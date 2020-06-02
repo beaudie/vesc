@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53b83f3e_e72f8570",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T05:49:57Z",
+      "side": 1,
+      "message": "This block of new code feels hacky, but I\u0027m not sure of a good way to compare the formats for the image units that are bound do this texture.   Any suggestions here are appreciated.",
+      "revId": "565b2255f79fd3d3ba19127d8d834a259b88fab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

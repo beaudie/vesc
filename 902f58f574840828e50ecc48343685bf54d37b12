@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb821692_f3da0b3d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T05:49:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b54908bf_55709509",
+      "range": {
+        "startLine": 1653,
+        "startChar": 8,
+        "endLine": 1653,
+        "endChar": 37
+      },
+      "revId": "902f58f574840828e50ecc48343685bf54d37b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff36d00e_2001bb83",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-02T04:06:55Z",
       "side": 1,
       "message": "Huh, was it this simple? I vaguely remember there was more to it than this, like Vulkan having some restrictions on reinterpretation that GL didn\u0027t have.",
+      "range": {
+        "startLine": 382,
+        "startChar": 31,
+        "endLine": 382,
+        "endChar": 65
+      },
+      "revId": "902f58f574840828e50ecc48343685bf54d37b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80ed2cf0_a166a21b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T05:49:57Z",
+      "side": 1,
+      "message": "Well, unfortunately it doesn\u0027t work everywhere.   It looks good on desktop, but SwiftShader and Android complain.\n\nThe test passes on Android/SwS, but we get more validation errors (see https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3885#c8 for details on those).   I was playing around with it and reading a bit today, but I\u0027ll need some help on how to solve the fact that VK_FORMAT_R8G8B8A8_SNORM can\u0027t be used with VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT (Vulkan Spec: Table 60. Mandatory format support: 4 byte-sized channels).",
+      "parentUuid": "ff36d00e_2001bb83",
       "range": {
         "startLine": 382,
         "startChar": 31,
