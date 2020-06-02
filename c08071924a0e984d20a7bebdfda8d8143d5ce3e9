@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdce5378_e198ae80",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T03:44:49Z",
+      "side": 1,
+      "message": "Please add comments inside each `if` block below as to why the calls are made the way they are.",
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
