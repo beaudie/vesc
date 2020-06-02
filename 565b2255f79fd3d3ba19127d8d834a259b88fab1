@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7515afef_0ebf444f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-02T15:30:26Z",
+      "side": 1,
+      "message": "hey Tim - you just want to put your flag change in here.",
+      "range": {
+        "startLine": 1489,
+        "startChar": 0,
+        "endLine": 1497,
+        "endChar": 5
+      },
+      "revId": "565b2255f79fd3d3ba19127d8d834a259b88fab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "53b83f3e_e72f8570",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
