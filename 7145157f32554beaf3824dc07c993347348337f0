@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bc1c4e67_94d22e4c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T18:29:01Z",
+      "side": 1,
+      "message": "That would also require using alignas() to force alignment to the size of the struct (rather than just word-aligned based on the largest member).   Otherwise, it\u0027s a roll of the dice where these declarations start in memory and putting them into a struct doesn\u0027t directly help that.   I don\u0027t see that being used much, but I certainly wouldn\u0027t be against it in cases like this.",
+      "parentUuid": "cc5b40ba_63e037e9",
+      "range": {
+        "startLine": 50,
+        "startChar": 48,
+        "endLine": 50,
+        "endChar": 61
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bcfde625_444a0e3e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-02T03:25:59Z",
       "side": 1,
       "message": "Can\u0027t these be inferred from `mCurrent*Type*`, so you could eliminate them?",
+      "range": {
+        "startLine": 912,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 45
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4707fa67_8dbc68e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T18:29:01Z",
+      "side": 1,
+      "message": "I brought up a similar question earlier, though from a \"two copies of the truth\" perspective:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2210962/4/src/libANGLE/renderer/vulkan/vk_helpers.cpp#2518\n\nBit of a diatribe here, but this sparked some thoughts...\n\nRight now our focus seems to be entirely on reducing CPU cycles, without much regard for memory.   I don\u0027t know if that\u0027s the right thing to do, but we can\u0027t easily measure memory like we can CPU (FPS) so CPU gets higher priority by default.   It\u0027s a small amount of memory, so I\u0027m willing to accept it, assuming we aren\u0027t concerned about them ever containing mismatched values.\n\nIt\u0027s certainly not what I\u0027m used to either though, since pre-processing isn\u0027t always a straightforward improvement.   CPUs are incredibly fast compared to reading RAM and any new pre-processed data increases the chance that it\u0027ll evict something useful, causing stalls and lowering performance overall.\n\nSomething specific like this is too small to measure, but once you fall off the cliff it\u0027s hard to climb back up.   It\u0027s also possible that ANGLE\u0027s real-world workloads are too unpredictable and varied to worry too much about these types of optimizations, especially compared to the hyper-focused systems that my experience comes from), and that it\u0027s basically \"six of one or half a dozen of the other\".",
+      "parentUuid": "bcfde625_444a0e3e",
       "range": {
         "startLine": 912,
         "startChar": 0,
