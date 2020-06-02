@@ -19,6 +19,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
+#include "libANGLE/renderer/gl/EGLSyncGL.h"
 #include "libANGLE/renderer/gl/glx/PbufferSurfaceGLX.h"
 #include "libANGLE/renderer/gl/glx/RendererGLX.h"
 #include "libANGLE/renderer/gl/glx/WindowSurfaceGLX.h"
@@ -443,6 +444,11 @@ ContextImpl *DisplayGLX::createContext(const gl::State &state,
     return new ContextGL(state, errorSet, mRenderer);
 }
 
+EGLSyncImpl *DisplayGLX::createSync(const egl::AttributeMap &attribs)
+{
+    return new EGLSyncGL(attribs, mRenderer->getFunctions());
+}
+
 DeviceImpl *DisplayGLX::createDevice()
 {
     UNIMPLEMENTED();
@@ -833,6 +839,10 @@ void DisplayGLX::generateExtensions(egl::DisplayExtensions *outExtensions) const
     const bool hasSyncControlOML        = mGLX.hasExtension("GLX_OML_sync_control");
     outExtensions->syncControlCHROMIUM  = hasSyncControlOML;
     outExtensions->syncControlRateANGLE = hasSyncControlOML;
+
+    const FunctionsGL *functionsGL = mRenderer->getFunctions();
+    outExtensions->fenceSync       = EGLSyncGL::Supported(functionsGL);
+    outExtensions->waitSync        = outExtensions->fenceSync;
 
     DisplayGL::generateExtensions(outExtensions);
 }

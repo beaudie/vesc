@@ -20,6 +20,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
+#include "libANGLE/renderer/gl/EGLSyncGL.h"
 #include "libANGLE/renderer/gl/FenceNVGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
@@ -1273,7 +1274,8 @@ void GenerateCaps(const FunctionsGL *functions,
         functions->hasGLESExtension("GL_OES_EGL_image_external_essl3");
     extensions->eglImageArray = functions->hasGLESExtension("GL_EXT_EGL_image_array");
 
-    extensions->eglSyncOES = functions->hasGLESExtension("GL_OES_EGL_sync");
+    extensions->eglSyncOES =
+        functions->hasGLESExtension("GL_OES_EGL_sync") || EGLSyncGL::Supported(functions);
 
     if (!features.disableTimestampQueries.enabled &&
         (functions->isAtLeastGL(gl::Version(3, 3)) ||

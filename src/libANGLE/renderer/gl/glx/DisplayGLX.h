@@ -68,6 +68,8 @@ class DisplayGLX : public DisplayGL
                                const gl::Context *shareContext,
                                const egl::AttributeMap &attribs) override;
 
+    EGLSyncImpl *createSync(const egl::AttributeMap &attribs) override;
+
     egl::ConfigSet generateConfigs() override;
 
     bool testDeviceLost() override;
