@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "13114118_8bf2e9be",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T19:38:40Z",
+      "side": 1,
+      "message": "Well yes, without alignas(), \"most\" row\u0027s data would be in the same cache line instead of \"all\". I was fine with that, but while we are at it, why not align it too.",
+      "parentUuid": "bc1c4e67_94d22e4c",
+      "range": {
+        "startLine": 50,
+        "startChar": 48,
+        "endLine": 50,
+        "endChar": 61
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bcfde625_444a0e3e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "Is mCurrentWriteStage helpful? Not following the earlier discussion. If it\u0027s redundant it\u0027s better design wise to remove it anyway.",
       "parentUuid": "46c128d9_344233c8",
+      "range": {
+        "startLine": 912,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 45
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f446d9e_5a860a48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T19:38:40Z",
+      "side": 1,
+      "message": "My comment was also just about avoiding \"two copies of the truth\". Anyway, accessing an extra variable through the `this` pointer, vs a table lookup in .text, I guess they are pretty similar operations.",
+      "parentUuid": "381a4fd6_53f50f6f",
       "range": {
         "startLine": 912,
         "startChar": 0,
