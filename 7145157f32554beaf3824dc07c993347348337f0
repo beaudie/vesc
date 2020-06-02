@@ -93,6 +93,30 @@
       "revId": "7145157f32554beaf3824dc07c993347348337f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c2a290b_98408a3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-02T18:37:20Z",
+      "side": 1,
+      "message": "A microbenchmark can measure precisely enough to detect even a few additional instructions. Certainly a cache miss. The poof is in really in the pudding - if we have data about perf we can make better decisions and code. In this case we\u0027re trying to improve GPU perf primarily without overly costing CPU and incurring larger code redesign changes. These vales are stored per-object so the memory overhead will be marginal.\n\nAt this point our work is to figure out how best to measure memory before figuring out how to improve it.",
+      "parentUuid": "4707fa67_8dbc68e8",
+      "range": {
+        "startLine": 912,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 45
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
