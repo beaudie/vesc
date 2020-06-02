@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1b34cbac_4d7b5fd5",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-02T15:59:55Z",
+      "side": 1,
+      "message": "Seem like a good idea, but I\u0027ve not figured out how to do this.  The only example I\u0027m following is the breshenham code, which is generating a one-time-use set of code.  dFdx()/dFdy() can be used more than once.  Can you help me on this?",
+      "parentUuid": "f5f2bb9d_1705269e",
+      "range": {
+        "startLine": 166,
+        "startChar": 19,
+        "endLine": 166,
+        "endChar": 32
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ccaddf6a_de2a041a",
         "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "50db6237_ac7487a5",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-02T15:59:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccaddf6a_de2a041a",
+      "range": {
+        "startLine": 173,
+        "startChar": 18,
+        "endLine": 173,
+        "endChar": 29
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f246a005_3fe7a508",
         "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d118c902_81555eae",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-02T15:59:55Z",
+      "side": 1,
+      "message": "I couldn\u0027t remove the multiplier*-\u003edeepCopy()\u0027s, but I removed the rest.",
+      "parentUuid": "f246a005_3fe7a508",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 98
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
