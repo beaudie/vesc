@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3cb6e77d_c2217911",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-02T23:19:41Z",
+      "side": 1,
+      "message": "Done\n\nTo record for later, a key difference from AddBresenhamEmulationVS/FS is the need to use insertStatementsInParentBlock().  For that, the \"RewriteCubeMapSamplersAs2DArray.cpp\" file was a good resource to see what they did.  Also, after I was generating the correct GLSL, I needed to add a deepCopy(), but the validation assert wasn\u0027t helpful; so I added lots and then later looked for which I could remove.",
+      "parentUuid": "877e1ce1_567a7a64",
+      "range": {
+        "startLine": 166,
+        "startChar": 19,
+        "endLine": 166,
+        "endChar": 32
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccaddf6a_de2a041a",
         "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
         "patchSetId": 2
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "Ok, that\u0027s because the definition of multiplierY is reusing rotatedFlipXY without deepCopy. So you can change the multipliers to:\n\n    TIntermSwizzle *multiplierX \u003d new TIntermSwizzle(rotatedFlipXY, swizzleOffsetX);\n    TIntermSwizzle *multiplierY \u003d new TIntermSwizzle(rotatedFlipXY-\u003edeepCopy(), swizzleOffsetY);\n\nAnd then remove the two deepCopy()s from here.",
       "parentUuid": "d118c902_81555eae",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 98
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d86a67c_938033c0",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-02T23:19:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0e9041_dcb68c0c",
       "range": {
         "startLine": 178,
         "startChar": 0,
