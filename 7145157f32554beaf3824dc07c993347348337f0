@@ -141,6 +141,30 @@
       "revId": "7145157f32554beaf3824dc07c993347348337f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c128d9_344233c8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-02T18:57:24Z",
+      "side": 1,
+      "message": "Folks, thanks for comment. mCurrentReadStageMask is the bit mask try to avoid loop the array. Most cases I expect only one or two bits set, the bitmask will avoid having to loop the entire array. I think it should be kept. \n\nmCurrentWriteStage maybe can be removed. But depends on the current size of bufferHelper object, you may not save memory at all. malloc will always try to align the data structure size to a certain alignment by padding it. That been said, I don\u0027t have strong opinion on this, I am willing to do either way. I think the difference likely is not measurable either way.",
+      "parentUuid": "180a79eb_90f4cf73",
+      "range": {
+        "startLine": 912,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 45
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
