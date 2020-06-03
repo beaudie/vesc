@@ -1800,6 +1800,21 @@ rx::FramebufferAttachmentObjectImpl *Texture::getAttachmentImpl() const
     return mTexture;
 }
 
+bool Texture::isSamplerDirty(const Context *context, const Sampler *optionalSampler)
+{
+    const auto &samplerState =
+        optionalSampler ? optionalSampler->getSamplerState() : mState.mSamplerState;
+    const auto &contextState = context->getState();
+
+    if (contextState.getContextID() != mCompletenessCache.context ||
+        !mCompletenessCache.samplerState.sameCompleteness(samplerState))
+    {
+        return true;
+    }
+
+    return false;
+}
+
 bool Texture::isSamplerComplete(const Context *context, const Sampler *optionalSampler)
 {
     const auto &samplerState =
