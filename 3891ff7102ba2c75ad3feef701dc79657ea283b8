@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "82b03044_92e7ece4",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-03T16:24:47Z",
+      "side": 1,
+      "message": "Well, here you\u0027re in angle_enable_gl (the GL back-end). You should at least be putting it outside this if statement as it applies to the front-end. Maybe that\u0027s all you\u0027re missing?",
+      "parentUuid": "06d9739f_d916dffa",
+      "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfbd4b4a_605e18b2",
         "filename": "src/libANGLE/MemoryProgramCache.cpp",
         "patchSetId": 1
