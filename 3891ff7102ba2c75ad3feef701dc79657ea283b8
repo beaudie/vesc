@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "2a3ea42c_b567eb71",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-03T21:54:32Z",
+      "side": 1,
+      "message": "It\u0027s not in there either.\n\nHacking it a bit and just always including \"slide_hash_neon.h\" fixes that error, but generates not ones.\n\n[[[ third_party/zlib/BUILD.gn ]]]\ncomponent(\"zlib\") {\n...\n    sources +\u003d [ \"contrib/optimizations/slide_hash_neon.h\" ]  \u003c\u003c--- hack\n    if (use_x86_x64_optimizations) {\n      deps +\u003d [ \":zlib_crc32_simd\" ]\n    } else if (use_arm_neon_optimizations) {\n      sources +\u003d [ \"contrib/optimizations/slide_hash_neon.h\" ]\n      deps +\u003d [ \":zlib_arm_crc32\" ]\n    }\n\nThat hack gives new presubmit errors:\n\nWarning in //third_party/zlib:zlib_adler32_simd: third_party/zlib/adler32_simd.h: Invalid include: b\u0027zconf.h\u0027\nWarning in //third_party/zlib:zlib_adler32_simd: third_party/zlib/adler32_simd.h: Invalid include: b\u0027zutil.h\u0027\n\nBoth of those header files are always included as part of \"zlib\", so that doesn\u0027t really make any sense to me:\n\n[[[ third_party/zlib/BUILD.gn ]]]\ncomponent(\"zlib\") {\n  if (!is_win) {\n    # Don\u0027t stomp on \"libzlib\" on other platforms.\n    output_name \u003d \"chrome_zlib\"\n  }\n\n  sources \u003d [\n..\n    \"zconf.h\",\n    \"zlib.h\",\n    \"zutil.c\",\n    \"zutil.h\",\n  ]\n\nI\u0027m not sure what\u0027s going on with GN and zlib, but it doesn\u0027t seem to like it.\n\nAdding \u0027//third_party/zlib\u0027 to IGNORED_DIRECTORIES ignores the errors (obviously), but it would be nice to know what\u0027s going wrong here.",
+      "parentUuid": "255c5139_ceda8fc4",
+      "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfbd4b4a_605e18b2",
         "filename": "src/libANGLE/MemoryProgramCache.cpp",
         "patchSetId": 1
