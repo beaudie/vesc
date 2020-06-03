@@ -16,6 +16,29 @@
       "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfbd4b4a_605e18b2",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-03T03:06:53Z",
+      "side": 1,
+      "message": "Does it have to be 0-initialized if it\u0027s about to be overwritten?",
+      "range": {
+        "startLine": 151,
+        "startChar": 62,
+        "endLine": 151,
+        "endChar": 65
+      },
+      "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
