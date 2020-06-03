@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "196b6e24_524aab1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T16:52:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f68209e9_b8b1ad4b",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "3a721163742e80345d8fd778263b15e336b2aaec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabf46ea_0553a2a2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "3a721163742e80345d8fd778263b15e336b2aaec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d94437f7_0bec6a52",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T16:52:02Z",
+      "side": 1,
+      "message": "I checked the other usages and they are all safe, updateViewport does the clamping internally and handleDirtyGraphicsDriverUniforms converts the viewport to floats to use as part of re-rotation, we don\u0027t want the clamped viewport in this case.",
+      "parentUuid": "dabf46ea_0553a2a2",
+      "range": {
+        "startLine": 2522,
+        "startChar": 34,
+        "endLine": 2522,
+        "endChar": 54
+      },
+      "revId": "3a721163742e80345d8fd778263b15e336b2aaec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
