@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c601460d_5efea512",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-03T00:33:58Z",
+      "side": 1,
+      "message": "Where in the D3D specs is this alignment specified?",
+      "parentUuid": "b2bb6563_453461a1",
+      "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb23a26a_e2de53ac",
         "filename": "src/libANGLE/renderer/d3d/d3d11/VertexBuffer11.cpp",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-06-02T19:53:16Z",
       "side": 1,
       "message": "The `start` seemed only assigned at GLint firstVertexIndex \u003d (binding.getDivisor() \u003e 0 ? 0 : start);\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/d3d/VertexDataManager.cpp;l\u003d505-536?q\u003dfirstVertexIndex%20f:angle\u0026ss\u003dchromium%2Fchromium%2Fsrc\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nI\u0027ve assigned it with GLint firstVertexIndex \u003d (binding.getDivisor() \u003e 0 ? baseInstance * binding.getDivisor() : start); The `start` here (passed in by `firstVertexIndex`) seems need applied to input in all circumstances now.\n\nBy looking at the src data getting copied from input into output later (line 129), it\u0027s correct to apply such offset (regardless of the alignment in output for now)",
+      "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2a75cbc_2bdfcc74",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/VertexBuffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-03T00:33:58Z",
+      "side": 1,
+      "message": "Is the idea of the streaming vertices that the necessary vertex data is copied to a destination buffer, compacting it and removing any initial offset into the original vertex buffer?\n\nDoes this new computation follow that design?\n\nIf we\u0027re skipping copying the vertex data for the first \"baseInstance\" instances, then when we pass baseInstance down to the D3D driver, it\u0027ll index incorrectly into the streamed vertex data.\n\nShould we zero-pad the destination buffer for those vertices\u0027 data that will be skipped over?",
+      "parentUuid": "cb23a26a_e2de53ac",
       "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
