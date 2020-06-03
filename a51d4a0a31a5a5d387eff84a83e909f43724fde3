@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9e525757_5114d4d1",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-03T19:11:33Z",
+      "side": 1,
+      "message": "Right, will do.",
+      "parentUuid": "4a230678_dcc69573",
+      "range": {
+        "startLine": 45,
+        "startChar": 59,
+        "endLine": 45,
+        "endChar": 63
+      },
+      "revId": "a51d4a0a31a5a5d387eff84a83e909f43724fde3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6bd9637f_9ec6f66b",
         "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "a51d4a0a31a5a5d387eff84a83e909f43724fde3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38c3a5da_1478cb6e",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-03T19:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bd9637f_9ec6f66b",
+      "range": {
+        "startLine": 46,
+        "startChar": 56,
+        "endLine": 46,
+        "endChar": 57
+      },
+      "revId": "a51d4a0a31a5a5d387eff84a83e909f43724fde3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
