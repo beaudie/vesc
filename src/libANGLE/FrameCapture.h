@@ -335,6 +335,8 @@ void CaptureStringLimit(const GLchar *str, uint32_t limit, ParamCapture *paramCa
 
 gl::Program *GetLinkedProgramForCapture(const gl::State &glState, gl::ShaderProgramID handle);
 
+gl::Program *GetProgramForCapture(const gl::State &glState, gl::ShaderProgramID handle);
+
 // For GetIntegerv, GetFloatv, etc.
 void CaptureGetParameter(const gl::State &glState,
                          GLenum pname,

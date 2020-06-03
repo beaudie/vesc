@@ -3898,6 +3898,12 @@ gl::Program *GetLinkedProgramForCapture(const gl::State &glState, gl::ShaderProg
     return program;
 }
 
+gl::Program *GetProgramForCapture(const gl::State &glState, gl::ShaderProgramID handle)
+{
+    gl::Program *program = glState.getShaderProgramManagerForCapture().getProgram(handle);
+    return program;
+}
+
 void CaptureGetParameter(const gl::State &glState,
                          GLenum pname,
                          size_t typeSize,
