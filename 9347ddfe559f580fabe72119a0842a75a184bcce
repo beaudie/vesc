@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffce0c9d_2247684b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4075,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T17:06:03Z",
+      "side": 1,
+      "message": "nit: braces? 😊",
+      "range": {
+        "startLine": 4074,
+        "startChar": 39,
+        "endLine": 4075,
+        "endChar": 15
+      },
+      "revId": "9347ddfe559f580fabe72119a0842a75a184bcce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872999a9_9b8799f1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4085,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T17:06:03Z",
+      "side": 1,
+      "message": "This can be removed unless syncing the framebuffer can make it incomplete somehow.",
+      "range": {
+        "startLine": 4082,
+        "startChar": 0,
+        "endLine": 4085,
+        "endChar": 5
+      },
+      "revId": "9347ddfe559f580fabe72119a0842a75a184bcce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
