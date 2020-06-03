@@ -610,7 +610,7 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
                                                   const Sampler *sampler,
                                                   Texture *texture)
 {
-    if (!texture || !texture->isSamplerComplete(context, sampler))
+    if (!texture)
     {
         mActiveTexturesCache.reset(mID, textureIndex);
     }

@@ -2733,13 +2733,11 @@ angle::Result StateManager11::applyTexturesForSRVs(const gl::Context *context,
     {
         GLint textureUnit = mProgramD3D->getSamplerMapping(shaderType, samplerIndex, caps);
         ASSERT(textureUnit != -1);
-        gl::Texture *texture = completeTextures[textureUnit];
+        gl::Texture *texture       = completeTextures[textureUnit];
+        gl::Sampler *samplerObject = glState.getSampler(textureUnit);
 
-        // A nullptr texture indicates incomplete.
-        if (texture)
+        if (texture && texture->isSamplerComplete(context, samplerObject))
         {
-            gl::Sampler *samplerObject = glState.getSampler(textureUnit);
-
             const gl::SamplerState &samplerState =
                 samplerObject ? samplerObject->getSamplerState() : texture->getSamplerState();
 

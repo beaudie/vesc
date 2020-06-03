@@ -3634,7 +3634,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         gl::TextureType textureType = textureTypes[textureUnit];
 
         // Null textures represent incomplete textures.
-        if (texture == nullptr)
+        if (texture == nullptr || !texture->isSamplerComplete(context, sampler))
         {
             ANGLE_TRY(getIncompleteTexture(context, textureType, &texture));
         }

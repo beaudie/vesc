@@ -829,9 +829,10 @@ void StateManagerGL::updateProgramTextureBindings(const gl::Context *context)
     {
         gl::TextureType textureType = textureTypes[textureUnitIndex];
         gl::Texture *texture        = textures[textureUnitIndex];
+        gl::Sampler *sampler        = glState.getSampler(static_cast<uint32_t>(textureUnitIndex));
 
         // A nullptr texture indicates incomplete.
-        if (texture != nullptr)
+        if (texture != nullptr && texture->isSamplerComplete(context, sampler))
         {
             const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
             ASSERT(!texture->hasAnyDirtyBit());
