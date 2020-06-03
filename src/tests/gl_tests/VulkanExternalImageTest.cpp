@@ -350,8 +350,6 @@ void RunShouldClearTest(bool isSwiftshader, bool enableDebugLayers)
 TEST_P(VulkanExternalImageTest, ShouldClearOpaqueFdRGBA8)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
-    // http://anglebug.com/4630
-    ANGLE_SKIP_TEST_IF(IsAndroid() && (IsPixel2() || IsPixel2XL()));
     RunShouldClearTest<OpaqueFdTraits>(isSwiftshader(), enableDebugLayers());
 }
 
