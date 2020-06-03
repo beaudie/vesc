@@ -22,6 +22,30 @@
       "revId": "55e9e6b65777b1d82d58333a13d77383bb55ae5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1080c40_e69faf83",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-06-03T00:27:57Z",
+      "side": 1,
+      "message": "The texture is initialized much earlier in the function. I think this is just reusing the flag to see if it\u0027s possible to use copyTexImage2D instead of copyTexSubImage2D.",
+      "parentUuid": "3ec6456e_1da27ab7",
+      "range": {
+        "startLine": 724,
+        "startChar": 20,
+        "endLine": 724,
+        "endChar": 30
+      },
+      "revId": "55e9e6b65777b1d82d58333a13d77383bb55ae5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
