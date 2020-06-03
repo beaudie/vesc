@@ -88,6 +88,17 @@ bool BlobCache::get(angle::ScratchBuffer *scratchBuffer,
             return false;
         }
 
+        // Resize the buffer to the actual size.
+        // While ScratchBuffer::get() may return a buffer (much) larger than is required for the
+        // data, the callers to BlobCache::get() require that the buffer returned is the exact same
+        // size as was initially stored in the blob cache, so we need to resize it to match.
+        if (!scratchMemory->resize(valueSize))
+        {
+            ERR() << "Failed to resize scratch memory to actual buffer size. (" << valueSize
+                  << " bytes )";
+            return false;
+        }
+
         EGLsizeiANDROID originalValueSize = valueSize;
         valueSize = mGetBlobFunc(key.data(), key.size(), scratchMemory->data(), valueSize);
 
