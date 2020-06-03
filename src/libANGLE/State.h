@@ -79,6 +79,7 @@ class ActiveTexturesCache final : angle::NonCopyable
 
     void clear(ContextID contextID);
     void set(ContextID contextID, size_t textureIndex, Texture *texture);
+    size_t getTextureIndex(Texture *texture) const;
     void reset(ContextID contextID, size_t textureIndex);
     bool empty() const;
 
@@ -304,6 +305,7 @@ class State : angle::NonCopyable
     }
 
     Sampler *getSampler(GLuint textureUnit) const { return mSamplers[textureUnit].get(); }
+    Sampler *getActiveTextureSampler(Texture *texture) const;
 
     const SamplerBindingVector &getSamplers() const { return mSamplers; }
 
@@ -637,6 +639,7 @@ class State : angle::NonCopyable
     // TODO(jmadill): Consider storing dirty objects in a list instead of by binding.
     enum DirtyObjectType
     {
+        DIRTY_OBJECT_ACTIVE_TEXTURES,  // Top-level dirty bit. Also see mDirtyActiveTextures.
         DIRTY_OBJECT_TEXTURES_INIT,
         DIRTY_OBJECT_IMAGES_INIT,
         DIRTY_OBJECT_READ_ATTACHMENTS,
@@ -671,6 +674,7 @@ class State : angle::NonCopyable
     void setObjectDirty(GLenum target);
     void setTextureDirty(size_t textureUnitIndex);
     void setSamplerDirty(size_t samplerIndex);
+    void setActiveTextureDirty(size_t textureUnitIndex);
 
     ANGLE_INLINE void setReadFramebufferDirty()
     {
@@ -705,7 +709,8 @@ class State : angle::NonCopyable
     void onActiveTextureChange(const Context *context, size_t textureUnit);
 
     // "onActiveTextureStateChange" calls when the Texture itself changed but the binding did not.
-    void onActiveTextureStateChange(const Context *context, size_t textureUnit);
+    void onActiveTextureStateChange(size_t textureUnit);
+    void onActiveTextureStateChange(size_t textureUnit, Texture *activeTexture);
 
     void onImageStateChange(const Context *context, size_t unit);
 
@@ -800,13 +805,15 @@ class State : angle::NonCopyable
     void updateActiveTextureState(const Context *context,
                                   size_t textureIndex,
                                   const Sampler *sampler,
-                                  Texture *texture);
+                                  Texture *texture,
+                                  bool immediate);
     Texture *getTextureForActiveSampler(TextureType type, size_t index);
 
     bool hasConstantColor(GLenum sourceRGB, GLenum destRGB) const;
     bool hasConstantAlpha(GLenum sourceRGB, GLenum destRGB) const;
 
     // Functions to synchronize dirty states
+    angle::Result syncActiveTextures(const Context *context);
     angle::Result syncTexturesInit(const Context *context);
     angle::Result syncImagesInit(const Context *context);
     angle::Result syncReadAttachments(const Context *context);
@@ -824,30 +831,33 @@ class State : angle::NonCopyable
 
     using DirtyObjectHandler = angle::Result (State::*)(const Context *context);
     static constexpr DirtyObjectHandler kDirtyObjectHandlers[DIRTY_OBJECT_MAX] = {
-        &State::syncTexturesInit,    &State::syncImagesInit,      &State::syncReadAttachments,
-        &State::syncDrawAttachments, &State::syncReadFramebuffer, &State::syncDrawFramebuffer,
-        &State::syncVertexArray,     &State::syncTextures,        &State::syncImages,
-        &State::syncSamplers,        &State::syncProgram,         &State::syncProgramPipeline,
+        &State::syncActiveTextures,  &State::syncTexturesInit,    &State::syncImagesInit,
+        &State::syncReadAttachments, &State::syncDrawAttachments, &State::syncReadFramebuffer,
+        &State::syncDrawFramebuffer, &State::syncVertexArray,     &State::syncTextures,
+        &State::syncImages,          &State::syncSamplers,        &State::syncProgram,
+        &State::syncProgramPipeline,
     };
 
     // Robust init must happen before Framebuffer init for the Vulkan back-end.
+    static_assert(DIRTY_OBJECT_ACTIVE_TEXTURES < DIRTY_OBJECT_TEXTURES_INIT, "init order");
     static_assert(DIRTY_OBJECT_TEXTURES_INIT < DIRTY_OBJECT_DRAW_FRAMEBUFFER, "init order");
     static_assert(DIRTY_OBJECT_IMAGES_INIT < DIRTY_OBJECT_DRAW_FRAMEBUFFER, "init order");
     static_assert(DIRTY_OBJECT_DRAW_ATTACHMENTS < DIRTY_OBJECT_DRAW_FRAMEBUFFER, "init order");
     static_assert(DIRTY_OBJECT_READ_ATTACHMENTS < DIRTY_OBJECT_READ_FRAMEBUFFER, "init order");
 
-    static_assert(DIRTY_OBJECT_TEXTURES_INIT == 0, "check DIRTY_OBJECT_TEXTURES_INIT index");
-    static_assert(DIRTY_OBJECT_IMAGES_INIT == 1, "check DIRTY_OBJECT_IMAGES_INIT index");
-    static_assert(DIRTY_OBJECT_READ_ATTACHMENTS == 2, "check DIRTY_OBJECT_READ_ATTACHMENTS index");
-    static_assert(DIRTY_OBJECT_DRAW_ATTACHMENTS == 3, "check DIRTY_OBJECT_DRAW_ATTACHMENTS index");
-    static_assert(DIRTY_OBJECT_READ_FRAMEBUFFER == 4, "check DIRTY_OBJECT_READ_FRAMEBUFFER index");
-    static_assert(DIRTY_OBJECT_DRAW_FRAMEBUFFER == 5, "check DIRTY_OBJECT_DRAW_FRAMEBUFFER index");
-    static_assert(DIRTY_OBJECT_VERTEX_ARRAY == 6, "check DIRTY_OBJECT_VERTEX_ARRAY index");
-    static_assert(DIRTY_OBJECT_TEXTURES == 7, "check DIRTY_OBJECT_TEXTURES index");
-    static_assert(DIRTY_OBJECT_IMAGES == 8, "check DIRTY_OBJECT_IMAGES index");
-    static_assert(DIRTY_OBJECT_SAMPLERS == 9, "check DIRTY_OBJECT_SAMPLERS index");
-    static_assert(DIRTY_OBJECT_PROGRAM == 10, "check DIRTY_OBJECT_PROGRAM index");
-    static_assert(DIRTY_OBJECT_PROGRAM_PIPELINE == 11, "check DIRTY_OBJECT_PROGRAM_PIPELINE index");
+    static_assert(DIRTY_OBJECT_ACTIVE_TEXTURES == 0, "check DIRTY_OBJECT_ACTIVE_TEXTURES index");
+    static_assert(DIRTY_OBJECT_TEXTURES_INIT == 1, "check DIRTY_OBJECT_TEXTURES_INIT index");
+    static_assert(DIRTY_OBJECT_IMAGES_INIT == 2, "check DIRTY_OBJECT_IMAGES_INIT index");
+    static_assert(DIRTY_OBJECT_READ_ATTACHMENTS == 3, "check DIRTY_OBJECT_READ_ATTACHMENTS index");
+    static_assert(DIRTY_OBJECT_DRAW_ATTACHMENTS == 4, "check DIRTY_OBJECT_DRAW_ATTACHMENTS index");
+    static_assert(DIRTY_OBJECT_READ_FRAMEBUFFER == 5, "check DIRTY_OBJECT_READ_FRAMEBUFFER index");
+    static_assert(DIRTY_OBJECT_DRAW_FRAMEBUFFER == 6, "check DIRTY_OBJECT_DRAW_FRAMEBUFFER index");
+    static_assert(DIRTY_OBJECT_VERTEX_ARRAY == 7, "check DIRTY_OBJECT_VERTEX_ARRAY index");
+    static_assert(DIRTY_OBJECT_TEXTURES == 8, "check DIRTY_OBJECT_TEXTURES index");
+    static_assert(DIRTY_OBJECT_IMAGES == 9, "check DIRTY_OBJECT_IMAGES index");
+    static_assert(DIRTY_OBJECT_SAMPLERS == 10, "check DIRTY_OBJECT_SAMPLERS index");
+    static_assert(DIRTY_OBJECT_PROGRAM == 11, "check DIRTY_OBJECT_PROGRAM index");
+    static_assert(DIRTY_OBJECT_PROGRAM_PIPELINE == 12, "check DIRTY_OBJECT_PROGRAM_PIPELINE index");
 
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
@@ -1012,6 +1022,7 @@ class State : angle::NonCopyable
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
+    ActiveTextureMask mDirtyActiveTextures;
     ActiveTextureMask mDirtyTextures;
     ActiveTextureMask mDirtySamplers;
     ImageUnitMask mDirtyImages;

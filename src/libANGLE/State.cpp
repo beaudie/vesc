@@ -305,6 +305,19 @@ ANGLE_INLINE void ActiveTexturesCache::set(ContextID contextID,
     mTextures[textureIndex] = texture;
 }
 
+size_t ActiveTexturesCache::getTextureIndex(Texture *texture) const
+{
+    for (size_t textureIndex = 0; textureIndex < mTextures.size(); ++textureIndex)
+    {
+        if (texture == mTextures[textureIndex])
+        {
+            return textureIndex;
+        }
+    }
+
+    return IMPLEMENTATION_MAX_ACTIVE_TEXTURES;
+}
+
 State::State(const State *shareContextState,
              egl::ShareGroup *shareGroup,
              TextureManager *shareTextures,
@@ -610,7 +623,8 @@ ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
 ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
                                                   size_t textureIndex,
                                                   const Sampler *sampler,
-                                                  Texture *texture)
+                                                  Texture *texture,
+                                                  bool immediate)
 {
     if (!texture || !texture->isSamplerComplete(context, sampler))
     {
@@ -620,14 +634,17 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
     {
         mActiveTexturesCache.set(mID, textureIndex, texture);
 
-        if (texture->hasAnyDirtyBit())
+        if (immediate)
         {
-            setTextureDirty(textureIndex);
-        }
+            if (texture->hasAnyDirtyBit())
+            {
+                setTextureDirty(textureIndex);
+            }
 
-        if (mRobustResourceInit && texture->initState() == InitState::MayNeedInit)
-        {
-            mDirtyObjects.set(DIRTY_OBJECT_TEXTURES_INIT);
+            if (mRobustResourceInit && texture->initState() == InitState::MayNeedInit)
+            {
+                mDirtyObjects.set(DIRTY_OBJECT_TEXTURES_INIT);
+            }
         }
     }
 
@@ -662,7 +679,14 @@ ANGLE_INLINE void State::updateActiveTexture(const Context *context,
         return;
     }
 
-    updateActiveTextureState(context, textureIndex, sampler, texture);
+    if (texture->getId())
+    {
+        onActiveTextureStateChange(textureIndex, texture);
+    }
+    else
+    {
+        updateActiveTextureState(context, textureIndex, sampler, texture, true);
+    }
 }
 
 ANGLE_INLINE bool State::hasConstantColor(GLenum sourceRGB, GLenum destRGB) const
@@ -1579,6 +1603,13 @@ void State::invalidateTexture(TextureType type)
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
+Sampler *State::getActiveTextureSampler(Texture *texture) const
+{
+    size_t index = mActiveTexturesCache.getTextureIndex(texture);
+
+    return (index == IMPLEMENTATION_MAX_ACTIVE_TEXTURES) ? nullptr : mSamplers[index].get();
+}
+
 void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sampler *sampler)
 {
     if (mSamplers[textureUnit].get() == sampler)
@@ -1591,7 +1622,6 @@ void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sample
     // This is overly conservative as it assumes the sampler has never been bound.
     setSamplerDirty(textureUnit);
     onActiveTextureChange(context, textureUnit);
-    onActiveTextureStateChange(context, textureUnit);
 }
 
 void State::detachSampler(const Context *context, SamplerID sampler)
@@ -3063,6 +3093,29 @@ Texture *State::getTextureForActiveSampler(TextureType type, size_t index)
     return mSamplerTextures[type][index].get();
 }
 
+angle::Result State::syncActiveTextures(const Context *context)
+{
+    if (mDirtyActiveTextures.none())
+        return angle::Result::Continue;
+
+    for (size_t textureUnit : mDirtyActiveTextures)
+    {
+        if (mExecutable)
+        {
+            TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
+            Texture *activeTexture = (type != TextureType::InvalidEnum)
+                                         ? getTextureForActiveSampler(type, textureUnit)
+                                         : nullptr;
+            const Sampler *sampler = mSamplers[textureUnit].get();
+
+            updateActiveTextureState(context, textureUnit, sampler, activeTexture, false);
+        }
+    }
+
+    mDirtyActiveTextures.reset();
+    return angle::Result::Continue;
+}
+
 angle::Result State::syncTexturesInit(const Context *context)
 {
     ASSERT(mRobustResourceInit);
@@ -3375,6 +3428,12 @@ void State::setSamplerDirty(size_t samplerIndex)
     mDirtySamplers.set(samplerIndex);
 }
 
+void State::setActiveTextureDirty(size_t textureUnitIndex)
+{
+    mDirtyObjects.set(DIRTY_OBJECT_ACTIVE_TEXTURES);
+    mDirtyActiveTextures.set(textureUnitIndex);
+}
+
 void State::setImageUnit(const Context *context,
                          size_t unit,
                          Texture *texture,
@@ -3439,7 +3498,7 @@ void State::onActiveTextureChange(const Context *context, size_t textureUnit)
     }
 }
 
-void State::onActiveTextureStateChange(const Context *context, size_t textureUnit)
+void State::onActiveTextureStateChange(size_t textureUnit)
 {
     if (mExecutable)
     {
@@ -3447,9 +3506,38 @@ void State::onActiveTextureStateChange(const Context *context, size_t textureUni
         Texture *activeTexture = (type != TextureType::InvalidEnum)
                                      ? getTextureForActiveSampler(type, textureUnit)
                                      : nullptr;
-        const Sampler *sampler = mSamplers[textureUnit].get();
-        updateActiveTextureState(context, textureUnit, sampler, activeTexture);
+
+        if (activeTexture)
+        {
+            if (activeTexture && activeTexture->hasAnyDirtyBit())
+            {
+                setTextureDirty(textureUnit);
+            }
+
+            if (mRobustResourceInit && activeTexture->initState() == InitState::MayNeedInit)
+            {
+                mDirtyObjects.set(DIRTY_OBJECT_TEXTURES_INIT);
+            }
+        }
     }
+    setActiveTextureDirty(textureUnit);
+}
+
+void State::onActiveTextureStateChange(size_t textureUnit, Texture *activeTexture)
+{
+    if (activeTexture)
+    {
+        if (activeTexture && activeTexture->hasAnyDirtyBit())
+        {
+            setTextureDirty(textureUnit);
+        }
+
+        if (mRobustResourceInit && activeTexture->initState() == InitState::MayNeedInit)
+        {
+            mDirtyObjects.set(DIRTY_OBJECT_TEXTURES_INIT);
+        }
+    }
+    setActiveTextureDirty(textureUnit);
 }
 
 void State::onImageStateChange(const Context *context, size_t unit)

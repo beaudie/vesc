@@ -2064,6 +2064,48 @@ FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::Subject
     }
 }
 
+bool Framebuffer::hasRenderingFeedbackLoop(const Context *context)
+{
+    Texture *texture;
+    Sampler *sampler;
+    const gl::State &glState = context->getState();
+
+    if (mState.mDepthBufferFeedbackLoop)
+    {
+        texture = mState.mDepthAttachment.getTexture();
+        ASSERT(texture);
+        sampler = glState.getActiveTextureSampler(texture);
+
+        mState.mDepthBufferFeedbackLoop = texture->isSamplerComplete(context, sampler);
+    }
+
+    if (mState.mStencilBufferFeedbackLoop)
+    {
+        texture = mState.mStencilAttachment.getTexture();
+        ASSERT(texture);
+        sampler = glState.getActiveTextureSampler(texture);
+
+        mState.mStencilBufferFeedbackLoop = texture->isSamplerComplete(context, sampler);
+    }
+
+    for (size_t colorIndex = 0; colorIndex < mState.mColorAttachments.size(); ++colorIndex)
+    {
+        if (mState.mDrawBufferFeedbackLoops[colorIndex])
+        {
+            texture = mState.mColorAttachments[colorIndex].getTexture();
+            ASSERT(texture);
+            sampler = glState.getActiveTextureSampler(texture);
+
+            mState.mDrawBufferFeedbackLoops[colorIndex] =
+                texture->isSamplerComplete(context, sampler);
+        }
+    }
+
+    mState.updateHasRenderingFeedbackLoop();
+
+    return mState.mHasRenderingFeedbackLoop;
+}
+
 bool Framebuffer::formsCopyingFeedbackLoopWith(TextureID copyTextureID,
                                                GLint copyTextureLevel,
                                                GLint copyTextureLayer) const

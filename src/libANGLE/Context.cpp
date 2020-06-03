@@ -464,6 +464,7 @@ void Context::initialize()
     // Initialize dirty bit masks
     mAllDirtyBits.set();
 
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
@@ -515,6 +516,7 @@ void Context::initialize()
     mComputeDirtyBits.set(State::DIRTY_BIT_SAMPLER_BINDINGS);
     mComputeDirtyBits.set(State::DIRTY_BIT_IMAGE_BINDINGS);
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
@@ -8283,7 +8285,7 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
                 if (message != angle::SubjectMessage::ContentsChanged &&
                     message != angle::SubjectMessage::BindingChanged)
                 {
-                    mState.onActiveTextureStateChange(this, index);
+                    mState.onActiveTextureStateChange(index);
                     mStateCache.onActiveTextureChange(this);
                 }
             }
@@ -8304,7 +8306,7 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             {
                 ASSERT(index < kSamplerMaxSubjectIndex);
                 mState.setSamplerDirty(index - kSampler0SubjectIndex);
-                mState.onActiveTextureStateChange(this, index - kSampler0SubjectIndex);
+                mState.onActiveTextureStateChange(index - kSampler0SubjectIndex);
             }
             break;
     }
