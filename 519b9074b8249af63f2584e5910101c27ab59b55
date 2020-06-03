@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "e4685ceb_af103f48",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/VertexBuffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-06-03T01:00:20Z",
+      "side": 1,
+      "message": "Thanks for looking into this and the reply. I think I just found the triggering issue. Let me do a quick update here:\n\nWhen the attribute is dynamic, Angle copy data accessed by cur draw call using Map/Unmap (before apply the baseInstance to firstVertexIndex, even the src data range is incorrect). And the offset is passed in via IASetVertexBuffers. At this moment data for the next draw sits at begining of the vertexBuffer (actually it\u0027s the instanceBuffer in our case) baseInstance is still passed to D3D driver via the DrawIndexedInstanced call. So it\u0027s referencing the zeros used for alignment (in our test case data copied per draw for the instanceBuffer is 2 float (8 byte) while copying is aligned to 16byte)\n\nSo yes, the inital offset is lost and D3D driver is still told to have an offset because of baseInstance.\n\nThis is verified by setting baseInstance sent to DrawIndexedInstance to 0. Now first several draws are correct until the attribute is promoted to static.\n\nQuick thought for fixing this would be not passing baseInstance (and maybe baseVertex) to DrawIndexedInstance when attributes are streaming; Or preserve the initial offset when streaming the data (consume unnecessary space)\nWill look closer and discuss with Geoff at tomorrow\u0027s debugging session",
+      "parentUuid": "c2a75cbc_2bdfcc74",
+      "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45f11030_52646347",
         "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
         "patchSetId": 1
