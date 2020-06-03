@@ -305,6 +305,19 @@ ANGLE_INLINE void ActiveTexturesCache::set(ContextID contextID,
     mTextures[textureIndex] = texture;
 }
 
+size_t ActiveTexturesCache::getTextureIndex(Texture *texture) const
+{
+    for (size_t textureIndex = 0; textureIndex < mTextures.size(); ++textureIndex)
+    {
+        if (texture == mTextures[textureIndex])
+        {
+            return textureIndex;
+        }
+    }
+
+    return IMPLEMENTATION_MAX_ACTIVE_TEXTURES;
+}
+
 State::State(const State *shareContextState,
              egl::ShareGroup *shareGroup,
              TextureManager *shareTextures,
@@ -612,7 +625,7 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
                                                   const Sampler *sampler,
                                                   Texture *texture)
 {
-    if (!texture || !texture->isSamplerComplete(context, sampler))
+    if (!texture)
     {
         mActiveTexturesCache.reset(mID, textureIndex);
     }
@@ -620,7 +633,7 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
     {
         mActiveTexturesCache.set(mID, textureIndex, texture);
 
-        if (texture->hasAnyDirtyBit())
+        if (texture->hasAnyDirtyBit() || texture->isSamplerDirty(context, sampler))
         {
             setTextureDirty(textureIndex);
         }
@@ -1579,6 +1592,13 @@ void State::invalidateTexture(TextureType type)
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
+Sampler *State::getActiveTextureSampler(Texture *texture) const
+{
+    size_t index = mActiveTexturesCache.getTextureIndex(texture);
+
+    return (index == IMPLEMENTATION_MAX_ACTIVE_TEXTURES) ? nullptr : mSamplers[index].get();
+}
+
 void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sampler *sampler)
 {
     if (mSamplers[textureUnit].get() == sampler)
@@ -1591,7 +1611,6 @@ void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sample
     // This is overly conservative as it assumes the sampler has never been bound.
     setSamplerDirty(textureUnit);
     onActiveTextureChange(context, textureUnit);
-    onActiveTextureStateChange(context, textureUnit);
 }
 
 void State::detachSampler(const Context *context, SamplerID sampler)
@@ -3130,9 +3149,19 @@ angle::Result State::syncTextures(const Context *context)
     for (size_t textureIndex : mDirtyTextures)
     {
         Texture *texture = mActiveTexturesCache[textureIndex];
-        if (texture && texture->hasAnyDirtyBit())
+
+        if (texture)
         {
-            ANGLE_TRY(texture->syncState(context));
+            Sampler *sampler = getSampler(static_cast<uint32_t>(textureIndex));
+            if (!texture->isSamplerComplete(context, sampler))
+            {
+                mActiveTexturesCache.reset(mID, textureIndex);
+                continue;
+            }
+            if (texture->hasAnyDirtyBit())
+            {
+                ANGLE_TRY(texture->syncState(context));
+            }
         }
     }
 

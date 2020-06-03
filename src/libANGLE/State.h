@@ -79,6 +79,7 @@ class ActiveTexturesCache final : angle::NonCopyable
 
     void clear(ContextID contextID);
     void set(ContextID contextID, size_t textureIndex, Texture *texture);
+    size_t getTextureIndex(Texture *texture) const;
     void reset(ContextID contextID, size_t textureIndex);
     bool empty() const;
 
@@ -304,6 +305,7 @@ class State : angle::NonCopyable
     }
 
     Sampler *getSampler(GLuint textureUnit) const { return mSamplers[textureUnit].get(); }
+    Sampler *getActiveTextureSampler(Texture *texture) const;
 
     const SamplerBindingVector &getSamplers() const { return mSamplers; }
 
