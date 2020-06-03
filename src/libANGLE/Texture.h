@@ -495,6 +495,7 @@ class Texture final : public RefCountObject<TextureID>,
 
     void signalDirtyStorage(InitState initState);
 
+    bool isSamplerDirty(const Context *context, const Sampler *optionalSampler);
     bool isSamplerComplete(const Context *context, const Sampler *optionalSampler);
 
     GLenum getImplementationColorReadFormat(const Context *context) const;
