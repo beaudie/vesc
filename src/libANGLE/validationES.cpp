@@ -475,10 +475,11 @@ bool ValidateVertexShaderAttributeTypeMatch(const Context *context)
     vaoAttribTypeBits = (vaoAttribEnabledMask & vaoAttribTypeBits);
     vaoAttribTypeBits |= (~vaoAttribEnabledMask & stateCurrentValuesTypeBits);
 
-    return program &&
-           ValidateComponentTypeMasks(
-               program->getExecutable().getAttributesTypeMask().to_ulong(), vaoAttribTypeBits,
-               program->getExecutable().getAttributesMask().to_ulong(), 0xFFFF);
+    const ProgramExecutable &executable = program->getExecutable();
+
+    return program && ValidateComponentTypeMasks(executable.getAttributesTypeMask().to_ulong(),
+                                                 vaoAttribTypeBits,
+                                                 executable.getAttributesMask().to_ulong(), 0xFFFF);
 }
 
 bool IsCompatibleDrawModeWithGeometryShader(PrimitiveMode drawMode,
