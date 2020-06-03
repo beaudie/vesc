@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2bcea408_8bae61c3",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T19:51:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "321055a6_593c7b71",
+      "range": {
+        "startLine": 1008,
+        "startChar": 31,
+        "endLine": 1008,
+        "endChar": 45
+      },
+      "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faf75526_58166077",
         "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2060164b_5acf5e0d",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T19:51:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faf75526_58166077",
+      "range": {
+        "startLine": 1022,
+        "startChar": 0,
+        "endLine": 1037,
+        "endChar": 70
+      },
+      "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "039a861f_0d3f9ccf",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T19:51:00Z",
+      "side": 1,
+      "message": "Done. Also fixed another bug where GL_TEXTURE_SWIZZLE_RGBA is only available on desktop GL.",
+      "parentUuid": "03ed1e31_6f805cfd",
+      "range": {
+        "startLine": 1153,
+        "startChar": 8,
+        "endLine": 1154,
+        "endChar": 98
+      },
+      "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1422f76f_04a0e5ae",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e9ac197_64a659ee",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T19:51:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1422f76f_04a0e5ae",
+      "range": {
+        "startLine": 323,
+        "startChar": 21,
+        "endLine": 323,
+        "endChar": 24
+      },
+      "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
