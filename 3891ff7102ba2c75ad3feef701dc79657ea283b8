@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06d9739f_d916dffa",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-03T00:54:07Z",
+      "side": 1,
+      "message": "This is causing the presubmit and build failures.\n\nHow do I correctly include this library?",
+      "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
