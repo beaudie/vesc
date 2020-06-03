@@ -22,6 +22,30 @@
       "revId": "ba45d05233480449f1b2b1bc8263e3978a792a41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd8e968b_99911452",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-03T19:13:19Z",
+      "side": 1,
+      "message": "gl::Extents contains signed ints, leading to signed/unsigned comparison issues in the caller.\n\nI\u0027ll change to std::pair\u003cGLuint, GLuint\u003e.",
+      "parentUuid": "e92b0699_d7847df0",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 83
+      },
+      "revId": "ba45d05233480449f1b2b1bc8263e3978a792a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
