@@ -495,6 +495,7 @@ class Texture final : public RefCountObject<TextureID>,
 
     void signalDirtyStorage(InitState initState);
 
+    bool isSamplerDirty(const Context *context, const Sampler *optionalSampler);
     bool isSamplerComplete(const Context *context, const Sampler *optionalSampler);
 
     GLenum getImplementationColorReadFormat(const Context *context) const;
@@ -582,6 +583,7 @@ class Texture final : public RefCountObject<TextureID>,
 
     angle::Result syncState(const Context *context);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+    void resetDirtyBit() { mDirtyBits.reset(); }
 
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
