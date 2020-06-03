@@ -57,6 +57,52 @@
       "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21a1dd51_8df1279e",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T17:03:59Z",
+      "side": 1,
+      "message": "Small worry that we end up allocating more peak memory but I doubt we can compress the data in the same buffer we read from.",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 226,
+        "endChar": 55
+      },
+      "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf1e61e8_c95ab134",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T17:03:59Z",
+      "side": 1,
+      "message": "I\u0027m excited to see how the metric changes.",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 68
+      },
+      "revId": "3891ff7102ba2c75ad3feef701dc79657ea283b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
