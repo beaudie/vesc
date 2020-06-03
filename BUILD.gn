@@ -650,6 +650,7 @@ angle_source_set("libANGLE_base") {
   if (angle_enable_gl) {
     sources += libangle_gl_sources
     include_dirs += [ "src/third_party/khronos" ]
+    deps += [ ":angle_compression" ]
 
     if (angle_enable_gl_null) {
       sources += libangle_gl_null_sources
