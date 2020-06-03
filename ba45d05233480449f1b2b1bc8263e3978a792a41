@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e92b0699_d7847df0",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-03T15:24:52Z",
+      "side": 1,
+      "message": "nit: I\u0027d just return gl::Extents or std::pair\u003cfloat, float\u003e",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 83
+      },
+      "revId": "ba45d05233480449f1b2b1bc8263e3978a792a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
