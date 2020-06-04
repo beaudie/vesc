@@ -14,6 +14,12 @@
 #include "libANGLE/renderer/SyncImpl.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 
+#if !defined(ANGLE_PLATFORM_WINDOWS)
+#    include <unistd.h>
+#else
+#    include <io.h>
+#endif
+
 namespace egl
 {
 class AttributeMap;
@@ -64,8 +70,14 @@ class SyncHelper : public vk::Resource
 class SyncHelperNativeFence : public SyncHelper
 {
   public:
-    SyncHelperNativeFence() {}
-    ~SyncHelperNativeFence() override {}
+    SyncHelperNativeFence() { mNativeFenceFd = kInvalidFenceFd; }
+    ~SyncHelperNativeFence() override
+    {
+        if (mNativeFenceFd != kInvalidFenceFd)
+        {
+            close(mNativeFenceFd);
+        }
+    }
 
     void releaseToRenderer(RendererVk *renderer) override;
 
@@ -81,6 +93,7 @@ class SyncHelperNativeFence : public SyncHelper
 
   private:
     vk::Fence mFenceWithFd;
+    int mNativeFenceFd;
 };
 
 }  // namespace vk
