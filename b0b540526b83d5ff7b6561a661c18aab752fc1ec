@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "951545eb_07e82667",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T14:59:01Z",
+      "side": 1,
+      "message": "Well, you seem to have fixed some bugs related to replaying the last frame. I am worried that we\u0027re not replaying the last frame in our perf tests.",
+      "parentUuid": "0d41c8a4_fec06678",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 80
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23ab7446_b0cbd5ae",
         "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I\u0027m not sure I understand. Can you clarify?",
       "parentUuid": "23ab7446_b0cbd5ae",
+      "range": {
+        "startLine": 349,
+        "startChar": 18,
+        "endLine": 349,
+        "endChar": 38
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f84857a3_6ad1690e",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T14:59:01Z",
+      "side": 1,
+      "message": "Check the GLES 3.x specs for BUFFER_MAP_POINTER . It\u0027s the size of a void *.",
+      "parentUuid": "2dc836c7_bf9befbe",
       "range": {
         "startLine": 349,
         "startChar": 18,
