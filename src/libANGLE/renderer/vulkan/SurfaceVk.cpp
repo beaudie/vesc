@@ -1215,6 +1215,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
     presentInfo.pResults           = nullptr;
 
+    fprintf(stderr, "Going to present waiting on semaphore %p\n", presentInfo.pWaitSemaphores[0]);
+
     VkPresentRegionKHR presentRegion   = {};
     VkPresentRegionsKHR presentRegions = {};
     std::vector<VkRectLayerKHR> vkRects;
@@ -1344,6 +1346,7 @@ VkResult WindowSurfaceVk::nextSwapchainImage(vk::Context *context)
         return result;
     }
 
+    fprintf(stderr, "ANI signals %p\n", acquireImageSemaphore.get().getHandle());
     // The semaphore will be waited on in the next flush.
     mAcquireImageSemaphore = acquireImageSemaphore.release();
 

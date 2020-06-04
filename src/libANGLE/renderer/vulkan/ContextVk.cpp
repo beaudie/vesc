@@ -3749,8 +3749,14 @@ bool ContextVk::hasRecordedCommands()
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 {
     bool hasPendingSemaphore = signalSemaphore || !mWaitSemaphores.empty();
+    fprintf(
+        stderr,
+        "Asking to flush: has commands? %d, has pending semaphore? %d (%d || %d), gpu events? %d\n",
+        hasRecordedCommands(), hasPendingSemaphore, signalSemaphore != nullptr,
+        !mWaitSemaphores.empty(), mGpuEventsEnabled);
     if (!hasRecordedCommands() && !hasPendingSemaphore && !mGpuEventsEnabled)
     {
+        fprintf(stderr, "  - Nothing to do\n");
         return angle::Result::Continue;
     }
 
@@ -3799,6 +3805,11 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     VkSubmitInfo submitInfo = {};
     InitializeSubmitInfo(&submitInfo, mPrimaryCommands, mWaitSemaphores, mWaitSemaphoreStageMasks,
                          signalSemaphore);
+    fprintf(stderr, "  - Going to submit, signaling %d: %p (waiting %d: %p)\n",
+            submitInfo.signalSemaphoreCount,
+            submitInfo.signalSemaphoreCount > 0 ? submitInfo.pSignalSemaphores[0] : nullptr,
+            submitInfo.waitSemaphoreCount,
+            submitInfo.waitSemaphoreCount > 0 ? submitInfo.pWaitSemaphores[0] : nullptr);
 
     ANGLE_TRY(submitFrame(submitInfo, std::move(mPrimaryCommands)));
 
