@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ee00175_3fdf91f8",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T20:03:48Z",
+      "side": 1,
+      "message": "wording suggestion: \"The corresponding auto-roller must update the Chromium DEPS files with the updated commit hash of the ANGLE branch.\"",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df6f0602_6fdf7bad",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T20:03:48Z",
+      "side": 1,
+      "message": "very minor suggestion: generally prefer to avoid passive voice, e.g. \"This was done by someone.\" -\u003e \"Someone did this.\" Makes it more straight-forward.",
+      "range": {
+        "startLine": 72,
+        "startChar": 28,
+        "endLine": 73,
+        "endChar": 21
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e9a4598_85c7f5ac",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T20:03:48Z",
+      "side": 1,
+      "message": "this generally isn\u0027t strictly necessary. the rollers should do their job.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 39
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
