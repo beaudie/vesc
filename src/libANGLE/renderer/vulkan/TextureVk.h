@@ -278,6 +278,14 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                         const gl::Box &sourceArea,
                                         size_t offset);
 
+    // Generate mipmaps from level 0 into given destination.  If the destination is `this`, it will
+    // generate mipmaps directly into levels [1, Count).  This requires the image to have STORAGE
+    // usage.  Otherwise, mipmaps are generated in destination in levels [0, Count-1) and copied
+    // over to mipmaps [1, Max] at the end.
+    angle::Result generateMipmapsWithCompute(ContextVk *contextVk,
+                                             vk::ImageHelper *dest,
+                                             vk::ImageViewHelper *destViews);
+
     angle::Result generateMipmapsWithCPU(const gl::Context *context);
 
     angle::Result generateMipmapLevelsWithCPU(ContextVk *contextVk,
@@ -391,6 +399,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     }
 
     bool mOwnsImage;
+    bool mRequiresSRGBViews;
 
     gl::TextureType mImageNativeType;
 
