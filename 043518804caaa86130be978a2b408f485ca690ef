@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d9288320_c9ffb4dd",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-06-04T20:26:39Z",
+      "side": 1,
+      "message": "Then I\u0027d have to reword everything saying that changes can only be made in current Beta and Stable branches. I\u0027ve tried to formulate this in general, and make Beta and Stable branches a special case, since they have autorollers.",
+      "parentUuid": "4ee00175_3fdf91f8",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df6f0602_6fdf7bad",
         "filename": "doc/ChoosingANGLEBranch.md",
         "patchSetId": 1
@@ -59,6 +83,30 @@
       "writtenOn": "2020-06-04T20:03:48Z",
       "side": 1,
       "message": "this generally isn\u0027t strictly necessary. the rollers should do their job.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 39
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "babe8abc_b265fec2",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-06-04T20:26:39Z",
+      "side": 1,
+      "message": "If they work.",
+      "parentUuid": "2e9a4598_85c7f5ac",
       "range": {
         "startLine": 77,
         "startChar": 0,
