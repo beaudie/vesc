@@ -91,6 +91,7 @@ declare_args() {
 }
 
 declare_args() {
+  angle_delegate_workers = build_with_chromium
   angle_enable_d3d9 = is_win && !angle_is_winuwp
   angle_enable_d3d11 = is_win
   angle_enable_gl =
