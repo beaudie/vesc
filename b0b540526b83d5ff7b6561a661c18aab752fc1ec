@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ead57203_7b2ce720",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-04T15:21:49Z",
+      "side": 1,
+      "message": "So I ran this ```set ANGLE_CAPTURE_FRAME_END\u003d5 \u0026\u0026 set ANGLE_CAPTURE_ENABLED\u003d1 \u0026\u0026 set ANGLE_CAPTURE_OUT_DIR\u003dsamples\\capture_replay\u0026\u0026 out\\Debug\\angle_perftests.exe ```, and for each test it recorded 6 frames from frame0 to frame5. I went into the angle_capture_context_1.cpp (file created from capture) and the switch statement in the replay method have a case for each of the 6 frame. So I think it will replay the last frame.",
+      "parentUuid": "951545eb_07e82667",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 80
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23ab7446_b0cbd5ae",
         "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
         "patchSetId": 3
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "Because this method is extended in GLES 3.x we should fix it now so we don\u0027t forget later.",
       "parentUuid": "fe826289_6c78def1",
+      "range": {
+        "startLine": 349,
+        "startChar": 18,
+        "endLine": 349,
+        "endChar": 38
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1034a8d_0081e93b",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-04T15:21:49Z",
+      "side": 1,
+      "message": "So I should add a similar method to capture_gles_3_0_params, right?",
+      "parentUuid": "2010b05f_9345aaa5",
       "range": {
         "startLine": 349,
         "startChar": 18,
