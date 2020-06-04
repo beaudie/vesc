@@ -16,6 +16,24 @@
       "revId": "d5066c12ccbff24a851032bf03e9395d80f194d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "786509bc_2039bab5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-04T23:28:35Z",
+      "side": 1,
+      "message": "Sorry.  As I tried to explain in a CL comment, this changed from being an anonymous-namespace utility function (only visible in this file) to being a method of the ContextVk class, so that it can be called by FramebufferVk methods.  Given the way the file is structured, that required moving it.",
+      "parentUuid": "3c5533af_01e69e4a",
+      "revId": "d5066c12ccbff24a851032bf03e9395d80f194d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
