@@ -1528,7 +1528,8 @@ EGLint EGLAPIENTRY EGL_DupNativeFenceFDANDROID(EGLDisplay dpy, EGLSyncKHR sync)
                          EGL_NO_NATIVE_FENCE_FD_ANDROID);
 
     EGLint result = EGL_NO_NATIVE_FENCE_FD_ANDROID;
-    ANGLE_EGL_TRY_RETURN(thread, syncObject->dupNativeFenceFD(display, &result),
+    ANGLE_EGL_TRY_RETURN(thread,
+                         syncObject->dupNativeFenceFD(display, thread->getContext(), &result),
                          "eglDupNativeFenceFDANDROID", GetSyncIfValid(display, syncObject),
                          EGL_NO_NATIVE_FENCE_FD_ANDROID);
 

@@ -134,17 +134,23 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = renderer->getDevice();
 
+    VkExportFenceCreateInfo exportCreateInfo = {};
+    exportCreateInfo.sType                   = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO;
+    exportCreateInfo.pNext                   = nullptr;
+    exportCreateInfo.handleTypes             = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+
     // Create fenceInfo base.
     VkFenceCreateInfo fenceCreateInfo = {};
     fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceCreateInfo.flags             = 0;
+    fenceCreateInfo.pNext             = &exportCreateInfo;
+
+    // Initialize/create a VkFence handle
+    ANGLE_VK_TRY(contextVk, mFenceWithFd.init(device, fenceCreateInfo));
 
     // If valid FD provided by application - import it to fence.
     if (inFd > kInvalidFenceFd)
     {
-        // Initialize/create a VkFence handle
-        ANGLE_VK_TRY(contextVk, mFenceWithFd.init(device, fenceCreateInfo));
-
         // Import FD - after creating fence.
         VkImportFenceFdInfoKHR importFenceFdInfo = {};
         importFenceFdInfo.sType                  = VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR;
@@ -167,15 +173,6 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // If invalid FD provided by application - create one with fence.
     if (inFd == kInvalidFenceFd)
     {
-        // Attach export FD-handleType, pNext struct, to indicate we may want to export FD.
-        VkExportFenceCreateInfo exportCreateInfo = {};
-        exportCreateInfo.sType                   = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO;
-        exportCreateInfo.handleTypes             = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
-        fenceCreateInfo.pNext                    = &exportCreateInfo;
-
-        // Initialize/create a VkFence handle
-        ANGLE_VK_TRY(contextVk, mFenceWithFd.init(device, fenceCreateInfo));
-
         /*
           Spec: "When a fence sync object is created or when an EGL native fence sync
           object is created with the EGL_SYNC_NATIVE_FENCE_FD_ANDROID attribute set to
@@ -254,13 +251,9 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = renderer->getDevice();
 
-    // Export an FD from mFenceWithFd
-    int fenceFd                   = kInvalidFenceFd;
-    VkFenceGetFdInfoKHR getFdInfo = {};
-    getFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
-    getFdInfo.fence               = mFenceWithFd.getHandle();
-    getFdInfo.handleType          = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
-    ANGLE_VK_TRY(contextVk, mFenceWithFd.exportFd(device, getFdInfo, &fenceFd));
+    // Dup an FD from mFenceWithFd
+    int fenceFd = kInvalidFenceFd;
+    ANGLE_TRY(dupNativeFenceFD(contextVk, &fenceFd));
 
     DeviceScoped<Semaphore> waitSemaphore(device);
     // Wait semaphore for next vkQueueSubmit().
@@ -296,7 +289,7 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context, bool *signaled)
     return angle::Result::Continue;
 }
 
-angle::Result SyncHelperNativeFence::dupNativeFenceFD(Context *context, int *fdOut) const
+angle::Result SyncHelperNativeFence::dupNativeFenceFD(ContextVk *contextVk, int *fdOut)
 {
     if (!mFenceWithFd.valid())
     {
@@ -307,7 +300,24 @@ angle::Result SyncHelperNativeFence::dupNativeFenceFD(Context *context, int *fdO
     fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
     fenceGetFdInfo.fence               = mFenceWithFd.getHandle();
     fenceGetFdInfo.handleType          = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
-    ANGLE_VK_TRY(context, mFenceWithFd.exportFd(context->getDevice(), fenceGetFdInfo, fdOut));
+    ANGLE_VK_TRY(contextVk, mFenceWithFd.exportFd(contextVk->getDevice(), fenceGetFdInfo, fdOut));
+
+    /*
+     Spec: Export operations have the same transference as the specified handle type's import
+     operations. Additionally, exporting a fence payload to a handle with copy transference has
+     the same side effects on the source fence's payload as executing a fence reset operation.
+     */
+    // Queue fence since pGetFdInfo->handleType is VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT.
+    Serial serialOut;
+    VkSubmitInfo submitInfo = {};
+    submitInfo.sType        = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    if (contextVk->getRenderer()->queueSubmit(contextVk, contextVk->getPriority(), submitInfo,
+                                              &mFenceWithFd, &serialOut) != angle::Result::Continue)
+    {
+        mFenceWithFd.destroy(contextVk->getDevice());
+        return angle::Result::Stop;
+    }
+
     return angle::Result::Continue;
 }
 
@@ -496,12 +506,14 @@ egl::Error EGLSyncVk::getStatus(const egl::Display *display, EGLint *outStatus)
     return egl::NoError();
 }
 
-egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display, EGLint *fdOut) const
+egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display,
+                                       const gl::Context *context,
+                                       EGLint *fdOut) const
 {
     switch (mType)
     {
         case EGL_SYNC_NATIVE_FENCE_ANDROID:
-            return angle::ToEGL(mSyncHelper->dupNativeFenceFD(vk::GetImpl(display), fdOut),
+            return angle::ToEGL(mSyncHelper->dupNativeFenceFD(vk::GetImpl(context), fdOut),
                                 vk::GetImpl(display), EGL_BAD_PARAMETER);
         default:
             return egl::EglBadDisplay();
