@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c5533af_01e69e4a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-04T23:07:51Z",
+      "side": 1,
+      "message": "Why did this change position in the code? Makes it harder to see what changed.",
+      "revId": "d5066c12ccbff24a851032bf03e9395d80f194d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
