@@ -22,6 +22,30 @@
       "revId": "83d771a84f1db15fa1ac6ab8a5ae0f4747f093df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b85e4b3_f088d713",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T14:35:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54754651_bcfe7694",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 11
+      },
+      "revId": "83d771a84f1db15fa1ac6ab8a5ae0f4747f093df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
