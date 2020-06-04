@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "030c9063_960e0f78",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-04T21:12:24Z",
+      "side": 1,
+      "message": "The math certainly looks correct, and I verified it by running replay.",
+      "parentUuid": "ac8c3cbf_667f585a",
+      "range": {
+        "startLine": 63,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90997f8e_18a2a6cb",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
