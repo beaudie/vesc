@@ -213,12 +213,98 @@ void AsyncWorkerPool::checkToRunPendingTasks()
 }
 #endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 
+#if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED)
+class DelegateWaitableEvent final : public WaitableEvent
+{
+  public:
+    DelegateWaitableEvent()           = default;
+    ~DelegateWaitableEvent() override = default;
+
+    void wait() override;
+    bool isReady() override;
+
+    void markAsReady();
+
+  private:
+    // To protect the concurrent accesses from both main thread and background
+    // threads to the member fields.
+    std::mutex mMutex;
+
+    bool mIsReady = false;
+    std::condition_variable mCondition;
+};
+
+void DelegateWaitableEvent::markAsReady()
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    mIsReady = true;
+    mCondition.notify_all();
+}
+
+void DelegateWaitableEvent::wait()
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    if (!mIsReady)
+        mCondition.wait(lock);
+}
+
+bool DelegateWaitableEvent::isReady()
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    return mIsReady;
+}
+
+class DelegateWorkerPool final : public WorkerThreadPool
+{
+  public:
+    DelegateWorkerPool()           = default;
+    ~DelegateWorkerPool() override = default;
+
+    std::shared_ptr<WaitableEvent> postWorkerTask(std::shared_ptr<Closure> task) override;
+
+    virtual void setMaxThreads(size_t maxThreads) override;
+    bool isAsync() override;
+};
+
+std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(std::shared_ptr<Closure> task)
+{
+    auto waitable = std::make_shared<DelegateWaitableEvent>();
+
+    // A function wrapper to execute the closure and to notify the waitable
+    // event after the execution.
+    auto function_wrapper = [task, waitable]() {
+        (*task)();
+        waitable->markAsReady();
+    };
+
+    auto *platform = ANGLEPlatformCurrent();
+    platform->postWorkerTask(platform, std::move(function_wrapper));
+
+    return waitable;
+}
+
+void DelegateWorkerPool::setMaxThreads(size_t maxThreads) {}
+
+bool DelegateWorkerPool::isAsync()
+{
+    return true;
+}
+#endif
+
 // static
 std::shared_ptr<WorkerThreadPool> WorkerThreadPool::Create(bool multithreaded)
 {
     std::shared_ptr<WorkerThreadPool> pool(nullptr);
-#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+
+#if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED)
     if (multithreaded)
+    {
+        pool = std::shared_ptr<WorkerThreadPool>(
+            static_cast<WorkerThreadPool *>(new DelegateWorkerPool()));
+    }
+#endif
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+    if (!pool && multithreaded)
     {
         pool = std::shared_ptr<WorkerThreadPool>(static_cast<WorkerThreadPool *>(
             new AsyncWorkerPool(std::thread::hardware_concurrency())));
