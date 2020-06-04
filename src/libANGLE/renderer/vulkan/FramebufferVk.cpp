@@ -1726,7 +1726,12 @@ gl::Rectangle FramebufferVk::getScissoredRenderArea(ContextVk *contextVk) const
 {
     const gl::Rectangle renderArea = getCompleteRenderArea();
     bool invertViewport            = contextVk->isViewportFlipEnabledForDrawFBO();
-    return ClipRectToScissor(contextVk->getState(), renderArea, invertViewport);
+    gl::Rectangle scissoredArea    = ClipRectToScissor(contextVk->getState(), renderArea, false);
+    gl::Rectangle rotatedScissoredArea;
+    contextVk->RotateRectangle(contextVk->getRotationDrawFramebuffer(), invertViewport,
+                               renderArea.width, renderArea.height, scissoredArea,
+                               &rotatedScissoredArea);
+    return rotatedScissoredArea;
 }
 
 RenderTargetVk *FramebufferVk::getFirstRenderTarget() const
