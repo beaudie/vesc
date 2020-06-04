@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ce17d9c_137ab99d",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T16:45:31Z",
+      "side": 1,
+      "message": "it\u0027s actually a few parameters that can be 64 bit. Not just offset. I\u0027d suggest we conservatively always reserve 64 bits.",
+      "range": {
+        "startLine": 349,
+        "startChar": 17,
+        "endLine": 349,
+        "endChar": 37
+      },
+      "revId": "4fe6c0218dd2b81f9fcd781652e5b9ded54d5a4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
