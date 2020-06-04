@@ -103,7 +103,9 @@ egl::Error SyncEGL::getStatus(const egl::Display *display, EGLint *outStatus)
     return egl::NoError();
 }
 
-egl::Error SyncEGL::dupNativeFenceFD(const egl::Display *display, EGLint *result) const
+egl::Error SyncEGL::dupNativeFenceFD(const egl::Display *display,
+                                     const gl::Context *context,
+                                     EGLint *result) const
 {
     ASSERT(mSync != EGL_NO_SYNC_KHR);
     *result = mEGL->dupNativeFenceFDANDROID(mSync);

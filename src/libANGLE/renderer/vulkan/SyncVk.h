@@ -46,7 +46,7 @@ class SyncHelper : public vk::Resource
                                      VkResult *outResult);
     virtual angle::Result serverWait(ContextVk *contextVk);
     virtual angle::Result getStatus(Context *context, bool *signaled) const;
-    virtual angle::Result dupNativeFenceFD(Context *context, int *fdOut) const
+    virtual angle::Result dupNativeFenceFD(ContextVk *contextVk, int *fdOut)
     {
         return angle::Result::Stop;
     }
@@ -77,7 +77,7 @@ class SyncHelperNativeFence : public SyncHelper
                              VkResult *outResult) override;
     angle::Result serverWait(ContextVk *contextVk) override;
     angle::Result getStatus(Context *context, bool *signaled) const override;
-    angle::Result dupNativeFenceFD(Context *context, int *fdOut) const override;
+    angle::Result dupNativeFenceFD(ContextVk *contextVk, int *fdOut) override;
 
   private:
     vk::Fence mFenceWithFd;
@@ -130,7 +130,9 @@ class EGLSyncVk final : public EGLSyncImpl
                           EGLint flags) override;
     egl::Error getStatus(const egl::Display *display, EGLint *outStatus) override;
 
-    egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *fdOut) const override;
+    egl::Error dupNativeFenceFD(const egl::Display *display,
+                                const gl::Context *context,
+                                EGLint *fdOut) const override;
 
   private:
     EGLenum mType;
