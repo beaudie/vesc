@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f32d7812_fa257519",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T21:55:53Z",
+      "side": 1,
+      "message": "It looks like our initialization doesn\u0027t correctly detect when the ICD version is presented as lower than the loader\u0027s reported version. This is actually an existing bug in ANGLE\u0027s init code. Not sure on the right way to fix this, I\u0027ll bring it up to the team.",
+      "parentUuid": "9c164ea3_bbc117c4",
+      "range": {
+        "startLine": 823,
+        "startChar": 47,
+        "endLine": 823,
+        "endChar": 73
+      },
+      "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c098c3b_4bf5e73e",
         "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
         "patchSetId": 1
