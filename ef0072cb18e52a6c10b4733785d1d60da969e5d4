@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "199b714d_84a96adc",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-04T16:13:00Z",
+      "side": 1,
+      "message": "All good changes, I only don\u0027t understand this added call to queueSubmit(). I would expect the app, after calling dupNativeFenceFD(), to call eglClientWaitSync(), but I guess you are saying that is not the case, and the FD needs to be submitted, so that the exported/dup\u0027d FD gets signaled?",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
