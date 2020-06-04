@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4a1cbcfa_404d464e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-04T15:19:54Z",
+      "side": 1,
+      "message": "Here\u0027s to align with same style of line 176, sure we can update to \"//\" style. :)",
+      "parentUuid": "cacfc627_9c5c8670",
+      "range": {
+        "startLine": 305,
+        "startChar": 2,
+        "endLine": 305,
+        "endChar": 6
+      },
+      "revId": "9d471c7d6fd2a63e603c77996602982c36cd58e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7097697a_b826b458",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-04T14:10:42Z",
       "side": 1,
       "message": "Doesn\u0027t this mean the fence should become unsignaled? Wouldn\u0027t the queueSubmit below make it signaled?",
+      "range": {
+        "startLine": 308,
+        "startChar": 70,
+        "endLine": 308,
+        "endChar": 93
+      },
+      "revId": "9d471c7d6fd2a63e603c77996602982c36cd58e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5035379e_f3c58a75",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-04T15:19:54Z",
+      "side": 1,
+      "message": "Yes export operation means the fence is unsignaled, and the queueSubmit is to ensure fence was added into vkQueue with valid FD before duplicate a new FD out, just like a flush operation which may not signal the fence right away? \n\nThe key point here is, under VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT, the transference of fence ownership is \"COPY\" rather that transfer. \n\nThe vkGetFenceFdKHR() will unsignal the fence and _transfer_ the ownership to the new FD out, and then vkQueueSubmit() will ensure fence(although submitted into queue) still got valid FD before passing out the \"duped\" new FD. Thus, after dup the new FD out, we can still have a valid fence.",
+      "parentUuid": "7097697a_b826b458",
       "range": {
         "startLine": 308,
         "startChar": 70,
