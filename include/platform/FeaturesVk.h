@@ -330,6 +330,30 @@ struct FeaturesVk : FeatureSetBase
         "enable_command_processing_thread", FeatureCategory::VulkanFeatures,
         "Enable parallel processing and submission of Vulkan commands in worker thread", &members,
         "http://anglebug.com/4324"};
+
+    // Whether the VkDevice supports the VK_KHR_shader_float16_int8 extension and has the
+    // shaderFloat16 feature.
+    Feature supportsShaderFloat16 = {"supports_shader_float16", FeatureCategory::VulkanFeatures,
+                                     "VkDevice supports the VK_KHR_shader_float16_int8 extension "
+                                     "and has the shaderFloat16 feature",
+                                     &members, "http://anglebug.com/4551"};
+
+    // Some devices don't meet the limits required to perform mipmap generation using the built-in
+    // compute shader.
+    Feature disallowGenerateMipmapWithCompute = {
+        "disallow_generate_mipmap_with_compute", FeatureCategory::VulkanFeatures,
+        "Don't use the compute path to generate mipmaps on devices that don't meet the minimum "
+        "requirements.",
+        &members, "http://anglebug.com/4551"};
+
+    // On some devices, VK_IMAGE_USAGE_STORAGE_BIT is deterimental to sampling performance.  On such
+    // hardware, if using the compute path, prefer to generate mipmap into a temporary image to
+    // avoid adding that flag to the original image.
+    Feature avoidStorageFlagAfterGenerateMipmap = {
+        "avoid_storage_flag_after_generate_mipmap", FeatureCategory::VulkanFeatures,
+        "Prefer to generate mipmaps to a temporary image to avoid VK_IMAGE_USAGE_STORAGE_BIT on "
+        "the final image",
+        &members, "http://anglebug.com/4551"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

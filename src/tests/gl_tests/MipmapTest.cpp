@@ -404,6 +404,7 @@ class MipmapTestES31 : public BaseMipmapTest
         setConfigAlphaBits(8);
     }
 };
+
 // This test uses init data for the first three levels of the texture. It passes the level 0 data
 // in, then renders, then level 1, then renders, etc. This ensures that renderers using the zero LOD
 // workaround (e.g. D3D11 FL9_3) correctly pass init data to the mipmapped texture, even if the the
@@ -516,6 +517,90 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::green);
     clearAndDrawQuad(m2DProgram, getWindowWidth() / 4, getWindowHeight() / 4);
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 8, getWindowHeight() / 8, GLColor::red);
+}
+
+// This test generates mipmaps for a large texture and ensures all mips are generated.
+TEST_P(MipmapTestES3, GenerateMipmapLargeTexture)
+{
+    constexpr uint32_t kTextureSize = 4096;
+
+    const std::vector<GLColor> kInitialColor(kTextureSize * kTextureSize, GLColor::blue);
+
+    // Create the texture.
+    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTextureSize, kTextureSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, kInitialColor.data());
+
+    // Then generate the mips.
+    glGenerateMipmap(GL_TEXTURE_2D);
+    ASSERT_GL_NO_ERROR();
+
+    // Enable mipmaps.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    glUseProgram(program);
+    GLint textureLoc = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    GLint lodLoc     = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, textureLoc);
+    ASSERT_NE(-1, lodLoc);
+    glUniform1i(textureLoc, 0);
+
+    // Verify that every mip is correct.
+    const int w = getWindowWidth() - 1;
+    const int h = getWindowHeight() - 1;
+    for (uint32_t mip = 0; kTextureSize >> mip >= 1; ++mip)
+    {
+        glUniform1f(lodLoc, mip);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_EQ(0, 0, kInitialColor[0]);
+        EXPECT_PIXEL_COLOR_EQ(w, 0, kInitialColor[0]);
+        EXPECT_PIXEL_COLOR_EQ(0, h, kInitialColor[0]);
+        EXPECT_PIXEL_COLOR_EQ(w, h, kInitialColor[0]);
+    }
+}
+
+// This test generates mipmaps for a large npot texture and ensures all mips are generated.
+TEST_P(MipmapTestES3, GenerateMipmapLargeNPOTTexture)
+{
+    constexpr uint32_t kTextureWidth  = 3840;
+    constexpr uint32_t kTextureHeight = 2160;
+
+    const std::vector<GLColor> kInitialColor(kTextureWidth * kTextureHeight, GLColor::red);
+
+    // Create the texture.
+    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTextureWidth, kTextureHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, kInitialColor.data());
+
+    // Then generate the mips.
+    glGenerateMipmap(GL_TEXTURE_2D);
+    ASSERT_GL_NO_ERROR();
+
+    // Enable mipmaps.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    glUseProgram(program);
+    GLint textureLoc = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    GLint lodLoc     = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, textureLoc);
+    ASSERT_NE(-1, lodLoc);
+    glUniform1i(textureLoc, 0);
+
+    // Verify that every mip is correct.
+    for (uint32_t mip = 0; kTextureWidth >> mip >= 1 || kTextureHeight >> mip >= 1; ++mip)
+    {
+        glUniform1f(lodLoc, mip);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_EQ(0, 0, kInitialColor[0]);
+    }
 }
 
 // This test generates (and uses) mipmaps on a texture using init data. D3D11 will use a
