@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "df75e1b8_4b5c46ea",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T20:34:51Z",
+      "side": 1,
+      "message": "how about \"There is one final step for Chrome Beta and Stable release branches: a Skia auto-roller updates the ...\"",
+      "parentUuid": "d9288320_c9ffb4dd",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df6f0602_6fdf7bad",
         "filename": "doc/ChoosingANGLEBranch.md",
         "patchSetId": 1
@@ -116,6 +140,30 @@
       "revId": "043518804caaa86130be978a2b408f485ca690ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c36dad9_209293ac",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T20:34:51Z",
+      "side": 1,
+      "message": "OK, SGTM.",
+      "parentUuid": "babe8abc_b265fec2",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 39
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
