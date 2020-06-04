@@ -4156,16 +4156,7 @@ angle::Result ContextVk::flushAndBeginRenderPass(
     vk::CommandBuffer *outsideRenderPassCommandBuffer;
     ANGLE_TRY(endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
 
-    gl::Rectangle rotatedRenderArea = renderArea;
-    if (isRotatedAspectRatioForDrawFBO())
-    {
-        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of
-        // the surface.  Swap the x and y axis of the renderArea.
-        std::swap(rotatedRenderArea.x, rotatedRenderArea.y);
-        std::swap(rotatedRenderArea.width, rotatedRenderArea.height);
-    }
-
-    mRenderPassCommands->beginRenderPass(framebuffer, rotatedRenderArea, renderPassDesc,
+    mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                          renderPassAttachmentOps, clearValues, commandBufferOut);
     return angle::Result::Continue;
 }

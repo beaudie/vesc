@@ -88,6 +88,51 @@ bool AreSrcAndDstDepthStencilChannelsBlitCompatible(RenderTargetVk *srcRenderTar
     return (dstFormat.depthBits > 0 || srcFormat.depthBits == 0) &&
            (dstFormat.stencilBits > 0 || srcFormat.stencilBits == 0);
 }
+
+// FIXME: THE FOLLOWING IS CLONED FROM "ContextVk.cpp"
+void RotateRectangle(const SurfaceRotation rotation,
+                     const bool flipY,
+                     const int framebufferWidth,
+                     const int framebufferHeight,
+                     const gl::Rectangle &incoming,
+                     gl::Rectangle *outgoing)
+{
+    // GLES's y-axis points up; Vulkan's points down.
+    switch (rotation)
+    {
+        case SurfaceRotation::Identity:
+            // Do not rotate gl_Position (surface matches the device's orientation):
+            outgoing->x     = incoming.x;
+            outgoing->y     = flipY ? framebufferHeight - incoming.y - incoming.height : incoming.y;
+            outgoing->width = incoming.width;
+            outgoing->height = incoming.height;
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            // Rotate gl_Position 90 degrees:
+            outgoing->x      = incoming.y;
+            outgoing->y      = flipY ? incoming.x : framebufferWidth - incoming.x - incoming.width;
+            outgoing->width  = incoming.height;
+            outgoing->height = incoming.width;
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            // Rotate gl_Position 180 degrees:
+            outgoing->x     = framebufferWidth - incoming.x - incoming.width;
+            outgoing->y     = flipY ? incoming.y : framebufferHeight - incoming.y - incoming.height;
+            outgoing->width = incoming.width;
+            outgoing->height = incoming.height;
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            // Rotate gl_Position 270 degrees:
+            outgoing->x      = framebufferHeight - incoming.y - incoming.height;
+            outgoing->y      = flipY ? framebufferWidth - incoming.x - incoming.width : incoming.x;
+            outgoing->width  = incoming.height;
+            outgoing->height = incoming.width;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
 }  // anonymous namespace
 
 // static
@@ -1726,7 +1771,11 @@ gl::Rectangle FramebufferVk::getScissoredRenderArea(ContextVk *contextVk) const
 {
     const gl::Rectangle renderArea = getCompleteRenderArea();
     bool invertViewport            = contextVk->isViewportFlipEnabledForDrawFBO();
-    return ClipRectToScissor(contextVk->getState(), renderArea, invertViewport);
+    gl::Rectangle scissoredArea    = ClipRectToScissor(contextVk->getState(), renderArea, false);
+    gl::Rectangle rotatedScissoredArea;
+    RotateRectangle(contextVk->getRotationDrawFramebuffer(), invertViewport, renderArea.width,
+                    renderArea.height, scissoredArea, &rotatedScissoredArea);
+    return rotatedScissoredArea;
 }
 
 RenderTargetVk *FramebufferVk::getFirstRenderTarget() const
