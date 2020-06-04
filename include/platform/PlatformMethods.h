@@ -247,6 +247,17 @@ inline void DefaultCacheProgram(PlatformMethods *platform,
                                 const uint8_t *programBytes)
 {}
 
+using PostWorkerTaskCallback = void (*)(void *user_data);
+using PostWorkerTaskFunc     = void (*)(PlatformMethods *platform,
+                                    PostWorkerTaskCallback callback,
+                                    void *user_data);
+inline void DefaultPostWorkerTask(PlatformMethods *platform,
+                                  PostWorkerTaskCallback callback,
+                                  void *user_data)
+{
+    callback(user_data);
+}
+
 // Platform methods are enumerated here once.
 #define ANGLE_PLATFORM_OP(OP)                                    \
     OP(currentTime, CurrentTime)                                 \
@@ -264,7 +275,8 @@ inline void DefaultCacheProgram(PlatformMethods *platform,
     OP(overrideWorkaroundsD3D, OverrideWorkaroundsD3D)           \
     OP(overrideFeaturesVk, OverrideFeaturesVk)                   \
     OP(cacheProgram, CacheProgram)                               \
-    OP(overrideFeaturesMtl, OverrideFeaturesMtl)
+    OP(overrideFeaturesMtl, OverrideFeaturesMtl)                 \
+    OP(postWorkerTask, PostWorkerTask)
 
 #define ANGLE_PLATFORM_METHOD_DEF(Name, CapsName) CapsName##Func Name = Default##CapsName;
 
