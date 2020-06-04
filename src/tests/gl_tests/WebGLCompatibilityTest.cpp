@@ -2781,6 +2781,53 @@ TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that copying from mip 1 of a texture to mip 0 works.  When the framebuffer is attached to
+// mip 1 of a mip-complete texture, an image with both mips are created.  When copying from the
+// framebuffer to mip 1, mip 0 is being redefined.  TODO: is this valid? Does it work before making
+// the FB incomplete, or does it not work at all?
+TEST_P(WebGL2CompatibilityTest, Mip1ToMip0)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    const GLColor mip0[4] = {
+        GLColor::red,
+        GLColor::red,
+        GLColor::red,
+        GLColor::red,
+    };
+    const GLColor mip1[1] = {
+        GLColor::green,
+    };
+
+    // Create a complete mip chain in mips 0 to 2
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, mip0);
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, mip1);
+
+    // Framebuffer can bind to mip 1, as the texture is mip-complete.
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 1);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Copy to mip 0.  This shouldn't crash.
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 1, 1, 0);
+
+    // The framebuffer is now incomplete.
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
+                     glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    // Bind framebuffer to mip 0 and make sure the copy was done.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 void WebGLCompatibilityTest::drawBuffersFeedbackLoop(GLuint program,
                                                      const std::array<GLenum, 2> &drawBuffers,
                                                      GLenum expectedError)
