@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "838f63f4_fb9b3eb5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-04T23:59:49Z",
+      "side": 1,
+      "message": "Isn\u0027t \u0026bindings-\u003eimmutableSamplers.back() the same thing as the \u0026bindings-\u003eimmutableSamplers.back() that we just pushed in the line above this?  Is the idea that we need a pointer?",
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b2dac94_1820231c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-04T23:59:49Z",
+      "side": 1,
+      "message": "I\u0027m sure I\u0027m missing something, but ... Since VkDescriptorSetLayoutBinding contains pImmutableSamplers, and since \"bindings\" is a vector of VkDescriptorSetLayoutBinding\u0027s, why do we need a separate vector here?",
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
