@@ -254,9 +254,7 @@ using PostWorkerTaskFunc     = void (*)(PlatformMethods *platform,
 inline void DefaultPostWorkerTask(PlatformMethods *platform,
                                   PostWorkerTaskCallback callback,
                                   void *userData)
-{
-    callback(userData);
-}
+{}
 
 // Platform methods are enumerated here once.
 #define ANGLE_PLATFORM_OP(OP)                                    \
