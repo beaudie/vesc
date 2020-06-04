@@ -462,6 +462,29 @@ TEST_P(FramebufferTest_ES3, TextureAttachmentMipLevels)
     ExpectFramebufferCompleteOrUnsupported(GL_FRAMEBUFFER);
 }
 
+// Test that framebuffer can be created from a mip-incomplete texture.
+TEST_P(FramebufferTest_ES3, TextureAttachmentMipIncomplete)
+{
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 100, 100, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, 5, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Set framebuffer to mip 0.  Framebuffer should be complete, and make the texture allocate
+    // an image of only 1 level (the latter is impossible to test here).
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    ExpectFramebufferCompleteOrUnsupported(GL_FRAMEBUFFER);
+
+    glClearColor(0, 0, 0, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+}
+
 // Test that passing an attachment COLOR_ATTACHMENTm where m is equal to MAX_COLOR_ATTACHMENTS
 // generates an INVALID_OPERATION.
 // OpenGL ES Version 3.0.5 (November 3, 2016), 4.4.2.4 Attaching Texture Images to a Framebuffer, p.
