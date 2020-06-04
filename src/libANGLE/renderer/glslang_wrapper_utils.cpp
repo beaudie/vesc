@@ -1225,6 +1225,11 @@ void SpirvTransformer::transformInstruction()
         // Look at global declaration opcodes.
         switch (opCode)
         {
+            case spv::OpName:
+            case spv::OpMemberName:
+                // Strip debug info to reduce binary size.
+                transformed = true;
+                break;
             case spv::OpCapability:
                 transformed = transformCapability(instruction, wordCount);
                 break;
