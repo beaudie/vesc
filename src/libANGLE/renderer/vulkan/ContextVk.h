@@ -215,6 +215,12 @@ class ContextVk : public ContextImpl, public vk::Context
     bool isRotatedAspectRatioForReadFBO() const;
     SurfaceRotation getRotationDrawFramebuffer() const;
     SurfaceRotation getRotationReadFramebuffer() const;
+    void RotateRectangle(const SurfaceRotation rotation,
+                         const bool flipY,
+                         const int framebufferWidth,
+                         const int framebufferHeight,
+                         const gl::Rectangle &incoming,
+                         gl::Rectangle *outgoing);
 
     void invalidateProgramBindingHelper(const gl::State &glState);
     angle::Result invalidateProgramExecutableHelper(const gl::Context *context);
