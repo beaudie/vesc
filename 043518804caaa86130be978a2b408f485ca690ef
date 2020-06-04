@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "2173d43b_f6eb02ce",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-06-04T20:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df75e1b8_4b5c46ea",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df6f0602_6fdf7bad",
         "filename": "doc/ChoosingANGLEBranch.md",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "revId": "043518804caaa86130be978a2b408f485ca690ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53266983_d6cd8f67",
+        "filename": "doc/ChoosingANGLEBranch.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-06-04T20:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df6f0602_6fdf7bad",
+      "range": {
+        "startLine": 72,
+        "startChar": 28,
+        "endLine": 73,
+        "endChar": 21
+      },
+      "revId": "043518804caaa86130be978a2b408f485ca690ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
