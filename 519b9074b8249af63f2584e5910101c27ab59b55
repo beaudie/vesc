@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "85fb69fc_cf6be95d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/VertexBuffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-04T00:42:41Z",
+      "side": 1,
+      "message": "Sounds good. Hope you and Geoff made some progress.",
+      "parentUuid": "e4685ceb_af103f48",
+      "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45f11030_52646347",
         "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
         "patchSetId": 1
