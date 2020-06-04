@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ac8c3cbf_667f585a",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-04T20:53:29Z",
+      "side": 1,
+      "message": "I think I prefer updating the math a bit rather than checking for equality each iteration.\n\nDoes the following work for single frame cases?  It is working for playing the last frame: \n\nuint32_t frame \u003d\n    kReplayFrameStart + (mCurrentFrame % ((kReplayFrameEnd - kReplayFrameStart) + 1));",
+      "range": {
+        "startLine": 63,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90997f8e_18a2a6cb",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
@@ -85,6 +108,30 @@
       "side": 1,
       "message": "So I ran this ```set ANGLE_CAPTURE_FRAME_END\u003d5 \u0026\u0026 set ANGLE_CAPTURE_ENABLED\u003d1 \u0026\u0026 set ANGLE_CAPTURE_OUT_DIR\u003dsamples\\capture_replay\u0026\u0026 out\\Debug\\angle_perftests.exe ```, and for each test it recorded 6 frames from frame0 to frame5. I went into the angle_capture_context_1.cpp (file created from capture) and the switch statement in the replay method have a case for each of the 6 frame. So I think it will replay the last frame.",
       "parentUuid": "951545eb_07e82667",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 80
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9950d93a_7c89c87d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-04T20:53:29Z",
+      "side": 1,
+      "message": "I think you\u0027ll need to look at the harness (TracePerfTest.cpp) and run the test to ensure it is hitting all ten frames.  I definitely see a problem with running a single frame:\n\n    ASSERT_TRUE(mEndFrame \u003e mStartFrame);\n\nand with the end frame:\n\n    for (uint32_t frame \u003d mStartFrame; frame \u003c mEndFrame; ++frame)\n\nI\u0027m about to try it locally for a new trace, so I can probably fix the latter.  Single frame perf tests aren\u0027t a thing yet.",
+      "parentUuid": "ead57203_7b2ce720",
       "range": {
         "startLine": 935,
         "startChar": 4,
