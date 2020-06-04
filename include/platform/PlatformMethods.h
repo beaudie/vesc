@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <array>
+#include <thread>
 
 #define EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX 0x3482
 
@@ -255,7 +256,8 @@ inline void DefaultPostWorkerTask(PlatformMethods *platform,
                                   PostWorkerTaskCallback callback,
                                   void *userData)
 {
-    callback(userData);
+    std::thread worker_thread([callback, userData] { callback(userData); });
+    worker_thread.detach();
 }
 
 // Platform methods are enumerated here once.
