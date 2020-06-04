@@ -12,13 +12,13 @@
 
 #include "libANGLE/trace.h"
 
-#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+#if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED) || (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 #    include <condition_variable>
 #    include <future>
 #    include <mutex>
 #    include <queue>
 #    include <thread>
-#endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+#endif  // (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED) || (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 
 namespace angle
 {
