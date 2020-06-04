@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90997f8e_18a2a6cb",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T14:30:38Z",
+      "side": 1,
+      "message": "can you check if we\u0027re skipping the last frame in TracePerfTest?",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 80
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23ab7446_b0cbd5ae",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-04T14:30:38Z",
+      "side": 1,
+      "message": "for the map pointer, this can be larger than a GLint.",
+      "range": {
+        "startLine": 349,
+        "startChar": 18,
+        "endLine": 349,
+        "endChar": 38
+      },
+      "revId": "b0b540526b83d5ff7b6561a661c18aab752fc1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
