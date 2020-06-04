@@ -66,3 +66,14 @@ If there are conflicts, however, follow these steps:
 Have the cherry-pick reviewed, and then land it. It's also OK to skip
 the review and land it yourself with TBR= in the issue description, if
 you have that ability.
+
+There is one more step for the ANGLE change to be picked up by Chromium.
+Chromium DEPS file in Chromium branch should be updated with the commit hash
+of the fix in ANGLE branch. For Chromium Beta and Stable branches this is done
+by these autorollers:
+
+1. https://autoroll.skia.org/r/angle-chromium-beta-autoroll
+1. https://autoroll.skia.org/r/angle-chromium-stable-autoroll
+
+Please make sure that the autorollers have picked up your ANGLE fix and rolled
+it into the correspong Chromium branch.
