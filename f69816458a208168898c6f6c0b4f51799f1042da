@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52e48d6f_4fddc0ac",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-04T14:11:55Z",
+      "side": 1,
+      "message": "nit: Add comment in the code as to why these aren\u0027t length-checked.",
+      "revId": "f69816458a208168898c6f6c0b4f51799f1042da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
