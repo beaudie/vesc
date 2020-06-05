@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "6377694a_9c5115dc",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-05T23:21:09Z",
+      "side": 1,
+      "message": "I thought that might be what you wanted to work with. It\u0027s passed to createEGLImageAndroidHardwareBufferSource, but createEGLImageAndroidHardwareBufferSource doesn\u0027t pass it on to createAndroidHardwareBuffer to use it as the source data.",
+      "parentUuid": "2fa12169_406b00ff",
+      "revId": "3beb59301bf9b156c12d15525052723ee5f147be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc5760fe_31062f66",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 1
@@ -101,6 +119,30 @@
       "side": 1,
       "message": "yes will do so when we have a compilable and testable code. As of now we dont have access to the ndk headers and ndk libs from here",
       "parentUuid": "dc5760fe_31062f66",
+      "range": {
+        "startLine": 1398,
+        "startChar": 7,
+        "endLine": 1398,
+        "endChar": 22
+      },
+      "revId": "3beb59301bf9b156c12d15525052723ee5f147be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe3a79e3_3d6fbadf",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-05T23:21:09Z",
+      "side": 1,
+      "message": "Ah, that\u0027s a pain.",
+      "parentUuid": "c6cebf54_cf622dfb",
       "range": {
         "startLine": 1398,
         "startChar": 7,
