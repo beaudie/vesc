@@ -38,7 +38,9 @@ void CaptureDrawArraysIndirect_indirect(const State &glState,
                                         const void *indirect,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // DrawArraysIndirect requires that all data sourced for the command,
+    // including the DrawArraysIndirectCommand structure, be in buffer objects,
+    // and may not be called when the default vertex array object is bound.
 }
 
 void CaptureDrawElementsIndirect_indirect(const State &glState,
@@ -48,7 +50,9 @@ void CaptureDrawElementsIndirect_indirect(const State &glState,
                                           const void *indirect,
                                           ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // DrawElementsIndirect requires that all data sourced for the command,
+    // including the DrawElementsIndirectCommand structure, be in buffer objects,
+    // and may not be called when the default vertex array object is bound
 }
 
 void CaptureGenProgramPipelines_pipelinesPacked(const State &glState,
