@@ -904,7 +904,7 @@ void CaptureVertexAttribPointer_pointer(const State &glState,
                                         ParamCapture *paramCapture)
 {
     paramCapture->value.voidConstPointerVal = pointer;
-    if (!glState.getTargetBuffer(gl::BufferBinding::Array))
+    if (!glState.getTargetBuffer(gl::BufferBinding::Array) && pointer != nullptr)
     {
         paramCapture->arrayClientPointerIndex = index;
     }

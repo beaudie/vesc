@@ -2364,7 +2364,14 @@ void CaptureGetQueryObjectuivEXT_params(const State &glState,
                                         GLuint *params,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (pname == GL_QUERY_RESULT)
+    {
+        paramCapture->readBufferSizeBytes = sizeof(GLuint);
+    }
+    else if (pname == GL_QUERY_RESULT_AVAILABLE)
+    {
+        paramCapture->readBufferSizeBytes = sizeof(GLboolean);
+    }
 }
 
 void CaptureGetQueryivEXT_params(const State &glState,
