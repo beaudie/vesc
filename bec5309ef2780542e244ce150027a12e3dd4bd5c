@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6055e032_e66379ef",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T15:38:42Z",
+      "side": 1,
+      "message": "nit: I suggest we just reserve 8 bytes here. sizeof(void*) will be 4 bytes on 32-bit platforms which won\u0027t be enough for OFFSET, etc, as those are 64-bit always.",
+      "range": {
+        "startLine": 349,
+        "startChar": 39,
+        "endLine": 349,
+        "endChar": 54
+      },
+      "revId": "bec5309ef2780542e244ce150027a12e3dd4bd5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
