@@ -53,7 +53,7 @@ Thread *AllocateCurrentThread()
     }
 
     Thread *thread = new Thread();
-    if (!SetTLSValue(threadTLS, thread))
+    if (!SetContextTls(threadTLS, thread))
     {
         ERR() << "Could not set thread local storage.";
         return nullptr;
@@ -97,10 +97,10 @@ Thread *GetCurrentThread()
     // Create a TLS index if one has not been created for this DLL
     if (threadTLS == TLS_INVALID_INDEX)
     {
-        threadTLS = CreateTLSIndex();
+        threadTLS = CreateContextTLSIndex();
     }
 
-    Thread *current = static_cast<Thread *>(GetTLSValue(threadTLS));
+    Thread *current = static_cast<Thread *>(GetContextTls(threadTLS));
 
     // ANGLE issue 488: when the dll is loaded after thread initialization,
     // thread local storage (current) might not exist yet.

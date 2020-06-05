@@ -9,6 +9,8 @@
 #ifndef COMMON_TLS_H_
 #define COMMON_TLS_H_
 
+#include "common/angleutils.h"
+#include "common/debug.h"
 #include "common/platform.h"
 
 #ifdef ANGLE_PLATFORM_WINDOWS
@@ -42,5 +44,95 @@ bool DestroyTLSIndex(TLSIndex index);
 
 bool SetTLSValue(TLSIndex index, void *value);
 void *GetTLSValue(TLSIndex index);
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    if defined(__aarch64__)
+#        define __get_tls()                                 \
+            ({                                              \
+                void **__val;                               \
+                __asm__("mrs %0, tpidr_el0" : "=r"(__val)); \
+                __val;                                      \
+            })
+#    elif defined(__arm__)
+#        define __get_tls()                                          \
+            ({                                                       \
+                void **__val;                                        \
+                __asm__("mrc p15, 0, %0, c13, c0, 3" : "=r"(__val)); \
+                __val;                                               \
+            })
+#    elif defined(__mips__)
+#        define __get_tls()                                                                      \
+            /* On mips32r1, this goes via a kernel illegal instruction trap that's optimized for \
+             * v1. */                                                                            \
+            ({                                                                                   \
+                register void **__val asm("v1");                                                 \
+                __asm__(                                                                         \
+                    ".set    push\n"                                                             \
+                    ".set    mips32r2\n"                                                         \
+                    "rdhwr   %0,$29\n"                                                           \
+                    ".set    pop\n"                                                              \
+                    : "=r"(__val));                                                              \
+                __val;                                                                           \
+            })
+#    elif defined(__i386__)
+#        define __get_tls()                               \
+            ({                                            \
+                void **__val;                             \
+                __asm__("movl %%gs:0, %0" : "=r"(__val)); \
+                __val;                                    \
+            })
+#    elif defined(__x86_64__)
+#        define __get_tls()                              \
+            ({                                           \
+                void **__val;                            \
+                __asm__("mov %%fs:0, %0" : "=r"(__val)); \
+                __val;                                   \
+            })
+#    else
+#        error unsupported architecture
+#    endif
+
+//  - TLS_SLOT_OPENGL and TLS_SLOT_OPENGL_API: These two aren't used by bionic
+//    itself, but allow the graphics code to access TLS directly rather than
+//    using the pthread API.
+//
+// Choose the TLS_SLOT_OPENGL TLS slot with the value that matches value in the header file in
+// bionic(bionic_asm_tls.h)
+// #define TLS_SLOT_OPENGL           3
+constexpr TLSIndex kContextTlsSlot = 3;
+
+ANGLE_INLINE TLSIndex CreateContextTLSIndex()
+{
+    return kContextTlsSlot;
+}
+
+ANGLE_INLINE bool SetContextTls(TLSIndex index, void *value)
+{
+    ASSERT(kContextTlsSlot == index);
+    __get_tls()[kContextTlsSlot] = value;
+    return true;
+}
+
+ANGLE_INLINE void *GetContextTls(TLSIndex index)
+{
+    ASSERT(kContextTlsSlot == index);
+    return __get_tls()[kContextTlsSlot];
+}
+#else
+ANGLE_INLINE TLSIndex CreateContextTLSIndex()
+{
+    return CreateTLSIndex();
+}
+
+ANGLE_INLINE bool SetContextTls(TLSIndex index, void *value)
+{
+    return SetTLSValue(index, value);
+}
+
+ANGLE_INLINE void *GetContextTls(TLSIndex index)
+{
+    return GetTLSValue(index);
+}
+#endif
 
 #endif  // COMMON_TLS_H_
