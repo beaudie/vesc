@@ -109,6 +109,7 @@ void ProgramExecutable::reset()
     mAtomicCounterBuffers.clear();
     mOutputVariables.clear();
     mOutputLocations.clear();
+    mSamplerBindings.clear();
 
     mPipelineHasGraphicsUniformBuffers       = false;
     mPipelineHasComputeUniformBuffers        = false;
@@ -118,6 +119,8 @@ void ProgramExecutable::reset()
     mPipelineHasComputeAtomicCounterBuffers  = false;
     mPipelineHasGraphicsDefaultUniforms      = false;
     mPipelineHasComputeDefaultUniforms       = false;
+    mPipelineHasGraphicsTextures             = false;
+    mPipelineHasComputeTextures              = false;
 }
 
 void ProgramExecutable::load(gl::BinaryInputStream *stream)
@@ -241,16 +244,10 @@ bool ProgramExecutable::hasDefaultUniforms() const
            (isCompute() ? mPipelineHasComputeDefaultUniforms : mPipelineHasGraphicsDefaultUniforms);
 }
 
-// TODO: http://anglebug.com/4520: Needs  mSamplerBindings moved to ProgramExecutable
 bool ProgramExecutable::hasTextures() const
 {
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->hasTextures();
-    }
-
-    return mProgramPipelineState->hasTextures();
+    return !getSamplerBindings().empty() ||
+           (isCompute() ? mPipelineHasComputeTextures : mPipelineHasGraphicsTextures);
 }
 
 // TODO: http://anglebug.com/3570: Remove mHas*UniformBuffers once PPO's have valid data in
@@ -288,7 +285,7 @@ bool ProgramExecutable::hasImages() const
 
 void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
 {
-    const std::vector<SamplerBinding> &samplerBindings = programState.getSamplerBindings();
+    const std::vector<SamplerBinding> &samplerBindings = getSamplerBindings();
 
     for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
     {
