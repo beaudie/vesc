@@ -68,6 +68,30 @@
       "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edc211de_ec202144",
+        "filename": "src/common/tls.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-05T18:32:10Z",
+      "side": 1,
+      "message": "One way is to only enable this optimization if the GL backend is not built, as the GL driver could be using this slot as well.",
+      "parentUuid": "b87a71a0_f3c8187f",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 30
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
