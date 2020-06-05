@@ -2435,10 +2435,7 @@ TEST_P(Texture2DBaseMaxTestES3, ExtendMipChainAfterRedefine)
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
 
     // Mip 1 is green.  Verify this.
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
-
-    // http://anglebug.com/4696
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    EXPECT_PIXEL_COLOR_EQ(0, 0, kMipColors[1]);
 
     // Add mip 0 and rebase the mip chain.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kMip0Size, kMip0Size, 0, GL_RGBA, GL_UNSIGNED_BYTE,
@@ -2459,6 +2456,9 @@ TEST_P(Texture2DBaseMaxTestES3, ExtendMipChainAfterRedefine)
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // http://anglebug.com/4704
+    ANGLE_SKIP_TEST_IF(IsVulkan());
 
     // Mip 0 data seems to have disappeared in this configuration! http://anglebug.com/4698
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsNVIDIA() && IsLinux());
