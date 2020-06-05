@@ -27,7 +27,6 @@ typedef DWORD TLSIndex;
 #elif defined(ANGLE_PLATFORM_POSIX)
 #    include <errno.h>
 #    include <pthread.h>
-#    include <semaphore.h>
 typedef pthread_key_t TLSIndex;
 #    define TLS_INVALID_INDEX (static_cast<TLSIndex>(-1))
 #else
