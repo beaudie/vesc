@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "71d68a63_356f4094",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-05T20:05:23Z",
+      "side": 1,
+      "message": "\u003e There is a bug here. bindings-\u003eimmutableSamplers is changing size with every push_back, and internal std::vector reallocation will invalidate the pointers you are storing here.\n\nWow, good catch, that\u0027s a subtle bug (with my short C++ experience anyway).   Seems like this is pointing to a lack of YUV testing that should have caught this somewhere?   Are there deqp tests that can be enabled once we support YUV which could have caught this?\n\nSince we\u0027ve made it this far without supporting immutable samplers, maybe looping twice is better than trying to allocate a fixed size vector that would typically remain unused (and result in wasted memory)?",
+      "parentUuid": "44c9d6d7_1ffa0fe2",
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b2dac94_1820231c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
