@@ -22,6 +22,30 @@
       "revId": "b0ccec26bf7de563866024aa2b3cc8bc59f21e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "657ba474_3fc92a40",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-05T22:08:56Z",
+      "side": 1,
+      "message": "EGL_CreatePixmapSurface() is also unimplemented, so there\u0027s no code to easily steal from.\n\nAlso, Android doesn\u0027t support pixmaps so it\u0027s not something we\u0027ll run into for ANGLE on Android (meaning we can safely keep ignoring it for now anyway).",
+      "parentUuid": "684e6de2_fcdb07e1",
+      "range": {
+        "startLine": 1065,
+        "startChar": 4,
+        "endLine": 1065,
+        "endChar": 20
+      },
+      "revId": "b0ccec26bf7de563866024aa2b3cc8bc59f21e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
