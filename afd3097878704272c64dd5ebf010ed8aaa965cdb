@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "79b34131_ae9f04cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-05T20:58:16Z",
+      "side": 1,
+      "message": "Good catch! I need to reserve the space ahead of time to ensure we don\u0027t reallocate.\nThe push_back is pushing the VKSampler into my array of VkSampler\u0027s. I then point that specific binding\u0027s .pImmutableSamplers to the value I just put into the array.",
+      "parentUuid": "44c9d6d7_1ffa0fe2",
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b2dac94_1820231c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
@@ -90,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "d1028b2b_2f54b461",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-05T20:58:16Z",
+      "side": 1,
+      "message": "That\u0027s right.",
+      "parentUuid": "04455da2_cd25b9af",
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfcda562_204fc3d4",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
@@ -110,6 +146,30 @@
       "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ea047b9_595639d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-05T20:58:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfcda562_204fc3d4",
+      "range": {
+        "startLine": 547,
+        "startChar": 17,
+        "endLine": 547,
+        "endChar": 20
+      },
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
