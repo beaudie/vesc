@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7420b905_191aaa96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-05T16:28:15Z",
+      "side": 1,
+      "message": "nit: can this be a const?",
+      "revId": "7013248d9d21fe11b30284e50ad6ed67db7335bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3638d357_2fb83292",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-05T16:28:15Z",
+      "side": 1,
+      "message": "nit: can this be a const?",
+      "revId": "7013248d9d21fe11b30284e50ad6ed67db7335bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
