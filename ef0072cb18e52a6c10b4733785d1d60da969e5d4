@@ -16,6 +16,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16c33b98_3cc67a0c",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-05T02:53:25Z",
+      "side": 1,
+      "message": "Just to clarify: the queueSubmit() is to submit the fence explicitly so the latter sync wait could wait for the fence to be signaled. Take API sequence below:\n\nGLES sequence:\n\neglCreateSyncKHR(fence)\neglDupNativeFenceFDANDROID(fence)\n\u003csome draw call or clear\u003e\nglFlush()\neglClientWaitSyncKHR(fence)\n\nVulkan sequence:\n\nvkCreateFence(vfence)\nvkGetFenceFdKHR(vfence) // get new FD, meanwhile reset the fence\n\u003csubmissions for draw\u003e\nvkQueueSubmit()     // vfence was not ensured to be submitted into queue\nvkWaitForFences(vfence)\n\n\nSo the extra queueSubmit() is to ensure the \u0027vfence\u0027 after reset is in the queue so that the latter vkWaitForFences(vfence) could wait on.\n\n-----------------\nBackground:\nThe tests failed on Mali, and the failed reason is the fence after vkGetFenceFdKHR() was reset and the latter flush didn\u0027t queue the submission with \u0027vfence\u0027 explicitly, then we can not get the signaled fence in vkWaitForFences(vfence).",
+      "parentUuid": "199b714d_84a96adc",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
