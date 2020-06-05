@@ -16,6 +16,24 @@
       "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7861861f_7e423b1c",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T19:48:16Z",
+      "side": 1,
+      "message": "Yes and yes. The CL makes it so you can build either test target within Chromium. ANGLE will only ever build ANGLE standalone. Eventually we\u0027ll use the ANGLE harness only in Chromium too. We need both simultaneously for a while so we can test the new path before switching.",
+      "parentUuid": "d5558927_1d022ee2",
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
