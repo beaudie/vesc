@@ -56,6 +56,11 @@ struct Type
 
 uint32_t GetPackedTypeInfo(GLenum type);
 
+// ES2 requires that format is equal to internal format at all glTex*Image2D entry points and the
+// implementation can decide the true, sized, internal format. The ES2FormatMap determines the
+// internal format for all valid format and type combinations.
+GLenum GetSizedFormatInternal(GLenum format, GLenum type);
+
 ANGLE_INLINE GLenum GetNonLinearFormat(const GLenum format)
 {
     switch (format)
