@@ -34,6 +34,24 @@
       "revId": "d5066c12ccbff24a851032bf03e9395d80f194d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea040027_769c014b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-05T04:13:12Z",
+      "side": 1,
+      "message": "It makes more sense for this to move to renderer/renderer_utils. It\u0027s not using anything from ContextVk.",
+      "parentUuid": "786509bc_2039bab5",
+      "revId": "d5066c12ccbff24a851032bf03e9395d80f194d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
