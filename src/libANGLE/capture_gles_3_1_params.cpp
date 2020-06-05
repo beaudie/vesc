@@ -38,7 +38,11 @@ void CaptureDrawArraysIndirect_indirect(const State &glState,
                                         const void *indirect,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (indirect)
+    {
+        CaptureMemory(indirect, sizeof(DrawArraysIndirectCommand), paramCapture);
+        paramCapture->value.voidConstPointerVal = paramCapture->data[0].data();
+    }
 }
 
 void CaptureDrawElementsIndirect_indirect(const State &glState,
@@ -48,7 +52,11 @@ void CaptureDrawElementsIndirect_indirect(const State &glState,
                                           const void *indirect,
                                           ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (indirect)
+    {
+        CaptureMemory(indirect, sizeof(DrawElementsIndirectCommand), paramCapture);
+        paramCapture->value.voidConstPointerVal = paramCapture->data[0].data();
+    }
 }
 
 void CaptureGenProgramPipelines_pipelinesPacked(const State &glState,
