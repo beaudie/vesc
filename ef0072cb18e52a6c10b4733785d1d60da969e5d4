@@ -34,6 +34,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f438430_ff1b4766",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-05T04:03:03Z",
+      "side": 1,
+      "message": "I have a question. Since this submission has no explicit dependency to other submissions (such as through a semaphore wait), won\u0027t the driver immediately signal the fence? Or some implicit dependency to the previous submissions ensure that the fence gets signaled until all the previous work is done?\n\nAlso, in your example \"vkQueueSubmit()     // vfence was not ensured to be submitted into queue\", what was the expected behavior? Was the fence supposed to be signaled after or before the draw calls?",
+      "parentUuid": "16c33b98_3cc67a0c",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
