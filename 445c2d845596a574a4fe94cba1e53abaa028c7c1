@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5558927_1d022ee2",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-05T19:43:33Z",
+      "side": 1,
+      "message": "Does this mean you can only build the chromium test harness version when building within chromium?\nIs there a way to make two different targets so you can still build either one?",
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
