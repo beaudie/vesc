@@ -304,6 +304,30 @@
       "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b816cd05_2332c069",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T20:26:52Z",
+      "side": 1,
+      "message": "Filed a bug for the Intel failures. For the P2 it\u0027s no longer supported so we should not invest any time in it really. When we have P4 then yeah we should file bugs for it.",
+      "parentUuid": "5c7657df_9aa97c09",
+      "range": {
+        "startLine": 1777,
+        "startChar": 0,
+        "endLine": 1781,
+        "endChar": 63
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
