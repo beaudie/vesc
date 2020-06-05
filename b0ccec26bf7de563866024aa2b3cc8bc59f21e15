@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "684e6de2_fcdb07e1",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-05T03:51:29Z",
+      "side": 1,
+      "message": "Nice-to-have-maybe-followup: Probably trivial to implement while you\u0027re at it.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 4,
+        "endLine": 1065,
+        "endChar": 20
+      },
+      "revId": "b0ccec26bf7de563866024aa2b3cc8bc59f21e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
