@@ -1130,6 +1130,7 @@ class ImageHelper final : public Resource, public angle::Subject
     ImageLayout getCurrentImageLayout() const { return mCurrentLayout; }
     VkImageLayout getCurrentLayout() const;
 
+    gl::Extents getLevelExtents(uint32_t level) const;
     // Helper function to calculate the extents of a render target created for a certain mip of the
     // image.
     gl::Extents getLevelExtents2D(uint32_t level) const;
@@ -1141,8 +1142,6 @@ class ImageHelper final : public Resource, public angle::Subject
                uint32_t baseArrayLayer,
                uint32_t layerCount,
                CommandBuffer *commandBuffer);
-
-    gl::Extents getSize(const gl::ImageIndex &index) const;
 
     // Return unique Serial for underlying image, first assigning it if it hasn't been set yet
     Serial getAssignSerial(ContextVk *contextVk);
@@ -1320,7 +1319,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
-    uint32_t getBaseLevel();
+    uint32_t getBaseLevel() const { return mBaseLevel; }
     void setBaseAndMaxLevels(uint32_t baseLevel, uint32_t maxLevel);
 
     angle::Result copyImageDataToBuffer(ContextVk *contextVk,
