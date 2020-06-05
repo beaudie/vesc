@@ -52,6 +52,24 @@
       "revId": "d5066c12ccbff24a851032bf03e9395d80f194d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b572fce_a59f83e6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-05T13:39:08Z",
+      "side": 1,
+      "message": "That\u0027s a good idea.  I\u0027ll do that shortly.  Thanks!",
+      "parentUuid": "ea040027_769c014b",
+      "revId": "d5066c12ccbff24a851032bf03e9395d80f194d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
