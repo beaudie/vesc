@@ -70,6 +70,30 @@
       "revId": "3f31bf8aaa97598adfc7e4b48eea963980c9563a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4903992c_2d00c3ab",
+        "filename": "src/common/tls.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T18:37:54Z",
+      "side": 1,
+      "message": "Yep. When we use the GLES back-end we could maybe recreate the TLS index.",
+      "parentUuid": "76060625_231af608",
+      "range": {
+        "startLine": 96,
+        "startChar": 24,
+        "endLine": 96,
+        "endChar": 41
+      },
+      "revId": "3f31bf8aaa97598adfc7e4b48eea963980c9563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
