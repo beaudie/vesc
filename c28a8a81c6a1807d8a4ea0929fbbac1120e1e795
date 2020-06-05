@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c7d8d4f_a2dd9d85",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T18:12:19Z",
+      "side": 1,
+      "message": "I\u0027m wondering if this is the right place for this. Maybe closer to where the crash happens?",
+      "range": {
+        "startLine": 907,
+        "startChar": 59,
+        "endLine": 907,
+        "endChar": 80
+      },
+      "revId": "c28a8a81c6a1807d8a4ea0929fbbac1120e1e795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "474cbe58_c2be49f0",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T18:12:19Z",
+      "side": 1,
+      "message": "I don\u0027t think this is correct either. I believe you should be checking for the presence of a bound array buffer. We don\u0027t typically validate pointers in ANGLE.",
+      "range": {
+        "startLine": 41,
+        "startChar": 5,
+        "endLine": 41,
+        "endChar": 17
+      },
+      "revId": "c28a8a81c6a1807d8a4ea0929fbbac1120e1e795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c511a4_26766e81",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T18:12:19Z",
+      "side": 1,
+      "message": "should be unnecessary. should happen already in the autogen.",
+      "range": {
+        "startLine": 44,
+        "startChar": 8,
+        "endLine": 44,
+        "endChar": 79
+      },
+      "revId": "c28a8a81c6a1807d8a4ea0929fbbac1120e1e795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8546e11f_b2d26604",
+        "filename": "src/libANGLE/capture_gles_ext_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T18:12:19Z",
+      "side": 1,
+      "message": "I think you can do what we did for the buffer parameter and reserve the maximum possible space for the set of possible inputs.",
+      "range": {
+        "startLine": 2367,
+        "startChar": 0,
+        "endLine": 2374,
+        "endChar": 5
+      },
+      "revId": "c28a8a81c6a1807d8a4ea0929fbbac1120e1e795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
