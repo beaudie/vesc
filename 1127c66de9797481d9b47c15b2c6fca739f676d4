@@ -42,6 +42,48 @@
     },
     {
       "key": {
+        "uuid": "bebb2de9_a4eb17b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T20:23:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9f0072aa_fb254e05",
+      "range": {
+        "startLine": 3215,
+        "startChar": 44,
+        "endLine": 3215,
+        "endChar": 49
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61398f46_6aa1aada",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T20:23:54Z",
+      "side": 1,
+      "message": "!empty() is a different check. We\u0027re checking for any matching buffers.",
+      "parentUuid": "fb997a8a_4de2a919",
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2027f03d_705f7c6a",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 4
@@ -53,6 +95,30 @@
       "writtenOn": "2020-06-02T03:03:08Z",
       "side": 1,
       "message": "Suggest find instead of count",
+      "range": {
+        "startLine": 971,
+        "startChar": 51,
+        "endLine": 971,
+        "endChar": 56
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d91950a2_bbae0580",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T20:23:54Z",
+      "side": 1,
+      "message": "Any justification for why? count allows for a single check instead of a two-sided check (begin !\u003d end). Since this is a set and each element is unique the count method should return 1 or 0 and should early-exit if any element is found.",
+      "parentUuid": "2027f03d_705f7c6a",
       "range": {
         "startLine": 971,
         "startChar": 51,
@@ -112,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "64e3e8c9_272dd505",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T20:23:54Z",
+      "side": 1,
+      "message": "Had a conversation offline with Charlie. Switched to use Serials. This CL still tracks the active XFB buffers in the ContextVk/RP instead of tracking the RP in the XFB Buffers.",
+      "parentUuid": "47508905_7f355bd9",
+      "range": {
+        "startLine": 984,
+        "startChar": 11,
+        "endLine": 984,
+        "endChar": 49
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66d75123_b4bf6bd3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 4
@@ -126,6 +216,24 @@
       "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22b0faab_9fff2f40",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T20:23:54Z",
+      "side": 1,
+      "message": "It is. I split off the functional change for good measure.",
+      "parentUuid": "66d75123_b4bf6bd3",
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -149,6 +257,30 @@
       "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e497d4a9_be93d2d0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T20:23:54Z",
+      "side": 1,
+      "message": "It\u0027s a type thing. VkBool uses VK_FALSE/VK_TRUE which are integer types, bool uses true/false which are boolean types. Marking as resolved since that should clear up why the code is as it is.",
+      "parentUuid": "79b392ba_9849af22",
+      "range": {
+        "startLine": 1652,
+        "startChar": 29,
+        "endLine": 1652,
+        "endChar": 94
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
