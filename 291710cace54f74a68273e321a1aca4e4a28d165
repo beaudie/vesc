@@ -92,6 +92,30 @@
       "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a03d515a_c920dfa8",
+        "filename": "src/common/tls.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-05T19:03:18Z",
+      "side": 1,
+      "message": "Note that the GL backend is enabled by default (meaning this would be disabled by default also):\n\nangle_enable_gl\n    Current value (from the default) \u003d true\n      From //gni/angle.gni:97\n\nWe should work on removing all of the non-vulkan backends for Android builds anyway to reduce the binary size, but this arg will need to be added to the recommended \"performance\" configs for local standalone builds if we decide to go this route.",
+      "parentUuid": "edc211de_ec202144",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 30
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
