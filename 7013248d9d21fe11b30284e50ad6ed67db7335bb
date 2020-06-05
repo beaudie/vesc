@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5892ef15_72e6c34a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T17:33:24Z",
+      "side": 1,
+      "message": "From the style guide:\n\n\"For a function parameter passed by value, const has no effect on the caller, thus is not recommended in function declarations.\"\n\nhttps://google.github.io/styleguide/cppguide.html#Use_of_const\n\nTypically in ANGLE we haven\u0027t used the parameter const for value params.",
+      "parentUuid": "7420b905_191aaa96",
+      "revId": "7013248d9d21fe11b30284e50ad6ed67db7335bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3638d357_2fb83292",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "7013248d9d21fe11b30284e50ad6ed67db7335bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d177ae56_0a731b64",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T17:33:24Z",
+      "side": 1,
+      "message": "See other comment.",
+      "parentUuid": "3638d357_2fb83292",
+      "revId": "7013248d9d21fe11b30284e50ad6ed67db7335bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
