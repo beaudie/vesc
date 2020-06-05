@@ -22,6 +22,30 @@
       "revId": "3f31bf8aaa97598adfc7e4b48eea963980c9563a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9ec1ebf_a4b60e54",
+        "filename": "src/common/tls.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-05T15:37:34Z",
+      "side": 1,
+      "message": "any given process can have only 1 GLES driver active, right? It can either be angle or the native driver, or is there a path for a single process to have both angle and native driver be used actively?",
+      "parentUuid": "e445ab17_5a7d43b2",
+      "range": {
+        "startLine": 96,
+        "startChar": 24,
+        "endLine": 96,
+        "endChar": 41
+      },
+      "revId": "3f31bf8aaa97598adfc7e4b48eea963980c9563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
