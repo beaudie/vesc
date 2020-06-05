@@ -164,6 +164,30 @@
       "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0ca9606_510daa22",
+        "filename": "src/common/tls.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T19:28:00Z",
+      "side": 1,
+      "message": "This conversation has quickly outstripped the confines of this CL. For now let\u0027s keep assuming we just want to land this feature in a non-disruptive way. Hence the suggestion to look for a dynamic implementation that doesn\u0027t cost performance.",
+      "parentUuid": "34cde17b_fa52f14f",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 30
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
