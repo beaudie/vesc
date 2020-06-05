@@ -52,6 +52,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "805d754f_7f2a0e4b",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-05T06:03:29Z",
+      "side": 1,
+      "message": "The vfence get it\u0027s dependency at creation in initializeWithFd(), refer to line 174 part of create a new android native fence with no input FD, so here only submit empty job into queue.\n\nAnd the expected behavior could be:\nvkCreateFence(vfence)\nvkGetFenceFdKHR(vfence) // get new FD, meanwhile reset the fence\n\u003csubmissions for draw\u003e\nvkQueueSubmit(vfence)     // vfence was submitted into queue after the reset\nvkWaitForFences(vfence)\n\n\nPS: I was wondering that the vfence payload duplication issue was introduced by the current implementation not putting the native fence into the \"RendererVk::mFenceRecycler\", which would link fence with submit queue at flush. Instead, the native fence part used a independent way of job submission in vulkan backend, and the context flush would not explicitly link the vfence with submission queue.",
+      "parentUuid": "0f438430_ff1b4766",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
