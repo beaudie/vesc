@@ -2274,6 +2274,63 @@ TEST_P(Texture2DTestES3, FramebufferTextureChangingBaselevel)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that changing the base level of a texture after redefining a level outside the mip-chain
+// preserves the other mips' data.
+TEST_P(Texture2DTestES3, ExtendMipChainAfterRedefine)
+{
+    // Affected by two bugs:
+    // - http://anglebug.com/4695
+    // - http://anglebug.com/4696
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    std::array<GLColor, 8 * 8> mip0Data;
+    std::array<GLColor, 4 * 4> mip1Data;
+    std::array<GLColor, 2 * 2> mip2Data;
+    std::array<GLColor, 1 * 1> mip3Data;
+
+    std::fill(mip0Data.begin(), mip0Data.end(), GLColor::red);
+    std::fill(mip1Data.begin(), mip1Data.end(), GLColor::green);
+    std::fill(mip2Data.begin(), mip2Data.end(), GLColor::blue);
+    std::fill(mip3Data.begin(), mip3Data.end(), GLColor::magenta);
+
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, mip1Data.data());
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, mip2Data.data());
+    glTexImage2D(GL_TEXTURE_2D, 3, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, mip3Data.data());
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 1);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Mip 1 is green.  Verify this.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Add mip 0 and rebase the mip chain.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, mip0Data.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+
+    // Mip 1 should still be green.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Verify the other mips too.
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 2);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 3);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
 // Test to check that texture completeness is determined correctly when the texture base level is
 // greater than 0, and also that level 0 is not sampled when base level is greater than 0.
 TEST_P(Texture2DTestES3, DrawWithBaseLevel1)
