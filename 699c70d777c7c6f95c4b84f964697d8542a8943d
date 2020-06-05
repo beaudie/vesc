@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db351f0a_28b5c81d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2020-06-05T14:11:47Z",
+      "side": 1,
+      "message": "s/WorkerPool/ThreadPool/\n\nhere and elsewhere",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 13,
+        "endChar": 34
+      },
+      "revId": "699c70d777c7c6f95c4b84f964697d8542a8943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aba37201_32dba002",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2020-06-05T14:11:47Z",
+      "side": 1,
+      "message": "Links to self?",
+      "revId": "699c70d777c7c6f95c4b84f964697d8542a8943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f63ccb61_fe8d1468",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2020-06-05T14:11:47Z",
+      "side": 1,
+      "message": "I\u0027d expect this cast to be implicit from DelegateWorkerPool* into shared_ptr\u003cWorkerThreadPool\u003e?",
+      "range": {
+        "startLine": 303,
+        "startChar": 12,
+        "endLine": 303,
+        "endChar": 43
+      },
+      "revId": "699c70d777c7c6f95c4b84f964697d8542a8943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
