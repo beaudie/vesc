@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "df24801b_95189619",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-05T21:13:45Z",
+      "side": 1,
+      "message": "\u003e maybe looping twice is better than trying to allocate a fixed size vector that would typically remain unused\nGood question. The reserved size is kMaxDescriptorSetLayoutBindings which is 64, so 64 pointers.\nWhat\u0027s the impact of making space for that every time vs. extra processing when you have immutable samplers.\nI might try it with the extra loop to see which looks better.",
+      "parentUuid": "79b34131_ae9f04cf",
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b2dac94_1820231c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
