@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e445ab17_5a7d43b2",
+        "filename": "src/common/tls.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-05T15:33:26Z",
+      "side": 1,
+      "message": "With ANGLE, there are two \"graphics code\"s. How can we be sure the real driver is not using the same tls slots?",
+      "range": {
+        "startLine": 96,
+        "startChar": 24,
+        "endLine": 96,
+        "endChar": 41
+      },
+      "revId": "3f31bf8aaa97598adfc7e4b48eea963980c9563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
