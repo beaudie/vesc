@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "386c7ff9_d174c11d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T17:40:55Z",
+      "side": 1,
+      "message": "please mention this is a specific slot on Android reserved for the OpenGL driver. Is there a link to a public spec or doc somewhere?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b62c9d2f_c2b1dc8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T17:40:55Z",
+      "side": 1,
+      "message": "please file a bug for this.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b87a71a0_f3c8187f",
+        "filename": "src/common/tls.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-05T17:40:55Z",
+      "side": 1,
+      "message": "we need to make sure this only applies to the Vulkan back-end. It might be why you\u0027re seeing errors on the GL back-end. Not sure immediately on the best way to do this.",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 30
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
