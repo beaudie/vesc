@@ -2833,12 +2833,21 @@ VkImageLayout ImageHelper::getCurrentLayout() const
     return kImageMemoryBarrierData[mCurrentLayout].layout;
 }
 
-gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
+gl::Extents ImageHelper::getLevelExtents(uint32_t level) const
 {
+    // Level 0 should be the size of the extents, after that every time you increase a level
+    // you shrink the extents by half.
     uint32_t width  = std::max(mExtents.width >> level, 1u);
     uint32_t height = std::max(mExtents.height >> level, 1u);
 
-    return gl::Extents(width, height, 1);
+    return gl::Extents(width, height, mExtents.depth);
+}
+
+gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
+{
+    gl::Extents extents = getLevelExtents(level);
+    extents.depth       = 1;
+    return extents;
 }
 
 bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
@@ -2900,11 +2909,6 @@ bool ImageHelper::isReleasedToExternal() const
     // TODO(anglebug.com/4635): Implement external memory barriers on Mac/Android.
     return false;
 #endif
-}
-
-uint32_t ImageHelper::getBaseLevel()
-{
-    return mBaseLevel;
 }
 
 void ImageHelper::setBaseAndMaxLevels(uint32_t baseLevel, uint32_t maxLevel)
@@ -3102,15 +3106,6 @@ void ImageHelper::clear(VkImageAspectFlags aspectFlags,
 
         clearColor(value.color, mipLevel, 1, baseArrayLayer, layerCount, commandBuffer);
     }
-}
-
-gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
-{
-    GLint mipLevel = index.getLevelIndex();
-    // Level 0 should be the size of the extents, after that every time you increase a level
-    // you shrink the extents by half.
-    return gl::Extents(std::max(1u, mExtents.width >> mipLevel),
-                       std::max(1u, mExtents.height >> mipLevel), mExtents.depth);
 }
 
 Serial ImageHelper::getAssignSerial(ContextVk *contextVk)

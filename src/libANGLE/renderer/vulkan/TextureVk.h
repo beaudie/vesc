@@ -249,10 +249,18 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                         bool selfOwned);
     void updateImageHelper(ContextVk *contextVk, const vk::Format &internalFormat);
 
-    angle::Result redefineImage(const gl::Context *context,
+    // Redefine a mip level of the texture.  If the new size and format don't match the allocated
+    // image, the image may be releaseed.  When redefining a mip of a multi-level image, updates
+    // are forced to be staged, as another mip of the image may be bound to a framebuffer.  For
+    // example, assume texture has two mips, and framebuffer is bound to mip 0.  Redefining mip 1
+    // to an incompatible size shouldn't affect the the framebuffer, even if the redefinition comes
+    // from something like glCopyTexSubImage2D() (which simultaneously is reading from said
+    // framebuffer, i.e. mip 0 of the texture).
+    angle::Result redefineLevel(const gl::Context *context,
                                 const gl::ImageIndex &index,
                                 const vk::Format &format,
-                                const gl::Extents &size);
+                                const gl::Extents &size,
+                                bool *forceStagedUpdateOut);
 
     angle::Result setImageImpl(const gl::Context *context,
                                const gl::ImageIndex &index,
@@ -270,7 +278,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                   const gl::PixelUnpackState &unpack,
                                   gl::Buffer *unpackBuffer,
                                   const uint8_t *pixels,
-                                  const vk::Format &vkFormat);
+                                  const vk::Format &vkFormat,
+                                  bool forceStagedUpdate);
 
     angle::Result copyImageDataToBufferAndGetData(ContextVk *contextVk,
                                                   size_t sourceLevel,
@@ -305,7 +314,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                    const gl::Offset &destOffset,
                                    const gl::Rectangle &sourceArea,
                                    const gl::InternalFormat &internalFormat,
-                                   gl::Framebuffer *source);
+                                   gl::Framebuffer *source,
+                                   bool forceStagedUpdate);
 
     angle::Result copySubTextureImpl(ContextVk *contextVk,
                                      const gl::ImageIndex &index,
@@ -316,7 +326,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                      bool unpackFlipY,
                                      bool unpackPremultiplyAlpha,
                                      bool unpackUnmultiplyAlpha,
-                                     TextureVk *source);
+                                     TextureVk *source,
+                                     bool forceStagedUpdate);
 
     angle::Result copySubImageImplWithTransfer(ContextVk *contextVk,
                                                const gl::ImageIndex &index,
@@ -325,7 +336,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                                size_t sourceLevel,
                                                size_t sourceLayer,
                                                const gl::Rectangle &sourceArea,
-                                               vk::ImageHelper *srcImage);
+                                               vk::ImageHelper *srcImage,
+                                               bool forceStagedUpdate);
 
     angle::Result copySubImageImplWithDraw(ContextVk *contextVk,
                                            const gl::ImageIndex &index,
@@ -338,7 +350,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                            bool unpackPremultiplyAlpha,
                                            bool unpackUnmultiplyAlpha,
                                            vk::ImageHelper *srcImage,
-                                           const vk::ImageView *srcView);
+                                           const vk::ImageView *srcView,
+                                           bool forceStagedUpdate);
 
     angle::Result initImage(ContextVk *contextVk,
                             const vk::Format &format,
