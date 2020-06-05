@@ -1252,9 +1252,6 @@ TEST_P(MipmapTestES3, BaseLevelTextureBug)
     // Probably not Intel.
     ANGLE_SKIP_TEST_IF(IsOSX() && (IsNVIDIA() || IsIntel()));
 
-    // TODO(cnorthrop): Figure out what's going on here: http://anglebug.com/3950
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     std::vector<GLColor> texDataRed(2u * 2u, GLColor::red);
 
     glBindTexture(GL_TEXTURE_2D, mTexture);
