@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "af3e515e_be4cc550",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-05T21:32:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7861861f_7e423b1c",
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62ae33a5_f4a49092",
         "filename": "gni/angle.gni",
         "patchSetId": 5
@@ -94,6 +112,30 @@
       "writtenOn": "2020-06-05T21:06:07Z",
       "side": 1,
       "message": "Took me a while to figure out how this works.\nWould be more readable to have 2 variables for standalone and chromium targets,\nthen you can give them different names if(build_with_chromium) and if not.",
+      "range": {
+        "startLine": 360,
+        "startChar": 0,
+        "endLine": 360,
+        "endChar": 26
+      },
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c566320_8a41f5f2",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-05T21:32:32Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "15b6c085_6c407621",
       "range": {
         "startLine": 360,
         "startChar": 0,
