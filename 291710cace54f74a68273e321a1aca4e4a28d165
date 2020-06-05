@@ -140,6 +140,30 @@
       "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34cde17b_fa52f14f",
+        "filename": "src/common/tls.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-05T19:26:28Z",
+      "side": 1,
+      "message": "It is very likely we will be shipping vulkan only ANGLE binaries for Android, so testing that in CQ should be done rather than relying on Android\u0027s CTS for that flavor of ANGLE builds.\n\nWe can\u0027t ship all backends with ANGLE due to size constraints:\n- The amount of storage on the device should be considered, though I don\u0027t think any OEMs have expressed huge concern here yet they may when combined with updatable drivers and multiple copies for rolling back.\n- OTAs need to be as small as possible:\n  - When dealing with billions of users we need to reduce the Play Store bandwidth requirements.\n  - Respect user\u0027s data plans (many are paying per byte without WiFi).\n  - Reduce the amount of time to download the updates themselves since many Android users may not have broadband access.",
+      "parentUuid": "b6acbc31_e1f925ae",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 30
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
