@@ -75,6 +75,21 @@ use CamelCase (chosen for consistency)
 
 [EnumsOfficial]: https://google.github.io/styleguide/cppguide.html#Enumerator_Names
 
+### Include Directives
+
+*   For files outside of the third party directories, includes to headers in the angle repo or third party deps should use ONLY the "" style rather than the <> style.
+*   This more restrictive format allows for better validation of strict dependencies to ensure it can be used across build systems.
+
+```
+// The following is NOT correct:
+#include <fuchsia_egl.h>
+#include <fuchsia_egl_backend.h>
+
+// The following is correct:
+#include "common/fuchsia_egl/fuchsia_egl.h"
+#include "common/fuchsia_egl/fuchsia_egl_backend.h"
+```
+
 ### [Comments](https://google.github.io/styleguide/cppguide.html#Comments)
 
 *   {DO} read and follow Google's recommendations.
