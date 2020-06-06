@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f193e272_194bba55",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-06T01:35:35Z",
+      "side": 1,
+      "message": "What exactly is the issue here? No time for a proper fix? Some issue with drivers?\n\nWouldn\u0027t it be enough to make the copy shader apply (or unapply?) an sRGB transformation?",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
