@@ -157,6 +157,20 @@ const string &str;
 *   If modifying pre-existing code that does not match the standard, the altered
     portions of the code should be changed to match the standard.
 
+### Include Directives
+
+*   The <> style of include directives should only be used for including system
+    headers or headers found in third party dependencies (files pulled in from
+    outside the ANGLE git repo).
+*   The "" style should be used for headers found in the ANGLE git repo and 
+    allows for dependency validation by GN check which is used as part of 
+    exporting builds.
+
+Example:
+```
+#include <zircon/syscalls/object.h> // outside ANGLE
+#include "common/fuchsia_egl/fuchsia_egl.h" // within ANGLE
+```
 ### Generated Source Files
 
 Prefer storing generated sources as baked files in the repository. Avoid using
