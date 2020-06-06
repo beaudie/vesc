@@ -453,57 +453,66 @@
 #define INTERNAL_TRACE_EVENT_UID2(a, b) INTERNAL_TRACE_EVENT_UID3(a, b)
 #define INTERNALTRACEEVENTUID(name_prefix) INTERNAL_TRACE_EVENT_UID2(name_prefix, __LINE__)
 
+#define INTERNALTRACEEVENTUID_LOAD(name_prefix) INTERNALTRACEEVENTUID(name_prefix).Get()
+
 // Implementation detail: internal macro to create static category.
-#define INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category)    \
-    static const unsigned char *INTERNALTRACEEVENTUID(catstatic) = 0; \
-    if (!INTERNALTRACEEVENTUID(catstatic))                            \
-        INTERNALTRACEEVENTUID(catstatic) = TRACE_EVENT_API_GET_CATEGORY_ENABLED(platform, category);
+#define INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category)        \
+    class INTERNALTRACEEVENTUID(catinstance)                              \
+    {                                                                     \
+      public:                                                             \
+        const unsigned char *Get()                                        \
+        {                                                                 \
+            static const unsigned char *INTERNALTRACEEVENTUID(catvalue) = \
+                TRACE_EVENT_API_GET_CATEGORY_ENABLED(platform, category); \
+            return INTERNALTRACEEVENTUID(catvalue);                       \
+        }                                                                 \
+    } INTERNALTRACEEVENTUID(catstatic);
 
 // Implementation detail: internal macro to create static category and add
 // event if the category is enabled.
-#define INTERNAL_TRACE_EVENT_ADD(platform, phase, category, name, flags, ...)                      \
-    do                                                                                             \
-    {                                                                                              \
-        INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category);                                \
-        if (*INTERNALTRACEEVENTUID(catstatic))                                                     \
-        {                                                                                          \
-            gl::TraceEvent::addTraceEvent(platform, phase, INTERNALTRACEEVENTUID(catstatic), name, \
-                                          gl::TraceEvent::noEventId, flags, ##__VA_ARGS__);        \
-        }                                                                                          \
+#define INTERNAL_TRACE_EVENT_ADD(platform, phase, category, name, flags, ...)                     \
+    do                                                                                            \
+    {                                                                                             \
+        INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category);                               \
+        if (*INTERNALTRACEEVENTUID_LOAD(catstatic))                                               \
+        {                                                                                         \
+            gl::TraceEvent::addTraceEvent(platform, phase, INTERNALTRACEEVENTUID_LOAD(catstatic), \
+                                          name, gl::TraceEvent::noEventId, flags, ##__VA_ARGS__); \
+        }                                                                                         \
     } while (0)
 
 // Implementation detail: internal macro to create static category and add begin
 // event if the category is enabled. Also adds the end event when the scope
 // ends.
-#define INTERNAL_TRACE_EVENT_ADD_SCOPED(platform, category, name, ...)                     \
-    INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category);                            \
-    gl::TraceEvent::TraceEndOnScopeClose INTERNALTRACEEVENTUID(profileScope);              \
-    do                                                                                     \
-    {                                                                                      \
-        if (*INTERNALTRACEEVENTUID(catstatic))                                             \
-        {                                                                                  \
-            gl::TraceEvent::addTraceEvent(                                                 \
-                platform, TRACE_EVENT_PHASE_BEGIN, INTERNALTRACEEVENTUID(catstatic), name, \
-                gl::TraceEvent::noEventId, TRACE_EVENT_FLAG_NONE, ##__VA_ARGS__);          \
-            INTERNALTRACEEVENTUID(profileScope)                                            \
-                .initialize(platform, INTERNALTRACEEVENTUID(catstatic), name);             \
-        }                                                                                  \
+#define INTERNAL_TRACE_EVENT_ADD_SCOPED(platform, category, name, ...)                          \
+    INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category);                                 \
+    gl::TraceEvent::TraceEndOnScopeClose INTERNALTRACEEVENTUID(profileScope);                   \
+    do                                                                                          \
+    {                                                                                           \
+        if (*INTERNALTRACEEVENTUID_LOAD(catstatic))                                             \
+        {                                                                                       \
+            gl::TraceEvent::addTraceEvent(                                                      \
+                platform, TRACE_EVENT_PHASE_BEGIN, INTERNALTRACEEVENTUID_LOAD(catstatic), name, \
+                gl::TraceEvent::noEventId, TRACE_EVENT_FLAG_NONE, ##__VA_ARGS__);               \
+            INTERNALTRACEEVENTUID(profileScope)                                                 \
+                .initialize(platform, INTERNALTRACEEVENTUID_LOAD(catstatic), name);             \
+        }                                                                                       \
     } while (0)
 
 // Implementation detail: internal macro to create static category and add
 // event if the category is enabled.
-#define INTERNAL_TRACE_EVENT_ADD_WITH_ID(platform, phase, category, name, id, flags, ...)          \
-    do                                                                                             \
-    {                                                                                              \
-        INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category);                                \
-        if (*INTERNALTRACEEVENTUID(catstatic))                                                     \
-        {                                                                                          \
-            unsigned char traceEventFlags = flags | TRACE_EVENT_FLAG_HAS_ID;                       \
-            gl::TraceEvent::TraceID traceEventTraceID(id, &traceEventFlags);                       \
-            gl::TraceEvent::addTraceEvent(platform, phase, INTERNALTRACEEVENTUID(catstatic), name, \
-                                          traceEventTraceID.data(), traceEventFlags,               \
-                                          ##__VA_ARGS__);                                          \
-        }                                                                                          \
+#define INTERNAL_TRACE_EVENT_ADD_WITH_ID(platform, phase, category, name, id, flags, ...)         \
+    do                                                                                            \
+    {                                                                                             \
+        INTERNAL_TRACE_EVENT_GET_CATEGORY_INFO(platform, category);                               \
+        if (*INTERNALTRACEEVENTUID_LOAD(catstatic))                                               \
+        {                                                                                         \
+            unsigned char traceEventFlags = flags | TRACE_EVENT_FLAG_HAS_ID;                      \
+            gl::TraceEvent::TraceID traceEventTraceID(id, &traceEventFlags);                      \
+            gl::TraceEvent::addTraceEvent(platform, phase, INTERNALTRACEEVENTUID_LOAD(catstatic), \
+                                          name, traceEventTraceID.data(), traceEventFlags,        \
+                                          ##__VA_ARGS__);                                         \
+        }                                                                                         \
     } while (0)
 
 // Notes regarding the following definitions:
