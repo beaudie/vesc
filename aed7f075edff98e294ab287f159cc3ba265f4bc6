@@ -22,6 +22,30 @@
       "revId": "aed7f075edff98e294ab287f159cc3ba265f4bc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "961d134e_c1ed0b6a",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-06-07T12:44:24Z",
+      "side": 1,
+      "message": "I currently use a serialization to binary approach in which an objective-C pointer is serialized directly to bytes. In this approach I have to manually retain and release the pointer when serializing and deserializing. I don\u0027t think WrappedObject\u0027s auto reference counting could be used in this approach.\n\nI chose this approach to store every metal command\u0027s id and arguments since it has low memory overhead compare to other approaches.\nThere might be other approaches. Do you have any suggestion?\n\nI actually looked at other metal open source projects as references. For example, MoltenVK stores deferred command as MVKCommand abstract class\u0027s instances, however, I think that approach has higher memory and runtime overhead due to virtual table \u0026 method calls.",
+      "parentUuid": "9bde615d_ac59453f",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 30
+      },
+      "revId": "aed7f075edff98e294ab287f159cc3ba265f4bc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
