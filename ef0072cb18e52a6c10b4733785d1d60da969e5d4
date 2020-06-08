@@ -70,6 +70,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5adc06eb_e2e4fd9a",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-08T21:49:47Z",
+      "side": 1,
+      "message": "Yes, the init causes a new native FD, and by spec, it is submitted, so there is some question why dup needs a submit also. If a native FD is provided to init, then the only use case is ServerWait, so no need to submit until then.\n\nThe Recycler feature resets a VkFence. And it seems we need VkExportFenceCreateInfo, as part of the VkFence creation.",
+      "parentUuid": "805d754f_7f2a0e4b",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
