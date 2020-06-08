@@ -70,6 +70,30 @@
       "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd90d786_2caddc26",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-08T15:14:39Z",
+      "side": 1,
+      "message": "I suggest we go with this, as it\u0027s the solution in place for the GL backend, and is what geofflang@ recommended, and you can follow up with an optimization change, as you suggest. What do you think?",
+      "parentUuid": "f35e4bab_697bd2ed",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
