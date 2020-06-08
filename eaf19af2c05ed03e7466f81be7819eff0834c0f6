@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "05b47049_2e94f667",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3402,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T16:31:01Z",
+      "side": 1,
+      "message": "what if it\u0027s mapped for read? do we not need to setMappedBufferID?",
+      "range": {
+        "startLine": 3402,
+        "startChar": 22,
+        "endLine": 3402,
+        "endChar": 38
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e909e877_f4521b57",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -41,6 +64,52 @@
         "startChar": 46,
         "endLine": 3945,
         "endChar": 52
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682ec377_25825eef",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T16:31:01Z",
+      "side": 1,
+      "message": "nit: finish name with the type: BufferMapStatusMap (or BufferStatusMap, etc). To match ANGLE informal type naming convention.",
+      "range": {
+        "startLine": 184,
+        "startChar": 6,
+        "endLine": 184,
+        "endChar": 21
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba726755_3a092812",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T16:31:01Z",
+      "side": 1,
+      "message": "nit: seems a bit odd to return a mutable accessor and have a set method. can we converge to just the set method/get method?",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 5
       },
       "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
