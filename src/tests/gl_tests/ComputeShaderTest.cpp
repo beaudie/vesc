@@ -3636,6 +3636,76 @@ void main(void) {
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2 - 1, getWindowHeight() / 2 - 1, GLColor::green);
 }
 
+// Test that redefining a texture that's been previously used in compute can still be used in
+// compute.  Regression test for bug in the Vulkan backend where redefining the image resets the
+// usage flags, but the dirty bit that signals the requirement for STORAGE_IMAGE is not resent.
+//
+// TODO: turns out only desktop GL allows mutable textures to be used with glBindImageTexture.
+// This is not an issue with GLES then.
+TEST_P(ComputeShaderTest, DispatchAfterTextureRedefine)
+{
+    const char kCSSource[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1) in;
+layout(rgba8, binding = 0) writeonly uniform highp image2D image;
+void main()
+{
+    imageStore(image, ivec2(0, 0), vec4(vec3(gl_GlobalInvocationID), 1.0));
+})";
+
+    GLTexture texture;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    const GLColor kInitialColor = GLColor::blue;
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &kInitialColor);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Bind the texture as image.
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
+    EXPECT_GL_NO_ERROR();
+
+    // Dispatch once, so the image is created with STORAGE_IMAGE flag.
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCSSource);
+    glUseProgram(program);
+    glDispatchCompute(1, 1, 1);
+
+    // Redefine the texture.
+    const GLColor kUpdateColor[4] = {
+        GLColor::cyan,
+        GLColor::cyan,
+        GLColor::cyan,
+        GLColor::cyan,
+    };
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, kUpdateColor);
+
+    // Dispatch again.  A bug in the Vulkan backend made the image not created with STORAGE_IMAGE.
+    glDispatchCompute(2, 2, 1);
+
+    // Verify texture data.
+    glMemoryBarrier(GL_TEXTURE_FETCH_BARRIER_BIT);
+    EXPECT_GL_NO_ERROR();
+    glFinish();
+
+    ANGLE_GL_PROGRAM(verifyProgram, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    glUseProgram(verifyProgram);
+
+    GLint samplerLocation = glGetUniformLocation(program, essl1_shaders::Texture2DUniform());
+    ASSERT_NE(-1, samplerLocation);
+    glUniform1i(samplerLocation, 0);
+
+    drawQuad(verifyProgram, essl1_shaders::PositionAttrib(), 0.5f);
+
+    const int w = getWindowWidth() - 1;
+    const int h = getWindowHeight() - 1;
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
+}
+
 // Test that maxComputeWorkGroupCount is valid number.
 TEST_P(ComputeShaderTest, ValidateMaxComputeWorkGroupCount)
 {
