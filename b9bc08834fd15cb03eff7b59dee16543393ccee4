@@ -69,6 +69,29 @@
       "revId": "b9bc08834fd15cb03eff7b59dee16543393ccee4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1de57b2a_7ca8d456",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1002897
+      },
+      "writtenOn": "2020-06-08T17:16:35Z",
+      "side": 1,
+      "message": "Can you simplify the code by defining the static local variable inline?\n\nstatic const unsigned char *INTERNALTRACEEVENTUID(catvalue) \u003d\n  TRACE_EVENT_API_GET_CATEGORY_ENABLED(platform, category);\n\nThis also means that INTERNALTRACEEVENTUID_LOAD is not needed.",
+      "range": {
+        "startLine": 460,
+        "startChar": 4,
+        "endLine": 469,
+        "endChar": 39
+      },
+      "revId": "b9bc08834fd15cb03eff7b59dee16543393ccee4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
