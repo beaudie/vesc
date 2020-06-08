@@ -46,6 +46,30 @@
       "revId": "b0ccec26bf7de563866024aa2b3cc8bc59f21e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3719a12_4217eac8",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-08T16:18:02Z",
+      "side": 1,
+      "message": "I have a patch coming later to implement this function",
+      "parentUuid": "657ba474_3fc92a40",
+      "range": {
+        "startLine": 1065,
+        "startChar": 4,
+        "endLine": 1065,
+        "endChar": 20
+      },
+      "revId": "b0ccec26bf7de563866024aa2b3cc8bc59f21e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
