@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e25271a2_43d42b19",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T16:18:58Z",
+      "side": 1,
+      "message": "I suggest you early exit here. Wouldn\u0027t it be safer?",
+      "range": {
+        "startLine": 4258,
+        "startChar": 16,
+        "endLine": 4258,
+        "endChar": 20
+      },
+      "revId": "97be5b8090f6d04625d7c96514c9f39698490256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
