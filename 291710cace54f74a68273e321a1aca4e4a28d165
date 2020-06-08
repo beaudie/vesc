@@ -260,6 +260,30 @@
       "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a77fd64e_d2e526fe",
+        "filename": "src/common/tls.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T16:41:09Z",
+      "side": 1,
+      "message": "Yeah, I think that\u0027s what we want. I\u0027d make it so that as soon as we initialize the GL back-end we disable the TLS logic you added here and fall back to the previous method.",
+      "parentUuid": "51b1b150_24a5b9a0",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 30
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
