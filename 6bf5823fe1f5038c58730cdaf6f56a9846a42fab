@@ -166,6 +166,30 @@
       "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fbd4000_fb8719f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-08T16:06:28Z",
+      "side": 1,
+      "message": "The real issue is that copies from non-srgb to srgb textures should NOT convert the data at all, they should be treated as memory copies.  The bug is that our copy path which uses draws does convert the data as part of the srgb blending, the other paths (transfer and cpu readback) do not.\n\nThe right thing to do is land this first as it fixes the bug, even if this path gets slower.  We do CPU readbacks for this type of copy in all of our other backends, Chrome does it in it\u0027s own implementation as well.\n\nThis should be possible to implement in Vulkan though, I suspect we need to make an alternate image view of the destination texture with a non-srgb format when we do the draw.",
+      "parentUuid": "bf19f908_bc63ab4a",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
