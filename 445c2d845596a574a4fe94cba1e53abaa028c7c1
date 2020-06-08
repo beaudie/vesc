@@ -78,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "03cd7b99_e6385fe9",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T17:19:03Z",
+      "side": 1,
+      "message": "In both cases (standalone/chromium) we build a source_set and need to inherit that into the test target. We use public_deps to ensure the inheritance works similarly to how it worked before (single test target with two modes). Not sure if that answers your question.",
+      "parentUuid": "62ae33a5_f4a49092",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 34
+      },
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9fae1e3_c1105dcb",
         "filename": "gni/angle.gni",
         "patchSetId": 5
@@ -98,6 +122,30 @@
       "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9757cba_d14cba7d",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T17:19:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9fae1e3_c1105dcb",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 353,
+        "endChar": 34
+      },
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -145,6 +193,30 @@
       "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9041e618_9a1e6b03",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-08T17:19:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c566320_8a41f5f2",
+      "range": {
+        "startLine": 360,
+        "startChar": 0,
+        "endLine": 360,
+        "endChar": 26
+      },
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
