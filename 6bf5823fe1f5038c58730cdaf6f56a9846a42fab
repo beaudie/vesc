@@ -22,6 +22,30 @@
       "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b8a5900_a89c9f57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-08T14:41:39Z",
+      "side": 1,
+      "message": "When using the draw path, the values sampled from the RGBA source texture (the Canvas) will be converted to sRGB when stored in the target sRGB texture. What\u0027s needed here is that no conversion occurs at all when storing in the sRGB buffer, but there isn\u0027t an easy way to do that using the draw path.\n\nOne way would be to modify the copy fragment shader that ANGLE uses so that when copying to an sRGB texture, have it perform an sRGB -\u003e Linear conversion of the sampled texels so that when they get converted to sRGB on write to the target texture, they end up with the original value. This would means adding another flag to the current set of flags (isInt, isFloat, isArray), and I\u0027m not sure this is really what you\u0027d want.\n\nThis bug is something I spent time looking at with geofflang@, and once we realized this bug was something that occured for all Vulkan drivers, he suggested that we handle this in the same was as is done for the GL backend.",
+      "parentUuid": "f193e272_194bba55",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
