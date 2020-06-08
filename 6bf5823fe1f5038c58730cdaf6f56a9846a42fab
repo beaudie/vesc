@@ -94,6 +94,30 @@
       "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63433ac2_61762123",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-08T15:22:11Z",
+      "side": 1,
+      "message": "Also, am a bit confused by this:\n\n\u003e Well, if a feature goes through a CPU readback path, it\u0027s worse than not existing in my opinion, as it severely hurts an applications framerate. At least if the feature doesn\u0027t exist, the application has a chance to do something else, which we are taking away by providing an inefficient implementation.\n\nThis isn\u0027t a feature, it\u0027s a bug fix. Without this change, code that uses glTexImage2D to load values from a non-sRGB to an sRGB texture will not work correctly.",
+      "parentUuid": "dd90d786_2caddc26",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
