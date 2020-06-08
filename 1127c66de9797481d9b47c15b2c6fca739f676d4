@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "63d6d6cf_91cf05d2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-08T10:08:29Z",
+      "side": 1,
+      "message": "That\u0027s right, I didn\u0027t pay attention to the fact that it\u0027s a set.",
+      "parentUuid": "d91950a2_bbae0580",
+      "range": {
+        "startLine": 971,
+        "startChar": 51,
+        "endLine": 971,
+        "endChar": 56
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc5da452_99cb1ef0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 4
