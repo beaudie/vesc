@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e909e877_f4521b57",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3938,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-08T15:21:04Z",
+      "side": 1,
+      "message": "Check the current state?\nThis isn\u0027t a check is it? More of a \"Record current state\"",
+      "range": {
+        "startLine": 3938,
+        "startChar": 11,
+        "endLine": 3938,
+        "endChar": 34
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6be6f4_55ed4a61",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-08T15:21:04Z",
+      "side": 1,
+      "message": "This is for an unmapped buffer, right?",
+      "range": {
+        "startLine": 3945,
+        "startChar": 46,
+        "endLine": 3945,
+        "endChar": 52
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
