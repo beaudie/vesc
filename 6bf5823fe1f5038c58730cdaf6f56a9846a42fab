@@ -46,6 +46,30 @@
       "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f35e4bab_697bd2ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-08T15:02:32Z",
+      "side": 1,
+      "message": "Well, if a feature goes through a CPU readback path, it\u0027s worse than not existing in my opinion, as it severely hurts an applications framerate. At least if the feature doesn\u0027t exist, the application has a chance to do something else, which we are taking away by providing an inefficient implementation.\n\nThe shader compilation flags are used for things we can\u0027t really choose dynamically, such as sampler types etc. For something like this, you can simply add a flag to the push constants sent to the shader, and add a simple `if` in the body to do the sRGB-\u003eLinear conversion. Let me know on Chat if you need help figuring out how to do that.",
+      "parentUuid": "2b8a5900_a89c9f57",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
