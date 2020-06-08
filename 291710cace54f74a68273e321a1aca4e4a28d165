@@ -212,6 +212,30 @@
       "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51b1b150_24a5b9a0",
+        "filename": "src/common/tls.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-08T14:35:36Z",
+      "side": 1,
+      "message": "\u003e dynamic implementation that doesn\u0027t cost performance\n\nThis is kludgy but if we can have a global state for what backend we are using, which is set when display gets initialized, we can if-else the TLS logic. WDYT?",
+      "parentUuid": "6a9901c9_3fb412d4",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 30
+      },
+      "revId": "291710cace54f74a68273e321a1aca4e4a28d165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
