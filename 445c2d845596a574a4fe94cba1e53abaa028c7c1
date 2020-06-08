@@ -102,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "3f998aab_f801ea98",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-06-08T17:50:49Z",
+      "side": 1,
+      "message": "I was wondering if TestSuite.cpp and TestSuite.h are used by non-standalone harness.",
+      "parentUuid": "03cd7b99_e6385fe9",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 34
+      },
+      "revId": "445c2d845596a574a4fe94cba1e53abaa028c7c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9fae1e3_c1105dcb",
         "filename": "gni/angle.gni",
         "patchSetId": 5
