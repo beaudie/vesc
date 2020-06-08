@@ -142,6 +142,30 @@
       "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf19f908_bc63ab4a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-08T15:28:19Z",
+      "side": 1,
+      "message": "\u003e The feature is sRGB support.\n\nI don\u0027t fully agree. If sRGB support is a feature that\u0027s lacking, then attempting to use it should report some kind of \"unsupported\" error. Right now, it does something without error, and produces the wrong result. Semantics, perhaps, but to me, this change is a bug fix, not a feature.\n\n \n\u003e Ok, if you\u0027re not up to the task, I can handle it myself.\n\nTo be clear, it\u0027s not that I\u0027m not up to it. I don\u0027t think it should be done as part of this change. The goal of this change is to fix a bug in the most straightforward way so that WebGL conformance tests pass for SWANGLE. Making it faster can be done later. Note that optimizing this path implies that it should also be done for the other backends, including GL, and probably D3D.\n\n\u003e You can commit this.\n\nThanks.",
+      "parentUuid": "dbaf2906_cf106a04",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "6bf5823fe1f5038c58730cdaf6f56a9846a42fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
