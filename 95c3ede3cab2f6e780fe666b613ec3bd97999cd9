@@ -16,6 +16,24 @@
       "revId": "95c3ede3cab2f6e780fe666b613ec3bd97999cd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94056db7_5e809b77",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-08T20:01:06Z",
+      "side": 1,
+      "message": "The mips are initialized with red and green, then cleared to black here and readback. So only black is seen.\n\nLet me change the clear color to blue, to avoid possible mistakes with robust init clearing to black. That said, the bug is that the clear is not applied to the image when readback is performed, so old data is seen (if a relevant ASSERT is removed).",
+      "parentUuid": "61859aaf_269f7f5f",
+      "revId": "95c3ede3cab2f6e780fe666b613ec3bd97999cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
