@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3275b552_5bf21e4f",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-08T15:18:04Z",
+      "side": 1,
+      "message": "This can be interrupted, so you need to turn the `if` into `while`. If you look at AsyncWorkerPool, it uses a variant of `wait()` that does that.",
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4242e156_80230a53",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-08T15:18:04Z",
+      "side": 1,
+      "message": "If both ANGLE_DELEGATE_WORKERS and ANGLE_DELEGATE_WORKERS are set, we still cannot enter this if, so it might as well say:\n\n    #elif ...STD...\n        if (multithreaded)",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 31
+      },
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
