@@ -88,6 +88,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8659bd8f_dbc8d114",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-09T07:51:55Z",
+      "side": 1,
+      "message": "For the queueSubmit(), quote our vulkan expert:\n\"Exporting a sync_fd will reset the source , and hence waits become illegal as the (source) vkFence is not signalled nor pending. So you cannot call WaitForFences on it because the (vulkan object) fence is not in the right state for allowing the call any longer\"\n\nAs the Spec says, under SYNC_FD semantic, export a fence is \"as executing a fence reset operation\", and then waiting on a reset fence could be undefined since fence is reset.\n\n------\n\nFor the VkFence creation part, the VkExportFenceCreateInfo is already added in line 149. :)",
+      "parentUuid": "5adc06eb_e2e4fd9a",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
