@@ -900,6 +900,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     RendererVk *renderer = contextVk->getRenderer();
 
     releaseAndDeleteImage(contextVk);
+    onStateChange(angle::SubjectMessage::SubjectColorAttachmentOrphaned);
 
     const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
 
