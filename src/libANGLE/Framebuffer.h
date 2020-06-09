@@ -384,6 +384,7 @@ class Framebuffer final : public angle::ObserverInterface,
         DIRTY_BIT_DEFAULT_SAMPLES,
         DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS,
         DIRTY_BIT_DEFAULT_LAYERS,
+        DIRTY_BIT_COLOR_ATTACHMENT_ORPHANED,
         DIRTY_BIT_UNKNOWN,
         DIRTY_BIT_MAX = DIRTY_BIT_UNKNOWN
     };
