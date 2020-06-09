@@ -81,59 +81,71 @@ class NullFactory : public GLImplFactory
 class MockGLFactory : public GLImplFactory
 {
   public:
-    MOCK_METHOD1(createContext, ContextImpl *(const gl::State &));
-    MOCK_METHOD0(createCompiler, CompilerImpl *());
-    MOCK_METHOD1(createShader, ShaderImpl *(const gl::ShaderState &));
-    MOCK_METHOD1(createProgram, ProgramImpl *(const gl::ProgramState &));
-    MOCK_METHOD1(createProgramPipeline, ProgramPipelineImpl *(const gl::ProgramPipelineState &));
-    MOCK_METHOD1(createFramebuffer, FramebufferImpl *(const gl::FramebufferState &));
-    MOCK_METHOD0(createMemoryObject, MemoryObjectImpl *());
-    MOCK_METHOD1(createTexture, TextureImpl *(const gl::TextureState &));
-    MOCK_METHOD1(createRenderbuffer, RenderbufferImpl *(const gl::RenderbufferState &));
-    MOCK_METHOD1(createBuffer, BufferImpl *(const gl::BufferState &));
-    MOCK_METHOD1(createVertexArray, VertexArrayImpl *(const gl::VertexArrayState &));
-    MOCK_METHOD1(createQuery, QueryImpl *(gl::QueryType type));
-    MOCK_METHOD0(createFenceNV, FenceNVImpl *());
-    MOCK_METHOD0(createSync, SyncImpl *());
-    MOCK_METHOD1(createTransformFeedback,
-                 TransformFeedbackImpl *(const gl::TransformFeedbackState &));
-    MOCK_METHOD1(createSampler, SamplerImpl *(const gl::SamplerState &));
-    MOCK_METHOD0(createSemaphore, SemaphoreImpl *());
-    MOCK_METHOD1(createOverlay, OverlayImpl *(const gl::OverlayState &));
+    MOCK_METHOD(ContextImpl *, createContext, (const gl::State &));
+    MOCK_METHOD(CompilerImpl *, createCompiler, (), (override));
+    MOCK_METHOD(ShaderImpl *, createShader, (const gl::ShaderState &), (override));
+    MOCK_METHOD(ProgramImpl *, createProgram, (const gl::ProgramState &), (override));
+    MOCK_METHOD(ProgramPipelineImpl *,
+                createProgramPipeline,
+                (const gl::ProgramPipelineState &),
+                (override));
+    MOCK_METHOD(FramebufferImpl *, createFramebuffer, (const gl::FramebufferState &), (override));
+    MOCK_METHOD(MemoryObjectImpl *, createMemoryObject, (), (override));
+    MOCK_METHOD(TextureImpl *, createTexture, (const gl::TextureState &), (override));
+    MOCK_METHOD(RenderbufferImpl *,
+                createRenderbuffer,
+                (const gl::RenderbufferState &),
+                (override));
+    MOCK_METHOD(BufferImpl *, createBuffer, (const gl::BufferState &), (override));
+    MOCK_METHOD(VertexArrayImpl *, createVertexArray, (const gl::VertexArrayState &), (override));
+    MOCK_METHOD(QueryImpl *, createQuery, (gl::QueryType type), (override));
+    MOCK_METHOD(FenceNVImpl *, createFenceNV, (), (override));
+    MOCK_METHOD(SyncImpl *, createSync, (), (override));
+    MOCK_METHOD(TransformFeedbackImpl *,
+                createTransformFeedback,
+                (const gl::TransformFeedbackState &),
+                (override));
+    MOCK_METHOD(SamplerImpl *, createSampler, (const gl::SamplerState &), (override));
+    MOCK_METHOD(SemaphoreImpl *, createSemaphore, (), (override));
+    MOCK_METHOD(OverlayImpl *, createOverlay, (const gl::OverlayState &), (override));
 };
 
 class MockEGLFactory : public EGLImplFactory
 {
   public:
-    MOCK_METHOD3(createWindowSurface,
-                 SurfaceImpl *(const egl::SurfaceState &,
-                               EGLNativeWindowType,
-                               const egl::AttributeMap &));
-    MOCK_METHOD2(createPbufferSurface,
-                 SurfaceImpl *(const egl::SurfaceState &, const egl::AttributeMap &));
-    MOCK_METHOD4(createPbufferFromClientBuffer,
-                 SurfaceImpl *(const egl::SurfaceState &,
-                               EGLenum,
-                               EGLClientBuffer,
-                               const egl::AttributeMap &));
-    MOCK_METHOD3(createPixmapSurface,
-                 SurfaceImpl *(const egl::SurfaceState &,
-                               NativePixmapType,
-                               const egl::AttributeMap &));
-    MOCK_METHOD4(createImage,
-                 ImageImpl *(const egl::ImageState &,
-                             const gl::Context *,
-                             EGLenum,
-                             const egl::AttributeMap &));
-    MOCK_METHOD5(createContext,
-                 ContextImpl *(const gl::State &,
-                               gl::ErrorSet *,
-                               const egl::Config *,
-                               const gl::Context *,
-                               const egl::AttributeMap &));
-    MOCK_METHOD2(createStreamProducerD3DTexture,
-                 StreamProducerImpl *(egl::Stream::ConsumerType, const egl::AttributeMap &));
-    MOCK_METHOD0(createShareGroup, ShareGroupImpl *());
+    MOCK_METHOD(SurfaceImpl *,
+                createWindowSurface,
+                (const egl::SurfaceState &, EGLNativeWindowType, const egl::AttributeMap &),
+                (override));
+    MOCK_METHOD(SurfaceImpl *,
+                createPbufferSurface,
+                (const egl::SurfaceState &, const egl::AttributeMap &),
+                (override));
+    MOCK_METHOD(SurfaceImpl *,
+                createPbufferFromClientBuffer,
+                (const egl::SurfaceState &, EGLenum, EGLClientBuffer, const egl::AttributeMap &),
+                (override));
+    MOCK_METHOD(SurfaceImpl *,
+                createPixmapSurface,
+                (const egl::SurfaceState &, NativePixmapType, const egl::AttributeMap &),
+                (override));
+    MOCK_METHOD(ImageImpl *,
+                createImage,
+                (const egl::ImageState &, const gl::Context *, EGLenum, const egl::AttributeMap &),
+                (override));
+    MOCK_METHOD(ContextImpl *,
+                createContext,
+                (const gl::State &,
+                 gl::ErrorSet *,
+                 const egl::Config *,
+                 const gl::Context *,
+                 const egl::AttributeMap &),
+                (override));
+    MOCK_METHOD(StreamProducerImpl *,
+                createStreamProducerD3DTexture,
+                (egl::Stream::ConsumerType, const egl::AttributeMap &),
+                (override));
+    MOCK_METHOD(ShareGroupImpl *, createShareGroup, (), (override));
 };
 
 }  // namespace rx
