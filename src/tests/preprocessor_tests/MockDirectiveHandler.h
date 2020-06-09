@@ -16,21 +16,30 @@ namespace angle
 class MockDirectiveHandler : public pp::DirectiveHandler
 {
   public:
-    MOCK_METHOD2(handleError, void(const pp::SourceLocation &loc, const std::string &msg));
+    MOCK_METHOD(void,
+                handleError,
+                (const pp::SourceLocation &loc, const std::string &msg),
+                (override));
 
-    MOCK_METHOD4(handlePragma,
-                 void(const pp::SourceLocation &loc,
-                      const std::string &name,
-                      const std::string &value,
-                      bool stdgl));
+    MOCK_METHOD(void,
+                handlePragma,
+                (const pp::SourceLocation &loc,
+                 const std::string &name,
+                 const std::string &value,
+                 bool stdgl),
+                (override));
 
-    MOCK_METHOD3(handleExtension,
-                 void(const pp::SourceLocation &loc,
-                      const std::string &name,
-                      const std::string &behavior));
+    MOCK_METHOD(void,
+                handleExtension,
+                (const pp::SourceLocation &loc,
+                 const std::string &name,
+                 const std::string &behavior),
+                (override));
 
-    MOCK_METHOD3(handleVersion,
-                 void(const pp::SourceLocation &loc, int version, ShShaderSpec spec));
+    MOCK_METHOD(void,
+                handleVersion,
+                (const pp::SourceLocation &loc, int version, ShShaderSpec spec),
+                (override));
 };
 
 }  // namespace angle
