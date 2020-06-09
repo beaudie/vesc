@@ -34,6 +34,24 @@
       "revId": "cb3c8e6562a7f9be0bbde0a5c0bbae43c496a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73d89663_91263d49",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2020-06-09T16:31:27Z",
+      "side": 1,
+      "message": "Ok right, I was confused because this code appears file-scope but it\u0027s a macro that\u0027s only instantiated in local-scope so it works.",
+      "parentUuid": "0b45b9cd_15919efd",
+      "revId": "cb3c8e6562a7f9be0bbde0a5c0bbae43c496a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
