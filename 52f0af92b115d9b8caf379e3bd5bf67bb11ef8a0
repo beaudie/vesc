@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d8ff35cc_5b5b6f4d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T14:51:56Z",
+      "side": 1,
+      "message": "This seems like a good change, only staging updates for the levels in the VK image, not the GL image.  I\u0027m still trying to think of any cases where an update could already be staged, but I think we want the VK image contents to be reality, so the assert makes sense.\n\nAny changes that simplify this section are sorely needed.  We definitely need an optimization that can rapidly switch VK images when base and max level are moved around, but the contents aren\u0027t changed.",
+      "parentUuid": "2c77f9cf_6ecd3cb4",
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f44a16e0_674fa72f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -35,6 +53,98 @@
         "startChar": 0,
         "endLine": 3899,
         "endChar": 96
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bc2a7ed_f109b1ad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4079,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T14:51:56Z",
+      "side": 1,
+      "message": "Can you add a VK here as well?",
+      "range": {
+        "startLine": 4079,
+        "startChar": 17,
+        "endLine": 4079,
+        "endChar": 31
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "624a43d9_f116b6e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4278,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T14:51:56Z",
+      "side": 1,
+      "message": "This is an important change too.",
+      "range": {
+        "startLine": 4278,
+        "startChar": 19,
+        "endLine": 4278,
+        "endChar": 49
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae46041_3c0d3463",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4367,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T14:51:56Z",
+      "side": 1,
+      "message": "This as well.  Mismatches all over the place.",
+      "range": {
+        "startLine": 4367,
+        "startChar": 46,
+        "endLine": 4367,
+        "endChar": 66
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87f9eef8_51e4f1f3",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2441,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T14:51:56Z",
+      "side": 1,
+      "message": "Does moving the skip down allow part of the test to run?",
+      "range": {
+        "startLine": 2441,
+        "startChar": 4,
+        "endLine": 2441,
+        "endChar": 22
       },
       "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
