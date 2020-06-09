@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "759a6ae8_170e9c78",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T18:40:29Z",
+      "side": 1,
+      "message": "typo: then",
+      "range": {
+        "startLine": 968,
+        "startChar": 70,
+        "endLine": 968,
+        "endChar": 77
+      },
+      "revId": "ee17e116389eebd50d968308330799f2d6e008f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43f904cb_8ab8da04",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T18:40:29Z",
+      "side": 1,
+      "message": "You can make a `const GLColor` out of this above above and use it henceforth.",
+      "range": {
+        "startLine": 1076,
+        "startChar": 36,
+        "endLine": 1076,
+        "endChar": 61
+      },
+      "revId": "ee17e116389eebd50d968308330799f2d6e008f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40dcb460_932c503d",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T18:40:29Z",
+      "side": 1,
+      "message": "mSize / 2",
+      "range": {
+        "startLine": 1076,
+        "startChar": 26,
+        "endLine": 1076,
+        "endChar": 29
+      },
+      "revId": "ee17e116389eebd50d968308330799f2d6e008f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
