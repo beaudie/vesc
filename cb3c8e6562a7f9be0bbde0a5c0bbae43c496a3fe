@@ -16,6 +16,24 @@
       "revId": "cb3c8e6562a7f9be0bbde0a5c0bbae43c496a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b45b9cd_15919efd",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-06-09T16:18:11Z",
+      "side": 1,
+      "message": "File-scope?\n\nA trace event needs to be declared in an executable scope. It is not possible to have a global trace_event. So, scope should be the same than the trace_event and should be initialized\nat the first execution of the trace_event.",
+      "parentUuid": "0a273816_a53a1307",
+      "revId": "cb3c8e6562a7f9be0bbde0a5c0bbae43c496a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
