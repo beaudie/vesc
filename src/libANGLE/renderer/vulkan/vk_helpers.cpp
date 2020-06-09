@@ -4594,30 +4594,50 @@ ImageViewHelper::~ImageViewHelper()
     mUse.release();
 }
 
+void ImageViewHelper::collectReadViewsAsGarbage(std::vector<GarbageObject> *garbage)
+{
+    if (mLinearReadImageView.valid())
+    {
+        garbage->emplace_back(GetGarbage(&mLinearReadImageView));
+    }
+    if (mNonLinearReadImageView.valid())
+    {
+        garbage->emplace_back(GetGarbage(&mNonLinearReadImageView));
+    }
+    if (mLinearFetchImageView.valid())
+    {
+        garbage->emplace_back(GetGarbage(&mLinearFetchImageView));
+    }
+    if (mNonLinearFetchImageView.valid())
+    {
+        garbage->emplace_back(GetGarbage(&mNonLinearFetchImageView));
+    }
+    if (mStencilReadImageView.valid())
+    {
+        garbage->emplace_back(GetGarbage(&mStencilReadImageView));
+    }
+}
+
+void ImageViewHelper::releaseReadViews(RendererVk *renderer)
+{
+    std::vector<GarbageObject> garbage;
+
+    collectReadViewsAsGarbage(&garbage);
+
+    if (!garbage.empty())
+    {
+        renderer->collectGarbage(std::move(mUse), std::move(garbage));
+
+        // Ensure the resource use is always valid.
+        mUse.init();
+    }
+}
+
 void ImageViewHelper::release(RendererVk *renderer)
 {
     std::vector<GarbageObject> garbage;
 
-    if (mLinearReadImageView.valid())
-    {
-        garbage.emplace_back(GetGarbage(&mLinearReadImageView));
-    }
-    if (mNonLinearReadImageView.valid())
-    {
-        garbage.emplace_back(GetGarbage(&mNonLinearReadImageView));
-    }
-    if (mLinearFetchImageView.valid())
-    {
-        garbage.emplace_back(GetGarbage(&mLinearFetchImageView));
-    }
-    if (mNonLinearFetchImageView.valid())
-    {
-        garbage.emplace_back(GetGarbage(&mNonLinearFetchImageView));
-    }
-    if (mStencilReadImageView.valid())
-    {
-        garbage.emplace_back(GetGarbage(&mStencilReadImageView));
-    }
+    collectReadViewsAsGarbage(&garbage);
 
     for (ImageView &imageView : mLevelDrawImageViews)
     {
