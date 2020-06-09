@@ -4586,7 +4586,7 @@ ImageViewHelper::~ImageViewHelper()
     mUse.release();
 }
 
-void ImageViewHelper::release(RendererVk *renderer)
+void ImageViewHelper::releaseReadViews(RendererVk *renderer)
 {
     std::vector<GarbageObject> garbage;
 
@@ -4610,6 +4610,22 @@ void ImageViewHelper::release(RendererVk *renderer)
     {
         garbage.emplace_back(GetGarbage(&mStencilReadImageView));
     }
+
+    if (!garbage.empty())
+    {
+        vk::SharedResourceUse readImageViewsUse;
+        readImageViewsUse.init();
+        readImageViewsUse.updateSerialOneOff(mUse.getSerial());
+
+        renderer->collectGarbage(std::move(readImageViewsUse), std::move(garbage));
+    }
+}
+
+void ImageViewHelper::release(RendererVk *renderer)
+{
+    releaseReadViews(renderer);
+
+    std::vector<GarbageObject> garbage;
 
     for (ImageView &imageView : mLevelDrawImageViews)
     {
