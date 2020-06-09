@@ -2023,6 +2023,13 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
         }
 
         // This can be triggered by the GL back-end TextureGL class.
+        if (message == angle::SubjectMessage::SubjectColorAttachmentOrphaned)
+        {
+            mDirtyBits.set(DIRTY_BIT_COLOR_ATTACHMENT_ORPHANED);
+            return;
+        }
+
+        // There are no cases to reach this
         ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
         return;
     }
