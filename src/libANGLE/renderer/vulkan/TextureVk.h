@@ -349,11 +349,11 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                                uint32_t currentLayer,
                                                uint32_t srcLevelVk,
                                                uint32_t dstLevelGL);
-    angle::Result initImageViews(ContextVk *contextVk,
-                                 const vk::Format &format,
-                                 const bool sized,
-                                 uint32_t levelCount,
-                                 uint32_t layerCount);
+    angle::Result initReadImageViews(ContextVk *contextVk,
+                                     const vk::Format &format,
+                                     const bool sized,
+                                     uint32_t levelCount,
+                                     uint32_t layerCount);
     angle::Result initRenderTargets(ContextVk *contextVk, GLuint layerCount, GLuint levelIndex);
     angle::Result getLevelLayerImageView(ContextVk *contextVk,
                                          size_t level,
