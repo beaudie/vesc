@@ -4586,30 +4586,35 @@ ImageViewHelper::~ImageViewHelper()
     mUse.release();
 }
 
-void ImageViewHelper::release(RendererVk *renderer)
+void ImageViewHelper::releaseReadViews(RendererVk *renderer)
 {
-    std::vector<GarbageObject> garbage;
-
     if (mLinearReadImageView.valid())
     {
-        garbage.emplace_back(GetGarbage(&mLinearReadImageView));
+        mReadViewsGarbage.emplace_back(GetGarbage(&mLinearReadImageView));
     }
     if (mNonLinearReadImageView.valid())
     {
-        garbage.emplace_back(GetGarbage(&mNonLinearReadImageView));
+        mReadViewsGarbage.emplace_back(GetGarbage(&mNonLinearReadImageView));
     }
     if (mLinearFetchImageView.valid())
     {
-        garbage.emplace_back(GetGarbage(&mLinearFetchImageView));
+        mReadViewsGarbage.emplace_back(GetGarbage(&mLinearFetchImageView));
     }
     if (mNonLinearFetchImageView.valid())
     {
-        garbage.emplace_back(GetGarbage(&mNonLinearFetchImageView));
+        mReadViewsGarbage.emplace_back(GetGarbage(&mNonLinearFetchImageView));
     }
     if (mStencilReadImageView.valid())
     {
-        garbage.emplace_back(GetGarbage(&mStencilReadImageView));
+        mReadViewsGarbage.emplace_back(GetGarbage(&mStencilReadImageView));
     }
+}
+
+void ImageViewHelper::release(RendererVk *renderer)
+{
+    releaseReadViews(renderer);
+
+    std::vector<GarbageObject> garbage(std::move(mReadViewsGarbage));
 
     for (ImageView &imageView : mLevelDrawImageViews)
     {

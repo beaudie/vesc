@@ -1506,6 +1506,7 @@ class ImageViewHelper : angle::NonCopyable
     ImageViewHelper(ImageViewHelper &&other);
     ~ImageViewHelper();
 
+    void releaseReadViews(RendererVk *renderer);
     void release(RendererVk *renderer);
     void destroy(VkDevice device);
 
@@ -1582,6 +1583,7 @@ class ImageViewHelper : angle::NonCopyable
 
     // Lifetime.
     SharedResourceUse mUse;
+    std::vector<GarbageObject> mReadViewsGarbage;
 
     // Read views
     ImageView mLinearReadImageView;
