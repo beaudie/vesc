@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d2ee52a4_57cd9b72",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T02:33:46Z",
+      "side": 1,
+      "message": "ref for tracking writable buffer location",
+      "range": {
+        "startLine": 458,
+        "startChar": 12,
+        "endLine": 458,
+        "endChar": 37
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05b47049_2e94f667",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -22,6 +45,30 @@
       "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0040e060_2f1b7c59",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3402,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T02:33:46Z",
+      "side": 1,
+      "message": "No, we only track the return value if the buffer was writable.  See ref above.",
+      "parentUuid": "05b47049_2e94f667",
+      "range": {
+        "startLine": 3402,
+        "startChar": 22,
+        "endLine": 3402,
+        "endChar": 38
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -48,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "36785f5b_df351101",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3938,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T02:33:46Z",
+      "side": 1,
+      "message": "Yep, copy paste error.",
+      "parentUuid": "e909e877_f4521b57",
+      "range": {
+        "startLine": 3938,
+        "startChar": 11,
+        "endLine": 3938,
+        "endChar": 34
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce6be6f4_55ed4a61",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -68,6 +139,30 @@
       "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "393b8252_e4e607ce",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T02:33:46Z",
+      "side": 1,
+      "message": "Since we are setting the mapped state to \"false\", that translates to unmapped.  I updated the comments here generally.",
+      "parentUuid": "ce6be6f4_55ed4a61",
+      "range": {
+        "startLine": 3945,
+        "startChar": 46,
+        "endLine": 3945,
+        "endChar": 52
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "ff1245cc_eb9a0ac9",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T02:33:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "682ec377_25825eef",
+      "range": {
+        "startLine": 184,
+        "startChar": 6,
+        "endLine": 184,
+        "endChar": 21
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba726755_3a092812",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 2
@@ -114,6 +233,30 @@
       "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d13f893c_36e16948",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T02:33:46Z",
+      "side": 1,
+      "message": "Changed these to const reference getters, thanks.",
+      "parentUuid": "ba726755_3a092812",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 5
+      },
+      "revId": "eaf19af2c05ed03e7466f81be7819eff0834c0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
