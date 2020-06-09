@@ -1151,6 +1151,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     vk::FramebufferDesc priorFramebufferDesc = mCurrentFramebufferDesc;
+    bool colorAttachmentOrphaned             = false;
 
     // Only defer clears for whole draw framebuffer ops. If the scissor test is on and the scissor
     // rect doesn't match the draw rect, forget it.
@@ -1192,6 +1193,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 // can add related data (such as width/height) to the cache
                 clearCache(contextVk);
                 break;
+            case gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_ORPHANED:
+                // Remove the VkFramebuffer object cache to recreate VkFramebuffer object
+                colorAttachmentOrphaned = true;
+                break;
             default:
             {
                 static_assert(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0, "FB dirty bits");
@@ -1224,7 +1229,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     }
 
     // No-op redundant changes to prevent closing the RenderPass.
-    if (mCurrentFramebufferDesc == priorFramebufferDesc)
+    if (!colorAttachmentOrphaned && mCurrentFramebufferDesc == priorFramebufferDesc)
     {
         return angle::Result::Continue;
     }
@@ -1249,6 +1254,17 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     }
     // Deactivate Framebuffer
     mFramebuffer = nullptr;
+
+    // Remove current VkFramebuffer object from the cache
+    if (colorAttachmentOrphaned)
+    {
+        auto iter = mFramebufferCache.find(priorFramebufferDesc);
+        if (iter != mFramebufferCache.end())
+        {
+            iter->second.release(contextVk);
+            mFramebufferCache.erase(iter);
+        }
+    }
 
     return angle::Result::Continue;
 }
