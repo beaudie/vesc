@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c77f9cf_6ecd3cb4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T06:03:16Z",
+      "side": 1,
+      "message": "Simplified this section. We only want to copy the levels in the currently allocated image, so that\u0027s all we really need to loop over. All the other staged updates are kept intact.",
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f44a16e0_674fa72f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3899,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T06:03:16Z",
+      "side": 1,
+      "message": "The change that fixes the bugs is here!",
+      "range": {
+        "startLine": 3898,
+        "startChar": 0,
+        "endLine": 3899,
+        "endChar": 96
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
