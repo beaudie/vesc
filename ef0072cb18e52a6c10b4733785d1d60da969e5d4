@@ -106,6 +106,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2e58ebe_b627cb5e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T14:17:07Z",
+      "side": 1,
+      "message": "There is still something I don\u0027t understand. Per your quote:\n\n\u003e Exporting a sync_fd will reset the source ...\n\n\u003e ... export a fence is \"as executing a fence reset operation\" ...\n\nNote that it says **reset** not signal. What you\u0027re doing here is signal the fence (through submission). What you\u0027re quoting says reset (as in vkResetFences).",
+      "parentUuid": "8659bd8f_dbc8d114",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
