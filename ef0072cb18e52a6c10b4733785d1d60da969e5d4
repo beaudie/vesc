@@ -124,6 +124,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4385332_7d1a1cde",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-09T16:28:46Z",
+      "side": 1,
+      "message": "OK, So when we init with FD \u003d -1, should call VkFenceGetFd() to create/export a new Native FD. This should be saved in mNativeFenceFD. And submit needs to be called with this.\n\nWhen init is called and FD !\u003d -1, this FD is valid and should be saved to mNativeFence.\n\nThen dupNativeFenceFd() should just dup()/make a copy of mNativeFence and return. We should not be resetting/exporting a new unrelated (to first FD) FD.\nMy interpretation was they were related.\n\nThis seems to be consistent with intent of extension.Yes?",
+      "parentUuid": "a2e58ebe_b627cb5e",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
