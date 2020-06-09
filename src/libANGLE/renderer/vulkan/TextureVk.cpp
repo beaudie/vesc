@@ -886,8 +886,8 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
         memoryObjectVk->createImage(contextVk, type, levels, internalFormat, size, offset, mImage));
 
     gl::Format glFormat(internalFormat);
-    ANGLE_TRY(initImageViews(contextVk, format, glFormat.info->sized, static_cast<uint32_t>(levels),
-                             mImage->getLayerCount()));
+    ANGLE_TRY(initReadImageViews(contextVk, format, glFormat.info->sized,
+                                 static_cast<uint32_t>(levels), mImage->getLayerCount()));
 
     return angle::Result::Continue;
 }
@@ -909,7 +909,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
                    mState.getEffectiveBaseLevel(), false);
 
     ASSERT(type != gl::TextureType::CubeMap);
-    ANGLE_TRY(initImageViews(contextVk, format, image->getFormat().info->sized, 1, 1));
+    ANGLE_TRY(initReadImageViews(contextVk, format, image->getFormat().info->sized, 1, 1));
 
     // Transfer the image to this queue if needed
     uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
@@ -1490,7 +1490,7 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
 
     ASSERT(mImage->getLayerCount() == 1);
     gl::Format glFormat(internalFormat);
-    return initImageViews(contextVk, format, glFormat.info->sized, 1, 1);
+    return initReadImageViews(contextVk, format, glFormat.info->sized, 1, 1);
 }
 
 angle::Result TextureVk::releaseTexImage(const gl::Context *context)
@@ -1672,12 +1672,12 @@ angle::Result TextureVk::syncState(const gl::Context *context,
             uint32_t layerCount =
                 mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
 
-            mImageViews.release(renderer);
+            mImageViews.releaseReadViews(renderer);
             const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
-            ANGLE_TRY(initImageViews(contextVk, mImage->getFormat(),
-                                     baseLevelDesc.format.info->sized, mImage->getLevelCount(),
-                                     layerCount));
+            ANGLE_TRY(initReadImageViews(contextVk, mImage->getFormat(),
+                                         baseLevelDesc.format.info->sized, mImage->getLevelCount(),
+                                         layerCount));
         }
     }
 
@@ -1804,18 +1804,18 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
 
-    ANGLE_TRY(initImageViews(contextVk, format, sized, levelCount, layerCount));
+    ANGLE_TRY(initReadImageViews(contextVk, format, sized, levelCount, layerCount));
 
     mSerial = contextVk->generateTextureSerial();
 
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::initImageViews(ContextVk *contextVk,
-                                        const vk::Format &format,
-                                        const bool sized,
-                                        uint32_t levelCount,
-                                        uint32_t layerCount)
+angle::Result TextureVk::initReadImageViews(ContextVk *contextVk,
+                                            const vk::Format &format,
+                                            const bool sized,
+                                            uint32_t levelCount,
+                                            uint32_t layerCount)
 {
     ASSERT(mImage != nullptr && mImage->valid());
 
