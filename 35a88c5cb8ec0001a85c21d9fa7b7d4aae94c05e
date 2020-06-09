@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "106ae603_239d2613",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T02:55:33Z",
+      "side": 1,
+      "message": "Nope, asterix goes with the name, because that\u0027s how C\u0027s type definition was made. ANGLE\u0027s style agrees with this.",
+      "parentUuid": "586f8d29_e1e54ef2",
+      "range": {
+        "startLine": 463,
+        "startChar": 8,
+        "endLine": 463,
+        "endChar": 34
+      },
+      "revId": "35a88c5cb8ec0001a85c21d9fa7b7d4aae94c05e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc58de42_43f7cabe",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 6
@@ -68,6 +92,30 @@
       "revId": "35a88c5cb8ec0001a85c21d9fa7b7d4aae94c05e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36340ba4_2c6557cb",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-09T02:55:33Z",
+      "side": 1,
+      "message": "Nack",
+      "parentUuid": "bc58de42_43f7cabe",
+      "range": {
+        "startLine": 465,
+        "startChar": 19,
+        "endLine": 465,
+        "endChar": 40
+      },
+      "revId": "35a88c5cb8ec0001a85c21d9fa7b7d4aae94c05e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
