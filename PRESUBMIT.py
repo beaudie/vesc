@@ -41,7 +41,7 @@ def _CheckCommitMessageFormatting(input_api, output_api):
             while len(lines) > 0 and _IsLineBlank(lines[0]):
                 lines.pop(0)
 
-    whitelist_strings = ['Revert "', 'Roll ']
+    whitelist_strings = ['Revert "', 'Roll ', 'Reland ']
     summary_linelength_warning_lower_limit = 65
     summary_linelength_warning_upper_limit = 70
     description_linelength_limit = 72
@@ -124,8 +124,9 @@ def _CheckCommitMessageFormatting(input_api, output_api):
         if len(line) > description_linelength_limit:
             errors.append(
                 output_api.PresubmitError(
-                    "Please ensure that your description body is wrapped to " +
-                    str(description_linelength_limit) + " characters or less."))
+                    "Line \"" + line + "\" is too long. " + "Wrap it to " +
+                    str(description_linelength_limit) + " characters. " +
+                    "Lines without space or lines starting with 4 spaces are exempt."))
             return errors
     return errors
 
