@@ -22,6 +22,30 @@
       "revId": "97be5b8090f6d04625d7c96514c9f39698490256",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1186d830_f0c09eed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4258,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-09T00:58:13Z",
+      "side": 1,
+      "message": "I was hoping that partial data might still be useful, but more likely it is depth, not stencil, that would be useful anyway.  With the clear warning, early return is fine too.",
+      "parentUuid": "e25271a2_43d42b19",
+      "range": {
+        "startLine": 4258,
+        "startChar": 16,
+        "endLine": 4258,
+        "endChar": 20
+      },
+      "revId": "97be5b8090f6d04625d7c96514c9f39698490256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
