@@ -51,6 +51,10 @@ enum class SubjectMessage
     // gl::VertexArray, into gl::Context. Used to track validation.
     SubjectMapped,
     SubjectUnmapped,
+
+    // Sent by gl::Texture. This flag indicates that all color attachments derived from the Texture
+    // have been orphaned.
+    SubjectColorAttachmentOrphaned,
 };
 
 // The observing class inherits from this interface class.
