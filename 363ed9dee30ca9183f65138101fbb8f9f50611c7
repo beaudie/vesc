@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "4390edc6_37c8d81b",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-10T18:56:33Z",
+      "side": 1,
+      "message": "Tobin has a good CL that you can follow with locks, waits, and signals:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2174719\n\nIn particular, functions like CommandProcessor::processCommandProcessorTasks().",
+      "parentUuid": "8fc71add_419adf39",
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4242e156_80230a53",
         "filename": "src/libANGLE/WorkerThread.cpp",
         "patchSetId": 9
