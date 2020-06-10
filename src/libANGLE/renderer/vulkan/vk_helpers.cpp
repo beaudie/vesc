@@ -1348,9 +1348,11 @@ angle::Result DynamicDescriptorPool::init(ContextVk *contextVk,
                                         mDescriptorPools[0]->get().hasCapacity(mMaxSetsPerPool)));
 
     mPoolSizes.assign(setSizes, setSizes + setSizeCount);
+    WARN() << "setSizeCount: " << setSizeCount;
     for (uint32_t i = 0; i < setSizeCount; ++i)
     {
         mPoolSizes[i].descriptorCount *= mMaxSetsPerPool;
+        WARN() << "mPoolSizes[" << i << "] = " << mPoolSizes[i].descriptorCount;
     }
 
     mDescriptorPools.push_back(new RefCountedDescriptorPoolHelper());
@@ -1426,12 +1428,14 @@ angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
         {
             mCurrentPoolIndex = poolIndex;
             found             = true;
+            WARN() << "found available pool: " << poolIndex;
             break;
         }
     }
 
     if (!found)
     {
+        WARN() << "new RefCountedDescriptorPoolHelper()";
         mDescriptorPools.push_back(new RefCountedDescriptorPoolHelper());
         mCurrentPoolIndex = mDescriptorPools.size() - 1;
 
