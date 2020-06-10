@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a552886f_7b3b0bc7",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-10T07:28:09Z",
+      "side": 1,
+      "message": "Hi Jeff/Shahbaz,\n\nI\u0027m not totally understanding the device destruction here, why do we need to destroy device as we didn\u0027t create new device in this function?",
+      "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
