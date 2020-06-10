@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb4e659f_86b6835e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T16:43:10Z",
+      "side": 0,
+      "message": "nit: can you leave the format if possible. It keeps the code more future-proof.",
+      "range": {
+        "startLine": 962,
+        "startChar": 55,
+        "endLine": 962,
+        "endChar": 80
+      },
+      "revId": "4c2d466e3ce5b46a9613d95306fb3220dc0fe7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
