@@ -22,6 +22,30 @@
       "revId": "4c2d466e3ce5b46a9613d95306fb3220dc0fe7a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62fe51c3_0b5e85bc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 0,
+      "message": "This is intentional. If anything else in the format affects the image helper in the future, the code in this change needs to be rethought.\n\nIn particular, this change works on the assumption that until the image is recreated, any level redefinitions doesn\u0027t affect the format of the currently allocated image (because the redefinition could be to a different format).\n\nMaybe better would be to rename the function to make this even more explicit. How about s/updateImageHelper/updateImageStagingBuffer?\n\nWhile on the subject, `initStagingBuffer` calls `DynamicBuffer::init` which works when called multiple times. Would you rather I rework it so that on second call, it only calls requireAlignment and skips the rest of initialization?",
+      "parentUuid": "fb4e659f_86b6835e",
+      "range": {
+        "startLine": 962,
+        "startChar": 55,
+        "endLine": 962,
+        "endChar": 80
+      },
+      "revId": "4c2d466e3ce5b46a9613d95306fb3220dc0fe7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

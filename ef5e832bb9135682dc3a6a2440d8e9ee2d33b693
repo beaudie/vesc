@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "29005eb4_24941928",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 1,
+      "message": "The caller already calls IsTextureLevelInAllocatedImage for another purpose, so it would be duplicate CPU work.",
+      "parentUuid": "3268b79b_9f343135",
+      "range": {
+        "startLine": 69,
+        "startChar": 5,
+        "endLine": 69,
+        "endChar": 48
+      },
+      "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e7e47ed_2eabaee5",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11937f38_179e6df3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e7e47ed_2eabaee5",
+      "range": {
+        "startLine": 277,
+        "startChar": 15,
+        "endLine": 277,
+        "endChar": 39
+      },
+      "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "35b24cec_463ae310",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f44f5ac_cc2758f8",
+      "range": {
+        "startLine": 1089,
+        "startChar": 0,
+        "endLine": 1091,
+        "endChar": 0
+      },
+      "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72edf705_22ce0177",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 11
@@ -82,6 +154,30 @@
       "writtenOn": "2020-06-10T16:43:10Z",
       "side": 1,
       "message": "why not? seems totally reasonable that the FBO would need to refresh its cache. presumably this is a performance optimization?",
+      "range": {
+        "startLine": 240,
+        "startChar": 30,
+        "endLine": 240,
+        "endChar": 67
+      },
+      "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e033e959_2351de26",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 1,
+      "message": "Changed \"even if\" to \"especially if\". The given example emphasizes why the framebuffer shouldn\u0027t be affected during the glCopyTex[Sub]Image2D call.\n\nI probably didn\u0027t think much of it in terms of FramebufferVk, as I was thinking about the ImageHelper it uses. I\u0027m trying to say that the image in the ImageHelper shouldn\u0027t be released because it could be read from in the same gl call through the framebuffer.\n\nThe FBO cache is probably refreshed in following commands when the corresponding syncState is called.",
+      "parentUuid": "72edf705_22ce0177",
       "range": {
         "startLine": 240,
         "startChar": 30,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "963927bc_9734290a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "061414b2_a49be0a1",
+      "range": {
+        "startLine": 441,
+        "startChar": 11,
+        "endLine": 441,
+        "endChar": 19
+      },
+      "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2082df92_3f49d04e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 11
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "c5610b00_a26d37dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 1,
+      "message": "I\u0027m relying on VVL on bots to catch regressions. One of the new tests exercises the accumulated alignment requirement (which is also why I changed the texture size in tests from 8x8 to 13x13)\n\nThe logic of the change itself is quite simple:\n\n- Previously, we calculated lcm(alignment, atomSize)\n- Now we calculate lcm(prevAlignment, alignment), where prevAlignment is initialized with atomSize on first call.\n\nSo for the first call to this, there\u0027s no change in behavior. In subsequent calls, alignment requirements are accumulated with the old one.",
+      "parentUuid": "2082df92_3f49d04e",
+      "range": {
+        "startLine": 1150,
+        "startChar": 20,
+        "endLine": 1150,
+        "endChar": 36
+      },
+      "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd950cfd_41044100",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
@@ -160,6 +304,30 @@
       "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13402af3_ff0686cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T18:47:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd950cfd_41044100",
+      "range": {
+        "startLine": 1266,
+        "startChar": 36,
+        "endLine": 1266,
+        "endChar": 57
+      },
+      "revId": "ef5e832bb9135682dc3a6a2440d8e9ee2d33b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
