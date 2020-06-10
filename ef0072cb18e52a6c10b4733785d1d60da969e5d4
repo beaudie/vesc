@@ -142,6 +142,24 @@
       "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1261d5f_68651896",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-10T07:19:40Z",
+      "side": 1,
+      "message": "Hi Jeff,\n\nGood point! I\u0027ve update the code based on your advice in patch set 3, please help to check if it\u0027s okay. :) \n\nHi Shahbaz,\n\nI\u0027ve updated the code based on Jeff\u0027s advice, and we still need to call queueSubmit after the export, to make sure the fence after reset is valid. Good news is that the dupNativeFencdFd() could just simply dup the stored FD in SyncHelperNativeFence.",
+      "parentUuid": "b4385332_7d1a1cde",
+      "revId": "ef0072cb18e52a6c10b4733785d1d60da969e5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
