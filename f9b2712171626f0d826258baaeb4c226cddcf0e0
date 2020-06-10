@@ -22,6 +22,30 @@
       "revId": "f9b2712171626f0d826258baaeb4c226cddcf0e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1371244e_1af5b6e9",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3696,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-10T01:41:25Z",
+      "side": 1,
+      "message": "I removed the \"DirectX\" part, but let me know if there\u0027s something better to put.",
+      "parentUuid": "cc0ad7ec_efa4ed1b",
+      "range": {
+        "startLine": 3696,
+        "startChar": 37,
+        "endLine": 3696,
+        "endChar": 55
+      },
+      "revId": "f9b2712171626f0d826258baaeb4c226cddcf0e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
