@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "3972a281_e6863ef5",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T15:33:06Z",
+      "side": 1,
+      "message": "https://en.cppreference.com/w/cpp/thread/condition_variable/wait says:\n\n\u003e wait causes the current thread to block until the condition variable is notified **or a spurious wakeup occurs**\n\nLater it says again:\n\n\u003e The thread will be unblocked when notify_all() or notify_one() is executed. It may also be unblocked spuriously.\n\nThat\u0027s why the `if` should turn into a `while`.",
+      "parentUuid": "e5403699_2eccc821",
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4242e156_80230a53",
         "filename": "src/libANGLE/WorkerThread.cpp",
         "patchSetId": 9
