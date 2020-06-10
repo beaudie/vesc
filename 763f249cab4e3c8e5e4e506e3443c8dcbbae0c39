@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b27047f_3d34cc93",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-10T22:20:45Z",
+      "side": 1,
+      "message": "The other option is to update BlobCache::get() to return the actual size of the buffer (valueSize) to the caller to avoid this resize() call.   Let me know what you guys think.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 9
+      },
+      "revId": "763f249cab4e3c8e5e4e506e3443c8dcbbae0c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
