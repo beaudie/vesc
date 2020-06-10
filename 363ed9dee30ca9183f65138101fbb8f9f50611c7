@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e5403699_2eccc821",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-06-10T15:21:30Z",
+      "side": 1,
+      "message": "If what you mean is related to |mIsPending|, you no longer need this.\n\nThe reason |mIsPending| is used if because you cannot wait on a future\nbefore it is created:\n \n    ASSERT(mFuture.valid());\n    mFuture.wait();\n\nThis is happening because the task can be in the working queue, not yet emited.\nThe AsyncWorkerPool code ensures the task is emited and the future is valid before\ntrying to wait for it.\n\nIn the current implementation, only one condition variable is used. The condition\nvariable is created before the task is posted and there is no need to wait for\nthe creation of the task. Since the task is posted on the worker pool. There is\nno mechanism to wait for task completion and solely rely on the condition variable\nto signal that the closure was executed.\n\nDoes that make sense?",
+      "parentUuid": "044526e0_dc855ef8",
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4242e156_80230a53",
         "filename": "src/libANGLE/WorkerThread.cpp",
         "patchSetId": 9
