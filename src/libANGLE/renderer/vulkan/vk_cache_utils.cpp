@@ -1778,6 +1778,10 @@ void SamplerDesc::update(const gl::SamplerState &samplerState,
     mMaxLod        = samplerState.getMaxLod();
 
     // GL has no notion of external format, this must be provided from metadata from the image
+    if (externalFormat)
+    {
+        WARN() << "externalFormat: " << std::hex << externalFormat;
+    }
     mExternalFormat = externalFormat;
 
     bool compareEnable    = samplerState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
@@ -1854,6 +1858,7 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, vk::Sampler *sampler) cons
     VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
     if (mExternalFormat)
     {
+        WARN() << "Adding yuvConversionInfo to sampler createInfo chain";
         ASSERT((contextVk->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
         yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
         yuvConversionInfo.pNext = nullptr;
@@ -2206,7 +2211,7 @@ SamplerYcbcrConversionCache::~SamplerYcbcrConversionCache()
 void SamplerYcbcrConversionCache::destroy(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
-
+    WARN() << "destroying SamplerYcbcrConversionCache";
     for (auto &iter : mPayload)
     {
         vk::RefCountedSamplerYcbcrConversion &yuvSampler = iter.second;
@@ -2225,10 +2230,11 @@ angle::Result SamplerYcbcrConversionCache::getYuvConversion(uint64_t externalFor
     auto iter = mPayload.find(externalFormat);
     if (iter != mPayload.end())
     {
+        WARN() << "got cached YcbcrConversion";
         *yuvConversion = iter->second.get().getHandle();
         return angle::Result::Continue;
     }
-
+    ERR() << "Should have found yuvConversion in cache";
     return angle::Result::Stop;
 }
 
@@ -2242,6 +2248,7 @@ void SamplerYcbcrConversionCache::createYuvConversion(
     auto iter = mPayload.find(externalFormat);
     if (iter != mPayload.end())
     {
+        WARN() << "Found matching externalFormat in YuvConversion cache";
         vk::RefCountedSamplerYcbcrConversion &refCountedYuvConversion = iter->second;
         refCountedYuvConversion.addRef();
         return;
@@ -2250,6 +2257,7 @@ void SamplerYcbcrConversionCache::createYuvConversion(
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = renderer->getDevice();
 
+    WARN() << "Create YuvConversion object";
     vk::SamplerYcbcrConversion wrappedYuvConversion;
     wrappedYuvConversion.init(device, *yuvConversionInfo);
     mPayload.emplace(externalFormat,
