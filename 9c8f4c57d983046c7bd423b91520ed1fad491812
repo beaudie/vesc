@@ -16,6 +16,29 @@
       "revId": "9c8f4c57d983046c7bd423b91520ed1fad491812",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f8aef5c_1ce71813",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-10T22:29:47Z",
+      "side": 1,
+      "message": "if i replace all of this with -\n\n    renderer-\u003ecollectGarbage(std::move(mUse), std::move(garbage));\n\n    // Ensure the resource use is always valid.\n    mUse.init();\n\ntests work fine but im not convinced that is the right thing to do, help appreciated",
+      "range": {
+        "startLine": 4616,
+        "startChar": 8,
+        "endLine": 4620,
+        "endChar": 83
+      },
+      "revId": "9c8f4c57d983046c7bd423b91520ed1fad491812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
