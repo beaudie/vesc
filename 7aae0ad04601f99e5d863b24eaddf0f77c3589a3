@@ -103,6 +103,24 @@
       "revId": "7aae0ad04601f99e5d863b24eaddf0f77c3589a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3949f356_b2158051",
+        "filename": "src/tests/gl_tests/VulkanImageViewTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T17:13:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e97b40aa_1042a342",
+      "revId": "7aae0ad04601f99e5d863b24eaddf0f77c3589a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
