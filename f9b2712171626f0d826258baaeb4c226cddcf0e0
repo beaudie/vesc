@@ -46,6 +46,30 @@
       "revId": "f9b2712171626f0d826258baaeb4c226cddcf0e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "794e0074_17eed243",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3696,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T02:43:41Z",
+      "side": 1,
+      "message": "Looks good.",
+      "parentUuid": "1371244e_1af5b6e9",
+      "range": {
+        "startLine": 3696,
+        "startChar": 37,
+        "endLine": 3696,
+        "endChar": 55
+      },
+      "revId": "f9b2712171626f0d826258baaeb4c226cddcf0e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
