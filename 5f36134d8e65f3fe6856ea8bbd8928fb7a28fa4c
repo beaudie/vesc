@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1622dbf8_56d17891",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T15:48:29Z",
+      "side": 1,
+      "message": "nit: can you make the subject \u003c\u003d 65 chars?",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 76
+      },
+      "revId": "5f36134d8e65f3fe6856ea8bbd8928fb7a28fa4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75cd395d_97a3f627",
         "filename": "doc/CodingStandard.md",
         "patchSetId": 3
@@ -41,6 +64,53 @@
         "startChar": 0,
         "endLine": 81,
         "endChar": 131
+      },
+      "revId": "5f36134d8e65f3fe6856ea8bbd8928fb7a28fa4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34af6b0e_e5d3da36",
+        "filename": "doc/CodingStandard.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T15:48:29Z",
+      "side": 1,
+      "message": "Needs to include the information that GN only checks \"\" header paths and \u003c\u003e are ignored. And that in exporting our build files we rely on GN check.",
+      "parentUuid": "75cd395d_97a3f627",
+      "range": {
+        "startLine": 81,
+        "startChar": 9,
+        "endLine": 81,
+        "endChar": 25
+      },
+      "revId": "5f36134d8e65f3fe6856ea8bbd8928fb7a28fa4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ba62ab6_7e2e7c60",
+        "filename": "doc/CodingStandard.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T15:48:29Z",
+      "side": 1,
+      "message": "can you move your new section down here and follow this format? (definition/decision)",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 26
       },
       "revId": "5f36134d8e65f3fe6856ea8bbd8928fb7a28fa4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
