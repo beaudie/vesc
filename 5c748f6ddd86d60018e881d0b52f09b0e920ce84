@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3b623f0_6c1f3378",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T15:53:14Z",
+      "side": 1,
+      "message": "for some reason \"\\\" characters are coming through in the presubmit errors. Can we figure out how to get rid of those guys?",
+      "range": {
+        "startLine": 126,
+        "startChar": 27,
+        "endLine": 126,
+        "endChar": 41
+      },
+      "revId": "5c748f6ddd86d60018e881d0b52f09b0e920ce84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc432f8a_b7024cd8",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T15:53:14Z",
+      "side": 1,
+      "message": "Putting the line inside the presubmit might make it a bit hard to read, how about\n\nLine 10 is too long:\n\nQuote the really long line line\n\nPlease wrap it to ## characters. Lines without spaces and lines starting with 4 spaces are exempt.",
+      "range": {
+        "startLine": 127,
+        "startChar": 21,
+        "endLine": 127,
+        "endChar": 55
+      },
+      "revId": "5c748f6ddd86d60018e881d0b52f09b0e920ce84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59b219a4_f780cb87",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T15:53:14Z",
+      "side": 1,
+      "message": "nit: spaces",
+      "range": {
+        "startLine": 129,
+        "startChar": 35,
+        "endLine": 129,
+        "endChar": 41
+      },
+      "revId": "5c748f6ddd86d60018e881d0b52f09b0e920ce84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
