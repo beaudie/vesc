@@ -68,6 +68,24 @@
       "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "454552ba_bbe6deaa",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T19:50:52Z",
+      "side": 1,
+      "message": "I\u0027m also still not sure about this. The comment says:\n\n\u003e has the same side effects ... as executing a fence reset operation.\n\nThis is NOT a reset operation, this is a signal operation. There\u0027s a mismatch in logic here.",
+      "parentUuid": "a6302262_4c14bec9",
+      "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
