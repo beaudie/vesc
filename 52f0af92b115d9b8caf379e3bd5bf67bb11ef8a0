@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "b4d90580_ddb234cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T04:46:45Z",
+      "side": 1,
+      "message": "Ack.\n\nThe `if` at the beginning of the function ensures that all changes are flushed to the image.\n\nAbout quick changes to base/max level, probably the optimization we want is to not recreate the image if the new base/max level lies within the already allocated image, and just recreate the views. Is there a bug to track this already?",
+      "parentUuid": "d8ff35cc_5b5b6f4d",
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f44a16e0_674fa72f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -83,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "d433eeff_1f920183",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4079,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T04:46:45Z",
+      "side": 1,
+      "message": "Done. Added GL ;)",
+      "parentUuid": "6bc2a7ed_f109b1ad",
+      "range": {
+        "startLine": 4079,
+        "startChar": 17,
+        "endLine": 4079,
+        "endChar": 31
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "624a43d9_f116b6e7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -103,6 +145,30 @@
       "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0457c38_24a84f87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4278,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T04:46:45Z",
+      "side": 1,
+      "message": "Yes, this was another bug!",
+      "parentUuid": "624a43d9_f116b6e7",
+      "range": {
+        "startLine": 4278,
+        "startChar": 19,
+        "endLine": 4278,
+        "endChar": 49
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -129,6 +195,30 @@
     },
     {
       "key": {
+        "uuid": "85585b57_2b0176c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T04:46:45Z",
+      "side": 1,
+      "message": "Yes, I went through the same nightmare dealing with GL and VK color attachment indices...",
+      "parentUuid": "1ae46041_3c0d3463",
+      "range": {
+        "startLine": 4367,
+        "startChar": 46,
+        "endLine": 4367,
+        "endChar": 66
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87f9eef8_51e4f1f3",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
@@ -149,6 +239,30 @@
       "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de6866cd_22058968",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T04:46:45Z",
+      "side": 1,
+      "message": "Yeap!",
+      "parentUuid": "87f9eef8_51e4f1f3",
+      "range": {
+        "startLine": 2441,
+        "startChar": 4,
+        "endLine": 2441,
+        "endChar": 22
+      },
+      "revId": "52f0af92b115d9b8caf379e3bd5bf67bb11ef8a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
