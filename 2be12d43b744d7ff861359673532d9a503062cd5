@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c85e3ea_48a3296a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T20:58:48Z",
+      "side": 1,
+      "message": "re-nit: can you de-duplicate this by calling releaseReadViews",
+      "range": {
+        "startLine": 4627,
+        "startChar": 3,
+        "endLine": 4654,
+        "endChar": 5
+      },
+      "revId": "2be12d43b744d7ff861359673532d9a503062cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
