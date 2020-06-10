@@ -948,6 +948,10 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
+    WARN() << "&mSamplerYcbcrConversionFeatures:";
+    WARN() << "\tsamplerYcbcrConversion = "
+           << mSamplerYcbcrConversionFeatures.samplerYcbcrConversion;
+
     // Fence properties
     if (mFeatures.supportsExternalFenceCapabilities.enabled)
     {
