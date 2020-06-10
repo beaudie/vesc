@@ -34,6 +34,87 @@ static vector<DWORD> freeTlsIndices;
 
 #endif
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    if defined(__aarch64__)
+#        define __get_tls()                                 \
+            ({                                              \
+                void **__val;                               \
+                __asm__("mrs %0, tpidr_el0" : "=r"(__val)); \
+                __val;                                      \
+            })
+#    elif defined(__arm__)
+#        define __get_tls()                                          \
+            ({                                                       \
+                void **__val;                                        \
+                __asm__("mrc p15, 0, %0, c13, c0, 3" : "=r"(__val)); \
+                __val;                                               \
+            })
+#    elif defined(__mips__)
+#        define __get_tls()                                                                      \
+            /* On mips32r1, this goes via a kernel illegal instruction trap that's optimized for \
+             * v1. */                                                                            \
+            ({                                                                                   \
+                register void **__val asm("v1");                                                 \
+                __asm__(                                                                         \
+                    ".set    push\n"                                                             \
+                    ".set    mips32r2\n"                                                         \
+                    "rdhwr   %0,$29\n"                                                           \
+                    ".set    pop\n"                                                              \
+                    : "=r"(__val));                                                              \
+                __val;                                                                           \
+            })
+#    elif defined(__i386__)
+#        define __get_tls()                               \
+            ({                                            \
+                void **__val;                             \
+                __asm__("movl %%gs:0, %0" : "=r"(__val)); \
+                __val;                                    \
+            })
+#    elif defined(__x86_64__)
+#        define __get_tls()                              \
+            ({                                           \
+                void **__val;                            \
+                __asm__("mov %%fs:0, %0" : "=r"(__val)); \
+                __val;                                   \
+            })
+#    else
+#        error unsupported architecture
+#    endif
+
+//  - TLS_SLOT_OPENGL and TLS_SLOT_OPENGL_API: These two aren't used by bionic
+//    itself, but allow the graphics code to access TLS directly rather than
+//    using the pthread API.
+//
+// Choose the TLS_SLOT_OPENGL TLS slot with the value that matches value in the header file in
+// bionic(bionic_asm_tls.h)
+// #define TLS_SLOT_OPENGL           3
+constexpr TLSIndex kContextTlsSlot = 3;
+
+TLSIndex CreateContextTLSIndexFast()
+{
+    return kContextTlsSlot;
+}
+
+bool DestroyContextTLSIndexFast(TLSIndex index)
+{
+    ANGLE_UNUSED_VARIABLE(index);
+    return true;
+}
+
+bool SetContextTLSFast(TLSIndex index, void *value)
+{
+    ASSERT(kContextTlsSlot == index);
+    __get_tls()[kContextTlsSlot] = value;
+    return true;
+}
+
+void *GetContextTLSFast(TLSIndex index)
+{
+    ASSERT(kContextTlsSlot == index);
+    return __get_tls()[kContextTlsSlot];
+}
+#endif
+
 TLSIndex CreateTLSIndex()
 {
     TLSIndex index;
@@ -154,4 +235,48 @@ void *GetTLSValue(TLSIndex index)
 #elif defined(ANGLE_PLATFORM_POSIX)
     return pthread_getspecific(index);
 #endif
+}
+
+CreateContextTlsIndexImpl createContextTlsIndexImpl   = CreateTLSIndex;
+DestroyContextTLSIndexImpl destroyContextTlsIndexImpl = DestroyTLSIndex;
+SetContextTlsValueImpl setContextTlsValueImpl         = SetTLSValue;
+GetContextTlsValueImpl getContextTlsValueImpl         = GetTLSValue;
+
+void SetPlatformType(bool platformTypeVulkan)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (platformTypeVulkan == true)
+    {
+        createContextTlsIndexImpl  = CreateContextTLSIndexFast;
+        destroyContextTlsIndexImpl = DestroyContextTLSIndexFast;
+        setContextTlsValueImpl     = SetContextTLSFast;
+        getContextTlsValueImpl     = GetContextTLSFast;
+        return;
+    }
+#endif  // ANGLE_PLATFORM_ANDROID
+
+    createContextTlsIndexImpl  = CreateTLSIndex;
+    destroyContextTlsIndexImpl = DestroyTLSIndex;
+    setContextTlsValueImpl     = SetTLSValue;
+    getContextTlsValueImpl     = GetTLSValue;
+}
+
+TLSIndex CreateContextTLSIndex()
+{
+    return createContextTlsIndexImpl();
+}
+
+bool DestroyContextTLSIndex(TLSIndex index)
+{
+    return destroyContextTlsIndexImpl(index);
+}
+
+bool SetContextTLSValue(TLSIndex index, void *value)
+{
+    return setContextTlsValueImpl(index, value);
+}
+
+void *GetContextTLSValue(TLSIndex index)
+{
+    return getContextTlsValueImpl(index);
 }

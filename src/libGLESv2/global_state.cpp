@@ -53,7 +53,7 @@ Thread *AllocateCurrentThread()
     }
 
     Thread *thread = new Thread();
-    if (!SetTLSValue(threadTLS, thread))
+    if (!SetContextTLSValue(threadTLS, thread))
     {
         ERR() << "Could not set thread local storage.";
         return nullptr;
@@ -97,10 +97,10 @@ Thread *GetCurrentThread()
     // Create a TLS index if one has not been created for this DLL
     if (threadTLS == TLS_INVALID_INDEX)
     {
-        threadTLS = CreateTLSIndex();
+        threadTLS = CreateContextTLSIndex();
     }
 
-    Thread *current = static_cast<Thread *>(GetTLSValue(threadTLS));
+    Thread *current = static_cast<Thread *>(GetContextTLSValue(threadTLS));
 
     // ANGLE issue 488: when the dll is loaded after thread initialization,
     // thread local storage (current) might not exist yet.
@@ -145,9 +145,9 @@ namespace
 
 bool DeallocateCurrentThread()
 {
-    Thread *thread = static_cast<Thread *>(GetTLSValue(threadTLS));
+    Thread *thread = static_cast<Thread *>(GetContextTLSValue(threadTLS));
     SafeDelete(thread);
-    return SetTLSValue(threadTLS, nullptr);
+    return SetContextTLSValue(threadTLS, nullptr);
 }
 
 void DeallocateDebug()
@@ -172,7 +172,7 @@ bool InitializeProcess()
 
     AllocateMutex();
 
-    threadTLS = CreateTLSIndex();
+    threadTLS = CreateContextTLSIndex();
     if (threadTLS == TLS_INVALID_INDEX)
     {
         return false;
@@ -197,7 +197,7 @@ bool TerminateProcess()
         TLSIndex tlsCopy = threadTLS;
         threadTLS        = TLS_INVALID_INDEX;
 
-        if (!DestroyTLSIndex(tlsCopy))
+        if (!DestroyContextTLSIndex(tlsCopy))
         {
             return false;
         }

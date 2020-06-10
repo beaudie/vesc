@@ -26,6 +26,7 @@
 #include "common/platform.h"
 #include "common/string_utils.h"
 #include "common/system_utils.h"
+#include "common/tls.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
@@ -561,6 +562,7 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
             return nullptr;
         }
 
+        SetPlatformType(displayType == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE);
         display->setupDisplayPlatform(impl);
     }
 

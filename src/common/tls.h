@@ -34,9 +34,25 @@ typedef pthread_key_t TLSIndex;
 #    error Unsupported platform.
 #endif
 
+using CreateContextTlsIndexImpl  = TLSIndex (*)(void);
+using DestroyContextTLSIndexImpl = bool (*)(TLSIndex);
+using SetContextTlsValueImpl     = bool (*)(TLSIndex index, void *value);
+using GetContextTlsValueImpl     = void *(*)(TLSIndex index);
+
+void SetPlatformType(bool platformTypeVulkan);
+
 // TODO(kbr): for POSIX platforms this will have to be changed to take
 // in a destructor function pointer, to allow the thread-local storage
 // to be properly deallocated upon thread exit.
+
+// TLS functions specific to context TLS storage and retrieval
+TLSIndex CreateContextTLSIndex();
+bool DestroyContextTLSIndex(TLSIndex index);
+
+bool SetContextTLSValue(TLSIndex index, void *value);
+void *GetContextTLSValue(TLSIndex index);
+
+// Generic TLS storage and retrieval functions
 TLSIndex CreateTLSIndex();
 bool DestroyTLSIndex(TLSIndex index);
 
