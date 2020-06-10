@@ -70,6 +70,20 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(RendererV
         return egl::EglBadParameter() << "Failed to query AHardwareBuffer properties";
     }
 
+    WARN() << "bufferFormatProperties:";
+    WARN() << "\tformat: 0x" << std::hex << bufferFormatProperties.format;
+    WARN() << "\texternalFormat: 0x" << std::hex << bufferFormatProperties.externalFormat;
+    WARN() << "\tformatFeatures: 0x" << std::hex << bufferFormatProperties.formatFeatures;
+    WARN() << "\tsamplerYcbcrConversionComponents: "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.r << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.g << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.b << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.a;
+    WARN() << "\tsuggestedYcbcrModel: " << bufferFormatProperties.suggestedYcbcrModel;
+    WARN() << "\tsuggestedYcbcrRange: " << bufferFormatProperties.suggestedYcbcrRange;
+    WARN() << "\tsuggestedXChromaOffset: " << bufferFormatProperties.suggestedXChromaOffset;
+    WARN() << "\tsuggestedYChromaOffset: " << bufferFormatProperties.suggestedYChromaOffset;
+
     if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
     {
         ASSERT(bufferFormatProperties.externalFormat != 0);
@@ -127,6 +141,20 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     AHardwareBuffer_Desc ahbDescription;
     AHardwareBuffer_describe(hardwareBuffer, &ahbDescription);
     VkImageTiling imageTilingMode = AhbDescUsageToVkImageTiling(&ahbDescription);
+
+    WARN() << "bufferFormatProperties:";
+    WARN() << "\tformat: 0x" << std::hex << bufferFormatProperties.format;
+    WARN() << "\texternalFormat: 0x" << std::hex << bufferFormatProperties.externalFormat;
+    WARN() << "\tformatFeatures: 0x" << std::hex << bufferFormatProperties.formatFeatures;
+    WARN() << "\tsamplerYcbcrConversionComponents: "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.r << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.g << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.b << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.a;
+    WARN() << "\tsuggestedYcbcrModel: " << bufferFormatProperties.suggestedYcbcrModel;
+    WARN() << "\tsuggestedYcbcrRange: " << bufferFormatProperties.suggestedYcbcrRange;
+    WARN() << "\tsuggestedXChromaOffset: " << bufferFormatProperties.suggestedXChromaOffset;
+    WARN() << "\tsuggestedYChromaOffset: " << bufferFormatProperties.suggestedYChromaOffset;
 
     VkExternalFormatANDROID externalFormat = {};
     externalFormat.sType                   = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID;
