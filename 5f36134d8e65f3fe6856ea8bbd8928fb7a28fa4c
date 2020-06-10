@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75cd395d_97a3f627",
+        "filename": "doc/CodingStandard.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T02:49:58Z",
+      "side": 1,
+      "message": "Not sure why you would call \"\" more restrictive. The search path of \"\" is a superset of the search path of \u003c\u003e.",
+      "range": {
+        "startLine": 81,
+        "startChar": 9,
+        "endLine": 81,
+        "endChar": 25
+      },
+      "revId": "5f36134d8e65f3fe6856ea8bbd8928fb7a28fa4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac8f14ad_b013aa40",
+        "filename": "doc/CodingStandard.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T02:49:58Z",
+      "side": 1,
+      "message": "These aren\u0027t two items, so I\u0027d just turn it into a paragraph.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 131
+      },
+      "revId": "5f36134d8e65f3fe6856ea8bbd8928fb7a28fa4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
