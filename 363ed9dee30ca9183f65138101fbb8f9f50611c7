@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "8fc71add_419adf39",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-06-10T17:10:00Z",
+      "side": 1,
+      "message": "I\u0027ve spent a bit of time looking on details. I find it a bit scary.\n\n1) Wait(..) can wake up Spurious. So,it must be around a while (!pred()) { wait(); } or \n   use the overloaded version with predicate.\n\n  see: https://en.cppreference.com/w/cpp/thread/condition_variable/wait\n\n  \"The thread will be unblocked when notify_all() or notify_one() is executed.\n   It may also be unblocked spuriously.\"\n  \n  \"This overload may be used to ignore spurious awakenings while waiting for\n   a specific condition to become true.\"\n\n\n2) Notify may be implemented as a broadcast all\n\n  see: https://en.wikipedia.org/wiki/Spurious_wakeup\n\n  \"The system may decide to wake them all up, treating every signal( ) to wake one\n   thread as a broadcast( ) to wake all of them, thus breaking any possibly\n   expected 1:1 relationship between signals and wakeups.[1] If there are ten threads\n   waiting, only one will win and the other nine will experience spurious wakeups.\"\n\n  see: https://devblogs.microsoft.com/oldnewthing/20180201-00/?p\u003d97946\n\n\n3) We do not have the lost notification issue since the lock is always taken while\n   updating the predicate and while notifying threads.\n\n\nShort story: We need to use the overloaded predicate version of wait as recommended\n             by Shahbaz.",
+      "parentUuid": "3972a281_e6863ef5",
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4242e156_80230a53",
         "filename": "src/libANGLE/WorkerThread.cpp",
         "patchSetId": 9
