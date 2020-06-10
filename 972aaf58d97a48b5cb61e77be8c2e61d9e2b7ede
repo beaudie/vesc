@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59e32d7b_26211ec9",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T18:41:53Z",
+      "side": 1,
+      "message": "nit: http://anglebug.com/4715",
+      "range": {
+        "startLine": 346,
+        "startChar": 5,
+        "endLine": 346,
+        "endChar": 67
+      },
+      "revId": "972aaf58d97a48b5cb61e77be8c2e61d9e2b7ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
