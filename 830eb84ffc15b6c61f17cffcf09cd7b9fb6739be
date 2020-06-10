@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8def61bc_aace634c",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T01:40:30Z",
+      "side": 1,
+      "message": "I\u0027d in the very least remove the terminating \"\\n\" from line (not sure if there is one, so nevermind if there are none)\n\nnit: I\u0027d personally have liked to see something like \u0027Line \"Start of ... line ending\" is too long\u0027, so a huge line doesn\u0027t end up actually generating a super long error message. But up to you if you feel like implementing that.",
+      "range": {
+        "startLine": 127,
+        "startChar": 32,
+        "endLine": 127,
+        "endChar": 36
+      },
+      "revId": "830eb84ffc15b6c61f17cffcf09cd7b9fb6739be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d5bab5c_be0b793d",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-10T01:40:30Z",
+      "side": 1,
+      "message": "Can be a bit less wordy:\n\n    ... characters. \" +\n    \"Lines without spaces and lines starting with 4 spaces are exempt.\"",
+      "range": {
+        "startLine": 128,
+        "startChar": 58,
+        "endLine": 130,
+        "endChar": 65
+      },
+      "revId": "830eb84ffc15b6c61f17cffcf09cd7b9fb6739be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
