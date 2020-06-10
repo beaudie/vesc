@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "044526e0_dc855ef8",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-06-10T15:14:27Z",
+      "side": 1,
+      "message": "I don\u0027t understand at all what do you mean by \"interrupted\".\n\nIs it interrupt by the stl implementation? Does we provide an way to interrupt the tasks execution?\n\nI\u0027m reading the doc and I can\u0027t find an explanation for interruption.\n  https://en.cppreference.com/w/cpp/thread/condition_variable/wait\n\nCan you clarify?",
+      "parentUuid": "3275b552_5bf21e4f",
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4242e156_80230a53",
         "filename": "src/libANGLE/WorkerThread.cpp",
         "patchSetId": 9
@@ -39,6 +57,30 @@
       "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b54e546f_a8df5db8",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-06-10T15:14:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4242e156_80230a53",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 31
+      },
+      "revId": "363ed9dee30ca9183f65138101fbb8f9f50611c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
