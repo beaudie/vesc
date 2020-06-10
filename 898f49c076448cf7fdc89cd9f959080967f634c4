@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f9a5d613_fe7764e3",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-10T19:43:52Z",
+      "side": 1,
+      "message": "This comment should change, now the SyncHelperNativeFence is holding the FD and needs to be responsible for close(). Need to be sure it is closed after vkQueueSubmit() is complete.",
+      "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a552886f_7b3b0bc7",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 3
@@ -31,6 +48,23 @@
       "side": 1,
       "message": "The device is passed to fence, so the fence can be destroyed. See the man page for vkDestroyFence: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkDestroyFence.html",
       "parentUuid": "a552886f_7b3b0bc7",
+      "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6302262_4c14bec9",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-10T19:43:52Z",
+      "side": 1,
+      "message": "This is the only part I am unsure about. Having a second QueueSubmit (third if you count flush). Can we export after flush and before first QueueSubmit()? Will fence with QueueSubmit, and exported FD be signaled on QueueSubmit() complete? We want all dup()s to related to this first FD.",
       "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
