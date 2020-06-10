@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7919c68a_61745d4e",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-10T17:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "163e950a_0aa35072",
+      "range": {
+        "startLine": 2025,
+        "startChar": 40,
+        "endLine": 2025,
+        "endChar": 68
+      },
+      "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "081923fe_da493cf2",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af8f6b0a_f67fbeeb",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-10T17:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "081923fe_da493cf2",
+      "range": {
+        "startLine": 2032,
+        "startChar": 8,
+        "endLine": 2032,
+        "endChar": 43
+      },
+      "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "d6e566e0_98b28ae5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-10T17:10:07Z",
+      "side": 1,
+      "message": "not sure i understand shabi. \"mFramebufferCache.erase(...)\" will invalidate all iter references going forward right? or are you talking about a race condition?",
+      "parentUuid": "7e93d1f5_5010b300",
+      "range": {
+        "startLine": 1265,
+        "startChar": 36,
+        "endLine": 1265,
+        "endChar": 56
+      },
+      "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78848515_ade733c3",
         "filename": "src/tests/gl_tests/VulkanImageViewTest.cpp",
         "patchSetId": 3
@@ -108,6 +180,24 @@
       "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af663275_cbfcf487",
+        "filename": "src/tests/gl_tests/VulkanImageViewTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-10T17:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78848515_ade733c3",
+      "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "a3fb021b_ce5e382e",
+        "filename": "src/tests/gl_tests/VulkanImageViewTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-10T17:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f4be3c3_a06e513a",
+      "range": {
+        "startLine": 204,
+        "startChar": 15,
+        "endLine": 204,
+        "endChar": 35
+      },
+      "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "284331b0_430530ba",
         "filename": "src/tests/gl_tests/VulkanImageViewTest.cpp",
         "patchSetId": 3
@@ -154,6 +268,30 @@
       "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c91a5530_3a68a8b7",
+        "filename": "src/tests/gl_tests/VulkanImageViewTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-10T17:10:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "284331b0_430530ba",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 216,
+        "endChar": 10
+      },
+      "revId": "fc0bcfe8dedea38b297f4977bbc79718bd7d7a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
