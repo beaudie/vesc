@@ -342,7 +342,7 @@ def CheckChangeOnUpload(input_api, output_api):
     results.extend(
         input_api.canned_checks.CheckPatchFormatted(
             input_api, output_api, result_factory=output_api.PresubmitError))
-    results.extend(_CheckCommitMessageFormatting(input_api, output_api))
+    #results.extend(_CheckCommitMessageFormatting(input_api, output_api))
     return results
 
 
