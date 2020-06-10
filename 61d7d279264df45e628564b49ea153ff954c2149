@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2808d85_57912fbc",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-10T17:09:05Z",
+      "side": 1,
+      "message": "ah, I forgot we chop off a bunch of lines. sorry to go back on my request , but maybe you can omit this to keep the cl a bit simpler. LGTM either way.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 60
+      },
+      "revId": "61d7d279264df45e628564b49ea153ff954c2149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
