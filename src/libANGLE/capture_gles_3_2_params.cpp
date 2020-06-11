@@ -250,7 +250,7 @@ void CaptureGetSamplerParameterIiv_params(const State &glState,
                                           GLint *params,
                                           ParamCapture *paramsParam)
 {
-    UNIMPLEMENTED();
+    paramsParam->readBufferSizeBytes = sizeof(GLint) * 4;
 }
 
 void CaptureGetSamplerParameterIuiv_params(const State &glState,
@@ -260,7 +260,7 @@ void CaptureGetSamplerParameterIuiv_params(const State &glState,
                                            GLuint *params,
                                            ParamCapture *paramsParam)
 {
-    UNIMPLEMENTED();
+    paramsParam->readBufferSizeBytes = sizeof(GLuint) * 4;
 }
 
 void CaptureGetTexParameterIiv_params(const State &glState,
@@ -270,7 +270,7 @@ void CaptureGetTexParameterIiv_params(const State &glState,
                                       GLint *params,
                                       ParamCapture *paramsParam)
 {
-    UNIMPLEMENTED();
+    paramsParam->readBufferSizeBytes = sizeof(GLint) * 4;
 }
 
 void CaptureGetTexParameterIuiv_params(const State &glState,
@@ -280,7 +280,7 @@ void CaptureGetTexParameterIuiv_params(const State &glState,
                                        GLuint *params,
                                        ParamCapture *paramsParam)
 {
-    UNIMPLEMENTED();
+    paramsParam->readBufferSizeBytes = sizeof(GLuint) * 4;
 }
 
 void CaptureGetnUniformfv_params(const State &glState,
@@ -380,7 +380,14 @@ void CaptureSamplerParameterIiv_param(const State &glState,
                                       const GLint *param,
                                       ParamCapture *paramParam)
 {
-    UNIMPLEMENTED();
+    if (pname == GL_TEXTURE_BORDER_COLOR)
+    {
+        CaptureMemory(param, sizeof(GLint) * 4, paramParam);
+    }
+    else
+    {
+        CaptureMemory(param, sizeof(GLint), paramParam);
+    }
 }
 
 void CaptureSamplerParameterIuiv_param(const State &glState,
@@ -390,7 +397,14 @@ void CaptureSamplerParameterIuiv_param(const State &glState,
                                        const GLuint *param,
                                        ParamCapture *paramParam)
 {
-    UNIMPLEMENTED();
+    if (pname == GL_TEXTURE_BORDER_COLOR)
+    {
+        CaptureMemory(param, sizeof(GLuint) * 4, paramParam);
+    }
+    else
+    {
+        CaptureMemory(param, sizeof(GLuint), paramParam);
+    }
 }
 
 void CaptureTexParameterIiv_params(const State &glState,
@@ -400,7 +414,14 @@ void CaptureTexParameterIiv_params(const State &glState,
                                    const GLint *params,
                                    ParamCapture *paramParam)
 {
-    UNIMPLEMENTED();
+    if (pname == GL_TEXTURE_BORDER_COLOR)
+    {
+        CaptureMemory(params, sizeof(GLint) * 4, paramParam);
+    }
+    else
+    {
+        CaptureMemory(params, sizeof(GLint), paramParam);
+    }
 }
 
 void CaptureTexParameterIuiv_params(const State &glState,
@@ -410,7 +431,14 @@ void CaptureTexParameterIuiv_params(const State &glState,
                                     const GLuint *params,
                                     ParamCapture *paramParam)
 {
-    UNIMPLEMENTED();
+    if (pname == GL_TEXTURE_BORDER_COLOR)
+    {
+        CaptureMemory(params, sizeof(GLuint) * 4, paramParam);
+    }
+    else
+    {
+        CaptureMemory(params, sizeof(GLuint), paramParam);
+    }
 }
 
 }  // namespace gl
