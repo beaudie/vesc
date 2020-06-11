@@ -46,6 +46,8 @@ def _CheckCommitMessageFormatting(input_api, output_api):
     summary_linelength_warning_upper_limit = 70
     description_linelength_limit = 72
     print("*****************************")
+
+    
     print(input_api.change.DescriptionText())
     print("*****************************")
 
