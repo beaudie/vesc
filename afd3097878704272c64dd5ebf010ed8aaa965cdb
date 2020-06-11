@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "d8415f5f_1d3e691a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-11T21:05:22Z",
+      "side": 1,
+      "message": "I liked Tim\u0027s suggestion and changed to use that.\nThis is a rare case, should only pay for it when it\u0027s used.",
+      "parentUuid": "df24801b_95189619",
+      "revId": "afd3097878704272c64dd5ebf010ed8aaa965cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b2dac94_1820231c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
