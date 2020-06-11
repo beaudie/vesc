@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6dd8b52_9f66a4ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-11T01:46:04Z",
+      "side": 1,
+      "message": "I was a bit thrown off by the title.\n\nSuggest:\n\nVulkan: Initialize stencil ops with DontCare for color attachments",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "5b42c42e95f4a89c238ae4f43c31400b90fa1620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
