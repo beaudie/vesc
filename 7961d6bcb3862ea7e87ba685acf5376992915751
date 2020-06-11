@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "2b4a57e4_0b8d37a2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-11T17:16:16Z",
+      "side": 1,
+      "message": "I\u0027m hesitant to invert the meaning, resetting this is easy (set to 0) and independent of number of levels. Having the bits normally set can be tricky and easy to introduce subtle bugs.\n\nMaybe mRedefinedLevels is not so bad after all. WDYT?",
+      "parentUuid": "eacaed46_83b979b7",
+      "range": {
+        "startLine": 1095,
+        "startChar": 16,
+        "endLine": 1095,
+        "endChar": 44
+      },
+      "revId": "7961d6bcb3862ea7e87ba685acf5376992915751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14680902_2328da2f",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 15
