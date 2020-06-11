@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6e8f81f1_9edb055a",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T21:02:01Z",
+      "side": 1,
+      "message": "It\u0027s handled in the autogen parts.",
+      "parentUuid": "efdba00e_a55373de",
+      "range": {
+        "startLine": 38,
+        "startChar": 52,
+        "endLine": 38,
+        "endChar": 60
+      },
+      "revId": "03e2202fef535ffea2edee8c7633192e313a5350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e967440_7ed0ba5f",
         "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
         "patchSetId": 4
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "But wouldn\u0027t assert crash the capture if there\u0027s no bound indirect buffer? In a similar program in OpenGL it wouldn\u0027t crash. Probably undefined behavior though.",
       "parentUuid": "9e967440_7ed0ba5f",
+      "range": {
+        "startLine": 42,
+        "startChar": 21,
+        "endLine": 42,
+        "endChar": 47
+      },
+      "revId": "03e2202fef535ffea2edee8c7633192e313a5350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8176ae73_da105693",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T21:02:01Z",
+      "side": 1,
+      "message": "The call would be rejected (isCallValid \u003d\u003d false). So you can probably make the ASSERT correct by ASSERTing !isCallValid || indirect buffer is valid.",
+      "parentUuid": "fe935a3a_a74f6b81",
       "range": {
         "startLine": 42,
         "startChar": 21,
