@@ -515,7 +515,7 @@ void CaptureGetTexParameterfv_params(const State &glState,
                                      GLfloat *params,
                                      ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLfloat) * 4;
 }
 
 void CaptureGetTexParameteriv_params(const State &glState,
@@ -525,10 +525,7 @@ void CaptureGetTexParameteriv_params(const State &glState,
                                      GLint *params,
                                      ParamCapture *paramCapture)
 {
-    if (params)
-    {
-        paramCapture->readBufferSizeBytes = sizeof(GLint);
-    }
+    paramCapture->readBufferSizeBytes = sizeof(GLint) * 4;
 }
 
 void CaptureGetUniformLocation_name(const State &glState,
@@ -714,7 +711,14 @@ void CaptureTexParameterfv_params(const State &glState,
                                   const GLfloat *params,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (pname == GL_TEXTURE_BORDER_COLOR)
+    {
+        CaptureMemory(params, sizeof(GLfloat) * 4, paramCapture);
+    }
+    else
+    {
+        CaptureMemory(params, sizeof(GLfloat), paramCapture);
+    }
 }
 
 void CaptureTexParameteriv_params(const State &glState,
@@ -724,7 +728,14 @@ void CaptureTexParameteriv_params(const State &glState,
                                   const GLint *params,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (pname == GL_TEXTURE_BORDER_COLOR)
+    {
+        CaptureMemory(params, sizeof(GLint) * 4, paramCapture);
+    }
+    else
+    {
+        CaptureMemory(params, sizeof(GLint), paramCapture);
+    }
 }
 
 void CaptureTexSubImage2D_pixels(const State &glState,
