@@ -1517,6 +1517,14 @@ class ImageViewHelper : angle::NonCopyable
     const ImageView &getNonLinearReadImageView() const { return mNonLinearReadImageView; }
     const ImageView &getLinearFetchImageView() const { return mLinearFetchImageView; }
     const ImageView &getNonLinearFetchImageView() const { return mNonLinearFetchImageView; }
+    const ImageView &getLinearNoSwizzleFetchImageView() const
+    {
+        return mLinearNoSwizzleFetchImageView;
+    }
+    const ImageView &getNonLinearNoSwizzleFetchImageView() const
+    {
+        return mNonLinearNoSwizzleFetchImageView;
+    }
     const ImageView &getStencilReadImageView() const { return mStencilReadImageView; }
 
     const ImageView &getReadImageView() const
@@ -1527,6 +1535,12 @@ class ImageViewHelper : angle::NonCopyable
     const ImageView &getFetchImageView() const
     {
         return mLinearColorspace ? mLinearFetchImageView : mNonLinearFetchImageView;
+    }
+
+    const ImageView &getNoSwizzleFetchImageView() const
+    {
+        return mLinearColorspace ? mLinearNoSwizzleFetchImageView
+                                 : mNonLinearNoSwizzleFetchImageView;
     }
 
     // Used when initialized RenderTargets.
@@ -1583,6 +1597,11 @@ class ImageViewHelper : angle::NonCopyable
     {
         return mLinearColorspace ? mLinearFetchImageView : mNonLinearFetchImageView;
     }
+    ImageView &getNoSwizzleFetchImageView()
+    {
+        return mLinearColorspace ? mLinearNoSwizzleFetchImageView
+                                 : mNonLinearNoSwizzleFetchImageView;
+    }
 
     // Lifetime.
     SharedResourceUse mUse;
@@ -1592,6 +1611,8 @@ class ImageViewHelper : angle::NonCopyable
     ImageView mNonLinearReadImageView;
     ImageView mLinearFetchImageView;
     ImageView mNonLinearFetchImageView;
+    ImageView mLinearNoSwizzleFetchImageView;
+    ImageView mNonLinearNoSwizzleFetchImageView;
     ImageView mStencilReadImageView;
 
     bool mLinearColorspace;
