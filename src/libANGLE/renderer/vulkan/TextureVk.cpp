@@ -529,6 +529,9 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         // Layer count can only be 1 as the source is a framebuffer.
         ASSERT(offsetImageIndex.getLayerCount() == 1);
 
+        // Note: Copy from sRGB not implemented.
+        ASSERT(gl::GetSizedInternalFormatInfo(srcFormat.internalFormat).colorEncoding != GL_SRGB);
+
         const vk::ImageView *readImageView = nullptr;
         ANGLE_TRY(colorReadRT->getImageView(contextVk, &readImageView));
         colorReadRT->retainImageViews(contextVk);
@@ -575,12 +578,15 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
                                             sourceLevel, 0, sourceArea, &source->getImage());
     }
 
-    bool forceCPUPath =
-        (destFormat.colorEncoding == GL_SRGB) || ForceCPUPathForCopy(renderer, *mImage);
+    bool forceCPUPath = ForceCPUPathForCopy(renderer, *mImage);
 
     // If it's possible to perform the copy with a draw call, do that.
     if (CanCopyWithDraw(renderer, sourceVkFormat, destVkFormat) && !forceCPUPath)
     {
+        // Note: Copy from sRGB not implemented.
+        ASSERT(gl::GetSizedInternalFormatInfo(sourceVkFormat.internalFormat).colorEncoding !=
+               GL_SRGB);
+
         return copySubImageImplWithDraw(
             contextVk, offsetImageIndex, destOffset, destVkFormat, sourceLevel, sourceArea, false,
             unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha, &source->getImage(),
@@ -772,17 +778,51 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     // If destination is valid, copy the source directly into it.
     if (mImage->valid() && !shouldUpdateBeStaged(level) && !isSelfCopy)
     {
+        // If destination format is sRGB, create temp views that are not sRGB.
+        bool destIsSRGB =
+            gl::GetSizedInternalFormatInfo(destFormat.internalFormat).colorEncoding == GL_SRGB;
+
+        // If the image hasn't been created with the MUTABLE_FORMAT flag, need to recreate the image
+        // to be able to create a non-sRGB view.
+        if (destIsSRGB && (mImageCreateFlags & VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT) == 0)
+        {
+            mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+            ANGLE_TRY(respecifyImageAttributes(contextVk));
+        }
+
         // Make sure any updates to the image are already flushed.
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
-            params.srcLayer = layerIndex;
+            params.srcLayer    = layerIndex;
+            uint32_t destLayer = baseLayer + layerIndex;
 
             const vk::ImageView *destView;
-            ANGLE_TRY(getLevelLayerImageView(contextVk, level, baseLayer + layerIndex, &destView));
+            vk::ImageView linearDestView;
+
+            if (destIsSRGB)
+            {
+                uint32_t nativeLevel     = getNativeImageLevel(static_cast<uint32_t>(level));
+                uint32_t nativeLayer     = getNativeImageLayer(static_cast<uint32_t>(destLayer));
+                gl::TextureType viewType = vk::Get2DTextureType(1, mImage->getSamples());
+                ANGLE_TRY(mImage->initLayerImageView(contextVk, viewType, mImage->getAspectFlags(),
+                                                     gl::SwizzleState(), &linearDestView,
+                                                     nativeLevel, 1, nativeLayer, 1, true));
+                destView = &linearDestView;
+            }
+            else
+            {
+                ANGLE_TRY(getLevelLayerImageView(contextVk, level, destLayer, &destView));
+            }
 
             ANGLE_TRY(utilsVk.copyImage(contextVk, mImage, destView, srcImage, srcView, params));
+
+            // Queue the temporary view (if created) for deletion.
+            if (linearDestView.valid())
+            {
+                contextVk->addGarbage(&linearDestView);
+            }
         }
     }
     else
@@ -806,11 +846,12 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         {
             params.srcLayer = layerIndex;
 
-            // Create a temporary view for this layer.
+            // Create a temporary view for this layer.  Note that copy should not apply sRGB
+            // transformation.
             vk::ImageView stagingView;
             ANGLE_TRY(stagingImage->initLayerImageView(
                 contextVk, stagingTextureType, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
-                &stagingView, 0, 1, layerIndex, 1));
+                &stagingView, 0, 1, layerIndex, 1, true));
 
             ANGLE_TRY(utilsVk.copyImage(contextVk, stagingImage.get(), &stagingView, srcImage,
                                         srcView, params));

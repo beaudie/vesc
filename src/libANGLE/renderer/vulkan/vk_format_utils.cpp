@@ -277,6 +277,72 @@ VkImageUsageFlags GetMaximalImageUsageFlags(RendererVk *renderer, VkFormat forma
     return imageUsageFlags;
 }
 
+angle::FormatID ConvertToLinearFormatID(angle::FormatID format)
+{
+    // Equivalent to ConvertToLinear but with FormatID.  Mirror entries that don't have a
+    // corresponding angle::FormatID are commented out for documentation.
+    switch (format)
+    {
+        case angle::FormatID::R8_UNORM_SRGB:
+            return angle::FormatID::R8_UNORM;
+        // case angle::FormatID::R8G8_UNORM_SRGB:
+        //    return angle::FormatID::R8G8_UNORM;
+        case angle::FormatID::R8G8B8_UNORM_SRGB:
+            return angle::FormatID::R8G8B8_UNORM;
+        // case angle::FormatID::B8G8R8_UNORM_SRGB:
+        //    return angle::FormatID::B8G8R8_UNORM;
+        case angle::FormatID::R8G8B8A8_UNORM_SRGB:
+            return angle::FormatID::R8G8B8A8_UNORM;
+        case angle::FormatID::B8G8R8A8_UNORM_SRGB:
+            return angle::FormatID::B8G8R8A8_UNORM;
+        case angle::FormatID::BC1_RGB_UNORM_SRGB_BLOCK:
+            return angle::FormatID::BC1_RGB_UNORM_BLOCK;
+        case angle::FormatID::BC1_RGBA_UNORM_SRGB_BLOCK:
+            return angle::FormatID::BC1_RGBA_UNORM_BLOCK;
+        case angle::FormatID::BC2_RGBA_UNORM_SRGB_BLOCK:
+            return angle::FormatID::BC2_RGBA_UNORM_BLOCK;
+        case angle::FormatID::BC3_RGBA_UNORM_SRGB_BLOCK:
+            return angle::FormatID::BC3_RGBA_UNORM_BLOCK;
+        // case angle::FormatID::BC7_RGBA_UNORM_SRGB_BLOCK:
+        //    return angle::FormatID::BC7_RGBA_UNORM_BLOCK;
+        case angle::FormatID::ETC2_R8G8B8_SRGB_BLOCK:
+            return angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK;
+        case angle::FormatID::ETC2_R8G8B8A1_SRGB_BLOCK:
+            return angle::FormatID::ETC2_R8G8B8A1_UNORM_BLOCK;
+        case angle::FormatID::ETC2_R8G8B8A8_SRGB_BLOCK:
+            return angle::FormatID::ETC2_R8G8B8A8_UNORM_BLOCK;
+        case angle::FormatID::ASTC_4x4_SRGB_BLOCK:
+            return angle::FormatID::ASTC_4x4_UNORM_BLOCK;
+        case angle::FormatID::ASTC_5x4_SRGB_BLOCK:
+            return angle::FormatID::ASTC_5x4_UNORM_BLOCK;
+        case angle::FormatID::ASTC_5x5_SRGB_BLOCK:
+            return angle::FormatID::ASTC_5x5_UNORM_BLOCK;
+        case angle::FormatID::ASTC_6x5_SRGB_BLOCK:
+            return angle::FormatID::ASTC_6x5_UNORM_BLOCK;
+        case angle::FormatID::ASTC_6x6_SRGB_BLOCK:
+            return angle::FormatID::ASTC_6x6_UNORM_BLOCK;
+        case angle::FormatID::ASTC_8x5_SRGB_BLOCK:
+            return angle::FormatID::ASTC_8x5_UNORM_BLOCK;
+        case angle::FormatID::ASTC_8x6_SRGB_BLOCK:
+            return angle::FormatID::ASTC_8x6_UNORM_BLOCK;
+        case angle::FormatID::ASTC_8x8_SRGB_BLOCK:
+            return angle::FormatID::ASTC_8x8_UNORM_BLOCK;
+        case angle::FormatID::ASTC_10x5_SRGB_BLOCK:
+            return angle::FormatID::ASTC_10x5_UNORM_BLOCK;
+        case angle::FormatID::ASTC_10x6_SRGB_BLOCK:
+            return angle::FormatID::ASTC_10x6_UNORM_BLOCK;
+        case angle::FormatID::ASTC_10x8_SRGB_BLOCK:
+            return angle::FormatID::ASTC_10x8_UNORM_BLOCK;
+        case angle::FormatID::ASTC_10x10_SRGB_BLOCK:
+            return angle::FormatID::ASTC_10x10_UNORM_BLOCK;
+        case angle::FormatID::ASTC_12x10_SRGB_BLOCK:
+            return angle::FormatID::ASTC_12x10_UNORM_BLOCK;
+        case angle::FormatID::ASTC_12x12_SRGB_BLOCK:
+            return angle::FormatID::ASTC_12x12_UNORM_BLOCK;
+        default:
+            return format;
+    }
+}
 }  // namespace vk
 
 bool HasFullTextureFormatSupport(RendererVk *renderer, VkFormat vkFormat)

@@ -1072,7 +1072,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                      uint32_t baseMipLevel,
                                      uint32_t levelCount,
                                      uint32_t baseArrayLayer,
-                                     uint32_t layerCount) const;
+                                     uint32_t layerCount,
+                                     bool forceLinear) const;
     angle::Result initLayerImageViewImpl(Context *context,
                                          gl::TextureType textureType,
                                          VkImageAspectFlags aspectMask,
