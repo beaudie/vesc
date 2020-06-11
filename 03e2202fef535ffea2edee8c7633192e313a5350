@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fd36ffd4_e816fbac",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-11T21:36:29Z",
+      "side": 1,
+      "message": "It is automatically captured by the autogen file. From capture_gles_3_1_autogen.cpp\nInitParamValue(ParamType::TvoidConstPointer, indirect, \u0026indirectParam.value);",
+      "parentUuid": "efdba00e_a55373de",
+      "range": {
+        "startLine": 38,
+        "startChar": 52,
+        "endLine": 38,
+        "endChar": 60
+      },
+      "revId": "03e2202fef535ffea2edee8c7633192e313a5350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e967440_7ed0ba5f",
         "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
         "patchSetId": 4
@@ -117,6 +141,30 @@
       "revId": "03e2202fef535ffea2edee8c7633192e313a5350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1d518c6_b5ce0e66",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-11T21:36:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8176ae73_da105693",
+      "range": {
+        "startLine": 42,
+        "startChar": 21,
+        "endLine": 42,
+        "endChar": 47
+      },
+      "revId": "03e2202fef535ffea2edee8c7633192e313a5350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
