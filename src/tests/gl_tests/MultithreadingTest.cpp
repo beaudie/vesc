@@ -10,7 +10,7 @@
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
 
-#include <mutex>
+#include <atomic>
 #include <thread>
 
 namespace angle
@@ -33,8 +33,6 @@ class MultithreadingTest : public ANGLETest
         std::function<void(EGLSurface surface, size_t threadIndex)> testBody,
         size_t threadCount)
     {
-        std::mutex mutex;
-
         EGLWindow *window = getEGLWindow();
         EGLDisplay dpy    = window->getDisplay();
         EGLConfig config  = window->getConfig();
@@ -48,36 +46,28 @@ class MultithreadingTest : public ANGLETest
                 EGLSurface surface = EGL_NO_SURFACE;
                 EGLContext ctx     = EGL_NO_CONTEXT;
 
-                {
-                    std::lock_guard<decltype(mutex)> lock(mutex);
+                // Initialize the pbuffer and context
+                EGLint pbufferAttributes[] = {
+                    EGL_WIDTH, kPBufferSize, EGL_HEIGHT, kPBufferSize, EGL_NONE, EGL_NONE,
+                };
+                surface = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
+                EXPECT_EGL_SUCCESS();
 
-                    // Initialize the pbuffer and context
-                    EGLint pbufferAttributes[] = {
-                        EGL_WIDTH, kPBufferSize, EGL_HEIGHT, kPBufferSize, EGL_NONE, EGL_NONE,
-                    };
-                    surface = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
-                    EXPECT_EGL_SUCCESS();
+                ctx = window->createContext(EGL_NO_CONTEXT);
+                EXPECT_NE(EGL_NO_CONTEXT, ctx);
 
-                    ctx = window->createContext(EGL_NO_CONTEXT);
-                    EXPECT_NE(EGL_NO_CONTEXT, ctx);
-
-                    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
-                    EXPECT_EGL_SUCCESS();
-                }
+                EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
+                EXPECT_EGL_SUCCESS();
 
                 testBody(surface, threadIdx);
 
-                {
-                    std::lock_guard<decltype(mutex)> lock(mutex);
+                // Clean up
+                EXPECT_EGL_TRUE(
+                    eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+                EXPECT_EGL_SUCCESS();
 
-                    // Clean up
-                    EXPECT_EGL_TRUE(
-                        eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
-                    EXPECT_EGL_SUCCESS();
-
-                    eglDestroySurface(dpy, surface);
-                    eglDestroyContext(dpy, ctx);
-                }
+                eglDestroySurface(dpy, surface);
+                eglDestroyContext(dpy, ctx);
             });
         }
 
@@ -93,8 +83,6 @@ TEST_P(MultithreadingTest, MakeCurrentSingleContext)
 {
     ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
 
-    std::mutex mutex;
-
     EGLWindow *window  = getEGLWindow();
     EGLDisplay dpy     = window->getDisplay();
     EGLContext ctx     = window->getContext();
@@ -108,8 +96,6 @@ TEST_P(MultithreadingTest, MakeCurrentSingleContext)
     for (std::thread &thread : threads)
     {
         thread = std::thread([&]() {
-            std::lock_guard<decltype(mutex)> lock(mutex);
-
             EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
             EXPECT_EGL_SUCCESS();
 
@@ -199,6 +185,55 @@ TEST_P(MultithreadingTest, MultiContextDraw)
         }
     };
     runMultithreadedGLTest(testBody, 4);
+}
+
+TEST_P(MultithreadingTest, MultiCreateContext)
+{
+    // Supported by WGL and GLX (https://anglebug.com/4725)
+    ANGLE_SKIP_TEST_IF(!IsWindows() && !IsLinux());
+
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay dpy     = window->getDisplay();
+    EGLContext ctx     = window->getContext();
+    EGLSurface surface = window->getSurface();
+
+    // Un-makeCurrent the test window's context
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    EXPECT_EGL_SUCCESS();
+
+    constexpr size_t kThreadCount = 16;
+    std::atomic<uint32_t> barrier(0);
+    std::vector<std::thread> threads(kThreadCount);
+    std::vector<EGLContext> contexts(kThreadCount);
+    for (size_t threadIdx = 0; threadIdx < kThreadCount; threadIdx++)
+    {
+        threads[threadIdx] = std::thread([&, threadIdx]() {
+            contexts[threadIdx] = EGL_NO_CONTEXT;
+            {
+                contexts[threadIdx] = window->createContext(EGL_NO_CONTEXT);
+                EXPECT_NE(EGL_NO_CONTEXT, contexts[threadIdx]);
+
+                barrier++;
+            }
+
+            while (barrier < kThreadCount)
+            {
+            }
+
+            {
+                EXPECT_TRUE(eglDestroyContext(dpy, contexts[threadIdx]));
+            }
+        });
+    }
+
+    for (std::thread &thread : threads)
+    {
+        thread.join();
+    }
+
+    // Re-make current the test window's context for teardown.
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
+    EXPECT_EGL_SUCCESS();
 }
 
 // TODO(geofflang): Test sharing a program between multiple shared contexts on multiple threads
