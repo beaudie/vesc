@@ -22,6 +22,23 @@
       "revId": "5b42c42e95f4a89c238ae4f43c31400b90fa1620",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de6f2b1c_c574685a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-11T13:11:32Z",
+      "side": 1,
+      "message": "Could this change be sufficient?\nE.g. if above test if (!depthStencilRenderTarget-\u003ehasDefinedContent()), will these tests always pass as well?",
+      "revId": "5b42c42e95f4a89c238ae4f43c31400b90fa1620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
