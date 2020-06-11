@@ -47,14 +47,10 @@ def _CheckCommitMessageFormatting(input_api, output_api):
     description_linelength_limit = 72
     print("*****************************")
 
-    
     print(input_api.change.DescriptionText())
     print("*****************************")
 
-    if input_api.change.issue:
-        git_output = input_api.gerrit.GetChangeDescription(input_api.change.issue)
-    else:
-        git_output = subprocess.check_output(["git", "log", "-n", "1", "--pretty=format:%B"])
+    git_output = input_api.change.DescriptionText()
     commit_msg_lines = git_output.splitlines()
     commit_msg_line_numbers = {}
     for i in range(len(commit_msg_lines)):
