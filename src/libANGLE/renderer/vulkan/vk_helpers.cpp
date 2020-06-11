@@ -4587,6 +4587,7 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mNonLinearReadImageView, other.mNonLinearReadImageView);
     std::swap(mLinearFetchImageView, other.mLinearFetchImageView);
     std::swap(mNonLinearFetchImageView, other.mNonLinearFetchImageView);
+    std::swap(mLinearNoSwizzleFetchImageView, other.mLinearNoSwizzleFetchImageView);
     std::swap(mLinearColorspace, other.mLinearColorspace);
 
     std::swap(mStencilReadImageView, other.mStencilReadImageView);
@@ -4618,6 +4619,10 @@ void ImageViewHelper::release(RendererVk *renderer)
     if (mNonLinearFetchImageView.valid())
     {
         garbage.emplace_back(GetGarbage(&mNonLinearFetchImageView));
+    }
+    if (mLinearNoSwizzleFetchImageView.valid())
+    {
+        garbage.emplace_back(GetGarbage(&mLinearNoSwizzleFetchImageView));
     }
     if (mStencilReadImageView.valid())
     {
@@ -4660,6 +4665,7 @@ void ImageViewHelper::destroy(VkDevice device)
     mNonLinearReadImageView.destroy(device);
     mLinearFetchImageView.destroy(device);
     mNonLinearFetchImageView.destroy(device);
+    mLinearNoSwizzleFetchImageView.destroy(device);
     mStencilReadImageView.destroy(device);
 
     for (ImageView &imageView : mLevelDrawImageViews)
@@ -4707,16 +4713,21 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
                                            layerCount, false));
     }
 
+    gl::TextureType fetchType = viewType;
+
     if (viewType == gl::TextureType::CubeMap || viewType == gl::TextureType::_2DArray ||
         viewType == gl::TextureType::_2DMultisampleArray)
     {
-        gl::TextureType arrayType = Get2DTextureType(layerCount, image.getSamples());
+        fetchType = Get2DTextureType(layerCount, image.getSamples());
 
-        // TODO(http://anglebug.com/4004): SwizzleState incorrect for CopyTextureCHROMIUM.
-        ANGLE_TRY(image.initLayerImageView(contextVk, arrayType, aspectFlags, swizzleState,
+        ANGLE_TRY(image.initLayerImageView(contextVk, fetchType, aspectFlags, swizzleState,
                                            &getFetchImageView(), baseLevel, levelCount, baseLayer,
                                            layerCount, false));
     }
+
+    ANGLE_TRY(image.initLayerImageView(contextVk, fetchType, aspectFlags, gl::SwizzleState(),
+                                       &getNoSwizzleFetchImageView(), baseLevel, levelCount,
+                                       baseLayer, layerCount, false));
 
     return angle::Result::Continue;
 }
@@ -4752,16 +4763,17 @@ angle::Result ImageViewHelper::initSRGBReadViews(ContextVk *contextVk,
                                                baseLayer, layerCount, nonLinearOverrideFormat));
     }
 
+    gl::TextureType fetchType = viewType;
+
     if (viewType == gl::TextureType::CubeMap || viewType == gl::TextureType::_2DArray ||
         viewType == gl::TextureType::_2DMultisampleArray)
     {
-        gl::TextureType arrayType = Get2DTextureType(layerCount, image.getSamples());
+        fetchType = Get2DTextureType(layerCount, image.getSamples());
 
-        // TODO(http://anglebug.com/4004): SwizzleState incorrect for CopyTextureCHROMIUM.
         if (!mLinearFetchImageView.valid())
         {
 
-            ANGLE_TRY(image.initLayerImageViewImpl(contextVk, arrayType, aspectFlags, swizzleState,
+            ANGLE_TRY(image.initLayerImageViewImpl(contextVk, fetchType, aspectFlags, swizzleState,
                                                    &mLinearFetchImageView, baseLevel, levelCount,
                                                    baseLayer, layerCount, linearFormat));
         }
@@ -4771,6 +4783,13 @@ angle::Result ImageViewHelper::initSRGBReadViews(ContextVk *contextVk,
                                                    &mNonLinearFetchImageView, baseLevel, levelCount,
                                                    baseLayer, layerCount, nonLinearOverrideFormat));
         }
+    }
+
+    if (!mLinearNoSwizzleFetchImageView.valid())
+    {
+        ANGLE_TRY(image.initLayerImageViewImpl(
+            contextVk, fetchType, aspectFlags, gl::SwizzleState(), &mLinearNoSwizzleFetchImageView,
+            baseLevel, levelCount, baseLayer, layerCount, linearFormat));
     }
 
     return angle::Result::Continue;
