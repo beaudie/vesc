@@ -34,6 +34,24 @@
       "revId": "08376bbdf47bd9d10e0d33bc69298c0377b394a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57818f5d_d3456a0a",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-11T23:20:01Z",
+      "side": 1,
+      "message": "Makes sense.",
+      "parentUuid": "e568ea02_7bd1b451",
+      "revId": "08376bbdf47bd9d10e0d33bc69298c0377b394a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
