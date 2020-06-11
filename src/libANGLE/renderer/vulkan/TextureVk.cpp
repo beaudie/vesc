@@ -584,7 +584,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
         return copySubImageImplWithDraw(
             contextVk, offsetImageIndex, destOffset, destVkFormat, sourceLevel, sourceArea, false,
             unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha, &source->getImage(),
-            &source->getFetchImageViewAndRecordUse(contextVk));
+            &source->getNoSwizzleFetchImageViewAndRecordUse(contextVk));
     }
 
     if (sourceLevel != 0)
@@ -1749,6 +1749,19 @@ const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *context
 
     return (mImageViews.hasFetchImageView() ? mImageViews.getFetchImageView()
                                             : mImageViews.getReadImageView());
+}
+
+const vk::ImageView &TextureVk::getNoSwizzleFetchImageViewAndRecordUse(ContextVk *contextVk) const
+{
+    ASSERT(mImage->valid());
+
+    mImageViews.retain(&contextVk->getResourceUseList());
+
+    // We don't currently support fetch for depth/stencil textures.
+    ASSERT(!mImageViews.hasStencilReadImageView() || !mImageViews.hasFetchImageView());
+
+    // We don't currently need copies from sRGB textures.
+    return mImageViews.getNoSwizzleFetchImageView();
 }
 
 angle::Result TextureVk::getLevelLayerImageView(ContextVk *contextVk,

@@ -1529,6 +1529,13 @@ class ImageViewHelper : angle::NonCopyable
         return mLinearColorspace ? mLinearFetchImageView : mNonLinearFetchImageView;
     }
 
+    const ImageView &getNoSwizzleFetchImageView() const
+    {
+        // Currently, sRGB textures cannot be the source of a copy operation.
+        ASSERT(mLinearColorspace);
+        return mLinearNoSwizzleFetchImageView;
+    }
+
     // Used when initialized RenderTargets.
     bool hasStencilReadImageView() const { return mStencilReadImageView.valid(); }
 
@@ -1583,6 +1590,12 @@ class ImageViewHelper : angle::NonCopyable
     {
         return mLinearColorspace ? mLinearFetchImageView : mNonLinearFetchImageView;
     }
+    ImageView &getNoSwizzleFetchImageView()
+    {
+        // Currently, sRGB textures cannot be the source of a copy operation.
+        ASSERT(mLinearColorspace);
+        return mLinearNoSwizzleFetchImageView;
+    }
 
     // Lifetime.
     SharedResourceUse mUse;
@@ -1592,6 +1605,7 @@ class ImageViewHelper : angle::NonCopyable
     ImageView mNonLinearReadImageView;
     ImageView mLinearFetchImageView;
     ImageView mNonLinearFetchImageView;
+    ImageView mLinearNoSwizzleFetchImageView;
     ImageView mStencilReadImageView;
 
     bool mLinearColorspace;
