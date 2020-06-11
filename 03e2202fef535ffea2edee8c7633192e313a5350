@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e967440_7ed0ba5f",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T20:37:19Z",
+      "side": 1,
+      "message": "we can verify this - you can ASSERT that glState has a bound indirect buffer.",
+      "range": {
+        "startLine": 42,
+        "startChar": 21,
+        "endLine": 42,
+        "endChar": 47
+      },
+      "revId": "03e2202fef535ffea2edee8c7633192e313a5350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
