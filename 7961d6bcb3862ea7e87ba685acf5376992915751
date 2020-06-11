@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "5ca38760_6d3b2c0a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T17:26:31Z",
+      "side": 1,
+      "message": "Sure, SGTM. No strong opinion.",
+      "parentUuid": "2b4a57e4_0b8d37a2",
+      "range": {
+        "startLine": 1095,
+        "startChar": 16,
+        "endLine": 1095,
+        "endChar": 44
+      },
+      "revId": "7961d6bcb3862ea7e87ba685acf5376992915751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14680902_2328da2f",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 15
