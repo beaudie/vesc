@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "eacaed46_83b979b7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T16:13:55Z",
+      "side": 1,
+      "message": "how about storing the inverse, like mCompatibleLevels? Here you are inverting the bool which makes it harder to parse.",
+      "parentUuid": "30eb7507_a0627ce8",
+      "range": {
+        "startLine": 1095,
+        "startChar": 16,
+        "endLine": 1095,
+        "endChar": 44
+      },
+      "revId": "7961d6bcb3862ea7e87ba685acf5376992915751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14680902_2328da2f",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 15
