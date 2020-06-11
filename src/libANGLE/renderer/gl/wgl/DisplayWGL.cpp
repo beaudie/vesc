@@ -556,11 +556,10 @@ egl::ConfigSet DisplayWGL::generateConfigs()
 
 bool DisplayWGL::testDeviceLost()
 {
-    if (mHasRobustness)
+    if (mHasARBCreateContextRobustness)
     {
         return mRenderer->getResetStatus() != gl::GraphicsResetStatus::NoError;
     }
-
     return false;
 }
 
