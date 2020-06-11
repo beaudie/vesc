@@ -265,6 +265,9 @@ std::string RendererGL::getRendererDescription() const
     std::string nativeRendererString(
         reinterpret_cast<const char *>(mFunctions->getString(GL_RENDERER)));
 
+    fprintf(stderr, "RendererGL got GL_VENDOR = %s , GL_RENDERER = %s\n",
+            nativeVendorString.c_str(), nativeRendererString.c_str());
+
     std::ostringstream rendererString;
     rendererString << nativeVendorString << ", " << nativeRendererString << ", OpenGL";
     if (mFunctions->standard == STANDARD_GL_ES)

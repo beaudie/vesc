@@ -27,6 +27,8 @@ struct Workarounds;
 
 namespace rx
 {
+class DisplayImpl;
+
 class ContextImpl : public GLImplFactory
 {
   public:
@@ -190,6 +192,10 @@ class ContextImpl : public GLImplFactory
                      unsigned int line);
 
     virtual egl::ContextPriority getContextPriority() const;
+
+    // EGL_ANGLE_power_preference implementation.
+    virtual egl::Error releaseHighPowerGPU(gl::Context *context);
+    virtual egl::Error reacquireHighPowerGPU(gl::Context *context);
 
   protected:
     const gl::State &mState;
