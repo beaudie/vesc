@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c606e664_b4376cb3",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-11T20:33:08Z",
+      "side": 1,
+      "message": "glClear before this blit like previous frame?",
+      "revId": "d06d21245dc5d2a9829b79f67123a8dd3a2c44e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
