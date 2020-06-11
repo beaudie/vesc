@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec98d833_7971ab49",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-11T14:33:50Z",
+      "side": 1,
+      "message": "This reads a bit funny that you are setting an incompatible level after guarding it with just the allocation check.  I see that you are passing in the redefinition bool, so it ends up correct.  I just had to read it a few times to make sure.  I thought maybe a different variable name might clear it up, like mRedefinedLevels (where true is incompatible), but I think that might make the rest of the code confusing.  Probably fine to leave it as is.",
+      "range": {
+        "startLine": 1095,
+        "startChar": 16,
+        "endLine": 1095,
+        "endChar": 44
+      },
+      "revId": "7961d6bcb3862ea7e87ba685acf5376992915751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14680902_2328da2f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2613,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-11T14:33:50Z",
+      "side": 1,
+      "message": "This test is sadistic, but I like it.",
+      "range": {
+        "startLine": 2613,
+        "startChar": 32,
+        "endLine": 2613,
+        "endChar": 67
+      },
+      "revId": "7961d6bcb3862ea7e87ba685acf5376992915751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
