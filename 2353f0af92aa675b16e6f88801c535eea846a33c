@@ -45,6 +45,30 @@
       "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3b492b4_9ddf1ca4",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-11T21:02:37Z",
+      "side": 1,
+      "message": "I\u0027m thinking of putting the function in https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/util/frame_capture_utils.h?q\u003dframe_capture_utils.h\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F. So every capture_gles_params.cpp can have access to it. Do you think it\u0027s the proper place?",
+      "parentUuid": "53d3e2b2_f2813dbf",
+      "range": {
+        "startLine": 645,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 1
+      },
+      "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
