@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffb9a9fa_ef47ef85",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T20:43:45Z",
+      "side": 1,
+      "message": "can you leave a comment indicating which part of the spec you got the \"4\" from? same with the below.",
+      "range": {
+        "startLine": 518,
+        "startChar": 58,
+        "endLine": 518,
+        "endChar": 59
+      },
+      "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d3e2b2_f2813dbf",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T20:43:45Z",
+      "side": 1,
+      "message": "Can you make this a templated helper function? The code is repeated in several places.",
+      "range": {
+        "startLine": 645,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 1
+      },
+      "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
