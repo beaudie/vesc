@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "efdba00e_a55373de",
+        "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-11T20:54:09Z",
+      "side": 1,
+      "message": "\"indirect\" is an offset into the buffer.  I think we need to capture it.  Is that handled somewhere else?",
+      "range": {
+        "startLine": 38,
+        "startChar": 52,
+        "endLine": 38,
+        "endChar": 60
+      },
+      "revId": "03e2202fef535ffea2edee8c7633192e313a5350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e967440_7ed0ba5f",
         "filename": "src/libANGLE/capture_gles_3_1_params.cpp",
         "patchSetId": 4
