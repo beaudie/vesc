@@ -560,7 +560,6 @@ bool DisplayWGL::testDeviceLost()
     {
         return mRenderer->getResetStatus() != gl::GraphicsResetStatus::NoError;
     }
-
     return false;
 }
 
