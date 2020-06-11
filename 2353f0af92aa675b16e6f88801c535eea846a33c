@@ -69,6 +69,30 @@
       "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b4d10e9_6c8cb588",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T21:06:47Z",
+      "side": 1,
+      "message": "Yep, SGTM.",
+      "parentUuid": "e3b492b4_9ddf1ca4",
+      "range": {
+        "startLine": 645,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 1
+      },
+      "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
