@@ -39,6 +39,30 @@
       "revId": "9c8f4c57d983046c7bd423b91520ed1fad491812",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f125752b_3c2c997b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T16:16:46Z",
+      "side": 1,
+      "message": "My bad, I forgot about the particularities of GC.\n\nCan you make a helper function collectReadViewsAsGarbage that can be used in both releaseReadViews and release? We should only call collectGarbage once per release call.",
+      "parentUuid": "8f8aef5c_1ce71813",
+      "range": {
+        "startLine": 4616,
+        "startChar": 8,
+        "endLine": 4620,
+        "endChar": 83
+      },
+      "revId": "9c8f4c57d983046c7bd423b91520ed1fad491812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
