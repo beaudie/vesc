@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1dbaff3_09dc807c",
+        "filename": "doc/CodingStandard.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T15:21:38Z",
+      "side": 1,
+      "message": "nit: wording suggestion, remove () and \"files\" -\u003e third party dependencies pulled in from outside the ANGLE git repo.",
+      "range": {
+        "startLine": 163,
+        "startChar": 55,
+        "endLine": 164,
+        "endChar": 32
+      },
+      "revId": "0a55baad914836ae625d4d87ae22283e7deb41ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f05c0c6_680ba314",
+        "filename": "doc/CodingStandard.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T15:21:38Z",
+      "side": 1,
+      "message": "nit: can you place this in a **Decision** block mirroring the style below?",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 2
+      },
+      "revId": "0a55baad914836ae625d4d87ae22283e7deb41ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "140effe9_5f1eeb8b",
+        "filename": "doc/CodingStandard.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-11T15:21:38Z",
+      "side": 1,
+      "message": "nit: trailing spaces",
+      "range": {
+        "startLine": 165,
+        "startChar": 75,
+        "endLine": 165,
+        "endChar": 76
+      },
+      "revId": "0a55baad914836ae625d4d87ae22283e7deb41ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
