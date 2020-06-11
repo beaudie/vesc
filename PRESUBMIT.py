@@ -45,6 +45,9 @@ def _CheckCommitMessageFormatting(input_api, output_api):
     summary_linelength_warning_lower_limit = 65
     summary_linelength_warning_upper_limit = 70
     description_linelength_limit = 72
+    print("*****************************")
+    print(input_api.change.DescriptionText())
+    print("*****************************")
 
     if input_api.change.issue:
         git_output = input_api.gerrit.GetChangeDescription(input_api.change.issue)
@@ -337,19 +340,19 @@ def _CheckNonAsciiInSourceFiles(input_api, output_api):
 
 def CheckChangeOnUpload(input_api, output_api):
     results = []
-    results.extend(_CheckTabsInSourceFiles(input_api, output_api))
-    results.extend(_CheckNonAsciiInSourceFiles(input_api, output_api))
-    results.extend(_CheckCodeGeneration(input_api, output_api))
-    results.extend(_CheckChangeHasBugField(input_api, output_api))
-    results.extend(input_api.canned_checks.CheckChangeHasDescription(input_api, output_api))
-    results.extend(_CheckNewHeaderWithoutGnChange(input_api, output_api))
-    results.extend(_CheckExportValidity(input_api, output_api))
-    results.extend(
-        input_api.canned_checks.CheckPatchFormatted(
-            input_api, output_api, result_factory=output_api.PresubmitError))
+    # results.extend(_CheckTabsInSourceFiles(input_api, output_api))
+    # results.extend(_CheckNonAsciiInSourceFiles(input_api, output_api))
+    # results.extend(_CheckCodeGeneration(input_api, output_api))
+    # results.extend(_CheckChangeHasBugField(input_api, output_api))
+    # results.extend(input_api.canned_checks.CheckChangeHasDescription(input_api, output_api))
+    # results.extend(_CheckNewHeaderWithoutGnChange(input_api, output_api))
+    # results.extend(_CheckExportValidity(input_api, output_api))
+    # results.extend(
+    #     input_api.canned_checks.CheckPatchFormatted(
+    #         input_api, output_api, result_factory=output_api.PresubmitError))
     #TODO(nguyenmh): Renable commit message formatting once stable
     #https://bugs.chromium.org/p/angleproject/issues/detail?id=4715
-    #results.extend(_CheckCommitMessageFormatting(input_api, output_api))
+    results.extend(_CheckCommitMessageFormatting(input_api, output_api))
     return results
 
 
