@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edc1a653_95b5a928",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-11T15:37:38Z",
+      "side": 1,
+      "message": "Question: If exported above (line 192), do we need to import here? What are test results?",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31cd429b_4fb6e089",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-11T15:37:38Z",
+      "side": 1,
+      "message": "I allowed for returning kInvalidFenceFd. Since that should indicate to app that FD is closed. But we need to check EGL and Vulkan specs on this, because I sort of recall a mismatch on this and talking with Jesse.",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
