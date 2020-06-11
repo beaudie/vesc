@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72b0992f_524dbbc6",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-11T17:59:56Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8e65a6_8a312b98",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-11T17:59:56Z",
+      "side": 1,
+      "message": "nit: could check if it\u0027s BadDrawable vs BadWindow to be precise",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4a1956d_756b9c4c",
+        "filename": "src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-11T17:59:56Z",
+      "side": 1,
+      "message": "Could go in utils",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
