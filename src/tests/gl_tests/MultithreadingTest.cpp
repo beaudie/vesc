@@ -201,6 +201,64 @@ TEST_P(MultithreadingTest, MultiContextDraw)
     runMultithreadedGLTest(testBody, 4);
 }
 
+TEST_P(MultithreadingTest, MultiCreateContext)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
+    std::mutex mutex;
+
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay dpy     = window->getDisplay();
+    EGLContext ctx     = window->getContext();
+    EGLSurface surface = window->getSurface();
+
+    // Un-makeCurrent the test window's context
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    EXPECT_EGL_SUCCESS();
+
+    constexpr size_t kThreadCount = 16;
+
+    std::vector<std::thread> threads(kThreadCount);
+    std::vector<EGLContext> contexts(kThreadCount);
+    for (size_t threadIdx = 0; threadIdx < kThreadCount; threadIdx++)
+    {
+        threads[threadIdx] = std::thread([&, threadIdx]() {
+            contexts[threadIdx] = EGL_NO_CONTEXT;
+            {
+                std::lock_guard<decltype(mutex)> lock(mutex);
+
+                contexts[threadIdx] = window->createContext(EGL_NO_CONTEXT);
+                EXPECT_NE(EGL_NO_CONTEXT, contexts[threadIdx]);
+            }
+        });
+    }
+
+    for (std::thread &thread : threads)
+    {
+        thread.join();
+    }
+
+    for (size_t threadIdx = 0; threadIdx < kThreadCount; threadIdx++)
+    {
+        threads[threadIdx] = std::thread([&, threadIdx]() {
+            {
+                std::lock_guard<decltype(mutex)> lock(mutex);
+
+                EXPECT_TRUE(eglDestroyContext(dpy, contexts[threadIdx]));
+            }
+        });
+    }
+
+    for (std::thread &thread : threads)
+    {
+        thread.join();
+    }
+
+    // Re-make current the test window's context for teardown.
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
+    EXPECT_EGL_SUCCESS();
+}
+
 // TODO(geofflang): Test sharing a program between multiple shared contexts on multiple threads
 
 ANGLE_INSTANTIATE_TEST(MultithreadingTest,
