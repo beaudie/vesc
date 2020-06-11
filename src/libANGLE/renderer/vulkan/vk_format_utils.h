@@ -315,6 +315,8 @@ ANGLE_INLINE bool IsLinearFormat(VkFormat format)
     return !IsNonLinearFormat(format);
 }
 
+angle::FormatID ConvertToLinearFormatID(angle::FormatID format);
+
 }  // namespace vk
 }  // namespace rx
 
