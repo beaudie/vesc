@@ -356,6 +356,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     egl::Error onDestroy(const egl::Display *display);
     ~Context() override;
 
+    void initRendererString();
+
     void setLabel(EGLLabelKHR label) override;
     EGLLabelKHR getLabel() const override;
 
@@ -608,6 +610,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     Program *getActiveLinkedProgram() const;
 
+    // EGL_ANGLE_power_preference implementation.
+    egl::Error releaseHighPowerGPU();
+    egl::Error reacquireHighPowerGPU();
+
   private:
     void initialize();
 
@@ -642,7 +648,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     egl::Error setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surface *readSurface);
     egl::Error unsetDefaultFramebuffer();
 
-    void initRendererString();
     void initVersionStrings();
     void initExtensionStrings();
 
