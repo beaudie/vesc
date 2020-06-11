@@ -86,6 +86,24 @@
       "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f1dcfcc_b536ee36",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-11T07:19:08Z",
+      "side": 1,
+      "message": "Hi Jeff \u0026\u0026 Shahbaz,\n\nJust found another way to avoid the extra queueSubmit() we\u0027re all concerning about, we can make sure we got a valid FD(importFencdFd) here whether the input FD is valid or not(if input FD invalid, we create one and get FD), then import the importFenceFd to mFenceWithFd.\n\nAs for the further eglDupNativeFenceFDANDROID(), we dup and store before import, i.e., before giving out the ownership of importFenceFd. So in dupNativeFenceFD() we can still just dup() the mNativeFenceFd we stored in SyncHelperNativeFence.",
+      "parentUuid": "454552ba_bbe6deaa",
+      "revId": "898f49c076448cf7fdc89cd9f959080967f634c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
