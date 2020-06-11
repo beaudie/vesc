@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "b00f65e0_e96aab98",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-11T20:07:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ca38760_6d3b2c0a",
+      "range": {
+        "startLine": 1095,
+        "startChar": 16,
+        "endLine": 1095,
+        "endChar": 44
+      },
+      "revId": "7961d6bcb3862ea7e87ba685acf5376992915751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14680902_2328da2f",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 15
