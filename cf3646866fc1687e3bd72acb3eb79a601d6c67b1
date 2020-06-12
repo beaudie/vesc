@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "83c756b5_524df218",
+        "filename": "doc/AddingExtensions.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-12T18:27:06Z",
+      "side": 1,
+      "message": "Also suggest:\n\nAdd members the appropriate Extensions struct in https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/Caps.h\n\nInitialize extension availability in the Display*::generateExtensions for displays that can support the extension.",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6dc0e220_c1f1bf18",
         "filename": "src/gpu_info_util/SystemInfo.h",
         "patchSetId": 4
@@ -36,6 +53,46 @@
     },
     {
       "key": {
+        "uuid": "bd575bdb_6b9bea2c",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-12T18:27:06Z",
+      "side": 1,
+      "message": "nit: Would prefer we add a new function that can call through to initRendererString (and keep it private).  Maybe onGPUSwitch().",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 30
+      },
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f8c84e9_089dc8d8",
+        "filename": "src/libANGLE/renderer/gl/cgl/ContextCGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-12T18:27:06Z",
+      "side": 1,
+      "message": "Because this inherits from ContextGL, we should probably call ContextGL::onDestroy as well.  I realize this  was not present before but we might as well fix it now.",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71a8fd34_80267d3a",
         "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
         "patchSetId": 4
@@ -47,6 +104,46 @@
       "writtenOn": "2020-06-12T15:12:19Z",
       "side": 1,
       "message": "Can you add some link to this code so we can track down potential changes?",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cba1281_59c41e51",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-12T18:27:06Z",
+      "side": 1,
+      "message": "This ends up getting stringified and put in about:gpu so anything we can do the improve the condition is helpful.  How about naming doDisable as isMacWithNVIDIAGPU?",
+      "range": {
+        "startLine": 1777,
+        "startChar": 66,
+        "endLine": 1777,
+        "endChar": 75
+      },
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b803eafd_c0bbda4d",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-12T18:27:06Z",
+      "side": 1,
+      "message": "These need a thread-\u003esetSuccess(); at the end.",
       "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
