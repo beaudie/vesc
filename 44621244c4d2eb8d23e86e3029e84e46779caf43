@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23a1398e_d3d11c44",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-12T19:39:57Z",
+      "side": 1,
+      "message": "Nit: This is done by the other update() method, so probably not needed here.",
+      "revId": "44621244c4d2eb8d23e86e3029e84e46779caf43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba9acccb_3a54b2fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-12T19:39:57Z",
+      "side": 1,
+      "message": "Bug?  Before, binding.pImmutableSamplers was initialized to nullptr.  Now, binding.pImmutableSamplers is only initialized when packedBinding.immutableSampler is not nullptr.",
+      "revId": "44621244c4d2eb8d23e86e3029e84e46779caf43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
