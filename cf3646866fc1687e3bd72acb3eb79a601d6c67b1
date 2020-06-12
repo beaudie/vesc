@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "da5d51fb_829649e1",
+        "filename": "doc/AddingExtensions.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-12T20:53:02Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "83c756b5_524df218",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6dc0e220_c1f1bf18",
         "filename": "src/gpu_info_util/SystemInfo.h",
         "patchSetId": 4
@@ -47,6 +65,24 @@
       "writtenOn": "2020-06-12T15:12:19Z",
       "side": 1,
       "message": "Can you add this to a SystemInfo_macos.h file that\u0027s included by SystemInfo_macos.mm?",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "635b560f_e2476396",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-12T20:53:02Z",
+      "side": 1,
+      "message": "It needs to be exposed in SystemInfo\u0027s \"public API\" - this is used by DisplayCGL.mm. If factored off into SystemInfo_macos.h then this header would have to include that one too. Is it worth it for this one entry point?",
+      "parentUuid": "6dc0e220_c1f1bf18",
       "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "70825292_fadfa5e7",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-12T20:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd575bdb_6b9bea2c",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 30
+      },
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f8c84e9_089dc8d8",
         "filename": "src/libANGLE/renderer/gl/cgl/ContextCGL.cpp",
         "patchSetId": 4
@@ -93,6 +153,24 @@
     },
     {
       "key": {
+        "uuid": "d6bd973f_8024ace5",
+        "filename": "src/libANGLE/renderer/gl/cgl/ContextCGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-12T20:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f8c84e9_089dc8d8",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71a8fd34_80267d3a",
         "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
         "patchSetId": 4
@@ -107,6 +185,24 @@
       "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd7bfbb9_ba9f3219",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-12T20:53:02Z",
+      "side": 1,
+      "message": "Yes, done. I also realized I duplicated some of this code, and have removed it in favor of the version in SystemInfo_mac.mm.",
+      "parentUuid": "71a8fd34_80267d3a",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -133,6 +229,30 @@
     },
     {
       "key": {
+        "uuid": "bab9ced1_2966ad9c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-12T20:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cba1281_59c41e51",
+      "range": {
+        "startLine": 1777,
+        "startChar": 66,
+        "endLine": 1777,
+        "endChar": 75
+      },
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b803eafd_c0bbda4d",
         "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
         "patchSetId": 4
@@ -144,6 +264,24 @@
       "writtenOn": "2020-06-12T18:27:06Z",
       "side": 1,
       "message": "These need a thread-\u003esetSuccess(); at the end.",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "309a0cb5_57e0f6f9",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-12T20:53:02Z",
+      "side": 1,
+      "message": "Thanks, done. Is there some test that I should have added which would have caught this?",
+      "parentUuid": "b803eafd_c0bbda4d",
       "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
