@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "661ce215_1269594d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-12T21:21:45Z",
+      "side": 1,
+      "message": "If we truly reserve the max size, then we do not need to grow.\nThe problem is that buffers are used for uniforms, transform feedback, atomic buffer storage etc. I did not really reserve the max here. mImageInfo might reserved enough spaces, but not 100% sure. To be safe and symetrical to buffers, I added the same grow func as well. If we never run into grow, the cost is just an if check.",
+      "parentUuid": "9a9a9018_72b91114",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ef84433_b113eb5d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -30,6 +48,47 @@
       "writtenOn": "2020-06-12T20:54:48Z",
       "side": 1,
       "message": "Anything to say about mImageInfos?",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f57d9697_45e62087",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-12T21:21:45Z",
+      "side": 1,
+      "message": "Good catch! Will fix in next update.",
+      "parentUuid": "1ef84433_b113eb5d",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f3f035_6677d276",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-12T21:21:45Z",
+      "side": 1,
+      "message": "typo: image",
+      "range": {
+        "startLine": 74,
+        "startChar": 15,
+        "endLine": 74,
+        "endChar": 21
+      },
       "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
