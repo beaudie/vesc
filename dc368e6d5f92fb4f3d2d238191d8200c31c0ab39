@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "710dcadc_083929b8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:47:38Z",
+      "side": 1,
+      "message": "this issue is closed - can you check if we can remove the TODO?",
+      "range": {
+        "startLine": 1835,
+        "startChar": 0,
+        "endLine": 1837,
+        "endChar": 0
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b517bba_ae3ee91d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:47:38Z",
+      "side": 1,
+      "message": "at some point it would be nice to rename these to their properties instead of their usage - e.g. mippedSwizzledView, whatever fetch view is, and nonSwizzledView, etc.",
+      "range": {
+        "startLine": 1520,
+        "startChar": 21,
+        "endLine": 1520,
+        "endChar": 43
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
