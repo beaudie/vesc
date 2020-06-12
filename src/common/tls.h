@@ -9,7 +9,13 @@
 #ifndef COMMON_TLS_H_
 #define COMMON_TLS_H_
 
+#include "common/angleutils.h"
 #include "common/platform.h"
+
+namespace gl
+{
+class Context;
+}
 
 #ifdef ANGLE_PLATFORM_WINDOWS
 
@@ -33,6 +39,91 @@ typedef pthread_key_t TLSIndex;
 #else
 #    error Unsupported platform.
 #endif
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+
+#    if defined(__aarch64__)
+#        define __get_tls()                                 \
+            ({                                              \
+                void **__val;                               \
+                __asm__("mrs %0, tpidr_el0" : "=r"(__val)); \
+                __val;                                      \
+            })
+#    elif defined(__arm__)
+#        define __get_tls()                                          \
+            ({                                                       \
+                void **__val;                                        \
+                __asm__("mrc p15, 0, %0, c13, c0, 3" : "=r"(__val)); \
+                __val;                                               \
+            })
+#    elif defined(__mips__)
+#        define __get_tls()                                                                      \
+            /* On mips32r1, this goes via a kernel illegal instruction trap that's optimized for \
+             * v1. */                                                                            \
+            ({                                                                                   \
+                register void **__val asm("v1");                                                 \
+                __asm__(                                                                         \
+                    ".set    push\n"                                                             \
+                    ".set    mips32r2\n"                                                         \
+                    "rdhwr   %0,$29\n"                                                           \
+                    ".set    pop\n"                                                              \
+                    : "=r"(__val));                                                              \
+                __val;                                                                           \
+            })
+#    elif defined(__i386__)
+#        define __get_tls()                               \
+            ({                                            \
+                void **__val;                             \
+                __asm__("movl %%gs:0, %0" : "=r"(__val)); \
+                __val;                                    \
+            })
+#    elif defined(__x86_64__)
+#        define __get_tls()                              \
+            ({                                           \
+                void **__val;                            \
+                __asm__("mov %%fs:0, %0" : "=r"(__val)); \
+                __val;                                   \
+            })
+#    else
+#        error unsupported architecture
+#    endif
+
+#endif  // ANGLE_PLATFORM_ANDROID
+
+//  - TLS_SLOT_OPENGL and TLS_SLOT_OPENGL_API: These two aren't used by bionic
+//    itself, but allow the graphics code to access TLS directly rather than
+//    using the pthread API.
+//
+// Choose the TLS_SLOT_OPENGL TLS slot with the value that matches value in the header file in
+// bionic(bionic_asm_tls.h)
+constexpr TLSIndex kAndroidOpenGLTlsSlot = 3;
+
+extern bool kUseAndroidOpenGLTlsSlot;
+ANGLE_INLINE bool SetContextToAndroidOpenGLTLSSlot(gl::Context *value)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (kUseAndroidOpenGLTlsSlot)
+    {
+        __get_tls()[kAndroidOpenGLTlsSlot] = static_cast<void *>(value);
+        return true;
+    }
+#endif
+    return false;
+}
+
+ANGLE_INLINE bool GetContextFromAndroidOpenGLTLSSlot(gl::Context **value)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (kUseAndroidOpenGLTlsSlot)
+    {
+        *value = static_cast<gl::Context *>(__get_tls()[kAndroidOpenGLTlsSlot]);
+        return true;
+    }
+#endif
+    return false;
+}
+
+void SetUseAndroidOpenGLTlsSlot(bool platformTypeVulkan);
 
 // TODO(kbr): for POSIX platforms this will have to be changed to take
 // in a destructor function pointer, to allow the thread-local storage
