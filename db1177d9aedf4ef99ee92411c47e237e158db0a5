@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9999fd40_386d78b4",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-12T02:54:09Z",
+      "side": 1,
+      "message": "Per Spec:\n\n```\nTo create a fence whose payload can be exported to external handles, add a VkExportFenceCreateInfo structure to the pNext chain of the VkFenceCreateInfo structure.\n```\n\nSo here the VkExportFenceCreateInfo is a must to make the created fence exportable.",
+      "parentUuid": "fb4313ea_dff5f931",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "edc1a653_95b5a928",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "55d4dd09_f7e32428",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-12T02:54:09Z",
+      "side": 1,
+      "message": "Yes we should import here from the FD we got previously. The export is to get the FD so that we can store a local dup in SyncHelperNativeFence.\n\nScenarios:\n\n```\nif (inFd is valid)\n  importFd \u003d inFd\nelse\n  importFd \u003d create fence and get the Fd through export\n\nthen import FD to current fence\n```\n\n---\n\nTests passed with patch set 4 both CQ Run and our tests on Mali platform.",
+      "parentUuid": "edc1a653_95b5a928",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31cd429b_4fb6e089",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2020-06-11T15:37:38Z",
       "side": 1,
       "message": "I allowed for returning kInvalidFenceFd. Since that should indicate to app that FD is closed. But we need to check EGL and Vulkan specs on this, because I sort of recall a mismatch on this and talking with Jesse.",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5415d9b_1cec8193",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-12T02:54:09Z",
+      "side": 1,
+      "message": "We already processed the invalid FD input (-1) in initialzedWithFd() by creating a fence and insert into command stream, so the mNativeFenceFd we stored in SyncHelperNativeFence should always be valid. Correct me if I misunderstood this. :)",
+      "parentUuid": "31cd429b_4fb6e089",
       "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "a642e1fb_362cf0ee",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-12T02:54:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ae57651_4457e658",
+      "range": {
+        "startLine": 314,
+        "startChar": 4,
+        "endLine": 314,
+        "endChar": 35
+      },
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2619ef8_429f096a",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 4
@@ -96,6 +174,30 @@
       "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbc75f64_edb88ce1",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-12T02:54:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2619ef8_429f096a",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "bbe9414f_bfe4651e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-12T02:54:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4e94615_1857c1d9",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 5
+      },
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4f1c47b_5b2c637d",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 4
@@ -133,6 +259,30 @@
       "writtenOn": "2020-06-11T15:42:47Z",
       "side": 1,
       "message": "nit: make sure you zero-init this.",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 22
+      },
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3810a9f_b1a066cf",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-12T02:54:09Z",
+      "side": 1,
+      "message": "We init this in construction into kInvalidFenceFd to indict it\u0027s invalid.",
+      "parentUuid": "f4f1c47b_5b2c637d",
       "range": {
         "startLine": 96,
         "startChar": 8,
