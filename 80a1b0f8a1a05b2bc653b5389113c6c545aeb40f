@@ -166,6 +166,24 @@
     },
     {
       "key": {
+        "uuid": "5144ef1a_ab0f359d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T17:12:37Z",
+      "side": 1,
+      "message": "There are 2 flags to determine if there is an immutable sampler:\n1.) null pointer or not\n2.) getImage().getExternalFormat() !\u003d 0\n\nI\u0027m not sure how invalid ContextVk::getActiveTextures() is during LinkProgram, but hopefully it\u0027s at least good enough not to trick us into thinking there is an immutable sampler.   That would allow us to simplify to just using (2) and remove the pointer stuff.",
+      "parentUuid": "3320b06c_9db749ac",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc3ca747_1ab48f15",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 22
@@ -195,6 +213,24 @@
       "side": 1,
       "message": "ContextVK is not available here unless I add it to the arg list, or am I missing something?\nI\u0027m using the pointer as a flag as well so can\u0027t be a reference.",
       "parentUuid": "fc3ca747_1ab48f15",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e789e968_329f2c45",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T17:12:37Z",
+      "side": 1,
+      "message": "This is only called by ProgramExecutableVk::createPipelineLayout(), which has a ContextVk and can pass in the const ref returned by ContextVk::getActiveTextures().",
+      "parentUuid": "53bfe32a_d5749ce5",
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -341,6 +377,30 @@
       "side": 1,
       "message": "I\u0027m not returning a pointer here, I\u0027m returning a VkSamplerYcbcrConversion handle. A non-dispatchable Vulkan object. There are no guarantees to the value of a non-dispatchable handle so the only way to know if it\u0027s valid or not is by having the return value indicate that.",
       "parentUuid": "664b6025_55754f9e",
+      "range": {
+        "startLine": 2229,
+        "startChar": 0,
+        "endLine": 2231,
+        "endChar": 44
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f1e7049_a0355863",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2231,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T17:12:37Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not returning a pointer here, I\u0027m returning a VkSamplerYcbcrConversion handle.\n\nHa, duh.   Probably shouldn\u0027t do reviews so late.\n\n\u003e There are no guarantees to the value of a non-dispatchable handle so the only way to know if it\u0027s valid or not is by having the return value indicate that.\n\nThis should probably set the value to VK_NULL_HANDLE before searching, which the user can check for to see if anything was found (or crashing earlier if they don\u0027t).   I think that makes the code clearer and prevents any random values that could have been hanging around from being used.",
+      "parentUuid": "8393d632_44ce305d",
       "range": {
         "startLine": 2229,
         "startChar": 0,
