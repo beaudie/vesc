@@ -298,6 +298,85 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
     dynamicBuffer.destroy(renderer);
 }
 
+// DescriptorSetUpdates
+DescriptorSetUpdates::DescriptorSetUpdates() : mBufferInfos(), mImageInfos(), mWriteInfos()
+{
+    // Reserve reasonable amount of spaces so that for majority of apps we don't need to grwo at all
+    mBufferInfos.reserve(8);
+    mImageInfos.reserve(4);
+    mWriteInfos.reserve(12);
+}
+
+DescriptorSetUpdates::~DescriptorSetUpdates()
+{
+    ASSERT(mWriteInfos.empty());
+    ASSERT(mBufferInfos.empty());
+    ASSERT(mImageInfos.empty());
+}
+
+void DescriptorSetUpdates::flushWritesToDevice(const VkDevice &device)
+{
+    if (mWriteInfos.empty())
+    {
+        ASSERT(mBufferInfos.empty());
+        ASSERT(mImageInfos.empty());
+        return;
+    }
+
+    vkUpdateDescriptorSets(device, static_cast<uint32_t>(mWriteInfos.size()), mWriteInfos.data(), 0,
+                           nullptr);
+    mWriteInfos.clear();
+    mBufferInfos.clear();
+    mImageInfos.clear();
+}
+
+VkDescriptorBufferInfo &DescriptorSetUpdates::allocBufferInfos(size_t count)
+{
+    return allocInfos<VkDescriptorBufferInfo, &VkWriteDescriptorSet::pBufferInfo>(mBufferInfos,
+                                                                                  count);
+}
+
+VkDescriptorImageInfo &DescriptorSetUpdates::allocImageInfo()
+{
+    return allocInfos<VkDescriptorImageInfo, &VkWriteDescriptorSet::pImageInfo>(mImageInfos, 1);
+}
+
+template <typename T, const T *VkWriteDescriptorSet::*pInfo>
+T &DescriptorSetUpdates::allocInfos(std::vector<T> &mInfos, size_t count)
+{
+    size_t oldSize = mInfos.size();
+    size_t newSize = oldSize + count;
+    if (newSize > mInfos.capacity())
+    {
+        // If we have reached capacity, grow the storage and patch the descriptor set with new
+        // buffer info pointer
+        growCapacity<T, pInfo>(mInfos, newSize);
+    }
+    mInfos.resize(newSize);
+    return mInfos[oldSize];
+}
+
+template <typename T, const T *VkWriteDescriptorSet::*pInfo>
+void DescriptorSetUpdates::growCapacity(std::vector<T> &mInfos, size_t newSize)
+{
+    const T *const oldInfoStart = mInfos.empty() ? nullptr : &mInfos[0];
+    size_t newCapacity          = std::min(mInfos.capacity() << 1, newSize);
+    mInfos.reserve(newCapacity);
+
+    if (oldInfoStart)
+    {
+        // patch mWriteInfo with new BufferInfo/ImageInfo pointers
+        for (VkWriteDescriptorSet &set : mWriteInfos)
+        {
+            if (set.*pInfo)
+            {
+                size_t index = set.*pInfo - oldInfoStart;
+                set.*pInfo   = &mInfos[index];
+            }
+        }
+    }
+}
+
 // CommandBatch implementation.
 CommandBatch::CommandBatch() = default;
 
@@ -614,6 +693,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
       mHasPrimaryCommands(false),
+      mDescriptorSetUpdates(),
       mGpuEventsEnabled(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
@@ -889,15 +969,15 @@ angle::Result ContextVk::finish(const gl::Context *context)
     return finishImpl();
 }
 
-angle::Result ContextVk::setupDraw(const gl::Context *context,
-                                   gl::PrimitiveMode mode,
-                                   GLint firstVertexOrInvalid,
-                                   GLsizei vertexOrIndexCount,
-                                   GLsizei instanceCount,
-                                   gl::DrawElementsType indexTypeOrInvalid,
-                                   const void *indices,
-                                   DirtyBits dirtyBitMask,
-                                   vk::CommandBuffer **commandBufferOut)
+angle::Result ContextVk::setupDrawAndDescriptorSetUpdates(const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          GLint firstVertexOrInvalid,
+                                                          GLsizei vertexOrIndexCount,
+                                                          GLsizei instanceCount,
+                                                          gl::DrawElementsType indexTypeOrInvalid,
+                                                          const void *indices,
+                                                          DirtyBits dirtyBitMask,
+                                                          vk::CommandBuffer **commandBufferOut)
 {
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
@@ -957,19 +1037,35 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
-    if (dirtyBits.none())
-        return angle::Result::Continue;
-
-    // Flush any relevant dirty bits.
-    for (size_t dirtyBit : dirtyBits)
+    if (dirtyBits.any())
     {
-        ASSERT(mGraphicsDirtyBitHandlers[dirtyBit]);
-        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
+        // Flush any relevant dirty bits.
+        for (size_t dirtyBit : dirtyBits)
+        {
+            ASSERT(mGraphicsDirtyBitHandlers[dirtyBit]);
+            ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
+        }
+
+        mGraphicsDirtyBits &= ~dirtyBitMask;
     }
 
-    mGraphicsDirtyBits &= ~dirtyBitMask;
-
     return angle::Result::Continue;
+}
+angle::Result ContextVk::setupDraw(const gl::Context *context,
+                                   gl::PrimitiveMode mode,
+                                   GLint firstVertexOrInvalid,
+                                   GLsizei vertexOrIndexCount,
+                                   GLsizei instanceCount,
+                                   gl::DrawElementsType indexTypeOrInvalid,
+                                   const void *indices,
+                                   DirtyBits dirtyBitMask,
+                                   vk::CommandBuffer **commandBufferOut)
+{
+    angle::Result result = setupDrawAndDescriptorSetUpdates(
+        context, mode, firstVertexOrInvalid, vertexOrIndexCount, instanceCount, indexTypeOrInvalid,
+        indices, dirtyBitMask, commandBufferOut);
+    mDescriptorSetUpdates.flushWritesToDevice(getDevice());
+    return result;
 }
 
 angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
@@ -1153,8 +1249,8 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                      mIndexedDirtyBitsMask, commandBufferOut);
 }
 
-angle::Result ContextVk::setupDispatch(const gl::Context *context,
-                                       vk::CommandBuffer **commandBufferOut)
+angle::Result ContextVk::setupDispatchAndDescriptorSetUpdates(const gl::Context *context,
+                                                              vk::CommandBuffer **commandBufferOut)
 {
     // |setupDispatch| and |setupDraw| are special in that they flush dirty bits. Therefore they
     // don't use the same APIs to record commands as the functions outside ContextVk.
@@ -1186,6 +1282,14 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context,
     mComputeDirtyBits.reset();
 
     return angle::Result::Continue;
+}
+
+angle::Result ContextVk::setupDispatch(const gl::Context *context,
+                                       vk::CommandBuffer **commandBufferOut)
+{
+    angle::Result result = setupDispatchAndDescriptorSetUpdates(context, commandBufferOut);
+    mDescriptorSetUpdates.flushWritesToDevice(getDevice());
+    return result;
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(const gl::Context *context,
@@ -3600,23 +3704,21 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
         &driverUniforms->descriptorPoolBinding, &driverUniforms->descriptorSet));
 
     // Update the driver uniform descriptor set.
-    VkDescriptorBufferInfo bufferInfo = {};
-    bufferInfo.buffer                 = buffer;
-    bufferInfo.offset                 = 0;
-    bufferInfo.range                  = driverUniformsSize;
+    VkDescriptorBufferInfo &bufferInfo = mDescriptorSetUpdates.allocBufferInfo();
+    bufferInfo.buffer                  = buffer;
+    bufferInfo.offset                  = 0;
+    bufferInfo.range                   = driverUniformsSize;
 
-    VkWriteDescriptorSet writeInfo = {};
-    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet               = driverUniforms->descriptorSet;
-    writeInfo.dstBinding           = 0;
-    writeInfo.dstArrayElement      = 0;
-    writeInfo.descriptorCount      = 1;
-    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-    writeInfo.pImageInfo           = nullptr;
-    writeInfo.pTexelBufferView     = nullptr;
-    writeInfo.pBufferInfo          = &bufferInfo;
-
-    vkUpdateDescriptorSets(getDevice(), 1, &writeInfo, 0, nullptr);
+    VkWriteDescriptorSet &writeInfo = mDescriptorSetUpdates.allocWriteInfo();
+    writeInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet                = driverUniforms->descriptorSet;
+    writeInfo.dstBinding            = 0;
+    writeInfo.dstArrayElement       = 0;
+    writeInfo.descriptorCount       = 1;
+    writeInfo.descriptorType        = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+    writeInfo.pImageInfo            = nullptr;
+    writeInfo.pTexelBufferView      = nullptr;
+    writeInfo.pBufferInfo           = &bufferInfo;
 
     return angle::Result::Continue;
 }
