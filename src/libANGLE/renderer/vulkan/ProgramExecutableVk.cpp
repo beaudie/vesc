@@ -424,20 +424,20 @@ void ProgramExecutableVk::addAtomicCounterBufferDescriptorSetDesc(
 void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramState &programState,
                                                     vk::DescriptorSetLayoutDesc *descOut)
 {
-    const std::vector<gl::ImageBinding> &imageBindings = programState.getImageBindings();
-    const std::vector<gl::LinkedUniform> &uniforms     = programState.getUniforms();
+    const ProgramExecutable &executable                = programState.getExecutable();
+    const std::vector<gl::ImageBinding> &imageBindings = executable.getImageBindings();
+    const std::vector<gl::LinkedUniform> &uniforms     = executable.getUniforms();
 
     for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
     {
         const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
-
-        uint32_t uniformIndex = programState.getUniformIndexFromImageIndex(imageIndex);
+        uint32_t uniformIndex                = executable.getUniformIndexFromImageIndex(imageIndex);
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
 
         // The front-end always binds array image units sequentially.
         uint32_t arraySize = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
 
-        for (const gl::ShaderType shaderType : programState.getExecutable().getLinkedShaderStages())
+        for (const gl::ShaderType shaderType : executable.getLinkedShaderStages())
         {
             if (!imageUniform.isActive(shaderType))
             {
@@ -1065,8 +1065,9 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(const gl::ProgramSt
                                                              ContextVk *contextVk)
 {
     const gl::State &glState                           = contextVk->getState();
-    const std::vector<gl::ImageBinding> &imageBindings = programState.getImageBindings();
-    const std::vector<gl::LinkedUniform> &uniforms     = programState.getUniforms();
+    const ProgramExecutable &executable                = programState.getExecutable();
+    const std::vector<gl::ImageBinding> &imageBindings = executable.getImageBindings();
+    const std::vector<gl::LinkedUniform> &uniforms     = executable.getUniforms();
 
     if (imageBindings.empty())
     {
@@ -1085,7 +1086,7 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(const gl::ProgramSt
     for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
     {
         const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
-        uint32_t uniformIndex = programState.getUniformIndexFromImageIndex(imageIndex);
+        uint32_t uniformIndex                = executable.getUniformIndexFromImageIndex(imageIndex);
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
 
         if (!imageUniform.isActive(shaderType))
