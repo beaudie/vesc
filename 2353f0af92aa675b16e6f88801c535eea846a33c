@@ -93,6 +93,30 @@
       "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f279d76_fd65f614",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-12T15:15:18Z",
+      "side": 1,
+      "message": "I wasn\u0027t able to add the method to frame_capture_utils.h because it needs ParamCapture struct which is defined in FrameCapture.h. FrameCapture.h also includes this frame_capture_utils.h. Since I don\u0027t want to forward-declare ParamCapture, I just add the method to FrameCapture.h. Is it OK?",
+      "parentUuid": "0b4d10e9_6c8cb588",
+      "range": {
+        "startLine": 645,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 1
+      },
+      "revId": "2353f0af92aa675b16e6f88801c535eea846a33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
