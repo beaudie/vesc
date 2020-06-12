@@ -202,6 +202,24 @@
     },
     {
       "key": {
+        "uuid": "b6eae24c_8c205e91",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T18:31:05Z",
+      "side": 1,
+      "message": "I see (well, not entirely, but there\u0027s clearly more complexity here than I fully understand).\n\nMaybe I\u0027m getting tripped up on having to do the full updatePipelineLayout() call here.   Why are immutable samplers special in this regard?",
+      "parentUuid": "2375d017_356103f3",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc3ca747_1ab48f15",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 22
@@ -270,6 +288,24 @@
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b65e3059_3e0f9a79",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T18:31:05Z",
+      "side": 1,
+      "message": "Ack.   This seems like a good approach based on those constraints.",
+      "parentUuid": "d327f4d5_bf98c125",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -470,6 +506,30 @@
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "331aaced_85edacd4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2231,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T18:31:05Z",
+      "side": 1,
+      "message": "Ah, ok.",
+      "parentUuid": "4531e059_b1f8a138",
+      "range": {
+        "startLine": 2229,
+        "startChar": 0,
+        "endLine": 2231,
+        "endChar": 44
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
