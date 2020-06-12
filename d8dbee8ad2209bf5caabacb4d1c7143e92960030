@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d6c62e2_978bc703",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T17:22:17Z",
+      "side": 1,
+      "message": "nit: can be in the constructor initialization list.",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 37
+      },
+      "revId": "d8dbee8ad2209bf5caabacb4d1c7143e92960030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5062026_c16a2107",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T17:22:17Z",
+      "side": 1,
+      "message": "returning Stop is unusual. Can this code be reached? If this is an implementation error please update this to be an ASSERT. If this is an expected error please use ANGLE_VK_CHECK to generate an error that will be exposed to the application.",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 35
+      },
+      "revId": "d8dbee8ad2209bf5caabacb4d1c7143e92960030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0af6563_6b3d53b3",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T17:22:17Z",
+      "side": 1,
+      "message": "minor cleanup: instead of checking VK_SUCCESS, make a local DeviceScoped\u003cvk::Fence\u003e variable and transfer ownership on success. Understood that this is just copied code, would be nice to clean up if you have time.",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 20
+      },
+      "revId": "d8dbee8ad2209bf5caabacb4d1c7143e92960030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
