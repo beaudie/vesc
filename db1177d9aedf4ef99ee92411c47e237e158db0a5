@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "0b0ee5e4_b1ce59d9",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-12T17:16:22Z",
+      "side": 1,
+      "message": "Agreed, needed for \"to make the created fence exportable\". Just not sure if needed if only doing import.\n\nBut if tests are passing now and were not before. Then OK",
+      "parentUuid": "9999fd40_386d78b4",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edc1a653_95b5a928",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "ec4289bd_a89449dc",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-12T17:16:22Z",
+      "side": 1,
+      "message": "Scenarios:\n\nif (inFd is valid)\n  create vkFence\n  import inFd to fence\n  mNativeFenceFD \u003d inFd\nelse\n  create Vkfence with exportable struct\n  mNativeFenceFD \u003d get the Fd through export\n  Submit with fence\nend\n\nIs this step needed?: \"then import FD to current fence\" for both \u0027if\u0027 and \u0027else\u0027 clauses?\n---\n\nIf it is working with tests, then good enough for me. Just seems odd to import FD on fence we just exported the FD from.",
+      "parentUuid": "55d4dd09_f7e32428",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31cd429b_4fb6e089",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
@@ -104,6 +140,24 @@
       "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b32f363_1ae9ab00",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-06-12T17:16:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b5415d9b_1cec8193",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
