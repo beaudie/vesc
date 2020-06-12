@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c4a3d86_d5813ed0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:17:13Z",
+      "side": 1,
+      "message": "Please use `reinterpret_cast\u003cconst VkSampler *\u003e(angle::DirtyPointer)` instead.",
+      "range": {
+        "startLine": 1561,
+        "startChar": 41,
+        "endLine": 1561,
+        "endChar": 75
+      },
+      "revId": "90d5d2cc627fb3e95702bfb496e69a201504690a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
