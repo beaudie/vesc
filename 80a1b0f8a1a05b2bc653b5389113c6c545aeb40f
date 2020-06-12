@@ -1,0 +1,307 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d603b18d_eb9ba813",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "nit: remove \"angle::\" here too?",
+      "range": {
+        "startLine": 129,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 11
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab7ec499_3147ec81",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3619,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "This pattern is used a few places and should probably be put into a textureVk-\u003egetImage().hasImmutableSampler().",
+      "range": {
+        "startLine": 3619,
+        "startChar": 32,
+        "endLine": 3619,
+        "endChar": 79
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "506f6f4c_35fc9ad0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3630,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "The only way to get into here is if the executable has textures, so this check can be removed.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e15edce_ed62edb9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Passing in \u0027\u0026mActiveTextures\u0027 seems unnecessary since ProgramExecutableVk::updatePipelineLayout() has access to the ContextVk, so it can call ContextVk::getActiveTextures() on its own.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc3ca747_1ab48f15",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Since ContextVk::getActiveTextures() can always be called, this can be a const ref also, removing any need to check if the pointer is valid.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0959b2d3_8f7c720d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Does this need to pass nullptr?   Looks like it could just keep calling the original function:\n\n\n    void update(uint32_t bindingIndex,\n                VkDescriptorType type,\n                uint32_t count,\n                VkShaderStageFlags stages);\n    void update(uint32_t bindingIndex,\n                VkDescriptorType type,\n                uint32_t count,\n                VkShaderStageFlags stages,\n                const vk::Sampler *immutableSampler);",
+      "range": {
+        "startLine": 522,
+        "startChar": 0,
+        "endLine": 523,
+        "endChar": 55
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bffd94b_f769b102",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Can you update this comment to explain why you\u0027re checking if the format support sampling if the format is undefined?",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3bfdb56_aa03eb4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "With the change for getYuvConversion() to return the pointer directly, this can become:\n\n    yuvConversionInfo.conversion \u003d\n        contextVk-\u003egetRenderer()-\u003egetYuvConversionCache().getYuvConversion(mExternalFormat);\n    ASSERT(yuvConversionInfo.conversion);",
+      "range": {
+        "startLine": 1868,
+        "startChar": 0,
+        "endLine": 1869,
+        "endChar": 61
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "664b6025_55754f9e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2231,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Rather than returning an angle::Result, it\u0027s probably better to just return the VkSamplerYcbcrConversion* directly.",
+      "range": {
+        "startLine": 2229,
+        "startChar": 0,
+        "endLine": 2231,
+        "endChar": 44
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3645e089_1386f938",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2243,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "This function only returns angle::Result::Continue, so it can be updated to just return void.",
+      "range": {
+        "startLine": 2243,
+        "startChar": 0,
+        "endLine": 2243,
+        "endChar": 13
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a18cda9_99d0e85b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like anyone calls this.   Remove?",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a6ce3db_d03a7686",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Since Android is likely where we are the most memory constrained, it\u0027s #ifdef\u0027ing is probably not worth the extra complexity.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ef4ab53_3450d68c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Rather than mixing types, I\u0027ve typically seen arrays used instead:\n\n    uint16_t mReserved[3];\n\nThat lets future users grab only the portion they need a little more easily and avoids all the padding vs reserved naming conflicts.",
+      "range": {
+        "startLine": 692,
+        "startChar": 0,
+        "endLine": 693,
+        "endChar": 18
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "150d66d3_078964e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "The \"apparently\" can probably be removed.\n\nMaybe I\u0027m used to some type of \u0027-malign-double\u0027 always being used (e.g., to avoid 64b values spanning multiple cache lines), but the general rule for alignment I always follow is that structs are aligned to the largest member (uint64_t in this case).",
+      "range": {
+        "startLine": 697,
+        "startChar": 3,
+        "endLine": 697,
+        "endChar": 13
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded2fa32_35bbac7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T07:56:16Z",
+      "side": 1,
+      "message": "Need to mark the TODO with a bug number if you\u0027re planning to defer this work.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
