@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e6dde60_c3f15025",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:26:43Z",
+      "side": 1,
+      "message": "nit: instances !\u003d 0 \u0026\u0026 divisor !\u003d 0 ?",
+      "range": {
+        "startLine": 193,
+        "startChar": 6,
+        "endLine": 193,
+        "endChar": 42
+      },
+      "revId": "693c77036a9a9deca0ef78a3d852fb1acd089b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f230474_ada5b721",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:26:43Z",
+      "side": 1,
+      "message": "I don\u0027t quite follow, a small expanded comment might help.",
+      "range": {
+        "startLine": 195,
+        "startChar": 9,
+        "endLine": 196,
+        "endChar": 67
+      },
+      "revId": "693c77036a9a9deca0ef78a3d852fb1acd089b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "938a680e_85c2912f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:26:43Z",
+      "side": 1,
+      "message": "can you move this...",
+      "range": {
+        "startLine": 2176,
+        "startChar": 10,
+        "endLine": 2176,
+        "endChar": 30
+      },
+      "revId": "693c77036a9a9deca0ef78a3d852fb1acd089b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d175b0c_f1489c25",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:26:43Z",
+      "side": 1,
+      "message": "use mVertexArray11",
+      "range": {
+        "startLine": 2180,
+        "startChar": 8,
+        "endLine": 2180,
+        "endChar": 21
+      },
+      "revId": "693c77036a9a9deca0ef78a3d852fb1acd089b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40799cd1_e0393ea9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:26:43Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 2225,
+        "startChar": 14,
+        "endLine": 2225,
+        "endChar": 28
+      },
+      "revId": "693c77036a9a9deca0ef78a3d852fb1acd089b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d60c86a_6cbaba3e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2237,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T15:26:43Z",
+      "side": 1,
+      "message": "... inside the if here? seems to be the only place you use firstVertexOnChange?",
+      "range": {
+        "startLine": 2237,
+        "startChar": 21,
+        "endLine": 2237,
+        "endChar": 33
+      },
+      "revId": "693c77036a9a9deca0ef78a3d852fb1acd089b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
