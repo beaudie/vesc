@@ -220,6 +220,24 @@
     },
     {
       "key": {
+        "uuid": "0337ee2c_0248cd41",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T19:26:55Z",
+      "side": 1,
+      "message": "Immutable samplers are special in that they must be specified in the DescriptorSetLayout. That\u0027s normally computed at link time but we don\u0027t know what the immutable samplers are at that time so we have to re-compute the DescriptorSetLayouts again when we see that we need them.\nAnd PipelineLayout as well since it\u0027s dependent.",
+      "parentUuid": "b6eae24c_8c205e91",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc3ca747_1ab48f15",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 22
