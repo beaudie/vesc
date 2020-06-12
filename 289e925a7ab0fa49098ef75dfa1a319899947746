@@ -59,6 +59,29 @@
     },
     {
       "key": {
+        "uuid": "37d6ffff_fc9a2e29",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "nit: redundant",
+      "range": {
+        "startLine": 707,
+        "startChar": 33,
+        "endLine": 707,
+        "endChar": 37
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1a8768c8_b310f115",
         "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
         "patchSetId": 21
@@ -75,6 +98,29 @@
         "startChar": 71,
         "endLine": 711,
         "endChar": 98
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "835c2344_4ebfa1ff",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "nit: redundant",
+      "range": {
+        "startLine": 719,
+        "startChar": 29,
+        "endLine": 719,
+        "endChar": 33
       },
       "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -122,6 +168,69 @@
     },
     {
       "key": {
+        "uuid": "42d6680e_f3a70c24",
+        "filename": "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "nit: Don\u0027t know what the LEFT/RIGHT difference is, but GLX_BACK_EXT is defined as GLX_BACK_LEFT_EXT I think, so can use that (and avoid confusing people like me :D)",
+      "range": {
+        "startLine": 57,
+        "startChar": 19,
+        "endLine": 57,
+        "endChar": 36
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1004c03f_8c07f1d7",
+        "filename": "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "postSubBuffer() is a noop, so  presumably this _is_ implemented and should return EGL_TRUE?\n\nOtherwise that function needs UNIMPLEMENTED too.",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b563d2df_b7687725",
+        "filename": "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "Probably PRESERVED, since swap is a noop.",
+      "range": {
+        "startLine": 193,
+        "startChar": 11,
+        "endLine": 193,
+        "endChar": 31
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c232dee_1320d28d",
         "filename": "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.h",
         "patchSetId": 21
@@ -159,6 +268,29 @@
       "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "789af564_a562e65f",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 21
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "I see a lot of suppressions in this file that just have the platform name. Presumably it\u0027s from old times where windows meant d3d and Linux meant gl. If you get a chance to narrow them down to platform+API, it would be nice.\n\nAlso, yeay for the removal of all pixmap suppressions!",
+      "range": {
+        "startLine": 109,
+        "startChar": 5,
+        "endLine": 109,
+        "endChar": 10
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -225,6 +357,29 @@
     },
     {
       "key": {
+        "uuid": "98db5fc0_c8ea1b89",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "nit: If you invert the y coordinate in output checks, you can reuse `essl1_shaders::vs::Texture2D` and `essl1_shaders::fs::Texture2D` instead.",
+      "range": {
+        "startLine": 41,
+        "startChar": 16,
+        "endLine": 41,
+        "endChar": 46
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac3f4ad6_5038899a",
         "filename": "src/tests/gl_tests/PixmapTest.cpp",
         "patchSetId": 21
@@ -265,6 +420,30 @@
     },
     {
       "key": {
+        "uuid": "4477acfa_678b4f9f",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "Can\u0027t use GLColor with glClearColor",
+      "parentUuid": "09c63afc_9ed566ea",
+      "range": {
+        "startLine": 144,
+        "startChar": 17,
+        "endLine": 144,
+        "endChar": 39
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a556cd29_4877e90f",
         "filename": "src/tests/gl_tests/PixmapTest.cpp",
         "patchSetId": 21
@@ -293,6 +472,47 @@
       "writtenOn": "2020-06-12T00:49:06Z",
       "side": 1,
       "message": "Same as above, but GLColor::magenta for these.",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93c40172_fb2c1a37",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "GLColor is not a part of OpenGL",
+      "parentUuid": "43f4f468_be3a6b31",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a24146b5_42381b2b",
+        "filename": "src/tests/perf_tests/EGLMakeCurrentPerf.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T02:06:06Z",
+      "side": 1,
+      "message": "Is it because the pbuffer may not exist? Presumably it does, since this test was always working.",
+      "range": {
+        "startLine": 109,
+        "startChar": 28,
+        "endLine": 109,
+        "endChar": 42
+      },
       "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
