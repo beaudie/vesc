@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6f922213_55ce0645",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1539,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-12T20:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4d32d3c_09f242cb",
+      "range": {
+        "startLine": 1539,
+        "startChar": 22,
+        "endLine": 1539,
+        "endChar": 36
+      },
+      "revId": "5dfb2a298f305266380963fd2192a765a0ec2193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc674ad8_3b3670ec",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "981a7d32_b623912e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-12T20:33:15Z",
+      "side": 1,
+      "message": "oops, Done",
+      "parentUuid": "dc674ad8_3b3670ec",
+      "range": {
+        "startLine": 1584,
+        "startChar": 62,
+        "endLine": 1584,
+        "endChar": 63
+      },
+      "revId": "5dfb2a298f305266380963fd2192a765a0ec2193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71075622_8ced5ec9",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-12T19:35:37Z",
       "side": 1,
       "message": "This test you\u0027re adding should be part of something like SwizzleTest or TextureTest. It really isn\u0027t related to eglImage.",
+      "range": {
+        "startLine": 7,
+        "startChar": 30,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "5dfb2a298f305266380963fd2192a765a0ec2193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f0c115b_fa111d1c",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-12T20:33:15Z",
+      "side": 1,
+      "message": "there is a lot of code reuse between this test and the one added by https://chromium-review.googlesource.com/c/angle/angle/+/2238852/, which is exposed only with glEGL..2DOES(...) API with an EGLImage. Dint want to duplicate that much code, so i would like to keep these 2 together",
+      "parentUuid": "71075622_8ced5ec9",
       "range": {
         "startLine": 7,
         "startChar": 30,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "f3f002bd_43fc7c39",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2424,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-12T20:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5b269cb_c7192fab",
+      "range": {
+        "startLine": 2424,
+        "startChar": 8,
+        "endLine": 2424,
+        "endChar": 20
+      },
+      "revId": "5dfb2a298f305266380963fd2192a765a0ec2193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed0d2851_74b590c4",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 8
@@ -114,6 +210,30 @@
       "revId": "5dfb2a298f305266380963fd2192a765a0ec2193",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5621ee30_9c4825f5",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2437,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-12T20:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed0d2851_74b590c4",
+      "range": {
+        "startLine": 2437,
+        "startChar": 8,
+        "endLine": 2437,
+        "endChar": 29
+      },
+      "revId": "5dfb2a298f305266380963fd2192a765a0ec2193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
