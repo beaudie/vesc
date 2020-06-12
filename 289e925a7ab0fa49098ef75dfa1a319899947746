@@ -36,6 +36,132 @@
     },
     {
       "key": {
+        "uuid": "9ded2d73_77a79345",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "For consistency, I think they should either both do \"!\u003d 0\" or neither.",
+      "range": {
+        "startLine": 699,
+        "startChar": 0,
+        "endLine": 700,
+        "endChar": 59
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a8768c8_b310f115",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "GLX_BIND_TO_TEXTURE_RGBA_EXT ?",
+      "range": {
+        "startLine": 711,
+        "startChar": 71,
+        "endLine": 711,
+        "endChar": 98
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef925fde_9349bd6e",
+        "filename": "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "nit: 2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60bdbcd4_c28af992",
+        "filename": "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "nit: spacing between functions?",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c232dee_1320d28d",
+        "filename": "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "nit: 2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b35575ba_df41325a",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4a1956d_756b9c4c",
         "filename": "src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp",
         "patchSetId": 21
@@ -47,6 +173,126 @@
       "writtenOn": "2020-06-11T17:59:56Z",
       "side": 1,
       "message": "Could go in utils",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca7dea07_0e9958d5",
+        "filename": "src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "Even if for nothing but readability, is using std::min() better?\n\n    constexpr size_t copySize \u003d std::min(sizeof(destType), sizeof(sourceType));",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 86
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f70bee9e_a789bc08",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "nit: 2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac3f4ad6_5038899a",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "Might be good to sprinkle some error checking throughout to catch problems sooner:\n\n    ASSERT_NE(-1, mTextureUniformLocation);",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09c63afc_9ed566ea",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "GLColor::blue",
+      "range": {
+        "startLine": 144,
+        "startChar": 17,
+        "endLine": 144,
+        "endChar": 39
+      },
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a556cd29_4877e90f",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::blue);",
+      "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43f4f468_be3a6b31",
+        "filename": "src/tests/gl_tests/PixmapTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T00:49:06Z",
+      "side": 1,
+      "message": "Same as above, but GLColor::magenta for these.",
       "revId": "289e925a7ab0fa49098ef75dfa1a319899947746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
