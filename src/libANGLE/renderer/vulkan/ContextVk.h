@@ -31,6 +31,17 @@ namespace rx
 class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
+class ContextVk;
+
+class DescriptorSetUpdates final : angle::NonCopyable
+{
+  public:
+    DescriptorSetUpdates(ContextVk *contextVk);
+    ~DescriptorSetUpdates();
+
+  private:
+    ContextVk *mContextVk;
+};
 
 struct CommandBatch final : angle::NonCopyable
 {
@@ -526,6 +537,20 @@ class ContextVk : public ContextImpl, public vk::Context
     // When worker thread completes, it releases command buffers back to context queue
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
 
+    // DescriptorSet writes
+    VkDescriptorBufferInfo &allocBufferInfo() { return allocBufferInfos(1); }
+    VkDescriptorBufferInfo &allocBufferInfos(size_t count);
+    VkDescriptorImageInfo &allocImageInfo() { return allocImageInfos(1); }
+    VkDescriptorImageInfo &allocImageInfos(size_t count);
+    VkWriteDescriptorSet &allocWriteInfo() { return allocWriteInfos(1); }
+    VkWriteDescriptorSet &allocWriteInfos(size_t count)
+    {
+        size_t oldSize = mWriteInfos.size();
+        size_t newSize = oldSize + count;
+        mWriteInfos.resize(newSize);
+        return mWriteInfos[oldSize];
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -616,6 +641,7 @@ class ContextVk : public ContextImpl, public vk::Context
                             const void *indices,
                             DirtyBits dirtyBitMask,
                             vk::CommandBuffer **commandBufferOut);
+
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLsizei indexCount,
@@ -800,6 +826,12 @@ class ContextVk : public ContextImpl, public vk::Context
         size_t bufferCount,
         const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
 
+    // DescriptorSet writes
+    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
+    T &allocInfos(std::vector<T> *mInfos, size_t count);
+    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
+    void growCapacity(std::vector<T> *mInfos, size_t newSize);
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
@@ -978,6 +1010,12 @@ class ContextVk : public ContextImpl, public vk::Context
     egl::ContextPriority mContextPriority;
 
     const vk::BufferHelper *mCurrentIndirectBuffer;
+
+    // Storage for vkUpdateDescriptorSets
+    std::vector<VkDescriptorBufferInfo> mBufferInfos;
+    std::vector<VkDescriptorImageInfo> mImageInfos;
+    std::vector<VkWriteDescriptorSet> mWriteInfos;
+    friend class DescriptorSetUpdates;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };
