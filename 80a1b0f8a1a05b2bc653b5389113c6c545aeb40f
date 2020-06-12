@@ -596,6 +596,24 @@
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a04bf0c4_28307542",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T16:54:24Z",
+      "side": 1,
+      "message": "Fixed. Removed this entirely, instead free up conversioncache when we destroy the renderer, same as the sampler cache.",
+      "parentUuid": "d1b59bf5_2572b178",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
