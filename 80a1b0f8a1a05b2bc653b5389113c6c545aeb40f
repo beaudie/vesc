@@ -184,6 +184,24 @@
     },
     {
       "key": {
+        "uuid": "2375d017_356103f3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T17:50:31Z",
+      "side": 1,
+      "message": "Different flags.\ngetImage().hasImmutableShader() indicates that that specific image has / requires an immutable sampler.\nThe activeTextures pointer indicates that some activeTexture has an immutable sampler and we figure out which exact image in a loop in the function using the information available in the referenced list of activeTextures.\n\nContextVk::getActiveTextures() is completely untrustworthy at LinkProgram time. E.g. I could have just completed a draw that used an immutable sampler, link a bunch of programs and then change the texture state for the next draw. That previously immutable sampler is not helpful during those links.\n\nI can change the interface to pass a bool flag and then lookup the current getActiveTextures() when needed. Does that make the interface better?",
+      "parentUuid": "5144ef1a_ab0f359d",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc3ca747_1ab48f15",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 22
@@ -231,6 +249,24 @@
       "side": 1,
       "message": "This is only called by ProgramExecutableVk::createPipelineLayout(), which has a ContextVk and can pass in the const ref returned by ContextVk::getActiveTextures().",
       "parentUuid": "53bfe32a_d5749ce5",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d327f4d5_bf98c125",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T17:50:31Z",
+      "side": 1,
+      "message": "Yeah I could.\nDoes it make the interface better?\nPart of the reason I pass it in is to make it clear that\u0027s the statement of truth. It is the same as ContextVk::getActiveTextures(), but ContextVk::getActiveTextures() is not always valid for this use when executing this function.",
+      "parentUuid": "e789e968_329f2c45",
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -401,6 +437,30 @@
       "side": 1,
       "message": "\u003e I\u0027m not returning a pointer here, I\u0027m returning a VkSamplerYcbcrConversion handle.\n\nHa, duh.   Probably shouldn\u0027t do reviews so late.\n\n\u003e There are no guarantees to the value of a non-dispatchable handle so the only way to know if it\u0027s valid or not is by having the return value indicate that.\n\nThis should probably set the value to VK_NULL_HANDLE before searching, which the user can check for to see if anything was found (or crashing earlier if they don\u0027t).   I think that makes the code clearer and prevents any random values that could have been hanging around from being used.",
       "parentUuid": "8393d632_44ce305d",
+      "range": {
+        "startLine": 2229,
+        "startChar": 0,
+        "endLine": 2231,
+        "endChar": 44
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4531e059_b1f8a138",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2231,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T17:50:31Z",
+      "side": 1,
+      "message": "Non-dispatchable handles have no guaranteed invalid value. They are just a 64bit value, can be anything, including 0 and be valid so only way to know if I found one is by the return code.\nI\u0027m following GL behavior here, only change the return value if we find something.",
+      "parentUuid": "4f1e7049_a0355863",
       "range": {
         "startLine": 2229,
         "startChar": 0,
