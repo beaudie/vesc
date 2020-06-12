@@ -32,6 +32,67 @@ class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
 
+class DescriptorSetWriteInfo final : angle::NonCopyable
+{
+  public:
+    DescriptorSetWriteInfo();
+    ~DescriptorSetWriteInfo();
+
+    void flushWritesToDevice(const VkDevice &device);
+
+    VkDescriptorBufferInfo *getBufferInfo()
+    {
+        if ((mBufferInfos.size() + 1) >= mBufferInfos.capacity())
+        {
+            // If we have reached capacity, grow the storage and patch the descriptor set with new
+            // buffer info pointer
+            growBufferInfoCapacity();
+        }
+        mBufferInfos.emplace_back();
+        return &mBufferInfos.back();
+    }
+
+    VkDescriptorBufferInfo *getBufferInfos(size_t count)
+    {
+        size_t oldSize = mBufferInfos.size();
+        size_t newSize = oldSize + count;
+        if (newSize >= mBufferInfos.capacity())
+        {
+            // If we have reached capacity, grow the storage and patch the descriptor set with new
+            // buffer info pointer
+            growBufferInfoCapacity();
+        }
+        mBufferInfos.resize(newSize);
+        return &mBufferInfos[oldSize];
+    }
+
+    VkDescriptorImageInfo *getImageInfo()
+    {
+        if ((mImageInfos.size() + 1) >= mBufferInfos.capacity())
+        {
+            // If we have reached capacity, grow the storage and patch the descriptor set with new
+            // buffer info pointer
+            growImageInfoCapacity();
+        }
+        mImageInfos.emplace_back();
+        return &mImageInfos.back();
+    }
+
+    VkWriteDescriptorSet *getWriteInfo()
+    {
+        mWriteInfos.emplace_back();
+        return &mWriteInfos.back();
+    }
+
+  private:
+    void growBufferInfoCapacity();
+    void growImageInfoCapacity();
+
+    std::vector<VkDescriptorBufferInfo> mBufferInfos;
+    std::vector<VkDescriptorImageInfo> mImageInfos;
+    std::vector<VkWriteDescriptorSet> mWriteInfos;
+};
+
 struct CommandBatch final : angle::NonCopyable
 {
     CommandBatch();
@@ -534,6 +595,11 @@ class ContextVk : public ContextImpl, public vk::Context
     // When worker thread completes, it releases command buffers back to context queue
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
 
+    ANGLE_INLINE DescriptorSetWriteInfo &getDescriptorSetWriteInfo()
+    {
+        return mDescriptorSetWriteInfo;
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -936,6 +1002,8 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::PrimaryCommandBuffer mPrimaryCommands;
     // Function recycleCommandBuffer() is public above
     bool mHasPrimaryCommands;
+
+    DescriptorSetWriteInfo mDescriptorSetWriteInfo;
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;

@@ -298,6 +298,65 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
     dynamicBuffer.destroy(renderer);
 }
 
+// DescriptorSetWriteInfo
+DescriptorSetWriteInfo::DescriptorSetWriteInfo() : mBufferInfos(), mImageInfos(), mWriteInfos()
+{
+    mBufferInfos.reserve(sizeof(gl::UniformBuffersArray<VkWriteDescriptorSet>));
+    mImageInfos.reserve(sizeof(gl::ActiveTextureArray<VkWriteDescriptorSet>));
+    mWriteInfos.reserve(sizeof(gl::UniformBuffersArray<VkWriteDescriptorSet>));
+}
+
+DescriptorSetWriteInfo::~DescriptorSetWriteInfo()
+{
+    ASSERT(mWriteInfos.empty());
+    ASSERT(mBufferInfos.empty());
+}
+
+void DescriptorSetWriteInfo::flushWritesToDevice(const VkDevice &device)
+{
+    if (mWriteInfos.empty())
+    {
+        return;
+    }
+
+    vkUpdateDescriptorSets(device, static_cast<uint32_t>(mWriteInfos.size()), mWriteInfos.data(), 0,
+                           nullptr);
+    mWriteInfos.clear();
+    mBufferInfos.clear();
+    mImageInfos.clear();
+}
+
+void DescriptorSetWriteInfo::growBufferInfoCapacity()
+{
+    const VkDescriptorBufferInfo *const oldBufferInfoStart = &mBufferInfos[0];
+    size_t newCapacity                                     = mBufferInfos.capacity() << 1;
+    mBufferInfos.reserve(newCapacity);
+    // patch mWriteInfo with new BufferInfo pointers
+    for (VkWriteDescriptorSet &set : mWriteInfos)
+    {
+        if (set.pBufferInfo)
+        {
+            size_t index    = set.pBufferInfo - oldBufferInfoStart;
+            set.pBufferInfo = &mBufferInfos[index];
+        }
+    }
+}
+void DescriptorSetWriteInfo::growImageInfoCapacity()
+{
+    const VkDescriptorImageInfo *const oldImageInfoStart = &mImageInfos[0];
+    size_t newCapacity                                   = mImageInfos.capacity() << 1;
+    mImageInfos.reserve(newCapacity);
+    // patch mWriteInfo with new BufferInfo pointers
+    for (VkWriteDescriptorSet &set : mWriteInfos)
+    {
+        if (set.pImageInfo)
+        {
+            size_t index   = set.pImageInfo - oldImageInfoStart;
+            set.pImageInfo = &mImageInfos[index];
+        }
+    }
+}
+
 // CommandBatch implementation.
 CommandBatch::CommandBatch() = default;
 
@@ -614,6 +673,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
       mHasPrimaryCommands(false),
+      mDescriptorSetWriteInfo(),
       mGpuEventsEnabled(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
@@ -956,17 +1016,19 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
-    if (dirtyBits.none())
-        return angle::Result::Continue;
-
-    // Flush any relevant dirty bits.
-    for (size_t dirtyBit : dirtyBits)
+    if (dirtyBits.any())
     {
-        ASSERT(mGraphicsDirtyBitHandlers[dirtyBit]);
-        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
+        // Flush any relevant dirty bits.
+        for (size_t dirtyBit : dirtyBits)
+        {
+            ASSERT(mGraphicsDirtyBitHandlers[dirtyBit]);
+            ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
+        }
+
+        mGraphicsDirtyBits &= ~dirtyBitMask;
     }
 
-    mGraphicsDirtyBits &= ~dirtyBitMask;
+    mDescriptorSetWriteInfo.flushWritesToDevice(getDevice());
 
     return angle::Result::Continue;
 }
@@ -1177,6 +1239,8 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context,
     }
 
     mComputeDirtyBits.reset();
+
+    mDescriptorSetWriteInfo.flushWritesToDevice(getDevice());
 
     return angle::Result::Continue;
 }
@@ -3530,23 +3594,21 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
         &driverUniforms->descriptorPoolBinding, &driverUniforms->descriptorSet));
 
     // Update the driver uniform descriptor set.
-    VkDescriptorBufferInfo bufferInfo = {};
-    bufferInfo.buffer                 = buffer;
-    bufferInfo.offset                 = 0;
-    bufferInfo.range                  = driverUniformsSize;
+    VkDescriptorBufferInfo &bufferInfo = *mDescriptorSetWriteInfo.getBufferInfo();
+    bufferInfo.buffer                  = buffer;
+    bufferInfo.offset                  = 0;
+    bufferInfo.range                   = driverUniformsSize;
 
-    VkWriteDescriptorSet writeInfo = {};
-    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet               = driverUniforms->descriptorSet;
-    writeInfo.dstBinding           = 0;
-    writeInfo.dstArrayElement      = 0;
-    writeInfo.descriptorCount      = 1;
-    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-    writeInfo.pImageInfo           = nullptr;
-    writeInfo.pTexelBufferView     = nullptr;
-    writeInfo.pBufferInfo          = &bufferInfo;
-
-    vkUpdateDescriptorSets(getDevice(), 1, &writeInfo, 0, nullptr);
+    VkWriteDescriptorSet &writeInfo = *mDescriptorSetWriteInfo.getWriteInfo();
+    writeInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet                = driverUniforms->descriptorSet;
+    writeInfo.dstBinding            = 0;
+    writeInfo.dstArrayElement       = 0;
+    writeInfo.descriptorCount       = 1;
+    writeInfo.descriptorType        = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+    writeInfo.pImageInfo            = nullptr;
+    writeInfo.pTexelBufferView      = nullptr;
+    writeInfo.pBufferInfo           = &bufferInfo;
 
     return angle::Result::Continue;
 }
