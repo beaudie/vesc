@@ -1301,6 +1301,8 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     BlitResolveShaderParams shaderParams;
     if (isResolve)
     {
+        // TODO(ianelliott): Address rotation resolve cases.
+        // https://issuetracker.google.com/issues/158337857
         CalculateResolveOffset(params, shaderParams.offset.resolve);
     }
     else
@@ -1316,8 +1318,31 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     shaderParams.invSamples      = 1.0f / shaderParams.samples;
     shaderParams.outputMask =
         static_cast<uint32_t>(framebuffer->getState().getEnabledDrawBuffers().to_ulong());
-    shaderParams.flipX = params.flipX;
-    shaderParams.flipY = params.flipY;
+    shaderParams.flipX    = params.flipX;
+    shaderParams.flipY    = params.flipY;
+    shaderParams.rotateXY = 0;
+
+    // Adjust some shaderParams for rotation
+    switch (params.rotation)
+    {
+        case SurfaceRotation::Identity:
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            shaderParams.rotateXY = 1;
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            shaderParams.offset.blit[0] += params.blitArea.width * params.stretch[0];
+            shaderParams.offset.blit[1] += params.blitArea.height * params.stretch[1];
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            shaderParams.offset.blit[0] += params.blitArea.width * params.stretch[0];
+            shaderParams.offset.blit[1] += params.blitArea.height * params.stretch[1];
+            shaderParams.rotateXY = 1;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
 
     bool blitColor   = srcColorView != nullptr;
     bool blitDepth   = srcDepthView != nullptr;
@@ -1379,6 +1404,11 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     VkViewport viewport;
     gl::Rectangle completeRenderArea = framebuffer->getCompleteRenderArea();
+    if (contextVk->isRotatedAspectRatioForDrawFBO())
+    {
+        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
+        std::swap(completeRenderArea.width, completeRenderArea.height);
+    }
     gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, false, completeRenderArea.height, &viewport);
     pipelineDesc.setViewport(viewport);
 
