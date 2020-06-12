@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b2849f17_1e2c8e62",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d603b18d_eb9ba813",
+      "range": {
+        "startLine": 129,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 11
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab7ec499_3147ec81",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "978607e1_2aaef971",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3619,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab7ec499_3147ec81",
+      "range": {
+        "startLine": 3619,
+        "startChar": 32,
+        "endLine": 3619,
+        "endChar": 79
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "506f6f4c_35fc9ad0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -62,6 +110,24 @@
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7e60d9a_64591efd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3630,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "506f6f4c_35fc9ad0",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "3320b06c_9db749ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "That\u0027s how I know there are immutable samplers to process, that way I have one value I need to pass around that acts as both a flag and source of truth.\nThe first time updatePipelineLayout is called as part of LinkProgram, ContextVk::getActiveTextures() is not valid, we don\u0027t know it\u0027s good until we get a draw call.",
+      "parentUuid": "6e15edce_ed62edb9",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc3ca747_1ab48f15",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 22
@@ -93,6 +177,24 @@
       "writtenOn": "2020-06-12T07:56:16Z",
       "side": 1,
       "message": "Since ContextVk::getActiveTextures() can always be called, this can be a const ref also, removing any need to check if the pointer is valid.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53bfe32a_d5749ce5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "ContextVK is not available here unless I add it to the arg list, or am I missing something?\nI\u0027m using the pointer as a flag as well so can\u0027t be a reference.",
+      "parentUuid": "fc3ca747_1ab48f15",
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "933edb69_e0203400",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0959b2d3_8f7c720d",
+      "range": {
+        "startLine": 522,
+        "startChar": 0,
+        "endLine": 523,
+        "endChar": 55
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8bffd94b_f769b102",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 22
@@ -136,6 +262,24 @@
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dcd16fe_d957a771",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bffd94b_f769b102",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -185,6 +329,30 @@
     },
     {
       "key": {
+        "uuid": "8393d632_44ce305d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2231,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "I\u0027m not returning a pointer here, I\u0027m returning a VkSamplerYcbcrConversion handle. A non-dispatchable Vulkan object. There are no guarantees to the value of a non-dispatchable handle so the only way to know if it\u0027s valid or not is by having the return value indicate that.",
+      "parentUuid": "664b6025_55754f9e",
+      "range": {
+        "startLine": 2229,
+        "startChar": 0,
+        "endLine": 2231,
+        "endChar": 44
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3645e089_1386f938",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 22
@@ -208,6 +376,30 @@
     },
     {
       "key": {
+        "uuid": "10c95ad4_b1ee55ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2243,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3645e089_1386f938",
+      "range": {
+        "startLine": 2243,
+        "startChar": 0,
+        "endLine": 2243,
+        "endChar": 13
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a18cda9_99d0e85b",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 22
@@ -225,6 +417,24 @@
     },
     {
       "key": {
+        "uuid": "cb52e68f_3b92e440",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a18cda9_99d0e85b",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a6ce3db_d03a7686",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 22
@@ -236,6 +446,24 @@
       "writtenOn": "2020-06-12T07:56:16Z",
       "side": 1,
       "message": "Since Android is likely where we are the most memory constrained, it\u0027s #ifdef\u0027ing is probably not worth the extra complexity.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afa2256d_0346fade",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "I expect that to be the case, but thought it worth asking since adding the externalFormat increases the size of this packed struct considerably.",
+      "parentUuid": "5a6ce3db_d03a7686",
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -265,6 +493,30 @@
     },
     {
       "key": {
+        "uuid": "56636e2b_fe829b67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ef4ab53_3450d68c",
+      "range": {
+        "startLine": 692,
+        "startChar": 0,
+        "endLine": 693,
+        "endChar": 18
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "150d66d3_078964e9",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 22
@@ -288,6 +540,30 @@
     },
     {
       "key": {
+        "uuid": "3539a2c2_9393721c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "150d66d3_078964e9",
+      "range": {
+        "startLine": 697,
+        "startChar": 3,
+        "endLine": 697,
+        "endChar": 13
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ded2fa32_35bbac7b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 22
@@ -299,6 +575,24 @@
       "writtenOn": "2020-06-12T07:56:16Z",
       "side": 1,
       "message": "Need to mark the TODO with a bug number if you\u0027re planning to defer this work.",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1b59bf5_2572b178",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-12T15:39:30Z",
+      "side": 1,
+      "message": "Plan to fix this before landing.",
+      "parentUuid": "ded2fa32_35bbac7b",
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
