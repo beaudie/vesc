@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa84113d_49ab283c",
+        "filename": "samples/simple_texture_2d/SimpleTexture2D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-12T17:26:18Z",
+      "side": 1,
+      "message": "can make this 1000 if 100 is too frequent.",
+      "range": {
+        "startLine": 118,
+        "startChar": 25,
+        "endLine": 118,
+        "endChar": 29
+      },
+      "revId": "c7d3afdf3694726b85b0619f517c7d5b9994c647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
