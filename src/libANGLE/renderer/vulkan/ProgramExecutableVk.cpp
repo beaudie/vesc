@@ -431,7 +431,8 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramState &prog
     {
         const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
 
-        uint32_t uniformIndex = programState.getUniformIndexFromImageIndex(imageIndex);
+        uint32_t uniformIndex =
+            programState.getExecutable().getUniformIndexFromImageIndex(imageIndex);
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
 
         // The front-end always binds array image units sequentially.
@@ -1085,7 +1086,8 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(const gl::ProgramSt
     for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
     {
         const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
-        uint32_t uniformIndex = programState.getUniformIndexFromImageIndex(imageIndex);
+        uint32_t uniformIndex =
+            programState.getExecutable().getUniformIndexFromImageIndex(imageIndex);
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
 
         if (!imageUniform.isActive(shaderType))
