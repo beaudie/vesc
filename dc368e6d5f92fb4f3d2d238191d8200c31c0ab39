@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "25755812_37a4d549",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T16:10:00Z",
+      "side": 1,
+      "message": "@Cody",
+      "parentUuid": "710dcadc_083929b8",
+      "range": {
+        "startLine": 1835,
+        "startChar": 0,
+        "endLine": 1837,
+        "endChar": 0
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c2c66a2_38e77b01",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T16:10:00Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 1840,
+        "startChar": 0,
+        "endLine": 1841,
+        "endChar": 91
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b517bba_ae3ee91d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 4
@@ -45,6 +92,30 @@
       "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d7b546_b4907640",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-12T16:10:00Z",
+      "side": 1,
+      "message": "I originally called it NoSwizzleFetchView, but that turned out to be imprecise. There could actually be swizzle in these, for example to support LUMA and emulated formats. It\u0027s just the application\u0027s swizzle that\u0027s not applied. See ref.",
+      "parentUuid": "0b517bba_ae3ee91d",
+      "range": {
+        "startLine": 1520,
+        "startChar": 21,
+        "endLine": 1520,
+        "endChar": 43
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
