@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "eaff3090_d7335944",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T21:46:51Z",
+      "side": 1,
+      "message": "It would be nice to reserve the max space if it\u0027s not too unreasonable.\n\nOne thing to take into account is the number of shader stages per pipeline also, since we duplicate descriptor sets for each stage to simplify the PPO implementation.",
+      "parentUuid": "9a9a9018_72b91114",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ef84433_b113eb5d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -72,6 +90,80 @@
     },
     {
       "key": {
+        "uuid": "a1fe0250_e9bbc7ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T21:46:51Z",
+      "side": 1,
+      "message": "Can you add some ASSERT()s here also?\n\n    ASSERT(mBufferInfos.empty());\n    ASSERT(mImageInfos.empty());",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87ffa967_e7b9f821",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T21:46:51Z",
+      "side": 1,
+      "message": "The pointers from these get*Info() functions are always being dereferenced immediately, so they should just return a reference instead.",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a52ec8ef_e9a5260b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T21:46:51Z",
+      "side": 1,
+      "message": "The \"\u003d\" shouldn\u0027t be necessary in these conditionals, since the capacity is already enough to hold the new element.",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 40
+      },
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0c738e1_4f0b054b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T21:46:51Z",
+      "side": 1,
+      "message": "Looks like there\u0027s a bug here if growBufferInfoCapacity() didn\u0027t reserve enough space for this resize().",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25f3f035_6677d276",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
@@ -89,6 +181,23 @@
         "endLine": 74,
         "endChar": 21
       },
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "584ea575_dd8cbc50",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-12T21:46:51Z",
+      "side": 1,
+      "message": "If the vector is reallocated, this will cause any previous pointers returned by this function to become invalid.   Based on the work being done in the previous functions, it looks like this should behave similarly (either those don\u0027t need to be manually grown, or this one does too).",
       "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
