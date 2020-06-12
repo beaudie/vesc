@@ -32,6 +32,58 @@ class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
 
+class DescriptorSetUpdates final : angle::NonCopyable
+{
+  public:
+    DescriptorSetUpdates();
+    ~DescriptorSetUpdates();
+
+    void flushWritesToDevice(const VkDevice &device);
+
+    VkDescriptorBufferInfo &allocBufferInfo() { return allocBufferInfos(1); }
+
+    VkDescriptorBufferInfo &allocBufferInfos(size_t count)
+    {
+        size_t oldSize = mBufferInfos.size();
+        size_t newSize = oldSize + count;
+        if (newSize > mBufferInfos.capacity())
+        {
+            // If we have reached capacity, grow the storage and patch the descriptor set with new
+            // buffer info pointer
+            growBufferInfoCapacity(newSize);
+        }
+        mBufferInfos.resize(newSize);
+        return mBufferInfos[oldSize];
+    }
+
+    VkDescriptorImageInfo &allocImageInfo()
+    {
+        size_t newSize = mImageInfos.size() + 1;
+        if (newSize > mImageInfos.capacity())
+        {
+            // If we have reached capacity, grow the storage and patch the descriptor set with new
+            // image info pointer
+            growImageInfoCapacity(newSize);
+        }
+        mImageInfos.emplace_back();
+        return mImageInfos.back();
+    }
+
+    VkWriteDescriptorSet &allocWriteInfo()
+    {
+        mWriteInfos.emplace_back();
+        return mWriteInfos.back();
+    }
+
+  private:
+    void growBufferInfoCapacity(size_t newSize);
+    void growImageInfoCapacity(size_t newSize);
+
+    std::vector<VkDescriptorBufferInfo> mBufferInfos;
+    std::vector<VkDescriptorImageInfo> mImageInfos;
+    std::vector<VkWriteDescriptorSet> mWriteInfos;
+};
+
 struct CommandBatch final : angle::NonCopyable
 {
     CommandBatch();
@@ -523,6 +575,8 @@ class ContextVk : public ContextImpl, public vk::Context
     // When worker thread completes, it releases command buffers back to context queue
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
 
+    ANGLE_INLINE DescriptorSetUpdates &getDescriptorSetUpdates() { return mDescriptorSetUpdates; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -604,6 +658,15 @@ class ContextVk : public ContextImpl, public vk::Context
         double cpuTimestampS;
     };
 
+    angle::Result setupDrawAndDescriptorSetUpdates(const gl::Context *context,
+                                                   gl::PrimitiveMode mode,
+                                                   GLint firstVertexOrInvalid,
+                                                   GLsizei vertexOrIndexCount,
+                                                   GLsizei instanceCount,
+                                                   gl::DrawElementsType indexTypeOrInvalid,
+                                                   const void *indices,
+                                                   DirtyBits dirtyBitMask,
+                                                   vk::CommandBuffer **commandBufferOut);
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
                             GLint firstVertexOrInvalid,
@@ -613,6 +676,7 @@ class ContextVk : public ContextImpl, public vk::Context
                             const void *indices,
                             DirtyBits dirtyBitMask,
                             vk::CommandBuffer **commandBufferOut);
+
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLsizei indexCount,
@@ -657,6 +721,8 @@ class ContextVk : public ContextImpl, public vk::Context
                                     const void *indices,
                                     vk::CommandBuffer **commandBufferOut,
                                     uint32_t *numIndicesOut);
+    angle::Result setupDispatchAndDescriptorSetUpdates(const gl::Context *context,
+                                                       vk::CommandBuffer **commandBufferOut);
     angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
 
     gl::Rectangle getCorrectedViewport(const gl::Rectangle &viewport) const;
@@ -934,6 +1000,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // Transform feedback buffers.
     std::unordered_set<const vk::BufferHelper *> mCurrentTransformFeedbackBuffers;
+
+    DescriptorSetUpdates mDescriptorSetUpdates;
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
