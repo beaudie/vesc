@@ -1683,6 +1683,11 @@ void Program::updateLinkedShaderStages()
             mState.mExecutable->setLinkedShaderStages(shader->getType());
         }
     }
+
+    if (mState.mExecutable->hasLinkedShaderStage(ShaderType::Compute))
+    {
+        mState.mExecutable->setIsCompute(true);
+    }
 }
 
 void ProgramState::updateTransformFeedbackStrides()
