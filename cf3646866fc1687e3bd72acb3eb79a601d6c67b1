@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35e3b65b_0d9b5beb",
+        "filename": "doc/AddingExtensions.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-12T15:12:19Z",
+      "side": 1,
+      "message": "Nice, thanks!",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6dc0e220_c1f1bf18",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-12T15:12:19Z",
+      "side": 1,
+      "message": "Can you add this to a SystemInfo_macos.h file that\u0027s included by SystemInfo_macos.mm?",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71a8fd34_80267d3a",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-12T15:12:19Z",
+      "side": 1,
+      "message": "Can you add some link to this code so we can track down potential changes?",
+      "revId": "cf3646866fc1687e3bd72acb3eb79a601d6c67b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
