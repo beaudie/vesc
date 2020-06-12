@@ -31,6 +31,39 @@ namespace rx
 class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
+class ContextVk;
+
+class DescriptorSetUpdates final : angle::NonCopyable
+{
+  public:
+    DescriptorSetUpdates(ContextVk *contextVk,
+                         std::vector<VkDescriptorBufferInfo> &bufferInfos,
+                         std::vector<VkDescriptorImageInfo> &imageInfos,
+                         std::vector<VkWriteDescriptorSet> &writeInfos);
+    ~DescriptorSetUpdates();
+
+    VkDescriptorBufferInfo &allocBufferInfo() { return allocBufferInfos(1); }
+    VkDescriptorBufferInfo &allocBufferInfos(size_t count);
+    VkDescriptorImageInfo &allocImageInfo();
+
+    VkWriteDescriptorSet &allocWriteInfo()
+    {
+        mWriteInfos.emplace_back();
+        return mWriteInfos.back();
+    }
+
+  private:
+    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
+    T &allocInfos(std::vector<T> &mInfos, size_t count);
+
+    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
+    void growCapacity(std::vector<T> &mInfos, size_t newSize);
+
+    ContextVk *mContextVk;
+    std::vector<VkDescriptorBufferInfo> &mBufferInfos;
+    std::vector<VkDescriptorImageInfo> &mImageInfos;
+    std::vector<VkWriteDescriptorSet> &mWriteInfos;
+};
 
 struct CommandBatch final : angle::NonCopyable
 {
@@ -523,6 +556,8 @@ class ContextVk : public ContextImpl, public vk::Context
     // When worker thread completes, it releases command buffers back to context queue
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
 
+    ANGLE_INLINE DescriptorSetUpdates &getDescriptorSetUpdates() { return *mDescriptorSetUpdates; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -613,6 +648,7 @@ class ContextVk : public ContextImpl, public vk::Context
                             const void *indices,
                             DirtyBits dirtyBitMask,
                             vk::CommandBuffer **commandBufferOut);
+
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLsizei indexCount,
@@ -975,6 +1011,13 @@ class ContextVk : public ContextImpl, public vk::Context
     egl::ContextPriority mContextPriority;
 
     const vk::BufferHelper *mCurrentIndirectBuffer;
+
+    // Storage for vkUpdateDescriptorSets
+    std::vector<VkDescriptorBufferInfo> mBufferInfos;
+    std::vector<VkDescriptorImageInfo> mImageInfos;
+    std::vector<VkWriteDescriptorSet> mWriteInfos;
+    DescriptorSetUpdates *mDescriptorSetUpdates;
+    friend class DescriptorSetUpdates;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };
