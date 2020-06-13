@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1d83eaf1_5c49da6f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "Yea, that is my concern as well. for buffers, you could end up with a few KBs. For 99.9% of apps most of entry are wasted. The calculation of max is a bit tricky as well, so I think rely on grow seems both efficient and safe. I just locally forced to start with 1 entry so that grow gets aggressively tested.",
+      "parentUuid": "eaff3090_d7335944",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ef84433_b113eb5d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -90,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "45277e50_aa2f04b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f57d9697_45e62087",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1fe0250_e9bbc7ac",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -104,6 +140,24 @@
       "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe3b9ef9_4c5b071c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1fe0250_e9bbc7ac",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -124,6 +178,24 @@
     },
     {
       "key": {
+        "uuid": "13dcd5ab_e6345611",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87ffa967_e7b9f821",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a52ec8ef_e9a5260b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
@@ -135,6 +207,30 @@
       "writtenOn": "2020-06-12T21:46:51Z",
       "side": 1,
       "message": "The \"\u003d\" shouldn\u0027t be necessary in these conditionals, since the capacity is already enough to hold the new element.",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 40
+      },
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c40b1d35_914b3ac3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "a52ec8ef_e9a5260b",
       "range": {
         "startLine": 45,
         "startChar": 39,
@@ -164,6 +260,24 @@
     },
     {
       "key": {
+        "uuid": "0e4f8988_c95c3d15",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "You rock!",
+      "parentUuid": "c0c738e1_4f0b054b",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25f3f035_6677d276",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
@@ -187,6 +301,30 @@
     },
     {
       "key": {
+        "uuid": "c2a9f909_f9841bf4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25f3f035_6677d276",
+      "range": {
+        "startLine": 74,
+        "startChar": 15,
+        "endLine": 74,
+        "endChar": 21
+      },
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "584ea575_dd8cbc50",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
@@ -198,6 +336,24 @@
       "writtenOn": "2020-06-12T21:46:51Z",
       "side": 1,
       "message": "If the vector is reallocated, this will cause any previous pointers returned by this function to become invalid.   Based on the work being done in the previous functions, it looks like this should behave similarly (either those don\u0027t need to be manually grown, or this one does too).",
+      "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdf9369f_e69e1b19",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-13T16:37:56Z",
+      "side": 1,
+      "message": "The other two needs to patch because mWriteInfo has pointers to them. No one points to mWriteInfos, so there is no patch needed, thus no need to manually grow (manual grow was needed in the mBufferInfos/mImageInfos so that we can do patch).",
+      "parentUuid": "584ea575_dd8cbc50",
       "revId": "e97614aca502cf4a40c63465ebb8c26c1bf16318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
