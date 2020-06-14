@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eced8d83_69e13a30",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-14T09:37:24Z",
+      "side": 1,
+      "message": "Reserve the sum of the two?",
+      "range": {
+        "startLine": 306,
+        "startChar": 16,
+        "endLine": 306,
+        "endChar": 23
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b8348eb_6d8650ec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-14T09:37:24Z",
+      "side": 1,
+      "message": "Can use a templated helper to avoid the code duplication.\n\n(in case you didn\u0027t know: https://stackoverflow.com/q/6880832)",
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7231863_84df1884",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-14T09:37:24Z",
+      "side": 1,
+      "message": "Could just call `getBufferInfos(1)`, there shouldn\u0027t be any discernible performance difference.",
+      "range": {
+        "startLine": 43,
+        "startChar": 28,
+        "endLine": 43,
+        "endChar": 41
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e13ce226_b9efbde1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-14T09:37:24Z",
+      "side": 1,
+      "message": "Add an inline helper to avoid duplication",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cee4b5c_975f46ee",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-14T09:37:24Z",
+      "side": 1,
+      "message": "nit: I\u0027d call these newBufferInfo[s]() and newImageInfo(). From the caller side, `get` sounds like it\u0027s modifying something that\u0027s already there.",
+      "range": {
+        "startLine": 70,
+        "startChar": 27,
+        "endLine": 70,
+        "endChar": 39
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e66542c5_2f68081d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-14T09:37:24Z",
+      "side": 1,
+      "message": "nit/personal preference/no big deal: VkWriteDescriptorSet is not a WriteInfo, so better naming IMO is:\n\n- DescriptorSetWriteInfo -\u003e DescriptorSetUpdates\n- DescriptorSetWriteInfo::mWriteInfos -\u003e DescriptorSetWriteInfo::mUpdates\n- DescriptorSetWriteInfo::getWriteInfo -\u003e DescriptorSetWriteInfo::getUpdate (combined with the other comment, DescriptorSetWriteInfo::newUpdate)\n- mDescriptorSetWriteInfo -\u003e mDescriptorSetUpdates\n- getDescriptorSetsWriteInfo -\u003e getDescriptorSetUpdates\n- flushWritesToDevice -\u003e just flush or flushUpdates",
+      "range": {
+        "startLine": 602,
+        "startChar": 15,
+        "endLine": 602,
+        "endChar": 38
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
