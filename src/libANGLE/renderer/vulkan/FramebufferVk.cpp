@@ -88,6 +88,45 @@ bool AreSrcAndDstDepthStencilChannelsBlitCompatible(RenderTargetVk *srcRenderTar
     return (dstFormat.depthBits > 0 || srcFormat.depthBits == 0) &&
            (dstFormat.stencilBits > 0 || srcFormat.stencilBits == 0);
 }
+
+void AdjustBlitAreaForPreRotation(SurfaceRotation framebufferAngle,
+                                  const gl::Rectangle &blitAreaIn,
+                                  SurfaceRotation *blitAngle,
+                                  gl::Rectangle *blitArea,
+                                  bool *blitFlipY,
+                                  gl::Rectangle *framebufferDimensions)
+{
+    switch (framebufferAngle)
+    {
+        case SurfaceRotation::Identity:
+            // No adjustments needed
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            *blitAngle  = SurfaceRotation::Rotated90Degrees;
+            blitArea->x = blitAreaIn.y;
+            blitArea->y = blitAreaIn.x;
+            *blitFlipY  = false;
+            std::swap(blitArea->width, blitArea->height);
+            std::swap(framebufferDimensions->width, framebufferDimensions->height);
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            *blitAngle  = SurfaceRotation::Rotated180Degrees;
+            blitArea->x = framebufferDimensions->width - blitAreaIn.x - blitAreaIn.width;
+            blitArea->y = framebufferDimensions->height - blitAreaIn.y - blitAreaIn.height;
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            *blitAngle  = SurfaceRotation::Rotated270Degrees;
+            blitArea->x = framebufferDimensions->height - blitAreaIn.y - blitAreaIn.height;
+            blitArea->y = framebufferDimensions->width - blitAreaIn.x - blitAreaIn.width;
+            *blitFlipY  = false;
+            std::swap(blitArea->width, blitArea->height);
+            std::swap(framebufferDimensions->width, framebufferDimensions->height);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
 }  // anonymous namespace
 
 // static
@@ -646,9 +685,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     const bool isResolve =
         srcFramebuffer->getCachedSamples(context, gl::AttachmentSampleType::Resource) > 1;
 
-    FramebufferVk *srcFramebufferVk    = vk::GetImpl(srcFramebuffer);
-    const bool srcFramebufferFlippedY  = contextVk->isViewportFlipEnabledForReadFBO();
-    const bool destFramebufferFlippedY = contextVk->isViewportFlipEnabledForDrawFBO();
+    FramebufferVk *srcFramebufferVk = vk::GetImpl(srcFramebuffer);
+    bool srcFramebufferFlippedY     = contextVk->isViewportFlipEnabledForReadFBO();
+    bool destFramebufferFlippedY    = contextVk->isViewportFlipEnabledForDrawFBO();
 
     gl::Rectangle sourceArea = sourceAreaIn;
     gl::Rectangle destArea   = destAreaIn;
@@ -659,8 +698,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
            (sourceArea.x == destArea.x && sourceArea.y == destArea.y &&
             sourceArea.width == destArea.width && sourceArea.height == destArea.height));
 
-    const gl::Rectangle srcFramebufferDimensions =
-        srcFramebufferVk->mState.getDimensions().toRect();
+    gl::Rectangle srcFramebufferDimensions  = srcFramebufferVk->mState.getDimensions().toRect();
+    gl::Rectangle destFramebufferDimensions = mState.getDimensions().toRect();
 
     // If the destination is flipped in either direction, we will flip the source instead so that
     // the destination area is always unflipped.
@@ -672,6 +711,24 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         std::abs(sourceArea.width / static_cast<float>(destArea.width)),
         std::abs(sourceArea.height / static_cast<float>(destArea.height)),
     };
+
+    // Potentially make adjustments for pre-rotatation.  To handle various cases (e.g. clipping)
+    // and to not interrupt the normal flow of the code, different adjustments are made in
+    // different parts of the code.  These first adjustments are primarily for the blit
+    // sourceArea/destArea and whether or not to flip the y-axis.  Here, it matters whether it is
+    // the source or destination that is rotated.  Note is made for later adjustments where only
+    // the angle of rotation matters (not source vs. destination).
+    SurfaceRotation srcFramebufferRotation  = contextVk->getRotationReadFramebuffer();
+    SurfaceRotation destFramebufferRotation = contextVk->getRotationDrawFramebuffer();
+    SurfaceRotation rotation                = SurfaceRotation::Identity;
+    // Both the source and destination cannot be rotated (which would indicate both are the default
+    // framebuffer (i.e. swapchain image).
+    ASSERT((srcFramebufferRotation == SurfaceRotation::Identity) ||
+           (destFramebufferRotation == SurfaceRotation::Identity));
+    AdjustBlitAreaForPreRotation(srcFramebufferRotation, sourceAreaIn, &rotation, &sourceArea,
+                                 &srcFramebufferFlippedY, &srcFramebufferDimensions);
+    AdjustBlitAreaForPreRotation(destFramebufferRotation, destAreaIn, &rotation, &destArea,
+                                 &destFramebufferFlippedY, &destFramebufferDimensions);
 
     // First, clip the source area to framebuffer.  That requires transforming the dest area to
     // match the clipped source.
@@ -735,11 +792,11 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     }
     if (destFramebufferFlippedY)
     {
-        destArea.y      = mState.getDimensions().height - destArea.y;
+        destArea.y      = destFramebufferDimensions.height - destArea.y;
         destArea.height = -destArea.height;
 
         srcClippedDestArea.y =
-            mState.getDimensions().height - srcClippedDestArea.y - srcClippedDestArea.height;
+            destFramebufferDimensions.height - srcClippedDestArea.y - srcClippedDestArea.height;
     }
 
     const bool flipX = sourceArea.isReversedX() != destArea.isReversedX();
@@ -782,6 +839,32 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     params.linear        = filter == GL_LINEAR;
     params.flipX         = flipX;
     params.flipY         = flipY;
+    params.rotation      = rotation;
+
+    // Potentially make adjustments for pre-rotatation.  Depending on the angle some of the params
+    // need to be swapped and/or changes made to which axis are flipped.
+    switch (rotation)
+    {
+        case SurfaceRotation::Identity:
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            std::swap(params.stretch[0], params.stretch[1]);
+            std::swap(params.srcOffset[0], params.srcOffset[1]);
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            params.flipX = true;
+            params.flipY = false;
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            std::swap(params.stretch[0], params.stretch[1]);
+            std::swap(params.srcOffset[0], params.srcOffset[1]);
+            params.flipX = true;
+            params.flipY = true;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
 
     if (blitColorBuffer)
     {
@@ -796,10 +879,13 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // be hard to guarantee the image stretching remains perfect.  That also allows us not to
         // have to transform back the dest clipping to source.
         //
+        // Non-identity pre-rotation cases do not use Vulkan's builtin blit.
+        //
         // For simplicity, we either blit all render targets with a Vulkan command, or none.
         bool canBlitWithCommand = !isResolve && noClip &&
                                   (noFlip || !disableFlippingBlitWithCommand) &&
-                                  HasSrcBlitFeature(renderer, readRenderTarget);
+                                  HasSrcBlitFeature(renderer, readRenderTarget) &&
+                                  (rotation == SurfaceRotation::Identity);
         bool areChannelsBlitCompatible = true;
         for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
         {
@@ -821,8 +907,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                                           flipY));
             }
         }
-        // If we're not flipping, use Vulkan's builtin resolve.
-        else if (isResolve && !flipX && !flipY && areChannelsBlitCompatible)
+        // If we're not flipping or rotating, use Vulkan's builtin resolve.
+        else if (isResolve && !flipX && !flipY && areChannelsBlitCompatible &&
+                 (rotation == SurfaceRotation::Identity))
         {
             ANGLE_TRY(resolveColorWithCommand(contextVk, params, &readRenderTarget->getImage()));
         }
@@ -846,11 +933,12 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // Multisampled images are not allowed to have mips.
         ASSERT(!isResolve || readRenderTarget->getLevelIndex() == 0);
 
-        // Similarly, only blit if there's been no clipping.
+        // Similarly, only blit if there's been no clipping or rotating.
         bool canBlitWithCommand = !isResolve && noClip &&
                                   (noFlip || !disableFlippingBlitWithCommand) &&
                                   HasSrcBlitFeature(renderer, readRenderTarget) &&
-                                  HasDstBlitFeature(renderer, drawRenderTarget);
+                                  HasDstBlitFeature(renderer, drawRenderTarget) &&
+                                  (rotation == SurfaceRotation::Identity);
         bool areChannelsBlitCompatible =
             AreSrcAndDstDepthStencilChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
 
