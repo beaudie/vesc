@@ -18,8 +18,8 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
-#include "libANGLE/renderer/vulkan/vk_google_filtering_precision.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
+#include "vulkan/vk_google_filtering_precision.h"
 
 #include <type_traits>
 
