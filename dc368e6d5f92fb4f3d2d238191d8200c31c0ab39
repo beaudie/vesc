@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3b10ce29_67682183",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-15T16:15:20Z",
+      "side": 1,
+      "message": "FWIW, the comment was partially a carry forward:\n\n -    // TODO: Support non-zero base level for ES 3.0 by passing it to getNativeImageLevel.\n -    // http://anglebug.com/3148\n +    // TODO(cnorthrop): May be missing non-zero base level http://anglebug.com/3948\n\nIt wasn\u0027t clear to me what needed to change, but I didn\u0027t want to lose the comment.",
+      "parentUuid": "94190ce8_6d0d6a6a",
+      "range": {
+        "startLine": 1835,
+        "startChar": 0,
+        "endLine": 1837,
+        "endChar": 0
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c2c66a2_38e77b01",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
