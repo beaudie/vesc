@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81dff8b8_77e1807f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-15T13:34:23Z",
+      "side": 1,
+      "message": "pass in gl::ProgramExecutable\u0026 instead since there are no other uses of programState in this function?",
+      "range": {
+        "startLine": 424,
+        "startChar": 62,
+        "endLine": 424,
+        "endChar": 88
+      },
+      "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a8c8dad_3e5ecdf9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-15T13:34:23Z",
+      "side": 1,
+      "message": "why not executible-\u003egetUniforms() here?",
+      "range": {
+        "startLine": 462,
+        "startChar": 61,
+        "endLine": 462,
+        "endChar": 85
+      },
+      "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9e5e2d_67183684",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-15T13:34:23Z",
+      "side": 1,
+      "message": "executable?",
+      "range": {
+        "startLine": 1063,
+        "startChar": 71,
+        "endLine": 1063,
+        "endChar": 97
+      },
+      "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
