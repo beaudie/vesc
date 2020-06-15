@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c269a436_18dd0f55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-15T20:53:57Z",
+      "side": 1,
+      "message": "Why do it this way?   Doesn\u0027t this do a copy of result into readSwizzle, rather than writing directly into readSwizzle like before, which presumably is slower and costs more memory?",
+      "revId": "c8489cea4d70a46ac6da2bb576444ff13681460f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
