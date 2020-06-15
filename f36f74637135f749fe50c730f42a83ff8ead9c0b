@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "0e957844_72dc613d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-15T20:26:03Z",
+      "side": 1,
+      "message": "This would be purely for consistency. It caught my attention that it was executable.getUniforms 30 lines ago so odd that it\u0027s different here.",
+      "parentUuid": "291f383f_2c908ed2",
+      "range": {
+        "startLine": 462,
+        "startChar": 61,
+        "endLine": 462,
+        "endChar": 85
+      },
+      "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb9e5e2d_67183684",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 4
