@@ -12,7 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "libANGLE/renderer/vulkan/vk_headers.h"
+#ifndef CUSTOM_VK_GOOGLE_SAMPLER_FILTERING_PRECISION_H_
+#define CUSTOM_VK_GOOGLE_SAMPLER_FILTERING_PRECISION_H_
+
+#if ANGLE_SHARED_LIBVULKAN
+#    include "third_party/volk/volk.h"
+#else
+#    include <vulkan/vulkan.h>
+#endif
 
 // THIS FILE SHOULD BE DELETED IF VK_GOOGLE_sampler_filtering_precision IS EVER ADDED TO THE VULKAN
 // HEADERS
@@ -24,7 +31,7 @@
 static constexpr VkStructureType VK_STRUCTURE_TYPE_SAMPLER_FILTERING_PRECISION_GOOGLE =
     static_cast<VkStructureType>(1000264000);
 
-#define VK_GOOGLE_sampler_filtering_precisions 1
+#define VK_GOOGLE_sampler_filtering_precision 1
 #define VK_GOOGLE_SAMPLER_FILTERING_PRECISION_SPEC_VERSION 1
 #define VK_GOOGLE_SAMPLER_FILTERING_PRECISION_EXTENSION_NAME "VK_GOOGLE_sampler_filtering_precision"
 
@@ -50,3 +57,5 @@ typedef struct VkSamplerFilteringPrecisionGOOGLE
     const void *pNext;
     VkSamplerFilteringPrecisionModeGOOGLE samplerFilteringPrecisionMode;
 } VkSamplerFilteringPrecisionGOOGLE;
+
+#endif  // CUSTOM_VK_GOOGLE_SAMPLER_FILTERING_PRECISION_H_
