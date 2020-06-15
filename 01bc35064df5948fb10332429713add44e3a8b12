@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "09f0799d_bd90d6cb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-15T17:14:19Z",
+      "side": 1,
+      "message": "The sum of two means both bufferInof and ImageInfos are been used fully at the same time, which usually not true. \nThese numbers are kind of arbitrary, maybe I should not using the sizeof, just the hard coded number. The sizeof() giving people false sense of this is specific to VkWriteDescriptorSet, but they are not. It just some heuristic based number. How about something like this:\n    mBufferInfos.reserve(8);\n    mImageInfos.reserve(8);\n    mWriteInfos.reserve(8);",
+      "parentUuid": "eced8d83_69e13a30",
+      "range": {
+        "startLine": 306,
+        "startChar": 16,
+        "endLine": 306,
+        "endChar": 23
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b8348eb_6d8650ec",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -111,6 +135,30 @@
     },
     {
       "key": {
+        "uuid": "288a9682_48f7a41e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-15T17:14:19Z",
+      "side": 1,
+      "message": "Good point! Will fix in next update.",
+      "parentUuid": "7cee4b5c_975f46ee",
+      "range": {
+        "startLine": 70,
+        "startChar": 27,
+        "endLine": 70,
+        "endChar": 39
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e66542c5_2f68081d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
@@ -122,6 +170,30 @@
       "writtenOn": "2020-06-14T09:37:24Z",
       "side": 1,
       "message": "nit/personal preference/no big deal: VkWriteDescriptorSet is not a WriteInfo, so better naming IMO is:\n\n- DescriptorSetWriteInfo -\u003e DescriptorSetUpdates\n- DescriptorSetWriteInfo::mWriteInfos -\u003e DescriptorSetWriteInfo::mUpdates\n- DescriptorSetWriteInfo::getWriteInfo -\u003e DescriptorSetWriteInfo::getUpdate (combined with the other comment, DescriptorSetWriteInfo::newUpdate)\n- mDescriptorSetWriteInfo -\u003e mDescriptorSetUpdates\n- getDescriptorSetsWriteInfo -\u003e getDescriptorSetUpdates\n- flushWritesToDevice -\u003e just flush or flushUpdates",
+      "range": {
+        "startLine": 602,
+        "startChar": 15,
+        "endLine": 602,
+        "endChar": 38
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "160e8cc4_19a08915",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-15T17:14:19Z",
+      "side": 1,
+      "message": "I mostly just keeping the existing name. If anyone has other ideas/opinions on the name, please voice up.\n\nGiven vkUpdateDescriptorSets has two parts: VkWriteDescriptorSet and VkCopyDescriptorSet, and we are only using the write, so has \"Write\" in the name seems appropriate to me, IMO.",
+      "parentUuid": "e66542c5_2f68081d",
       "range": {
         "startLine": 602,
         "startChar": 15,
