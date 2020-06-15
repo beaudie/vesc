@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "031a9059_b1b39a1a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-15T17:14:23Z",
+      "side": 1,
+      "message": "Done\n\nGood idea, thanks!  Elsewhere I collapsed other duplicate switch statements into one.  This let me do the same here.",
+      "parentUuid": "071c0e08_cc8bbb61",
+      "range": {
+        "startLine": 685,
+        "startChar": 12,
+        "endLine": 685,
+        "endChar": 34
+      },
+      "revId": "3eeb96d5139d38b901f07eb0568d457c65215820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "374cfbe5_5e9f5b27",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "84e95a79_4063e2cd",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-15T17:14:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "374cfbe5_5e9f5b27",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 1
+      },
+      "revId": "3eeb96d5139d38b901f07eb0568d457c65215820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b943d61_6d4d13e3",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-15T15:13:10Z",
       "side": 1,
       "message": "because you make so many checks in a single test this test will be very difficult to debug if there\u0027s ever a failure. Can you split the large test into several smaller tests?",
+      "range": {
+        "startLine": 1394,
+        "startChar": 4,
+        "endLine": 1394,
+        "endChar": 25
+      },
+      "revId": "3eeb96d5139d38b901f07eb0568d457c65215820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3731d5f_52cc0ce8",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-15T17:14:23Z",
+      "side": 1,
+      "message": "Sure!  Makes sense (as one who\u0027s been debugging failures with the large test:-).\n\nI\u0027ll do this with the next patch set.",
+      "parentUuid": "9b943d61_6d4d13e3",
       "range": {
         "startLine": 1394,
         "startChar": 4,
