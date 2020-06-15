@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee4064e2_e29a4952",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-15T13:38:31Z",
+      "side": 1,
+      "message": "nit: Don\u0027t really need the if.\nCould be:\nbool isCompute \u003d mState.mExecutable-\u003ehasLinkedShaderStage(ShaderType::Compute);\nmState.mExecutable-\u003esetIsCompute(isCompute);",
+      "revId": "d15444a1334777c115eac111c009a2ee66938057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
