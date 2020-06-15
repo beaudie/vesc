@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "bb9a29bc_ef7b5581",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-15T17:53:10Z",
+      "side": 1,
+      "message": "I think getNativeImageLevel/Layer is taking the level/layer of a bound EGLImage into account. I\u0027ll double-check, but I think initializing read views shouldn\u0027t care about the GL base level, because the view is always created from VK level 0.\n\nI\u0027ll remove the TODO.",
+      "parentUuid": "3b10ce29_67682183",
+      "range": {
+        "startLine": 1835,
+        "startChar": 0,
+        "endLine": 1837,
+        "endChar": 0
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c2c66a2_38e77b01",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
