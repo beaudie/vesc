@@ -22,6 +22,30 @@
       "revId": "df75b0e7ce2ee2b8cd93c470cc44a298e71258ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1df969a_30bd399f",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2330,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-15T15:19:33Z",
+      "side": 1,
+      "message": "I see your response, my bad. I\u0027m fine with code duplication. This test has nothing to do with eglImage. You can add helper functions in some util files if they\u0027re really helpful. You can also omit all the state unbinding commands as they\u0027re mostly redundant.",
+      "parentUuid": "c96aa06f_22ef6791",
+      "range": {
+        "startLine": 2330,
+        "startChar": 6,
+        "endLine": 2330,
+        "endChar": 31
+      },
+      "revId": "df75b0e7ce2ee2b8cd93c470cc44a298e71258ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
