@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf066ffe_486d1116",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-15T19:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81dff8b8_77e1807f",
+      "range": {
+        "startLine": 424,
+        "startChar": 62,
+        "endLine": 424,
+        "endChar": 88
+      },
+      "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a8c8dad_3e5ecdf9",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-15T13:34:23Z",
       "side": 1,
       "message": "why not executible-\u003egetUniforms() here?",
+      "range": {
+        "startLine": 462,
+        "startChar": 61,
+        "endLine": 462,
+        "endChar": 85
+      },
+      "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "291f383f_2c908ed2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-15T19:11:06Z",
+      "side": 1,
+      "message": "ProgramState::getUniforms() does that (along with most of the other get functions):\n\n    const std::vector\u003cLinkedUniform\u003e \u0026getUniforms() const { return mExecutable-\u003egetUniforms(); }\n\nI wasn\u0027t planning on refactoring all of the usages of these functions to query the executable directly, but I can open a bug to do that work if you think it would be better.   I would expect these all to be inlined anyway, so I don\u0027t think there\u0027s any performance differences either way.",
+      "parentUuid": "9a8c8dad_3e5ecdf9",
       "range": {
         "startLine": 462,
         "startChar": 61,
@@ -68,6 +116,30 @@
       "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a0a8c11_84afe4b2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-15T19:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb9e5e2d_67183684",
+      "range": {
+        "startLine": 1063,
+        "startChar": 71,
+        "endLine": 1063,
+        "endChar": 97
+      },
+      "revId": "f36f74637135f749fe50c730f42a83ff8ead9c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
