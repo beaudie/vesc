@@ -3738,6 +3738,11 @@ void FrameCapture::maybeCapturePostCallUpdates(const gl::Context *context)
     }
 }
 
+void FrameCapture::serializeState(gl::Context *context)
+{
+    // TODO(nguyenmh): Implement serialize context
+}
+
 void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
                                               size_t vertexCount,
                                               size_t instanceCount)
@@ -3851,6 +3856,7 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     // Note that we currently capture before the start frame to collect shader and program sources.
     if (!mFrameCalls.empty() && mFrameIndex >= mFrameStart)
     {
+        serializeState(const_cast<gl::Context *>(context));
         WriteCppReplay(mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameIndex,
                        mFrameEnd, mFrameCalls, mSetupCalls, &mResourceTracker, &mBinaryData);
 
