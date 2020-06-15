@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "94190ce8_6d0d6a6a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-15T16:10:39Z",
+      "side": 1,
+      "message": "I believe getNativeImageLevel is asking about the VK image\u0027s level 0, which would incorporate base level (right Shabi?), so the comment can be removed.",
+      "parentUuid": "25755812_37a4d549",
+      "range": {
+        "startLine": 1835,
+        "startChar": 0,
+        "endLine": 1837,
+        "endChar": 0
+      },
+      "revId": "dc368e6d5f92fb4f3d2d238191d8200c31c0ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c2c66a2_38e77b01",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
