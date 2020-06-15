@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7688dc0f_fb3f0f1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-15T15:03:07Z",
+      "side": 1,
+      "message": "just to confirm - eventually this will go away too right? And we\u0027ll be back to using the linked stages stored in the executable.",
+      "range": {
+        "startLine": 13,
+        "startChar": 19,
+        "endLine": 13,
+        "endChar": 30
+      },
+      "revId": "d15444a1334777c115eac111c009a2ee66938057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee4064e2_e29a4952",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
