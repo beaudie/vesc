@@ -57,6 +57,24 @@
       "revId": "565b2255f79fd3d3ba19127d8d834a259b88fab1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dff54d8b_e6a20468",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-15T22:52:33Z",
+      "side": 1,
+      "message": "I added \u0027ImageUnitMask mImageUnitMask\u0027 to TextureState to track which image units the texture is bound to, so we can walk that list here (well, above where Jamie mentioned this needs to be moved to).   Let me know what you think.",
+      "parentUuid": "11c5974d_b2869ed2",
+      "revId": "565b2255f79fd3d3ba19127d8d834a259b88fab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
