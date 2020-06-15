@@ -15,6 +15,27 @@
 #include "common/debug.h"
 #include "common/system_utils.h"
 
+namespace
+{
+Optional<std::string> GetOptionalEnvironmentVar(const char *variableName)
+{
+    auto env = angle::GetEnvironmentVar(variableName);
+    return env.empty() ? Optional<std::string>{} : env;
+}
+
+void ResetEnvironmentVar(const char *variableName, const Optional<std::string> &value)
+{
+    if (value.value().empty())
+    {
+        angle::UnsetEnvironmentVar(variableName);
+    }
+    else
+    {
+        angle::SetEnvironmentVar(variableName, value.value().c_str());
+    }
+}
+}  // namespace
+
 namespace angle
 {
 
@@ -37,7 +58,8 @@ const std::string WrapICDEnvironment(const char *icdEnvironment)
     return icdEnvironment;
 }
 
-constexpr char kLoaderLayersPathEnv[] = "VK_LAYER_PATH";
+constexpr char kLoaderLayersPathEnv[]                = "VK_LAYER_PATH";
+constexpr char kValidationLayersCustomSTypeListEnv[] = "VK_LAYER_CUSTOM_STYPE_LIST";
 #endif
 
 constexpr char kLoaderICDFilenamesEnv[]   = "VK_ICD_FILENAMES";
@@ -85,11 +107,14 @@ ICDFilterFunc GetFilterForICD(vk::ICD preferredICD)
 // If we're loading the validation layers, we could be running from any random directory.
 // Change to the executable directory so we can find the layers, then change back to the
 // previous directory to be safe we don't disrupt the application.
-ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers, vk::ICD icd)
+ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers,
+                                                     vk::ICD icd,
+                                                     std::vector<CustomExtension> customExtensions)
     : mEnableValidationLayers(enableValidationLayers),
       mICD(icd),
       mChangedCWD(false),
-      mChangedICDEnv(false)
+      mChangedICDEnv(false),
+      mCustomExtensions(std::move(customExtensions))
 {
 // Changing CWD and setting environment variables makes no sense on Android,
 // since this code is a part of Java application there.
@@ -143,6 +168,12 @@ ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers
             ERR() << "Error setting environment for Vulkan layers init.";
             mEnableValidationLayers = false;
         }
+
+        if (!setCustomExtensionsEnvironment())
+        {
+            ERR() << "Error setting custom list for custom extensions for Vulkan layers init.";
+            mEnableValidationLayers = false;
+        }
     }
 #endif  // !defined(ANGLE_PLATFORM_ANDROID)
 }
@@ -167,6 +198,8 @@ ScopedVkLoaderEnvironment::~ScopedVkLoaderEnvironment()
             angle::SetEnvironmentVar(kLoaderICDFilenamesEnv, mPreviousICDEnv.value().c_str());
         }
     }
+
+    ResetEnvironmentVar(kValidationLayersCustomSTypeListEnv, mPreviousCustomExtensionsEnv);
 }
 
 bool ScopedVkLoaderEnvironment::setICDEnvironment(const char *icd)
@@ -181,6 +214,30 @@ bool ScopedVkLoaderEnvironment::setICDEnvironment(const char *icd)
         mICD = vk::ICD::Default;
     }
     return mChangedICDEnv;
+}
+
+bool ScopedVkLoaderEnvironment::setCustomExtensionsEnvironment()
+{
+    if (mCustomExtensions.empty())
+    {
+        return true;
+    }
+
+    mPreviousCustomExtensionsEnv = GetOptionalEnvironmentVar(kValidationLayersCustomSTypeListEnv);
+
+    std::stringstream strstr;
+    for (auto &extension : mCustomExtensions)
+    {
+        if (strstr.tellp() != std::streampos(0))
+        {
+            strstr << angle::GetPathSeparatorForEnvironmentVar();
+        }
+
+        strstr << extension.type << angle::GetPathSeparatorForEnvironmentVar() << extension.size;
+    }
+
+    return angle::PrependPathToEnvironmentVar(kValidationLayersCustomSTypeListEnv,
+                                              strstr.str().c_str());
 }
 
 void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,

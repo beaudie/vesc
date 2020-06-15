@@ -550,8 +550,18 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
-    angle::vk::ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseValidationLayers(attribs),
-                                                           ChooseICDFromAttribs(attribs));
+
+    angle::vk::ScopedVkLoaderEnvironment scopedEnvironment(
+        ShouldUseValidationLayers(attribs), ChooseICDFromAttribs(attribs),
+        // Custom extensions
+        {
+            {VK_STRUCTURE_TYPE_SAMPLER_FILTERING_PRECISION_GOOGLE,
+             sizeof(VkSamplerFilteringPrecisionGOOGLE)},
+
+            {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT,
+             sizeof(VkPhysicalDeviceProvokingVertexFeaturesEXT)},
+        });
+
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
     mEnabledICD             = scopedEnvironment.getEnabledICD();
 

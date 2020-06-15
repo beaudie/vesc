@@ -9,6 +9,7 @@
 #define COMMON_VULKAN_VULKAN_ICD_H_
 
 #include <string>
+#include <vector>
 
 #include "common/Optional.h"
 #include "common/angleutils.h"
@@ -30,7 +31,15 @@ enum class ICD
 class ScopedVkLoaderEnvironment : angle::NonCopyable
 {
   public:
-    ScopedVkLoaderEnvironment(bool enableValidationLayers, vk::ICD icd);
+    struct CustomExtension
+    {
+        VkStructureType type;
+        size_t size;
+    };
+
+    ScopedVkLoaderEnvironment(bool enableValidationLayers,
+                              vk::ICD icd,
+                              std::vector<CustomExtension> customExtensions);
     ~ScopedVkLoaderEnvironment();
 
     bool canEnableValidationLayers() const { return mEnableValidationLayers; }
@@ -38,6 +47,7 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
 
   private:
     bool setICDEnvironment(const char *icd);
+    bool setCustomExtensionsEnvironment();
 
     bool mEnableValidationLayers;
     vk::ICD mICD;
@@ -45,6 +55,8 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
     Optional<std::string> mPreviousCWD;
     bool mChangedICDEnv;
     Optional<std::string> mPreviousICDEnv;
+    std::vector<CustomExtension> mCustomExtensions;
+    Optional<std::string> mPreviousCustomExtensionsEnv;
 };
 
 void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
