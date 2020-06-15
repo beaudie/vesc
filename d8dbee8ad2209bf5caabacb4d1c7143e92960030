@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ede940fc_1d5ba514",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-15T03:24:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d6c62e2_978bc703",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 37
+      },
+      "revId": "d8dbee8ad2209bf5caabacb4d1c7143e92960030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5062026_c16a2107",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-12T17:22:17Z",
       "side": 1,
       "message": "returning Stop is unusual. Can this code be reached? If this is an implementation error please update this to be an ASSERT. If this is an expected error please use ANGLE_VK_CHECK to generate an error that will be exposed to the application.",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 35
+      },
+      "revId": "d8dbee8ad2209bf5caabacb4d1c7143e92960030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f09a4a0c_03e0f367",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-15T03:24:31Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be reached, I\u0027ll add an ASSERT here.",
+      "parentUuid": "e5062026_c16a2107",
       "range": {
         "startLine": 156,
         "startChar": 7,
@@ -68,6 +116,30 @@
       "revId": "d8dbee8ad2209bf5caabacb4d1c7143e92960030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a551872e_480545bb",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-15T03:24:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0af6563_6b3d53b3",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 20
+      },
+      "revId": "d8dbee8ad2209bf5caabacb4d1c7143e92960030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

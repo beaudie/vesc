@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "4f22b0c0_2c91c21a",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-06-15T03:24:31Z",
+      "side": 1,
+      "message": "\u003e Scenarios:\n\u003e \n\u003e if (inFd is valid)\n\u003e   create vkFence\n\u003e   import inFd to fence\n\u003e   mNativeFenceFD \u003d inFd\n\u003e else\n\u003e   create Vkfence with exportable struct\n\u003e   mNativeFenceFD \u003d get the Fd through export\n\u003e   Submit with fence\n\u003e end\n\u003e \n\u003e Is this step needed?: \"then import FD to current fence\" for both \u0027if\u0027 and \u0027else\u0027 clauses?\n\u003e ---\n\u003e \n\u003e If it is working with tests, then good enough for me. Just seems odd to import FD on fence we just exported the FD from.\n\n\nIt\u0027s because the export operation reset mFenceWithFd, and it\u0027s status could be unknown, but the exported FD should be valid, so we import the FD here to re-gain the \u0027fence\u0027.\n\nThrough this export-import, we can get the FD while avoiding an extra queueSubmit().",
+      "parentUuid": "ec4289bd_a89449dc",
+      "revId": "db1177d9aedf4ef99ee92411c47e237e158db0a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31cd429b_4fb6e089",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
