@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "eb332648_52088212",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-15T19:35:20Z",
+      "side": 1,
+      "message": "probably `!params.flipX`?",
+      "range": {
+        "startLine": 855,
+        "startChar": 27,
+        "endLine": 855,
+        "endChar": 31
+      },
+      "revId": "43dbf392024c676067835100bec86a489a1f298e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85668b43_d1e4f2b5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
         "patchSetId": 3
