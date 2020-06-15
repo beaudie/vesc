@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50488d02_01bec5a6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-15T18:31:16Z",
+      "side": 1,
+      "message": "nit: I probably should have used dst like Vulkan does, but pretty much everywhere else in this particular section of code uses dest.",
+      "range": {
+        "startLine": 84,
+        "startChar": 39,
+        "endLine": 84,
+        "endChar": 42
+      },
+      "revId": "e6445ef3af4914f03bd0473ecde4c1763f051ff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40be21c7_1ba81772",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-15T18:31:16Z",
+      "side": 1,
+      "message": "nit: s/FormatFeatureBitsValid/FormatHasNecessaryFeature",
+      "range": {
+        "startLine": 90,
+        "startChar": 12,
+        "endLine": 90,
+        "endChar": 34
+      },
+      "revId": "e6445ef3af4914f03bd0473ecde4c1763f051ff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b985a4f0_256fa817",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-15T18:31:16Z",
+      "side": 1,
+      "message": "Maybe make a helper that returns OPTIMAL if the image is not yet created.",
+      "range": {
+        "startLine": 598,
+        "startChar": 39,
+        "endLine": 598,
+        "endChar": 65
+      },
+      "revId": "e6445ef3af4914f03bd0473ecde4c1763f051ff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
