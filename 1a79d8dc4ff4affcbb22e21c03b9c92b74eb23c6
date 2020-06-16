@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "55bdea68_7e258a74",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T15:29:44Z",
+      "side": 1,
+      "message": "this is incorrect because of multi-context concerns. We should aim to find a solution that doesn\u0027t require this mask.",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 230,
+        "endChar": 33
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55667f23_534ddde3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T15:29:44Z",
+      "side": 1,
+      "message": "just enable mutable if storage. unless I\u0027m missing something this should only be a very marginal performance thing and doesn\u0027t apply to ARM.",
+      "range": {
+        "startLine": 1616,
+        "startChar": 0,
+        "endLine": 1624,
+        "endChar": 13
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5977c270_b03dbf65",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 10
@@ -40,6 +86,29 @@
         "startLine": 1850,
         "startChar": 60,
         "endLine": 1850,
+        "endChar": 76
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91bc7e6a_8e4157a4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T15:29:44Z",
+      "side": 1,
+      "message": "can these be private?",
+      "range": {
+        "startLine": 1076,
+        "startChar": 0,
+        "endLine": 1098,
         "endChar": 76
       },
       "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
