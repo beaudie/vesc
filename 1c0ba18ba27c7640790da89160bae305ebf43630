@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88c6929c_18b9e405",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T22:48:36Z",
+      "side": 1,
+      "message": "Can you add a Test: tag for the tests being enable by this?",
+      "revId": "1c0ba18ba27c7640790da89160bae305ebf43630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab51f6cc_061289da",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T22:48:36Z",
+      "side": 1,
+      "message": "nit:\n    const vk::ImageView \u0026copyView \u003d mImageViews-\u003egetCopyImageView();",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 75
+      },
+      "revId": "1c0ba18ba27c7640790da89160bae305ebf43630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e5c1a4f_e96da828",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T22:48:36Z",
+      "side": 1,
+      "message": "How do you know both are 2D arrays here?",
+      "revId": "1c0ba18ba27c7640790da89160bae305ebf43630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
