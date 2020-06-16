@@ -317,12 +317,14 @@ class UtilsVk : angle::NonCopyable
         int32_t destOffset[2]            = {};
         int32_t srcMip                   = 0;
         int32_t srcLayer                 = 0;
+        uint32_t flipX                   = 0;
         uint32_t flipY                   = 0;
         uint32_t premultiplyAlpha        = 0;
         uint32_t unmultiplyAlpha         = 0;
         uint32_t destHasLuminance        = 0;
         uint32_t destIsAlpha             = 0;
         uint32_t destDefaultChannelsMask = 0;
+        uint32_t rotateXY                = 0;
     };
 
     union BlitResolveOffset
