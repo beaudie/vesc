@@ -747,15 +747,50 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
 
+    // Potentially make adjustments for pre-rotatation.
+    SurfaceRotation srcFramebufferRotation = contextVk->getRotationReadFramebuffer();
+    gl::Rectangle rotatedSourceArea        = sourceArea;
+    const gl::State &glState               = contextVk->getState();
+    const gl::Framebuffer *srcFramebuffer  = glState.getReadFramebuffer();
+    FramebufferVk *srcFramebufferVk        = vk::GetImpl(srcFramebuffer);
+    gl::Rectangle framebufferDimensions    = srcFramebufferVk->getState().getDimensions().toRect();
+    switch (srcFramebufferRotation)
+    {
+        case SurfaceRotation::Identity:
+            // No adjustments needed
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            rotatedSourceArea.x = sourceArea.y;
+            rotatedSourceArea.y = sourceArea.x;
+            isSrcFlipY          = false;
+            std::swap(rotatedSourceArea.width, rotatedSourceArea.height);
+            std::swap(framebufferDimensions.width, framebufferDimensions.height);
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            rotatedSourceArea.x = framebufferDimensions.width - sourceArea.x - sourceArea.width;
+            rotatedSourceArea.y = framebufferDimensions.height - sourceArea.y - sourceArea.height;
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            rotatedSourceArea.x = framebufferDimensions.height - sourceArea.y - sourceArea.height;
+            rotatedSourceArea.y = framebufferDimensions.width - sourceArea.x - sourceArea.width;
+            isSrcFlipY          = false;
+            std::swap(rotatedSourceArea.width, rotatedSourceArea.height);
+            std::swap(framebufferDimensions.width, framebufferDimensions.height);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+
     UtilsVk::CopyImageParameters params;
-    params.srcOffset[0]        = sourceArea.x;
-    params.srcOffset[1]        = sourceArea.y;
-    params.srcExtents[0]       = sourceArea.width;
-    params.srcExtents[1]       = sourceArea.height;
+    params.srcOffset[0]        = rotatedSourceArea.x;
+    params.srcOffset[1]        = rotatedSourceArea.y;
+    params.srcExtents[0]       = rotatedSourceArea.width;
+    params.srcExtents[1]       = rotatedSourceArea.height;
     params.destOffset[0]       = destOffset.x;
     params.destOffset[1]       = destOffset.y;
     params.srcMip              = static_cast<uint32_t>(sourceLevel);
-    params.srcHeight           = srcImage->getExtents().height;
+    params.srcHeight           = framebufferDimensions.height;
     params.srcPremultiplyAlpha = unpackPremultiplyAlpha && !unpackUnmultiplyAlpha;
     params.srcUnmultiplyAlpha  = unpackUnmultiplyAlpha && !unpackPremultiplyAlpha;
     params.srcFlipY            = isSrcFlipY;
