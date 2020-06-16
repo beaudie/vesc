@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b88e9151_4a8c78b9",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T18:07:03Z",
+      "side": 1,
+      "message": "As you prefer.",
+      "parentUuid": "68e66262_b61908ac",
+      "range": {
+        "startLine": 67,
+        "startChar": 18,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "a4931a7525e44f9ab5277006abaadfe4403dc198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51d8473b_f01d5985",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
