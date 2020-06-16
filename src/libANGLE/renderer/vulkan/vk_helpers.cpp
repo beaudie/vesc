@@ -443,6 +443,7 @@ ImageView *GetLevelImageView(ImageViewVector *imageViews, uint32_t level, uint32
     {
         imageViews->resize(levelCount);
     }
+    // TODO: Currently hitting this assert in a few test cases
     ASSERT(imageViews->size() > level);
 
     return &(*imageViews)[level];
@@ -3124,15 +3125,6 @@ void ImageHelper::clear(VkImageAspectFlags aspectFlags,
     }
 }
 
-Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
-{
-    if (mSerial.getValue() == 0)
-    {
-        mSerial = contextVk->generateAttachmentImageSerial();
-    }
-    return mSerial;
-}
-
 // static
 void ImageHelper::Copy(ImageHelper *srcImage,
                        ImageHelper *dstImage,
@@ -4870,6 +4862,15 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     gl::TextureType viewType = Get2DTextureType(1, image.getSamples());
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
                                     imageView, level, 1, layer, 1);
+}
+
+Serial ImageViewHelper::getAssignSerial(ContextVk *contextVk, VkImageView imageView)
+{
+    if (mSerialMap.find(imageView) == mSerialMap.end())
+    {
+        mSerialMap[imageView] = contextVk->generateAttachmentImageViewSerial();
+    }
+    return mSerialMap[imageView];
 }
 
 // SamplerHelper implementation.

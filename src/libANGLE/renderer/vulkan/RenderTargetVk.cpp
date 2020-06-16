@@ -72,6 +72,25 @@ vk::AttachmentSerial RenderTargetVk::getAssignSerial(ContextVk *contextVk)
     return attachmentSerial;
 }
 
+vk::AttachmentSerial RenderTargetVk::getAssignImageViewSerial(ContextVk *contextVk)
+{
+    ASSERT(mImageViews);
+    vk::AttachmentSerial attachmentSerial;
+    ASSERT(mLayerIndex < std::numeric_limits<uint16_t>::max());
+    ASSERT(mLevelIndex < std::numeric_limits<uint16_t>::max());
+    const vk::ImageView *tmpImageView;
+    angle::Result result = getImageView(contextVk, &tmpImageView);
+    ASSERT(result == angle::Result::Continue);
+
+    Serial imageViewSerial = mImageViews->getAssignSerial(contextVk, tmpImageView->getHandle());
+    ASSERT(imageViewSerial.getValue() < std::numeric_limits<uint32_t>::max());
+    // TODO: Now that Serials are based on imageViews, I believe we can kill level/layer from Serial
+    SetBitField(attachmentSerial.layer, mLayerIndex);
+    SetBitField(attachmentSerial.level, mLevelIndex);
+    SetBitField(attachmentSerial.imageSerial, imageViewSerial.getValue());
+    return attachmentSerial;
+}
+
 angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk)
 {
     ASSERT(!mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
