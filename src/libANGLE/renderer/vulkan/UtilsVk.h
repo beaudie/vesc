@@ -126,6 +126,7 @@ class UtilsVk : angle::NonCopyable
         bool linear;
         bool flipX;
         bool flipY;
+        SurfaceRotation rotation;
     };
 
     struct CopyImageParameters
@@ -342,6 +343,7 @@ class UtilsVk : angle::NonCopyable
         uint32_t outputMask      = 0;
         uint32_t flipX           = 0;
         uint32_t flipY           = 0;
+        uint32_t rotateXY        = 0;
     };
 
     struct BlitResolveStencilNoExportShaderParams

@@ -1359,6 +1359,45 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + mSize - 1, GLColor::green);
     EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + mSize - 1, GLColor::yellow);
 
+    //
+    // Test blitting a 256x256 part of the default framebuffer to the entire FBO (no scaling)
+    //
+
+    // To get the entire predictable pattern into the default framebuffer, blit it from the FBO
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glViewport(xOffset, yOffset, mSize, mSize);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBlitFramebuffer(0, 0, mSize, mSize, xOffset, yOffset, xOffset + mSize, yOffset + mSize,
+                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    // Swap buffers to put the image in the window (so the test can be visually checked)
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_GL_NO_ERROR();
+    // Blit again to check the colors in the back buffer
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBlitFramebuffer(0, 0, mSize, mSize, xOffset, yOffset, xOffset + mSize, yOffset + mSize,
+                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    // Clear the FBO to black and blit from the window to the FBO
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    glViewport(0, 0, mSize, mSize);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBlitFramebuffer(xOffset, yOffset, xOffset + mSize, yOffset + mSize, 0, 0, mSize, mSize,
+                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    // Ensure the predictable pattern seems correct in the FBO
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(0, mSize - 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(mSize - 1, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(mSize - 1, mSize - 1, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayShort, kColorMidWayShortShort);
+    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayLong, kColorMidWayShortLong);
+    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayShort, kColorMidWayLongShort);
+    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayLong, kColorMidWayLongLong);
+    ASSERT_GL_NO_ERROR();
+
     ASSERT_EGL_SUCCESS();
 }
 
