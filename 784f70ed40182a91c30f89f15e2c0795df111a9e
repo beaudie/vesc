@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e45f8eca_7fbcf377",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T00:27:01Z",
+      "side": 1,
+      "message": "The table of samplers is in ContextVk::mActiveTextures\nProgramExecutableVk::updatePipelineLayout, UtilsVk::ensureResourcesInitialized both call \nRendererVk::getDescriptorSetLayout which is the only caller of  DescriptorSetLayoutCache::getDescriptorSetLayout\nI would need to plumb ContextVk through RendererVk::getDescriptorSetLayout and DescriptorSetLayoutCache::getDescriptorSetLayout.\nSo if I cached a flag and textureUnit in the PackedDescriptorSetBinding and had access to ContextVk I could pull out the sampler.\nWould that be preferred?",
+      "parentUuid": "9db540c3_8cead951",
+      "range": {
+        "startLine": 1559,
+        "startChar": 12,
+        "endLine": 1559,
+        "endChar": 82
+      },
+      "revId": "784f70ed40182a91c30f89f15e2c0795df111a9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "908d36eb_322c6f2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 16
@@ -45,6 +69,30 @@
       "revId": "784f70ed40182a91c30f89f15e2c0795df111a9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0567c93b_949e1c01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T00:27:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "908d36eb_322c6f2e",
+      "range": {
+        "startLine": 511,
+        "startChar": 4,
+        "endLine": 511,
+        "endChar": 45
+      },
+      "revId": "784f70ed40182a91c30f89f15e2c0795df111a9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a3111efa_2c4e9db7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T00:27:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c3e0bee_91776310",
+      "range": {
+        "startLine": 527,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 53
+      },
+      "revId": "784f70ed40182a91c30f89f15e2c0795df111a9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "871b040c_4974eb29",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 16
@@ -82,6 +154,30 @@
       "writtenOn": "2020-06-15T21:35:21Z",
       "side": 1,
       "message": "nit: just use the explicit size",
+      "range": {
+        "startLine": 551,
+        "startChar": 56,
+        "endLine": 551,
+        "endChar": 79
+      },
+      "revId": "784f70ed40182a91c30f89f15e2c0795df111a9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c79d5b0_93622923",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T00:27:01Z",
+      "side": 1,
+      "message": "Not sure what you mean.\nThis is checking that sizeof(PackedDescriptorSetBinding) is 4 32bit values.",
+      "parentUuid": "871b040c_4974eb29",
       "range": {
         "startLine": 551,
         "startChar": 56,
