@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "490963d8_186bb3f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T20:44:59Z",
+      "side": 1,
+      "message": "I was originally proposing using Serials to avoid lifetime issues using pointers or handles. Storing pointers/handles in caches is potentially risky. The Serial in this case would be the TextureVk\u0027s mSerial for an immutable sampler or the default Serial. WDYT?",
+      "parentUuid": "50e8ac15_c59fbe11",
+      "range": {
+        "startLine": 1559,
+        "startChar": 12,
+        "endLine": 1559,
+        "endChar": 82
+      },
+      "revId": "784f70ed40182a91c30f89f15e2c0795df111a9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "908d36eb_322c6f2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 16

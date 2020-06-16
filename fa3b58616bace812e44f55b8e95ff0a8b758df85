@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa7b093a_a6f5a523",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T20:44:59Z",
+      "side": 1,
+      "message": "you can omit this, right?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 47
+      },
+      "revId": "fa3b58616bace812e44f55b8e95ff0a8b758df85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f47c3d06_7891db3d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T20:44:59Z",
+      "side": 1,
+      "message": "should ASSERT that count \u003d\u003d 1.",
+      "range": {
+        "startLine": 1531,
+        "startChar": 8,
+        "endLine": 1531,
+        "endChar": 24
+      },
+      "revId": "fa3b58616bace812e44f55b8e95ff0a8b758df85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e33cb64_be390a42",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T20:44:59Z",
+      "side": 1,
+      "message": "you can revert this",
+      "range": {
+        "startLine": 508,
+        "startChar": 0,
+        "endLine": 511,
+        "endChar": 2
+      },
+      "revId": "fa3b58616bace812e44f55b8e95ff0a8b758df85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d06ba5d0_ad391675",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T20:44:59Z",
+      "side": 1,
+      "message": "I was suggesting you use the expected size (16) of the struct instead of 4 * 4.",
+      "range": {
+        "startLine": 547,
+        "startChar": 56,
+        "endLine": 547,
+        "endChar": 78
+      },
+      "revId": "fa3b58616bace812e44f55b8e95ff0a8b758df85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
