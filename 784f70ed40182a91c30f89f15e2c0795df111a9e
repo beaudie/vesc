@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "50e8ac15_c59fbe11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T13:17:21Z",
+      "side": 1,
+      "message": "That won\u0027t work, at least not by itself. The DescriptorSetLayoutDesc is used as a key to the Descriptor cache, we need to know the exact sampler we are using to get the correct descriptor. So I need some sort of unique ID. VkSampler handle works for that.",
+      "parentUuid": "e45f8eca_7fbcf377",
+      "range": {
+        "startLine": 1559,
+        "startChar": 12,
+        "endLine": 1559,
+        "endChar": 82
+      },
+      "revId": "784f70ed40182a91c30f89f15e2c0795df111a9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "908d36eb_322c6f2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 16
