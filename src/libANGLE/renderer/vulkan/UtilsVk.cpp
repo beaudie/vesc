@@ -1683,6 +1683,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     const angle::Format &dstIntendedFormat = dstFormat.intendedFormat();
 
     ImageCopyShaderParams shaderParams;
+    shaderParams.flipX            = 0;
     shaderParams.flipY            = params.srcFlipY || params.destFlipY;
     shaderParams.premultiplyAlpha = params.srcPremultiplyAlpha;
     shaderParams.unmultiplyAlpha  = params.srcUnmultiplyAlpha;
@@ -1695,6 +1696,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     shaderParams.srcOffset[1]            = params.srcOffset[1];
     shaderParams.destOffset[0]           = params.destOffset[0];
     shaderParams.destOffset[1]           = params.destOffset[1];
+    shaderParams.rotateXY                = 0;
 
     shaderParams.srcIsSRGB =
         gl::GetSizedInternalFormatInfo(srcFormat.internalFormat).colorEncoding == GL_SRGB;
@@ -1724,6 +1726,31 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
         shaderParams.srcOffset[1] = params.srcOffset[1] + params.srcExtents[1] - 1;
     }
 
+    switch (contextVk->getRotationReadFramebuffer())
+    {
+        case SurfaceRotation::Identity:
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            shaderParams.rotateXY = 1;
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            shaderParams.flipX = true;
+            shaderParams.flipY = false;
+            shaderParams.srcOffset[0] += params.srcExtents[0];
+            shaderParams.srcOffset[1] -= params.srcExtents[1];
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            shaderParams.flipX = true;
+            shaderParams.flipY = true;
+            shaderParams.srcOffset[0] += params.srcExtents[0];
+            shaderParams.srcOffset[1] += params.srcExtents[1];
+            shaderParams.rotateXY = 1;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+
     uint32_t flags = GetImageCopyFlags(srcFormat, dstFormat);
     flags |= src->getLayerCount() > 1 ? ImageCopy_frag::kSrcIsArray : 0;
 
@@ -1749,11 +1776,23 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     renderArea.y      = params.destOffset[1];
     renderArea.width  = params.srcExtents[0];
     renderArea.height = params.srcExtents[1];
+    if (contextVk->isRotatedAspectRatioForDrawFBO())
+    {
+        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
+        std::swap(renderArea.x, renderArea.y);
+        std::swap(renderArea.width, renderArea.height);
+    }
 
     VkViewport viewport;
     gl_vk::GetViewport(renderArea, 0.0f, 1.0f, false, dest->getExtents().height, &viewport);
     pipelineDesc.setViewport(viewport);
 
+    if (contextVk->isRotatedAspectRatioForDrawFBO())
+    {
+        int maxExtent     = std::max(renderArea.width, renderArea.height);
+        renderArea.width  = maxExtent;
+        renderArea.height = maxExtent;
+    }
     VkRect2D scissor = gl_vk::GetRect(renderArea);
     pipelineDesc.setScissor(scissor);
 
