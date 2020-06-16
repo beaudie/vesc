@@ -83,11 +83,11 @@
 #if SrcIsArray
 #define SRC_RESOURCE_NAME texture2DArray
 #define SRC_SAMPLER_NAME sampler2DArray
-#define TEXEL_FETCH(src, coord, sample) texture(src, vec3(coord * params.invSrcExtent, params.srcLayer))
+#define TEXEL_FETCH(src, coord, sample) texture(src, vec3(coord * invSrcExtent, params.srcLayer))
 #else
 #define SRC_RESOURCE_NAME texture2D
 #define SRC_SAMPLER_NAME sampler2D
-#define TEXEL_FETCH(src, coord, sample) texture(src, coord * params.invSrcExtent)
+#define TEXEL_FETCH(src, coord, sample) texture(src, coord * invSrcExtent)
 #endif
 
 #define COLOR_TEXEL_FETCH(src, coord, sample) TEXEL_FETCH(COLOR_SRC_RESOURCE(SRC_SAMPLER_NAME)(src, blitSampler), coord, sample)
@@ -109,6 +109,7 @@ layout(push_constant) uniform PushConstants {
     // Flip control.
     bool flipX;
     bool flipY;
+    bool rotateXY;
 } params;
 
 #if IsBlitColor
@@ -181,6 +182,12 @@ void main()
         srcImageCoords.x = -srcImageCoords.x;
     if (params.flipY)
         srcImageCoords.y = -srcImageCoords.y;
+    vec2 invSrcExtent = params.invSrcExtent;
+    if (params.rotateXY)
+    {
+        srcImageCoords.xy = srcImageCoords.yx;
+        invSrcExtent.xy = invSrcExtent.yx;
+    }
 
 #if IsBlitColor
 #if IsResolve
