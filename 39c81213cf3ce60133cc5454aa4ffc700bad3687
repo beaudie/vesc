@@ -1,0 +1,187 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd73dd86_d72af3f8",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "So if this is not supported, don\u0027t show Ads? Just curious what the plan is.",
+      "range": {
+        "startLine": 177,
+        "startChar": 12,
+        "endLine": 177,
+        "endChar": 40
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6123fb53_38a17621",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3630,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "Looks a bit iffy. This recreates the pipeline layout, should that then trigger a pipeline recreation?\n\nAlso, if a texture has changed that\u0027s not Ycbcr, this is recreating the pipeline layout for no reason, but probably ok for the first implementation.",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aec3cc46_1cca2e53",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "Unrelated change? Can it be split?",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7485b35a_556074f2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "issuetracker",
+      "range": {
+        "startLine": 507,
+        "startChar": 29,
+        "endLine": 507,
+        "endChar": 35
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "927f4c4a_9f3fe65f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "Is this overriding the user sampler if an immutable sampler exists? That is, if Ycbcr, the spec requires that the user sampler be discarded?",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae3a5ea0_f538860b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1345,
+        "startChar": 8,
+        "endLine": 1345,
+        "endChar": 41
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0bfb97d_57967f74",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "Should check for mSamplerYcbcrConversionFeatures.samplerYcbcrConversion instead. It could be false even if the extension exists.",
+      "range": {
+        "startLine": 1752,
+        "startChar": 8,
+        "endLine": 1752,
+        "endChar": 92
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f5b7935_8440b2f3",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "Not very clear what the comment is referring to.",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 54
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc3ff89e_e270a84c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T04:45:50Z",
+      "side": 1,
+      "message": "nit: The comment makes sense in the context of this review, but it\u0027s a pretty specific thing to say right above SamplerDesc::update.",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
