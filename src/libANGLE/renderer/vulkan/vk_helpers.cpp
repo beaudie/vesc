@@ -3151,15 +3151,6 @@ void ImageHelper::clear(VkImageAspectFlags aspectFlags,
     }
 }
 
-Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
-{
-    if (mSerial.getValue() == 0)
-    {
-        mSerial = contextVk->generateAttachmentImageSerial();
-    }
-    return mSerial;
-}
-
 // static
 void ImageHelper::Copy(ImageHelper *srcImage,
                        ImageHelper *dstImage,
@@ -4625,6 +4616,7 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mStencilReadImageView, other.mStencilReadImageView);
     std::swap(mLevelDrawImageViews, other.mLevelDrawImageViews);
     std::swap(mLayerLevelDrawImageViews, other.mLayerLevelDrawImageViews);
+    std::swap(mSerialCache, other.mSerialCache);
 }
 
 ImageViewHelper::~ImageViewHelper()
@@ -4693,6 +4685,8 @@ void ImageViewHelper::release(RendererVk *renderer)
         // Ensure the resource use is always valid.
         mUse.init();
     }
+
+    mSerialCache.clear();
 }
 
 void ImageViewHelper::destroy(VkDevice device)
@@ -4719,6 +4713,8 @@ void ImageViewHelper::destroy(VkDevice device)
         }
     }
     mLayerLevelDrawImageViews.clear();
+
+    mSerialCache.clear();
 }
 
 angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
@@ -4895,6 +4891,8 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     {
         return angle::Result::Continue;
     }
+    // Clear serial cache for this layer/level
+    mSerialCache[{layer, level}] = kZeroSerial;
 
     // Lazily allocate the image view itself.
     // Note that these views are specifically made to be used as color attachments, and therefore
@@ -4902,6 +4900,16 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     gl::TextureType viewType = Get2DTextureType(1, image.getSamples());
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
                                     imageView, level, 1, layer, 1);
+}
+
+Serial ImageViewHelper::getAssignSerial(ContextVk *contextVk, uint32_t level, uint32_t layer)
+{
+    LayerLevel layerLevelPair = {layer, level};
+    if (mSerialCache.find(layerLevelPair) == mSerialCache.end())
+    {
+        mSerialCache[layerLevelPair] = contextVk->generateAttachmentImageViewSerial();
+    }
+    return mSerialCache[layerLevelPair];
 }
 
 // SamplerHelper implementation.
