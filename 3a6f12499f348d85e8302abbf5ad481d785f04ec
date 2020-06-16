@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0882aad_45ab2d85",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T16:43:19Z",
+      "side": 1,
+      "message": "nit: can you sort these when we land this?",
+      "range": {
+        "startLine": 150,
+        "startChar": 8,
+        "endLine": 150,
+        "endChar": 16
+      },
+      "revId": "3a6f12499f348d85e8302abbf5ad481d785f04ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
