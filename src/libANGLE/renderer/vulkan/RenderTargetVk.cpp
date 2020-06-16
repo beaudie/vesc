@@ -72,6 +72,20 @@ vk::AttachmentSerial RenderTargetVk::getAssignSerial(ContextVk *contextVk)
     return attachmentSerial;
 }
 
+vk::AttachmentSerial RenderTargetVk::getAssignImageViewSerial(ContextVk *contextVk)
+{
+    ASSERT(mImageViews);
+    vk::AttachmentSerial attachmentSerial;
+    ASSERT(mLayerIndex < std::numeric_limits<uint16_t>::max());
+    ASSERT(mLevelIndex < std::numeric_limits<uint16_t>::max());
+    Serial imageSerial = mImageViews->getAssignSerial(contextVk);
+    ASSERT(imageSerial.getValue() < std::numeric_limits<uint32_t>::max());
+    SetBitField(attachmentSerial.layer, mLayerIndex);
+    SetBitField(attachmentSerial.level, mLevelIndex);
+    SetBitField(attachmentSerial.imageSerial, imageSerial.getValue());
+    return attachmentSerial;
+}
+
 angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk)
 {
     ASSERT(!mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());

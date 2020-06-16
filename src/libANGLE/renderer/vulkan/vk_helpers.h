@@ -1588,6 +1588,9 @@ class ImageViewHelper : angle::NonCopyable
                                              uint32_t layer,
                                              const ImageView **imageViewOut);
 
+    // Return unique Serial for this imageView, first assigning it if it hasn't yet been set
+    Serial getAssignSerial(ContextVk *contextVk);
+
   private:
     ImageView &getReadImageView()
     {
@@ -1619,6 +1622,8 @@ class ImageViewHelper : angle::NonCopyable
     // Draw views.
     ImageViewVector mLevelDrawImageViews;
     LayerLevelImageViewVector mLayerLevelDrawImageViews;
+
+    Serial mSerial;
 };
 
 // The SamplerHelper allows a Sampler to be coupled with a resource lifetime.

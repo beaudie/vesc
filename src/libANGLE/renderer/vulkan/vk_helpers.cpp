@@ -4872,6 +4872,15 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                     imageView, level, 1, layer, 1);
 }
 
+Serial ImageViewHelper::getAssignSerial(ContextVk *contextVk)
+{
+    if (mSerial.getValue() == 0)
+    {
+        mSerial = contextVk->generateAttachmentImageSerial();
+    }
+    return mSerial;
+}
+
 // SamplerHelper implementation.
 SamplerHelper::SamplerHelper()
 {
