@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "48ea6538_aa7ca87c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-16T15:52:37Z",
+      "side": 1,
+      "message": "Actually, for a 180-degree rotation case, we always want flipX.  For any rotation case, there will be exactly one default framebuffer (src or dst).  That results in the orientation of gl_FragCoord being reversed from normal, relative to the rotated surface.",
+      "parentUuid": "eb332648_52088212",
+      "range": {
+        "startLine": 855,
+        "startChar": 27,
+        "endLine": 855,
+        "endChar": 31
+      },
+      "revId": "43dbf392024c676067835100bec86a489a1f298e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85668b43_d1e4f2b5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3a349bc1_d3b933bd",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-16T15:52:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85668b43_d1e4f2b5",
+      "range": {
+        "startLine": 86,
+        "startChar": 66,
+        "endLine": 86,
+        "endChar": 73
+      },
+      "revId": "43dbf392024c676067835100bec86a489a1f298e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0fbe0f66_42b6b442",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "43dbf392024c676067835100bec86a489a1f298e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8acdaa5e_95caf624",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-16T15:52:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fbe0f66_42b6b442",
+      "range": {
+        "startLine": 90,
+        "startChar": 61,
+        "endLine": 90,
+        "endChar": 68
+      },
+      "revId": "43dbf392024c676067835100bec86a489a1f298e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
