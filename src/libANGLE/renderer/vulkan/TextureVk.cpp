@@ -1270,9 +1270,11 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
         }
     }
 
+    // If base level has changed, the front-end should have called syncState already.
+    ASSERT(mImage->getBaseLevel() == mState.getEffectiveBaseLevel());
+
     // Check whether the image is already full mipmap
-    if (mImage->getLevelCount() == getMipLevelCount(ImageMipLevels::FullMipChain) &&
-        mImage->getBaseLevel() == mState.getEffectiveBaseLevel())
+    if (mImage->getLevelCount() == getMipLevelCount(ImageMipLevels::FullMipChain))
     {
         needRedefineImage = false;
     }
@@ -1295,7 +1297,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
         ANGLE_TRY(copyAndStageImageSubresource(contextVk, baseLevelDesc, false,
                                                getNativeImageLayer(0), 0, mImage->getBaseLevel()));
 
-        // Release the origin image and recreate it with new mipmap counts.
+        // Release the original image and recreate it with new mipmap counts.
         releaseImage(contextVk);
 
         mImage->retain(&contextVk->getResourceUseList());
