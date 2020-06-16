@@ -49,7 +49,8 @@ layout(push_constant) uniform PushConstants {
     ivec2 destOffset;
     int srcMip;
     int srcLayer;
-    // Whether y needs to be flipped
+    // Whether x and/or y need to be flipped
+    bool flipX;
     bool flipY;
     // Premultiplied alpha conversions
     bool premultiplyAlpha;
@@ -66,6 +67,7 @@ layout(push_constant) uniform PushConstants {
     // Bit 0 is ignored, because R is always present.  For B and G, the result is set to 0 and for
     // A, the result is set to 1.
     int destDefaultChannelsMask;
+    bool rotateXY;
 } params;
 
 #if SrcIsFloat
@@ -110,8 +112,13 @@ void main()
 
     ivec2 srcSubImageCoords = destSubImageCoords;
 
-    // If flipping Y, srcOffset would contain the opposite y coordinate, so we can
-    // simply reverse the direction in which y grows.
+    if (params.rotateXY)
+        srcSubImageCoords.xy = srcSubImageCoords.yx;
+
+    // If flipping X and/or Y, srcOffset would contain the opposite x and/or y coordinate, so we
+    // can simply reverse the direction in which x and/or y grows.
+    if (params.flipX)
+        srcSubImageCoords.x = -srcSubImageCoords.x;
     if (params.flipY)
     {
         srcSubImageCoords.y = -srcSubImageCoords.y;
