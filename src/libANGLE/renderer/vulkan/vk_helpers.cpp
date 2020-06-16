@@ -443,6 +443,9 @@ ImageView *GetLevelImageView(ImageViewVector *imageViews, uint32_t level, uint32
     {
         imageViews->resize(levelCount);
     }
+    // TODO: Hitting this assert for 2 tests (http://anglebug.com/4651)
+    // FramebufferTest_ES3.TextureAttachmentMipLevelsReadBack &
+    // Texture2DBaseMaxTestES3.ExtendMipChainAfterRedefine
     ASSERT(imageViews->size() > level);
 
     return &(*imageViews)[level];
@@ -3151,15 +3154,6 @@ void ImageHelper::clear(VkImageAspectFlags aspectFlags,
     }
 }
 
-Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
-{
-    if (mSerial.getValue() == 0)
-    {
-        mSerial = contextVk->generateAttachmentImageSerial();
-    }
-    return mSerial;
-}
-
 // static
 void ImageHelper::Copy(ImageHelper *srcImage,
                        ImageHelper *dstImage,
@@ -4625,6 +4619,7 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mStencilReadImageView, other.mStencilReadImageView);
     std::swap(mLevelDrawImageViews, other.mLevelDrawImageViews);
     std::swap(mLayerLevelDrawImageViews, other.mLayerLevelDrawImageViews);
+    std::swap(mSerialCache, other.mSerialCache);
 }
 
 ImageViewHelper::~ImageViewHelper()
@@ -4693,6 +4688,8 @@ void ImageViewHelper::release(RendererVk *renderer)
         // Ensure the resource use is always valid.
         mUse.init();
     }
+
+    mSerialCache.clear();
 }
 
 void ImageViewHelper::destroy(VkDevice device)
@@ -4719,6 +4716,8 @@ void ImageViewHelper::destroy(VkDevice device)
         }
     }
     mLayerLevelDrawImageViews.clear();
+
+    mSerialCache.clear();
 }
 
 angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
@@ -4902,6 +4901,21 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     gl::TextureType viewType = Get2DTextureType(1, image.getSamples());
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
                                     imageView, level, 1, layer, 1);
+}
+
+Serial ImageViewHelper::getAssignSerial(ContextVk *contextVk, uint32_t level, uint32_t layer)
+{
+    if (mSerialCache.empty() || mSerialCache.size() < (layer + 1) || mSerialCache[layer].empty() ||
+        mSerialCache[layer].size() < (level + 1))
+    {
+        mSerialCache.resize(layer + 1);
+        mSerialCache[layer].resize(level + 1);
+    }
+    if (mSerialCache[layer][level] == kZeroSerial)
+    {
+        mSerialCache[layer][level] = contextVk->generateAttachmentImageViewSerial();
+    }
+    return mSerialCache[layer][level];
 }
 
 // SamplerHelper implementation.
