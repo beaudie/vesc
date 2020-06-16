@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e26e371_92be2728",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T20:23:04Z",
+      "side": 1,
+      "message": "Done\n\nAlways setting mutable if storage means we don\u0027t need to track any of this stuff anymore, so it\u0027s all gone.",
+      "parentUuid": "55bdea68_7e258a74",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 230,
+        "endChar": 33
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55667f23_534ddde3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cffe2c41_23f1bcc4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T20:23:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55667f23_534ddde3",
+      "range": {
+        "startLine": 1616,
+        "startChar": 0,
+        "endLine": 1624,
+        "endChar": 13
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1045e45e_a2f6681d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1795,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T20:23:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5977c270_b03dbf65",
+      "range": {
+        "startLine": 1795,
+        "startChar": 58,
+        "endLine": 1795,
+        "endChar": 74
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5447805a_c509b48d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 10
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "c16799c1_a9a6ad35",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T20:23:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5447805a_c509b48d",
+      "range": {
+        "startLine": 1850,
+        "startChar": 60,
+        "endLine": 1850,
+        "endChar": 76
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91bc7e6a_8e4157a4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 10
@@ -114,6 +210,30 @@
       "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8a637cb_14b98daf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-16T20:23:04Z",
+      "side": 1,
+      "message": "Done\n\ninitLayerImageViewImpl() can be.",
+      "parentUuid": "91bc7e6a_8e4157a4",
+      "range": {
+        "startLine": 1076,
+        "startChar": 0,
+        "endLine": 1098,
+        "endChar": 76
+      },
+      "revId": "1a79d8dc4ff4affcbb22e21c03b9c92b74eb23c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
