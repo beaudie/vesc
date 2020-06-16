@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "13b55083_f0f78dee",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-16T23:55:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09f0799d_bd90d6cb",
+      "range": {
+        "startLine": 306,
+        "startChar": 16,
+        "endLine": 306,
+        "endChar": 23
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b8348eb_6d8650ec",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -60,6 +84,24 @@
       "writtenOn": "2020-06-14T09:37:24Z",
       "side": 1,
       "message": "Can use a templated helper to avoid the code duplication.\n\n(in case you didn\u0027t know: https://stackoverflow.com/q/6880832)",
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1bf89f1_b5fab903",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-16T23:55:44Z",
+      "side": 1,
+      "message": "I am not expert on the template and not a fan either. Not exactly sure how to deal with  the different variable type and name. IMO, use template for this makes code harder to read and debug. Saving a few lines of duplication does not really worth it. But if you can paste some sample code here, I will adopt.",
+      "parentUuid": "5b8348eb_6d8650ec",
       "revId": "01bc35064df5948fb10332429713add44e3a8b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "0d3f34a9_c06b29cf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-16T23:55:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7231863_84df1884",
+      "range": {
+        "startLine": 43,
+        "startChar": 28,
+        "endLine": 43,
+        "endChar": 41
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e13ce226_b9efbde1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
@@ -100,6 +166,30 @@
       "writtenOn": "2020-06-14T09:37:24Z",
       "side": 1,
       "message": "Add an inline helper to avoid duplication",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b84079f1_c8dff419",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-16T23:55:44Z",
+      "side": 1,
+      "message": "Sorry that I am not expert on template. Not exact sure how to do that with template.",
+      "parentUuid": "e13ce226_b9efbde1",
       "range": {
         "startLine": 45,
         "startChar": 0,
@@ -159,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "92bd89e9_3c687275",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-16T23:55:44Z",
+      "side": 1,
+      "message": "I changed to allocNewImageInfo which seems more consistent with the rest of alloc functions that allocate object out of a pool..",
+      "parentUuid": "288a9682_48f7a41e",
+      "range": {
+        "startLine": 70,
+        "startChar": 27,
+        "endLine": 70,
+        "endChar": 39
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e66542c5_2f68081d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
@@ -203,6 +317,30 @@
       "revId": "01bc35064df5948fb10332429713add44e3a8b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3a7aa14_dbd79153",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-16T23:55:44Z",
+      "side": 1,
+      "message": "I changed the whole class object into what you suggested, but kept the class variable the same to reflect the fact that these are writes, and leave space for future to add mCopyInfos if needed.",
+      "parentUuid": "160e8cc4_19a08915",
+      "range": {
+        "startLine": 602,
+        "startChar": 15,
+        "endLine": 602,
+        "endChar": 38
+      },
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
