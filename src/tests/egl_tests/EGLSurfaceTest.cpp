@@ -907,7 +907,7 @@ class EGLPreRotationLargeSurfaceTest : public EGLPreRotationSurfaceTest
 };
 
 // Provide a predictable pattern for testing pre-rotation
-TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithDraw)
+TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithFragCoordDraw)
 {
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
@@ -976,28 +976,148 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithDraw)
     testDrawingAndReadPixels();
 }
 
+// Pre-rotation tests for glBlitFramebuffer.  A slight variation of EGLPreRotationLargeSurfaceTest,
+// where the initial window size is still 400x300, and the drawing is still 256x256.  In addition,
+// glBlitFramebuffer is tested in a variety of ways.  Separate tests are used to make debugging
+// simpler, but they all share common setup.  These tests reproduce interesting pre-rotation cases
+// from dEQP tests such as the following:
+//
+// - dEQP.GLES3/functional_fbo_blit_default_framebuffer_*
+// - dEQP.GLES3/functional_fbo_invalidate_*
+constexpr GLuint kCoordMidWayShort       = 127;
+constexpr GLuint kCoordMidWayLong        = 128;
+constexpr GLColor kColorMidWayShortShort = GLColor(127, 127, 0, 255);
+constexpr GLColor kColorMidWayShortLong  = GLColor(127, 128, 0, 255);
+constexpr GLColor kColorMidWayLongShort  = GLColor(128, 127, 0, 255);
+constexpr GLColor kColorMidWayLongLong   = GLColor(128, 128, 0, 255);
+// When scaling horizontally, the "black" and "green" colors have a 1 in the red component
+constexpr GLColor kColorScaleHorizBlack = GLColor(1, 0, 0, 255);
+constexpr GLColor kColorScaleHorizGreen = GLColor(1, 255, 0, 255);
+// When scaling vertically, the "black" and "red" colors have a 1 in the green component
+constexpr GLColor kColorScaleVertBlack = GLColor(0, 1, 0, 255);
+constexpr GLColor kColorScaleVertRed   = GLColor(255, 1, 0, 255);
+
+class EGLPreRotationBlitFramebufferTest : public EGLPreRotationLargeSurfaceTest
+{
+  protected:
+    EGLPreRotationBlitFramebufferTest() : mFBO(0) {}
+
+    GLuint createProgram()
+    {
+        constexpr char kVS[] =
+            "attribute vec2 position;\n"
+            "attribute vec2 redGreen;\n"
+            "varying vec2 v_data;\n"
+            "void main() {\n"
+            "  gl_Position = vec4(position, 0, 1);\n"
+            "  v_data = redGreen;\n"
+            "}";
+
+        constexpr char kFS[] =
+            "varying highp vec2 v_data;\n"
+            "void main() {\n"
+            "  gl_FragColor = vec4(v_data, 0, 1);\n"
+            "}";
+
+        return CompileProgram(kVS, kFS);
+    }
+
+    void initializeGeometry(GLuint program)
+    {
+        GLint positionLocation = glGetAttribLocation(program, "position");
+        ASSERT_NE(-1, positionLocation);
+
+        GLint redGreenLocation = glGetAttribLocation(program, "redGreen");
+        ASSERT_NE(-1, redGreenLocation);
+
+        GLuint indexBuffer;
+        glGenBuffers(1, &indexBuffer);
+
+        GLuint vertexArray;
+        glGenVertexArrays(1, &vertexArray);
+
+        std::vector<GLuint> vertexBuffers(2);
+        glGenBuffers(2, &vertexBuffers[0]);
+
+        glBindVertexArray(vertexArray);
+
+        std::vector<GLushort> indices = {0, 1, 2, 2, 3, 0};
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * indices.size(), &indices[0],
+                     GL_STATIC_DRAW);
+
+        std::vector<GLfloat> positionData = {// quad vertices
+                                             -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
+
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[0]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * positionData.size(), &positionData[0],
+                     GL_STATIC_DRAW);
+        glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2,
+                              nullptr);
+        glEnableVertexAttribArray(positionLocation);
+
+        std::vector<GLfloat> redGreenData = {// green(0,1), black(0,0), red(1,0), yellow(1,1)
+                                             0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[1]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * redGreenData.size(), &redGreenData[0],
+                     GL_STATIC_DRAW);
+        glVertexAttribPointer(redGreenLocation, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2,
+                              nullptr);
+        glEnableVertexAttribArray(redGreenLocation);
+    }
+
+    GLuint createFBO()
+    {
+        GLuint framebuffer = 0;
+        GLuint texture     = 0;
+        glGenFramebuffers(1, &framebuffer);
+        glGenTextures(1, &texture);
+
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mSize, mSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        return framebuffer;
+    }
+
+    // Ensures that the correct colors are where they should be when the entire 256x256 pattern has
+    // been rendered or blitted to a location relative to an x and y offset.
+    void test256x256PredictablePattern(GLint xOffset, GLint yOffset)
+    {
+        EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + 0, GLColor::black);
+        EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + mSize - 1, GLColor::green);
+        EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + 0, GLColor::red);
+        EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + mSize - 1, GLColor::yellow);
+        EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayShort,
+                              kColorMidWayShortShort);
+        EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayLong,
+                              kColorMidWayShortLong);
+        EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayShort,
+                              kColorMidWayLongShort);
+        EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayLong,
+                              kColorMidWayLongLong);
+    }
+
+    GLuint mFBO;
+};
+
 // Draw a predictable pattern (for testing pre-rotation) into an FBO, and then use glBlitFramebuffer
-// to put that pattern into various places within the 400x300 window
-TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
+// to blit that pattern into various places within the 400x300 window
+TEST_P(EGLPreRotationBlitFramebufferTest, BasicBlitFramebuffer)
 {
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
     // Flaky on Linux SwANGLE http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
-
-    constexpr GLuint kCoordMidWayShort       = 127;
-    constexpr GLuint kCoordMidWayLong        = 128;
-    constexpr GLColor kColorMidWayShortShort = GLColor(127, 127, 0, 255);
-    constexpr GLColor kColorMidWayShortLong  = GLColor(127, 128, 0, 255);
-    constexpr GLColor kColorMidWayLongShort  = GLColor(128, 127, 0, 255);
-    constexpr GLColor kColorMidWayLongLong   = GLColor(128, 128, 0, 255);
-    // When scaling horizontally, the "black" and "green" colors have a 1 in the red component
-    constexpr GLColor kColorScaleHorizBlack = GLColor(1, 0, 0, 255);
-    constexpr GLColor kColorScaleHorizGreen = GLColor(1, 255, 0, 255);
-    // When scaling vertically, the "black" and "red" colors have a 1 in the green component
-    constexpr GLColor kColorScaleVertBlack = GLColor(0, 1, 0, 255);
-    constexpr GLColor kColorScaleVertRed   = GLColor(255, 1, 0, 255);
 
     // To aid in debugging, we want this window visible
     setWindowVisible(mOSWindow, true);
@@ -1010,97 +1130,23 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     ASSERT_EGL_SUCCESS();
 
     // Init program
-    constexpr char kVS[] =
-        "attribute vec2 position;\n"
-        "attribute vec2 redGreen;\n"
-        "varying vec2 v_data;\n"
-        "void main() {\n"
-        "  gl_Position = vec4(position, 0, 1);\n"
-        "  v_data = redGreen;\n"
-        "}";
-
-    constexpr char kFS[] =
-        "varying highp vec2 v_data;\n"
-        "void main() {\n"
-        "  gl_FragColor = vec4(v_data, 0, 1);\n"
-        "}";
-
-    GLuint program = CompileProgram(kVS, kFS);
+    GLuint program = createProgram();
     ASSERT_NE(0u, program);
     glUseProgram(program);
 
-    GLint positionLocation = glGetAttribLocation(program, "position");
-    ASSERT_NE(-1, positionLocation);
-
-    GLint redGreenLocation = glGetAttribLocation(program, "redGreen");
-    ASSERT_NE(-1, redGreenLocation);
-
-    GLuint indexBuffer;
-    glGenBuffers(1, &indexBuffer);
-
-    GLuint vertexArray;
-    glGenVertexArrays(1, &vertexArray);
-
-    std::vector<GLuint> vertexBuffers(2);
-    glGenBuffers(2, &vertexBuffers[0]);
-
-    glBindVertexArray(vertexArray);
-
-    std::vector<GLushort> indices = {0, 1, 2, 2, 3, 0};
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * indices.size(), &indices[0],
-                 GL_STATIC_DRAW);
-
-    std::vector<GLfloat> positionData = {// quad vertices
-                                         -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
-
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * positionData.size(), &positionData[0],
-                 GL_STATIC_DRAW);
-    glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, nullptr);
-    glEnableVertexAttribArray(positionLocation);
-
-    std::vector<GLfloat> redGreenData = {// green(0,1), black(0,0), red(1,0), yellow(1,1)
-                                         0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f};
-
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * redGreenData.size(), &redGreenData[0],
-                 GL_STATIC_DRAW);
-    glVertexAttribPointer(redGreenLocation, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, nullptr);
-    glEnableVertexAttribArray(redGreenLocation);
-
+    initializeGeometry(program);
     ASSERT_GL_NO_ERROR();
 
     // Create a texture-backed FBO and render the predictable pattern to it
-    GLuint framebuffer = 0;
-    GLuint texture     = 0;
-    glGenFramebuffers(1, &framebuffer);
-    glGenTextures(1, &texture);
-
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mSize, mSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    GLuint fbo = createFBO();
     ASSERT_GL_NO_ERROR();
 
     glViewport(0, 0, mSize, mSize);
-
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+    ASSERT_GL_NO_ERROR();
 
     // Ensure the predictable pattern seems correct in the FBO
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(0, mSize - 1, GLColor::green);
-    EXPECT_PIXEL_COLOR_EQ(mSize - 1, 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(mSize - 1, mSize - 1, GLColor::yellow);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayShort, kColorMidWayShortShort);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayLong, kColorMidWayShortLong);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayShort, kColorMidWayLongShort);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayLong, kColorMidWayLongLong);
+    test256x256PredictablePattern(0, 0);
     ASSERT_GL_NO_ERROR();
 
     //
@@ -1110,7 +1156,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     // Blit from the FBO to the default framebuffer (i.e. the swapchain)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glBlitFramebuffer(0, 0, mSize, mSize, 0, 0, mSize, mSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
@@ -1124,14 +1170,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     glClear(GL_COLOR_BUFFER_BIT);
     glBlitFramebuffer(0, 0, mSize, mSize, 0, 0, mSize, mSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(0, mSize - 1, GLColor::green);
-    EXPECT_PIXEL_COLOR_EQ(mSize - 1, 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(mSize - 1, mSize - 1, GLColor::yellow);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayShort, kColorMidWayShortShort);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayLong, kColorMidWayShortLong);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayShort, kColorMidWayLongShort);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayLong, kColorMidWayLongLong);
+    test256x256PredictablePattern(0, 0);
     ASSERT_GL_NO_ERROR();
 
     // Clear to black and blit to a different part of the window
@@ -1139,7 +1178,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     GLint xOffset = 40;
     GLint yOffset = 30;
     glViewport(xOffset, yOffset, mSize, mSize);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBlitFramebuffer(0, 0, mSize, mSize, xOffset, yOffset, xOffset + mSize, yOffset + mSize,
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
@@ -1152,19 +1191,61 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     glBlitFramebuffer(0, 0, mSize, mSize, xOffset, yOffset, xOffset + mSize, yOffset + mSize,
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + 0, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + mSize - 1, GLColor::green);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + mSize - 1, GLColor::yellow);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayShort,
-                          kColorMidWayShortShort);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayLong,
-                          kColorMidWayShortLong);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayShort,
-                          kColorMidWayLongShort);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayLong,
-                          kColorMidWayLongLong);
+    test256x256PredictablePattern(xOffset, yOffset);
     ASSERT_GL_NO_ERROR();
+
+    ASSERT_EGL_SUCCESS();
+}
+
+// Draw a predictable pattern (for testing pre-rotation) into an FBO, and then use glBlitFramebuffer
+// to blit the left and right halves of that pattern into various places within the 400x300 window
+TEST_P(EGLPreRotationBlitFramebufferTest, LeftAndRightBlitFramebuffer)
+{
+    // http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
+
+    // Flaky on Linux SwANGLE http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+
+    // To aid in debugging, we want this window visible
+    setWindowVisible(mOSWindow, true);
+
+    initializeDisplay();
+    initializeSurfaceWithRGBA8888Config();
+    initializeContext();
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    // Init program
+    GLuint program = createProgram();
+    ASSERT_NE(0u, program);
+    glUseProgram(program);
+
+    initializeGeometry(program);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a texture-backed FBO and render the predictable pattern to it
+    GLuint fbo = createFBO();
+    ASSERT_GL_NO_ERROR();
+
+    glViewport(0, 0, mSize, mSize);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    // Ensure the predictable pattern seems correct in the FBO
+    test256x256PredictablePattern(0, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Prepare to blit to the default framebuffer and read from the FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    // Blit to an offset part of the 400x300 window
+    GLint xOffset = 40;
+    GLint yOffset = 30;
 
     //
     // Test blitting half of the FBO image to a 128x256 or 256x128 part of the default framebuffer
@@ -1175,7 +1256,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     // halves of that different part of the window
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(xOffset, yOffset, mSize, mSize);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBlitFramebuffer(0, 0, mSize / 2, mSize, xOffset, yOffset, xOffset + (mSize / 2),
                       yOffset + mSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBlitFramebuffer(mSize / 2, 0, mSize, mSize, xOffset + (mSize / 2), yOffset, xOffset + mSize,
@@ -1192,18 +1273,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     glBlitFramebuffer(mSize / 2, 0, mSize, mSize, xOffset + (mSize / 2), yOffset, xOffset + mSize,
                       yOffset + mSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + 0, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + mSize - 1, GLColor::green);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + mSize - 1, GLColor::yellow);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayShort,
-                          kColorMidWayShortShort);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayLong,
-                          kColorMidWayShortLong);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayShort,
-                          kColorMidWayLongShort);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayLong,
-                          kColorMidWayLongLong);
+    test256x256PredictablePattern(xOffset, yOffset);
     ASSERT_GL_NO_ERROR();
 
     // 2nd) Clear to black and this time blit the left half of the source texture to the right half
@@ -1211,7 +1281,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     // half of the destination window
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(xOffset, yOffset, mSize, mSize);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBlitFramebuffer(mSize / 2, 0, mSize, mSize, xOffset, yOffset, xOffset + (mSize / 2),
                       yOffset + mSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBlitFramebuffer(0, 0, mSize / 2, mSize, xOffset + (mSize / 2), yOffset, xOffset + mSize,
@@ -1238,11 +1308,69 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + kCoordMidWayLong, kColorMidWayLongLong);
     ASSERT_GL_NO_ERROR();
 
-    // 3rd) Clear to black and blit the top and bottom halves of the texture to the top and bottom
+    ASSERT_EGL_SUCCESS();
+}
+
+// Draw a predictable pattern (for testing pre-rotation) into an FBO, and then use glBlitFramebuffer
+// to blit the top and bottom halves of that pattern into various places within the 400x300 window
+TEST_P(EGLPreRotationBlitFramebufferTest, TopAndBottomBlitFramebuffer)
+{
+    // http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
+
+    // Flaky on Linux SwANGLE http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+
+    // To aid in debugging, we want this window visible
+    setWindowVisible(mOSWindow, true);
+
+    initializeDisplay();
+    initializeSurfaceWithRGBA8888Config();
+    initializeContext();
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    // Init program
+    GLuint program = createProgram();
+    ASSERT_NE(0u, program);
+    glUseProgram(program);
+
+    initializeGeometry(program);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a texture-backed FBO and render the predictable pattern to it
+    GLuint fbo = createFBO();
+    ASSERT_GL_NO_ERROR();
+
+    glViewport(0, 0, mSize, mSize);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    // Ensure the predictable pattern seems correct in the FBO
+    test256x256PredictablePattern(0, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Prepare to blit to the default framebuffer and read from the FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    // Blit to an offset part of the 400x300 window
+    GLint xOffset = 40;
+    GLint yOffset = 30;
+
+    //
+    // Test blitting half of the FBO image to a 128x256 or 256x128 part of the default framebuffer
+    // (no scaling)
+    //
+
+    // 1st) Clear to black and blit the top and bottom halves of the texture to the top and bottom
     // halves of that different part of the window
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(xOffset, yOffset, mSize, mSize);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBlitFramebuffer(0, 0, mSize, mSize / 2, xOffset, yOffset, xOffset + mSize,
                       yOffset + (mSize / 2), GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBlitFramebuffer(0, mSize / 2, mSize, mSize, xOffset, yOffset + (mSize / 2), xOffset + mSize,
@@ -1259,26 +1387,15 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     glBlitFramebuffer(0, mSize / 2, mSize, mSize, xOffset, yOffset + (mSize / 2), xOffset + mSize,
                       yOffset + mSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + 0, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + mSize - 1, GLColor::green);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + mSize - 1, GLColor::yellow);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayShort,
-                          kColorMidWayShortShort);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayShort, yOffset + kCoordMidWayLong,
-                          kColorMidWayShortLong);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayShort,
-                          kColorMidWayLongShort);
-    EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + kCoordMidWayLong,
-                          kColorMidWayLongLong);
+    test256x256PredictablePattern(xOffset, yOffset);
     ASSERT_GL_NO_ERROR();
 
-    // 4th) Clear to black and this time blit the top half of the source texture to the bottom half
+    // 2nd) Clear to black and this time blit the top half of the source texture to the bottom half
     // of the destination window, and then blit the bottom half of the source texture to the top
     // half of the destination window
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(xOffset, yOffset, mSize, mSize);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBlitFramebuffer(0, 0, mSize, mSize / 2, xOffset, yOffset + (mSize / 2), xOffset + mSize,
                       yOffset + mSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBlitFramebuffer(0, mSize / 2, mSize, mSize, xOffset, yOffset, xOffset + mSize,
@@ -1305,6 +1422,60 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     EXPECT_PIXEL_COLOR_EQ(xOffset + kCoordMidWayLong, yOffset + 0, kColorMidWayLongLong);
     ASSERT_GL_NO_ERROR();
 
+    ASSERT_EGL_SUCCESS();
+}
+
+// Draw a predictable pattern (for testing pre-rotation) into an FBO, and then use glBlitFramebuffer
+// to blit that pattern into various places within the 400x300 window, but being scaled to one-half
+// size
+TEST_P(EGLPreRotationBlitFramebufferTest, ScaledBlitFramebuffer)
+{
+    // http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
+
+    // Flaky on Linux SwANGLE http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+
+    // To aid in debugging, we want this window visible
+    setWindowVisible(mOSWindow, true);
+
+    initializeDisplay();
+    initializeSurfaceWithRGBA8888Config();
+    initializeContext();
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    // Init program
+    GLuint program = createProgram();
+    ASSERT_NE(0u, program);
+    glUseProgram(program);
+
+    initializeGeometry(program);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a texture-backed FBO and render the predictable pattern to it
+    GLuint fbo = createFBO();
+    ASSERT_GL_NO_ERROR();
+
+    glViewport(0, 0, mSize, mSize);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    // Ensure the predictable pattern seems correct in the FBO
+    test256x256PredictablePattern(0, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Prepare to blit to the default framebuffer and read from the FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    // Blit to an offset part of the 400x300 window
+    GLint xOffset = 40;
+    GLint yOffset = 30;
+
     //
     // Test blitting the entire FBO image to a 128x256 or 256x128 part of the default framebuffer
     // (requires scaling)
@@ -1314,7 +1485,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     // the window
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(xOffset, yOffset, mSize, mSize);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBlitFramebuffer(0, 0, mSize, mSize, xOffset, yOffset, xOffset + (mSize / 2), yOffset + mSize,
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBlitFramebuffer(0, 0, mSize, mSize, xOffset + (mSize / 2), yOffset, xOffset + mSize,
@@ -1344,7 +1515,7 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     // the window
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(xOffset, yOffset, mSize, mSize);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBlitFramebuffer(0, 0, mSize, mSize, xOffset, yOffset, xOffset + mSize, yOffset + (mSize / 2),
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBlitFramebuffer(0, 0, mSize, mSize, xOffset, yOffset + (mSize / 2), xOffset + mSize,
@@ -1369,13 +1540,68 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
     EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + kCoordMidWayLong, kColorScaleVertRed);
     EXPECT_PIXEL_COLOR_EQ(xOffset + 0, yOffset + mSize - 1, GLColor::green);
     EXPECT_PIXEL_COLOR_EQ(xOffset + mSize - 1, yOffset + mSize - 1, GLColor::yellow);
+    ASSERT_GL_NO_ERROR();
+
+    ASSERT_EGL_SUCCESS();
+}
+
+// Draw a predictable pattern (for testing pre-rotation) into a 256x256 portion of the 400x300
+// window, and then use glBlitFramebuffer to blit that pattern into an FBO
+TEST_P(EGLPreRotationBlitFramebufferTest, FboDestBlitFramebuffer)
+{
+    // http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
+
+    // Flaky on Linux SwANGLE http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+
+    // To aid in debugging, we want this window visible
+    setWindowVisible(mOSWindow, true);
+
+    initializeDisplay();
+    initializeSurfaceWithRGBA8888Config();
+    initializeContext();
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    // Init program
+    GLuint program = createProgram();
+    ASSERT_NE(0u, program);
+    glUseProgram(program);
+
+    initializeGeometry(program);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a texture-backed FBO and render the predictable pattern to it
+    GLuint fbo = createFBO();
+    ASSERT_GL_NO_ERROR();
+
+    glViewport(0, 0, mSize, mSize);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    // Ensure the predictable pattern seems correct in the FBO
+    test256x256PredictablePattern(0, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Prepare to blit to the default framebuffer and read from the FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    // Blit to an offset part of the 400x300 window
+    GLint xOffset = 40;
+    GLint yOffset = 30;
 
     //
     // Test blitting a 256x256 part of the default framebuffer to the entire FBO (no scaling)
     //
 
-    // To get the entire predictable pattern into the default framebuffer, blit it from the FBO
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    // To get the entire predictable pattern into the default framebuffer at the desired offset,
+    // blit it from the FBO
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glViewport(xOffset, yOffset, mSize, mSize);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -1391,22 +1617,15 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithBlitFramebuffer)
 
     // Clear the FBO to black and blit from the window to the FBO
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
     glViewport(0, 0, mSize, mSize);
     glClear(GL_COLOR_BUFFER_BIT);
     glBlitFramebuffer(xOffset, yOffset, xOffset + mSize, yOffset + mSize, 0, 0, mSize, mSize,
                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
     // Ensure the predictable pattern seems correct in the FBO
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(0, mSize - 1, GLColor::green);
-    EXPECT_PIXEL_COLOR_EQ(mSize - 1, 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(mSize - 1, mSize - 1, GLColor::yellow);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayShort, kColorMidWayShortShort);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayShort, kCoordMidWayLong, kColorMidWayShortLong);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayShort, kColorMidWayLongShort);
-    EXPECT_PIXEL_COLOR_EQ(kCoordMidWayLong, kCoordMidWayLong, kColorMidWayLongLong);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    test256x256PredictablePattern(0, 0);
     ASSERT_GL_NO_ERROR();
 
     ASSERT_EGL_SUCCESS();
@@ -1971,6 +2190,9 @@ ANGLE_INSTANTIATE_TEST(EGLPreRotationSurfaceTest,
                        WithNoFixture(ES2_VULKAN()),
                        WithNoFixture(ES3_VULKAN()));
 ANGLE_INSTANTIATE_TEST(EGLPreRotationLargeSurfaceTest,
+                       WithNoFixture(ES2_VULKAN()),
+                       WithNoFixture(ES3_VULKAN()));
+ANGLE_INSTANTIATE_TEST(EGLPreRotationBlitFramebufferTest,
                        WithNoFixture(ES2_VULKAN()),
                        WithNoFixture(ES3_VULKAN()));
 ANGLE_INSTANTIATE_TEST(EGLFloatSurfaceTest,
