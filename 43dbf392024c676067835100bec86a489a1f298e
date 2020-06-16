@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6076c2b0_70d78548",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T18:13:57Z",
+      "side": 1,
+      "message": "That\u0027s not the only thing that influences flipX and flipY. glBlitFramebuffer accepts coordinates that are flipped themselves. So even without pre-rotation, you can do a blit that flips an image into another. See lines 802 and 803 above.",
+      "parentUuid": "48ea6538_aa7ca87c",
+      "range": {
+        "startLine": 855,
+        "startChar": 27,
+        "endLine": 855,
+        "endChar": 31
+      },
+      "revId": "43dbf392024c676067835100bec86a489a1f298e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85668b43_d1e4f2b5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
         "patchSetId": 3
