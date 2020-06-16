@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5bb079f9_29c113a0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-16T20:59:11Z",
+      "side": 1,
+      "message": "Thanks.  I saw those lines before.  \n\nI\u0027d like to land this CL and keep working through the test failures (as I mentioned, I\u0027ve been manually running tests).\n\nIf you\u0027re okay with it, here\u0027s what I\u0027d like to do:\n\n- Land this CL\n- I\u0027ll add some temporary asserts while running the tests again on Android, to see if this is an issue, and if so, do a follow-up CL.\n\nSound okay?",
+      "parentUuid": "6076c2b0_70d78548",
+      "range": {
+        "startLine": 855,
+        "startChar": 27,
+        "endLine": 855,
+        "endChar": 31
+      },
+      "revId": "43dbf392024c676067835100bec86a489a1f298e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85668b43_d1e4f2b5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
         "patchSetId": 3
