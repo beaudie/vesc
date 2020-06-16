@@ -505,8 +505,10 @@ constexpr uint32_t kMaxDescriptorSetLayoutBindings =
     std::max(gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES,
              gl::IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS);
 
-using DescriptorSetLayoutBindingVector =
-    angle::FixedVector<VkDescriptorSetLayoutBinding, kMaxDescriptorSetLayoutBindings>;
+struct DescriptorSetLayoutBindingVector
+{
+    angle::FixedVector<VkDescriptorSetLayoutBinding, kMaxDescriptorSetLayoutBindings> bindings;
+};
 
 // A packed description of a descriptor set layout. Use similarly to RenderPassDesc and
 // GraphicsPipelineDesc. Currently we only need to differentiate layouts based on sampler and ubo
@@ -525,19 +527,27 @@ class DescriptorSetLayoutDesc final
     void update(uint32_t bindingIndex,
                 VkDescriptorType type,
                 uint32_t count,
-                VkShaderStageFlags stages);
+                VkShaderStageFlags stages,
+                const vk::Sampler *immutableSampler);
 
-    void unpackBindings(DescriptorSetLayoutBindingVector *bindings) const;
+    void unpackBindings(DescriptorSetLayoutBindingVector *bindings,
+                        std::vector<VkSampler> *immutableSamplers) const;
 
   private:
+    // There is a small risk of an issue if the sampler cache is evicted but not the descriptor
+    // cache we would have an invalid handle here. Thus propose follow-up work:
+    // TODO: https://issuetracker.google.com/issues/159156775: Have immutable sampler use serial
     struct PackedDescriptorSetBinding
     {
         uint8_t type;    // Stores a packed VkDescriptorType descriptorType.
         uint8_t stages;  // Stores a packed VkShaderStageFlags.
         uint16_t count;  // Stores a packed uint32_t descriptorCount.
+        uint32_t pad;
+        VkSampler immutableSampler;
     };
 
-    static_assert(sizeof(PackedDescriptorSetBinding) == sizeof(uint32_t), "Unexpected size");
+    // 4x 32bit
+    static_assert(sizeof(PackedDescriptorSetBinding) == (sizeof(uint32_t) * 4), "Unexpected size");
 
     // This is a compact representation of a descriptor set layout.
     std::array<PackedDescriptorSetBinding, kMaxDescriptorSetLayoutBindings>
