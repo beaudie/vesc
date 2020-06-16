@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bd28f269_1fde07e6",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "Worse, the ads are black. This is expected functionality on Android.",
+      "parentUuid": "cd73dd86_d72af3f8",
+      "range": {
+        "startLine": 177,
+        "startChar": 12,
+        "endLine": 177,
+        "endChar": 40
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6123fb53_38a17621",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 35
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "7cfdc3db_9f55d5a2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3630,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "\u003e This recreates the pipeline layout, should that then trigger a pipeline recreation?\nYes. So far if we get here (updateActiveTextures) we always build a pipeline. I\u0027ll invalidate the pipeline to make sure.\n\nYeah, this will do a little more work than necessary if what changed is not the Ycbcr texture. We do cache the descriptors so we shouldn\u0027t recreate them from scratch.",
+      "parentUuid": "6123fb53_38a17621",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aec3cc46_1cca2e53",
         "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
         "patchSetId": 35
@@ -56,6 +98,24 @@
       "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9a825a7_51ff101c",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "No, this is required because the external Ycbcr image uses it\u0027s own dedicated memory there is no need for a staging buffer.",
+      "parentUuid": "aec3cc46_1cca2e53",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "a801ba93_3c8e4461",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7485b35a_556074f2",
+      "range": {
+        "startLine": 507,
+        "startChar": 29,
+        "endLine": 507,
+        "endChar": 35
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "927f4c4a_9f3fe65f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 35
@@ -96,6 +180,24 @@
       "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5c1af0f_d7c82f8c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "The spec doesn\u0027t really say all that much, but that is the behavior as I understand it. The Ycbcr conversion sampler is specific to this external image. User has no way to know what sampler to use.",
+      "parentUuid": "927f4c4a_9f3fe65f",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "aa79f227_7f976ca8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae3a5ea0_f538860b",
+      "range": {
+        "startLine": 1345,
+        "startChar": 8,
+        "endLine": 1345,
+        "endChar": 41
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0bfb97d_57967f74",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 35
@@ -142,6 +268,30 @@
       "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80a7603c_e392dba1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0bfb97d_57967f74",
+      "range": {
+        "startLine": 1752,
+        "startChar": 8,
+        "endLine": 1752,
+        "endChar": 92
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "9fe310fc_52ce0566",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "8f5b7935_8440b2f3",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 54
+      },
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc3ff89e_e270a84c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 35
@@ -182,6 +356,24 @@
       "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91d10206_2c40d565",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-16T15:46:58Z",
+      "side": 1,
+      "message": "Right, that was reminder to myself, will remove.",
+      "parentUuid": "fc3ff89e_e270a84c",
+      "revId": "39c81213cf3ce60133cc5454aa4ffc700bad3687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
