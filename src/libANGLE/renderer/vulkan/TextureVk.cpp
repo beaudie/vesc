@@ -815,15 +815,50 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
 
+    // Potentially make adjustments for pre-rotatation.
+    SurfaceRotation srcFramebufferRotation = contextVk->getRotationReadFramebuffer();
+    gl::Box rotatedSourceArea              = sourceBox;
+    const gl::State &glState               = contextVk->getState();
+    const gl::Framebuffer *srcFramebuffer  = glState.getReadFramebuffer();
+    FramebufferVk *srcFramebufferVk        = vk::GetImpl(srcFramebuffer);
+    gl::Box framebufferDimensions          = srcFramebufferVk->getState().getDimensions();
+    switch (srcFramebufferRotation)
+    {
+        case SurfaceRotation::Identity:
+            // No adjustments needed
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            rotatedSourceArea.x = sourceBox.y;
+            rotatedSourceArea.y = sourceBox.x;
+            isSrcFlipY          = false;
+            std::swap(rotatedSourceArea.width, rotatedSourceArea.height);
+            std::swap(framebufferDimensions.width, framebufferDimensions.height);
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            rotatedSourceArea.x = framebufferDimensions.width - sourceBox.x - sourceBox.width;
+            rotatedSourceArea.y = framebufferDimensions.height - sourceBox.y - sourceBox.height;
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            rotatedSourceArea.x = framebufferDimensions.height - sourceBox.y - sourceBox.height;
+            rotatedSourceArea.y = framebufferDimensions.width - sourceBox.x - sourceBox.width;
+            isSrcFlipY          = false;
+            std::swap(rotatedSourceArea.width, rotatedSourceArea.height);
+            std::swap(framebufferDimensions.width, framebufferDimensions.height);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+
     UtilsVk::CopyImageParameters params;
-    params.srcOffset[0]        = sourceBox.x;
-    params.srcOffset[1]        = sourceBox.y;
-    params.srcExtents[0]       = sourceBox.width;
-    params.srcExtents[1]       = sourceBox.height;
+    params.srcOffset[0]        = rotatedSourceArea.x;
+    params.srcOffset[1]        = rotatedSourceArea.y;
+    params.srcExtents[0]       = rotatedSourceArea.width;
+    params.srcExtents[1]       = rotatedSourceArea.height;
     params.destOffset[0]       = destOffset.x;
     params.destOffset[1]       = destOffset.y;
     params.srcMip              = static_cast<uint32_t>(sourceLevelGL) - srcImage->getBaseLevel();
-    params.srcHeight           = srcImage->getExtents().height;
+    params.srcHeight           = framebufferDimensions.height;
     params.srcPremultiplyAlpha = unpackPremultiplyAlpha && !unpackUnmultiplyAlpha;
     params.srcUnmultiplyAlpha  = unpackUnmultiplyAlpha && !unpackPremultiplyAlpha;
     params.srcFlipY            = isSrcFlipY;
