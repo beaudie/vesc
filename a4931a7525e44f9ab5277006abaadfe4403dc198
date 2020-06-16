@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86b1649a_776ce2fc",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T14:38:18Z",
+      "side": 1,
+      "message": "Another bug.",
+      "range": {
+        "startLine": 1300,
+        "startChar": 83,
+        "endLine": 1300,
+        "endChar": 94
+      },
+      "revId": "a4931a7525e44f9ab5277006abaadfe4403dc198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b1cdec30_b62b67bc",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T14:38:18Z",
+      "side": 1,
+      "message": "Another bug was trying to use the 2D image view for RT for copying. Some dEQP tests passed but with validation errors, which this fixes. For 3D textures, getImageView() wouldn\u0027t have worked at all.",
+      "range": {
+        "startLine": 67,
+        "startChar": 18,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "a4931a7525e44f9ab5277006abaadfe4403dc198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51d8473b_f01d5985",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T14:38:18Z",
+      "side": 1,
+      "message": "Just noticed, will turn to static_cast",
+      "range": {
+        "startLine": 664,
+        "startChar": 25,
+        "endLine": 664,
+        "endChar": 35
+      },
+      "revId": "a4931a7525e44f9ab5277006abaadfe4403dc198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e11ec92_8b663c32",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T14:38:18Z",
+      "side": 1,
+      "message": "There was a bug here, the function expected Vk level.",
+      "range": {
+        "startLine": 1211,
+        "startChar": 55,
+        "endLine": 1211,
+        "endChar": 68
+      },
+      "revId": "a4931a7525e44f9ab5277006abaadfe4403dc198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
