@@ -201,7 +201,7 @@ void TransformFeedbackVk::updateDescriptorSetLayout(
         const ShaderInterfaceVariableInfo &info = vsVariableInfoMap[bufferName];
 
         descSetLayoutOut->update(info.binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1,
-                                 VK_SHADER_STAGE_VERTEX_BIT);
+                                 VK_SHADER_STAGE_VERTEX_BIT, nullptr);
     }
 }
 
