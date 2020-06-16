@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0a7a1fd_5d22068b",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 23
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-16T15:14:14Z",
+      "side": 1,
+      "message": "final nit: You can use FmtHex(value)",
+      "range": {
+        "startLine": 65,
+        "startChar": 41,
+        "endLine": 65,
+        "endChar": 82
+      },
+      "revId": "c910aa104915d6e7180ef36dd804fa192df667fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
