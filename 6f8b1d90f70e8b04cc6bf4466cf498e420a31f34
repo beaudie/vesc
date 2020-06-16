@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cda0b88a_3cc8181c",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T15:20:00Z",
+      "side": 1,
+      "message": "same here. we make an exception for infoLog in other places so you can leave that one. though this looks like it can be const.",
+      "range": {
+        "startLine": 370,
+        "startChar": 37,
+        "endLine": 370,
+        "endChar": 50
+      },
+      "revId": "6f8b1d90f70e8b04cc6bf4466cf498e420a31f34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54c314e3_f3376be1",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-16T15:20:00Z",
+      "side": 1,
+      "message": "again, don\u0027t use non-const \u0026 parameters, see google style guide. can this be const?",
+      "range": {
+        "startLine": 275,
+        "startChar": 29,
+        "endLine": 275,
+        "endChar": 42
+      },
+      "revId": "6f8b1d90f70e8b04cc6bf4466cf498e420a31f34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
