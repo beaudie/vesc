@@ -16,6 +16,24 @@
       "revId": "c8489cea4d70a46ac6da2bb576444ff13681460f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eceba75f_dec2b882",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-16T02:05:35Z",
+      "side": 1,
+      "message": "Copy elision makes this equally fast, if not faster. The user of the function can use it more naturally too.",
+      "parentUuid": "c269a436_18dd0f55",
+      "revId": "c8489cea4d70a46ac6da2bb576444ff13681460f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
