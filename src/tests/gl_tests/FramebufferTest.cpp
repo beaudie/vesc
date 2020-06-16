@@ -468,6 +468,8 @@ TEST_P(FramebufferTest_ES3, TextureAttachmentMipLevelsReadBack)
     // http://anglebug.com/4737
     ANGLE_SKIP_TEST_IF(IsOSX());
 #endif
+    // TODO: Hitting VK backend assert for this test (http://anglebug.com/4651)
+    ANGLE_SKIP_TEST_IF(isVulkanRenderer());
 
     GLFramebuffer framebuffer;
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);

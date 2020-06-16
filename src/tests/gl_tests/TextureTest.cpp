@@ -2547,6 +2547,8 @@ TEST_P(Texture2DBaseMaxTestES3, ExtendMipChainAfterRedefine)
 {
     // http://anglebug.com/4699
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsOSX());
+    // TODO: Hitting VK backend assert for this test (http://anglebug.com/4651)
+    ANGLE_SKIP_TEST_IF(isVulkanRenderer());
 
     GLFramebuffer framebuffer;
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
