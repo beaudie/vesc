@@ -782,15 +782,7 @@ constexpr size_t kMaxFramebufferAttachments = gl::IMPLEMENTATION_MAX_FRAMEBUFFER
 // Color serials are at index [0:gl::IMPLEMENTATION_MAX_DRAW_BUFFERS-1]
 // Depth/stencil index is at gl::IMPLEMENTATION_MAX_DRAW_BUFFERS
 constexpr size_t kFramebufferDescDepthStencilIndex = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
-// Struct for AttachmentSerial cache signatures. Includes level/layer for imageView as
-//  well as a unique Serial value for the underlying image
-struct AttachmentSerial
-{
-    uint16_t level;
-    uint16_t layer;
-    uint32_t imageSerial;
-};
-constexpr AttachmentSerial kZeroAttachmentSerial = {0, 0, 0};
+
 class FramebufferDesc
 {
   public:
@@ -800,7 +792,7 @@ class FramebufferDesc
     FramebufferDesc(const FramebufferDesc &other);
     FramebufferDesc &operator=(const FramebufferDesc &other);
 
-    void update(uint32_t index, AttachmentSerial serial);
+    void update(uint32_t index, Serial serial);
     size_t hash() const;
     void reset();
 
@@ -809,7 +801,7 @@ class FramebufferDesc
     uint32_t attachmentCount() const;
 
   private:
-    gl::AttachmentArray<AttachmentSerial> mSerials;
+    gl::AttachmentArray<Serial> mSerials;
 };
 }  // namespace vk
 }  // namespace rx

@@ -1152,8 +1152,6 @@ class ImageHelper final : public Resource, public angle::Subject
                uint32_t layerCount,
                CommandBuffer *commandBuffer);
 
-    // Return unique Serial for underlying image, first assigning it if it hasn't been set yet
-    Serial getAssignSerial(ContextVk *contextVk);
     void resetSerial() { mSerial = rx::kZeroSerial; }
 
     static void Copy(ImageHelper *srcImage,
@@ -1522,6 +1520,30 @@ using ImageViewVector = std::vector<ImageView>;
 // A vector of vector of image views.  Primary index is layer, secondary index is level.
 using LayerLevelImageViewVector = std::vector<ImageViewVector>;
 
+// Create a layer level pair type used to index into Serial Map
+struct LayerLevel
+{
+    uint32_t layer;
+    uint32_t level;
+};
+
+struct LayerLevelHash
+{
+    size_t operator()(const LayerLevel &layerLevel) const
+    {
+        return std::hash<uint32_t>()(layerLevel.layer) ^
+               (std::hash<uint32_t>()(layerLevel.level) << 1);
+    }
+};
+
+struct LayerLevelEqual
+{
+    bool operator()(const LayerLevel &lhs, const LayerLevel &rhs) const
+    {
+        return lhs.layer == rhs.layer && lhs.level == rhs.level;
+    }
+};
+
 class ImageViewHelper : angle::NonCopyable
 {
   public:
@@ -1605,6 +1627,9 @@ class ImageViewHelper : angle::NonCopyable
                                              uint32_t layer,
                                              const ImageView **imageViewOut);
 
+    // Return unique Serial for this imageView, first assigning it if it hasn't yet been set
+    Serial getAssignSerial(ContextVk *contextVk, uint32_t level, uint32_t layer);
+
   private:
     ImageView &getReadImageView()
     {
@@ -1636,6 +1661,9 @@ class ImageViewHelper : angle::NonCopyable
     // Draw views.
     ImageViewVector mLevelDrawImageViews;
     LayerLevelImageViewVector mLayerLevelDrawImageViews;
+
+    // Store Serials per layer/level of imageView
+    std::unordered_map<LayerLevel, Serial, LayerLevelHash, LayerLevelEqual> mSerialCache;
 };
 
 // The SamplerHelper allows a Sampler to be coupled with a resource lifetime.
