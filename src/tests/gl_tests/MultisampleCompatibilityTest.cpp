@@ -367,9 +367,6 @@ TEST_P(MultisampleCompatibilityTest, DrawCoverageAndResolve)
     if (!isApplicable())
         return;
 
-    // TODO: Figure out why this fails on Android.
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
 
     GLsizei maxSamples = 0;
