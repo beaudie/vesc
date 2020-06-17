@@ -42,8 +42,14 @@ struct TracePerfParams final : public RenderTestParams
         iterationsPerStep = 1;
     }
 
-    EGLint windowWidth() const override { return 1920; }
-    EGLint windowHeight() const override { return 1080; }
+    EGLint windowWidth() const override
+    {
+        return static_cast<EGLint>(kTraceInfos[testID].displayWidth);
+    }
+    EGLint windowHeight() const override
+    {
+        return static_cast<EGLint>(kTraceInfos[testID].displayHeight);
+    }
 
     std::string story() const override
     {
@@ -74,6 +80,8 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
 
     uint32_t mStartFrame;
     uint32_t mEndFrame;
+    uint32_t mDisplayWidth;
+    uint32_t mDisplayHeight;
 
     double getHostTimeFromGLTime(GLint64 glTime);
 
@@ -103,7 +111,11 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
 };
 
 TracePerfTest::TracePerfTest()
-    : ANGLERenderTest("TracePerf", GetParam()), mStartFrame(0), mEndFrame(0)
+    : ANGLERenderTest("TracePerf", GetParam()),
+      mStartFrame(0),
+      mEndFrame(0),
+      mDisplayWidth(0),
+      mDisplayHeight(0)
 {
     const TracePerfParams &param = GetParam();
 
@@ -141,6 +153,8 @@ void TracePerfTest::initializeBenchmark()
     const TraceInfo &traceInfo = kTraceInfos[params.testID];
     mStartFrame                = traceInfo.startFrame;
     mEndFrame                  = traceInfo.endFrame;
+    mDisplayWidth              = traceInfo.displayWidth;
+    mDisplayHeight             = traceInfo.displayHeight;
     SetBinaryDataDecompressCallback(params.testID, DecompressBinaryData);
 
     std::stringstream testDataDirStr;
