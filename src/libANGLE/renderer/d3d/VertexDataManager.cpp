@@ -465,6 +465,11 @@ void VertexDataManager::PromoteDynamicAttribs(
     const gl::AttributesMask &dynamicAttribsMask,
     size_t count)
 {
+    if (context->getState().isDuringMultiDraw())
+    {
+        return;
+    }
+
     for (auto attribIndex : dynamicAttribsMask)
     {
         const auto &dynamicAttrib = translatedAttribs[attribIndex];

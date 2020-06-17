@@ -792,6 +792,9 @@ class State : angle::NonCopyable
 
     const BlendStateExt &getBlendStateExt() const { return mBlendStateExt; }
 
+    bool isDuringMultiDraw() const { return mIsDuringMultiDraw; }
+    void setMultiDrawState(bool value) { mIsDuringMultiDraw = value; }
+
   private:
     friend class Context;
 
@@ -1023,6 +1026,10 @@ class State : angle::NonCopyable
     DrawBufferMask mBlendFuncConstantAlphaDrawBuffers;
     DrawBufferMask mBlendFuncConstantColorDrawBuffers;
     bool mNoSimultaneousConstantColorAndAlphaBlendFunc;
+
+    // ANGLE_multi_draw
+    // Is currently in the mid of a serials of draw call triggered by glMultiDraw*
+    bool mIsDuringMultiDraw;
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
