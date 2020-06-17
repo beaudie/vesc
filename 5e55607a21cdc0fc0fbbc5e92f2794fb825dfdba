@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e6947e1c_73dc2316",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-17T19:54:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "853fcc7d_12e124e1",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 9
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbd252be_d9e6cd85",
         "filename": "src/common/vulkan/vulkan_icd.cpp",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-17T19:34:22Z",
       "side": 1,
       "message": "why use Optional if you can just check .empty()?",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77b48a9b_f645aa2b",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-17T19:54:21Z",
+      "side": 1,
+      "message": "Not sure I understand the question. Are you asking why I use Optional\u003cstd::string\u003e as a return type to this function? Or why I\u0027m creating a default-constructed Optional\u003cstd::string\u003e here as my return type?\n\nIf it\u0027s the former, this helper function is useful because it\u0027s return type encodes two pieces of info: if the environment variable exists, and what it\u0027s value is. Without this, I would need to store a bool and a string so that when resetting the variable, I either unset or revert. This helper returns an Optional which can ber used with ResetEnvironmentVar (below) to simplify this case.\n\nI was going to ask if we could move these functions next to GetEnvironmentVariable, UnsetEnvironmentVariable, etc.\n\nIf you take issue with the latter, I could rewrite as:\n\n    if (env.empty())\n        return {};\n    return env;\n\nI cannot use an initializer_list on the right hand side of a ternary operator expression because the compiler requires that the true and false expressions evaluate to the exact same type, hence explicitly constructing the Optional\u003cstd::string\u003e{}.",
+      "parentUuid": "fbd252be_d9e6cd85",
       "range": {
         "startLine": 26,
         "startChar": 25,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c43f9593_d7a79355",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-17T19:54:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e31dddb_aed00219",
+      "range": {
+        "startLine": 221,
+        "startChar": 3,
+        "endLine": 234,
+        "endChar": 0
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c91190a3_e729e461",
         "filename": "src/common/vulkan/vulkan_icd.cpp",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7c027b6_daf4b7e2",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-17T19:54:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c91190a3_e729e461",
+      "range": {
+        "startLine": 243,
+        "startChar": 9,
+        "endLine": 243,
+        "endChar": 14
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
