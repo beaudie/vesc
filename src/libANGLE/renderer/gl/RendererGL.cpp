@@ -445,8 +445,14 @@ unsigned int RendererGL::getMaxWorkerContexts()
 
 bool RendererGL::hasNativeParallelCompile()
 {
+    // Workaround issue in NVIDIA GL driver on Linux
+    // http://crbug.com/1094869
+#ifdef THREAD_SANITIZER
+    return false;
+#else
     return mFunctions->maxShaderCompilerThreadsKHR != nullptr ||
            mFunctions->maxShaderCompilerThreadsARB != nullptr;
+#endif
 }
 
 void RendererGL::setMaxShaderCompilerThreads(GLuint count)
