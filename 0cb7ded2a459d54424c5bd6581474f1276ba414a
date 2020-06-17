@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fee5bed_3c24176d",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T19:46:08Z",
+      "side": 1,
+      "message": "nit: update here (year, test name, description)",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "0cb7ded2a459d54424c5bd6581474f1276ba414a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
