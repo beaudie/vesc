@@ -45,26 +45,36 @@ struct TraceInfo
 {
     uint32_t startFrame;
     uint32_t endFrame;
+    uint32_t displayWidth;
+    uint32_t displayHeight;
     char name[kTraceInfoMaxNameLen];
 };
 
 constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
     {RestrictedTraceID::angry_birds_2_1500,
      {angry_birds_2_1500::kReplayFrameStart, angry_birds_2_1500::kReplayFrameEnd,
+      angry_birds_2_1500::kReplayDisplayWidth, angry_birds_2_1500::kReplayDisplayHeight,
       "angry_birds_2_1500"}},
     {RestrictedTraceID::candy_crush_500,
-     {candy_crush_500::kReplayFrameStart, candy_crush_500::kReplayFrameEnd, "candy_crush_500"}},
+     {candy_crush_500::kReplayFrameStart, candy_crush_500::kReplayFrameEnd,
+      candy_crush_500::kReplayDisplayWidth, candy_crush_500::kReplayDisplayHeight,
+      "candy_crush_500"}},
     {RestrictedTraceID::egypt_1500,
-     {egypt_1500::kReplayFrameStart, egypt_1500::kReplayFrameEnd, "egypt_1500"}},
+     {egypt_1500::kReplayFrameStart, egypt_1500::kReplayFrameEnd, egypt_1500::kReplayDisplayWidth,
+      egypt_1500::kReplayDisplayHeight, "egypt_1500"}},
     {RestrictedTraceID::manhattan_10,
-     {manhattan_10::kReplayFrameStart, manhattan_10::kReplayFrameEnd, "manhattan_10"}},
+     {manhattan_10::kReplayFrameStart, manhattan_10::kReplayFrameEnd,
+      manhattan_10::kReplayDisplayWidth, manhattan_10::kReplayDisplayHeight, "manhattan_10"}},
     {RestrictedTraceID::subway_surfer_500,
      {subway_surfer_500::kReplayFrameStart, subway_surfer_500::kReplayFrameEnd,
+      subway_surfer_500::kReplayDisplayWidth, subway_surfer_500::kReplayDisplayHeight,
       "subway_surfer_500"}},
     {RestrictedTraceID::temple_run_300,
-     {temple_run_300::kReplayFrameStart, temple_run_300::kReplayFrameEnd, "temple_run_300"}},
+     {temple_run_300::kReplayFrameStart, temple_run_300::kReplayFrameEnd,
+      temple_run_300::kReplayDisplayWidth, temple_run_300::kReplayDisplayHeight, "temple_run_300"}},
     {RestrictedTraceID::trex_200,
-     {trex_200::kReplayFrameStart, trex_200::kReplayFrameEnd, "trex_200"}}};
+     {trex_200::kReplayFrameStart, trex_200::kReplayFrameEnd, trex_200::kReplayDisplayWidth,
+      trex_200::kReplayDisplayHeight, "trex_200"}}};
 
 using DecompressCallback        = uint8_t *(*)(const std::vector<uint8_t> &);
 using FramebufferChangeCallback = void (*)(void *userData, GLenum target, GLuint framebuffer);
