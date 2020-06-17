@@ -33,13 +33,14 @@ struct TextureSamplingParams final : public RenderTestParams
         // Common default params
         majorVersion = 2;
         minorVersion = 0;
-        windowWidth  = 720;
-        windowHeight = 720;
 
         numSamplers = 2;
         textureSize = 32;
         kernelSize  = 3;
     }
+
+    EGLint windowWidth() const override { return 720; }
+    EGLint windowHeight() const override { return 720; }
 
     std::string story() const override;
     unsigned int numSamplers;

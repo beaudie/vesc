@@ -111,10 +111,10 @@ struct RenderTestParams : public angle::PlatformParameters
 
     virtual std::string backend() const;
     virtual std::string story() const;
+    virtual EGLint windowWidth() const;
+    virtual EGLint windowHeight() const;
     std::string backendAndStory() const;
 
-    EGLint windowWidth             = 64;
-    EGLint windowHeight            = 64;
     unsigned int iterationsPerStep = 0;
     bool trackGpuTime              = false;
 };

@@ -43,11 +43,12 @@ struct LinkProgramParams final : public RenderTestParams
 
         majorVersion = 2;
         minorVersion = 0;
-        windowWidth  = 256;
-        windowHeight = 256;
         taskOption   = taskOptionIn;
         threadOption = threadOptionIn;
     }
+
+    EGLint windowWidth() const override { return 256; }
+    EGLint windowHeight() const override { return 256; }
 
     std::string story() const override
     {

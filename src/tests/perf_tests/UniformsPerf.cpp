@@ -63,9 +63,10 @@ struct UniformsParams final : public RenderTestParams
         // Common default params
         majorVersion = 3;
         minorVersion = 0;
-        windowWidth  = 720;
-        windowHeight = 720;
     }
+
+    EGLint windowWidth() const override { return 720; }
+    EGLint windowHeight() const override { return 720; }
 
     std::string story() const override;
     size_t numVertexUniforms   = 200;

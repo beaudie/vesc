@@ -83,12 +83,14 @@ struct MultiviewPerfParams final : public RenderTestParams
         majorVersion       = 3;
         minorVersion       = 0;
         eglParameters      = platformParametersIn;
-        windowWidth        = workloadIn.first;
-        windowHeight       = workloadIn.second;
+        workload           = workloadIn;
         multiviewOption    = multiviewOptionIn;
         numViews           = 2;
         multiviewExtension = multiviewExtensionIn;
     }
+
+    EGLint windowWidth() const override { return workload.first; }
+    EGLint windowHeight() const override { return workload.second; }
 
     std::string story() const override
     {
@@ -127,6 +129,7 @@ struct MultiviewPerfParams final : public RenderTestParams
     }
 
     MultiviewOption multiviewOption;
+    MultiviewPerfWorkload workload;
     int numViews;
     angle::ExtensionName multiviewExtension;
 };
@@ -231,12 +234,12 @@ void MultiviewBenchmark::initializeBenchmark()
         case MultiviewOption::NoAcceleration:
             // No acceleration texture arrays
             glBindTexture(GL_TEXTURE_2D, mColorTexture);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, params->windowWidth, params->windowHeight, 0,
-                         GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, params->windowWidth(), params->windowHeight(),
+                         0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
             glBindTexture(GL_TEXTURE_2D, mDepthTexture);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, params->windowWidth,
-                         params->windowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, params->windowWidth(),
+                         params->windowHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
             glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
@@ -249,12 +252,12 @@ void MultiviewBenchmark::initializeBenchmark()
         {
             // Multiview texture arrays
             glBindTexture(GL_TEXTURE_2D_ARRAY, mColorTexture);
-            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, params->windowWidth,
-                         params->windowHeight, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, params->windowWidth(),
+                         params->windowHeight(), 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
             glBindTexture(GL_TEXTURE_2D_ARRAY, mDepthTexture);
-            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT32F, params->windowWidth,
-                         params->windowHeight, 2, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT32F, params->windowWidth(),
+                         params->windowHeight(), 2, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
             glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
             glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mColorTexture, 0,
@@ -277,8 +280,8 @@ void MultiviewBenchmark::initializeBenchmark()
 void MultiviewBenchmark::drawBenchmark()
 {
     const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
-    const int viewWidth               = params->windowWidth / params->numViews;
-    const int viewHeight              = params->windowHeight;
+    const int viewWidth               = params->windowWidth() / params->numViews;
+    const int viewHeight              = params->windowHeight();
 
     switch (params->multiviewOption)
     {
@@ -339,8 +342,8 @@ void MultiviewCPUBoundBenchmark::initializeBenchmark()
 
     createProgram(vs.c_str(), fs.c_str());
 
-    const float viewWidth  = static_cast<float>(params->windowWidth / params->numViews);
-    const float viewHeight = static_cast<float>(params->windowHeight);
+    const float viewWidth  = static_cast<float>(params->windowWidth() / params->numViews);
+    const float viewHeight = static_cast<float>(params->windowHeight());
     const float quadWidth  = 2.f / viewWidth;
     const float quadHeight = 2.f / viewHeight;
     Vector4 vertices[6]    = {Vector4(.0f, .0f, .0f, 1.f),
@@ -374,8 +377,8 @@ void MultiviewCPUBoundBenchmark::renderScene()
     glBindVertexArray(mVAO);
 
     const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
-    const int viewWidth               = params->windowWidth / params->numViews;
-    const int viewHeight              = params->windowHeight;
+    const int viewWidth               = params->windowWidth() / params->numViews;
+    const int viewHeight              = params->windowHeight();
 
     for (int w = 0; w < viewWidth; ++w)
     {
@@ -450,8 +453,8 @@ void MultiviewGPUBoundBenchmark::initializeBenchmark()
     ASSERT_GL_NO_ERROR();
 
     // Generate a vertex buffer of triangulated quads so that we have one quad per pixel.
-    const int viewWidth           = params->windowWidth / params->numViews;
-    const int viewHeight          = params->windowHeight;
+    const int viewWidth           = params->windowWidth() / params->numViews;
+    const int viewHeight          = params->windowHeight();
     const float quadWidth         = 2.f / static_cast<float>(viewWidth);
     const float quadHeight        = 2.f / static_cast<float>(viewHeight);
     const int kNumQuads           = viewWidth * viewHeight;
@@ -522,8 +525,8 @@ void MultiviewGPUBoundBenchmark::renderScene()
     glBindVertexArray(mVAO);
 
     const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
-    const int viewWidth               = params->windowWidth / params->numViews;
-    const int viewHeight              = params->windowHeight;
+    const int viewWidth               = params->windowWidth() / params->numViews;
+    const int viewHeight              = params->windowHeight();
     glDrawArrays(GL_TRIANGLES, 0, viewWidth * viewHeight * 6);
 }
 

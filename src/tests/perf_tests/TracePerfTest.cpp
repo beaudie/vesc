@@ -36,13 +36,14 @@ struct TracePerfParams final : public RenderTestParams
     {
         majorVersion = 3;
         minorVersion = 0;
-        windowWidth  = 1920;
-        windowHeight = 1080;
         trackGpuTime = true;
 
         // Display the frame after every drawBenchmark invocation
         iterationsPerStep = 1;
     }
+
+    EGLint windowWidth() const override { return 1920; }
+    EGLint windowHeight() const override { return 1080; }
 
     std::string story() const override
     {
@@ -316,27 +317,27 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     ReplayFrame(testID, traceInfo.startFrame);
 
     // RGBA 4-byte data.
-    uint32_t pixelCount = mTestParams.windowWidth * mTestParams.windowHeight;
+    uint32_t pixelCount = mTestParams.windowWidth() * mTestParams.windowHeight();
     std::vector<uint8_t> pixelData(pixelCount * 4);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glReadPixels(0, 0, mTestParams.windowWidth, mTestParams.windowHeight, GL_RGBA, GL_UNSIGNED_BYTE,
-                 pixelData.data());
+    glReadPixels(0, 0, mTestParams.windowWidth(), mTestParams.windowHeight(), GL_RGBA,
+                 GL_UNSIGNED_BYTE, pixelData.data());
 
     // Convert to RGB and flip y.
     std::vector<uint8_t> rgbData(pixelCount * 3);
-    for (EGLint y = 0; y < mTestParams.windowHeight; ++y)
+    for (EGLint y = 0; y < mTestParams.windowHeight(); ++y)
     {
-        for (EGLint x = 0; x < mTestParams.windowWidth; ++x)
+        for (EGLint x = 0; x < mTestParams.windowWidth(); ++x)
         {
-            EGLint srcPixel = x + y * mTestParams.windowWidth;
-            EGLint dstPixel = x + (mTestParams.windowHeight - y - 1) * mTestParams.windowWidth;
+            EGLint srcPixel = x + y * mTestParams.windowWidth();
+            EGLint dstPixel = x + (mTestParams.windowHeight() - y - 1) * mTestParams.windowWidth();
             memcpy(&rgbData[dstPixel * 3], &pixelData[srcPixel * 4], 3);
         }
     }
 
-    angle::SavePNGRGB(screenshotName.c_str(), "ANGLE Screenshot", mTestParams.windowWidth,
-                      mTestParams.windowHeight, rgbData);
+    angle::SavePNGRGB(screenshotName.c_str(), "ANGLE Screenshot", mTestParams.windowWidth(),
+                      mTestParams.windowHeight(), rgbData);
 
     // Finish the frame loop.
     for (uint32_t nextFrame = traceInfo.startFrame + 1; nextFrame < traceInfo.endFrame; ++nextFrame)

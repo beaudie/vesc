@@ -25,13 +25,14 @@ struct BufferSubDataParams final : public RenderTestParams
         // Common default values
         majorVersion      = 2;
         minorVersion      = 0;
-        windowWidth       = 512;
-        windowHeight      = 512;
         updateSize        = 32000;
         bufferSize        = 40000;
         iterationsPerStep = kIterationsPerStep;
         updateRate        = 1;
     }
+
+    EGLint windowWidth() const override { return 512; }
+    EGLint windowHeight() const override { return 512; }
 
     std::string story() const override;
 

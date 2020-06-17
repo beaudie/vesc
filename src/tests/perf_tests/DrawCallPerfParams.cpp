@@ -15,8 +15,6 @@ DrawCallPerfParams::DrawCallPerfParams()
 {
     majorVersion = 2;
     minorVersion = 0;
-    windowWidth  = 64;
-    windowHeight = 64;
 
 // Lower the iteration count in debug.
 #if !defined(NDEBUG)

@@ -48,13 +48,14 @@ struct InstancingPerfParams final : public RenderTestParams
     {
         majorVersion      = 2;
         minorVersion      = 0;
-        windowWidth       = 256;
-        windowHeight      = 256;
         iterationsPerStep = 1;
         runTimeSeconds    = 10.0;
         animationEnabled  = false;
         instancingEnabled = true;
     }
+
+    EGLint windowWidth() const override { return 256; }
+    EGLint windowHeight() const override { return 256; }
 
     std::string story() const override
     {

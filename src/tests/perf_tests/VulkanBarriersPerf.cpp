@@ -29,14 +29,15 @@ struct VulkanBarriersPerfParams final : public RenderTestParams
         eglParameters = egl_platform::VULKAN();
         majorVersion  = 3;
         minorVersion  = 0;
-        windowWidth   = 256;
-        windowHeight  = 256;
         trackGpuTime  = true;
 
         doBufferCopy          = bufferCopy;
         doLargeTransfers      = largeTransfers;
         doSlowFragmentShaders = slowFS;
     }
+
+    EGLint windowWidth() const override { return 256; }
+    EGLint windowHeight() const override { return 256; }
 
     std::string story() const override;
 

@@ -32,6 +32,9 @@ struct IndexConversionPerfParams final : public RenderTestParams
         return strstr.str();
     }
 
+    EGLint windowWidth() const override { return 256; }
+    EGLint windowHeight() const override { return 256; }
+
     unsigned int numIndexTris;
 
     // A second test, which covers using index ranges with an offset.
@@ -189,8 +192,6 @@ IndexConversionPerfParams IndexConversionPerfD3D11Params()
     params.eglParameters     = egl_platform::D3D11_NULL();
     params.majorVersion      = 2;
     params.minorVersion      = 0;
-    params.windowWidth       = 256;
-    params.windowHeight      = 256;
     params.iterationsPerStep = 225;
     params.numIndexTris      = 3000;
     params.indexRangeOffset  = 0;
@@ -203,8 +204,6 @@ IndexConversionPerfParams IndexRangeOffsetPerfD3D11Params()
     params.eglParameters     = egl_platform::D3D11_NULL();
     params.majorVersion      = 2;
     params.minorVersion      = 0;
-    params.windowWidth       = 256;
-    params.windowHeight      = 256;
     params.iterationsPerStep = 16;
     params.numIndexTris      = 50000;
     params.indexRangeOffset  = 64;

@@ -394,6 +394,16 @@ std::string RenderTestParams::story() const
     return "";
 }
 
+EGLint RenderTestParams::windowWidth() const
+{
+    return 64;
+}
+
+EGLint RenderTestParams::windowHeight() const
+{
+    return 64;
+}
+
 std::string RenderTestParams::backendAndStory() const
 {
     return backend() + story();
@@ -494,7 +504,7 @@ void ANGLERenderTest::SetUp()
     mPlatformMethods.monotonicallyIncreasingTime = MonotonicallyIncreasingTime;
     mPlatformMethods.context                     = this;
 
-    if (!mOSWindow->initialize(mName, mTestParams.windowWidth, mTestParams.windowHeight))
+    if (!mOSWindow->initialize(mName, mTestParams.windowWidth(), mTestParams.windowHeight()))
     {
         mSkipTest = true;
         FAIL() << "Failed initializing OSWindow";

@@ -26,10 +26,11 @@ struct InterleavedAttributeDataParams final : public RenderTestParams
         // Common default values
         majorVersion = 2;
         minorVersion = 0;
-        windowWidth  = 512;
-        windowHeight = 512;
         numSprites   = 3000;
     }
+
+    EGLint windowWidth() const override { return 512; }
+    EGLint windowHeight() const override { return 512; }
 
     // static parameters
     unsigned int numSprites;

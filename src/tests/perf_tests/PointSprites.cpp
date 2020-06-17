@@ -30,12 +30,13 @@ struct PointSpritesParams final : public RenderTestParams
         // Common default params
         majorVersion = 2;
         minorVersion = 0;
-        windowWidth  = 1280;
-        windowHeight = 720;
         count        = 10;
         size         = 3.0f;
         numVaryings  = 3;
     }
+
+    EGLint windowWidth() const override { return 1280; }
+    EGLint windowHeight() const override { return 720; }
 
     std::string story() const override;
 

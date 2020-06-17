@@ -28,8 +28,6 @@ struct TexturesParams final : public RenderTestParams
         // Common default params
         majorVersion = 2;
         minorVersion = 0;
-        windowWidth  = 720;
-        windowHeight = 720;
 
         numTextures                 = 8;
         textureRebindFrequency      = 5;
@@ -38,6 +36,9 @@ struct TexturesParams final : public RenderTestParams
 
         webgl = false;
     }
+
+    EGLint windowWidth() const override { return 720; }
+    EGLint windowHeight() const override { return 720; }
 
     std::string story() const override;
     size_t numTextures;
