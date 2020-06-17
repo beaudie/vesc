@@ -445,6 +445,14 @@ unsigned int RendererGL::getMaxWorkerContexts()
 
 bool RendererGL::hasNativeParallelCompile()
 {
+    // Workaround issue in NVIDIA GL driver on Linux
+    // http://crbug.com/1094869
+#ifdef THREAD_SANITIZER
+    if (IsLinux() && IsNvidia())
+    {
+        return false;
+    }
+#endif
     return mFunctions->maxShaderCompilerThreadsKHR != nullptr ||
            mFunctions->maxShaderCompilerThreadsARB != nullptr;
 }
