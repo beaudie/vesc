@@ -4287,9 +4287,10 @@ bool Program::linkValidateTransformFeedback(const Version &version,
 
         if (var->isArray())
         {
-            if (version < Version(3, 1))
+            if (version < Version(3, 1) && tfVaryingName.find('[') != std::string::npos &&
+                caps.maxShaderAtomicCounterBuffers[gl::ShaderType::Vertex] == 0)
             {
-                infoLog << "Capture of arrays is undefined and not supported.";
+                infoLog << "Capture of array elements is undefined and not supported.";
                 return false;
             }
 
