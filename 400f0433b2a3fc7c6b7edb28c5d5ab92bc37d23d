@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b775747a_29600932",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T19:15:51Z",
+      "side": 1,
+      "message": "copying",
+      "range": {
+        "startLine": 9,
+        "startChar": 23,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a65714b3_58127e5c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T19:15:51Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 11,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "465b1ef1_399d5950",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T19:15:51Z",
+      "side": 1,
+      "message": "UtilsVk::copyImage() is also called for glCopyTextureCHROMIUM() which doesn\u0027t read from the framebuffer. You should pipe the results of contextVk-\u003eisRotatedAspectRatioForReadFBO() and contextVk-\u003eisRotatedAspectRatioForReadFBO() from TextureVk::copySubImageImpl() through TextureVk::copySubImageImplWithDraw() and store them in UtilsVk::CopyImageParameters, then check that here.",
+      "range": {
+        "startLine": 1729,
+        "startChar": 12,
+        "endLine": 1729,
+        "endChar": 51
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81f845f2_19809152",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T19:15:51Z",
+      "side": 1,
+      "message": "Please add:\n\n     ASSERT(!shaderParams.flipX \u0026\u0026 !shaderParams.flipY);\n\nto both this and the 270Degrees cases.",
+      "range": {
+        "startLine": 1738,
+        "startChar": 33,
+        "endLine": 1738,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f629b1b1_a9763779",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T19:15:51Z",
+      "side": 1,
+      "message": "renderArea is already swapped, why is this code needed? It\u0027s making the scissor larger than it should be.",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1794,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95082d01_f97d506d",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 6
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T19:15:51Z",
+      "side": 1,
+      "message": "I think this should come after the flip checks. Say for the 90Degrees case, flipY is true, which means after rotation it should flip x, right? Or in other words, first it should flip, then rotate.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 52
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
