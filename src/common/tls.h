@@ -119,11 +119,8 @@ ANGLE_INLINE bool SetContextToAndroidOpenGLTLSSlot(gl::Context *value)
 ANGLE_INLINE bool GetContextFromAndroidOpenGLTLSSlot(gl::Context **value)
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
-    if (gUseAndroidOpenGLTlsSlot)
-    {
-        *value = static_cast<gl::Context *>(ANGLE_ANDROID_GET_GL_TLS()[kAndroidOpenGLTlsSlot]);
-        return true;
-    }
+    *value = static_cast<gl::Context *>(ANGLE_ANDROID_GET_GL_TLS()[kAndroidOpenGLTlsSlot]);
+    return gUseAndroidOpenGLTlsSlot;
 #endif
     return false;
 }
