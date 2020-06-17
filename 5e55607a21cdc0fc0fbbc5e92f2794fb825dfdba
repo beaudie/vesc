@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "2d1fc2cd_6544bd8c",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-17T20:03:45Z",
+      "side": 1,
+      "message": "Yes, that\u0027s true, and I see that this is how mPreviousICDEnv is handling it, but technically it\u0027s implementation-defined. It\u0027s entirely possible for a platform to allow defining empty variables, and to check for it\u0027s mere existance. However, I don\u0027t know of any platform that does. Also, note that angle::GetCWD() does return Optional\u003cstd::string\u003e, so there\u0027s precedence for this case.\n\nAnyway, if you prefer I go the route of checking empty strings, I\u0027ll do that. I can at least keep ResetEnvironmentVariable, and also use it where we currently reset kLoaderICDFilenamesEnv:\n\n        if (mPreviousICDEnv.value().empty())\n        {\n            angle::UnsetEnvironmentVar(kLoaderICDFilenamesEnv);\n        }\n        else\n        {\n            angle::SetEnvironmentVar(kLoaderICDFilenamesEnv, mPreviousICDEnv.value().c_str());\n        }\n\nShall I add this ResetEnvironmentVar to system_utils?",
+      "parentUuid": "8e0461f1_fb2e0b18",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e31dddb_aed00219",
         "filename": "src/common/vulkan/vulkan_icd.cpp",
         "patchSetId": 5
