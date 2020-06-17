@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "492ddd08_6ec95944",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-17T20:17:53Z",
+      "side": 1,
+      "message": "Updated with a new patch. Let me know what you think.",
+      "parentUuid": "2d1fc2cd_6544bd8c",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e31dddb_aed00219",
         "filename": "src/common/vulkan/vulkan_icd.cpp",
         "patchSetId": 5
