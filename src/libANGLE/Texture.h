@@ -542,6 +542,14 @@ class Texture final : public RefCountObject<TextureID>,
     InitState initState() const { return mState.mInitState; }
     void setInitState(const ImageIndex &imageIndex, InitState initState) override;
 
+    // The source of the syncState call.  Knowing why syncState is being called can help the
+    // back-end make more-informed decisions.
+    enum class SyncStateSource
+    {
+        GenerateMipmap,
+        Other,
+    };
+
     enum DirtyBitType
     {
         // Sampler state
@@ -580,7 +588,7 @@ class Texture final : public RefCountObject<TextureID>,
     };
     using DirtyBits = angle::BitSet<DIRTY_BIT_COUNT>;
 
-    angle::Result syncState(const Context *context);
+    angle::Result syncState(const Context *context, SyncStateSource source);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
     // ObserverInterface implementation.
