@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1626356d_70fcb540",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T17:19:55Z",
+      "side": 1,
+      "message": "BTW - this looks a bit risky. What if we use EGL image targets for external images that are not YUV conversions?",
+      "range": {
+        "startLine": 100,
+        "startChar": 7,
+        "endLine": 100,
+        "endChar": 55
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96f015d7_9d6eb7ec",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 40
