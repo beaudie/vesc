@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bc3e850_91d0085f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T05:23:49Z",
+      "side": 1,
+      "message": "There are a handful of other OpCodes to drop. See comment on spvtools::CreateStripDebugInfoPass().",
+      "revId": "8b0be6741874da63ccd6b62df58b87a610873994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
