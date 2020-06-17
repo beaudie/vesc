@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d76aa1f6_43930d11",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T21:12:40Z",
+      "side": 1,
+      "message": "here you can figure out the right w/h and set the member variable.",
+      "range": {
+        "startLine": 361,
+        "startChar": 16,
+        "endLine": 361,
+        "endChar": 29
+      },
+      "revId": "4a663ef273824a4f8af40b170cd54e992b31bb34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
