@@ -736,8 +736,8 @@ void AssignInterfaceBlockBindings(GlslangSourceOptions &options,
     {
         if (!block.isArray || block.arrayElement == 0)
         {
-            // TODO: http://anglebug.com/4523: All blocks should be active
-            if (programExecutable.hasLinkedShaderStage(shaderType) && block.isActive(shaderType))
+            ASSERT(block.isActive(shaderType));
+            if (programExecutable.hasLinkedShaderStage(shaderType))
             {
                 AddResourceInfo(&(*variableInfoMapOut)[shaderType], block.mappedName,
                                 programInterfaceInfo->shaderResourceDescriptorSetIndex,
