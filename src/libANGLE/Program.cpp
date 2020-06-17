@@ -4287,12 +4287,6 @@ bool Program::linkValidateTransformFeedback(const Version &version,
 
         if (var->isArray())
         {
-            if (version < Version(3, 1))
-            {
-                infoLog << "Capture of arrays is undefined and not supported.";
-                return false;
-            }
-
             // GLSL ES 3.10 section 4.3.6: A vertex output can't be an array of arrays.
             ASSERT(!var->isArrayOfArrays());
 
