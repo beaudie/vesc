@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "8e0461f1_fb2e0b18",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T19:58:18Z",
+      "side": 1,
+      "message": "An empty string and the environment variable not existing are the same. True as well for the inverse (non-empty iff exists).",
+      "parentUuid": "77b48a9b_f645aa2b",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e31dddb_aed00219",
         "filename": "src/common/vulkan/vulkan_icd.cpp",
         "patchSetId": 5
