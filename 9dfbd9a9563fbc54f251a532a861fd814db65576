@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96f015d7_9d6eb7ec",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "nullptr instead of 0?",
+      "range": {
+        "startLine": 42,
+        "startChar": 40,
+        "endLine": 42,
+        "endChar": 42
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c02b77b0_973f8e37",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "nit: imageFormat.hasDepthOrStencilBits()",
+      "range": {
+        "startLine": 171,
+        "startChar": 41,
+        "endLine": 171,
+        "endChar": 97
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c015ea61_ad770ae3",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "what happens if this is not enabled? Is this a runtime error? Maybe should make ANGLE_VK_CHECK?",
+      "range": {
+        "startLine": 235,
+        "startChar": 7,
+        "endLine": 235,
+        "endChar": 73
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eefe31c2_b737c774",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "can we revert this?",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc799c53_d7e60936",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "this isn\u0027t how angle::Result is used. for the caches we generally have a single get method that creates the entry if it\u0027s not there and returns a possible error. See other caches for examples.",
+      "range": {
+        "startLine": 2225,
+        "startChar": 0,
+        "endLine": 2232,
+        "endChar": 31
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed39b73a_43b3bd88",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "need error handling here",
+      "range": {
+        "startLine": 2254,
+        "startChar": 25,
+        "endLine": 2254,
+        "endChar": 29
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2bef01b_c2a3236f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "nah, this is fine. you can remove the TODO.",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 639,
+        "endChar": 88
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e142ec4_dd5026df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 1,
+      "message": "you can omit this comment, it is redundant with the static_assert.",
+      "range": {
+        "startLine": 664,
+        "startChar": 0,
+        "endLine": 666,
+        "endChar": 87
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

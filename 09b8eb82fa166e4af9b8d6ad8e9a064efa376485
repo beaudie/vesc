@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bcb67a0_62880c66",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T15:51:53Z",
+      "side": 0,
+      "message": "this looks bogus to me. Can we revert this?",
+      "range": {
+        "startLine": 1148,
+        "startChar": 12,
+        "endLine": 1148,
+        "endChar": 56
+      },
+      "revId": "09b8eb82fa166e4af9b8d6ad8e9a064efa376485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
