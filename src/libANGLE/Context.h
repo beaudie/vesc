@@ -527,6 +527,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const Limitations &getLimitations() const { return mState.getLimitations(); }
     bool isGLES1() const;
 
+    bool isDuringMultiDraw() const { return mIsDuringMultiDraw; }
+    void setMultiDrawState(bool value) { mIsDuringMultiDraw = value; }
+
     bool skipValidation() const
     {
         // Ensure we don't skip validation when context becomes lost, since implementations
@@ -767,6 +770,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     std::unique_ptr<angle::FrameCapture> mFrameCapture;
 
     OverlayType mOverlay;
+
+    // Is currently in the mid of a serials of draw call triggered by glMultiDraw*
+    bool mIsDuringMultiDraw;
 };
 }  // namespace gl
 

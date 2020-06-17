@@ -310,7 +310,8 @@ Context::Context(egl::Display *display,
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
       mThreadPool(nullptr),
       mFrameCapture(new angle::FrameCapture),
-      mOverlay(mImplementation.get())
+      mOverlay(mImplementation.get()),
+      mIsDuringMultiDraw(false)
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
@@ -5621,11 +5622,29 @@ void Context::memoryBarrierByRegion(GLbitfield barriers)
     ANGLE_CONTEXT_TRY(mImplementation->memoryBarrierByRegion(this, barriers));
 }
 
+// RAII object to set and reset mIsDuringMultiDraw state in Context
+class ResetMultiDrawState : angle::NonCopyable
+{
+  public:
+    ResetMultiDrawState(Context *context) : mContext(context) { mContext->setMultiDrawState(true); }
+    ~ResetMultiDrawState()
+    {
+        if (mContext)
+        {
+            mContext->setMultiDrawState(false);
+        }
+    }
+
+  private:
+    Context *mContext;
+};
+
 void Context::multiDrawArrays(PrimitiveMode mode,
                               const GLint *firsts,
                               const GLsizei *counts,
                               GLsizei drawcount)
 {
+    ResetMultiDrawState multiDrawStateResetter(this);
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     Program *programObject = mState.getLinkedProgram(this);
     const bool hasDrawID   = programObject && programObject->hasDrawIDUniform();
@@ -5666,6 +5685,7 @@ void Context::multiDrawArraysInstanced(PrimitiveMode mode,
                                        const GLsizei *instanceCounts,
                                        GLsizei drawcount)
 {
+    ResetMultiDrawState multiDrawStateResetter(this);
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     Program *programObject = mState.getLinkedProgram(this);
     const bool hasDrawID   = programObject && programObject->hasDrawIDUniform();
@@ -5706,6 +5726,7 @@ void Context::multiDrawElements(PrimitiveMode mode,
                                 const GLvoid *const *indices,
                                 GLsizei drawcount)
 {
+    ResetMultiDrawState multiDrawStateResetter(this);
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     Program *programObject = mState.getLinkedProgram(this);
     const bool hasDrawID   = programObject && programObject->hasDrawIDUniform();
@@ -5745,6 +5766,7 @@ void Context::multiDrawElementsInstanced(PrimitiveMode mode,
                                          const GLsizei *instanceCounts,
                                          GLsizei drawcount)
 {
+    ResetMultiDrawState multiDrawStateResetter(this);
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     Program *programObject = mState.getLinkedProgram(this);
     const bool hasDrawID   = programObject && programObject->hasDrawIDUniform();
@@ -5934,6 +5956,7 @@ void Context::multiDrawArraysInstancedBaseInstance(PrimitiveMode mode,
                                                    const GLuint *baseInstances,
                                                    GLsizei drawcount)
 {
+    ResetMultiDrawState multiDrawStateResetter(this);
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     Program *programObject     = mState.getLinkedProgram(this);
     const bool hasBaseInstance = programObject && programObject->hasBaseInstanceUniform();
@@ -5968,6 +5991,7 @@ void Context::multiDrawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mod
                                                                const GLuint *baseInstances,
                                                                GLsizei drawcount)
 {
+    ResetMultiDrawState multiDrawStateResetter(this);
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     Program *programObject     = mState.getLinkedProgram(this);
     const bool hasBaseVertex   = programObject && programObject->hasBaseVertexUniform();

@@ -598,7 +598,6 @@ TEST_P(DrawBaseVertexBaseInstanceTest, MultiDrawArraysInstancedBaseInstance)
     }
 
     ANGLE_SKIP_TEST_IF(!requestExtensions());
-    ANGLE_SKIP_TEST_IF(getBufferDataUsage() == GL_DYNAMIC_DRAW);
 
     GLProgram program;
     setupProgram(program, true, true);
@@ -656,7 +655,6 @@ TEST_P(DrawBaseVertexBaseInstanceTest, DrawElementsInstancedBaseVertexBaseInstan
 TEST_P(DrawBaseVertexBaseInstanceTest, MultiDrawElementsInstancedBaseVertexBaseInstance)
 {
     ANGLE_SKIP_TEST_IF(!requestExtensions());
-    ANGLE_SKIP_TEST_IF(getBufferDataUsage() == GL_DYNAMIC_DRAW);
 
     GLProgram program;
     setupProgram(program, false, true);
