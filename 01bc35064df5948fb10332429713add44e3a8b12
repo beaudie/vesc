@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "651fc593_a96fc055",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T02:42:05Z",
+      "side": 1,
+      "message": "Made an example for you. The key is the template parameters `typename T, T *C::*member` for the D::grow() function:\n\n    struct A\n    {\n        int a;\n    };\n    \n    struct B\n    {\n        float b[2];\n    };\n    \n    struct C\n    {\n        A *a;\n        B *b;\n    };\n    \n    class D\n    {\n        void growAs();\n        void growBs();\n    \n    private:\n        std::vector\u003cA\u003e as;\n        std::vector\u003cB\u003e bs;\n        std::vector\u003cC\u003e cs;\n    \n        template\u003ctypename T, T *C::*member\u003e\n        void grow(std::vector\u003cT\u003e *v);\n    };\n    \n    template\u003ctypename T, T *C::*member\u003e\n    void D::grow(std::vector\u003cT\u003e *v)\n    {\n        const T *oldStart \u003d v-\u003eempty() ? nullptr : v-\u003edata();\n        v-\u003ereserve(v-\u003ecapacity() + 1);\n    \n        if (oldStart)\n        {\n            for (C \u0026c : cs)\n            {\n                if (c.*member)\n                {\n                    size_t index \u003d c.*member - oldStart;\n                    c.*member \u003d v-\u003edata() + index;\n                }\n            }\n        }\n    }\n    \n    void D::growAs()\n    {\n        grow\u003cA, \u0026C::a\u003e(\u0026as);\n    }\n    \n    void D::growBs()\n    {\n        grow\u003cB, \u0026C::b\u003e(\u0026bs);\n    }",
+      "parentUuid": "c1bf89f1_b5fab903",
+      "revId": "01bc35064df5948fb10332429713add44e3a8b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7231863_84df1884",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
