@@ -2161,6 +2161,71 @@ void StateManager11::setSingleVertexBuffer(const d3d11::Buffer *buffer, UINT str
     }
 }
 
+angle::Result StateManager11::updateStateForDrawCallInMultiDraw(
+    const gl::Context *context,
+    gl::PrimitiveMode mode,
+    GLint firstVertex,
+    GLsizei vertexOrIndexCount,
+    gl::DrawElementsType indexTypeOrInvalid,
+    const void *indices,
+    GLsizei instanceCount,
+    GLint baseVertex,
+    GLuint baseInstance)
+{
+
+    ANGLE_TRY(mVertexArray11->syncStateForDraw(context, firstVertex, vertexOrIndexCount,
+                                               indexTypeOrInvalid, indices, instanceCount,
+                                               baseVertex, baseInstance, false));
+
+    // The ShaderConstants only need to be updated when the program uses vertexID
+    if (mProgramD3D->usesVertexID())
+    {
+        GLint firstVertexOnChange = firstVertex + baseVertex;
+        ASSERT(mVertexArray11);
+        if (mVertexArray11->hasActiveDynamicAttrib(context) &&
+            indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum)
+        {
+            // drawElements with Dynamic attribute
+            // the firstVertex is already including baseVertex when
+            // doing ComputeStartVertex
+            firstVertexOnChange = firstVertex;
+        }
+
+        if (mShaderConstants.onFirstVertexChange(firstVertexOnChange))
+        {
+            mInternalDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
+        }
+    }
+
+    // Changes in the draw call can affect the vertex buffer translations.
+    if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != firstVertex)
+    {
+        mLastFirstVertex = firstVertex;
+        invalidateInputLayout();
+        ANGLE_TRY(syncVertexBuffersAndInputLayout(context, mode, firstVertex, vertexOrIndexCount,
+                                                  indexTypeOrInvalid, instanceCount));
+    }
+
+    if (indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum)
+    {
+        ANGLE_TRY(applyIndexBuffer(context, vertexOrIndexCount, indexTypeOrInvalid, indices));
+    }
+
+    // if (mProgramD3D->anyShaderUniformsDirty())
+    // {
+    // DrawId must be dirty since it's in multiDraw
+    // BaseVertex, BaseInstance
+    mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORMS);
+    ANGLE_TRY(applyUniforms(context));
+    // }
+
+    // This must happen after viewport sync; the viewport affects builtin uniforms.
+    mInternalDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
+    ANGLE_TRY(applyDriverUniforms(context));
+
+    return angle::Result::Continue;
+}
+
 angle::Result StateManager11::updateState(const gl::Context *context,
                                           gl::PrimitiveMode mode,
                                           GLint firstVertex,
@@ -2170,6 +2235,8 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                                           GLsizei instanceCount,
                                           GLint baseVertex,
                                           GLuint baseInstance)
+//   GLuint baseInstance,
+//   bool promoteDynamic)
 {
     const gl::State &glState = context->getState();
 
@@ -2213,7 +2280,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
 
     ANGLE_TRY(mVertexArray11->syncStateForDraw(context, firstVertex, vertexOrIndexCount,
                                                indexTypeOrInvalid, indices, instanceCount,
-                                               baseVertex, baseInstance));
+                                               baseVertex, baseInstance, true));
 
     // Changes in the draw call can affect the vertex buffer translations.
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != firstVertex)

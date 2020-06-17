@@ -63,6 +63,10 @@ struct FrontendFeatures;
 namespace rx
 {
 class ContextImpl;
+class ContextGL;
+class Context9;
+class Context11;
+class ContextVk;
 class EGLImplFactory;
 }  // namespace rx
 
@@ -613,11 +617,17 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     egl::Error reacquireHighPowerGPU();
     void onGPUSwitch();
 
-  private:
-    void initialize();
+    bool noopDraw(PrimitiveMode mode, GLsizei count) const;
+    bool noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei instanceCount) const;
 
-    bool noopDraw(PrimitiveMode mode, GLsizei count);
-    bool noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei instanceCount);
+  private:
+    friend class rx::ContextImpl;
+    friend class rx::ContextGL;
+    friend class rx::Context9;
+    friend class rx::Context11;
+    friend class rx::ContextVk;
+
+    void initialize();
 
     angle::Result prepareForDraw(PrimitiveMode mode);
     angle::Result prepareForClear(GLbitfield mask);

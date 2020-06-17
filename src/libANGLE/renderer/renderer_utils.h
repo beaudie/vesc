@@ -211,6 +211,22 @@ class IncompleteTextureSet final : angle::NonCopyable
     gl::TextureMap mIncompleteTextures;
 };
 
+// // RAII object making sure reset uniforms is called no matter whether there's an error in draw
+// calls class ResetBaseVertexBaseInstance : angle::NonCopyable
+// {
+//   public:
+//     ResetBaseVertexBaseInstance(gl::Program *programObject,
+//                                 bool resetBaseVertex,
+//                                 bool resetBaseInstance);
+
+//     ~ResetBaseVertexBaseInstance();
+
+//   private:
+//     gl::Program *mProgramObject;
+//     bool mResetBaseVertex;
+//     bool mResetBaseInstance;
+// };
+
 // Helpers to set a matrix uniform value based on GLSL or HLSL semantics.
 // The return value indicate if the data was updated or not.
 template <int cols, int rows>
@@ -349,6 +365,53 @@ void CopyLineLoopIndicesWithRestart(GLsizei indexCount, const uint8_t *srcPtr, u
 }
 
 void GetSamplePosition(GLsizei sampleCount, size_t index, GLfloat *xy);
+
+angle::Result MultiDrawArraysGeneral(ContextImpl *contextImpl,
+                                     const gl::Context *context,
+                                     gl::PrimitiveMode mode,
+                                     const GLint *firsts,
+                                     const GLsizei *counts,
+                                     GLsizei drawcount);
+angle::Result MultiDrawArraysInstancedGeneral(ContextImpl *contextImpl,
+                                              const gl::Context *context,
+                                              gl::PrimitiveMode mode,
+                                              const GLint *firsts,
+                                              const GLsizei *counts,
+                                              const GLsizei *instanceCounts,
+                                              GLsizei drawcount);
+angle::Result MultiDrawElementsGeneral(ContextImpl *contextImpl,
+                                       const gl::Context *context,
+                                       gl::PrimitiveMode mode,
+                                       const GLsizei *counts,
+                                       gl::DrawElementsType type,
+                                       const GLvoid *const *indices,
+                                       GLsizei drawcount);
+angle::Result MultiDrawElementsInstancedGeneral(ContextImpl *contextImpl,
+                                                const gl::Context *context,
+                                                gl::PrimitiveMode mode,
+                                                const GLsizei *counts,
+                                                gl::DrawElementsType type,
+                                                const GLvoid *const *indices,
+                                                const GLsizei *instanceCounts,
+                                                GLsizei drawcount);
+angle::Result MultiDrawArraysInstancedBaseInstanceGeneral(ContextImpl *contextImpl,
+                                                          const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          const GLint *firsts,
+                                                          const GLsizei *counts,
+                                                          const GLsizei *instanceCounts,
+                                                          const GLuint *baseInstances,
+                                                          GLsizei drawcount);
+angle::Result MultiDrawElementsInstancedBaseVertexBaseInstanceGeneral(ContextImpl *contextImpl,
+                                                                      const gl::Context *context,
+                                                                      gl::PrimitiveMode mode,
+                                                                      const GLsizei *counts,
+                                                                      gl::DrawElementsType type,
+                                                                      const GLvoid *const *indices,
+                                                                      const GLsizei *instanceCounts,
+                                                                      const GLint *baseVertices,
+                                                                      const GLuint *baseInstances,
+                                                                      GLsizei drawcount);
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_RENDERER_UTILS_H_
