@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e4e52a8_f22e6c43",
+        "filename": "src/tests/perf_tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T21:13:16Z",
+      "side": 1,
+      "message": "again this should be surfaceWidth/H.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "3885e71989b821b117db432408469869e7f61ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
