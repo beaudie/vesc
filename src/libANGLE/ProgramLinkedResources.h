@@ -17,6 +17,7 @@
 #include "libANGLE/VaryingPacking.h"
 
 #include <functional>
+#include "GLSLANG/ShaderLang.h"
 
 namespace sh
 {
@@ -109,7 +110,8 @@ class InterfaceBlockLinker : angle::NonCopyable
 
     // This is called once during a link operation, after all shader blocks are added.
     void linkBlocks(const GetBlockSizeFunc &getBlockSize,
-                    const GetBlockMemberInfoFunc &getMemberInfo) const;
+                    const GetBlockMemberInfoFunc &getMemberInfo,
+                    ShShaderOutput compilerOutputType) const;
 
   protected:
     InterfaceBlockLinker(std::vector<InterfaceBlock> *blocksOut,
@@ -117,7 +119,8 @@ class InterfaceBlockLinker : angle::NonCopyable
     void defineInterfaceBlock(const GetBlockSizeFunc &getBlockSize,
                               const GetBlockMemberInfoFunc &getMemberInfo,
                               const sh::InterfaceBlock &interfaceBlock,
-                              ShaderType shaderType) const;
+                              ShaderType shaderType,
+                              ShShaderOutput compilerOutputType) const;
 
     virtual size_t getCurrentBlockMemberIndex() const = 0;
 

@@ -73,6 +73,8 @@ enum ShShaderOutput
     // Output specialized GLSL to be fed to glslang for Vulkan SPIR to be cross compiled to Metal
     // later.
     SH_GLSL_METAL_OUTPUT = 0x8B4C,
+
+    SH_INVALID = 0xFFFF,
 };
 
 // Compile options.
@@ -737,6 +739,12 @@ GLenum GetGeometryShaderOutputPrimitiveType(const ShHandle handle);
 int GetGeometryShaderInvocations(const ShHandle handle);
 int GetGeometryShaderMaxVertices(const ShHandle handle);
 unsigned int GetShaderSharedMemorySize(const ShHandle handle);
+
+bool IsOutputESSL(ShShaderOutput output);
+bool IsOutputGLSL(ShShaderOutput output);
+bool IsOutputHLSL(ShShaderOutput output);
+bool IsOutputVulkan(ShShaderOutput output);
+bool IsOutputMetal(ShShaderOutput output);
 
 //
 // Helper function to identify specs that are based on the WebGL spec.

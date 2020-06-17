@@ -161,6 +161,8 @@ class Shader final : angle::NonCopyable, public LabeledObject
     bool isCompiled();
     bool isCompleted();
 
+    ShShaderOutput getCompilerOutputType() { return mOutputType; }
+
     void addRef();
     void release(const Context *context);
     unsigned int getRefCount() const;
@@ -227,6 +229,8 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     GLuint mCurrentMaxComputeWorkGroupInvocations;
     unsigned int mMaxComputeSharedMemory;
+
+    ShShaderOutput mOutputType;
 };
 
 bool CompareShaderVar(const sh::ShaderVariable &x, const sh::ShaderVariable &y);

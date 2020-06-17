@@ -72,11 +72,6 @@ bool IsBuiltinFragmentInputVariable(TQualifier qualifier);
 bool CanBeInvariantESSL1(TQualifier qualifier);
 bool CanBeInvariantESSL3OrGreater(TQualifier qualifier);
 bool IsShaderOutput(TQualifier qualifier);
-bool IsOutputESSL(ShShaderOutput output);
-bool IsOutputGLSL(ShShaderOutput output);
-bool IsOutputHLSL(ShShaderOutput output);
-bool IsOutputVulkan(ShShaderOutput output);
-bool IsOutputMetal(ShShaderOutput output);
 
 bool IsInShaderStorageBlock(TIntermTyped *node);
 

@@ -365,6 +365,7 @@ void Shader::compile(const Context *context)
     mCompilingState->shCompilerInstance = std::move(compilerInstance);
     mCompilingState->compileEvent =
         mImplementation->compile(context, &(mCompilingState->shCompilerInstance), options);
+    mOutputType = mCompilingState->shCompilerInstance.getShaderOutputType();
 }
 
 void Shader::resolveCompile()
