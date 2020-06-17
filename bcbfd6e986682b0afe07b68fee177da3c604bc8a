@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17dec42a_db941621",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-17T23:20:48Z",
+      "side": 1,
+      "message": "This seems weird. Why are width and height both set to same/max value?",
+      "revId": "bcbfd6e986682b0afe07b68fee177da3c604bc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a48b39a7_d3395fb6",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-17T23:20:48Z",
+      "side": 1,
+      "message": "{} - curly braces around code inside the if, per style guide I believe.",
+      "revId": "bcbfd6e986682b0afe07b68fee177da3c604bc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
