@@ -1674,7 +1674,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (isGenerateMipmap)
     {
         mImage->removeStagedUpdates(contextVk, mState.getEffectiveBaseLevel() + 1,
-                                    mState.getEffectiveMaxLevel());
+                                    mState.getMipmapMaxLevel());
     }
 
     bool isMipmapEnabledByMinFilter = false;
