@@ -232,6 +232,17 @@ class StateManager11 final : angle::NonCopyable
 
     void setSingleVertexBuffer(const d3d11::Buffer *buffer, UINT stride, UINT offset);
 
+    // // Used instead for drawCalls during a multiDraw* call
+    // // Only updating params of a drawCall
+    // angle::Result updateStateForDrawCallInMultiDraw(const gl::Context *context,
+    //                                                 gl::PrimitiveMode mode,
+    //                                                 GLint firstVertex,
+    //                                                 GLsizei vertexOrIndexCount,
+    //                                                 gl::DrawElementsType indexTypeOrInvalid,
+    //                                                 const void *indices,
+    //                                                 GLsizei instanceCount,
+    //                                                 GLint baseVertex,
+    //                                                 GLuint baseInstance);
     angle::Result updateState(const gl::Context *context,
                               gl::PrimitiveMode mode,
                               GLint firstVertex,
@@ -240,7 +251,9 @@ class StateManager11 final : angle::NonCopyable
                               const void *indices,
                               GLsizei instanceCount,
                               GLint baseVertex,
-                              GLuint baseInstance);
+                              //   GLuint baseInstance);
+                              GLuint baseInstance,
+                              bool promoteDynamic);
 
     void setShaderResourceShared(gl::ShaderType shaderType,
                                  UINT resourceSlot,
