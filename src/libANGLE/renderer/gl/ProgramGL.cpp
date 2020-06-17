@@ -1109,6 +1109,17 @@ void ProgramGL::markUnusedUniformLocations(std::vector<gl::VariableLocation> *un
 
 void ProgramGL::linkResources(const gl::ProgramLinkedResources &resources)
 {
+    ShShaderOutput compilerOutputType = ShShaderOutput::SH_INVALID;
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        gl::Shader *shader = mState.getAttachedShader(shaderType);
+        if (shader)
+        {
+            compilerOutputType = shader->getCompilerOutputType();
+            break;
+        }
+    }
+
     // Gather interface block info.
     auto getUniformBlockSize = [this](const std::string &name, const std::string &mappedName,
                                       size_t *sizeOut) {
@@ -1120,7 +1131,8 @@ void ProgramGL::linkResources(const gl::ProgramLinkedResources &resources)
         return this->getUniformBlockMemberInfo(name, mappedName, infoOut);
     };
 
-    resources.uniformBlockLinker.linkBlocks(getUniformBlockSize, getUniformBlockMemberInfo);
+    resources.uniformBlockLinker.linkBlocks(getUniformBlockSize, getUniformBlockMemberInfo,
+                                            compilerOutputType);
 
     auto getShaderStorageBlockSize = [this](const std::string &name, const std::string &mappedName,
                                             size_t *sizeOut) {
@@ -1132,8 +1144,8 @@ void ProgramGL::linkResources(const gl::ProgramLinkedResources &resources)
                                                   sh::BlockMemberInfo *infoOut) {
         return this->getShaderStorageBlockMemberInfo(name, mappedName, infoOut);
     };
-    resources.shaderStorageBlockLinker.linkBlocks(getShaderStorageBlockSize,
-                                                  getShaderStorageBlockMemberInfo);
+    resources.shaderStorageBlockLinker.linkBlocks(
+        getShaderStorageBlockSize, getShaderStorageBlockMemberInfo, compilerOutputType);
 
     // Gather atomic counter buffer info.
     std::map<int, unsigned int> sizeMap;

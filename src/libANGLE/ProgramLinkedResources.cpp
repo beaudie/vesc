@@ -1061,7 +1061,8 @@ void InterfaceBlockLinker::addShaderBlocks(ShaderType shaderType,
 }
 
 void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
-                                      const GetBlockMemberInfoFunc &getMemberInfo) const
+                                      const GetBlockMemberInfoFunc &getMemberInfo,
+                                      ShShaderOutput compilerOutputType) const
 {
     ASSERT(mBlocksOut->empty());
 
@@ -1084,7 +1085,8 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
 
             if (visitedList.count(block.name) == 0)
             {
-                defineInterfaceBlock(getBlockSize, getMemberInfo, block, shaderType);
+                defineInterfaceBlock(getBlockSize, getMemberInfo, block, shaderType,
+                                     compilerOutputType);
                 visitedList.insert(block.name);
                 continue;
             }
@@ -1115,7 +1117,8 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
 void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlockSize,
                                                 const GetBlockMemberInfoFunc &getMemberInfo,
                                                 const sh::InterfaceBlock &interfaceBlock,
-                                                ShaderType shaderType) const
+                                                ShaderType shaderType,
+                                                ShShaderOutput compilerOutputType) const
 {
     size_t blockSize = 0;
     std::vector<unsigned int> blockIndexes;
@@ -1166,13 +1169,28 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlock
                              interfaceBlock.isArray(), arrayElement, firstFieldArraySize,
                              blockBinding);
         block.memberIndexes = blockIndexes;
-        block.setActive(shaderType, interfaceBlock.active);
+
+        // All members of a named uniform block declared with a shared or std140 layout qualifier
+        // are considered active
+        // HLSL has its own compiler path needs to be worked around.
+        bool isActive = interfaceBlock.active;
+        if (!sh::IsOutputHLSL(compilerOutputType))
+        {
+            isActive = isActive ||
+                       (interfaceBlock.layout == sh::BlockLayoutType::BLOCKLAYOUT_STD140) ||
+                       (interfaceBlock.layout == sh::BlockLayoutType::BLOCKLAYOUT_SHARED);
+        }
+        block.setActive(shaderType, isActive);
 
         // Since all block elements in an array share the same active interface blocks, they
         // will all be active once any block member is used. So, since interfaceBlock.name[0]
         // was active, here we will add every block element in the array.
         block.dataSize = static_cast<unsigned int>(blockSize);
-        mBlocksOut->push_back(block);
+
+        if (isActive)
+        {
+            mBlocksOut->push_back(block);
+        }
     }
 }
 
@@ -1266,6 +1284,7 @@ void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programStat
                                                  const ProgramLinkedResources &resources) const
 {
     // Gather uniform interface block info.
+    ShShaderOutput compilerOutputType = ShShaderOutput::SH_INVALID;
     InterfaceBlockInfo uniformBlockInfo(mCustomEncoderFactory);
     for (const ShaderType shaderType : AllShaderTypes())
     {
@@ -1273,6 +1292,7 @@ void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programStat
         if (shader)
         {
             uniformBlockInfo.getShaderBlockInfo(shader->getUniformBlocks());
+            compilerOutputType = shader->getCompilerOutputType();
         }
     }
 
@@ -1288,7 +1308,8 @@ void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programStat
     };
 
     // Link uniform interface blocks.
-    resources.uniformBlockLinker.linkBlocks(getUniformBlockSize, getUniformBlockMemberInfo);
+    resources.uniformBlockLinker.linkBlocks(getUniformBlockSize, getUniformBlockMemberInfo,
+                                            compilerOutputType);
 
     // Gather storage bufer interface block info.
     InterfaceBlockInfo shaderStorageBlockInfo(mCustomEncoderFactory);
@@ -1313,8 +1334,8 @@ void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programStat
     };
 
     // Link storage buffer interface blocks.
-    resources.shaderStorageBlockLinker.linkBlocks(getShaderStorageBlockSize,
-                                                  getShaderStorageBlockMemberInfo);
+    resources.shaderStorageBlockLinker.linkBlocks(
+        getShaderStorageBlockSize, getShaderStorageBlockMemberInfo, compilerOutputType);
 
     // Gather and link atomic counter buffer interface blocks.
     std::map<int, unsigned int> sizeMap;

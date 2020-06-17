@@ -715,6 +715,57 @@ unsigned int GetShaderSharedMemorySize(const ShHandle handle)
     return sharedMemorySize;
 }
 
+bool IsOutputESSL(ShShaderOutput output)
+{
+    return output == SH_ESSL_OUTPUT;
+}
+
+bool IsOutputGLSL(ShShaderOutput output)
+{
+    switch (output)
+    {
+        case SH_GLSL_130_OUTPUT:
+        case SH_GLSL_140_OUTPUT:
+        case SH_GLSL_150_CORE_OUTPUT:
+        case SH_GLSL_330_CORE_OUTPUT:
+        case SH_GLSL_400_CORE_OUTPUT:
+        case SH_GLSL_410_CORE_OUTPUT:
+        case SH_GLSL_420_CORE_OUTPUT:
+        case SH_GLSL_430_CORE_OUTPUT:
+        case SH_GLSL_440_CORE_OUTPUT:
+        case SH_GLSL_450_CORE_OUTPUT:
+        case SH_GLSL_COMPATIBILITY_OUTPUT:
+            return true;
+        default:
+            break;
+    }
+    return false;
+}
+
+bool IsOutputHLSL(ShShaderOutput output)
+{
+    switch (output)
+    {
+        case SH_HLSL_3_0_OUTPUT:
+        case SH_HLSL_4_1_OUTPUT:
+        case SH_HLSL_4_0_FL9_3_OUTPUT:
+            return true;
+        default:
+            break;
+    }
+    return false;
+}
+
+bool IsOutputVulkan(ShShaderOutput output)
+{
+    return output == SH_GLSL_VULKAN_OUTPUT;
+}
+
+bool IsOutputMetal(ShShaderOutput output)
+{
+    return output == SH_GLSL_METAL_OUTPUT;
+}
+
 // Can't prefix with just _ because then we might introduce a double underscore, which is not safe
 // in GLSL (ESSL 3.00.6 section 3.8: All identifiers containing a double underscore are reserved for
 // use by the underlying implementation). u is short for user-defined.
