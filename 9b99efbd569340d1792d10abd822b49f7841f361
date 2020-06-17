@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2453b636_69c0c5c9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-17T22:32:34Z",
+      "side": 1,
+      "message": "Done, went with DrawSurface.  I stumbled into display because that\u0027s the goal of the series, render to the entire display on Android.",
+      "parentUuid": "4da1fdeb_e68fbd04",
+      "range": {
+        "startLine": 962,
+        "startChar": 34,
+        "endLine": 962,
+        "endChar": 55
+      },
+      "revId": "9b99efbd569340d1792d10abd822b49f7841f361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29a15264_1d850a1d",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3e5cae25_b56a71bf",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3907,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-17T22:32:34Z",
+      "side": 1,
+      "message": "Done, passed in the drawSurface.",
+      "parentUuid": "29a15264_1d850a1d",
+      "range": {
+        "startLine": 3906,
+        "startChar": 0,
+        "endLine": 3907,
+        "endChar": 62
+      },
+      "revId": "9b99efbd569340d1792d10abd822b49f7841f361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "770fb7e0_a71d4076",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "9b99efbd569340d1792d10abd822b49f7841f361",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ccecf88_c8371dc8",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-17T22:32:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "770fb7e0_a71d4076",
+      "range": {
+        "startLine": 321,
+        "startChar": 0,
+        "endLine": 322,
+        "endChar": 28
+      },
+      "revId": "9b99efbd569340d1792d10abd822b49f7841f361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
