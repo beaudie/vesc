@@ -1060,12 +1060,14 @@ class ImageHelper final : public Resource, public angle::Subject
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags);
-    angle::Result initExternalMemory(Context *context,
-                                     const MemoryProperties &memoryProperties,
-                                     const VkMemoryRequirements &memoryRequirements,
-                                     const void *extraAllocationInfo,
-                                     uint32_t currentQueueFamilyIndex,
-                                     VkMemoryPropertyFlags flags);
+    angle::Result initExternalMemory(
+        Context *context,
+        const MemoryProperties &memoryProperties,
+        const VkMemoryRequirements &memoryRequirements,
+        const VkSamplerYcbcrConversionCreateInfo *samplerYcbcrConversionCreateInfo,
+        const void *extraAllocationInfo,
+        uint32_t currentQueueFamilyIndex,
+        VkMemoryPropertyFlags flags);
     angle::Result initLayerImageView(Context *context,
                                      gl::TextureType textureType,
                                      VkImageAspectFlags aspectMask,
@@ -1381,6 +1383,12 @@ class ImageHelper final : public Resource, public angle::Subject
                                       GLuint *inputDepthPitch,
                                       GLuint *inputSkipBytes);
 
+    bool hasImmutableSampler() { return mYuvConversionSampler.valid(); }
+    uint64_t getExternalFormat()
+    {
+        return mYuvConversionSampler.valid() ? mYuvConversionSampler.get().getExternalFormat() : 0;
+    }
+
   private:
     enum class UpdateSource
     {
@@ -1505,6 +1513,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // For optimizing transition between different shader readonly layouts
     ImageLayout mLastNonShaderReadOnlyLayout;
     VkPipelineStageFlags mCurrentShaderReadStageMask;
+
+    // For imported images
+    vk::BindingPointer<vk::SamplerYcbcrConversion> mYuvConversionSampler;
 
     // Cached properties.
     uint32_t mBaseLevel;
