@@ -1754,6 +1754,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(
         features, emulateCopyTexImage2DFromRenderbuffers,
         IsApple() && functions->standard == STANDARD_GL_ES && !(isAMD && IsWindows()));
+
+    // Workaround issue in NVIDIA GL driver on Linux
+    // http://crbug.com/1094869
+    ANGLE_FEATURE_CONDITION(features, disableNativeParallelCompile, IsLinux() && isNvidia);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

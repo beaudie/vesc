@@ -453,6 +453,12 @@ struct FeaturesGL : FeatureSetBase
         "emulate_copyteximage2d_from_renderbuffers", FeatureCategory::OpenGLWorkarounds,
         "CopyTexImage2D spuriously returns errors on iOS when copying from renderbuffers.",
         &members, "https://anglebug.com/4674"};
+
+    // KHR_parallel_shader_compile fails TSAN on Linux, so we avoid using it with this workaround.
+    Feature disableNativeParallelCompile = {
+        "disable_native_parallel_compile", FeatureCategory::OpenGLWorkarounds,
+        "Do not use native KHR_parallel_shader_compile even when available.", &members,
+        "http://crbug.com/1094869"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
