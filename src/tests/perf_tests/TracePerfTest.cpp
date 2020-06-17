@@ -42,8 +42,14 @@ struct TracePerfParams final : public RenderTestParams
         iterationsPerStep = 1;
     }
 
-    EGLint windowWidth() const override { return 1920; }
-    EGLint windowHeight() const override { return 1080; }
+    EGLint windowWidth() const override
+    {
+        return static_cast<EGLint>(kTraceInfos[testID].displayWidth);
+    }
+    EGLint windowHeight() const override
+    {
+        return static_cast<EGLint>(kTraceInfos[testID].displayHeight);
+    }
 
     std::string story() const override
     {
