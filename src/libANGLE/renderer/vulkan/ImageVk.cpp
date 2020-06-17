@@ -97,9 +97,16 @@ egl::Error ImageVk::initialize(const egl::Display *display)
             return egl::EglBadAccess();
         }
 
+        // start with some reasonable alignment that's safe for the case where intendedFormatID is
+        // FormatID::NONE
+        size_t alignment = 16;
+        if (mImage->getFormat().intendedFormatID != angle::FormatID::NONE)
+        {
+            alignment = mImage->getFormat().getImageCopyBufferAlignment();
+        }
         // Make sure a staging buffer is ready to use to upload data
-        mImage->initStagingBuffer(renderer, mImage->getFormat().getImageCopyBufferAlignment(),
-                                  vk::kStagingBufferFlags, vk::kStagingBufferSize);
+        mImage->initStagingBuffer(renderer, alignment, vk::kStagingBufferFlags,
+                                  vk::kStagingBufferSize);
 
         mOwnsImage = false;
 
