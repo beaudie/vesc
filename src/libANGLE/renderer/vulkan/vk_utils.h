@@ -482,6 +482,12 @@ class BindingPointer final : angle::NonCopyable
 
     ~BindingPointer() { reset(); }
 
+    BindingPointer(BindingPointer &&other)
+    {
+        set(other.mRefCounted);
+        other.reset();
+    }
+
     void set(RefCounted<T> *refCounted)
     {
         if (mRefCounted)
@@ -685,6 +691,7 @@ void InitDebugUtilsEXTFunctions(VkInstance instance);
 void InitDebugReportEXTFunctions(VkInstance instance);
 void InitGetPhysicalDeviceProperties2KHRFunctions(VkInstance instance);
 void InitTransformFeedbackEXTFunctions(VkDevice device);
+void InitSamplerYcbcrKHRFunctions(VkDevice device);
 
 #    if defined(ANGLE_PLATFORM_FUCHSIA)
 // VK_FUCHSIA_imagepipe_surface
@@ -715,6 +722,9 @@ void InitExternalFenceFdFunctions(VkInstance instance);
 
 // VK_KHR_external_semaphore_capabilities
 void InitExternalSemaphoreCapabilitiesFunctions(VkInstance instance);
+
+// VK_KHR_sampler_ycbcr_conversion
+void InitExternalSamplerYCbCrConversionFunctions(VkDevice device);
 
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
