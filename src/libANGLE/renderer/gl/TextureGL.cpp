@@ -1559,6 +1559,9 @@ angle::Result TextureGL::syncState(const gl::Context *context,
             case gl::Texture::DIRTY_BIT_BOUND_AS_IMAGE:
                 // Only used for Vulkan.
                 break;
+            case gl::Texture::DIRTY_BIT_GENERATE_MIPMAP:
+                // Only used for Vulkan.
+                break;
 
             default:
                 UNREACHABLE();

@@ -574,6 +574,7 @@ class Texture final : public RefCountObject<TextureID>,
         // Misc
         DIRTY_BIT_LABEL,
         DIRTY_BIT_USAGE,
+        DIRTY_BIT_GENERATE_MIPMAP,
         DIRTY_BIT_IMPLEMENTATION,
 
         DIRTY_BIT_COUNT,
