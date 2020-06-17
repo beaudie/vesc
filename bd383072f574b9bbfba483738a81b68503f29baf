@@ -16,6 +16,24 @@
       "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af215987_211e0550",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-17T23:47:09Z",
+      "side": 1,
+      "message": "\u003e Could we eliminate this if as well?\n\ni wanted to do that but there are a ton of bots that run GLES backend on Android and all of them crash with errors if i assume \"gUseAndroidOpenGLTlsSlot\" is true\n\n\u003e May have to be a compile-time thing\n\nif you have a suggestion on how to make this a compile time thing, im all ears",
+      "parentUuid": "8b3b33e6_bae7660a",
+      "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
