@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e42b5705_59b89174",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T04:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88c6929c_18b9e405",
+      "revId": "1c0ba18ba27c7640790da89160bae305ebf43630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab51f6cc_061289da",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 7
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "b1f25b7d_e6e5d635",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T04:13:10Z",
+      "side": 1,
+      "message": "Blame C++. mImageViews is not const, so it tries to get the non-const version of getCopyImageView() which is private. `imageViews` adds const to mImageViews.",
+      "parentUuid": "ab51f6cc_061289da",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 75
+      },
+      "revId": "1c0ba18ba27c7640790da89160bae305ebf43630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e5c1a4f_e96da828",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
@@ -56,6 +98,24 @@
       "revId": "1c0ba18ba27c7640790da89160bae305ebf43630",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4806fd65_df36a822",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-17T04:13:10Z",
+      "side": 1,
+      "message": "Because the destination is a staging image that\u0027s a 2d array. See line 741.",
+      "parentUuid": "8e5c1a4f_e96da828",
+      "revId": "1c0ba18ba27c7640790da89160bae305ebf43630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
