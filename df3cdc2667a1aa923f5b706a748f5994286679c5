@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1af6c6f_9113b417",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-17T02:21:11Z",
+      "side": 1,
+      "message": "The android bots failure are due to ANGLE_TRY was taking early returns. That left dangling descriptor set writes in the contextVk un-flushed. Later on app deleted buffer or other modifications, and now the context\u0027s descriptorset bufferInfo points to a buffer that already deleted. When setupDraw/setupDispatch is eventually called again, these dangling writeInfos gets sent to driver and causing the VVL complain and eventually crashed. The fix here is to ensure that regardless ANGLE_TRY took early return or not, we will make sure to flush out the vkUpdateDescriptorSets call to driver before return back to app.",
+      "range": {
+        "startLine": 1041,
+        "startChar": 12,
+        "endLine": 1041,
+        "endChar": 21
+      },
+      "revId": "df3cdc2667a1aa923f5b706a748f5994286679c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
