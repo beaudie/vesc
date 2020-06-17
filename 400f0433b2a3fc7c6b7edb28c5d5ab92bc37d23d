@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dca65e31_e1372a39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-17T21:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b775747a_29600932",
+      "range": {
+        "startLine": 9,
+        "startChar": 23,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a65714b3_58127e5c",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a802515c_7aa1891a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-17T21:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a65714b3_58127e5c",
+      "range": {
+        "startLine": 11,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "465b1ef1_399d5950",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-17T19:15:51Z",
       "side": 1,
       "message": "UtilsVk::copyImage() is also called for glCopyTextureCHROMIUM() which doesn\u0027t read from the framebuffer. You should pipe the results of contextVk-\u003eisRotatedAspectRatioForReadFBO() and contextVk-\u003eisRotatedAspectRatioForReadFBO() from TextureVk::copySubImageImpl() through TextureVk::copySubImageImplWithDraw() and store them in UtilsVk::CopyImageParameters, then check that here.",
+      "range": {
+        "startLine": 1729,
+        "startChar": 12,
+        "endLine": 1729,
+        "endChar": 51
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81c44106_ea603484",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-17T21:01:24Z",
+      "side": 1,
+      "message": "I don\u0027t see a problem.  getRotatedReadFramebuffer() will return Identity (0 degrees) and isRotatedAspectRatioForReadFBO() will return false if the read framebuffer is not the default framebuffer (e.g. for a texture or pbuffer).  Is that not the case for glCopyTextureCHROMIUM()?",
+      "parentUuid": "465b1ef1_399d5950",
       "range": {
         "startLine": 1729,
         "startChar": 12,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "6d7d0f95_495aa63a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-17T21:01:24Z",
+      "side": 1,
+      "message": "I\u0027ll add an ASSERT for shaderParams.flipY.  I added shaderParams.flipX, and so I don\u0027t need to assert it:-).",
+      "parentUuid": "81f845f2_19809152",
+      "range": {
+        "startLine": 1738,
+        "startChar": 33,
+        "endLine": 1738,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f629b1b1_a9763779",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -105,6 +201,30 @@
       "writtenOn": "2020-06-17T19:15:51Z",
       "side": 1,
       "message": "renderArea is already swapped, why is this code needed? It\u0027s making the scissor larger than it should be.",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1794,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93692ad3_92bf4ede",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-17T21:01:24Z",
+      "side": 1,
+      "message": "This is something that I don\u0027t fully understand.  Some of the tests are doing 64x128 or 128x64 operations, and I was only getting half of the rendering if the scissor wasn\u0027t set this way.  It didn\u0027t make sense to me that I had to do this, but it works.  Any ideas?",
+      "parentUuid": "f629b1b1_a9763779",
       "range": {
         "startLine": 1792,
         "startChar": 0,
