@@ -652,6 +652,8 @@ egl::Error Context::makeCurrent(egl::Display *display,
         mHasBeenCurrent = true;
     }
 
+    mFrameCapture->onMakeCurrent(this);
+
     // TODO(jmadill): Rework this when we support ContextImpl
     mState.setAllDirtyBits();
     mState.setAllDirtyObjects();
