@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "853fcc7d_12e124e1",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T19:34:22Z",
+      "side": 1,
+      "message": "style nit: avoid auto for simple types for readability - see style doc if curious.",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 9
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbd252be_d9e6cd85",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T19:34:22Z",
+      "side": 1,
+      "message": "why use Optional if you can just check .empty()?",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e31dddb_aed00219",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T19:34:22Z",
+      "side": 1,
+      "message": "nit: this init style is not idiomatic for ANGLE - try just defining the struct and then the variable after. I think it\u0027s fine if it\u0027s not a static, this function should be called once per process in most cases so performance is not a concern.",
+      "range": {
+        "startLine": 221,
+        "startChar": 3,
+        "endLine": 234,
+        "endChar": 0
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c91190a3_e729e461",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-17T19:34:22Z",
+      "side": 1,
+      "message": "ditto here",
+      "range": {
+        "startLine": 243,
+        "startChar": 9,
+        "endLine": 243,
+        "endChar": 14
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
