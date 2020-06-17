@@ -529,9 +529,38 @@
 // Transform Feedback
 4666 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.* = SKIP
 4666 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.array_element.separate.* = SKIP
-4666 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.array.interleaved.* = SKIP
-4666 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.array.separate.* = SKIP
-4666 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.* = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.points.1 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.points.2 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.points.6 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.points.8 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.points.9 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.points.10 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.lines.1 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.lines.2 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.lines.5 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.lines.7 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.lines.9 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.lines.10 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.2 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.3 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.5 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.6 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.7 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.8 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.9 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.points.1 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.points.3 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.points.5 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.points.9 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.2 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.4 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.6 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.9 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.1 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.3 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.4 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.5 = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.9 = SKIP
 
 // Flat shading:
 3430 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL

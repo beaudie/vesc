@@ -183,6 +183,16 @@
 // Cannot create 2D (array) view of 3D texture.
 3886 VULKAN : dEQP-GLES31.functional.image_load_store.3d.*layer = FAIL
 
+// Transform feedback varyings capture array elements failure:
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.resource_list.vertex_fragment.default_block_array_element = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.resource_list.separable_vertex.default_block_array_element = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.array_size.vertex_fragment.default_block_array_element = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.array_size.separable_vertex.default_block_array_element = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.name_length.vertex_fragment.default_block_array_element = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.name_length.separable_vertex.default_block_array_element = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.type.vertex_fragment.array.* = SKIP
+4723 VULKAN NVIDIA : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.type.separable_vertex.array.* = SKIP
+
 ////
 //// Android (i.e. Pixel*) Vulkan expectations
 ////
