@@ -1166,13 +1166,22 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlock
                              interfaceBlock.isArray(), arrayElement, firstFieldArraySize,
                              blockBinding);
         block.memberIndexes = blockIndexes;
-        block.setActive(shaderType, interfaceBlock.active);
+        // All members of a named uniform block declared with a shared or std140 layout qualifier
+        // are considered active
+        bool isActive = interfaceBlock.active ||
+                        (interfaceBlock.layout == sh::BlockLayoutType::BLOCKLAYOUT_STD140) ||
+                        (interfaceBlock.layout == sh::BlockLayoutType::BLOCKLAYOUT_SHARED);
+        block.setActive(shaderType, isActive);
 
         // Since all block elements in an array share the same active interface blocks, they
         // will all be active once any block member is used. So, since interfaceBlock.name[0]
         // was active, here we will add every block element in the array.
         block.dataSize = static_cast<unsigned int>(blockSize);
-        mBlocksOut->push_back(block);
+
+        if (isActive)
+        {
+            mBlocksOut->push_back(block);
+        }
     }
 }
 
