@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "fab26d1a_a6416d19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-18T23:42:20Z",
+      "side": 1,
+      "message": "What things are you referring to here?\n\nWhy is this necessary?   Shouldn\u0027t the files being downloaded mean this is the first time the build has seen them so they necessarily have to be part of whatever build includes them?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 8
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f755eb9b_59d2440a",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-18T23:42:20Z",
+      "side": 1,
+      "message": "This should target Python 3.   Python 2 went EOL January 1, 2020 (6 months ago).",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 18
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c9b64f5_fc185bf1",
         "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
         "patchSetId": 2
@@ -25,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "5b8d5518_793fc4a0",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-18T23:42:20Z",
+      "side": 1,
+      "message": "Does using \u0027--force\u0027 help instead of needing this script?\n\n    -f, --force           Force download even if local file exists.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 5
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2fcd32c_d215a145",
         "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
         "patchSetId": 2
@@ -36,6 +105,30 @@
       "writtenOn": "2020-06-18T23:11:05Z",
       "side": 1,
       "message": "I tested this locally and it worked for the files in the directories, but not the directories themselves.  Can we update this to touch the directories as well?  Then you can see very quickly that all the traces have been updated, rather than navigate into each directory.",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 40
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b678247_9e8defd5",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-18T23:42:20Z",
+      "side": 1,
+      "message": "Should be easy enough with:\n\n    target \u003d os.path.relpath(dirname, os.path.join(trace_dir, trace))\n    os.utime(target, None)",
+      "parentUuid": "f2fcd32c_d215a145",
       "range": {
         "startLine": 61,
         "startChar": 8,
