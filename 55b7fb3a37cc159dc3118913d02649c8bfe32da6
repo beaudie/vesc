@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a26e0efc_3544d66f",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-06-18T01:44:57Z",
+      "side": 1,
+      "message": "I\u0027d like to double check how we are interpreting glDrawArrays (without Instanced) on D3D.\nD3D assigns the instanceCount to 0 for glDrawArrays. When there\u0027s an instanced array (divisor \u003e 0) with bufferUsage \u003d\u003d DYNAMIC_DRAW, Angle D3D would intepret the attrib as non-instanced thus leading to an incorrect vertexCount (gl::ComputeVertexBindingElementCount, https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/d3d/VertexDataManager.cpp;l\u003d502?q\u003dgl::ComputeVertexBindingElementCount\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F)\n\nI\u0027m not sure if this is just an undefined behavior of OpenGL (glDrawArrays with instanced array), or some misbehave in Angle D3D that we want to fix",
+      "revId": "55b7fb3a37cc159dc3118913d02649c8bfe32da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
