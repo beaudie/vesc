@@ -116,6 +116,76 @@
       "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abe12d42_01097e32",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T17:14:52Z",
+      "side": 1,
+      "message": "Alternately clear the descriptor set updates on entry to setupDraw instead of after flush. Then I don\u0027t even think you need the scoped handler.",
+      "parentUuid": "d60c7b8e_67fa584d",
+      "range": {
+        "startLine": 1064,
+        "startChar": 0,
+        "endLine": 1068,
+        "endChar": 18
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "814cfdb8_5e6ec1bd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T17:14:52Z",
+      "side": 1,
+      "message": "growCapacity seems overly optimized. You can replace these with angle::FixedVector with a reasonable implementation limit. Because this is one-per-Context there should be minimal waste and it ensures you never have to worry about dynamic allocation. It also saves an indirection because the objects are stored inline.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 50
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7aa31b15_b4cfb849",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T17:14:52Z",
+      "side": 1,
+      "message": "can you pass this around instead of adding an accessor? To encapsulate Context class.",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 556,
+        "endChar": 98
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
