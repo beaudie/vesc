@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c2cc30e_72318004",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T14:31:22Z",
+      "side": 1,
+      "message": "What\u0027s sad is that now we don\u0027t get any TSAN coverage for threaded compile, which is actually where it\u0027s needed!\n\nIs there a way to change this `false` to something like `!(IsLinux() \u0026\u0026 IsNVIDIA())`?",
+      "revId": "f6f1c484b1f6de5f3d9f8aaa8ea2491fcbf51662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
