@@ -46,6 +46,30 @@
       "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8e09975_64055df9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T20:55:04Z",
+      "side": 1,
+      "message": "Parameter is significantly better because (despite the boilerplate) it keeps the value on the stack instead of heap mem. Also less math instructions from dirty bit processing.",
+      "parentUuid": "4ebfbdc7_91393a2b",
+      "range": {
+        "startLine": 1581,
+        "startChar": 25,
+        "endLine": 1581,
+        "endChar": 34
+      },
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
