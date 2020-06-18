@@ -312,12 +312,18 @@ GenerateMipmapParams VulkanParams(bool webglCompat, bool singleIteration)
 
 }  // anonymous namespace
 
-TEST_P(GenerateMipmapBenchmark, Run)
+// Fails on Windows: crbug.com/1096429.
+#if defined(OS_WIN)
+#define MAYBE_Run DISABLED_Run
+#else
+#define MAYBE_Run Run
+#endif
+TEST_P(GenerateMipmapBenchmark, MAYBE_Run)
 {
     run();
 }
 
-TEST_P(GenerateMipmapWithRedefineBenchmark, Run)
+TEST_P(GenerateMipmapWithRedefineBenchmark, MAYBE_Run)
 {
     run();
 }
