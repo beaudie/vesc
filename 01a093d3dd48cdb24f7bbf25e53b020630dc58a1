@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f69d5121_7cc97742",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T16:53:23Z",
+      "side": 1,
+      "message": "how about you change this to #if !defined(ANGLE_ENABLE_OPENGL) \u0026\u0026 defined(ANGLE_ENABLE_VULKAN) and resolve the TODO right away.",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
