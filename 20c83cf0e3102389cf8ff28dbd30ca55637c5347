@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39c55822_e3406c96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2650,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T03:37:02Z",
+      "side": 1,
+      "message": "Will move to this change: https://chromium-review.googlesource.com/c/angle/angle/+/2249376",
+      "range": {
+        "startLine": 2650,
+        "startChar": 50,
+        "endLine": 2650,
+        "endChar": 56
+      },
+      "revId": "20c83cf0e3102389cf8ff28dbd30ca55637c5347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
