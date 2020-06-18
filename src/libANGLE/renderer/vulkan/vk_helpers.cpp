@@ -2202,8 +2202,8 @@ angle::Result BufferHelper::init(Context *context,
             // Can map the memory.
             // Pick an arbitrary value to initialize non-zero memory for sanitization.
             constexpr int kNonZeroInitValue = 55;
-            ANGLE_TRY(InitMappableAllocation(allocator, &mAllocation, mSize, kNonZeroInitValue,
-                                             mMemoryPropertyFlags));
+            ANGLE_TRY(InitMappableAllocation(context, allocator, &mAllocation, mSize,
+                                             kNonZeroInitValue, mMemoryPropertyFlags));
         }
     }
 
@@ -2621,13 +2621,32 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSiz
     forceChangeLayoutAndQueue(getAspectFlags(), ImageLayout::TransferDst, mCurrentQueueFamilyIndex,
                               &commandBuffer);
 
-    VkBufferImageCopy copyRegion           = {};
-    copyRegion.imageExtent                 = mExtents;
-    copyRegion.imageSubresource.aspectMask = getAspectFlags();
-    copyRegion.imageSubresource.layerCount = 1;
+    for (uint32_t level = 0; level < mLevelCount; ++level)
+    {
+        VkBufferImageCopy copyRegion = {};
 
-    commandBuffer.copyBufferToImage(stagingBuffer.getBuffer().getHandle(), mImage,
-                                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
+        gl_vk::GetExtent(getLevelExtents(level), &copyRegion.imageExtent);
+        copyRegion.imageSubresource.aspectMask = getAspectFlags();
+        copyRegion.imageSubresource.layerCount = mLayerCount;
+
+        // If image has depth and stencil, copy to each individually per Vulkan spec.
+        bool hasBothDepthAndStencil = isCombinedDepthStencilFormat();
+        if (hasBothDepthAndStencil)
+        {
+            copyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+
+        commandBuffer.copyBufferToImage(stagingBuffer.getBuffer().getHandle(), mImage,
+                                        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
+
+        if (hasBothDepthAndStencil)
+        {
+            copyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+
+            commandBuffer.copyBufferToImage(stagingBuffer.getBuffer().getHandle(), mImage,
+                                            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
+        }
+    }
 
     ANGLE_VK_TRY(context, commandBuffer.end());
 
@@ -2656,16 +2675,7 @@ angle::Result ImageHelper::initMemory(Context *context,
         // Can't map the memory. Use a staging resource.
         if ((flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0)
         {
-            // Only currently works with single-sampled color images with one mip/layer.
-            if (mLevelCount == 1 && mLayerCount == 1 &&
-                getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT && mSamples == 1)
-            {
-                ANGLE_TRY(initializeNonZeroMemory(context, size));
-            }
-            else
-            {
-                UNIMPLEMENTED();
-            }
+            ANGLE_TRY(initializeNonZeroMemory(context, size));
         }
     }
 
@@ -2882,8 +2892,9 @@ gl::Extents ImageHelper::getLevelExtents(uint32_t level) const
     // you shrink the extents by half.
     uint32_t width  = std::max(mExtents.width >> level, 1u);
     uint32_t height = std::max(mExtents.height >> level, 1u);
+    uint32_t depth  = std::max(mExtents.depth >> level, 1u);
 
-    return gl::Extents(width, height, mExtents.depth);
+    return gl::Extents(width, height, depth);
 }
 
 gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
