@@ -88,6 +88,24 @@
       "revId": "4694bcd9864d2a3e9d7d5750827ec2b5bd6632d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13e74dab_f9a40f0d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3103,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-18T16:57:32Z",
+      "side": 1,
+      "message": "Alexey, while the WebGL 1.0 floating-point texture and blending situation is not great - a lot of changes piled on top of one another - this change is going to break WebGL 1.0 content using the OES_texture_float extension:\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/webgl/oes_texture_float.cc;l\u003d40?q\u003dEXT_float_blend\nhttps://github.com/KhronosGroup/WebGL/pull/2830\n\nI think we should leave well enough alone and not make this change.",
+      "parentUuid": "9a3eac38_6ee82bae",
+      "revId": "4694bcd9864d2a3e9d7d5750827ec2b5bd6632d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
