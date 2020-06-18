@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9013f672_3ace2749",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-18T22:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80057758_f42fabeb",
+      "range": {
+        "startLine": 972,
+        "startChar": 3,
+        "endLine": 972,
+        "endChar": 48
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a453f3f_73d7c69c",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 5
@@ -60,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "7dc5bae9_c21e1891",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-18T22:32:00Z",
+      "side": 1,
+      "message": "Now caching Serials in ImageViewHelper by layer/level",
+      "parentUuid": "58db2ed8_fbde1cfd",
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64a84d29_5bcf2e0a",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 5
@@ -80,6 +122,30 @@
       "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e1681a3_bc8faea0",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-18T22:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a84d29_5bcf2e0a",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 100
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -178,6 +244,30 @@
     },
     {
       "key": {
+        "uuid": "e648220c_f4e077ad",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-18T22:32:00Z",
+      "side": 1,
+      "message": "Hmm, with updated caching of Serials this is no longer an issue. I looked at this for a bit before the change the only suspicious code was when RenderTargets were initialized for TextureVk, which does offset level:\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/vulkan/TextureVk.cpp;l\u003d1618;bpv\u003d1;bpt\u003d1?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nThat made me think Shabi\u0027s suspicions were correct and the RenderTarget was storing GL level, but potentially ImageView wanted VK level.\n\nHowever, I\u0027m not sure if this is correct or if any action should be taking. Just noting this here for now, but since asserts are gone, not worrying about it for this CL.",
+      "parentUuid": "b75d2d08_92fedb3f",
+      "range": {
+        "startLine": 122,
+        "startChar": 71,
+        "endLine": 122,
+        "endChar": 82
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da6b5d76_4d956a7a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -198,6 +288,30 @@
       "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c25918_b7a30b54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-18T22:32:00Z",
+      "side": 1,
+      "message": "Ok, I think I\u0027ve got this reasonable now. Let me know if I\u0027ve missed a simpler solution to storing serial per layer/level.",
+      "parentUuid": "da6b5d76_4d956a7a",
+      "range": {
+        "startLine": 1625,
+        "startChar": 23,
+        "endLine": 1625,
+        "endChar": 34
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -224,6 +338,30 @@
     },
     {
       "key": {
+        "uuid": "1d1c6eea_e192cad0",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-18T22:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6916ef7_5d2caa7e",
+      "range": {
+        "startLine": 471,
+        "startChar": 0,
+        "endLine": 472,
+        "endChar": 43
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6336f37f_773811aa",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 5
@@ -244,6 +382,30 @@
       "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "278e684a_d968b02b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2551,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-18T22:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6336f37f_773811aa",
+      "range": {
+        "startLine": 2550,
+        "startChar": 0,
+        "endLine": 2551,
+        "endChar": 43
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
