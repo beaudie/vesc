@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86259708_8778a451",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T19:54:40Z",
+      "side": 1,
+      "message": "how about you just pass an enum indicating the type of call to syncState instead of storing it as a dirty bit? Or make a separate syncState call that optionally accepts an argument if you don\u0027t want to mess with implementing a million overloads.",
+      "range": {
+        "startLine": 1581,
+        "startChar": 25,
+        "endLine": 1581,
+        "endChar": 34
+      },
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
