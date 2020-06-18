@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f014b56_e53f836d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T16:20:08Z",
+      "side": 1,
+      "message": "Good catch! Thanks!",
+      "parentUuid": "adb918c9_d9064a1e",
+      "range": {
+        "startLine": 363,
+        "startChar": 39,
+        "endLine": 363,
+        "endChar": 42
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69404a5b_860499ee",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -59,6 +83,30 @@
       "writtenOn": "2020-06-18T04:11:58Z",
       "side": 1,
       "message": "I don\u0027t particularly have a problem with this, but the idiom is to write a small class whose constructor takes mDescripSetUpdates and device, and whose destructor calls flushWritesToDevice. Then you don\u0027t need to split the function in such an awkward manner.",
+      "range": {
+        "startLine": 1064,
+        "startChar": 0,
+        "endLine": 1068,
+        "endChar": 18
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d60c7b8e_67fa584d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T16:20:08Z",
+      "side": 1,
+      "message": "Good idea, I didn\u0027t thought about that c++ trick!",
+      "parentUuid": "ecb58106_f4848d94",
       "range": {
         "startLine": 1064,
         "startChar": 0,
