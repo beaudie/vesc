@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c013cf02_fd49dc3e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T23:34:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f014b56_e53f836d",
+      "range": {
+        "startLine": 363,
+        "startChar": 39,
+        "endLine": 363,
+        "endChar": 42
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69404a5b_860499ee",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -167,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "5a234784_b3dfdec1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T23:34:28Z",
+      "side": 1,
+      "message": "The new way I did is DescriporSetUpdates object is a short lived local object.",
+      "parentUuid": "abe12d42_01097e32",
+      "range": {
+        "startLine": 1064,
+        "startChar": 0,
+        "endLine": 1068,
+        "endChar": 18
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "814cfdb8_5e6ec1bd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 6
@@ -214,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "a0c87b7b_47d1fac6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T23:34:28Z",
+      "side": 1,
+      "message": "ContextVk::updateDriverUniformsDescriptorSet\t\t\tbuffer\tx 1\n ProgramExecutableVk::updateDefaultUniformsDescriptorSet\tbuffer: x 1\n ProgramExecutableVk::updateTransformFeedbackDescriptorSet\tbuffer: x 1\n ProgramExecutableVk::updateBuffersDescriptorSet:\t\tbuffer: x IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS (64)\n ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet   buffer: x IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS (8)\n ProgramExecutableVk::updateImagesDescriptorSet\t\t\timage x IMPLEMENTATION_MAX_ACTIVE_TEXTURES (64)\n ProgramExecutableVk::updateTexturesDescriptorSet\t\ttexture x IMPLEMENTATION_MAX_ACTIVE_TEXTURES (64)\n TransformFeedbackVk::initDescriptorSet\t\t\t\tbuffer: x IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS (4)\n TransformFeedbackVk::updateDescriptorSet\t\t\t\t\t\n TransformFeedbackVk::writeDescriptorSet\t\t\t\n ----------------\n Total (1+1+1+64+8+64+64)*2 + 4 \u003d 410\n (10 uint64 for writeinfo + 3 uint64 for bufferInfo) ) x 8 bytes \u003d 104 bytes\n 410 x 104bytes \u003d 42640 bytes\n\nNot sure if image and textures max counts are independent or not. I count them as independent, which adds up to max possible storage around 42K. I think its too much to waste, especially that the grow logic isn\u0027t that complicated.",
+      "parentUuid": "aa5bb6f2_43b3b63a",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 50
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7aa31b15_b4cfb849",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 6
@@ -249,6 +321,30 @@
       "side": 1,
       "message": "Right. This also solves the problem that you and Shabi commented in the setupDraw. I am going to move the std::vectors into ContextVK but use the DescriptorSetUpdate object to manage the update and flush. It solves both issues you guys pointed out. The only downside is that I have to modify quite a few APIs to pass this around, which was my original reason of doing the accessor. But as you point out, pass around makes it cleaner and encapsulates context class better.",
       "parentUuid": "7aa31b15_b4cfb849",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 556,
+        "endChar": 98
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ebda814_d1661a45",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T23:34:28Z",
+      "side": 1,
+      "message": "I end up having to modify way too many APIs: All handleDirty* APIs, all functions leading to the functions that uses it. I think it just too dirty to do this way. The other alternative I tried is to stick it in the vk::CommandBuffer object, but even that, I end up having to modify many APIs that leading to the use of DescriptorSetUpdates object. With the new way I did, the contextVK now owns the actual std::vector data, the DescriptorSetUpdates only has a reference to the actual data, and the DescriptorSetUpdates object itself is a shirt lived object, I think it helps encapsulation a little bit as well. Hopefully this is a good compromise.",
+      "parentUuid": "fc75aba5_ae69baca",
       "range": {
         "startLine": 556,
         "startChar": 0,
