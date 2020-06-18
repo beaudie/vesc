@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "80057758_f42fabeb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:51:26Z",
+      "side": 1,
+      "message": "can\u0027t we get rid of this now? Or is it used in other places.",
+      "range": {
+        "startLine": 972,
+        "startChar": 3,
+        "endLine": 972,
+        "endChar": 48
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a453f3f_73d7c69c",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 5
@@ -13,6 +36,47 @@
       "writtenOn": "2020-06-18T04:22:34Z",
       "side": 1,
       "message": "Is this really what we want? Bunch of temp views for some serial?",
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58db2ed8_fbde1cfd",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:51:26Z",
+      "side": 1,
+      "message": "We should store the serials in the ImageViewHelper. If you want to index them by level/layer that\u0027s fine.",
+      "parentUuid": "8a453f3f_73d7c69c",
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64a84d29_5bcf2e0a",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:51:26Z",
+      "side": 1,
+      "message": "sounds good, please do.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 100
+      },
       "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -35,6 +99,99 @@
         "startChar": 71,
         "endLine": 122,
         "endChar": 82
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49afbc59_39a291ad",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:51:26Z",
+      "side": 1,
+      "message": "The tests are failing because of OOM in Angry Birds 2. My guess is that the code above is creating too many ImageViews, but I\u0027m not sure.",
+      "parentUuid": "e0a623b6_549c61a2",
+      "range": {
+        "startLine": 122,
+        "startChar": 71,
+        "endLine": 122,
+        "endChar": 82
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da6b5d76_4d956a7a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:51:26Z",
+      "side": 1,
+      "message": "oh I see. Instead of indexing from the VkImageView, index from level/layer. The empty the cache when the level layer draw image views get recreated. You might be running OOM because of this design not ever emptying.",
+      "range": {
+        "startLine": 1625,
+        "startChar": 23,
+        "endLine": 1625,
+        "endChar": 34
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6916ef7_5d2caa7e",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:51:26Z",
+      "side": 1,
+      "message": "we should re-enable this before landing.",
+      "range": {
+        "startLine": 471,
+        "startChar": 0,
+        "endLine": 472,
+        "endChar": 43
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6336f37f_773811aa",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2551,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:51:26Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 2550,
+        "startChar": 0,
+        "endLine": 2551,
+        "endChar": 43
       },
       "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
