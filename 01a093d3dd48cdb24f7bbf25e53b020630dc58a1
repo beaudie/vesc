@@ -94,6 +94,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9575588_b6f347f4",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-18T20:39:30Z",
+      "side": 1,
+      "message": "will this condition ever be true with current android build scripts -\u003e \"#if defined(ANGLE_ENABLE_OPENGL) || !defined(ANGLE_ENABLE_VULKAN)\"\n\nIMO, it would be much better to circle back and address this when we have actual bots to test this usecase and i can get rid of \"gUseAndroidOpenGLTlsSlot\" entirely. would be the cleaner and clearer path",
+      "parentUuid": "e0edc6ae_8e21ddde",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
