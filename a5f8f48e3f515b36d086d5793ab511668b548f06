@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d59b904c_bf975038",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4290,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-06-18T05:29:15Z",
+      "side": 1,
+      "message": "this might be incorrect, because ANGLE can use vertex atomic to emulate",
+      "revId": "a5f8f48e3f515b36d086d5793ab511668b548f06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
