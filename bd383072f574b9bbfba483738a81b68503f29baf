@@ -34,6 +34,24 @@
       "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e911222e_fd3e7415",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T04:32:07Z",
+      "side": 1,
+      "message": "Some condition derived from the `angle_enable_gl` gn arg.\n\nWe don\u0027t have test coverage for a Vulkan-only build of ANGLE on Android though.",
+      "parentUuid": "af215987_211e0550",
+      "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
