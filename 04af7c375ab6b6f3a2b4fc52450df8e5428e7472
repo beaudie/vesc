@@ -22,6 +22,30 @@
       "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ebfbdc7_91393a2b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T20:02:57Z",
+      "side": 1,
+      "message": "I thought about that, but then you\u0027d be passing one more argument around in every call for something that\u0027s called like once per frame. A syncStateGenMipmaps would mean forwarding to a syncStateImpl with the same caveat.\n\nI do feel dirty (no pun intended) for using the dirty bit for this. At the same time, I\u0027d also feel bad adding a parameter for a single use. This seemed the most (micro-)optimal to me.\n\nI\u0027m 50-50 on this and syncState(type::GenerateMipmaps), so your call.",
+      "parentUuid": "86259708_8778a451",
+      "range": {
+        "startLine": 1581,
+        "startChar": 25,
+        "endLine": 1581,
+        "endChar": 34
+      },
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
