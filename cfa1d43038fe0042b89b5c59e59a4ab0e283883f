@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59d5a87c_58a915b0",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-18T15:49:34Z",
+      "side": 1,
+      "message": "Could also turn this into a member of FeaturesGL",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 6
+      },
+      "revId": "cfa1d43038fe0042b89b5c59e59a4ab0e283883f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
