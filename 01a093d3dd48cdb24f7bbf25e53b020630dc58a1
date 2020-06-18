@@ -46,6 +46,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "474684d0_d5ca3e4e",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T17:08:19Z",
+      "side": 1,
+      "message": "To clarify:\n\n #if defined(ANGLE_PLATFORM_ANDROID)\n #if defined(ANGLE_ENABLE_OPENGL) || !defined(ANGLE_ENABLE_VULKAN)\n if (gUseAndroidOpenGLTlsSlot)\n #endif\n {\n    return \"the TLS\"\n }\n #endif",
+      "parentUuid": "857e5a6b_f4088835",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
