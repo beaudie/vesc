@@ -118,6 +118,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ecf439b_4b85ae98",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T20:57:37Z",
+      "side": 1,
+      "message": "We will not be able to get rid of the TLS slot entirely because of how we test and ship ANGLE for Chrome on Android. So there\u0027s a good argument for resolving the TODO now with this simple trick.",
+      "parentUuid": "c9575588_b6f347f4",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
