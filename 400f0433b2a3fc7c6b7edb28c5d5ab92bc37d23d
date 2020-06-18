@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "e7e07f7e_19b98b55",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T04:28:37Z",
+      "side": 1,
+      "message": "glCopyTextureCHROMIUM copies between arbitrary textures. You could have the default framebuffer bound which is prerotated, then copy between random textures and see the copy rotated.\n\nProbably if you run the equivalent of `./angle_end2end_tests --gtest_filter\u003dCopyTextureTest*Vulkan` you would see them fail.",
+      "parentUuid": "81c44106_ea603484",
+      "range": {
+        "startLine": 1729,
+        "startChar": 12,
+        "endLine": 1729,
+        "endChar": 51
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81f845f2_19809152",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -190,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "bc1da75a_efbdecc9",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T04:28:37Z",
+      "side": 1,
+      "message": "Ack, though it never hurts to assert (to catch future mistakes)",
+      "parentUuid": "6d7d0f95_495aa63a",
+      "range": {
+        "startLine": 1738,
+        "startChar": 33,
+        "endLine": 1738,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f629b1b1_a9763779",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -225,6 +273,30 @@
       "side": 1,
       "message": "This is something that I don\u0027t fully understand.  Some of the tests are doing 64x128 or 128x64 operations, and I was only getting half of the rendering if the scissor wasn\u0027t set this way.  It didn\u0027t make sense to me that I had to do this, but it works.  Any ideas?",
       "parentUuid": "f629b1b1_a9763779",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1794,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0083135_9ed04438",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T04:28:37Z",
+      "side": 1,
+      "message": "At least one mistake here is that you are looking at the rotation of the \"read\" FBO to determine the viewport and scissor which apply to the \"draw\" FBO.",
+      "parentUuid": "93692ad3_92bf4ede",
       "range": {
         "startLine": 1792,
         "startChar": 0,
