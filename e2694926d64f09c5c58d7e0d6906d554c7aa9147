@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a453f3f_73d7c69c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T04:22:34Z",
+      "side": 1,
+      "message": "Is this really what we want? Bunch of temp views for some serial?",
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0a623b6_549c61a2",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-18T04:22:34Z",
+      "side": 1,
+      "message": "I\u0027m going to go ahead and guess the failing tests are due to this. I\u0027ve been meaning to take a look at it, but maybe you should while you\u0027re seeing this.\n\nPlease check to see if the level index given here is the GL level index or the VK level index (i.e. does it include the texture\u0027s base level (GL) or not (VK)). Then add the appropriate suffix (GL or VK) to the member variable for clarity. Additionally, see whether getLevelLayerDrawImageView wants a GL level index or a VK level index.\n\nMy guess is that this class stores GL level and the function expects a VK level. The failing tests use a non-zero base level.",
+      "range": {
+        "startLine": 122,
+        "startChar": 71,
+        "endLine": 122,
+        "endChar": 82
+      },
+      "revId": "e2694926d64f09c5c58d7e0d6906d554c7aa9147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
