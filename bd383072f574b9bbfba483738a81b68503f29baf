@@ -52,6 +52,24 @@
       "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22a27c9e_8cfe7892",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-18T13:49:12Z",
+      "side": 1,
+      "message": "We\u0027d need to introduce a new compile flag.\nSay ANDROID_PLATFORM_DRIVER which we could set true only for ANGLE apk builds.\nWe don\u0027t (as far as I know) re-use the same .so for all the uses of ANGLE so should be okay to have build specific flag.\n\n\u003e We don\u0027t have test coverage for a Vulkan-only build of ANGLE on Android though.\nYeah that\u0027s something that\u0027s an issue today. However, we have plans of getting ANGLE to autoroll into the Android build which would help with this.",
+      "parentUuid": "e911222e_fd3e7415",
+      "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
