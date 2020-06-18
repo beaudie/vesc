@@ -45,6 +45,52 @@
       "revId": "20c83cf0e3102389cf8ff28dbd30ca55637c5347",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ca595f5_9463fd5f",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-18T18:21:31Z",
+      "side": 1,
+      "message": "nit: I suggest rewording this to explicitly state the behavior you\u0027re expecting, rather than what could go wrong, since the correct behavior should always stay the same while the list of things that could go wrong can change as ANGLE\u0027s internal implementation changes.   Something like:\n\n    // Generate the mips again, which should update all levels to the new (green) color.",
+      "range": {
+        "startLine": 608,
+        "startChar": 0,
+        "endLine": 609,
+        "endChar": 12
+      },
+      "revId": "20c83cf0e3102389cf8ff28dbd30ca55637c5347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8052ab00_5bee1f8b",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-18T18:21:31Z",
+      "side": 1,
+      "message": "nit: are",
+      "range": {
+        "startLine": 1226,
+        "startChar": 73,
+        "endLine": 1226,
+        "endChar": 75
+      },
+      "revId": "20c83cf0e3102389cf8ff28dbd30ca55637c5347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
