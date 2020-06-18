@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "21b4e869_aea8682a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T17:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69404a5b_860499ee",
+      "range": {
+        "startLine": 1040,
+        "startChar": 0,
+        "endLine": 1050,
+        "endChar": 5
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecb58106_f4848d94",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -166,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "aa5bb6f2_43b3b63a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T17:31:20Z",
+      "side": 1,
+      "message": "Let me actually calculate the storage needs and we can decide with that data in hand.",
+      "parentUuid": "814cfdb8_5e6ec1bd",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 50
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7aa31b15_b4cfb849",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 6
@@ -177,6 +225,30 @@
       "writtenOn": "2020-06-18T17:14:52Z",
       "side": 1,
       "message": "can you pass this around instead of adding an accessor? To encapsulate Context class.",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 556,
+        "endChar": 98
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc75aba5_ae69baca",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-18T17:31:20Z",
+      "side": 1,
+      "message": "Right. This also solves the problem that you and Shabi commented in the setupDraw. I am going to move the std::vectors into ContextVK but use the DescriptorSetUpdate object to manage the update and flush. It solves both issues you guys pointed out. The only downside is that I have to modify quite a few APIs to pass this around, which was my original reason of doing the accessor. But as you point out, pass around makes it cleaner and encapsulates context class better.",
+      "parentUuid": "7aa31b15_b4cfb849",
       "range": {
         "startLine": 556,
         "startChar": 0,
