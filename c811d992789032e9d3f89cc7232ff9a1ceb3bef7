@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b643a0c1_b3b83b8b",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T21:10:14Z",
+      "side": 0,
+      "message": "can you ASSERT that it is valid?",
+      "range": {
+        "startLine": 1124,
+        "startChar": 4,
+        "endLine": 1124,
+        "endChar": 27
+      },
+      "revId": "c811d992789032e9d3f89cc7232ff9a1ceb3bef7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
