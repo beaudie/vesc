@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "569cbe6c_ead66cdf",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-18T14:45:19Z",
+      "side": 1,
+      "message": "Looks good! You can leave it as-is.",
+      "parentUuid": "492ddd08_6ec95944",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "5e55607a21cdc0fc0fbbc5e92f2794fb825dfdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e31dddb_aed00219",
         "filename": "src/common/vulkan/vulkan_icd.cpp",
         "patchSetId": 5
