@@ -70,6 +70,24 @@
       "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e091d2f6_670f2eec",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-18T15:49:03Z",
+      "side": 1,
+      "message": "courtney, given the infra issues, how about this - i will add a todo with a new bug tracking creation of new compiler flag to get rid of the if condition and work on it when we have the bot infra to support that usecase. Does that sound reasonable?",
+      "parentUuid": "22a27c9e_8cfe7892",
+      "revId": "bd383072f574b9bbfba483738a81b68503f29baf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
