@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d96d5311_d909a721",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:31:44Z",
+      "side": 1,
+      "message": "There are essl1_shaders::vs::Texture2D and essl1_shaders::fs::Texture2D already.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 18
+      },
+      "revId": "41e5540c7b3e7c9680673cd7353aa054611b3cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4b18a31_d0969ba8",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:31:44Z",
+      "side": 1,
+      "message": "nit: The comment is not very descriptive of what it\u0027s exactly testing for.\n\nAnd I don\u0027t see any rendering to other levels than 0.",
+      "revId": "41e5540c7b3e7c9680673cd7353aa054611b3cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11ca11fc_a56efb80",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:31:44Z",
+      "side": 1,
+      "message": "#include gl_raii.h and use GLtexture everywhere to avoid Gen/Delete. Works for framebuffers too.",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 10
+      },
+      "revId": "41e5540c7b3e7c9680673cd7353aa054611b3cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b179d9e_bca18d43",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:31:44Z",
+      "side": 1,
+      "message": "Comment is not right.",
+      "revId": "41e5540c7b3e7c9680673cd7353aa054611b3cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f66e221f_f9e9a3c0",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:31:44Z",
+      "side": 1,
+      "message": "Add a comment here like:\n\n    // Fill the middle of the depth texture with 0.0f. while the border remains 1.0f as\n    // previously cleared.",
+      "revId": "41e5540c7b3e7c9680673cd7353aa054611b3cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77b188f6_9b5e5255",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:31:44Z",
+      "side": 1,
+      "message": "Add a comment like:\n\n    // Fill finalTex with values read from the depth texture.  This should work even though the\n    // depth texture is also bound as the depth attachment, because depth write is disabled.\n    // The write only succeeds for the middle of finalTex due to depth test.",
+      "revId": "41e5540c7b3e7c9680673cd7353aa054611b3cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c7d144d_a6337769",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:31:44Z",
+      "side": 1,
+      "message": "Add a comment like:\n\n   // Copy finalTex to default framebuffer for verification.  Depth values written in the first\n   // draw call are expected in the middle, while the clear value in the clear before the\n   // second draw call are expected at the border.",
+      "revId": "41e5540c7b3e7c9680673cd7353aa054611b3cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
