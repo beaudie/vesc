@@ -16,6 +16,24 @@
       "revId": "c1a64fcdde433a796ad73ff3ef673c6ecc04bb50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52f24d3f_f7bb8897",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-19T19:22:19Z",
+      "side": 1,
+      "message": "Good point, Mohan, I did a few quick experiments and found some collisions for low-value layer/level combos. After some further tests I\u0027ve changed the shift to 11 bits, which produces unique hash values for 256x256 space of level/layer.",
+      "parentUuid": "a59982d2_8a1100f8",
+      "revId": "c1a64fcdde433a796ad73ff3ef673c6ecc04bb50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
