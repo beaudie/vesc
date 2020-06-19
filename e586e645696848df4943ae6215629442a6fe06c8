@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72504767_d1af287e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2672,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-19T00:03:39Z",
+      "side": 1,
+      "message": "It looks like we have a few different init values now:\n\n    constexpr int kNonZeroInitValue \u003d 55;  // 0x37\n    constexpr int kNonZeroInitValue \u003d 0x3F;\n    constexpr uint32_t kInitValue   \u003d 0x3F345678;\n\nShould these all match to make the value more recognizable?   Or is the intent to make them unique so we can tell the code path that initialized the value?   If they are intended to be uniquely identifiable, then I\u0027d suggest values that are further apart (e.g., 0x11, 0x22, 0x33) to try and remove any overlap in digits.",
+      "revId": "e586e645696848df4943ae6215629442a6fe06c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
