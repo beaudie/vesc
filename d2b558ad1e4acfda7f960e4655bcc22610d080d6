@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "962f2a5d_21aeb676",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-19T12:45:14Z",
+      "side": 1,
+      "message": "This is true, we should target py3. I guess the CQ is unblocked now so no need to force this through.",
+      "parentUuid": "556b486e_c06ee4c5",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 18
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c9b64f5_fc185bf1",
         "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
         "patchSetId": 2
