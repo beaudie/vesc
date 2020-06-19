@@ -94,6 +94,30 @@
       "revId": "30ddf77aa51d701b162302d6728c8d2c851fb583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "058af890_8dae313c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-19T20:12:31Z",
+      "side": 1,
+      "message": "\u003e \"((level \u003c\u003c 11) ^ (layer))\"\n\nsorry, meant \"((level \u003c\u003c 11) | (layer))\"",
+      "parentUuid": "993b0fc2_2fff1569",
+      "range": {
+        "startLine": 877,
+        "startChar": 0,
+        "endLine": 880,
+        "endChar": 63
+      },
+      "revId": "30ddf77aa51d701b162302d6728c8d2c851fb583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
