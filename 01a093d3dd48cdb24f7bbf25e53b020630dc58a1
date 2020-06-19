@@ -190,6 +190,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1502ea36_c521d74a",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-19T12:46:54Z",
+      "side": 1,
+      "message": "We cannot do that in Chrome CI which is why I said we can\u0027t have bots like that. We could change something Android-side post-commit.",
+      "parentUuid": "9c0ca9c1_f5c394fe",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
