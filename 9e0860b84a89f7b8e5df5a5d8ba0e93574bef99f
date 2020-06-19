@@ -16,6 +16,24 @@
       "revId": "9e0860b84a89f7b8e5df5a5d8ba0e93574bef99f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddb0cd56_f35d7035",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-19T16:33:36Z",
+      "side": 1,
+      "message": "This is not the same check. The above check is for array elements with [] in the name, this is for whole arrays without [].",
+      "parentUuid": "95f60b4e_f67041e4",
+      "revId": "9e0860b84a89f7b8e5df5a5d8ba0e93574bef99f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
