@@ -166,6 +166,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c0ca9c1_f5c394fe",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T02:10:31Z",
+      "side": 1,
+      "message": "We can change the Android build of ANGLE to build like that. Right now we are defining both ANGLE_ENABLE_OPENGL and ANGLE_ENABLE_VULKAN but we shouldn\u0027t have to. That would get us testing that way on Android at least.",
+      "parentUuid": "f1d29ca7_55d8114f",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
