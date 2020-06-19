@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "f7001e1f_789527ae",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T15:58:38Z",
+      "side": 1,
+      "message": "Done. I was skeptical a bit, but once done it looks like a good addition. We mind find other situations where this is beneficial.",
+      "parentUuid": "f8e09975_64055df9",
+      "range": {
+        "startLine": 1581,
+        "startChar": 25,
+        "endLine": 1581,
+        "endChar": 34
+      },
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3d6681b_9bece87a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "1eefba06_5f82433b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T15:58:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3d6681b_9bece87a",
+      "range": {
+        "startLine": 1611,
+        "startChar": 36,
+        "endLine": 1611,
+        "endChar": 69
+      },
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "639ad24a_d89e2c38",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -110,6 +158,24 @@
       "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edf12a65_5f93a261",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T15:58:38Z",
+      "side": 1,
+      "message": "Ranges are quite commonly [start, end), but ok I changed it to [start, end] because GL\u0027s base/max are inclusive on both sides too.",
+      "parentUuid": "639ad24a_d89e2c38",
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
