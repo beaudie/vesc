@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "2c2cb05e_ea0f0c0e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T15:38:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "602ae645_c0f6b808",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 8
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f755eb9b_59d2440a",
         "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
         "patchSetId": 2
@@ -141,6 +165,30 @@
       "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcd3bb79_ae0a4f38",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T15:38:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "962f2a5d_21aeb676",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 18
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -307,6 +355,30 @@
       "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c46c3960_b812413e",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T15:38:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b468a037_9233491c",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 5
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
