@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "602ae645_c0f6b808",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T02:02:25Z",
+      "side": 1,
+      "message": "According to Jamie, the build bots do not clean out the files prior to building so we have whatever files were left from the last build. If the next build pulls down different trace files that have a timestamp older than the dependent binaries the build doesn\u0027t think there is anything that needs to happen.\nWe aren\u0027t doing a git checkout here, we are extracting files from a zip which tries to preserve file modification times.",
+      "parentUuid": "fab26d1a_a6416d19",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 8
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f755eb9b_59d2440a",
         "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-18T23:42:20Z",
       "side": 1,
       "message": "This should target Python 3.   Python 2 went EOL January 1, 2020 (6 months ago).",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 18
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6ed1866_0397a8f8",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T02:02:25Z",
+      "side": 1,
+      "message": "Great question. I don\u0027t know what the expectation is for build scripts. If so, there are a bunch of scripts that need to update.",
+      "parentUuid": "f755eb9b_59d2440a",
       "range": {
         "startLine": 1,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6ca779a1_433e2c91",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T02:02:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c9b64f5_fc185bf1",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b8d5518_793fc4a0",
         "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2020-06-18T23:42:20Z",
       "side": 1,
       "message": "Does using \u0027--force\u0027 help instead of needing this script?\n\n    -f, --force           Force download even if local file exists.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 5
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bf1746e_3e21c32b",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T02:02:25Z",
+      "side": 1,
+      "message": "No, the download_from_google_storage script (well the tar library it uses) will set the modification time to match the time of the file when the zip was created. The build then sees these files as old and thus the dependent binaries don\u0027t need to be updated.\nVs. what git checkout does which always updates the modification time even though you may be checking out older versions of a file.",
+      "parentUuid": "5b8d5518_793fc4a0",
       "range": {
         "startLine": 39,
         "startChar": 0,
@@ -138,6 +234,30 @@
       "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ad1d365_eebded3f",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-19T02:02:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b678247_9e8defd5",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 40
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
