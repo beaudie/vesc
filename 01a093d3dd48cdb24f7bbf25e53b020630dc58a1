@@ -142,6 +142,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1d29ca7_55d8114f",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-19T00:44:12Z",
+      "side": 1,
+      "message": "after trying out multiple combinations it looks like, with a clean ANGLE, there wont be a way to avoid the run-time if-check. We will need to have a local patch to \"roll_aosp.sh\".",
+      "parentUuid": "4ecf439b_4b85ae98",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
