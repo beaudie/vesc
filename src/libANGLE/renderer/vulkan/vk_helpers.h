@@ -1381,6 +1381,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                       GLuint *inputDepthPitch,
                                       GLuint *inputSkipBytes);
 
+    void markDataDirty() { mHasClearValueOnly = nullptr; }
+
   private:
     enum class UpdateSource
     {
@@ -1395,6 +1397,10 @@ class ImageHelper final : public Resource, public angle::Subject
         uint32_t levelIndex;
         uint32_t layerIndex;
         uint32_t layerCount;
+        bool operator==(const ClearUpdate &rhs)
+        {
+            return memcmp(this, &rhs, sizeof(ClearUpdate)) == 0;
+        }
     };
     struct BufferUpdate
     {
@@ -1515,6 +1521,12 @@ class ImageHelper final : public Resource, public angle::Subject
     // Staging buffer
     DynamicBuffer mStagingBuffer;
     std::vector<SubresourceUpdate> mSubresourceUpdates;
+
+    // Optimization for repeated clear with the same value. If this pointer
+    // is not null, the entire image it has been cleared to the specified
+    // clear value. If another clear call is made with the exact same clear
+    // value, we will detect and skip the clear call.
+    std::unique_ptr<ClearUpdate> mHasClearValueOnly;
 };
 
 // A vector of image views, such as one per level or one per layer.
