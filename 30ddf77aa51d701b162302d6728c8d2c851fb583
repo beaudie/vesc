@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d8e7ea4_1eba9bce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T19:53:14Z",
+      "side": 1,
+      "message": "ANGLE caps layers to 2048, but I\u0027m not sure if there is a limit to levels. What happens if a malicious application causes a hash collision here? Say it creates a texture with 2 levels, one at level 1, and another at level 987 (assume hashes of these collide), then uses both as color attachments. If it can incur a use-after-free or some such error, it can be a security risk.\n\nOne possibility is to make the hash table (unordered_map) a table of tables, though if we can avoid the runtime cost, it would be better!",
+      "range": {
+        "startLine": 877,
+        "startChar": 0,
+        "endLine": 880,
+        "endChar": 63
+      },
+      "revId": "30ddf77aa51d701b162302d6728c8d2c851fb583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
