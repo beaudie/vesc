@@ -70,6 +70,46 @@
       "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3d6681b_9bece87a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-19T03:46:09Z",
+      "side": 1,
+      "message": "The \u0027+1\u0027 here looks like you\u0027re going past the max level.",
+      "range": {
+        "startLine": 1611,
+        "startChar": 36,
+        "endLine": 1611,
+        "endChar": 69
+      },
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "639ad24a_d89e2c38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-19T03:46:09Z",
+      "side": 1,
+      "message": "Why is start inclusive while end is exclusive?   I would have expected both to be inclusive, which would also remove the need for the +1 when calling this function above.",
+      "revId": "04af7c375ab6b6f3a2b4fc52450df8e5428e7472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
