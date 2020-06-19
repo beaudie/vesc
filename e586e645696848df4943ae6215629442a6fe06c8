@@ -16,6 +16,24 @@
       "revId": "e586e645696848df4943ae6215629442a6fe06c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c17743c8_a8e499f1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T03:37:56Z",
+      "side": 1,
+      "message": "They are really just arbitrary. I don\u0027t think we particularly care about which path did the clear, as long as the colors are not accidentally something we might expect (i.e. black or white).\n\nI could change 55 to 0x3F and the value here to 0x3F3F3F3F, though I don\u0027t think there is any benefit either way. Maybe keeping them separate would come in handy one way?\n\nThe clear value for textures should really start with 0x3F[3] though in my opinion, to give a value between 0 and 1, so something obvious like 0x11, 0x22 etc wouldn\u0027t work.",
+      "parentUuid": "72504767_d1af287e",
+      "revId": "e586e645696848df4943ae6215629442a6fe06c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
