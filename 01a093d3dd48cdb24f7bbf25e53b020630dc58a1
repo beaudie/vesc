@@ -286,6 +286,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2441aeec_21e6fe17",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T15:54:55Z",
+      "side": 1,
+      "message": "Definitely wouldn\u0027t want a special CHROME build flag. The point here is that if the OpenGL backend is built, the test must be here, if not it can be optimized out. Vulkan being built is irrelevant IMO. It should be as simple as:\n\n    #if defined(ANGLE_PLATFORM_ANDROID)\n    #if defined(ANGLE_ENABLE_OPENGL)\n        if (gUseAndroidOpenGLTlsSlot)\n    #endif\n        {\n            return ...;\n        }\n    #endif\n\n@Mohan, set `angle_enable_gl\u003dfalse` in your `args.gn` so you wouldn\u0027t build the GL backend. Then ANGLE_ENABLE_OPENGL is no longer defined (see BUILD.gn):\n\n    if (angle_enable_gl) {\n      defines +\u003d [ \"ANGLE_ENABLE_OPENGL\" ]\n      if (angle_enable_gl_null) {\n        defines +\u003d [ \"ANGLE_ENABLE_OPENGL_NULL\" ]\n      }\n    }",
+      "parentUuid": "a5f61476_2276bab4",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
