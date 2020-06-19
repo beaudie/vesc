@@ -1382,7 +1382,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                       GLuint *inputDepthPitch,
                                       GLuint *inputSkipBytes);
 
-    bool hasImmutableSampler() { return mExternalFormat != 0; }
+    bool hasImmutableSampler() { return mYuvConversionSampler.valid(); }
+    uint64_t getExternalFormat() { return mYuvConversionSampler.get().getExternalFormat(); }
 
   private:
     enum class UpdateSource
@@ -1510,7 +1511,7 @@ class ImageHelper final : public Resource, public angle::Subject
     VkPipelineStageFlags mCurrentShaderReadStageMask;
 
     // For imported images
-    // TODO: reference to YUV Conversion here
+    vk::BindingPointer<vk::SamplerYcbcrConversion> mYuvConversionSampler;
 
     // Cached properties.
     uint32_t mBaseLevel;

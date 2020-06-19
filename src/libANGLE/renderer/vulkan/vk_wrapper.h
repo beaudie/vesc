@@ -613,7 +613,13 @@ class SamplerYcbcrConversion final
   public:
     SamplerYcbcrConversion() = default;
     void destroy(VkDevice device);
-    VkResult init(VkDevice device, const VkSamplerYcbcrConversionCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  uint64_t externalFormat,
+                  const VkSamplerYcbcrConversionCreateInfo &createInfo);
+    uint64_t getExternalFormat() { return mExternalFormat; }
+
+  private:
+    uint64_t mExternalFormat;
 };
 
 class Event final : public WrappedObject<Event, VkEvent>
@@ -1719,9 +1725,12 @@ ANGLE_INLINE void SamplerYcbcrConversion::destroy(VkDevice device)
 }
 
 ANGLE_INLINE VkResult
-SamplerYcbcrConversion::init(VkDevice device, const VkSamplerYcbcrConversionCreateInfo &createInfo)
+SamplerYcbcrConversion::init(VkDevice device,
+                             uint64_t externalFormat,
+                             const VkSamplerYcbcrConversionCreateInfo &createInfo)
 {
     ASSERT(!valid());
+    mExternalFormat = externalFormat;
     return vkCreateSamplerYcbcrConversionKHR(device, &createInfo, nullptr, &mHandle);
 }
 

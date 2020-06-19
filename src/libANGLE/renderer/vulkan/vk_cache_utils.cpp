@@ -2220,6 +2220,7 @@ void SamplerYcbcrConversionCache::destroy(RendererVk *renderer)
 }
 
 angle::Result SamplerYcbcrConversionCache::getYuvConversion(
+    ContextVk *contextVk,
     uint64_t externalFormat,
     const VkSamplerYcbcrConversionCreateInfo &yuvConversionCreateInfo,
     vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut)
@@ -2232,43 +2233,36 @@ angle::Result SamplerYcbcrConversionCache::getYuvConversion(
         return angle::Result::Continue;
     }
 
-    vk::SamplerYcbcrConversion yuvConversion;
-    auto insertedItem = mPayload.emplace(
-        externalFormat, vk::RefCountedSamplerYcbcrConversion(std::move(yuvConversion)));
-    vk::RefCountedSampler &insertedSampler = insertedItem.first->second;
-    samplerOut->set(&insertedSampler);
+    vk::SamplerYcbcrConversion wrappedYuvConversion;
+    wrappedYuvConversion.init(contextVk->getDevice(), externalFormat, yuvConversionCreateInfo);
 
-    contextVk->getRenderer()->getActiveHandleCounts().onAllocate(vk::HandleType::Sampler);
+    auto insertedItem = mPayload.emplace(
+        externalFormat, vk::RefCountedSamplerYcbcrConversion(std::move(wrappedYuvConversion)));
+    vk::RefCountedSamplerYcbcrConversion &insertedYuvConversion = insertedItem.first->second;
+    yuvConversionOut->set(&insertedYuvConversion);
+
+    contextVk->getRenderer()->getActiveHandleCounts().onAllocate(
+        vk::HandleType::SamplerYcbcrConversion);
 
     return angle::Result::Continue;
 }
 
-void SamplerYcbcrConversionCache::createYuvConversion(
-    DisplayVk *displayVk,
+angle::Result SamplerYcbcrConversionCache::getYuvConversion(
+    ContextVk *contextVk,
     uint64_t externalFormat,
-    VkSamplerYcbcrConversionCreateInfo *yuvConversionInfo)
+    vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut)
 {
-    ASSERT(externalFormat != 0);
-
     auto iter = mPayload.find(externalFormat);
     if (iter != mPayload.end())
     {
-        vk::RefCountedSamplerYcbcrConversion &refCountedYuvConversion = iter->second;
-        refCountedYuvConversion.addRef();
-        return;
+        vk::RefCountedSamplerYcbcrConversion &yuvConversion = iter->second;
+        yuvConversionOut->set(&yuvConversion);
+        return angle::Result::Continue;
     }
 
-    RendererVk *renderer = displayVk->getRenderer();
-    VkDevice device      = renderer->getDevice();
-
-    vk::SamplerYcbcrConversion wrappedYuvConversion;
-    wrappedYuvConversion.init(device, *yuvConversionInfo);
-    mPayload.emplace(externalFormat,
-                     vk::RefCountedSamplerYcbcrConversion(std::move(wrappedYuvConversion)));
-
-    renderer->getActiveHandleCounts().onAllocate(vk::HandleType::SamplerYcbcrConversion);
-
-    return;
+    // This is only called by SamplerDesc::init when we know we have a YuvConversion sampler
+    UNREACHABLE();
+    return angle::Result::Stop;
 }
 
 // SamplerCache implementation.

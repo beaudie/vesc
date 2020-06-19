@@ -1050,15 +1050,16 @@ class SamplerYcbcrConversionCache final : angle::NonCopyable
     void destroy(RendererVk *render);
 
     angle::Result getYuvConversion(
+        ContextVk *contextVk,
         uint64_t externalFormat,
         const VkSamplerYcbcrConversionCreateInfo &yuvConversionCreateInfo,
         vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut);
+    angle::Result getYuvConversion(
+        ContextVk *contextVk,
+        uint64_t externalFormat,
+        vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut);
 
   private:
-    void createYuvConversion(DisplayVk *displayVk,
-                             uint64_t externalFormat,
-                             VkSamplerYcbcrConversionCreateInfo *yuvConversionInfo);
-
     std::unordered_map<uint64_t, vk::RefCountedSamplerYcbcrConversion> mPayload;
 };
 
