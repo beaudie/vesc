@@ -262,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "b468a037_9233491c",
+        "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-19T03:50:20Z",
+      "side": 1,
+      "message": "Ah, ok. That\u0027s a shame. Thanks for digging into that.",
+      "parentUuid": "7d3dd10a_ac5687f5",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 5
+      },
+      "revId": "d2b558ad1e4acfda7f960e4655bcc22610d080d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2fcd32c_d215a145",
         "filename": "src/tests/perf_tests/restricted_traces/download_restricted_traces.py",
         "patchSetId": 2
