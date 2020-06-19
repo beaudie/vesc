@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "de27f466_1f1f1ac1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4895,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-19T15:47:15Z",
+      "side": 1,
+      "message": "This reset was causing failures so I killed it.",
+      "parentUuid": "746146f5_7a0b6f33",
+      "revId": "5635abc05af2c33a088f1fced9675a0e52740e76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2aa5b8ff_32b51447",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a51e9aee_a151827e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1696,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-19T15:47:15Z",
+      "side": 1,
+      "message": "Much better",
+      "parentUuid": "04ba02c1_73cb6f68",
+      "range": {
+        "startLine": 1696,
+        "startChar": 12,
+        "endLine": 1696,
+        "endChar": 55
+      },
+      "revId": "a7d6e4461774825ba72cf0a85387e3df2dffa345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7f7386c_fa513cab",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "60aff26d_e40398c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-19T15:47:15Z",
+      "side": 1,
+      "message": "Nice, migrated these into vk_cache_utils w/ the other functions as this is also related to caching Serials.",
+      "parentUuid": "b7f7386c_fa513cab",
+      "range": {
+        "startLine": 1530,
+        "startChar": 0,
+        "endLine": 1537,
+        "endChar": 2
+      },
+      "revId": "a7d6e4461774825ba72cf0a85387e3df2dffa345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ecafba6_c25ab427",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
@@ -68,6 +116,30 @@
       "revId": "a7d6e4461774825ba72cf0a85387e3df2dffa345",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcd222bc_63b8b0a9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-06-19T15:47:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ecafba6_c25ab427",
+      "range": {
+        "startLine": 1539,
+        "startChar": 0,
+        "endLine": 1545,
+        "endChar": 2
+      },
+      "revId": "a7d6e4461774825ba72cf0a85387e3df2dffa345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
