@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04ba02c1_73cb6f68",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1696,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-19T14:38:54Z",
+      "side": 1,
+      "message": "nit: serial.valid()",
+      "range": {
+        "startLine": 1696,
+        "startChar": 12,
+        "endLine": 1696,
+        "endChar": 55
+      },
+      "revId": "a7d6e4461774825ba72cf0a85387e3df2dffa345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7f7386c_fa513cab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-19T14:38:54Z",
+      "side": 1,
+      "message": "the idiomatic way of using hashing in ANGLE is with std::hash. checkout vk_cache_utils:\n\nnamespace std\n{\ntemplate \u003c\u003e\nstruct hash\u003crx::vk::RenderPassDesc\u003e\n{\n    size_t operator()(const rx::vk::RenderPassDesc \u0026key) const { return key.hash(); }\n};\n...\n\nYou\u0027d change operator() to return this inline function.",
+      "range": {
+        "startLine": 1530,
+        "startChar": 0,
+        "endLine": 1537,
+        "endChar": 2
+      },
+      "revId": "a7d6e4461774825ba72cf0a85387e3df2dffa345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ecafba6_c25ab427",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-19T14:38:54Z",
+      "side": 1,
+      "message": "nit: here you can use operator\u003d\u003d",
+      "range": {
+        "startLine": 1539,
+        "startChar": 0,
+        "endLine": 1545,
+        "endChar": 2
+      },
+      "revId": "a7d6e4461774825ba72cf0a85387e3df2dffa345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
