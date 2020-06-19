@@ -262,6 +262,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5f61476_2276bab4",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-19T15:43:01Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t see why you need it\n\ni was under the impression that a chrome specific usecase was the blocker and thought that separating ANGLE build for chrome and ANGLE build for Android was one way out. may be it isnt that straight forward\n\n\u003e what got you stuck on implementing my suggestion. I don\u0027t see what would stop you.\n\nI did implement the suggestion but since both ANGLE_ENABLE_OPENGL and ANGLE_ENABLE_VULKAN were always defined for my android build the if-check was always performed. There was no value add by that code\n\n\u003e Anyway we should either land this or figure out ...\n\nI\u0027m fine landing this as-is, i have a todo in place for further optimization. Courtney/Geoff please leave a comment on the todo bug when the infra is in place and i will upload a change",
+      "parentUuid": "d3f0fd41_b3e11a10",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
