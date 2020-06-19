@@ -1157,6 +1157,7 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
         uint32_t levelIndexGL = index.getLevelIndex();
         uint32_t layerIndex   = index.hasLayer() ? index.getLayerIndex() : 0;
         mImage->removeStagedUpdates(contextVk, levelIndexGL, layerIndex);
+        mImage->markDataDirty();
 
         if (mImage->valid())
         {

@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/trace.h"
+#include "vk_helpers.h"
 
 namespace rx
 {
@@ -591,6 +592,7 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
                                      vk::ImageHelper *image)
 {
     image->retain(resourceUseList);
+    image->markDataDirty();
     // Write always requires a barrier
     PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
     ASSERT(barrierIndex != PipelineStage::InvalidEnum);
@@ -2499,6 +2501,7 @@ void ImageHelper::resetCachedProperties()
     mMaxLevel                    = 0;
     mLayerCount                  = 0;
     mLevelCount                  = 0;
+    mHasClearValueOnly           = nullptr;
 }
 
 void ImageHelper::initStagingBuffer(RendererVk *renderer,
@@ -2599,6 +2602,7 @@ void ImageHelper::releaseStagingBuffer(RendererVk *renderer)
     }
     mStagingBuffer.release(renderer);
     mSubresourceUpdates.clear();
+    mHasClearValueOnly = nullptr;
 }
 
 void ImageHelper::resetImageWeakReference()
@@ -4000,6 +4004,20 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
+    // If a clear is requested and we know it just has been cleared with the same value, we drop the
+    // clear
+    if (mSubresourceUpdates.size() == 1)
+    {
+        SubresourceUpdate &update = mSubresourceUpdates[0];
+        if (update.updateSource == UpdateSource::Clear && mHasClearValueOnly &&
+            *mHasClearValueOnly == update.clear)
+        {
+            update.release(contextVk->getRenderer());
+            mSubresourceUpdates.clear();
+            return angle::Result::Continue;
+        }
+    }
+
     const uint32_t levelGLStart = levelVKStart + mBaseLevel;
     const uint32_t levelGLEnd   = levelVKEnd + mBaseLevel;
 
@@ -4114,6 +4132,9 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             ASSERT(updateMipLevelVK == update.clear.levelIndex);
             clear(update.clear.aspectFlags, update.clear.value, updateMipLevelVK, updateBaseLayer,
                   updateLayerCount, commandBuffer);
+            // Remember the latest operation is a clear call
+            mHasClearValueOnly  = std::make_unique<ClearUpdate>();
+            *mHasClearValueOnly = update.clear;
         }
         else if (update.updateSource == UpdateSource::Buffer)
         {
@@ -4126,6 +4147,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
                                              getCurrentLayout(), 1, &update.buffer.copyRegion);
+            markDataDirty();
         }
         else
         {
@@ -4135,6 +4157,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             commandBuffer->copyImage(update.image.image->getImage(),
                                      update.image.image->getCurrentLayout(), mImage,
                                      getCurrentLayout(), 1, &update.image.copyRegion);
+            markDataDirty();
         }
 
         update.release(contextVk->getRenderer());
