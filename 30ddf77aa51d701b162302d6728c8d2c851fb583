@@ -46,6 +46,30 @@
       "revId": "30ddf77aa51d701b162302d6728c8d2c851fb583",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1295a67e_1a15a427",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-19T20:05:33Z",
+      "side": 1,
+      "message": "Could be:\n\n    return std::hash\u003cuint32_t\u003e()(layerLevel.layer \u003c\u003c 10 | layerLevel.level)\n\n(don\u0027t know if std::hash is guaranteed not to collide for uint32_t)\n\nOr just:\n\n    return layerLevel.layer \u003c\u003c 10 | layerLevel.level\n\nand hope for the best!",
+      "parentUuid": "372676a4_32f6aba7",
+      "range": {
+        "startLine": 877,
+        "startChar": 0,
+        "endLine": 880,
+        "endChar": 63
+      },
+      "revId": "30ddf77aa51d701b162302d6728c8d2c851fb583",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
