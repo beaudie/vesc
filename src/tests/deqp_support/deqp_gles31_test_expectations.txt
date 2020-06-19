@@ -147,6 +147,21 @@
 // The D3D backend does not expect missing shader stages
 1588 D3D11 : dEQP-GLES31.functional.separate_shader.validation.es31.varying.* = SKIP
 
+// Failing after Vulkan Validation Layer roll
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_int_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_uint_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_int_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_uint_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_1_use_texture_int_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_1_use_texture_uint_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_2_use_texture_int_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_2_use_texture_uint_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_3_use_texture_int_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_3_use_texture_uint_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_4.use_texture_int_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_4_use_texture_uint_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_8_use_texture_int_2d
+4768 VULKAN LINUX ANDROID : dEQP-GLES31.functional.texture.multisample.samples_8_use_texture_uint_2d
 
 ////
 //// Failures blocking an official GLES 3.1 conformance run on SwiftShader
