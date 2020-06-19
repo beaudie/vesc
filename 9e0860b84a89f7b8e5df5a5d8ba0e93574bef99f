@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95f60b4e_f67041e4",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4289,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2020-06-19T09:51:38Z",
+      "side": 1,
+      "message": "I removed it because it has the same logic in Line 4237.",
+      "revId": "9e0860b84a89f7b8e5df5a5d8ba0e93574bef99f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
