@@ -214,6 +214,30 @@
       "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd01d8b5_e37373e9",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-19T14:57:33Z",
+      "side": 1,
+      "message": "is it possible to request the chrome people to define a \"__CHROME__\" macro in their build system so ANGLE can make use of it?",
+      "parentUuid": "1502ea36_c521d74a",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 83
+      },
+      "revId": "01a093d3dd48cdb24f7bbf25e53b020630dc58a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
