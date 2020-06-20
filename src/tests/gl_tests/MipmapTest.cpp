@@ -1170,13 +1170,17 @@ TEST_P(MipmapTestES3, GenerateMipmapPreservesOutOfRangeMips)
 
     // Set base level to 1, and generate mipmaps.  Levels 1 through 5 will be green.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    clearAndDrawQuad(m2DProgram, getWindowWidth(), getWindowHeight());
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, kLevel1Data[0]);
 
     glGenerateMipmap(GL_TEXTURE_2D);
     ASSERT_GL_NO_ERROR();
 
     // Verify that the mips are all green.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     for (int mip = 0; mip < 5; ++mip)
     {
         int scale = 1 << mip;
