@@ -142,6 +142,24 @@
       "revId": "4694bcd9864d2a3e9d7d5750827ec2b5bd6632d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a12f44b8_f51d7bc7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3103,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-06-20T07:20:20Z",
+      "side": 1,
+      "message": "The linked issue has been updated.",
+      "parentUuid": "1d15aca2_151f248b",
+      "revId": "4694bcd9864d2a3e9d7d5750827ec2b5bd6632d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
