@@ -285,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "767b4297_6c868748",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T17:01:21Z",
+      "side": 1,
+      "message": "One example is the use of a proprietary format for camera data that the sampler knows how to work with but is not documented otherwise. Android treats it as a black box.",
+      "parentUuid": "6704da46_a5d9e1c8",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc799c53_d7e60936",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 40
