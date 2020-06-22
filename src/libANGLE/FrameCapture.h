@@ -311,6 +311,7 @@ class FrameCapture final : angle::NonCopyable
     std::vector<uint8_t> mBinaryData;
 
     bool mEnabled = false;
+    bool mSerializeContextEnabled;
     std::string mOutDirectory;
     std::string mCaptureLabel;
     bool mCompression;

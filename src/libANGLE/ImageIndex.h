@@ -16,7 +16,6 @@
 
 namespace gl
 {
-
 class ImageIndexIterator;
 
 class ImageIndex
