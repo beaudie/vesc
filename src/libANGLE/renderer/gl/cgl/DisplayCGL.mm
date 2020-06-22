@@ -184,6 +184,8 @@ egl::Error DisplayCGL::initialize(egl::Display *display)
 
     CGLSetCurrentContext(mContext);
 
+    mCurrentData[std::this_thread::get_id()] = mContext;
+
     // There is no equivalent getProcAddress in CGL so we open the dylib directly
     void *handle = dlopen(kDefaultOpenGLDylibName, RTLD_NOW);
     if (!handle)
@@ -219,6 +221,7 @@ void DisplayCGL::terminate()
         CGLDestroyPixelFormat(mPixelFormat);
         mPixelFormat = nullptr;
     }
+    mCurrentData.clear();
     if (mContext != nullptr)
     {
         CGLSetCurrentContext(nullptr);
@@ -238,6 +241,16 @@ egl::Error DisplayCGL::makeCurrent(egl::Surface *drawSurface,
                                    gl::Context *context)
 {
     checkDiscreteGPUStatus();
+    CGLContextObj newContext = 0;
+    if (context)
+    {
+        newContext = mContext;
+    }
+    if (newContext != mCurrentData[std::this_thread::get_id()])
+    {
+        CGLSetCurrentContext(newContext);
+        mCurrentData[std::this_thread::get_id()] = newContext;
+    }
     return DisplayGL::makeCurrent(drawSurface, readSurface, context);
 }
 

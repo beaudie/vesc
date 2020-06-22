@@ -205,7 +205,7 @@ TEST_P(MultithreadingTest, MultiContextDraw)
 TEST_P(MultithreadingTest, MultiCreateContext)
 {
     // Supported by WGL and GLX (https://anglebug.com/4725)
-    ANGLE_SKIP_TEST_IF(!IsWindows() && !IsLinux());
+    ANGLE_SKIP_TEST_IF(!IsWindows() && !IsLinux() && !IsOSX());
 
     std::mutex mutex;
 
