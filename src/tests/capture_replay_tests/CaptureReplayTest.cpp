@@ -8,11 +8,11 @@
 //
 
 #include "common/system_utils.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/frame_capture_utils.h"
 #include "util/EGLPlatformParameters.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
-#include "util/egl_loader_autogen.h"
-#include "util/gles_loader_autogen.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -22,7 +22,7 @@
 #include <string>
 #include <utility>
 
-#include "util/frame_capture_utils.h"
+#include "util/frame_capture_test_utils.h"
 
 // Build the right context header based on replay ID
 // This will expand to "angle_capture_context<#>.h"
@@ -38,6 +38,10 @@ std::function<void(int)> ReplayContextFrame = reinterpret_cast<void (*)(int)>(
 std::function<void()> ResetContextReplay = reinterpret_cast<void (*)()>(
     ANGLE_MACRO_CONCAT(ResetContext,
                        ANGLE_MACRO_CONCAT(ANGLE_CAPTURE_REPLAY_TEST_CONTEXT_ID, Replay)));
+std::function<std::vector<uint8_t>()> GetSerializedContextStateData =
+    reinterpret_cast<std::vector<uint8_t> (*)()>(
+        ANGLE_MACRO_CONCAT(GetSerializedContextState,
+                           ANGLE_MACRO_CONCAT(ANGLE_CAPTURE_REPLAY_TEST_CONTEXT_ID, Data)));
 
 class CaptureReplayTest
 {
@@ -113,8 +117,6 @@ class CaptureReplayTest
             return -1;
         }
 
-        angle::LoadGLES(eglGetProcAddress);
-
         int result = 0;
 
         if (!initialize())
@@ -123,6 +125,15 @@ class CaptureReplayTest
         }
 
         draw();
+
+        gl::Context *context = static_cast<gl::Context *>(mEGLWindow->getContext());
+        gl::BinaryOutputStream bos;
+        angle::SerializeContext(&bos, context);
+        bool isEqual = compareSerializedStates(bos);
+        if (!isEqual)
+        {
+            result = -1;
+        }
         swap();
 
         mEGLWindow->destroyGL();
@@ -132,6 +143,27 @@ class CaptureReplayTest
     }
 
   private:
+    bool compareSerializedStates(const gl::BinaryOutputStream &replaySerializedContextData)
+    {
+        // TODO (nguyenmh): http://anglebug.com/4759: do fuzzy compare of framebuffer contents
+        // due to variation in underlying Vulkan implementations/hardwares
+        std::vector<uint8_t> captureSerializedContextData = GetSerializedContextStateData();
+        if (captureSerializedContextData.size() != replaySerializedContextData.length())
+        {
+            return false;
+        }
+        const uint8_t *replaySerializedContextDataPtr =
+            reinterpret_cast<const uint8_t *>(replaySerializedContextData.data());
+        for (size_t i = 0; i < replaySerializedContextData.length(); i++)
+        {
+            if (captureSerializedContextData[i] != replaySerializedContextDataPtr[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     uint32_t mWidth;
     uint32_t mHeight;
     OSWindow *mOSWindow;
@@ -146,8 +178,8 @@ class CaptureReplayTest
 int main(int argc, char **argv)
 {
     // TODO (nguyenmh): http://anglebug.com/4759: initialize app with arguments taken from cmdline
-    const int width               = 128;
-    const int height              = 128;
+    const int width               = 1280;
+    const int height              = 720;
     const EGLint glesMajorVersion = 2;
     const GLint glesMinorVersion  = 0;
     CaptureReplayTest app(width, height, glesMajorVersion, glesMinorVersion);

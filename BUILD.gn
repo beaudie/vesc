@@ -907,6 +907,14 @@ angle_static_library("libGLESv2_static") {
   public_deps = [ ":libANGLE" ]
 }
 
+angle_static_library("libGLESv2_with_capture_static") {
+  sources = libglesv2_sources
+  configs += [ ":debug_annotations_config" ]
+  public_configs += [ ":angle_static" ]
+  deps = [ ":includes" ]
+  public_deps = [ ":libANGLE_with_capture" ]
+}
+
 angle_shared_library("libGLESv1_CM") {
   sources = libglesv1_cm_sources
   output_name = "libGLESv1_CM${angle_libs_suffix}"
@@ -998,6 +1006,22 @@ angle_static_library("libEGL_static") {
   deps = [
     ":includes",
     ":libGLESv2_static",
+  ]
+}
+
+angle_static_library("libEGL_with_capture_static") {
+  sources = libegl_sources
+
+  configs += [
+    ":debug_annotations_config",
+    ":library_name_config",
+  ]
+
+  public_configs += [ ":angle_static" ]
+
+  deps = [
+    ":includes",
+    ":libGLESv2_with_capture_static",
   ]
 }
 
