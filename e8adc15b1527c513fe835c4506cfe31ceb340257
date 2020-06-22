@@ -402,6 +402,30 @@
       "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea3e7da9_4d4e2961",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-22T20:17:36Z",
+      "side": 1,
+      "message": "The problem is that when the ANGLE_TRY failed, we took an early return. Now we have the writes pending in context that does not flush out to driver. These bufferInfo/imageInfo contains VKBuffer/VKImage information. Now app may delete the VKBuffer/VKImage. Then app come down the setupDraw again and we may eventually flush the writes into driver. Now driver sees the writes refering to VKBuffer object that have been deleted, and validation layer complains. The previous behavior is that we always flush the writes to driver immediately, so even if ANGLE_TRY failed, there is no such issue that writes contains inconsistent data. This change sort of get back the previous behavior so that even if ANGLE_TRY failed, we will ensure writes are flushed to driver before we return back from setupDraw.\n\nAs to why ANGLE_TRY failed, I think there could be various reaosn. It likely has nothing to do with descriptorset. Apparently with the latyest QC driver I am not reproducing the failure, so I assume that is driver bug that got fixed in recent driver release. Just any ANGL_TRY call in setupDraw if we hit early return, you will have an issue. We will have to handle that nicely anyway.",
+      "parentUuid": "e7023165_a3b9e146",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 556,
+        "endChar": 98
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
