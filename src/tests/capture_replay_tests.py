@@ -152,16 +152,23 @@ def ClearFolderContent(path):
         if os.path.isfile(path + "/" + f) and f.startswith("angle_capture_context"):
             os.remove(path + "/" + f)
 
-
 def CanRunReplay(path):
-    files = [
+    trace_files = {
         "angle_capture_context1.h", "angle_capture_context1.cpp",
-        "angle_capture_context1_files.txt", "angle_capture_context1_frame000.cpp"
-    ]
-    for file in files:
-        if not os.path.isfile(path + "/" + file):
+        "angle_capture_context1_files.txt", "angle_capture_context1_frame000.cpp",
+        "angle_capture_context1.angledata.gz"
+    }
+    trace_files_count = 0
+    for f in os.listdir(path):
+        if f in trace_files:
+            trace_files_count += 1
+        elif os.path.isfile(path + "/" + f) and f.startswith("angle_capture_context"):
+            # if trace_files of another context exists, then the test creates multiple contexts
+            # or capture multiple frames
             return False
-    return True
+    # the minimum number of trace files needed to run replay
+    min_trace_files_count = 4
+    return trace_files_count >= min_trace_files_count
 
 
 def SetCWDToAngleFolder():
@@ -179,7 +186,8 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     if not os.path.isdir(capture_out_dir):
         os.mkdir(capture_out_dir)
     environment_vars = [("ANGLE_CAPTURE_FRAME_END", "0"),
-                        ("ANGLE_CAPTURE_OUT_DIR", capture_out_dir)]
+                        ("ANGLE_CAPTURE_OUT_DIR", capture_out_dir),
+                        ("ANGLE_CAPTURE_SERIALIZE_STATE", "1")]
     replay_exec = "capture_replay_tests"
     if platform == "win32":
         test_exec += ".exe"
@@ -197,6 +205,9 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     for environment_var in environment_vars:
         os.environ[environment_var[0]] = environment_var[1]
 
+    passed_count = 0
+    failed_count = 0
+    skipped_count = 0
     for test in all_tests:
         if verbose:
             print("*" * 30)
@@ -214,12 +225,13 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
                 print("Passed: " + test.full_test_name)
         else:
             print("Skipped: " + test.full_test_name + ". Skipping replay since capture" + \
-                "didn't produce appropriate files or has crashed")
+                " didn't produce appropriate files or has crashed")
     for environment_var in environment_vars:
         del os.environ[environment_var[0]]
 
     if os.path.isdir(capture_out_dir):
         shutil.rmtree(capture_out_dir)
+    print("Passed:", passed_count, "Failed:", failed_count, "Skipped:", skipped_count)
 
 
 if __name__ == "__main__":
