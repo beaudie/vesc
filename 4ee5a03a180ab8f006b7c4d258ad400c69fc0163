@@ -22,6 +22,30 @@
       "revId": "4ee5a03a180ab8f006b7c4d258ad400c69fc0163",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca6f7192_fa2dd74d",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-22T17:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d296492_ca5dd1ef",
+      "range": {
+        "startLine": 387,
+        "startChar": 2,
+        "endLine": 396,
+        "endChar": 5
+      },
+      "revId": "4ee5a03a180ab8f006b7c4d258ad400c69fc0163",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
