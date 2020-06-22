@@ -122,6 +122,24 @@
       "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f53cc52f_4e50fb36",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-22T17:56:39Z",
+      "side": 1,
+      "message": "There\u0027s nearly zero additional cost to the dictionary lookup. An add and possibly a multiply. A ddoc might be in order.",
+      "parentUuid": "7799aeb7_4ffa5aa9",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
