@@ -1677,6 +1677,13 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                     mState.getEffectiveMaxLevel());
     }
 
+    bool isMipmapEnabledByMinFilter = false;
+    if (!isGenerateMipmap && mImage->valid() && dirtyBits.test(gl::Texture::DIRTY_BIT_MIN_FILTER))
+    {
+        isMipmapEnabledByMinFilter =
+            mImage->getLevelCount() < getMipLevelCount(ImageMipLevels::EnabledLevels);
+    }
+
     // Set base and max level before initializing the image
     if (dirtyBits.test(gl::Texture::DIRTY_BIT_MAX_LEVEL) ||
         dirtyBits.test(gl::Texture::DIRTY_BIT_BASE_LEVEL))
@@ -1691,7 +1698,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // twice, which incurs unncessary copies.  This is not expected to be happening in real
     // applications.
     if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
-        mRedefinedLevels.any())
+        mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
     {
         ANGLE_TRY(respecifyImageAttributes(contextVk));
     }
@@ -1974,18 +1981,13 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
         case ImageMipLevels::EnabledLevels:
             return mState.getEnabledLevelCount();
         case ImageMipLevels::FullMipChain:
-            return getMaxLevelCount() - mState.getEffectiveBaseLevel();
+            ASSERT(mState.getMipmapMaxLevel() >= mState.getEffectiveBaseLevel());
+            return mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel() + 1;
 
         default:
             UNREACHABLE();
             return 0;
     }
-}
-
-uint32_t TextureVk::getMaxLevelCount() const
-{
-    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
-    return mState.getMipmapMaxLevel() + 1;
 }
 
 angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,

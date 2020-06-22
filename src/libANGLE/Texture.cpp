@@ -504,6 +504,12 @@ TextureTarget TextureState::getBaseImageTarget() const
 
 GLuint TextureState::getEnabledLevelCount() const
 {
+    if (!IsMipmapFiltered(mSamplerState))
+    {
+        // If NEAREST or LINEAR minification, there are no mipmaps enabled, so return 1.
+        return 1;
+    }
+
     GLuint levelCount      = 0;
     const GLuint baseLevel = getEffectiveBaseLevel();
     const GLuint maxLevel  = std::min(getEffectiveMaxLevel(), getMipmapMaxLevel());
