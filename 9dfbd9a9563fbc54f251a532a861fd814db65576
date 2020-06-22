@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "512d2c73_f00c52f8",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T14:53:41Z",
+      "side": 1,
+      "message": "That\u0027s not a pointer argument, it\u0027s the external format, e.g. AHARDWAREBUFFER_FORMAT_* except Android doesn\u0027t have a define for 0 or NA.\nWe define our own version of ndk includes in android_ndk_types.h, I could add one for this there. AHARDWAREBUFFER_FORMAT_NONE 0\nThoughts?",
+      "parentUuid": "96f015d7_9d6eb7ec",
+      "range": {
+        "startLine": 42,
+        "startChar": 40,
+        "endLine": 42,
+        "endChar": 42
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c02b77b0_973f8e37",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 40
@@ -68,6 +92,30 @@
       "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1be8adf_877b3679",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T14:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c02b77b0_973f8e37",
+      "range": {
+        "startLine": 171,
+        "startChar": 41,
+        "endLine": 171,
+        "endChar": 97
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "0ac342e0_c6111f68",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T14:53:41Z",
+      "side": 1,
+      "message": "We probably couldn\u0027t be here (wouldn\u0027t have a buffer where format \u003d\u003d VK_FORMAT_UNDEFINED) if don\u0027t have this extension, but I can add ANGLE_VK_CHECK.",
+      "parentUuid": "c015ea61_ad770ae3",
+      "range": {
+        "startLine": 235,
+        "startChar": 7,
+        "endLine": 235,
+        "endChar": 73
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eefe31c2_b737c774",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
         "patchSetId": 40
@@ -105,6 +177,30 @@
       "writtenOn": "2020-06-17T15:51:53Z",
       "side": 1,
       "message": "can we revert this?",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deecc83b_87b3e583",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T14:53:41Z",
+      "side": 1,
+      "message": "No, I don\u0027t think so, I need the VK_FORMAT_NONE in the table. external format buffers use that as their VkFormat.",
+      "parentUuid": "eefe31c2_b737c774",
       "range": {
         "startLine": 147,
         "startChar": 4,
@@ -186,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "f1cd70bb_e9c99eb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T14:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2bef01b_c2a3236f",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 639,
+        "endChar": 88
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e142ec4_dd5026df",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 40
@@ -206,6 +326,30 @@
       "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f431192c_caa7fcdf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T14:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e142ec4_dd5026df",
+      "range": {
+        "startLine": 664,
+        "startChar": 0,
+        "endLine": 666,
+        "endChar": 87
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
