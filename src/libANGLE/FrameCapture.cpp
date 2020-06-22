@@ -23,6 +23,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/ResourceMap.h"
+#include "libANGLE/SerializeContext.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/VertexArray.h"
@@ -44,12 +45,13 @@ namespace angle
 namespace
 {
 
-constexpr char kEnabledVarName[]      = "ANGLE_CAPTURE_ENABLED";
-constexpr char kOutDirectoryVarName[] = "ANGLE_CAPTURE_OUT_DIR";
-constexpr char kFrameStartVarName[]   = "ANGLE_CAPTURE_FRAME_START";
-constexpr char kFrameEndVarName[]     = "ANGLE_CAPTURE_FRAME_END";
-constexpr char kCaptureLabel[]        = "ANGLE_CAPTURE_LABEL";
-constexpr char kCompression[]         = "ANGLE_CAPTURE_COMPRESSION";
+constexpr char kEnabledVarName[]                 = "ANGLE_CAPTURE_ENABLED";
+constexpr char kOutDirectoryVarName[]            = "ANGLE_CAPTURE_OUT_DIR";
+constexpr char kFrameStartVarName[]              = "ANGLE_CAPTURE_FRAME_START";
+constexpr char kFrameEndVarName[]                = "ANGLE_CAPTURE_FRAME_END";
+constexpr char kCaptureLabel[]                   = "ANGLE_CAPTURE_LABEL";
+constexpr char kCompression[]                    = "ANGLE_CAPTURE_COMPRESSION";
+constexpr char kSerializeContextEnabledVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
 
 constexpr size_t kBinaryAlignment = 16;
 
@@ -918,7 +920,9 @@ void WriteCppReplayIndexFiles(bool compression,
                               EGLint drawSurfaceHeight,
                               size_t readBufferSize,
                               const gl::AttribArray<size_t> &clientArraySizes,
-                              const HasResourceTypeMap &hasResourceType)
+                              const HasResourceTypeMap &hasResourceType,
+                              size_t serializedContextOffset,
+                              size_t serializedContextLength)
 {
     size_t maxClientArraySize = MaxClientArraySize(clientArraySizes);
 
@@ -927,8 +931,15 @@ void WriteCppReplayIndexFiles(bool compression,
 
     header << "#pragma once\n";
     header << "\n";
-    header << "#include \"util/gles_loader_autogen.h\"\n";
-    header << "#include \"util/egl_loader_autogen.h\"\n";
+    if (serializedContextLength == 0)
+    {
+        header << "#include \"util/gles_loader_autogen.h\"\n";
+        header << "#include \"util/egl_loader_autogen.h\"\n";
+    }
+    else
+    {
+        header << "#include \"util/util_gl.h\"\n";
+    }
     header << "\n";
     header << "#include <cstdint>\n";
     header << "#include <cstdio>\n";
@@ -967,6 +978,11 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "void ReplayContext" << static_cast<int>(contextId)
            << "Frame(uint32_t frameIndex);\n";
     header << "void ResetContext" << static_cast<int>(contextId) << "Replay();\n";
+    if (serializedContextLength > 0)
+    {
+        header << "std::vector<uint8_t> GetSerializedContext" << static_cast<int>(contextId)
+               << "Data();\n";
+    }
     header << "\n";
     header << "using FramebufferChangeCallback = void(*)(void *userData, GLenum target, GLuint "
               "framebuffer);\n";
@@ -1098,6 +1114,21 @@ void WriteCppReplayIndexFiles(bool compression,
     source << "    }\n";
     source << "}\n";
     source << "\n";
+
+    if (serializedContextLength > 0)
+    {
+        source << "std::vector<uint8_t> GetSerializedContext" << static_cast<int>(contextId)
+               << "Data()\n";
+        source << "{\n";
+        source << "    std::vector<uint8_t> serializedContextData(" << serializedContextLength
+               << ");\n";
+        source << "    memcpy(serializedContextData.data(), &gBinaryData["
+               << serializedContextOffset << "], " << serializedContextLength << ");\n";
+        source << "    return serializedContextData;\n";
+        source << "}\n";
+        source << "\n";
+    }
+
     source << "void SetBinaryDataDecompressCallback(DecompressCallback callback)\n";
     source << "{\n";
     source << "    gDecompressCallback = callback;\n";
@@ -3145,6 +3176,7 @@ ReplayContext::~ReplayContext() {}
 
 FrameCapture::FrameCapture()
     : mEnabled(true),
+      mSerializeContextEnabled(false),
       mCompression(true),
       mClientVertexArrayMap{},
       mFrameIndex(0),
@@ -3205,6 +3237,12 @@ FrameCapture::FrameCapture()
     if (compressionFromEnv == "0")
     {
         mCompression = false;
+    }
+    std::string serializeContextEnabledFromEnv =
+        angle::GetEnvironmentVar(kSerializeContextEnabledVarName);
+    if (serializeContextEnabledFromEnv == "1")
+    {
+        mSerializeContextEnabled = true;
     }
 }
 
@@ -3855,6 +3893,7 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
 void FrameCapture::onEndFrame(const gl::Context *context)
 {
     // Note that we currently capture before the start frame to collect shader and program sources.
+
     if (!mFrameCalls.empty() && mFrameIndex >= mFrameStart)
     {
         WriteCppReplay(mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameIndex,
@@ -3863,10 +3902,24 @@ void FrameCapture::onEndFrame(const gl::Context *context)
         // Save the index files after the last frame.
         if (mFrameIndex == mFrameEnd)
         {
+            size_t serializedContextLength = 0;
+            size_t serializedContextOffset = 0;
+            if (mSerializeContextEnabled)
+            {
+                gl::BinaryOutputStream serializedContextData{};
+                SerializeContext(&serializedContextData, const_cast<gl::Context *>(context));
+                // store serialized context behind capture replay data
+                serializedContextLength = serializedContextData.length();
+                serializedContextOffset = rx::roundUp(mBinaryData.size(), kBinaryAlignment);
+                mBinaryData.resize(serializedContextOffset + serializedContextLength);
+                memcpy(mBinaryData.data() + serializedContextOffset, serializedContextData.data(),
+                       serializedContextLength);
+            }
+
             WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel,
                                      mFrameStart, mFrameEnd, mDrawSurfaceWidth, mDrawSurfaceHeight,
-                                     mReadBufferSize, mClientArraySizes, mHasResourceType);
-
+                                     mReadBufferSize, mClientArraySizes, mHasResourceType,
+                                     serializedContextOffset, serializedContextLength);
             if (!mBinaryData.empty())
             {
                 SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel,

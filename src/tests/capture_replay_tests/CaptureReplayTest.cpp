@@ -8,11 +8,11 @@
 //
 
 #include "common/system_utils.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/SerializeContext.h"
 #include "util/EGLPlatformParameters.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
-#include "util/egl_loader_autogen.h"
-#include "util/gles_loader_autogen.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -38,6 +38,10 @@ std::function<void(int)> ReplayContextFrame = reinterpret_cast<void (*)(int)>(
 std::function<void()> ResetContextReplay = reinterpret_cast<void (*)()>(
     ANGLE_MACRO_CONCAT(ResetContext,
                        ANGLE_MACRO_CONCAT(ANGLE_CAPTURE_REPLAY_TEST_CONTEXT_ID, Replay)));
+std::function<std::vector<uint8_t>()> GetSerializedContextData =
+    reinterpret_cast<std::vector<uint8_t> (*)()>(
+        ANGLE_MACRO_CONCAT(GetSerializedContext,
+                           ANGLE_MACRO_CONCAT(ANGLE_CAPTURE_REPLAY_TEST_CONTEXT_ID, Data)));
 
 class CaptureReplayTest
 {
@@ -113,8 +117,6 @@ class CaptureReplayTest
             return -1;
         }
 
-        angle::LoadGLES(eglGetProcAddress);
-
         int result = 0;
 
         if (!initialize())
@@ -123,6 +125,11 @@ class CaptureReplayTest
         }
 
         draw();
+
+        gl::Context *context = static_cast<gl::Context *>(mEGLWindow->getContext());
+        gl::BinaryOutputStream bos;
+        angle::SerializeContext(&bos, context);
+        result = compareSerializedContexts(bos);
         swap();
 
         mEGLWindow->destroyGL();
@@ -132,6 +139,25 @@ class CaptureReplayTest
     }
 
   private:
+    int compareSerializedContexts(const gl::BinaryOutputStream &replaySerializedContextData)
+    {
+        std::vector<uint8_t> captureSerializedContextData = GetSerializedContextData();
+        if (captureSerializedContextData.size() != replaySerializedContextData.length())
+        {
+            return -1;
+        }
+        const uint8_t *replaySerializedContextDataPtr =
+            reinterpret_cast<const uint8_t *>(replaySerializedContextData.data());
+        for (size_t i = 0; i < replaySerializedContextData.length(); i++)
+        {
+            if (captureSerializedContextData[i] != replaySerializedContextDataPtr[i])
+            {
+                return -1;
+            }
+        }
+        return 0;
+    }
+
     uint32_t mWidth;
     uint32_t mHeight;
     OSWindow *mOSWindow;
@@ -146,8 +172,8 @@ class CaptureReplayTest
 int main(int argc, char **argv)
 {
     // TODO (nguyenmh): http://anglebug.com/4759: initialize app with arguments taken from cmdline
-    const int width               = 128;
-    const int height              = 128;
+    const int width               = 1280;
+    const int height              = 720;
     const EGLint glesMajorVersion = 2;
     const GLint glesMinorVersion  = 0;
     CaptureReplayTest app(width, height, glesMajorVersion, glesMinorVersion);
