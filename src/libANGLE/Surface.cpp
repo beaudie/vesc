@@ -278,6 +278,7 @@ EGLint Surface::getType() const
 Error Surface::swap(const gl::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "egl::Surface::swap");
+    const_cast<gl::Context *>(context)->onPreSwap();
 
     context->getState().getOverlay()->onSwap();
 
