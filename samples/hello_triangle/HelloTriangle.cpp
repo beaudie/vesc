@@ -21,7 +21,7 @@ class HelloTriangleSample : public SampleApplication
 {
   public:
     HelloTriangleSample(int argc, char **argv)
-        : SampleApplication("HelloTriangle", argc, argv, 2, 0)
+        : SampleApplication("HelloTriangle", argc, argv, 3, 0)
     {}
 
     bool initialize() override
@@ -44,7 +44,7 @@ void main()
             return false;
         }
 
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
 
         return true;
     }

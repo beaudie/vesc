@@ -273,6 +273,7 @@ class FrameCapture final : angle::NonCopyable
 
     void captureCall(const gl::Context *context, CallCapture &&call);
     void onEndFrame(const gl::Context *context);
+    void serializeContext(gl::Context *context);
     void onMakeCurrent(const egl::Surface *drawSurface);
     bool enabled() const { return mEnabled; }
 
@@ -311,6 +312,7 @@ class FrameCapture final : angle::NonCopyable
     std::vector<uint8_t> mBinaryData;
 
     bool mEnabled = false;
+    bool mSerializeContextEnabled;
     std::string mOutDirectory;
     std::string mCaptureLabel;
     bool mCompression;

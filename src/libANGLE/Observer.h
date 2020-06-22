@@ -18,6 +18,22 @@
 
 namespace angle
 {
+class ObserverBinding;
+class Subject;
+class ObserverBindingBase;
+}  // namespace angle
+
+namespace gl
+{
+class BinaryOutputStream;
+void SerializeObserverBinding(BinaryOutputStream *bos, angle::ObserverBinding *observerBinding);
+void SerializeSubject(BinaryOutputStream *bos, angle::Subject *subject);
+void SerializeObserverBindingBase(BinaryOutputStream *bos,
+                                  angle::ObserverBindingBase *observerBindingBase);
+}  // namespace gl
+
+namespace angle
+{
 template <typename HaystackT, typename NeedleT>
 bool IsInContainer(const HaystackT &haystack, const NeedleT &needle)
 {
@@ -75,6 +91,8 @@ class ObserverBindingBase
     virtual void onSubjectReset() {}
 
   private:
+    friend void gl::SerializeObserverBindingBase(gl::BinaryOutputStream *bos,
+                                                 ObserverBindingBase *observerBindingBase);
     ObserverInterface *mObserver;
     SubjectIndex mIndex;
 };
@@ -105,6 +123,7 @@ class Subject : NonCopyable
   private:
     // Keep a short list of observers so we can allocate/free them quickly. But since we support
     // unlimited bindings, have a spill-over list of that uses dynamic allocation.
+    friend void gl::SerializeSubject(gl::BinaryOutputStream *bos, Subject *subject);
     static constexpr size_t kMaxFixedObservers = 8;
     angle::FastVector<ObserverBindingBase *, kMaxFixedObservers> mObservers;
 };
@@ -130,6 +149,8 @@ class ObserverBinding final : public ObserverBindingBase
     ANGLE_INLINE void assignSubject(Subject *subject) { mSubject = subject; }
 
   private:
+    friend void gl::SerializeObserverBinding(gl::BinaryOutputStream *bos,
+                                             ObserverBinding *observerBinding);
     Subject *mSubject;
 };
 

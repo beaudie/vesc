@@ -24,6 +24,7 @@
 
 #    include <EGL/egl.h>
 #    include <EGL/eglext.h>
+#    include <string>
 #    include "angle_gl.h"
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
 

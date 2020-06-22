@@ -16,7 +16,7 @@
 
 namespace gl
 {
-
+class BinaryOutputStream;
 class ImageIndexIterator;
 
 class ImageIndex
@@ -71,6 +71,7 @@ class ImageIndex
 
   private:
     friend class ImageIndexIterator;
+    friend void SerializeImageIndex(BinaryOutputStream *bos, ImageIndex *imageIndex);
 
     ImageIndex(TextureType type, GLint leveIndex, GLint layerIndex, GLint layerCount);
 
