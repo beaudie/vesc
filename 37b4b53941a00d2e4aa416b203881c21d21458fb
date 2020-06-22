@@ -104,6 +104,24 @@
       "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7799aeb7_4ffa5aa9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-22T17:17:01Z",
+      "side": 1,
+      "message": "\"store a dictionary that indexes similarly to ImageDesc...\", I guess you are thinking cases that this repeated clear pattern occur on the different layer/level and want to optimize that as well? I intended this to be a narrow optimization though, mainly because gfxbench is doing this. There is no evidence that this usage pattern occurred on multi-level/layer textures and alternatively clearing different levels. It is pretty silly thing for app to do it this way and I would hesitate to optimize that. But we are talking about gfxbench, so it worth it. If we use a dictionary etc, now the cost is a bit higher (due to dictionary lookup) and a bit more complicated, all for an unknown benefit. That is why I picked a solution I think is simple and effective and solve the specific perf issue we have.",
+      "parentUuid": "69c400ad_22a3d45f",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
