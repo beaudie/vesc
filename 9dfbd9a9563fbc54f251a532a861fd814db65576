@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "7ef11493_13084e8d",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-22T16:38:18Z",
+      "side": 1,
+      "message": "They may not be using a real format we understand.\nThese external buffers are allowed to use any, possibly proprietary, format. We need to pass along the externFormat so that the driver knows what to do, but there is no corresponding Vulkan format. And that\u0027s why that extension requires the use of VK_FORMAT_UNDEFINED a.k.a. angle::FormatID::NONE.\nI guess we could define another FormatID for this case. FormatID::EXTERNAL or something.",
+      "parentUuid": "171d97bc_d294fb4e",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc799c53_d7e60936",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 40
