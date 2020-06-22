@@ -426,6 +426,30 @@
       "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b06a6a2_a334c45a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-22T21:11:33Z",
+      "side": 1,
+      "message": "Chatted offline - decided to reduce the number of pointers from 4 to 1 by just storing the ContextVk pointer.",
+      "parentUuid": "ea3e7da9_4d4e2961",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 556,
+        "endChar": 98
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
