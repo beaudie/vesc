@@ -1469,10 +1469,17 @@ angle::Result TextureVk::respecifyImageAttributesAndLevels(ContextVk *contextVk,
     // First, flush any pending updates so we have good data in the existing vkImage
     if (mImage->valid() && mImage->hasStagedUpdates())
     {
+    uint32_t levelCountToFlush = mImage->getLevelCount();
+    GLenum minFilter = mState.getSamplerState().getMinFilter();
+    if (minFilter == GL_NEAREST || minFilter == GL_LINEAR)
+    {
+        levelCountToFlush = 1;
+    }
+        fprintf(stderr, "2 Going to flush %u levels\n", levelCountToFlush);
         vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
         ANGLE_TRY(mImage->flushStagedUpdates(
-            contextVk, getNativeImageLevel(0), mImage->getLevelCount(), getNativeImageLayer(0),
+            contextVk, getNativeImageLevel(0), levelCountToFlush, getNativeImageLayer(0),
             mImage->getLayerCount(), mRedefinedLevels, commandBuffer));
     }
 
@@ -1613,9 +1620,19 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
                             levelCount));
     }
 
+    // If minification filtering is GL_NEAREST or GL_LINEAR, only flush the base level.  The other
+    // levels may have incompatible definitions.
+    uint32_t levelCountToFlush = mImage->getLevelCount();
+    GLenum minFilter = mState.getSamplerState().getMinFilter();
+    if (minFilter == GL_NEAREST || minFilter == GL_LINEAR)
+    {
+        levelCountToFlush = 1;
+    }
+    fprintf(stderr, "Going to flush %u levels\n", levelCountToFlush);
+
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), mImage->getLevelCount(),
+    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), levelCountToFlush,
                                       getNativeImageLayer(0), mImage->getLayerCount(),
                                       mRedefinedLevels, commandBuffer);
 }
@@ -1974,18 +1991,13 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
         case ImageMipLevels::EnabledLevels:
             return mState.getEnabledLevelCount();
         case ImageMipLevels::FullMipChain:
-            return getMaxLevelCount() - mState.getEffectiveBaseLevel();
+            ASSERT(mState.getMipmapMaxLevel() >= mState.getEffectiveBaseLevel());
+            return mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel() + 1;
 
         default:
             UNREACHABLE();
             return 0;
     }
-}
-
-uint32_t TextureVk::getMaxLevelCount() const
-{
-    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
-    return mState.getMipmapMaxLevel() + 1;
 }
 
 angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
