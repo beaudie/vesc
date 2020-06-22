@@ -8,11 +8,11 @@
 //
 
 #include "common/system_utils.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/SerializeContext.h"
 #include "util/EGLPlatformParameters.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
-#include "util/egl_loader_autogen.h"
-#include "util/gles_loader_autogen.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -113,8 +113,6 @@ class CaptureReplayTest
             return -1;
         }
 
-        angle::LoadGLES(eglGetProcAddress);
-
         int result = 0;
 
         if (!initialize())
@@ -123,6 +121,12 @@ class CaptureReplayTest
         }
 
         draw();
+
+        gl::Context *context = static_cast<gl::Context *>(mEGLWindow->getContext());
+        gl::BinaryOutputStream bos;
+        gl::Serialize(&bos, context);
+        result =
+            compareSerializedContexts(reinterpret_cast<const uint8_t *>(bos.data()), bos.length());
         swap();
 
         mEGLWindow->destroyGL();
@@ -132,6 +136,26 @@ class CaptureReplayTest
     }
 
   private:
+    int compareSerializedContexts(const uint8_t *replaySerializeData, size_t replaySerializeLength)
+    {
+        size_t captureSerializeOffset = *(reinterpret_cast<size_t *>(gBinaryData));
+        size_t captureSerializeLength = *(reinterpret_cast<size_t *>(gBinaryData) + 1);
+        uint8_t *captureSerializeData = gBinaryData + captureSerializeOffset;
+        if (captureSerializeLength != replaySerializeLength)
+        {
+            return -1;
+        }
+        for (size_t i = 0; i < replaySerializeLength; i++)
+        {
+            if (captureSerializeData[i] != replaySerializeData[i])
+            {
+                std::cout << captureSerializeData[i] << " " << replaySerializeData[i] << "\n";
+                return -1;
+            }
+        }
+        return 0;
+    }
+
     uint32_t mWidth;
     uint32_t mHeight;
     OSWindow *mOSWindow;
