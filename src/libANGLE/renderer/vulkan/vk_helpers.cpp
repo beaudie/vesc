@@ -2936,13 +2936,7 @@ VkImageLayout ImageHelper::getCurrentLayout() const
 
 gl::Extents ImageHelper::getLevelExtents(uint32_t level) const
 {
-    // Level 0 should be the size of the extents, after that every time you increase a level
-    // you shrink the extents by half.
-    uint32_t width  = std::max(mExtents.width >> level, 1u);
-    uint32_t height = std::max(mExtents.height >> level, 1u);
-    uint32_t depth  = std::max(mExtents.depth >> level, 1u);
-
-    return gl::Extents(width, height, depth);
+    return gl::Extents(mExtents.width, mExtents.height, mExtents.depth).getMip(level);
 }
 
 gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const

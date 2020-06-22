@@ -340,7 +340,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     void releaseImage(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *contextVk);
     uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;
-    uint32_t getMaxLevelCount() const;
     // Used when the image is being redefined (for example to add mips or change base level) to copy
     // each subresource of the image and stage it for another subresource.  When all subresources
     // are taken care of, the image is recreated.
@@ -444,6 +443,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // texture is no longer mip-complete.  However, if every level is redefined such that at the end
     // the image becomes mip-complete again, no reinitialization of the image is done.  This bitset
     // is additionally used to ensure the image is recreated in the next syncState, if not already.
+    //
+    // Bit 0 of corresponds to base level.
     gl::TexLevelMask mRedefinedLevels;
 
     angle::ObserverBinding mImageObserverBinding;

@@ -57,24 +57,36 @@ bool IsTextureLevelInAllocatedImage(const vk::ImageHelper &image, uint32_t textu
     return imageLevelIndexVK < image.getLevelCount();
 }
 
-// Test whether a redefined texture level is compatible with the currently allocated image.  Returns
-// true if the given size and format match the corresponding mip in the allocated image (taking
-// base level into account).  This could return false when:
-//
-// - Defining a texture level that is outside the range of the image levels.  In this case, changes
-//   to this level should remain staged until the texture is redefined to include this level.
-// - Redefining a texture level that is within the range of the image levels, but has a different
-//   size or format.  In this case too, changes to this level should remain staged as the texture
-//   is no longer complete as is.
-bool IsTextureLevelDefinitionCompatibleWithImage(const vk::ImageHelper &image,
-                                                 uint32_t textureLevelIndexGL,
-                                                 const gl::Extents &size,
-                                                 const vk::Format &format)
+// Test whether a texture level is within the range of possible levels the image could have.  This
+// is used to track level compatibility only for this range.
+bool IsTextureLevelInImageMipRange(uint32_t textureBaseLevel, uint32_t textureLevelIndexGL)
 {
-    ASSERT(IsTextureLevelInAllocatedImage(image, textureLevelIndexGL));
+    return textureLevelIndexGL >= textureBaseLevel &&
+           textureLevelIndexGL < textureLevelIndexGL + gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS;
+}
 
-    uint32_t imageLevelIndexVK = textureLevelIndexGL - image.getBaseLevel();
-    return size == image.getLevelExtents(imageLevelIndexVK) && format == image.getFormat();
+// Test whether a redefined texture level is compatible with the base level's description.  Returns
+// true if the given size and format match the corresponding mip of the (to-be-)allocated image
+// (taking base level into account).
+//
+// This returns false when redefining a texture level that is within the possible range of the image
+// levels, but has a different size or format.  In this case, changes to this level should remain
+// staged as the texture is no longer complete as is.
+bool IsTextureLevelDefinitionCompatibleWithBaseLevel(uint32_t textureBaseLevel,
+                                                     uint32_t textureLevelIndexGL,
+                                                     const gl::ImageDesc &baseLevelDesc,
+                                                     const gl::Extents &size,
+                                                     GLenum sizedInternalFormat)
+{
+    ASSERT(IsTextureLevelInImageMipRange(textureBaseLevel, textureLevelIndexGL));
+
+    uint32_t imageLevelIndexVK = textureLevelIndexGL - textureBaseLevel;
+
+    gl::Extents mipExtents = baseLevelDesc.size.getMip(imageLevelIndexVK);
+    fprintf(stderr, " Compatible size? %u, Compatible format? %u\n", size == mipExtents,
+            sizedInternalFormat == baseLevelDesc.format.info->sizedInternalFormat);
+    return size == mipExtents &&
+           sizedInternalFormat == baseLevelDesc.format.info->sizedInternalFormat;
 }
 
 ANGLE_INLINE bool FormatHasNecessaryFeature(RendererVk *renderer,
@@ -1150,49 +1162,70 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
         releaseAndDeleteImage(contextVk);
     }
 
+    // If the level that's being redefined is outside the level range of the (to-be-)allocated
+    // image, the application is free to use any size or format.  Any data uploaded to it will live
+    // in staging area until the texture base/max level is adjusted to include this level, at which
+    // point the image will be recreated.  The same is true for non-base levels if minification
+    // filter implies no mipmaps.
+    //
+    // Otherwise, if the level that's being redefined has a different format or size, only release
+    // the image if it's single-mip, and keep the uploaded data staged.  Otherwise the image is
+    // mip-incomplete anyway and will be eventually recreated when needed.  Only exception to this
+    // latter is if all the levels of the texture are redefined such that the image becomes
+    // mip-complete in the end.  mRedefinedLevels is used during syncState to support this use-case.
+    //
+    // Note that if the image has multiple mips, there could be a copy from one mip happening to the
+    // other, which means the image cannot be released.
+    //
+    // In summary:
+    //
+    // - If the image has a single level, and that level is being redefined, release the image.
+    // - Otherwise keep the image intact (another mip may be the source of a copy), and make sure
+    //   any updates to this level are staged.
+    uint32_t baseLevel    = mState.getEffectiveBaseLevel();
+    uint32_t levelIndexGL = index.getLevelIndex();
+    const gl::ImageDesc &baseLevelDesc =
+        mState.getImageDesc(mState.getBaseImageTarget(), baseLevel);
+    const GLenum sizedInternalFormat = format.internalFormat;
+
+    bool isCompatibleRedefinition = true;
+
+    if (levelIndexGL != baseLevel)
+    {
+        fprintf(stderr, "Non-zero mip\n");
+        bool isInImageMipRange = IsTextureLevelInImageMipRange(baseLevel, levelIndexGL);
+        isCompatibleRedefinition =
+            isInImageMipRange &&
+            IsTextureLevelDefinitionCompatibleWithBaseLevel(baseLevel, levelIndexGL, baseLevelDesc,
+                                                            size, sizedInternalFormat);
+
+        // Mark the level as incompatibly redefined if that's the case.  Note that if the level
+        // was previously incompatibly defined, then later redefined to be compatible, the
+        // corresponding bit should clear.
+        if (isInImageMipRange)
+        {
+            mRedefinedLevels.set(levelIndexGL - baseLevel, !isCompatibleRedefinition);
+        }
+    }
+
     if (mImage != nullptr)
     {
         // If there is any staged changes for this index, we can remove them since we're going to
         // override them with this call.
-        uint32_t levelIndexGL = index.getLevelIndex();
-        uint32_t layerIndex   = index.hasLayer() ? index.getLayerIndex() : 0;
+        uint32_t layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
         mImage->removeSingleSubresourceStagedUpdates(contextVk, levelIndexGL, layerIndex);
 
         if (mImage->valid())
         {
-            // If the level that's being redefined is outside the level range of the allocated
-            // image, the application is free to use any size or format.  Any data uploaded to it
-            // will live in staging area until the texture base/max level is adjusted to include
-            // this level, at which point the image will be recreated.
-            //
-            // Otherwise, if the level that's being redefined has a different format or size,
-            // only release the image if it's single-mip, and keep the uploaded data staged.
-            // Otherwise the image is mip-incomplete anyway and will be eventually recreated when
-            // needed.  Only exception to this latter is if all the levels of the texture are
-            // redefined such that the image becomes mip-complete in the end.
-            // mRedefinedLevels is used during syncState to support this use-case.
-            //
-            // Note that if the image has multiple mips, there could be a copy from one mip
-            // happening to the other, which means the image cannot be released.
-            //
-            // In summary:
-            //
-            // - If the image has a single level, and that level is being redefined, release the
-            //   image.
-            // - Otherwise keep the image intact (another mip may be the source of a copy), and
-            //   make sure any updates to this level are staged.
-            bool isInAllocatedImage = IsTextureLevelInAllocatedImage(*mImage, levelIndexGL);
-            bool isCompatibleRedefinition =
-                isInAllocatedImage &&
-                IsTextureLevelDefinitionCompatibleWithImage(*mImage, levelIndexGL, size, format);
-
-            // Mark the level as incompatibly redefined if that's the case.  Note that if the level
-            // was previously incompatibly defined, then later redefined to be compatible, the
-            // corresponding bit should clear.
-            if (isInAllocatedImage)
+            // If the update is to the base level of the texture, additionally check if the size and
+            // format are compatible with the actually allocated image.
+            if (levelIndexGL == baseLevel)
             {
-                mRedefinedLevels.set(levelIndexGL - mImage->getBaseLevel(),
-                                     !isCompatibleRedefinition);
+                isCompatibleRedefinition =
+                    size == mImage->getLevelExtents(0) &&
+                    format.internalFormat == mImage->getFormat().internalFormat;
+
+                mRedefinedLevels.set(0, !isCompatibleRedefinition);
             }
 
             bool isUpdateToSingleLevelImage =
@@ -1416,6 +1449,28 @@ angle::Result TextureVk::copyAndStageImageSubresource(ContextVk *contextVk,
 
 angle::Result TextureVk::setBaseLevel(const gl::Context *context, GLuint baseLevel)
 {
+    // If base level has changed, recalculate mRedefinedLevels.  That bitset only includes
+    // information in the range of [base + MAX_LEVELS), and the new base could be anywhere,
+    // including entirely outside this range.
+    mRedefinedLevels.reset();
+
+    const gl::ImageDesc &baseLevelDesc =
+        mState.getImageDesc(mState.getBaseImageTarget(), baseLevel);
+
+    GLuint levelCount = mState.getEnabledLevelCount();
+
+    for (uint32_t levelVK = 1; levelVK < levelCount; ++levelVK)
+    {
+        uint32_t levelGL               = baseLevel + levelVK;
+        const gl::ImageDesc &levelDesc = mState.getImageDesc(mState.getBaseImageTarget(), levelGL);
+
+        bool isCompatibleDefinition = IsTextureLevelDefinitionCompatibleWithBaseLevel(
+            baseLevel, levelGL, baseLevelDesc, levelDesc.size,
+            levelDesc.format.info->sizedInternalFormat);
+
+        mRedefinedLevels.set(levelVK, !isCompatibleDefinition);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1605,7 +1660,7 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
 
     if (!mImage->valid())
     {
-        ASSERT(!mRedefinedLevels.any());
+        ASSERT(!(mRedefinedLevels & gl::TexLevelMask((1 << levelCount) - 1)).any());
 
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
@@ -1675,6 +1730,10 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     {
         mImage->removeStagedUpdates(contextVk, mState.getEffectiveBaseLevel() + 1,
                                     mState.getEffectiveMaxLevel());
+
+        bool isBaseLevelRedefined = mRedefinedLevels.test(0);
+        mRedefinedLevels.reset();
+        mRedefinedLevels.set(0, isBaseLevelRedefined);
     }
 
     // Set base and max level before initializing the image
@@ -1685,13 +1744,16 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                       mState.getEffectiveMaxLevel()));
     }
 
+    ImageMipLevels mipLevels =
+        isGenerateMipmap ? ImageMipLevels::FullMipChain : ImageMipLevels::EnabledLevels;
+
     // Respecify the image if it's changed in usage, or if any of its levels are redefined and no
     // update to base/max levels were done (otherwise the above call would have already taken care
     // of this).  Note that if both base/max and image usage are changed, the image is recreated
     // twice, which incurs unncessary copies.  This is not expected to be happening in real
     // applications.
     if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
-        mRedefinedLevels.any())
+        (mRedefinedLevels & gl::TexLevelMask((1 << getMipLevelCount(mipLevels)) - 1)).any())
     {
         ANGLE_TRY(respecifyImageAttributes(contextVk));
     }
@@ -1716,8 +1778,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     // Initialize the image storage and flush the pixel buffer.
-    ANGLE_TRY(ensureImageInitialized(contextVk, isGenerateMipmap ? ImageMipLevels::FullMipChain
-                                                                 : ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, mipLevels));
 
     // Mask out the IMPLEMENTATION dirty bit to avoid unnecessary syncs.
     gl::Texture::DirtyBits localBits = dirtyBits;
@@ -1974,18 +2035,13 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
         case ImageMipLevels::EnabledLevels:
             return mState.getEnabledLevelCount();
         case ImageMipLevels::FullMipChain:
-            return getMaxLevelCount() - mState.getEffectiveBaseLevel();
+            ASSERT(mState.getMipmapMaxLevel() >= mState.getEffectiveBaseLevel());
+            return mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel() + 1;
 
         default:
             UNREACHABLE();
             return 0;
     }
-}
-
-uint32_t TextureVk::getMaxLevelCount() const
-{
-    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
-    return mState.getMipmapMaxLevel() + 1;
 }
 
 angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,

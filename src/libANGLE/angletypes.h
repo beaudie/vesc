@@ -89,6 +89,9 @@ struct Extents
 
     bool empty() const { return (width * height * depth) == 0; }
 
+    // Assuming extents corresponds to level 0 of an image, returns extents for the given level.
+    Extents getMip(uint32_t level) const;
+
     int width;
     int height;
     int depth;
