@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "6704da46_a5d9e1c8",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-22T16:44:46Z",
+      "side": 1,
+      "message": "What formats can they have? It\u0027s fine if it\u0027s not covered by Vulkan. We don\u0027t use Vulkan formats to identify formats in ANGLE, we use angle::Format precisely for this reason.",
+      "parentUuid": "7ef11493_13084e8d",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc799c53_d7e60936",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 40
