@@ -248,6 +248,8 @@ class Framebuffer final : public angle::ObserverInterface,
         return mState.mColorAttachments;
     }
 
+    const FramebufferState &getState() const { return mState; }
+
     const FramebufferAttachment *getAttachment(const Context *context, GLenum attachment) const;
     bool isMultiview() const;
     bool readDisallowedByMultiview() const;
