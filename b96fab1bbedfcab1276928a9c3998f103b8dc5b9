@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e2470d3_a30b4c4d",
+        "filename": "src/tests/gl_tests/ReadOnlyFeedbackLoopTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-22T14:31:01Z",
+      "side": 1,
+      "message": "you can replace these member variables with an inline program definition using RAII in the test body...\n\n\nANGLE_GL_PROGRAM(colorFillProgram, esss1_shaders::Simple(), ..Red());\n\nthe RAII will mean you can also remove the tearDown override.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 0
+      },
+      "revId": "b96fab1bbedfcab1276928a9c3998f103b8dc5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
