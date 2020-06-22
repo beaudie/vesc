@@ -175,6 +175,8 @@ class TextureState final : private angle::NonCopyable
     // Return the enabled mipmap level count.
     GLuint getEnabledLevelCount() const;
 
+    TextureTarget getBaseImageTarget() const;
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -186,8 +188,6 @@ class TextureState final : private angle::NonCopyable
     bool computeMipmapCompleteness() const;
     bool computeLevelCompleteness(TextureTarget target, size_t level) const;
     SamplerFormat computeRequiredSamplerFormat(const SamplerState &samplerState) const;
-
-    TextureTarget getBaseImageTarget() const;
 
     void setImageDesc(TextureTarget target, size_t level, const ImageDesc &desc);
     void setImageDescChain(GLuint baselevel,

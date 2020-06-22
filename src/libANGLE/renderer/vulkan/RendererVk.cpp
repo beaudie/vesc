@@ -302,8 +302,6 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     RendererVk *rendererVk = static_cast<RendererVk *>(userData);
     rendererVk->onNewValidationMessage(msg);
 
-    ASSERT(false);
-
     if (isError)
     {
         ERR() << msg;
@@ -312,6 +310,8 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     {
         WARN() << msg;
     }
+
+    ASSERT(false);
 
     return VK_FALSE;
 }

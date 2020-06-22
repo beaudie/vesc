@@ -443,6 +443,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // texture is no longer mip-complete.  However, if every level is redefined such that at the end
     // the image becomes mip-complete again, no reinitialization of the image is done.  This bitset
     // is additionally used to ensure the image is recreated in the next syncState, if not already.
+    //
+    // Bit 0 of corresponds to base level.
     gl::TexLevelMask mRedefinedLevels;
 
     angle::ObserverBinding mImageObserverBinding;

@@ -569,6 +569,17 @@ bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *in
     return true;
 }
 
+Extents Extents::getMip(uint32_t level) const
+{
+    // Level 0 should be the size of the extents, after that every time you increase a level
+    // you shrink the extents by half.
+    int mipWidth  = std::max(width >> level, 1);
+    int mipHeight = std::max(height >> level, 1);
+    int mipDepth  = std::max(depth >> level, 1);
+
+    return gl::Extents(mipWidth, mipHeight, mipDepth);
+}
+
 bool Box::operator==(const Box &other) const
 {
     return (x == other.x && y == other.y && z == other.z && width == other.width &&
