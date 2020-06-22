@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13bf8e65_4abf30eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-22T16:50:11Z",
+      "side": 1,
+      "message": "This is already included above on line 9.",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfdff276_a9e72b85",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-22T16:50:11Z",
+      "side": 1,
+      "message": "Since we aren\u0027t too concerned with which member is different, can you just do a memcmp() of the entire struct?   It doesn\u0027t look like we need to worry about any padding being uninitialized values, since all of the members are words and should pack tightly.",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea078a31_34217b3a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-22T16:50:11Z",
+      "side": 1,
+      "message": "How does this work with Jamie\u0027s CLs that defers clears?   Can they work together better to handle this case (merge the deferred clears), or does the deferred clears stuff not get invoked due to how gfxbench is doing things?\n\nJamie\u0027s CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2142711",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
