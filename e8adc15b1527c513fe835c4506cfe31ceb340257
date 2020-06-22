@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "b0c0a974_dfcbfcac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-22T19:47:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a0c87b7b_47d1fac6",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 50
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa31b15_b4cfb849",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 6
@@ -345,6 +369,30 @@
       "side": 1,
       "message": "I end up having to modify way too many APIs: All handleDirty* APIs, all functions leading to the functions that uses it. I think it just too dirty to do this way. The other alternative I tried is to stick it in the vk::CommandBuffer object, but even that, I end up having to modify many APIs that leading to the use of DescriptorSetUpdates object. With the new way I did, the contextVK now owns the actual std::vector data, the DescriptorSetUpdates only has a reference to the actual data, and the DescriptorSetUpdates object itself is a shirt lived object, I think it helps encapsulation a little bit as well. Hopefully this is a good compromise.",
       "parentUuid": "fc75aba5_ae69baca",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 556,
+        "endChar": 98
+      },
+      "revId": "e8adc15b1527c513fe835c4506cfe31ceb340257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7023165_a3b9e146",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-22T19:47:15Z",
+      "side": 1,
+      "message": "Hey Charlie, I didn\u0027t see if you explained this elsewhere. Why are you flushing the update descriptor set calls on an error? I get that you\u0027re doing some kind of graceful error handling. I don\u0027t see why. What does the write do that makes the state recoverable? What triggers the unexpected error?",
+      "parentUuid": "5ebda814_d1661a45",
       "range": {
         "startLine": 556,
         "startChar": 0,
