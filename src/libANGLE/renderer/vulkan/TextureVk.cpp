@@ -1329,11 +1329,8 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
             baseLevelExtents.depth, sourceRowPitch, sourceDepthPitch, imageData + bufferOffset));
     }
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), mImage->getLevelCount(),
-                                      getNativeImageLayer(0), mImage->getLayerCount(), {},
-                                      commandBuffer);
+    ASSERT(!mRedefinedLevels.any());
+    return flushImageStagedUpdates(contextVk, ImageMipLevels::FullMipChain);
 }
 
 angle::Result TextureVk::generateMipmap(const gl::Context *context)
@@ -1469,11 +1466,7 @@ angle::Result TextureVk::respecifyImageAttributesAndLevels(ContextVk *contextVk,
     // First, flush any pending updates so we have good data in the existing vkImage
     if (mImage->valid() && mImage->hasStagedUpdates())
     {
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-        ANGLE_TRY(mImage->flushStagedUpdates(
-            contextVk, getNativeImageLevel(0), mImage->getLevelCount(), getNativeImageLayer(0),
-            mImage->getLayerCount(), mRedefinedLevels, commandBuffer));
+        ANGLE_TRY(flushImageStagedUpdates(contextVk, ImageMipLevels::EnabledLevels));
     }
 
     // After flushing, track the new levels (they are used in the flush, hence the wait)
@@ -1500,13 +1493,27 @@ angle::Result TextureVk::respecifyImageAttributesAndLevels(ContextVk *contextVk,
                 continue;
             }
 
-            ASSERT(!mImage->isUpdateStaged(levelGL, layer));
+            const gl::ImageDesc &desc =
+                mState.getImageDesc(gl::TextureTypeToTarget(mState.getType(), layer), levelGL);
+
+            // If minification filter doesn't allow mipmapping, there could still be staged updates
+            // here.  In that case, the level may not be compatibly defined, but it's too
+            // complicated to track that in mRedefinedLevels.  Skip the copy in that case.
+            if (mImage->isUpdateStaged(levelGL, layer))
+            {
+                GLenum minFilter = mState.getSamplerState().getMinFilter();
+                ASSERT((minFilter == GL_NEAREST || minFilter == GL_LINEAR) && levelVK != 0);
+
+                if (desc.size != mImage->getLevelExtents(levelVK) ||
+                    desc.format.info->sizedInternalFormat != mImage->getFormat().internalFormat)
+                {
+                    continue;
+                }
+            }
 
             // Pull data from the current image and stage it as an update for the new image
 
             // First we populate the staging buffer with current level data
-            const gl::ImageDesc &desc =
-                mState.getImageDesc(gl::TextureTypeToTarget(mState.getType(), layer), levelGL);
 
             ANGLE_TRY(copyAndStageImageSubresource(contextVk, desc, true, layer, levelVK, levelGL));
         }
@@ -1586,18 +1593,6 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
-    const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
-    const gl::Extents &baseLevelExtents = baseLevelDesc.size;
-    const uint32_t levelCount           = getMipLevelCount(mipLevels);
-    const vk::Format &format            = getBaseLevelFormat(contextVk->getRenderer());
-    return ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount, format);
-}
-
-angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
-                                                    const gl::Extents &baseLevelExtents,
-                                                    uint32_t levelCount,
-                                                    const vk::Format &format)
-{
     if (mImage->valid() && !mImage->hasStagedUpdates())
     {
         return angle::Result::Continue;
@@ -1605,17 +1600,40 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
 
     if (!mImage->valid())
     {
-        ASSERT(!mRedefinedLevels.any());
+        const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
+        const gl::Extents &baseLevelExtents = baseLevelDesc.size;
+        const uint32_t levelCount           = getMipLevelCount(mipLevels);
+        const vk::Format &format            = getBaseLevelFormat(contextVk->getRenderer());
 
-        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+        ASSERT(!mRedefinedLevels.any());
 
         ANGLE_TRY(initImage(contextVk, format, baseLevelDesc.format.info->sized, baseLevelExtents,
                             levelCount));
     }
 
+    return flushImageStagedUpdates(contextVk, mipLevels);
+}
+
+angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk, ImageMipLevels mipLevels)
+{
+    ASSERT(mImage->valid());
+
+    // If minification filtering is GL_NEAREST or GL_LINEAR, only flush the base level.  The other
+    // levels may have incompatible definitions.
+    uint32_t levelCountToFlush = mImage->getLevelCount();
+
+    if (mipLevels == ImageMipLevels::EnabledLevels)
+    {
+        GLenum minFilter = mState.getSamplerState().getMinFilter();
+        if (minFilter == GL_NEAREST || minFilter == GL_LINEAR)
+        {
+            levelCountToFlush = 1;
+        }
+    }
+
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), mImage->getLevelCount(),
+    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), levelCountToFlush,
                                       getNativeImageLayer(0), mImage->getLayerCount(),
                                       mRedefinedLevels, commandBuffer);
 }
@@ -1685,13 +1703,23 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                       mState.getEffectiveMaxLevel()));
     }
 
+    // It is possible for the image to have a single level (because it doesn't use mipmapping),
+    // then have more levels defined in it and mipmapping enabled.  In that case, the image needs
+    // to be recreated.
+    bool isMipmapEnabledByMinFilter = false;
+    if (!isGenerateMipmap && mImage->valid() && dirtyBits.test(gl::Texture::DIRTY_BIT_MIN_FILTER))
+    {
+        isMipmapEnabledByMinFilter =
+            mImage->getLevelCount() < getMipLevelCount(ImageMipLevels::EnabledLevels);
+    }
+
     // Respecify the image if it's changed in usage, or if any of its levels are redefined and no
     // update to base/max levels were done (otherwise the above call would have already taken care
     // of this).  Note that if both base/max and image usage are changed, the image is recreated
     // twice, which incurs unncessary copies.  This is not expected to be happening in real
     // applications.
     if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
-        mRedefinedLevels.any())
+        mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
     {
         ANGLE_TRY(respecifyImageAttributes(contextVk));
     }
@@ -1974,18 +2002,13 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
         case ImageMipLevels::EnabledLevels:
             return mState.getEnabledLevelCount();
         case ImageMipLevels::FullMipChain:
-            return getMaxLevelCount() - mState.getEffectiveBaseLevel();
+            ASSERT(mState.getMipmapMaxLevel() >= mState.getEffectiveBaseLevel());
+            return mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel() + 1;
 
         default:
             UNREACHABLE();
             return 0;
     }
-}
-
-uint32_t TextureVk::getMaxLevelCount() const
-{
-    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
-    return mState.getMipmapMaxLevel() + 1;
 }
 
 angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,

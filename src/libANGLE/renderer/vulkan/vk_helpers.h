@@ -1205,6 +1205,9 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    const gl::Offset &offset,
                                                    uint8_t **destData);
 
+    // Note: this function prepends the staged update.  There is only one user,
+    // TextureVk::stageSubresourceUpdateFromBuffer and when called it redefines the image,
+    // expecting to keep already present staged updates.
     angle::Result stageSubresourceUpdateFromBuffer(ContextVk *contextVk,
                                                    size_t allocationSize,
                                                    uint32_t mipLevelGL,
