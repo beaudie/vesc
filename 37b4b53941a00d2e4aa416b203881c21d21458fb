@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ac336305_5badade2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-22T17:03:32Z",
+      "side": 1,
+      "message": "Agree.",
+      "parentUuid": "bfdff276_a9e72b85",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea078a31_34217b3a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 4
@@ -64,6 +82,24 @@
       "writtenOn": "2020-06-22T16:56:10Z",
       "side": 1,
       "message": "This seems like a pretty narrow optimization. Why don\u0027t you store a dictionary that indexes similarly to ImageDesc and stores the flushed clear value for a particular level? Also writes to the texture would have to invalidate this cache - it gets tricky.\n\nI wanted to wait on review and became concerned you might go down a different direction if I didn\u0027t speak up. Similar to the problem ddocs attempt to solve.",
+      "parentUuid": "ea078a31_34217b3a",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69c400ad_22a3d45f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-22T17:03:32Z",
+      "side": 1,
+      "message": "This build on top of Jamie\u0027s CL. Jamie\u0027s CL makes the clear to a vkCmdClear call and helped me to detect that this is a standalone clear.\n\nwrites to textures will trigger releaseStagingBuffer() which also clears this cache.",
       "parentUuid": "ea078a31_34217b3a",
       "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
