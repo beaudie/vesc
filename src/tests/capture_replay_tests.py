@@ -153,6 +153,14 @@ def ClearFolderContent(path):
             os.remove(path + "/" + f)
 
 
+def GetTraceFilesCount(path):
+    count = 0
+    for f in os.listdir(path):
+        if os.path.isfile(path + "/" + f) and f.startswith("angle_capture_context"):
+            count += 1
+    return count
+
+
 def CanRunReplay(path):
     files = [
         "angle_capture_context1.h", "angle_capture_context1.cpp",
@@ -179,7 +187,8 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     if not os.path.isdir(capture_out_dir):
         os.mkdir(capture_out_dir)
     environment_vars = [("ANGLE_CAPTURE_FRAME_END", "0"),
-                        ("ANGLE_CAPTURE_OUT_DIR", capture_out_dir)]
+                        ("ANGLE_CAPTURE_OUT_DIR", capture_out_dir),
+                        ("ANGLE_SERIALIZE_CONTEXT_ENABLED", "1")]
     replay_exec = "capture_replay_tests"
     if platform == "win32":
         test_exec += ".exe"
@@ -197,6 +206,8 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     for environment_var in environment_vars:
         os.environ[environment_var[0]] = environment_var[1]
 
+    # if trace file count > max_trace_files_count, then multiple contexts are created
+    max_trace_files_count = 5
     for test in all_tests:
         if verbose:
             print("*" * 30)
@@ -207,14 +218,16 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
             os.environ["ANGLE_CAPTURE_ENABLED"] = "0"
             test.BuildReplay(build_dir, replay_exec)
             replay_output = test.RunReplay(build_dir, replay_exec)
-            if replay_output[0] != 0:
+            if GetTraceFilesCount(capture_out_dir) > max_trace_files_count:
+                print("Skipped: " + test.full_test_name + " creates multiple contexts")
+            elif replay_output[0] != 0:
                 print("Failed: " + test.full_test_name)
                 print(replay_output[1])
             else:
                 print("Passed: " + test.full_test_name)
         else:
             print("Skipped: " + test.full_test_name + ". Skipping replay since capture" + \
-                "didn't produce appropriate files or has crashed")
+                " didn't produce appropriate files or has crashed")
     for environment_var in environment_vars:
         del os.environ[environment_var[0]]
 

@@ -38,6 +38,7 @@ class Surface;
 
 namespace gl
 {
+class BinaryOutputStream;
 struct Caps;
 class Context;
 struct Extensions;
@@ -141,6 +142,9 @@ class FramebufferState final : angle::NonCopyable
     void updateHasRenderingFeedbackLoop();
 
     friend class Framebuffer;
+    friend void SerializeFramebufferState(BinaryOutputStream *bos,
+                                          Context *context,
+                                          FramebufferState *framebufferState);
 
     FramebufferID mId;
     ContextID mOwningContextID;
@@ -486,6 +490,10 @@ class Framebuffer final : public angle::ObserverInterface,
     {
         mFloat32ColorAttachmentBits.set(index, format->type == GL_FLOAT);
     }
+
+    friend void SerializeFramebuffer(BinaryOutputStream *bos,
+                                     Context *context,
+                                     Framebuffer *framebuffer);
 
     rx::Serial mSerial;
     FramebufferState mState;
