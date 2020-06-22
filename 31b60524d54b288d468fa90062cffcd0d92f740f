@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c976539f_02ce7d90",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-22T18:00:16Z",
+      "side": 1,
+      "message": "I\u0027m gonna clean this up to be:\n    glx::Context newContext \u003d mContext;\n    if (!context)\n    {\n        newContext \u003d 0;\n        newDrawable \u003d 0;\n    }",
+      "range": {
+        "startLine": 387,
+        "startChar": 0,
+        "endLine": 396,
+        "endChar": 5
+      },
+      "revId": "31b60524d54b288d468fa90062cffcd0d92f740f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
