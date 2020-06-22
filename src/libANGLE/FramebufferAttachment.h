@@ -39,6 +39,7 @@ class FramebufferAttachmentObjectImpl;
 
 namespace gl
 {
+class BinaryOutputStream;
 class FramebufferAttachmentObject;
 class Renderbuffer;
 class Texture;
@@ -181,9 +182,17 @@ class FramebufferAttachment final
         const ImageIndex &textureIndex() const { return mTextureIndex; }
 
       private:
+        friend void SerializeFramebufferAttachment(BinaryOutputStream *bos,
+                                                   Context *context,
+                                                   GLenum mode,
+                                                   FramebufferAttachment *framebufferAttachment);
         GLenum mBinding;
         ImageIndex mTextureIndex;
     };
+    friend void SerializeFramebufferAttachment(BinaryOutputStream *bos,
+                                               Context *context,
+                                               GLenum mode,
+                                               FramebufferAttachment *framebufferAttachment);
 
     GLenum mType;
     Target mTarget;

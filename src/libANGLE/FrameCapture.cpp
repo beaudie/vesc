@@ -23,6 +23,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/ResourceMap.h"
+#include "libANGLE/SerializeContext.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/VertexArray.h"
@@ -44,12 +45,13 @@ namespace angle
 namespace
 {
 
-constexpr char kEnabledVarName[]      = "ANGLE_CAPTURE_ENABLED";
-constexpr char kOutDirectoryVarName[] = "ANGLE_CAPTURE_OUT_DIR";
-constexpr char kFrameStartVarName[]   = "ANGLE_CAPTURE_FRAME_START";
-constexpr char kFrameEndVarName[]     = "ANGLE_CAPTURE_FRAME_END";
-constexpr char kCaptureLabel[]        = "ANGLE_CAPTURE_LABEL";
-constexpr char kCompression[]         = "ANGLE_CAPTURE_COMPRESSION";
+constexpr char kEnabledVarName[]                 = "ANGLE_CAPTURE_ENABLED";
+constexpr char kOutDirectoryVarName[]            = "ANGLE_CAPTURE_OUT_DIR";
+constexpr char kFrameStartVarName[]              = "ANGLE_CAPTURE_FRAME_START";
+constexpr char kFrameEndVarName[]                = "ANGLE_CAPTURE_FRAME_END";
+constexpr char kCaptureLabel[]                   = "ANGLE_CAPTURE_LABEL";
+constexpr char kCompression[]                    = "ANGLE_CAPTURE_COMPRESSION";
+constexpr char kSerializeContextEnabledVarName[] = "ANGLE_SERIALIZE_CONTEXT_ENABLED";
 
 constexpr size_t kBinaryAlignment = 16;
 
@@ -918,7 +920,8 @@ void WriteCppReplayIndexFiles(bool compression,
                               EGLint drawSurfaceHeight,
                               size_t readBufferSize,
                               const gl::AttribArray<size_t> &clientArraySizes,
-                              const HasResourceTypeMap &hasResourceType)
+                              const HasResourceTypeMap &hasResourceType,
+                              bool serializeContextEnabled)
 {
     size_t maxClientArraySize = MaxClientArraySize(clientArraySizes);
 
@@ -927,7 +930,15 @@ void WriteCppReplayIndexFiles(bool compression,
 
     header << "#pragma once\n";
     header << "\n";
-    header << "#include \"util/gles_loader_autogen.h\"\n";
+    if (!serializeContextEnabled)
+    {
+        header << "#include \"util/gles_loader_autogen.h\"\n";
+        header << "#include \"util/egl_loader_autogen.h\"\n";
+    }
+    else
+    {
+        header << "#include \"util/util_gl.h\"\n";
+    }
     header << "\n";
     header << "#include <cstdint>\n";
     header << "#include <cstdio>\n";
@@ -3144,6 +3155,7 @@ ReplayContext::~ReplayContext() {}
 
 FrameCapture::FrameCapture()
     : mEnabled(true),
+      mSerializeContextEnabled(false),
       mCompression(true),
       mClientVertexArrayMap{},
       mFrameIndex(0),
@@ -3204,6 +3216,12 @@ FrameCapture::FrameCapture()
     if (compressionFromEnv == "0")
     {
         mCompression = false;
+    }
+    std::string serializeContextEnabledFromEnv =
+        angle::GetEnvironmentVar(kSerializeContextEnabledVarName);
+    if (serializeContextEnabledFromEnv == "1")
+    {
+        mSerializeContextEnabled = true;
     }
 }
 
@@ -3864,17 +3882,15 @@ void FrameCapture::onEndFrame(const gl::Context *context)
         {
             WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel,
                                      mFrameStart, mFrameEnd, mDrawSurfaceWidth, mDrawSurfaceHeight,
-                                     mReadBufferSize, mClientArraySizes, mHasResourceType);
-
-            if (!mBinaryData.empty())
-            {
-                SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel,
-                               mBinaryData);
-                mBinaryData.clear();
-            }
+                                     mReadBufferSize, mClientArraySizes, mHasResourceType,
+                                     mSerializeContextEnabled);
         }
     }
-
+    if (mFrameIndex == mFrameEnd && mBinaryData.size() > kBinaryAlignment)
+    {
+        SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel, mBinaryData);
+        mBinaryData.clear();
+    }
     // Count resource IDs. This is also done on every frame. It could probably be done by checking
     // the GL state instead of the calls.
     for (const CallCapture &call : mFrameCalls)
@@ -3900,12 +3916,42 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     }
 }
 
+void FrameCapture::serializeContext(gl::Context *context)
+{
+    if (mFrameIndex == mFrameStart)
+    {
+        ASSERT(kBinaryAlignment >= sizeof(size_t) * 2);
+        // reserve first kBinaryAlignment bytes to store offset + length of serialized context
+        // uses 4 * 2 = 8 bytes of the reserved bytes on 32-bit system
+        // and 8 * 2 = 16 bytes of the reserved bytes on 64-bit system to represent length
+        mBinaryData.resize(kBinaryAlignment);
+    }
+    if (mFrameIndex == mFrameEnd && mSerializeContextEnabled)
+    {
+        gl::BinaryOutputStream bos{};
+        Serialize(&bos, const_cast<gl::Context *>(context));
+        // copy the offset of the serialized context into the reserve block
+        memcpy(mBinaryData.data(), reinterpret_cast<const uint8_t *>(&kBinaryAlignment),
+               sizeof(size_t));
+        size_t length = bos.length();
+        // copy the length of the serialized context into the reserve block
+        memcpy(mBinaryData.data() + sizeof(size_t), reinterpret_cast<uint8_t *>(&length),
+               sizeof(size_t));
+        mBinaryData.resize(kBinaryAlignment + bos.length());
+        // copy the serialized context into mBinary
+        memcpy(mBinaryData.data() + kBinaryAlignment, bos.data(), bos.length());
+    }
+}
+
 void FrameCapture::onMakeCurrent(const egl::Surface *drawSurface)
 {
     // Track the width and height of the draw surface as provided to makeCurrent
     // TODO (b/159238311): Track this per context. Right now last one wins.
-    mDrawSurfaceWidth  = drawSurface->getWidth();
-    mDrawSurfaceHeight = drawSurface->getHeight();
+    if (drawSurface != nullptr)
+    {
+        mDrawSurfaceWidth  = drawSurface->getWidth();
+        mDrawSurfaceHeight = drawSurface->getHeight();
+    }
 }
 
 DataCounters::DataCounters() = default;
