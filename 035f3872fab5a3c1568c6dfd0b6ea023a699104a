@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c07be857_fd953923",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-23T15:05:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c720b084_0de371e2",
+      "range": {
+        "startLine": 106,
+        "startChar": 55,
+        "endLine": 106,
+        "endChar": 67
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3662cd16_e1329fbf",
         "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "dbd1c6d2_3cb7d35f",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-23T15:05:43Z",
+      "side": 1,
+      "message": "Yes, I\u0027ll explain how this works. There is one native context in the backend. When makeCurrent is called on some new thread, we need to call CGLSetCurrentContext with the backend\u0027s context in order for any gl calls to be made on that thread.\nIf we are running ANGLE with a single thread like most use cases we don\u0027t want any extra calls to CGLSetCurrentContext so this code here is basically caching this state. \nIt shouldn\u0027t be tracked with the frontend, because eventually we are going to add a new native context for each thread, so multiple threads can be used simultaneously. Also I\u0027m not sure this makes sense to track with the frontend, we still need to make sure the backend receives the makeCurrent call.",
+      "parentUuid": "3662cd16_e1329fbf",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 5
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e249bbc0_abfc979a",
         "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c829dbae_95b95c02",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-23T15:05:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e249bbc0_abfc979a",
+      "range": {
+        "startLine": 207,
+        "startChar": 20,
+        "endLine": 207,
+        "endChar": 31
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
