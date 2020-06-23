@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41f8960f_ecb00fca",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-23T06:08:17Z",
+      "side": 1,
+      "message": "nit: Update this to a \"TODO\" so it stands out a bit more as something needing fixing.",
+      "range": {
+        "startLine": 1191,
+        "startChar": 36,
+        "endLine": 1191,
+        "endChar": 40
+      },
+      "revId": "54ff21a29d3419f1eec60bffe2054685b4fdd87b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
