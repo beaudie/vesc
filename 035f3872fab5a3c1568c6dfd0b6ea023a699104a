@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c720b084_0de371e2",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T03:34:23Z",
+      "side": 1,
+      "message": "Could use a better name.",
+      "range": {
+        "startLine": 106,
+        "startChar": 55,
+        "endLine": 106,
+        "endChar": 67
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3662cd16_e1329fbf",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T03:34:23Z",
+      "side": 1,
+      "message": "`if` is checking `context`, then assigns `mContext`, is that intentional?",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 5
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e249bbc0_abfc979a",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T03:34:23Z",
+      "side": 1,
+      "message": "Update comment",
+      "range": {
+        "startLine": 207,
+        "startChar": 20,
+        "endLine": 207,
+        "endChar": 31
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
