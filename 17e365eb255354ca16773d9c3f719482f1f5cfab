@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ccf60b14_74e9d2e8",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-23T15:12:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e7f831b_6e8311f8",
+      "range": {
+        "startLine": 126,
+        "startChar": 54,
+        "endLine": 126,
+        "endChar": 66
+      },
+      "revId": "17e365eb255354ca16773d9c3f719482f1f5cfab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7cef433b_85707492",
         "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
         "patchSetId": 14
@@ -45,6 +69,30 @@
       "revId": "17e365eb255354ca16773d9c3f719482f1f5cfab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc9f0772_d21b98f7",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-23T15:12:50Z",
+      "side": 1,
+      "message": "To be honest I was copying this from the other tests here (which I see also call makeCurrent and other things). I removed it and it seems to work. We\u0027ll see on the bots.",
+      "parentUuid": "7cef433b_85707492",
+      "range": {
+        "startLine": 232,
+        "startChar": 46,
+        "endLine": 232,
+        "endChar": 59
+      },
+      "revId": "17e365eb255354ca16773d9c3f719482f1f5cfab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
