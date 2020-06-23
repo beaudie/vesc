@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2b0fb6_e8cfd9a3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T04:02:00Z",
+      "side": 1,
+      "message": "Idea for another change (while you\u0027re working around here): I added this workaround for a QC bug long time ago. It\u0027s likely the issue is fixed. If that\u0027s the case, you can try removing this workaround.\n\nAlso, you can try making a single `bindDescriptorSets` call with all the descriptor sets.",
+      "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
