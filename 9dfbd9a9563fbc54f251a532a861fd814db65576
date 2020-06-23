@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e58d49f4_9e38d6ad",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T15:07:10Z",
+      "side": 1,
+      "message": "Having contents defined is different from supporting a staging buffer. A staging buffer allows updates to the image. And there\u0027s no limitation on updating an external image from the external image spec that I know of. Can you check?",
+      "parentUuid": "1f7e9e5b_457738e1",
+      "range": {
+        "startLine": 100,
+        "startChar": 7,
+        "endLine": 100,
+        "endChar": 55
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96f015d7_9d6eb7ec",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 40
@@ -417,6 +441,30 @@
       "side": 1,
       "message": "Spent a bit of time looking at this yesterday. Trouble here is that the GL format that most makes sense is GL_NONE since the external format is unknown. However, the FormatID scripts expect a 1:1 relationship between ANGLE FormatID and GL format. Adding a new FormatID that is also GL_NONE would require significant changes to the generation scripts. Basically have to hand code the FormatID::EXTERNAL_UNDEFINED to GL_NONE relationship into the scripts.\nDiscussing with Jamie, decided that can be an activity for later.",
       "parentUuid": "0905c378_59465c39",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50ac9197_0dd06c81",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T15:07:10Z",
+      "side": 1,
+      "message": "To clarify - a new angle::Format::ID is required to match the external format. There is no 1:1 mapping to GL format required, we add new GLenums to a header for formats that don\u0027t exist in GL.",
+      "parentUuid": "e9accc42_e68020f8",
       "range": {
         "startLine": 147,
         "startChar": 4,
