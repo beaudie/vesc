@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e7f831b_6e8311f8",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T03:37:44Z",
+      "side": 1,
+      "message": "Could use a better name",
+      "range": {
+        "startLine": 126,
+        "startChar": 54,
+        "endLine": 126,
+        "endChar": 66
+      },
+      "revId": "17e365eb255354ca16773d9c3f719482f1f5cfab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cef433b_85707492",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T03:37:44Z",
+      "side": 1,
+      "message": "Don\u0027t createContext and eglDestroyContext already take some lock on their own?",
+      "range": {
+        "startLine": 232,
+        "startChar": 46,
+        "endLine": 232,
+        "endChar": 59
+      },
+      "revId": "17e365eb255354ca16773d9c3f719482f1f5cfab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
