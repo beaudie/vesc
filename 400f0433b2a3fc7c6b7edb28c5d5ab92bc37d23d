@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "820f8c40_a491f6bc",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-23T20:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe295a07_a4b0ccb9",
+      "range": {
+        "startLine": 1729,
+        "startChar": 12,
+        "endLine": 1729,
+        "endChar": 51
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81f845f2_19809152",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -345,6 +369,30 @@
       "side": 1,
       "message": "I need to look into this some more.  I can reproduce the failures if I don\u0027t do this, but don\u0027t know why yet.  An answer is coming...",
       "parentUuid": "b0083135_9ed04438",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1794,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbf208e5_7eed8f07",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-23T20:50:12Z",
+      "side": 1,
+      "message": "FYI ... The case that \"needed\" this work-around is where both the source and destination are rotated, at the same time.  That violates the assumptions that Shabi and I had about this function (that the destination would never be rotated) and is unlike any other code path that I\u0027ve seen in ANGLE.",
+      "parentUuid": "43729ac5_9052fe47",
       "range": {
         "startLine": 1792,
         "startChar": 0,

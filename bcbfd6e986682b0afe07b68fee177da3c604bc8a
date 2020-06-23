@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c856aeb0_9ddfd68a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-23T20:50:12Z",
+      "side": 1,
+      "message": "I won\u0027t keep repeating what you and Shabi brought up ... see other comment.",
+      "parentUuid": "ad68379d_da098ef2",
+      "revId": "bcbfd6e986682b0afe07b68fee177da3c604bc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a48b39a7_d3395fb6",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 7
