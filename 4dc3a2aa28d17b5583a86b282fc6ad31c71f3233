@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "51de53c1_5d132271",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "It needs to not be const because I modify certain states. Such as setting read buffer to read content of attachment. I modify the states after I serialize the old states however, so that the result are still correct",
+      "parentUuid": "b2a625d9_26697be3",
+      "range": {
+        "startLine": 607,
+        "startChar": 9,
+        "endLine": 607,
+        "endChar": 18
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cabcafd8_2b416073",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 7
@@ -59,6 +83,24 @@
       "writtenOn": "2020-06-23T17:23:18Z",
       "side": 1,
       "message": "you\u0027re missing the API that gets the serialized data into a buffer.",
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "816b3cb7_b80a2fea",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "I don\u0027t think I need that. I serialize everything with a BinaryOutputStream, so the data is already stored in the member variable stream. Then afterward, I can just copy the data from the stream to the FrameCapture\u0027s member variable mBinaryData",
+      "parentUuid": "cabcafd8_2b416073",
       "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -111,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "952e2030_dfaabbf4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "The new surface code added to FrameCapture will produce in the generated trace file something like this: \"constexpr EGLint kReplayDrawSurfaceWidth \u003d 1280\". Without the EGL header files, the CaptureReplaySample will not compile.",
+      "parentUuid": "0db25bd3_4aca62c4",
+      "range": {
+        "startLine": 936,
+        "startChar": 35,
+        "endLine": 936,
+        "endChar": 53
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fcdb1a9_649b7c6e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 7
@@ -122,6 +188,30 @@
       "writtenOn": "2020-06-23T17:23:18Z",
       "side": 1,
       "message": "what do you need from util_gl?",
+      "range": {
+        "startLine": 940,
+        "startChar": 35,
+        "endLine": 940,
+        "endChar": 42
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad921993_1687595d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "I need the egl includes and the different gles version includes that util_gl has. I\u0027m just following AngleTest example since it also static links the gles libraries",
+      "parentUuid": "9fcdb1a9_649b7c6e",
       "range": {
         "startLine": 940,
         "startChar": 35,
@@ -227,6 +317,30 @@
     },
     {
       "key": {
+        "uuid": "c6cc3fbe_fb606c6a",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "So I dedicate a kBinaryAlignment size block at the front of mBinaryData to store the length and offset of serialized states. So we only write out to files if the mBinaryData block is larger than kBinaryAlignment bytes",
+      "parentUuid": "4124d811_b46661c3",
+      "range": {
+        "startLine": 3889,
+        "startChar": 36,
+        "endLine": 3889,
+        "endChar": 73
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5cc324fe_a11f5ce6",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 7
@@ -238,6 +352,30 @@
       "writtenOn": "2020-06-23T17:23:18Z",
       "side": 1,
       "message": "if you put the state at the end instead you maybe don\u0027t have to deal with this alignment stuff.",
+      "range": {
+        "startLine": 3924,
+        "startChar": 6,
+        "endLine": 3926,
+        "endChar": 90
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c05414_09784b08",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "I think I still need to know the length and offset. I only have access to gBinaryData, which is a pointer. So I still need to know where the serialized context starts and ends.",
+      "parentUuid": "5cc324fe_a11f5ce6",
       "range": {
         "startLine": 3924,
         "startChar": 6,
@@ -451,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "5fb5b77e_ae558837",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "I am doing this check because for default framebuffer, we only want to query the back buffer. Whereas for other framebuffer we would want to query all the color attachments.",
+      "parentUuid": "b6254817_34089a61",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 65
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ecc882c_973f3779",
         "filename": "src/libANGLE/SerializeContext.cpp",
         "patchSetId": 7
@@ -474,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "2ce4a041_1ab222c3",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "Do you mean std::get_temporary_buffer?",
+      "parentUuid": "3ecc882c_973f3779",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 28
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7089f798_768c0db4",
         "filename": "src/libANGLE/SerializeContext.cpp",
         "patchSetId": 7
@@ -485,6 +671,30 @@
       "writtenOn": "2020-06-23T17:23:18Z",
       "side": 1,
       "message": "nit: put the variable on the left. actually I\u0027m not sure what this if is supposed to fix. seems like color attachments and depth/stencil should check the color/depth/stencil bits instead of the attachment point.",
+      "range": {
+        "startLine": 133,
+        "startChar": 9,
+        "endLine": 133,
+        "endChar": 39
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04ad616f_764c1454",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-23T18:11:36Z",
+      "side": 1,
+      "message": "What do you mean by color/depth/stencil bits?",
+      "parentUuid": "7089f798_768c0db4",
       "range": {
         "startLine": 133,
         "startChar": 9,
