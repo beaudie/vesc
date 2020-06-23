@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "9737f53f_16615c15",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:28:27Z",
+      "side": 1,
+      "message": "nit: style guide nit",
+      "range": {
+        "startLine": 49,
+        "startChar": 32,
+        "endLine": 49,
+        "endChar": 35
+      },
+      "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62f44685_bf4b0076",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:28:27Z",
+      "side": 1,
+      "message": "nit: style guide nit",
+      "range": {
+        "startLine": 52,
+        "startChar": 37,
+        "endLine": 52,
+        "endChar": 38
+      },
+      "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be3769e_447c63fe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:28:27Z",
+      "side": 1,
+      "message": "nit: can you store this as a pointer for consistency? we always use ContextVk * in ANGLE.",
+      "range": {
+        "startLine": 54,
+        "startChar": 14,
+        "endLine": 54,
+        "endChar": 15
+      },
+      "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3dcea59_770fb5b2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:28:27Z",
+      "side": 1,
+      "message": "needs a refactor so we don\u0027t store the pointer here. will cause additional instructions and an extra main memory store.\n\ni.e. put the store functions in ContextVk and call them directly on ContextVk instead of using the helper class. then just have a scoped helper that clears this store on abrupt exit.",
+      "range": {
+        "startLine": 1011,
+        "startChar": 0,
+        "endLine": 1011,
+        "endChar": 48
+      },
+      "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a2b0fb6_e8cfd9a3",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 8
