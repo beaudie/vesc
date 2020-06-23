@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "5a85d37a_caf9c52f",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-06-23T15:59:44Z",
+      "side": 1,
+      "message": "One way to think of it -- this isn\u0027t the \"context\" that the user is rendering to. That\u0027s tracked by the frontend/dirty bits.\nThis is just the context that ANGLE is using to render to.\nThe GL backend is a bit confusing with the naming sometimes because completely different objects are still technically the same names.",
+      "parentUuid": "71c53ba5_d64cdb67",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 5
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e249bbc0_abfc979a",
         "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
         "patchSetId": 1
