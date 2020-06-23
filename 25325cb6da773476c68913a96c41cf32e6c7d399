@@ -34,6 +34,24 @@
       "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7cd46c4_42a35ca8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T13:16:49Z",
+      "side": 1,
+      "message": "See line 1676. Any update for levels Base+1 to Max are discarded, because we are about to generate mipmaps into them anyway. This function only stages the update for the base level.\n\nAlso note that this path is only taken when we need to redefine the image. If the image already has enough levels, we don\u0027t need to do this.",
+      "parentUuid": "3d078119_5b722bf3",
+      "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
