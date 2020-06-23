@@ -16,6 +16,24 @@
       "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d078119_5b722bf3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-23T06:31:20Z",
+      "side": 1,
+      "message": "Hm, I suppose not at all, since there\u0027s no way to know if the other levels contain the appropriate data for their levels or are something else entirely, unless they are expanding a mip chain that ANGLE generated (and invalidated during writes to any levels).",
+      "parentUuid": "ca05be12_17c66704",
+      "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
