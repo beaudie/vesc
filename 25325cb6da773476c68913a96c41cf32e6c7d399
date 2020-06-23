@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca05be12_17c66704",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-23T05:56:36Z",
+      "side": 1,
+      "message": "How fancy can we get here?   Can we skip the staging buffer for an arbitrary number of levels that may already exist in the original image?",
+      "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
