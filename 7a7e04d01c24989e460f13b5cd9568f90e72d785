@@ -16,6 +16,24 @@
       "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a587ff59_16eed374",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-23T16:44:39Z",
+      "side": 1,
+      "message": "Thanks Shabi for the information. I have put a note to myself.",
+      "parentUuid": "7a2b0fb6_e8cfd9a3",
+      "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
