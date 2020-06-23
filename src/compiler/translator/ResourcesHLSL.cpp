@@ -104,6 +104,41 @@ void OutputUniformIndexArrayInitializer(TInfoSinkBase &out,
     out << "}";
 }
 
+// Check whether all fields matches std140 storage layout, and do not need to add paddings
+// when translating std140 uniform block to StructuredBuffer.
+bool shoudPadUniformBlockMemberForStructuredBuffer(const TType &type)
+{
+    const TStructure *structure = type.getStruct();
+    if (structure)
+    {
+        const TFieldList &fields = structure->fields();
+        for (size_t i = 0; i < fields.size(); i++)
+        {
+            if (shoudPadUniformBlockMemberForStructuredBuffer(*fields[i]->type()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    else if (type.isMatrix())
+    {
+        if ((type.getLayoutQualifier().matrixPacking != EmpRowMajor && type.getRows() == 4) ||
+            (type.getLayoutQualifier().matrixPacking == EmpRowMajor && type.getCols() == 4))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        if (type.isVector() && type.getNominalSize() == 4)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 }  // anonymous namespace
 
 ResourcesHLSL::ResourcesHLSL(StructureHLSL *structureHLSL,
@@ -887,12 +922,13 @@ TString ResourcesHLSL::uniformBlockStructString(const TInterfaceBlock &interface
 bool ResourcesHLSL::shouldTranslateUniformBlockToStructuredBuffer(
     const TInterfaceBlock &interfaceBlock)
 {
-    const TType &fieldType = *interfaceBlock.fields()[0]->type();
+    const TType &fieldType           = *interfaceBlock.fields()[0]->type();
+    bool shouldPadUniformBlockMember = interfaceBlock.blockStorage() == EbsStd140 &&
+                                       shoudPadUniformBlockMemberForStructuredBuffer(fieldType);
 
     return (mCompileOptions & SH_DONT_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) == 0 &&
            mSRVRegister < kMaxInputResourceSlotCount && interfaceBlock.fields().size() == 1u &&
-           (fieldType.getStruct() != nullptr || fieldType.isMatrix()) &&
-           fieldType.getNumArraySizes() == 1u &&
+           !shouldPadUniformBlockMember && fieldType.getNumArraySizes() == 1u &&
            fieldType.getOutermostArraySize() >= kMinArraySizeUseStructuredBuffer;
 }
 }  // namespace sh
