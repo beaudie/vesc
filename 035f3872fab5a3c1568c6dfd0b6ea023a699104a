@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "bcc41d6d_feb48e20",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T16:15:40Z",
+      "side": 1,
+      "message": "Ok I see, I guess it\u0027s something like GL Context vs Vulkan Queue that we have in the Vulkan backend.\n\nLGTM then.",
+      "parentUuid": "5a85d37a_caf9c52f",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 5
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e249bbc0_abfc979a",
         "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
         "patchSetId": 1
