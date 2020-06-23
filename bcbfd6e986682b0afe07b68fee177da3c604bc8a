@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ad68379d_da098ef2",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-23T18:50:55Z",
+      "side": 1,
+      "message": "As I just mentioned to Shabi, I don\u0027t know why yet, but I can reproduce the failure.  I\u0027ll look into this.",
+      "parentUuid": "17dec42a_db941621",
+      "revId": "bcbfd6e986682b0afe07b68fee177da3c604bc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a48b39a7_d3395fb6",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "bcbfd6e986682b0afe07b68fee177da3c604bc8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b026f460_8a06a80b",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-23T18:50:55Z",
+      "side": 1,
+      "message": "It\u0027s actually not in the style for these fragment shaders (just following what\u0027s being done:-)",
+      "parentUuid": "a48b39a7_d3395fb6",
+      "revId": "bcbfd6e986682b0afe07b68fee177da3c604bc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
