@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "366c18ee_43bb8967",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T20:46:21Z",
+      "side": 1,
+      "message": "With this std::swap, you are already implying that blitAreaOut is already initialized with blitAreaIn. Can you just make blitAreaOut an in-out parameter and remove blitAreaIn? You would need a std::swap for x/y too). For 270, you could either do the same as 90 then swap, or use temporary variables.\n\nThis should also get rid of a few temporaries that were added before calls to this function.",
+      "revId": "bafc9cb0df43f944fb65907f6068fc615db09687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ebde9c0_68645d57",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T20:46:21Z",
+      "side": 1,
+      "message": "Something feels wrong here. With 90 and 270 degree rotations, flipY is reset, but shouldn\u0027t that flip-ness be transferred to flipX? (so then we end up with srcFramebufferFlippedX and destFramebufferFlippedX too)",
+      "revId": "bafc9cb0df43f944fb65907f6068fc615db09687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a207db5_55097da4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T20:46:21Z",
+      "side": 1,
+      "message": "Again, with 90 and 270 rotations, if flipY should transfer to flipX, then these need to be duplicated for X too.",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 844,
+        "endChar": 5
+      },
+      "revId": "bafc9cb0df43f944fb65907f6068fc615db09687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e39767f_4188c05d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T20:46:21Z",
+      "side": 1,
+      "message": "Can\u0027t tell what\u0027s going on here, why only 90 is special-cased? Why can\u0027t this look like the src case?",
+      "range": {
+        "startLine": 870,
+        "startChar": 0,
+        "endLine": 877,
+        "endChar": 62
+      },
+      "revId": "bafc9cb0df43f944fb65907f6068fc615db09687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39e910a8_daaeffc4",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T20:46:21Z",
+      "side": 1,
+      "message": "Can you make sure that in the case of Identity and Rotated90Degrees, the caller sets these to 0? Then you can do this math unconditionally before the switch.",
+      "range": {
+        "startLine": 1338,
+        "startChar": 57,
+        "endLine": 1338,
+        "endChar": 76
+      },
+      "revId": "bafc9cb0df43f944fb65907f6068fc615db09687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb041c96_510196a7",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T20:46:21Z",
+      "side": 1,
+      "message": "This is assuming that the given framebuffer is the current draw framebuffer. I think that\u0027s always the case with GLES (I know it won\u0027t be on Desktop OpenGL 4.6, but we won\u0027t be there for a while!).\n\nJust wanted to know if there\u0027s a way to ask this from the framebuffer itself instead of the context? If not, it could be a good follow up generally to have the framebuffer determine this.",
+      "revId": "bafc9cb0df43f944fb65907f6068fc615db09687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
