@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94e94177_11827fb6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T19:57:45Z",
+      "side": 1,
+      "message": "nit: you can put this localized to the ContextVk.cpp file in an anonymous namespace. Also please include the word scoped in the name : \"e.g. ScopedDescriptorSetUpdates\"",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 20
+      },
+      "revId": "3881da71ac99bdebdc76f79011fdab851c1dc7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97e96d42_cd254a0e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T19:57:45Z",
+      "side": 1,
+      "message": "nit: please use named constants for these guys in the anonymous block.",
+      "range": {
+        "startLine": 739,
+        "startChar": 24,
+        "endLine": 739,
+        "endChar": 26
+      },
+      "revId": "3881da71ac99bdebdc76f79011fdab851c1dc7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
