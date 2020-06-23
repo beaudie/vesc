@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d8bccbfa_9f3e9919",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T21:11:45Z",
+      "side": 1,
+      "message": "make it a private class in ContextVk then.\n\nprivate:\n\n  class ScopedDescriptorSetUpdates;\n\nin the cpp:\n\nnamespace\n{\nANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::~ScopedDescriptorSetUpdates()\n{\n... \n}\n}",
+      "parentUuid": "f09b7500_a5819176",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 20
+      },
+      "revId": "3881da71ac99bdebdc76f79011fdab851c1dc7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97e96d42_cd254a0e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
