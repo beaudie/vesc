@@ -582,6 +582,52 @@
     },
     {
       "key": {
+        "uuid": "43834622_1c6340c7",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-23T17:48:51Z",
+      "side": 1,
+      "message": "Rather than pull ANGLE bits into our tests, can we put this functionality into an extension that any app could use?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 38
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7536924_64de57c9",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-06-23T17:48:51Z",
+      "side": 1,
+      "message": "We\u0027ll probably need some way to do fuzzy compares of framebuffer contents, since they may have slight variations per underlying Vulkan implementation/hardware.",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 66
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b2478ba_8a9f764e",
         "filename": "util/util_gl.h",
         "patchSetId": 7
