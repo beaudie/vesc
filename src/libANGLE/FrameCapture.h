@@ -283,7 +283,7 @@ class FrameCapture final : angle::NonCopyable
                             gl::BufferID id,
                             GLintptr offset,
                             GLsizeiptr length,
-                            GLbitfield accessFlags);
+                            bool writable);
 
     ResourceTracker &getResouceTracker() { return mResourceTracker; }
 

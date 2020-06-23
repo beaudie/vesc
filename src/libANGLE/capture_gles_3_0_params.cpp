@@ -20,7 +20,9 @@ void CaptureClearBufferfv_value(const State &glState,
                                 const GLfloat *value,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // Per the spec, color buffers have a vec4, the rest a single value
+    uint32_t valueSize = (buffer == GL_COLOR) ? 4 : 1;
+    CaptureMemory(value, valueSize * sizeof(GLfloat), paramCapture);
 }
 
 void CaptureClearBufferiv_value(const State &glState,
@@ -30,7 +32,9 @@ void CaptureClearBufferiv_value(const State &glState,
                                 const GLint *value,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // Per the spec, color buffers have a vec4, the rest a single value
+    uint32_t valueSize = (buffer == GL_COLOR) ? 4 : 1;
+    CaptureMemory(value, valueSize * sizeof(GLint), paramCapture);
 }
 
 void CaptureClearBufferuiv_value(const State &glState,
@@ -40,7 +44,9 @@ void CaptureClearBufferuiv_value(const State &glState,
                                  const GLuint *value,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // Per the spec, color buffers have a vec4, the rest a single value
+    uint32_t valueSize = (buffer == GL_COLOR) ? 4 : 1;
+    CaptureMemory(value, valueSize * sizeof(GLuint), paramCapture);
 }
 
 void CaptureCompressedTexImage3D_data(const State &glState,
@@ -291,7 +297,7 @@ void CaptureGetInteger64i_v_data(const State &glState,
                                  GLint64 *data,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureGetParameter(glState, target, sizeof(GLint64), paramCapture);
 }
 
 void CaptureGetInteger64v_data(const State &glState,
@@ -300,7 +306,7 @@ void CaptureGetInteger64v_data(const State &glState,
                                GLint64 *data,
                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureGetParameter(glState, pname, sizeof(GLint64), paramCapture);
 }
 
 void CaptureGetIntegeri_v_data(const State &glState,
@@ -310,7 +316,7 @@ void CaptureGetIntegeri_v_data(const State &glState,
                                GLint *data,
                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureGetParameter(glState, target, sizeof(GLint), paramCapture);
 }
 
 void CaptureGetInternalformativ_params(const State &glState,
