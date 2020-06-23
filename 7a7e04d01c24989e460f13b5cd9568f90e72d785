@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "354c219d_8532eb16",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T19:05:31Z",
+      "side": 1,
+      "message": "Can you make a patch to remove this line in the style guide? It\u0027s outdated.",
+      "parentUuid": "adac188f_549d9fbd",
+      "range": {
+        "startLine": 49,
+        "startChar": 32,
+        "endLine": 49,
+        "endChar": 35
+      },
+      "revId": "7a7e04d01c24989e460f13b5cd9568f90e72d785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62f44685_bf4b0076",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 8
