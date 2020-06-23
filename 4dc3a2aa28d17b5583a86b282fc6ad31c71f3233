@@ -1,0 +1,607 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20404078_35ca8fcb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: serialized GL state (here and following uses)\n\nin the future one serialized state can contain multiple contexts and other non-Context objects.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 8
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2a625d9_26697be3",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "make this const. and remove onPostSwap",
+      "range": {
+        "startLine": 607,
+        "startChar": 9,
+        "endLine": 607,
+        "endChar": 18
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cabcafd8_2b416073",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "you\u0027re missing the API that gets the serialized data into a buffer.",
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1373319_20c033d6",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: ANGLE_CAPTURE_SERIALIZE_STATE",
+      "range": {
+        "startLine": 54,
+        "startChar": 52,
+        "endLine": 54,
+        "endChar": 83
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0db25bd3_4aca62c4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "what do you need from EGL?",
+      "range": {
+        "startLine": 936,
+        "startChar": 35,
+        "endLine": 936,
+        "endChar": 53
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fcdb1a9_649b7c6e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "what do you need from util_gl?",
+      "range": {
+        "startLine": 940,
+        "startChar": 35,
+        "endLine": 940,
+        "endChar": 42
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "580cc0d4_f5c423ad",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "default to on. also don\u0027t forget to update the docs if you haven\u0027t already.",
+      "range": {
+        "startLine": 3158,
+        "startChar": 31,
+        "endLine": 3158,
+        "endChar": 36
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24198211_d4dd9c0e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3222,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "default on.",
+      "range": {
+        "startLine": 3222,
+        "startChar": 43,
+        "endLine": 3222,
+        "endChar": 44
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4124d811_b46661c3",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3889,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "don\u0027t quite follow this change. what happened here?",
+      "range": {
+        "startLine": 3889,
+        "startChar": 36,
+        "endLine": 3889,
+        "endChar": 73
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cc324fe_a11f5ce6",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "if you put the state at the end instead you maybe don\u0027t have to deal with this alignment stuff.",
+      "range": {
+        "startLine": 3924,
+        "startChar": 6,
+        "endLine": 3926,
+        "endChar": 90
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "508859fa_9e901448",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "let\u0027s chat offline - wondering if you can do this without friend.",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 78
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f33fd31a_0623990a",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "tiny nit: missing //\n\nsame for the header.",
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1c99b7c_357c35cb",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: remove _MACRO_ from these",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "432bcdd5_827b71eb",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: const auto \u0026?",
+      "range": {
+        "startLine": 27,
+        "startChar": 9,
+        "endLine": 27,
+        "endChar": 14
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e372b44_6c747c5b",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: cache in a temporary so we can see the type.",
+      "range": {
+        "startLine": 29,
+        "startChar": 42,
+        "endLine": 29,
+        "endChar": 61
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9811558_42cd7da2",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "you don\u0027t need to write this. it is derived from the attachments.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d06006a7_527b492a",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "or this",
+      "range": {
+        "startLine": 41,
+        "startChar": 46,
+        "endLine": 41,
+        "endChar": 73
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3064ea63_ed009a8e",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "remove all the explicit arguments.",
+      "range": {
+        "startLine": 49,
+        "startChar": 17,
+        "endLine": 49,
+        "endChar": 25
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6254817_34089a61",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: use isDefault. however I\u0027m not sure we really need to do this check. You can get attachments by index.",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 65
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ecc882c_973f3779",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "can you use a temporary buffer so we don\u0027t reallocate as much?",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 28
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7089f798_768c0db4",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: put the variable on the left. actually I\u0027m not sure what this if is supposed to fix. seems like color attachments and depth/stencil should check the color/depth/stencil bits instead of the attachment point.",
+      "range": {
+        "startLine": 133,
+        "startChar": 9,
+        "endLine": 133,
+        "endChar": 39
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05937210_821976f1",
+        "filename": "src/libANGLE/SerializeContext.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "this will be bugged for several cases: having an unpack buffer, non-default unpack parameters, or formats not listed. we can land something simple initially with a TODO to rework this.",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 43
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "525bd413_2b5ea7eb",
+        "filename": "src/libANGLE/SerializeContext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "how about adding these to a new file frame_capture_utils.cpp ?",
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7594ebcf_f1d2136b",
+        "filename": "src/libANGLE/SerializeContext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need to include this here, you can predeclare Context/BinaryOutputStream/Framebuffer. can include in the cpp file.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "742cb324_e9527a99",
+        "filename": "src/libANGLE/SerializeContext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: suggest using namespace angle to match FrameCapture",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 15,
+        "endChar": 12
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "345d6095_a0977a79",
+        "filename": "src/libANGLE/SerializeContext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "nit: SerializeContext.",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 14
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b2478ba_8a9f764e",
+        "filename": "util/util_gl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T17:23:18Z",
+      "side": 1,
+      "message": "can you please revert this change.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 21
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
