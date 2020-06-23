@@ -644,8 +644,8 @@ void CopyTexture3DTest::testSnormFormats(const GLenum testTarget)
              false, false, false, GLColor(250, 200, 150, 85));
     testCopy(testTarget, GLColor(250, 200, 150, 200), GL_RGB10_A2, GL_UNSIGNED_INT_2_10_10_10_REV,
              false, true, false, GLColor(196, 157, 118, 170));
-    testCopy(testTarget, GLColor(101, 150, 250, 200), GL_RGB10_A2, GL_UNSIGNED_INT_2_10_10_10_REV,
-             false, false, true, GLColor(128, 191, 255, 170));
+    testCopy(testTarget, GLColor(101, 150, 190, 200), GL_RGB10_A2, GL_UNSIGNED_INT_2_10_10_10_REV,
+             false, false, true, GLColor(128, 191, 242, 170));
 }
 
 // Test passthrough, premultiply alpha, and unmultiply alpha copies for GL_TEXTURE_3D with snorm
@@ -823,19 +823,14 @@ void CopyTexture3DTest::testFloatFormats(const GLenum testTarget)
                      GLColor(227, 217, 161, 255));
         }
 
-        // TODO: Vulkan's CPU-path implementation doesn't handle 2DArray textures correctly yet.
-        // http://anglebug.com/4744
-        if (!(IsVulkan() && testTarget == GL_TEXTURE_2D_ARRAY))
+        if (floatType != GL_UNSIGNED_INT_10F_11F_11F_REV)
         {
-            if (floatType != GL_UNSIGNED_INT_10F_11F_11F_REV)
-            {
-                testCopy(testTarget, kColor, GL_RGB9_E5, floatType, false, false, false,
-                         GLColor(210, 200, 148, 255));
-                testCopy(testTarget, kColor, GL_RGB9_E5, floatType, false, true, false,
-                         GLColor(192, 184, 138, 255));
-                testCopy(testTarget, kColor, GL_RGB9_E5, floatType, false, false, true,
-                         GLColor(227, 217, 161, 255));
-            }
+            testCopy(testTarget, kColor, GL_RGB9_E5, floatType, false, false, false,
+                     GLColor(210, 200, 148, 255));
+            testCopy(testTarget, kColor, GL_RGB9_E5, floatType, false, true, false,
+                     GLColor(192, 184, 138, 255));
+            testCopy(testTarget, kColor, GL_RGB9_E5, floatType, false, false, true,
+                     GLColor(227, 217, 161, 255));
         }
     }
 
@@ -1310,10 +1305,6 @@ TEST_P(Texture2DArrayCopy, UnsizedFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
 
-    // TODO: Vulkan's CPU-path implementation doesn't handle 2DArray textures correctly yet.
-    // http://anglebug.com/4744
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsIntel());
-
     testUnsizedFormats(GL_TEXTURE_2D_ARRAY);
 }
 
@@ -1322,10 +1313,6 @@ TEST_P(Texture2DArrayCopy, UnsizedFormats)
 TEST_P(Texture2DArrayCopy, SnormFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
-
-    // TODO: Vulkan's CPU-path implementation doesn't handle 2DArray textures correctly yet.
-    // http://anglebug.com/4744
-    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsIntel() || IsARM() || isSwiftshader() || IsAndroid()));
 
     testSnormFormats(GL_TEXTURE_2D_ARRAY);
 }
@@ -1339,10 +1326,6 @@ TEST_P(Texture2DArrayCopy, UnsignedByteFormats)
     // Flay on Windows D3D11. http://anglebug.com/2896
     ANGLE_SKIP_TEST_IF(IsWindows() && IsD3D11());
 
-    // TODO: Vulkan's CPU-path implementation doesn't handle 2DArray textures correctly yet.
-    // http://anglebug.com/4744
-    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsIntel() || IsAndroid()));
-
     testUnsignedByteFormats(GL_TEXTURE_2D_ARRAY);
 }
 
@@ -1351,10 +1334,6 @@ TEST_P(Texture2DArrayCopy, UnsignedByteFormats)
 TEST_P(Texture2DArrayCopy, FloatFormats)
 {
     ANGLE_SKIP_TEST_IF(!checkExtensions());
-
-    // TODO: Vulkan's CPU-path implementation doesn't handle 2DArray textures correctly yet.
-    // http://anglebug.com/4744
-    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsIntel() || IsAndroid()));
 
     testFloatFormats(GL_TEXTURE_2D_ARRAY);
 }
