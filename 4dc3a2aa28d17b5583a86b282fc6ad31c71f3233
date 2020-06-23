@@ -157,6 +157,30 @@
     },
     {
       "key": {
+        "uuid": "550de691_bcf8f645",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-23T18:07:21Z",
+      "side": 1,
+      "message": "on second thought, default to off makes sense. Still needs to docs update.",
+      "parentUuid": "580cc0d4_f5c423ad",
+      "range": {
+        "startLine": 3158,
+        "startChar": 31,
+        "endLine": 3158,
+        "endChar": 36
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24198211_d4dd9c0e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 7
