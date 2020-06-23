@@ -450,6 +450,30 @@
     },
     {
       "key": {
+        "uuid": "14e3a47f_dae6e5fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T14:57:49Z",
+      "side": 1,
+      "message": "This was restructured a bit based on Jamie\u0027s comments.",
+      "parentUuid": "c3bfdb56_aa03eb4b",
+      "range": {
+        "startLine": 1868,
+        "startChar": 0,
+        "endLine": 1869,
+        "endChar": 61
+      },
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "664b6025_55754f9e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 22
@@ -683,6 +707,24 @@
       "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b9eb392_6eaed8d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T14:57:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afa2256d_0346fade",
+      "revId": "80a1b0f8a1a05b2bc653b5389113c6c545aeb40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

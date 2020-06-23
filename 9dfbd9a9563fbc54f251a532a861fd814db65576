@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f7e9e5b_457738e1",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T14:57:49Z",
+      "side": 1,
+      "message": "I believe that any external image already has it\u0027s contents defined, that\u0027s the expected use for importing external images.",
+      "parentUuid": "1626356d_70fcb540",
+      "range": {
+        "startLine": 100,
+        "startChar": 7,
+        "endLine": 100,
+        "endChar": 55
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96f015d7_9d6eb7ec",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 40
@@ -357,6 +381,54 @@
     },
     {
       "key": {
+        "uuid": "8154f9a5_7f894424",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T14:57:49Z",
+      "side": 1,
+      "message": "Will save this for a follow-up task. Trying to add an angle::FormatID that aliases an existing GL format (GL_NONE) breaks the generation scripts. Will take a bit to sort out so leave for later.",
+      "parentUuid": "0905c378_59465c39",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e9accc42_e68020f8",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 40
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T14:57:49Z",
+      "side": 1,
+      "message": "Spent a bit of time looking at this yesterday. Trouble here is that the GL format that most makes sense is GL_NONE since the external format is unknown. However, the FormatID scripts expect a 1:1 relationship between ANGLE FormatID and GL format. Adding a new FormatID that is also GL_NONE would require significant changes to the generation scripts. Basically have to hand code the FormatID::EXTERNAL_UNDEFINED to GL_NONE relationship into the scripts.\nDiscussing with Jamie, decided that can be an activity for later.",
+      "parentUuid": "0905c378_59465c39",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc799c53_d7e60936",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 40
@@ -380,6 +452,30 @@
     },
     {
       "key": {
+        "uuid": "906e6d9a_a14db80e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2232,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T14:57:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc799c53_d7e60936",
+      "range": {
+        "startLine": 2225,
+        "startChar": 0,
+        "endLine": 2232,
+        "endChar": 31
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed39b73a_43b3bd88",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 40
@@ -400,6 +496,30 @@
       "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37343479_5286b8f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T14:57:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed39b73a_43b3bd88",
+      "range": {
+        "startLine": 2254,
+        "startChar": 25,
+        "endLine": 2254,
+        "endChar": 29
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
