@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "852a3990_cb28ddc0",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-23T15:51:47Z",
+      "side": 1,
+      "message": "Could you turn that into a comment?\n\nHonestly though it\u0027s still not very clear to me. If makeCurrent(context) is called, I expect the new given `context` would be `newContext`, not some cached `mContext` value. Unless `mContext` is being updated just before this call to correspond to `context`? In other words, what I see here is that `makeCurrent(context)` is setting the context to `mContext` which, looking at this function alone, has no apparent connection to the given `context`.\n\n---\n\nOn front-end tracking: I\u0027m not familiar with the code, so I may be wrong, but my thinking was that the front-end should already map thread_id to context, so if you stored `CGLContextObj` in `ContextCGL`, then you could take that out of the given `context` here, and you wouldn\u0027t need another map in `DisplayCGL`.",
+      "parentUuid": "dbd1c6d2_3cb7d35f",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 5
+      },
+      "revId": "035f3872fab5a3c1568c6dfd0b6ea023a699104a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e249bbc0_abfc979a",
         "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
         "patchSetId": 1
