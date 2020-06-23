@@ -283,7 +283,7 @@ class FrameCapture final : angle::NonCopyable
                             gl::BufferID id,
                             GLintptr offset,
                             GLsizeiptr length,
-                            GLbitfield accessFlags);
+                            bool writable);
 
     ResourceTracker &getResouceTracker() { return mResourceTracker; }
 
@@ -385,6 +385,9 @@ void CaptureGetParameter(const gl::State &glState,
                          GLenum pname,
                          size_t typeSize,
                          ParamCapture *paramCapture);
+
+template <typename T>
+void CaptureClearBufferValue(GLenum buffer, const T *value, ParamCapture *paramCapture);
 
 void CaptureGenHandlesImpl(GLsizei n, GLuint *handles, ParamCapture *paramCapture);
 
