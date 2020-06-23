@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "97f4ace7_5b3261fe",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-23T16:14:33Z",
+      "side": 1,
+      "message": "Ah, okay. The challenge then becomes what do we do when we don\u0027t know what the pixel format is?\nI\u0027ve changed it to use a default alignment if the image format is FormatID::NONE which causes getImageCopyBufferAlignment() to throw an assert.",
+      "parentUuid": "e58d49f4_9e38d6ad",
+      "range": {
+        "startLine": 100,
+        "startChar": 7,
+        "endLine": 100,
+        "endChar": 55
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96f015d7_9d6eb7ec",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 40
