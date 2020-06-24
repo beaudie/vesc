@@ -405,6 +405,30 @@
     },
     {
       "key": {
+        "uuid": "2e3a30d4_c0323709",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-24T03:19:16Z",
+      "side": 1,
+      "message": "That destination wasn\u0027t rotated.  That was a red herring.\n\nI have spent time on trying to understand what\u0027s wrong here, and I don\u0027t understand it.  It makes no sense.  I\u0027ve isolated things and can see that everything in the shader and the shader setup seem correct (I\u0027ve even hacked the shader to draw a constant color for all pixels).\n\nFor whatever reason(s), when I don\u0027t set the scissor width and height to the max dimension, for 90 \u0026 270 degrees, only the left half of the image is drawn.\n\nThe test is doing 2X the width (e.g. 128x64).  The scissor should be 128x64.  If I hack the scissor to be either 128x64 or 64x128, the visible result is the same (only the left half of the image is drawn).  If I set the scissor to 128x128, the entire image is drawn.",
+      "parentUuid": "cbf208e5_7eed8f07",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1794,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95082d01_f97d506d",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 6
