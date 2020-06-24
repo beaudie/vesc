@@ -35,6 +35,10 @@ vars = {
   # Note: this dep cannot be auto-rolled b/c of nesting.
   'jsoncpp_revision': '645250b6690785be60ab6780ce4b58698d884d11',
 
+  # Current revision of Chrome's third_party jsoncpp directory. Note
+  # that this should be kept in lock-step with jsoncpp_revision.
+  'chromium_jsoncpp_revision': 'ec647b85b61f525a1a74e4da7477b0c5371c50f4',
+
   # Current revision of patched-yasm.
   # Note: this dep cannot be auto-rolled b/c of nesting.
   'patched_yasm_revision': '720b70524a4424b15fc57e82263568c8ba0496ad',
@@ -136,7 +140,7 @@ deps = {
   },
 
   'third_party/jsoncpp': {
-    'url': '{chromium_git}/chromium/src/third_party/jsoncpp@ec647b85b61f525a1a74e4da7477b0c5371c50f4',
+    'url': '{chromium_git}/chromium/src/third_party/jsoncpp@{chromium_jsoncpp_revision}',
     'condition': 'not build_with_chromium',
    },
 
