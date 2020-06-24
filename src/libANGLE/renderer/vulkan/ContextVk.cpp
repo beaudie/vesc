@@ -1342,6 +1342,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
     if (executable->hasTextures())
     {
+        WARN() << "hasTextures";
         ANGLE_TRY(mExecutable->updateTexturesDescriptorSet(this));
     }
 
@@ -1546,7 +1547,9 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackResume(
 angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
+    WARN();
     ANGLE_TRY(mExecutable->updateDescriptorSets(this, commandBuffer));
+    WARN();
     return angle::Result::Continue;
 }
 
@@ -3706,13 +3709,23 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
             samplerSerial = samplerVk->getSerial();
         }
 
+        mActiveTextures[textureUnit].texture = textureVk;
+        mActiveTextures[textureUnit].sampler = samplerVk;
+
         if (textureVk->getImage().hasImmutableSampler())
         {
             haveImmutableSampler = true;
+            WARN() << "mActiveTextures[" << textureUnit << "].texture = " << std::hex
+                   << mActiveTextures[textureUnit].texture->getImage().getImage().getHandle();
+            WARN() << "textureVk->getSampler() = " << std::hex
+                   << textureVk->getSampler().getHandle();
+            if (samplerVk)
+            {
+                WARN() << "mActiveTextures[" << textureUnit << "].sampler = " << std::hex
+                       << mActiveTextures[textureUnit].sampler->getSampler().getHandle();
+            }
         }
 
-        mActiveTextures[textureUnit].texture = textureVk;
-        mActiveTextures[textureUnit].sampler = samplerVk;
         // Cache serials from sampler and texture, but re-use texture if no sampler bound
         ASSERT(textureVk != nullptr);
         mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
