@@ -1979,7 +1979,7 @@ TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveSimpleInterfaceBloc
 {
     const std::string &shaderString =
         R"(#version 300 es
-        uniform b
+        layout(packed) uniform b
         {
             float f;
         };
@@ -2010,7 +2010,7 @@ TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveInstancedInterfaceB
 {
     const std::string &shaderString =
         R"(#version 300 es
-        uniform b
+        layout(packed) uniform b
         {
             float f;
         } blockInstance;
