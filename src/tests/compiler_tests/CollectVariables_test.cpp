@@ -1995,7 +1995,7 @@ TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveSimpleInterfaceBloc
 
     EXPECT_EQ("b", interfaceBlock.name);
     EXPECT_TRUE(interfaceBlock.staticUse);
-    EXPECT_FALSE(interfaceBlock.active);
+    EXPECT_TRUE(interfaceBlock.active);
 
     ASSERT_EQ(1u, interfaceBlock.fields.size());
     const ShaderVariable &field = interfaceBlock.fields[0];
@@ -2026,7 +2026,7 @@ TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveInstancedInterfaceB
 
     EXPECT_EQ("b", interfaceBlock.name);
     EXPECT_TRUE(interfaceBlock.staticUse);
-    EXPECT_FALSE(interfaceBlock.active);
+    EXPECT_TRUE(interfaceBlock.active);
 
     ASSERT_EQ(1u, interfaceBlock.fields.size());
     const ShaderVariable &field = interfaceBlock.fields[0];
