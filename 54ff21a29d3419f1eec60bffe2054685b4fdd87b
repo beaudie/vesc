@@ -22,6 +22,30 @@
       "revId": "54ff21a29d3419f1eec60bffe2054685b4fdd87b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ab02961_ad3df28c",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-24T02:48:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41f8960f_ecb00fca",
+      "range": {
+        "startLine": 1191,
+        "startChar": 36,
+        "endLine": 1191,
+        "endChar": 40
+      },
+      "revId": "54ff21a29d3419f1eec60bffe2054685b4fdd87b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
