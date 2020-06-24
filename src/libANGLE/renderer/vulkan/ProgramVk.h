@@ -123,6 +123,7 @@ class ProgramVk : public ProgramImpl
     ProgramExecutableVk &getExecutable() { return mExecutable; }
 
     gl::ShaderMap<DefaultUniformBlock> &getDefaultUniformBlocks() { return mDefaultUniformBlocks; }
+    vk::DynamicBuffer &getDefaultUniformStorage() { return mDefaultUniformStorage; }
 
     ANGLE_INLINE angle::Result initGraphicsShaderProgram(ContextVk *contextVk,
                                                          const gl::ShaderType shaderType,
@@ -189,6 +190,8 @@ class ProgramVk : public ProgramImpl
 
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
+
+    vk::DynamicBuffer mDefaultUniformStorage;
 
     // We keep the SPIR-V code to use for draw call pipeline creation.
     ShaderInfo mShaderInfo;

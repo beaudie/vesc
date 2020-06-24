@@ -823,6 +823,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
 void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
     const gl::ShaderType shaderType,
     gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
+    vk::BufferHelper *defaultUniformBuffer,
     ContextVk *contextVk)
 {
     const std::string uniformBlockName = kDefaultUniformNames[shaderType];
@@ -838,9 +839,8 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
 
     if (!uniformBlock.uniformData.empty())
     {
-        vk::BufferHelper *bufferHelper = uniformBlock.storage.getCurrentBuffer();
-        bufferInfo.buffer              = bufferHelper->getBuffer().getHandle();
-        mDescriptorBuffersCache.emplace_back(bufferHelper);
+        bufferInfo.buffer = defaultUniformBuffer->getBuffer().getHandle();
+        mDescriptorBuffersCache.emplace_back(defaultUniformBuffer);
     }
     else
     {
@@ -1156,6 +1156,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
 angle::Result ProgramExecutableVk::updateTransformFeedbackDescriptorSet(
     const gl::ProgramState &programState,
     gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
+    vk::BufferHelper *defaultUniformBuffer,
     ContextVk *contextVk)
 {
     const gl::ProgramExecutable &executable = programState.getExecutable();
@@ -1166,7 +1167,8 @@ angle::Result ProgramExecutableVk::updateTransformFeedbackDescriptorSet(
     mDescriptorBuffersCache.clear();
     for (const gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
-        updateDefaultUniformsDescriptorSet(shaderType, defaultUniformBlocks, contextVk);
+        updateDefaultUniformsDescriptorSet(shaderType, defaultUniformBlocks, defaultUniformBuffer,
+                                           contextVk);
     }
 
     updateTransformFeedbackDescriptorSetImpl(programState, contextVk);
