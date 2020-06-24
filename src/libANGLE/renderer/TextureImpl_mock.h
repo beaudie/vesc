@@ -21,120 +21,144 @@ class MockTextureImpl : public TextureImpl
   public:
     MockTextureImpl() : TextureImpl(mMockState), mMockState(gl::TextureType::_2D) {}
     virtual ~MockTextureImpl() { destructor(); }
-    MOCK_METHOD9(setImage,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               GLenum,
-                               const gl::Extents &,
-                               GLenum,
-                               GLenum,
-                               const gl::PixelUnpackState &,
-                               gl::Buffer *,
-                               const uint8_t *));
-    MOCK_METHOD8(setSubImage,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               const gl::Box &,
-                               GLenum,
-                               GLenum,
-                               const gl::PixelUnpackState &,
-                               gl::Buffer *,
-                               const uint8_t *));
-    MOCK_METHOD7(setCompressedImage,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               GLenum,
-                               const gl::Extents &,
-                               const gl::PixelUnpackState &,
-                               size_t,
-                               const uint8_t *));
-    MOCK_METHOD7(setCompressedSubImage,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               const gl::Box &,
-                               GLenum,
-                               const gl::PixelUnpackState &,
-                               size_t,
-                               const uint8_t *));
-    MOCK_METHOD5(copyImage,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               const gl::Rectangle &,
-                               GLenum,
-                               gl::Framebuffer *));
-    MOCK_METHOD5(copySubImage,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               const gl::Offset &,
-                               const gl::Rectangle &,
-                               gl::Framebuffer *));
-    MOCK_METHOD9(copyTexture,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               GLenum,
-                               GLenum,
-                               size_t,
-                               bool,
-                               bool,
-                               bool,
-                               const gl::Texture *));
-    MOCK_METHOD9(copySubTexture,
-                 angle::Result(const gl::Context *,
-                               const gl::ImageIndex &,
-                               const gl::Offset &,
-                               size_t,
-                               const gl::Box &,
-                               bool,
-                               bool,
-                               bool,
-                               const gl::Texture *));
-    MOCK_METHOD2(copyCompressedTexture,
-                 angle::Result(const gl::Context *, const gl::Texture *source));
-    MOCK_METHOD5(
-        setStorage,
-        angle::Result(const gl::Context *, gl::TextureType, size_t, GLenum, const gl::Extents &));
-    MOCK_METHOD7(setStorageExternalMemory,
-                 angle::Result(const gl::Context *,
-                               gl::TextureType,
-                               size_t,
-                               GLenum,
-                               const gl::Extents &,
-                               gl::MemoryObject *,
-                               GLuint64));
-    MOCK_METHOD4(setImageExternal,
-                 angle::Result(const gl::Context *,
-                               gl::TextureType,
-                               egl::Stream *,
-                               const egl::Stream::GLTextureDescription &));
-    MOCK_METHOD3(setEGLImageTarget,
-                 angle::Result(const gl::Context *, gl::TextureType, egl::Image *));
-    MOCK_METHOD1(generateMipmap, angle::Result(const gl::Context *));
-    MOCK_METHOD2(bindTexImage, angle::Result(const gl::Context *, egl::Surface *));
-    MOCK_METHOD1(releaseTexImage, angle::Result(const gl::Context *));
+    MOCK_METHOD(angle::Result,
+                setImage,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 GLenum,
+                 const gl::Extents &,
+                 GLenum,
+                 GLenum,
+                 const gl::PixelUnpackState &,
+                 gl::Buffer *,
+                 const uint8_t *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setSubImage,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 const gl::Box &,
+                 GLenum,
+                 GLenum,
+                 const gl::PixelUnpackState &,
+                 gl::Buffer *,
+                 const uint8_t *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setCompressedImage,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 GLenum,
+                 const gl::Extents &,
+                 const gl::PixelUnpackState &,
+                 size_t,
+                 const uint8_t *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setCompressedSubImage,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 const gl::Box &,
+                 GLenum,
+                 const gl::PixelUnpackState &,
+                 size_t,
+                 const uint8_t *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                copyImage,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 const gl::Rectangle &,
+                 GLenum,
+                 gl::Framebuffer *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                copySubImage,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 const gl::Offset &,
+                 const gl::Rectangle &,
+                 gl::Framebuffer *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                copyTexture,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 GLenum,
+                 GLenum,
+                 size_t,
+                 bool,
+                 bool,
+                 bool,
+                 const gl::Texture *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                copySubTexture,
+                (const gl::Context *,
+                 const gl::ImageIndex &,
+                 const gl::Offset &,
+                 size_t,
+                 const gl::Box &,
+                 bool,
+                 bool,
+                 bool,
+                 const gl::Texture *),
+                (override));
+    MOCK_METHOD(angle::Result,
+                copyCompressedTexture,
+                (const gl::Context *, const gl::Texture *source),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setStorage,
+                (const gl::Context *, gl::TextureType, size_t, GLenum, const gl::Extents &),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setStorageExternalMemory,
+                (const gl::Context *,
+                 gl::TextureType,
+                 size_t,
+                 GLenum,
+                 const gl::Extents &,
+                 gl::MemoryObject *,
+                 GLuint64),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setImageExternal,
+                (const gl::Context *,
+                 gl::TextureType,
+                 egl::Stream *,
+                 const egl::Stream::GLTextureDescription &),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setEGLImageTarget,
+                (const gl::Context *, gl::TextureType, egl::Image *),
+                (override));
+    MOCK_METHOD(angle::Result, generateMipmap, (const gl::Context *), (override));
+    MOCK_METHOD(angle::Result, bindTexImage, (const gl::Context *, egl::Surface *), (override));
+    MOCK_METHOD(angle::Result, releaseTexImage, (const gl::Context *), (override));
 
-    MOCK_METHOD5(getAttachmentRenderTarget,
-                 angle::Result(const gl::Context *,
-                               GLenum,
-                               const gl::ImageIndex &,
-                               GLsizei,
-                               FramebufferAttachmentRenderTarget **));
+    MOCK_METHOD(angle::Result,
+                getAttachmentRenderTarget,
+                (const gl::Context *,
+                 GLenum,
+                 const gl::ImageIndex &,
+                 GLsizei,
+                 FramebufferAttachmentRenderTarget **),
+                (override));
 
-    MOCK_METHOD6(setStorageMultisample,
-                 angle::Result(const gl::Context *,
-                               gl::TextureType,
-                               GLsizei,
-                               GLint,
-                               const gl::Extents &,
-                               bool));
+    MOCK_METHOD(angle::Result,
+                setStorageMultisample,
+                (const gl::Context *, gl::TextureType, GLsizei, GLint, const gl::Extents &, bool),
+                (override));
 
-    MOCK_METHOD2(setBaseLevel, angle::Result(const gl::Context *, GLuint));
+    MOCK_METHOD(angle::Result, setBaseLevel, (const gl::Context *, GLuint), (override));
 
-    MOCK_METHOD3(syncState,
-                 angle::Result(const gl::Context *,
-                               const gl::Texture::DirtyBits &,
-                               gl::TextureCommand source));
+    MOCK_METHOD(angle::Result,
+                syncState,
+                (const gl::Context *, const gl::Texture::DirtyBits &, gl::TextureCommand source),
+                (override));
 
-    MOCK_METHOD0(destructor, void());
+    MOCK_METHOD(void, destructor, ());
 
   protected:
     gl::TextureState mMockState;

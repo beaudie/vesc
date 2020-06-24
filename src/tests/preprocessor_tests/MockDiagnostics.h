@@ -16,7 +16,10 @@ namespace angle
 class MockDiagnostics : public pp::Diagnostics
 {
   public:
-    MOCK_METHOD3(print, void(ID id, const pp::SourceLocation &loc, const std::string &text));
+    MOCK_METHOD(void,
+                print,
+                (ID id, const pp::SourceLocation &loc, const std::string &text),
+                (override));
 };
 
 }  // namespace angle
