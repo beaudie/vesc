@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b800ff3_a129a5af",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-24T16:04:10Z",
+      "side": 1,
+      "message": "I wonder if there\u0027s a Vulkan driver bug for my HW, that is the reason I need this work-around for the tests to pass.  Not sure where to file the bug yet.",
+      "revId": "d29bee7bbf74a6c114ca2ade2c65a2f713f984a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
