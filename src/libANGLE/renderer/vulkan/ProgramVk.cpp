@@ -24,9 +24,6 @@ namespace rx
 
 namespace
 {
-// This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
-constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
-
 // Identical to Std140 encoder in all aspects, except it ignores opaque uniform types.
 class VulkanDefaultBlockEncoder : public sh::Std140BlockEncoder
 {
@@ -177,14 +174,7 @@ void ProgramVk::destroy(const gl::Context *context)
 
 void ProgramVk::reset(ContextVk *contextVk)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     mShaderInfo.release(contextVk);
-
-    for (auto &uniformBlock : mDefaultUniformBlocks)
-    {
-        uniformBlock.storage.release(renderer);
-    }
 
     GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(&mGlslangProgramInterfaceInfo);
 
@@ -412,7 +402,6 @@ void ProgramVk::initDefaultUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap
 angle::Result ProgramVk::resizeUniformBlockMemory(ContextVk *contextVk,
                                                   gl::ShaderMap<size_t> &requiredBufferSize)
 {
-    RendererVk *renderer                      = contextVk->getRenderer();
     const gl::ProgramExecutable &glExecutable = mState.getExecutable();
 
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
@@ -424,20 +413,13 @@ angle::Result ProgramVk::resizeUniformBlockMemory(ContextVk *contextVk,
             {
                 ANGLE_VK_CHECK(contextVk, false, VK_ERROR_OUT_OF_HOST_MEMORY);
             }
-            size_t minAlignment = static_cast<size_t>(
-                renderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
-
-            mDefaultUniformBlocks[shaderType].storage.init(
-                renderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                minAlignment, kUniformBlockDynamicBufferMinSize, true);
-
             // Initialize uniform buffer memory to zero by default.
             mDefaultUniformBlocks[shaderType].uniformData.fill(0);
             mDefaultUniformBlocksDirty.set(shaderType);
         }
     }
 
-    return angle::Result::Continue;
+    return mExecutable.resizeUniformBlockMemory(contextVk, requiredBufferSize);
 }
 
 GLboolean ProgramVk::validate(const gl::Caps &caps, gl::InfoLog *infoLog)
@@ -737,7 +719,7 @@ angle::Result ProgramVk::updateShaderUniforms(ContextVk *contextVk,
     if (mDefaultUniformBlocksDirty[shaderType])
     {
         bool bufferModified = false;
-        ANGLE_TRY(SyncDefaultUniformBlock(contextVk, &uniformBlock.storage,
+        ANGLE_TRY(SyncDefaultUniformBlock(contextVk, &mExecutable.getDefaultUniformStorage(),
                                           uniformBlock.uniformData, outOffset, &bufferModified));
         mDefaultUniformBlocksDirty.reset(shaderType);
 
@@ -787,10 +769,7 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 
 void ProgramVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
 {
-    for (DefaultUniformBlock &block : mDefaultUniformBlocks)
-    {
-        block.storage.setMinimumSizeForTesting(minSize);
-    }
+    mExecutable.getDefaultUniformStorage().setMinimumSizeForTesting(minSize);
 }
 
 }  // namespace rx

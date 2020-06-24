@@ -87,8 +87,6 @@ struct DefaultUniformBlock final : private angle::NonCopyable
     DefaultUniformBlock();
     ~DefaultUniformBlock();
 
-    vk::DynamicBuffer storage;
-
     // Shadow copies of the shader uniform data.
     angle::MemoryBuffer uniformData;
 
@@ -163,6 +161,10 @@ class ProgramExecutableVk
         mProgramPipeline = pipeline;
     }
 
+    vk::DynamicBuffer &getDefaultUniformStorage() { return mDefaultUniformStorage; }
+    angle::Result resizeUniformBlockMemory(ContextVk *contextVk,
+                                           gl::ShaderMap<size_t> &requiredBufferSize);
+
   private:
     friend class ProgramVk;
     friend class ProgramPipelineVk;
@@ -218,6 +220,7 @@ class ProgramExecutableVk
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
     std::vector<vk::BufferHelper *> mDescriptorBuffersCache;
     size_t mNumDefaultUniformDescriptors;
+    vk::DynamicBuffer mDefaultUniformStorage;
 
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
 
