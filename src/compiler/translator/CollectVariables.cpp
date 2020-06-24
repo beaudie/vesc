@@ -788,6 +788,16 @@ void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
         interfaceBlock->layout           = GetBlockLayoutType(blockType->blockStorage());
     }
 
+    // All members of a named uniform block declared with a shared or std140 layout qualifier are
+    // considered active. The uniform block itself is also considered active, even if no member of
+    // the block is referenced.
+    if (!interfaceBlock->instanceName.empty() &&
+        ((interfaceBlock->layout == sh::BlockLayoutType::BLOCKLAYOUT_STD140) ||
+         (interfaceBlock->layout == sh::BlockLayoutType::BLOCKLAYOUT_SHARED)))
+    {
+        interfaceBlock->active = true;
+    }
+
     // Gather field information
     bool anyFieldStaticallyUsed = false;
     for (const TField *field : blockType->fields())
@@ -811,6 +821,7 @@ void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
 
         ShaderVariable fieldVariable;
         setFieldProperties(fieldType, field->name(), staticUse, &fieldVariable);
+        fieldVariable.active = interfaceBlock->active;
         fieldVariable.isRowMajorLayout =
             (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
         interfaceBlock->fields.push_back(fieldVariable);
