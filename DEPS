@@ -31,10 +31,6 @@ vars = {
   # Note: this dep cannot be auto-rolled b/c of nesting.
   'googletest_revision': 'f2fb48c3b3d79a75a88a99fba6576b25d42ec528',
 
-  # Current revision of jsoncpp.
-  # Note: this dep cannot be auto-rolled b/c of nesting.
-  'jsoncpp_revision': '645250b6690785be60ab6780ce4b58698d884d11',
-
   # Current revision of patched-yasm.
   # Note: this dep cannot be auto-rolled b/c of nesting.
   'patched_yasm_revision': '720b70524a4424b15fc57e82263568c8ba0496ad',
