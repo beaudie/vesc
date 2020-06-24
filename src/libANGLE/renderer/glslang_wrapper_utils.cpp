@@ -736,7 +736,9 @@ void AssignInterfaceBlockBindings(GlslangSourceOptions &options,
     {
         if (!block.isArray || block.arrayElement == 0)
         {
-            // TODO: http://anglebug.com/4523: All blocks should be active
+            // Make sure the block is active for at least 1 shader.
+            ASSERT(block.activeShaderCount());
+            // That doesn't necessarily mean it's active for *this* shader though...
             if (programExecutable.hasLinkedShaderStage(shaderType) && block.isActive(shaderType))
             {
                 AddResourceInfo(&(*variableInfoMapOut)[shaderType], block.mappedName,
@@ -855,7 +857,9 @@ void AssignTextureBindings(GlslangSourceOptions &options,
                                                 ? GetMappedSamplerNameOld(samplerUniform.name)
                                                 : GlslangGetMappedSamplerName(samplerUniform.name);
 
-            // TODO: http://anglebug.com/4523: All uniforms should be active
+            // Make sure the block is active for at least 1 shader.
+            ASSERT(samplerUniform.activeShaderCount());
+            // That doesn't necessarily mean it's active for *this* shader though...
             if (programExecutable.hasLinkedShaderStage(shaderType) &&
                 samplerUniform.isActive(shaderType))
             {

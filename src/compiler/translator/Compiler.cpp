@@ -944,6 +944,23 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     return true;
 }
 
+template <typename T>
+void RemoveInactiveSymbols(std::vector<T> &symbols)
+{
+    typename std::vector<T>::iterator it = symbols.begin();
+    while (it != symbols.end())
+    {
+        if (!it->active)
+        {
+            it = symbols.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
 bool TCompiler::compile(const char *const shaderStrings[],
                         size_t numStrings,
                         ShCompileOptions compileOptionsIn)
@@ -1017,6 +1034,9 @@ bool TCompiler::compile(const char *const shaderStrings[],
                 }
             }
         }
+
+        RemoveInactiveSymbols<sh::ShaderVariable>(mUniforms);
+        RemoveInactiveSymbols<sh::InterfaceBlock>(mShaderStorageBlocks);
 
         // The IntermNode tree doesn't need to be deleted here, since the
         // memory will be freed in a big chunk by the PoolAllocator.
