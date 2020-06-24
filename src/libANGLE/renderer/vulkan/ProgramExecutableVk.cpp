@@ -22,6 +22,9 @@ namespace rx
 {
 namespace
 {
+// This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
+constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
+
 constexpr gl::ShaderMap<vk::PipelineStage> kPipelineStageShaderMap = {
     {gl::ShaderType::Vertex, vk::PipelineStage::VertexShader},
     {gl::ShaderType::Fragment, vk::PipelineStage::FragmentShader},
@@ -175,6 +178,8 @@ ProgramExecutableVk::~ProgramExecutableVk() = default;
 void ProgramExecutableVk::reset(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
+
+    mDefaultUniformStorage.release(renderer);
 
     for (auto &descriptorSetLayout : mDescriptorSetLayouts)
     {
@@ -838,7 +843,7 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
 
     if (!uniformBlock.uniformData.empty())
     {
-        vk::BufferHelper *bufferHelper = uniformBlock.storage.getCurrentBuffer();
+        vk::BufferHelper *bufferHelper = mDefaultUniformStorage.getCurrentBuffer();
         bufferInfo.buffer              = bufferHelper->getBuffer().getHandle();
         mDescriptorBuffersCache.emplace_back(bufferHelper);
     }
@@ -1406,6 +1411,20 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
     {
         buffer->retain(&contextVk->getResourceUseList());
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ProgramExecutableVk::resizeUniformBlockMemory(ContextVk *contextVk)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    size_t minAlignment = static_cast<size_t>(
+        renderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
+
+    mDefaultUniformStorage.init(
+        renderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        minAlignment, kUniformBlockDynamicBufferMinSize, true);
 
     return angle::Result::Continue;
 }

@@ -102,16 +102,13 @@ class ProgramVk : public ProgramImpl
     void getUniformiv(const gl::Context *context, GLint location, GLint *params) const override;
     void getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const override;
 
-    angle::Result updateShaderUniforms(ContextVk *contextVk,
-                                       gl::ShaderType shaderType,
-                                       uint32_t *outOffset,
-                                       bool *anyNewBufferAllocated);
     angle::Result updateUniforms(ContextVk *contextVk);
 
     // For testing only.
     void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
 
     bool dirtyUniforms() const { return mDefaultUniformBlocksDirty.any(); }
+    gl::ShaderBitSet &getDefaultUniformDirtyBits() { return mDefaultUniformBlocksDirty; }
 
     // Used in testing only.
     vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t poolIndex)
@@ -123,7 +120,13 @@ class ProgramVk : public ProgramImpl
     ProgramExecutableVk &getExecutable() { return mExecutable; }
 
     gl::ShaderMap<DefaultUniformBlock> &getDefaultUniformBlocks() { return mDefaultUniformBlocks; }
-
+    size_t getDefaultShaderUniformAlignedSize(ContextVk *contextVk, const gl::ShaderType shaderType)
+    {
+        RendererVk *renderer = contextVk->getRenderer();
+        size_t minAlignment  = static_cast<size_t>(
+            renderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
+        return roundUp(mDefaultUniformBlocks[shaderType].uniformData.size(), minAlignment);
+    }
     ANGLE_INLINE angle::Result initGraphicsShaderProgram(ContextVk *contextVk,
                                                          const gl::ShaderType shaderType,
                                                          ProgramTransformOptionBits optionBits,

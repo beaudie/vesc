@@ -124,20 +124,65 @@ angle::Result ProgramPipelineVk::transformShaderSpirV(const gl::Context *glConte
 
 angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
 {
-    uint32_t offsetIndex                      = 0;
     bool anyNewBufferAllocated                = false;
     const gl::ProgramExecutable *glExecutable = contextVk->getState().getProgramExecutable();
+    uint8_t *dstBufferData                    = nullptr;
+    VkDeviceSize dstBufferOffset              = 0;
+    gl::ShaderMap<VkDeviceSize> shaderStageUniformOffsets;
 
+    // Allocate space from dynamicBuffer
+    vk::DynamicBuffer &dynamicBuffer = mExecutable.getDefaultUniformStorage();
+    dynamicBuffer.releaseInFlightBuffers(contextVk);
+    bool bufferModified = false;
+    do
+    {
+        size_t requiredSize = 0;
+        for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
+        {
+            ProgramVk *programVk = getShaderProgram(contextVk->getState(), shaderType);
+            if (programVk && programVk->getDefaultUniformDirtyBits()[shaderType])
+            {
+                requiredSize +=
+                    programVk->getDefaultShaderUniformAlignedSize(contextVk, shaderType);
+            }
+        }
+        if (!requiredSize)
+        {
+            return angle::Result::Continue;
+        }
+
+        ANGLE_TRY(dynamicBuffer.allocate(contextVk, requiredSize, &dstBufferData, nullptr,
+                                         &dstBufferOffset, &bufferModified));
+        if (bufferModified)
+        {
+            // If we have got a new buffer, we must update uniform data for all shader stages
+            for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
+            {
+                ProgramVk *programVk = getShaderProgram(contextVk->getState(), shaderType);
+                if (programVk)
+                {
+                    programVk->getDefaultUniformDirtyBits().set(shaderType);
+                }
+            }
+            anyNewBufferAllocated = true;
+        }
+    } while (bufferModified);
+
+    uint32_t offsetIndex = 0;
     for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
     {
         ProgramVk *programVk = getShaderProgram(contextVk->getState(), shaderType);
-        if (programVk && programVk->dirtyUniforms())
+        if (programVk && programVk->getDefaultUniformDirtyBits()[shaderType])
         {
-            ANGLE_TRY(programVk->updateShaderUniforms(
-                contextVk, shaderType, &mExecutable.mDynamicBufferOffsets[offsetIndex],
-                &anyNewBufferAllocated));
+            const angle::MemoryBuffer &bufferData =
+                programVk->getDefaultUniformBlocks()[shaderType].uniformData;
+            uint8_t *data = dstBufferData + shaderStageUniformOffsets[shaderType];
+            memcpy(data, bufferData.data(), bufferData.size());
+            mExecutable.mDynamicBufferOffsets[offsetIndex] =
+                static_cast<uint32_t>(dstBufferOffset + shaderStageUniformOffsets[shaderType]);
+            offsetIndex++;
+            programVk->getDefaultUniformDirtyBits().reset(shaderType);
         }
-        ++offsetIndex;
     }
 
     // The PPO's list of descriptor sets being empty without a new buffer being allocated indicates
