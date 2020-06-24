@@ -788,6 +788,14 @@ void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
         interfaceBlock->layout           = GetBlockLayoutType(blockType->blockStorage());
     }
 
+    // All members of a named uniform block declared with a shared or std140 layout qualifier are
+    // considered active
+    if ((interfaceBlock->layout == sh::BlockLayoutType::BLOCKLAYOUT_STD140) ||
+        (interfaceBlock->layout == sh::BlockLayoutType::BLOCKLAYOUT_SHARED))
+    {
+        interfaceBlock->active = true;
+    }
+
     // Gather field information
     bool anyFieldStaticallyUsed = false;
     for (const TField *field : blockType->fields())
