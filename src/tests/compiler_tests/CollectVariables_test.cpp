@@ -2005,8 +2005,8 @@ TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveSimpleInterfaceBloc
     EXPECT_FALSE(field.active);
 }
 
-// Test an interface block instance variable that is statically used but not active.
-TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveInstancedInterfaceBlock)
+// Test an interface block instance variable that is statically used.
+TEST_F(CollectVertexVariablesTest, StaticallyUsedAndActiveLayoutInstancedInterfaceBlock)
 {
     const std::string &shaderString =
         R"(#version 300 es
@@ -2026,6 +2026,40 @@ TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveInstancedInterfaceB
 
     EXPECT_EQ("b", interfaceBlock.name);
     EXPECT_TRUE(interfaceBlock.staticUse);
+    // Standard layout should be marked active.
+    EXPECT_TRUE(interfaceBlock.active);
+
+    ASSERT_EQ(1u, interfaceBlock.fields.size());
+    const ShaderVariable &field = interfaceBlock.fields[0];
+
+    EXPECT_EQ("f", field.name);
+    // See TODO in CollectVariables.cpp about tracking instanced interface block field static use.
+    // EXPECT_TRUE(field.staticUse);
+    EXPECT_TRUE(field.active);
+}
+
+// Test an interface block instance variable that is statically used but not active.
+TEST_F(CollectVertexVariablesTest, StaticallyUsedButNotActiveInstancedInterfaceBlock)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        layout(packed) uniform b
+        {
+            float f;
+        } blockInstance;
+        void main() {
+            gl_Position = vec4(true ? 0.0 : blockInstance.f);
+        })";
+
+    compile(shaderString);
+
+    const std::vector<InterfaceBlock> &interfaceBlocks = mTranslator->getInterfaceBlocks();
+    ASSERT_EQ(1u, interfaceBlocks.size());
+    const InterfaceBlock &interfaceBlock = interfaceBlocks[0];
+
+    EXPECT_EQ("b", interfaceBlock.name);
+    EXPECT_TRUE(interfaceBlock.staticUse);
+    // Packed layout should be marked inactive.
     EXPECT_FALSE(interfaceBlock.active);
 
     ASSERT_EQ(1u, interfaceBlock.fields.size());
