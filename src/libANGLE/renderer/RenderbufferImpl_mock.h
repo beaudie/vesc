@@ -23,19 +23,29 @@ class MockRenderbufferImpl : public RenderbufferImpl
   public:
     MockRenderbufferImpl() : RenderbufferImpl(mMockState) {}
     virtual ~MockRenderbufferImpl() { destructor(); }
-    MOCK_METHOD4(setStorage, angle::Result(const gl::Context *, GLenum, size_t, size_t));
-    MOCK_METHOD5(setStorageMultisample,
-                 angle::Result(const gl::Context *, size_t, GLenum, size_t, size_t));
-    MOCK_METHOD2(setStorageEGLImageTarget, angle::Result(const gl::Context *, egl::Image *));
+    MOCK_METHOD(angle::Result,
+                setStorage,
+                (const gl::Context *, GLenum, size_t, size_t),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setStorageMultisample,
+                (const gl::Context *, size_t, GLenum, size_t, size_t),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setStorageEGLImageTarget,
+                (const gl::Context *, egl::Image *),
+                (override));
 
-    MOCK_METHOD5(getAttachmentRenderTarget,
-                 angle::Result(const gl::Context *,
-                               GLenum,
-                               const gl::ImageIndex &,
-                               GLsizei,
-                               FramebufferAttachmentRenderTarget **));
+    MOCK_METHOD(angle::Result,
+                getAttachmentRenderTarget,
+                (const gl::Context *,
+                 GLenum,
+                 const gl::ImageIndex &,
+                 GLsizei,
+                 FramebufferAttachmentRenderTarget **),
+                (override));
 
-    MOCK_METHOD0(destructor, void());
+    MOCK_METHOD(void, destructor, ());
 
   protected:
     gl::RenderbufferState mMockState;

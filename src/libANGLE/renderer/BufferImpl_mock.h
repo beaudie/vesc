@@ -22,36 +22,34 @@ class MockBufferImpl : public BufferImpl
     MockBufferImpl() : BufferImpl(mMockState) {}
     ~MockBufferImpl() { destructor(); }
 
-    MOCK_METHOD5(setData,
-                 angle::Result(const gl::Context *,
-                               gl::BufferBinding,
-                               const void *,
-                               size_t,
-                               gl::BufferUsage));
-    MOCK_METHOD5(
-        setSubData,
-        angle::Result(const gl::Context *, gl::BufferBinding, const void *, size_t, size_t));
-    MOCK_METHOD5(copySubData,
-                 angle::Result(const gl::Context *contextImpl,
-                               BufferImpl *,
-                               GLintptr,
-                               GLintptr,
-                               GLsizeiptr));
-    MOCK_METHOD3(map, angle::Result(const gl::Context *contextImpl, GLenum, void **));
-    MOCK_METHOD5(
-        mapRange,
-        angle::Result(const gl::Context *contextImpl, size_t, size_t, GLbitfield, void **));
-    MOCK_METHOD2(unmap, angle::Result(const gl::Context *contextImpl, GLboolean *result));
+    MOCK_METHOD(angle::Result,
+                setData,
+                (const gl::Context *, gl::BufferBinding, const void *, size_t, gl::BufferUsage),
+                (override));
+    MOCK_METHOD(angle::Result,
+                setSubData,
+                (const gl::Context *, gl::BufferBinding, const void *, size_t, size_t),
+                (override));
+    MOCK_METHOD(angle::Result,
+                copySubData,
+                (const gl::Context *contextImpl, BufferImpl *, GLintptr, GLintptr, GLsizeiptr),
+                (override));
+    MOCK_METHOD(angle::Result, map, (const gl::Context *contextImpl, GLenum, void **), (override));
+    MOCK_METHOD(angle::Result,
+                mapRange,
+                (const gl::Context *contextImpl, size_t, size_t, GLbitfield, void **),
+                (override));
+    MOCK_METHOD(angle::Result,
+                unmap,
+                (const gl::Context *contextImpl, GLboolean *result),
+                (override));
 
-    MOCK_METHOD6(getIndexRange,
-                 angle::Result(const gl::Context *,
-                               gl::DrawElementsType,
-                               size_t,
-                               size_t,
-                               bool,
-                               gl::IndexRange *));
+    MOCK_METHOD(angle::Result,
+                getIndexRange,
+                (const gl::Context *, gl::DrawElementsType, size_t, size_t, bool, gl::IndexRange *),
+                (override));
 
-    MOCK_METHOD0(destructor, void());
+    MOCK_METHOD(void, destructor, ());
 
   protected:
     gl::BufferState mMockState;

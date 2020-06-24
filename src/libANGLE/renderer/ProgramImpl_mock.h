@@ -24,48 +24,80 @@ class MockProgramImpl : public rx::ProgramImpl
     MockProgramImpl() : ProgramImpl(gl::ProgramState()) {}
     virtual ~MockProgramImpl() { destructor(); }
 
-    MOCK_METHOD3(load, angle::Result(const gl::Context *, gl::InfoLog &, gl::BinaryInputStream *));
-    MOCK_METHOD2(save, void(const gl::Context *, gl::BinaryOutputStream *));
-    MOCK_METHOD1(setBinaryRetrievableHint, void(bool));
-    MOCK_METHOD1(setSeparable, void(bool));
+    MOCK_METHOD(angle::Result,
+                load,
+                (const gl::Context *, gl::InfoLog &, gl::BinaryInputStream *),
+                (override));
+    MOCK_METHOD(void, save, (const gl::Context *, gl::BinaryOutputStream *), (override));
+    MOCK_METHOD(void, setBinaryRetrievableHint, (bool), (override));
+    MOCK_METHOD(void, setSeparable, (bool), (override));
 
-    MOCK_METHOD3(link,
-                 std::unique_ptr<LinkEvent>(const gl::Context *,
-                                            const gl::ProgramLinkedResources &,
-                                            gl::InfoLog &));
-    MOCK_METHOD2(validate, GLboolean(const gl::Caps &, gl::InfoLog *));
+    MOCK_METHOD(std::unique_ptr<LinkEvent>,
+                link,
+                (const gl::Context *, const gl::ProgramLinkedResources &, gl::InfoLog &),
+                (override));
+    MOCK_METHOD(GLboolean, validate, (const gl::Caps &, gl::InfoLog *), (override));
 
-    MOCK_METHOD3(setUniform1fv, void(GLint, GLsizei, const GLfloat *));
-    MOCK_METHOD3(setUniform2fv, void(GLint, GLsizei, const GLfloat *));
-    MOCK_METHOD3(setUniform3fv, void(GLint, GLsizei, const GLfloat *));
-    MOCK_METHOD3(setUniform4fv, void(GLint, GLsizei, const GLfloat *));
-    MOCK_METHOD3(setUniform1iv, void(GLint, GLsizei, const GLint *));
-    MOCK_METHOD3(setUniform2iv, void(GLint, GLsizei, const GLint *));
-    MOCK_METHOD3(setUniform3iv, void(GLint, GLsizei, const GLint *));
-    MOCK_METHOD3(setUniform4iv, void(GLint, GLsizei, const GLint *));
-    MOCK_METHOD3(setUniform1uiv, void(GLint, GLsizei, const GLuint *));
-    MOCK_METHOD3(setUniform2uiv, void(GLint, GLsizei, const GLuint *));
-    MOCK_METHOD3(setUniform3uiv, void(GLint, GLsizei, const GLuint *));
-    MOCK_METHOD3(setUniform4uiv, void(GLint, GLsizei, const GLuint *));
+    MOCK_METHOD(void, setUniform1fv, (GLint, GLsizei, const GLfloat *), (override));
+    MOCK_METHOD(void, setUniform2fv, (GLint, GLsizei, const GLfloat *), (override));
+    MOCK_METHOD(void, setUniform3fv, (GLint, GLsizei, const GLfloat *), (override));
+    MOCK_METHOD(void, setUniform4fv, (GLint, GLsizei, const GLfloat *), (override));
+    MOCK_METHOD(void, setUniform1iv, (GLint, GLsizei, const GLint *), (override));
+    MOCK_METHOD(void, setUniform2iv, (GLint, GLsizei, const GLint *), (override));
+    MOCK_METHOD(void, setUniform3iv, (GLint, GLsizei, const GLint *), (override));
+    MOCK_METHOD(void, setUniform4iv, (GLint, GLsizei, const GLint *), (override));
+    MOCK_METHOD(void, setUniform1uiv, (GLint, GLsizei, const GLuint *), (override));
+    MOCK_METHOD(void, setUniform2uiv, (GLint, GLsizei, const GLuint *), (override));
+    MOCK_METHOD(void, setUniform3uiv, (GLint, GLsizei, const GLuint *), (override));
+    MOCK_METHOD(void, setUniform4uiv, (GLint, GLsizei, const GLuint *), (override));
 
-    MOCK_METHOD4(setUniformMatrix2fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix3fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix4fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix2x3fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix3x2fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix2x4fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix4x2fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix3x4fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
-    MOCK_METHOD4(setUniformMatrix4x3fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD(void,
+                setUniformMatrix2fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix3fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix4fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix2x3fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix3x2fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix2x4fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix4x2fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix3x4fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
+    MOCK_METHOD(void,
+                setUniformMatrix4x3fv,
+                (GLint, GLsizei, GLboolean, const GLfloat *),
+                (override));
 
-    MOCK_CONST_METHOD3(getUniformfv, void(const gl::Context *, GLint, GLfloat *));
-    MOCK_CONST_METHOD3(getUniformiv, void(const gl::Context *, GLint, GLint *));
-    MOCK_CONST_METHOD3(getUniformuiv, void(const gl::Context *, GLint, GLuint *));
+    MOCK_METHOD(void, getUniformfv, (const gl::Context *, GLint, GLfloat *), (const override));
+    MOCK_METHOD(void, getUniformiv, (const gl::Context *, GLint, GLint *), (const override));
+    MOCK_METHOD(void, getUniformuiv, (const gl::Context *, GLint, GLuint *), (const override));
 
-    MOCK_METHOD4(setPathFragmentInputGen,
-                 void(const std::string &, GLenum, GLint, const GLfloat *));
+    MOCK_METHOD(void,
+                setPathFragmentInputGen,
+                (const std::string &, GLenum, GLint, const GLfloat *),
+                (override));
 
-    MOCK_METHOD0(destructor, void());
+    MOCK_METHOD(void, destructor, ());
 };
 
 inline ::testing::NiceMock<MockProgramImpl> *MakeProgramMock()

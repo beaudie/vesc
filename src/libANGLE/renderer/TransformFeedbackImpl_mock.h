@@ -24,17 +24,17 @@ class MockTransformFeedbackImpl : public TransformFeedbackImpl
     {}
     ~MockTransformFeedbackImpl() { destructor(); }
 
-    MOCK_METHOD2(begin, angle::Result(const gl::Context *, gl::PrimitiveMode));
-    MOCK_METHOD1(end, angle::Result(const gl::Context *));
-    MOCK_METHOD1(pause, angle::Result(const gl::Context *));
-    MOCK_METHOD1(resume, angle::Result(const gl::Context *));
+    MOCK_METHOD(angle::Result, begin, (const gl::Context *, gl::PrimitiveMode), (override));
+    MOCK_METHOD(angle::Result, end, (const gl::Context *), (override));
+    MOCK_METHOD(angle::Result, pause, (const gl::Context *), (override));
+    MOCK_METHOD(angle::Result, resume, (const gl::Context *), (override));
 
-    MOCK_METHOD3(bindIndexedBuffer,
-                 angle::Result(const gl::Context *,
-                               size_t,
-                               const gl::OffsetBindingPointer<gl::Buffer> &));
+    MOCK_METHOD(angle::Result,
+                bindIndexedBuffer,
+                (const gl::Context *, size_t, const gl::OffsetBindingPointer<gl::Buffer> &),
+                (override));
 
-    MOCK_METHOD0(destructor, void());
+    MOCK_METHOD(void, destructor, ());
 };
 }  // namespace rx
 
