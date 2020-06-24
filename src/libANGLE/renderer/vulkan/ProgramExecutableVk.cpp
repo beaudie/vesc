@@ -185,6 +185,7 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     mEmptyBuffer.release(renderer);
 
     mDescriptorSets.clear();
+    WARN() << "mDescriptorSets.clear()";
     mEmptyDescriptorSets.fill(VK_NULL_HANDLE);
     mNumDefaultUniformDescriptors = 0;
     mTransformOptionBits.reset();
@@ -368,6 +369,8 @@ angle::Result ProgramExecutableVk::allocateDescriptorSetAndGetInfo(ContextVk *co
     ANGLE_TRY(dynamicDescriptorPool.allocateSetsAndGetInfo(
         contextVk, descriptorSetLayout.ptr(), 1, &mDescriptorPoolBindings[descriptorSetIndex],
         &mDescriptorSets[descriptorSetIndex], newPoolAllocatedOut));
+    WARN() << "mDescriptorSets[" << descriptorSetIndex << "] = " << std::hex
+           << mDescriptorSets[descriptorSetIndex];
     mEmptyDescriptorSets[descriptorSetIndex] = VK_NULL_HANDLE;
 
     return angle::Result::Continue;
@@ -506,6 +509,13 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
             // TODO: https://issuetracker.google.com/issues/158215272: how do we handle array of
             // immutable samplers?
             GLuint textureUnit = samplerBinding.boundTextureUnits[0];
+            if (activeTextures)
+            {
+                WARN() << "activeTextures is non-NULL";
+                WARN() << "textureUnit: " << textureUnit;
+                WARN() << "hasImmutableSampler(): "
+                       << (*activeTextures)[textureUnit].texture->getImage().hasImmutableSampler();
+            }
             if (activeTextures &&
                 ((*activeTextures)[textureUnit].texture->getImage().hasImmutableSampler()))
             {
@@ -514,8 +524,11 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 // externalFormat
                 const vk::Sampler &immutableSampler =
                     (*activeTextures)[textureUnit].texture->getSampler();
+                WARN() << "immutableSampler: " << std::hex << immutableSampler.getHandle();
                 descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
                                 activeStages, &immutableSampler);
+                // TODO: Do we need to update (*activeTextures)[textureUnit].sampler to be immutable
+                // sampler?
             }
             else
             {
@@ -717,6 +730,8 @@ angle::Result ProgramExecutableVk::updatePipelineLayout(
 
     // Textures:
     vk::DescriptorSetLayoutDesc texturesSetDesc;
+
+    WARN() << "activeTextures: " << std::hex << activeTextures;
 
     for (const gl::ShaderType shaderType : linkedShaderStages)
     {
@@ -1236,6 +1251,8 @@ void ProgramExecutableVk::updateTransformFeedbackDescriptorSetImpl(
             transformFeedbackVk->initDescriptorSet(
                 contextVk, executable.getTransformFeedbackBufferCount(), &mEmptyBuffer,
                 mDescriptorSets[kUniformsAndXfbDescriptorSetIndex]);
+            WARN() << "mDescriptorSets[kUniformsAndXfbDescriptorSetIndex] = " << std::hex
+                   << mDescriptorSets[kUniformsAndXfbDescriptorSetIndex];
         }
         return;
     }
@@ -1243,6 +1260,8 @@ void ProgramExecutableVk::updateTransformFeedbackDescriptorSetImpl(
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(glState.getCurrentTransformFeedback());
     transformFeedbackVk->updateDescriptorSet(contextVk, programState,
                                              mDescriptorSets[kUniformsAndXfbDescriptorSetIndex]);
+    WARN() << "mDescriptorSets[kUniformsAndXfbDescriptorSetIndex] = " << std::hex
+           << mDescriptorSets[kUniformsAndXfbDescriptorSetIndex];
 }
 
 angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contextVk)
@@ -1333,6 +1352,9 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
 
                 imageInfos[arrayElement].sampler     = sampler.getHandle();
                 imageInfos[arrayElement].imageLayout = image.getCurrentLayout();
+                WARN() << ((samplerVk != nullptr) ? "use samplerVk->getSampler()"
+                                                  : "use textureVk->getSampler()");
+                WARN() << "sampler: " << std::hex << sampler.getHandle();
 
                 if (emulateSeamfulCubeMapSampling)
                 {
@@ -1352,6 +1374,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
                 {
                     // We have immutable sampler
                     imageInfos[arrayElement].sampler = textureVk->getSampler().getHandle();
+                    WARN() << "have immutable sampler: " << std::hex
+                           << imageInfos[arrayElement].sampler;
                 }
                 ShaderInterfaceVariableInfoMap &variableInfoMap = mVariableInfoMap[shaderType];
                 const std::string samplerName =
@@ -1387,6 +1411,7 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
     if (mDescriptorSets.empty())
         return angle::Result::Continue;
 
+    WARN();
     // Find the maximum non-null descriptor set.  This is used in conjunction with a driver
     // workaround to bind empty descriptor sets only for gaps in between 0 and max and avoid
     // binding unnecessary empty descriptor sets for the sets beyond max.
@@ -1409,11 +1434,13 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
     for (uint32_t descriptorSetIndex = descriptorSetStart; descriptorSetIndex < descriptorSetRange;
          ++descriptorSetIndex)
     {
+        WARN() << "descriptorSetIndex: " << descriptorSetIndex;
         VkDescriptorSet descSet = mDescriptorSets[descriptorSetIndex];
         if (descSet == VK_NULL_HANDLE)
         {
             if (!contextVk->getRenderer()->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
             {
+                WARN() << "!bindEmptyForUnusedDescriptorSets.enabled";
                 continue;
             }
 
@@ -1421,6 +1448,7 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
             // later sets to misbehave.
             if (mEmptyDescriptorSets[descriptorSetIndex] == VK_NULL_HANDLE)
             {
+                WARN() << "mEmptyDescriptorSets[descriptorSetIndex] == VK_NULL_HANDLE";
                 const vk::DescriptorSetLayout &descriptorSetLayout =
                     mDescriptorSetLayouts[descriptorSetIndex].get();
 
@@ -1432,6 +1460,7 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
             descSet = mEmptyDescriptorSets[descriptorSetIndex];
         }
 
+        WARN();
         // Default uniforms are encompassed in a block per shader stage, and they are assigned
         // through dynamic uniform buffers (requiring dynamic offsets).  No other descriptor
         // requires a dynamic offset.
@@ -1445,11 +1474,13 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
                                           mDynamicBufferOffsets.data());
     }
 
+    WARN();
     for (vk::BufferHelper *buffer : mDescriptorBuffersCache)
     {
         buffer->retain(&contextVk->getResourceUseList());
     }
 
+    WARN();
     return angle::Result::Continue;
 }
 
