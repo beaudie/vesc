@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e5cb7169_a5a2dc35",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 3709,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T17:42:38Z",
+      "side": 1,
+      "message": "I had that originally but thought I could get rid of an if statement by using bitwise or.",
+      "parentUuid": "f4da2fcd_a6c160fd",
+      "range": {
+        "startLine": 3709,
+        "startChar": 28,
+        "endLine": 3709,
+        "endChar": 31
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b2123c39_f5c6e673",
         "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
         "patchSetId": 52
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "380c96fb_e00a1502",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T17:42:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2123c39_f5c6e673",
+      "range": {
+        "startLine": 100,
+        "startChar": 15,
+        "endLine": 100,
+        "endChar": 25
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30d74e37_3d774ad9",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 52
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-25T15:28:27Z",
       "side": 1,
       "message": "can you fix this for non-shared libvulkan? I worry about it being behind an ifdef.",
+      "range": {
+        "startLine": 1346,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 5
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d74eb76c_c353bce7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T17:42:38Z",
+      "side": 1,
+      "message": "Not sure what you mean, this is for non-shared libvulkan.",
+      "parentUuid": "30d74e37_3d774ad9",
       "range": {
         "startLine": 1346,
         "startChar": 0,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "bcc4cd32_6fc8da7f",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T17:42:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b113faa_e0ba4096",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 73
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9496ed6b_9048d3e5",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 52
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "bc931b27_f3e5957e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T17:42:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9496ed6b_9048d3e5",
+      "range": {
+        "startLine": 613,
+        "startChar": 4,
+        "endLine": 613,
+        "endChar": 13
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3511af05_241f9e8b",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 52
@@ -128,6 +248,30 @@
       "writtenOn": "2020-06-25T15:28:27Z",
       "side": 1,
       "message": "we shouldn\u0027t be storing the external format in the wrapped object. I haven\u0027t looked closely enough to figure out why you\u0027re doing this.",
+      "range": {
+        "startLine": 622,
+        "startChar": 13,
+        "endLine": 622,
+        "endChar": 28
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "136eadce_878c2f0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T17:42:38Z",
+      "side": 1,
+      "message": "The problem is the SamplerDesc. When we build the SamplerDesc we use mState.getSamplerState and the immutableSampler\u0027s externalFormat value - similar to Serial in that the externalFormat is guaranteed by the system to have the same value for images that use the same sampler. I wanted to use the externalFormat rather than the whole YuvConversionInfo struct to conserve space in SamplerDesc. Putting it here was convenient, otherwise I\u0027d save the externalFormat in ImageHelper.",
+      "parentUuid": "3511af05_241f9e8b",
       "range": {
         "startLine": 622,
         "startChar": 13,
