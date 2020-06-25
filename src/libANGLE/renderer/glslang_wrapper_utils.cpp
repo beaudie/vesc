@@ -1225,6 +1225,21 @@ void SpirvTransformer::transformInstruction()
         // Look at global declaration opcodes.
         switch (opCode)
         {
+// Only strip debug info for release builds
+#if !defined(ANGLE_ENABLE_RELEASE_ASSERTS)
+            case spv::OpSourceContinued:
+            case spv::OpSource:
+            case spv::OpSourceExtension:
+            case spv::OpName:
+            case spv::OpMemberName:
+            case spv::OpString:
+            case spv::OpLine:
+            case spv::OpNoLine:
+            case spv::OpModuleProcessed:
+                // Strip debug info to reduce binary size.
+                transformed = true;
+                break;
+#endif  // ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS_BY_DEFAULT
             case spv::OpCapability:
                 transformed = transformCapability(instruction, wordCount);
                 break;
