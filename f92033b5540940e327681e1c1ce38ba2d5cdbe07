@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da09b406_bc418ba1",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T03:51:19Z",
+      "side": 1,
+      "message": "match",
+      "range": {
+        "startLine": 107,
+        "startChar": 28,
+        "endLine": 107,
+        "endChar": 35
+      },
+      "revId": "f92033b5540940e327681e1c1ce38ba2d5cdbe07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78a92b83_90ed1d80",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T03:51:19Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 109,
+        "startChar": 5,
+        "endLine": 109,
+        "endChar": 10
+      },
+      "revId": "f92033b5540940e327681e1c1ce38ba2d5cdbe07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
