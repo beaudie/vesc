@@ -194,6 +194,24 @@
       "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee01fbfa_df01c81e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T18:42:44Z",
+      "side": 1,
+      "message": "A ddoc would have been good before so we could have a record of this discussion there. As it stands its probably not warranted now. I wasn\u0027t proposing a white texture.",
+      "parentUuid": "ddec3cc1_9a682917",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
