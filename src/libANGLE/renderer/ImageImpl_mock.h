@@ -20,9 +20,9 @@ class MockImageImpl : public ImageImpl
   public:
     MockImageImpl(const egl::ImageState &state) : ImageImpl(state) {}
     virtual ~MockImageImpl() { destructor(); }
-    MOCK_METHOD1(initialize, egl::Error(const egl::Display *));
-    MOCK_METHOD2(orphan, angle::Result(const gl::Context *, egl::ImageSibling *));
-    MOCK_METHOD0(destructor, void());
+    MOCK_METHOD(egl::Error, initialize, (const egl::Display *), (override));
+    MOCK_METHOD(angle::Result, orphan, (const gl::Context *, egl::ImageSibling *), (override));
+    MOCK_METHOD(void, destructor, ());
 };
 }  // namespace rx
 
