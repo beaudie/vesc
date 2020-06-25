@@ -226,6 +226,9 @@ angle::Result FramebufferVk::invalidate(const gl::Context *context,
                                         const GLenum *attachments)
 {
     // TODO(jmadill): Re-enable. See http://anglebug.com/4444
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
     return angle::Result::Continue;
 }
 
@@ -235,6 +238,13 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
                                            const gl::Rectangle &area)
 {
     // TODO(jmadill): Re-enable. See http://anglebug.com/4444
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    if (area.encloses(contextVk->getStartedRenderPassCommands().getRenderArea()))
+    {
+        ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1144,8 +1154,6 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
                                             size_t count,
                                             const GLenum *attachments)
 {
-    ASSERT(contextVk->hasStartedRenderPass());
-
     gl::DrawBufferMask invalidateColorBuffers;
     bool invalidateDepthBuffer   = false;
     bool invalidateStencilBuffer = false;
@@ -1178,48 +1186,74 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
         }
     }
 
-    // Set the appropriate storeOp for attachments.
-    size_t attachmentIndexVk = 0;
-    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    if (contextVk->hasStartedRenderPass())
     {
-        if (invalidateColorBuffers.test(colorIndexGL))
+        // Set the appropriate storeOp for attachments.
+        size_t attachmentIndexVk = 0;
+        for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
         {
-            contextVk->getStartedRenderPassCommands().invalidateRenderPassColorAttachment(
-                attachmentIndexVk);
+            if (invalidateColorBuffers.test(colorIndexGL))
+            {
+                contextVk->getStartedRenderPassCommands().invalidateRenderPassColorAttachment(
+                    attachmentIndexVk);
+            }
+            ++attachmentIndexVk;
         }
-        ++attachmentIndexVk;
-    }
 
-    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil(true);
-    if (depthStencilRenderTarget)
+        RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil(true);
+        if (depthStencilRenderTarget)
+        {
+            if (invalidateDepthBuffer)
+            {
+                contextVk->getStartedRenderPassCommands().invalidateRenderPassDepthAttachment(
+                    attachmentIndexVk);
+            }
+
+            if (invalidateStencilBuffer)
+            {
+                contextVk->getStartedRenderPassCommands().invalidateRenderPassStencilAttachment(
+                    attachmentIndexVk);
+            }
+        }
+
+        // NOTE: Possible future optimization is to delay setting the storeOp and only do so if the
+        // render pass is closed by itself before another draw call.  Otherwise, in a situation like
+        // this:
+        //
+        //     draw()
+        //     invalidate()
+        //     draw()
+        //
+        // We would be discarding the attachments only to load them for the next draw (which is less
+        // efficient than keeping the render pass open and not do the discard at all).  While dEQP
+        // tests this pattern, this optimization may not be necessary if no application does this.
+        // It is expected that an application would invalidate() when it's done with the
+        // framebuffer, so the render pass would have closed either way.
+        ANGLE_TRY(contextVk->endRenderPass());
+    }
+    else
     {
-        if (invalidateDepthBuffer)
+        const auto &colorRenderTargets = mRenderTargetCache.getColors();
+
+        // No active render pass, so set render buffer(s) to be invalid.
+        for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
         {
-            contextVk->getStartedRenderPassCommands().invalidateRenderPassDepthAttachment(
-                attachmentIndexVk);
+            if (invalidateColorBuffers.test(colorIndexGL))
+            {
+                RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
+                ASSERT(colorRenderTarget);
+                colorRenderTarget->invalidateContent();
+            }
         }
 
-        if (invalidateStencilBuffer)
+        // If we have a depth / stencil render target AND we invalidate both we'll mark it as
+        // invalid. Maybe in the future add separate depth & stencil invalid flags.
+        RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil(true);
+        if (depthStencilRenderTarget && invalidateDepthBuffer && invalidateStencilBuffer)
         {
-            contextVk->getStartedRenderPassCommands().invalidateRenderPassStencilAttachment(
-                attachmentIndexVk);
+            depthStencilRenderTarget->invalidateContent();
         }
     }
-
-    // NOTE: Possible future optimization is to delay setting the storeOp and only do so if the
-    // render pass is closed by itself before another draw call.  Otherwise, in a situation like
-    // this:
-    //
-    //     draw()
-    //     invalidate()
-    //     draw()
-    //
-    // We would be discarding the attachments only to load them for the next draw (which is less
-    // efficient than keeping the render pass open and not do the discard at all).  While dEQP tests
-    // this pattern, this optimization may not be necessary if no application does this.  It is
-    // expected that an application would invalidate() when it's done with the framebuffer, so the
-    // render pass would have closed either way.
-    ANGLE_TRY(contextVk->endRenderPass());
 
     return angle::Result::Continue;
 }
@@ -1757,7 +1791,10 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         }
         else
         {
-            renderPassAttachmentOps.setOps(currentAttachmentCount, VK_ATTACHMENT_LOAD_OP_LOAD,
+            renderPassAttachmentOps.setOps(currentAttachmentCount,
+                                           colorRenderTarget->hasDefinedContent()
+                                               ? VK_ATTACHMENT_LOAD_OP_LOAD
+                                               : VK_ATTACHMENT_LOAD_OP_DONT_CARE,
                                            VK_ATTACHMENT_STORE_OP_STORE);
             packedClearValues.store(currentAttachmentCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     kUninitializedClearValue);
