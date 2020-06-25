@@ -22,6 +22,30 @@
       "revId": "f883e6f42406cf2a1b6b2523cb4530922c8d4c5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17addb79_e22f11de",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-25T03:30:38Z",
+      "side": 1,
+      "message": "That\u0027s one of the extensions the WebGL implementation uses to determine floating-point texture renderability, so it seems it would work.",
+      "parentUuid": "f3e7ff73_c10299b9",
+      "range": {
+        "startLine": 328,
+        "startChar": 12,
+        "endLine": 328,
+        "endChar": 43
+      },
+      "revId": "f883e6f42406cf2a1b6b2523cb4530922c8d4c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
