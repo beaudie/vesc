@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ef7a4e3_edfa5b86",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T19:47:17Z",
+      "side": 1,
+      "message": "Ultimately, maybe we can get rid of the transformed SPIR-V entirely. We store them during link() just to create the VkShaderModules out of them when the pipeline is created (draw time).\n\nUnless I\u0027m missing something, we should be able to create the shader modules at link time too (which would also be a good optimization) so we could transform into a temp and discard right away after shader modules are initialized created.",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 43
+      },
+      "revId": "14f52a288862ad382ad90e5527f6117250eb8b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
