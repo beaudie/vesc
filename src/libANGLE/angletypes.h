@@ -949,6 +949,23 @@ using UniqueObjectPointer = UniqueObjectPointerBase<ObjT, DestroyThenDelete<ObjT
 namespace gl
 {
 class State;
+
+// RAII object making sure reset uniforms is called no matter whether there's an error in draw calls
+class ResetBaseVertexBaseInstance : angle::NonCopyable
+{
+  public:
+    ResetBaseVertexBaseInstance(gl::Program *programObject,
+                                bool resetBaseVertex,
+                                bool resetBaseInstance);
+
+    ~ResetBaseVertexBaseInstance();
+
+  private:
+    gl::Program *mProgramObject;
+    bool mResetBaseVertex;
+    bool mResetBaseInstance;
+};
+
 }  // namespace gl
 
 #endif  // LIBANGLE_ANGLETYPES_H_

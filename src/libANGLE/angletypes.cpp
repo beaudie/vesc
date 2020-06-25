@@ -669,4 +669,29 @@ GLsizeiptr GetBoundBufferAvailableSize(const OffsetBindingPointer<Buffer> &bindi
     }
 }
 
+ResetBaseVertexBaseInstance::ResetBaseVertexBaseInstance(gl::Program *programObject,
+                                                         bool resetBaseVertex,
+                                                         bool resetBaseInstance)
+    : mProgramObject(programObject),
+      mResetBaseVertex(resetBaseVertex),
+      mResetBaseInstance(resetBaseInstance)
+{}
+
+ResetBaseVertexBaseInstance::~ResetBaseVertexBaseInstance()
+{
+    if (mProgramObject)
+    {
+        // Reset emulated uniforms to zero to avoid affecting other draw calls
+        if (mResetBaseVertex)
+        {
+            mProgramObject->setBaseVertexUniform(0);
+        }
+
+        if (mResetBaseInstance)
+        {
+            mProgramObject->setBaseInstanceUniform(0);
+        }
+    }
+}
+
 }  // namespace gl
