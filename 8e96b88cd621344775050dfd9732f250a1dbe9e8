@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36fc64b3_755a94e6",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T14:14:17Z",
+      "side": 1,
+      "message": "Most callers are actually checking `if (!...isSet())`. How about both making the name clearer and remove the double negation by calling this `isWildcard()`?",
+      "range": {
+        "startLine": 151,
+        "startChar": 9,
+        "endLine": 151,
+        "endChar": 14
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "725f745e_a63dc741",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T14:14:17Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 181,
+        "startChar": 9,
+        "endLine": 181,
+        "endChar": 14
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80a55869_bc610a24",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T14:14:17Z",
+      "side": 1,
+      "message": "T \u0026\u0026",
+      "range": {
+        "startLine": 197,
+        "startChar": 17,
+        "endLine": 197,
+        "endChar": 19
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "754977d7_8a1681f7",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T14:14:17Z",
+      "side": 1,
+      "message": "`isWildcard` is how we would normally name this.",
+      "range": {
+        "startLine": 355,
+        "startChar": 9,
+        "endLine": 355,
+        "endChar": 17
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62c13681_6cf838e3",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T14:14:17Z",
+      "side": 1,
+      "message": "`GPU \u0026\u0026` to avoid copy.",
+      "range": {
+        "startLine": 537,
+        "startChar": 16,
+        "endLine": 537,
+        "endChar": 20
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
