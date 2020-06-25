@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4da2fcd_a6c160fd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 3709,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:28:27Z",
+      "side": 1,
+      "message": "nit: use boolean ops, this is a bitwise op. \n\nif (hasImmutableSampler)\n{\n   haveImmutableSampler \u003d true;\n}",
+      "range": {
+        "startLine": 3709,
+        "startChar": 28,
+        "endLine": 3709,
+        "endChar": 31
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2123c39_f5c6e673",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:28:27Z",
+      "side": 1,
+      "message": "this is a special case, should leave a comment.",
+      "range": {
+        "startLine": 100,
+        "startChar": 15,
+        "endLine": 100,
+        "endChar": 25
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d74e37_3d774ad9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:28:27Z",
+      "side": 1,
+      "message": "can you fix this for non-shared libvulkan? I worry about it being behind an ifdef.",
+      "range": {
+        "startLine": 1346,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 5
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b113faa_e0ba4096",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:28:27Z",
+      "side": 1,
+      "message": "nit: you have the VK_CHECK, you can remove the if now as it is redundant.",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 73
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9496ed6b_9048d3e5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:28:27Z",
+      "side": 1,
+      "message": "nit: can remove explicit.",
+      "range": {
+        "startLine": 613,
+        "startChar": 4,
+        "endLine": 613,
+        "endChar": 13
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3511af05_241f9e8b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:28:27Z",
+      "side": 1,
+      "message": "we shouldn\u0027t be storing the external format in the wrapped object. I haven\u0027t looked closely enough to figure out why you\u0027re doing this.",
+      "range": {
+        "startLine": 622,
+        "startChar": 13,
+        "endLine": 622,
+        "endChar": 28
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
