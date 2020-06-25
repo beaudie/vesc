@@ -90,7 +90,7 @@ class FunctionsGLWindows : public FunctionsGL
 DisplayWGL::DisplayWGL(const egl::DisplayState &state)
     : DisplayGL(state),
       mRenderer(nullptr),
-      mCurrentData(),
+      mCurrentNativeContexts(),
       mOpenGLModule(nullptr),
       mFunctionsWGL(nullptr),
       mHasWGLCreateContextRobustness(false),
@@ -353,7 +353,7 @@ void DisplayWGL::destroy()
             mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
         }
     }
-    mCurrentData.clear();
+    mCurrentNativeContexts.clear();
 
     SafeDelete(mFunctionsWGL);
 
@@ -681,17 +681,13 @@ egl::Error DisplayWGL::makeCurrent(egl::Surface *drawSurface,
                                    egl::Surface *readSurface,
                                    gl::Context *context)
 {
-    CurrentNativeContext &currentContext = mCurrentData[std::this_thread::get_id()];
+    CurrentNativeContext &currentContext = mCurrentNativeContexts[std::this_thread::get_id()];
 
-    HDC newDC = currentContext.dc;
+    HDC newDC = mDeviceContext;
     if (drawSurface)
     {
         SurfaceWGL *drawSurfaceWGL = GetImplAs<SurfaceWGL>(drawSurface);
         newDC                      = drawSurfaceWGL->getDC();
-    }
-    else
-    {
-        newDC = mDeviceContext;
     }
 
     HGLRC newContext = currentContext.glrc;
@@ -914,7 +910,7 @@ egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
     {
         return egl::EglNotInitialized() << "Failed to make the intermediate WGL context current.";
     }
-    CurrentNativeContext &currentContext = mCurrentData[std::this_thread::get_id()];
+    CurrentNativeContext &currentContext = mCurrentNativeContexts[std::this_thread::get_id()];
     currentContext.dc                    = mDeviceContext;
     currentContext.glrc                  = context;
 
