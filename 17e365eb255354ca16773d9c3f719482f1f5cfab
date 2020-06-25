@@ -117,6 +117,30 @@
       "revId": "17e365eb255354ca16773d9c3f719482f1f5cfab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b40cb95_e9d5648e",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-06-25T16:30:45Z",
+      "side": 1,
+      "message": "We do have a global EGL lock now.  It is probably safe to remove these.",
+      "parentUuid": "ed317350_3cb4e5a4",
+      "range": {
+        "startLine": 232,
+        "startChar": 46,
+        "endLine": 232,
+        "endChar": 59
+      },
+      "revId": "17e365eb255354ca16773d9c3f719482f1f5cfab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
