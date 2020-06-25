@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e77fd6f7_d3436671",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-25T18:30:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36fc64b3_755a94e6",
+      "range": {
+        "startLine": 151,
+        "startChar": 9,
+        "endLine": 151,
+        "endChar": 14
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "725f745e_a63dc741",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06c7a47b_9dbeb4e6",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-25T18:30:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "725f745e_a63dc741",
+      "range": {
+        "startLine": 181,
+        "startChar": 9,
+        "endLine": 181,
+        "endChar": 14
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "143e83ae_f61d89fa",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-25T18:30:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80a55869_bc610a24",
+      "range": {
+        "startLine": 197,
+        "startChar": 17,
+        "endLine": 197,
+        "endChar": 19
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "754977d7_8a1681f7",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "7c762212_6ebc5d6f",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-25T18:30:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "754977d7_8a1681f7",
+      "range": {
+        "startLine": 355,
+        "startChar": 9,
+        "endLine": 355,
+        "endChar": 17
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62c13681_6cf838e3",
         "filename": "src/feature_support_util/feature_support_util.cpp",
         "patchSetId": 1
@@ -114,6 +210,30 @@
       "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afee7d0b_7b7d228e",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-25T18:30:51Z",
+      "side": 1,
+      "message": "Generally on my team we would enforce copy avoidance by moving in and out, however I\u0027m happy to change the signature as well.",
+      "parentUuid": "62c13681_6cf838e3",
+      "range": {
+        "startLine": 537,
+        "startChar": 16,
+        "endLine": 537,
+        "endChar": 20
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
