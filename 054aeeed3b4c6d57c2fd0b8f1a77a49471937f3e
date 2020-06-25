@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae39d153_60686c33",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T19:04:07Z",
+      "side": 0,
+      "message": "This line is not as innocent as apparent. The comment talks about \"nesting\", so I checked in chromium. Found this which explains why this was necessary:\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/jsoncpp/DEPS",
+      "revId": "054aeeed3b4c6d57c2fd0b8f1a77a49471937f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
