@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4294f579_b0f17693",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T20:55:53Z",
+      "side": 1,
+      "message": "nit",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "c51a1f373f5434fdbdc6a1fb7109bc0b070dd005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f5192b2_00710738",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1966,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T20:55:53Z",
+      "side": 1,
+      "message": "can we consolidate these two functions now?",
+      "range": {
+        "startLine": 1966,
+        "startChar": 14,
+        "endLine": 1966,
+        "endChar": 32
+      },
+      "revId": "c51a1f373f5434fdbdc6a1fb7109bc0b070dd005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
