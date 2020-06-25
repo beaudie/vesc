@@ -521,6 +521,8 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
                                         const gl::Rectangle &area,
                                         GLenum format,
                                         GLenum type,
+                                        const gl::PixelPackState &pixelPackState,
+                                        gl::Buffer *packBuffer,
                                         void *pixels)
 {
     // Clip read area to framebuffer.
@@ -538,13 +540,10 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     // Flush any deferred clears.
     ANGLE_TRY(flushDeferredClears(contextVk, fbRect));
 
-    const gl::State &glState = contextVk->getState();
-    gl::Buffer *packBuffer   = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
-
     GLuint outputSkipBytes = 0;
     PackPixelsParams params;
-    ANGLE_TRY(vk::ImageHelper::GetReadPixelsParams(contextVk, glState.getPackState(), packBuffer,
-                                                   format, type, area, clippedArea, &params,
+    ANGLE_TRY(vk::ImageHelper::GetReadPixelsParams(contextVk, pixelPackState, packBuffer, format,
+                                                   type, area, clippedArea, &params,
                                                    &outputSkipBytes));
 
     bool flipY = contextVk->isViewportFlipEnabledForReadFBO();

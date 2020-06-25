@@ -353,6 +353,8 @@ class Framebuffer final : public angle::ObserverInterface,
     GLenum getImplementationColorReadType(const Context *context);
 
     angle::Result readPixels(const Context *context,
+                             const PixelPackState &pixelPackState,
+                             Buffer *packBuffer,
                              const Rectangle &area,
                              GLenum format,
                              GLenum type,
