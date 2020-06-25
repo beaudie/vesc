@@ -78,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "bc6bc101_47d6bc09",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T03:40:54Z",
+      "side": 1,
+      "message": "`new` is necessary to pass the image to stageSubresourceUpdateFromImage.\n\nThe move constructor is destructive to `this`. What I need here is to only partially move `this` and that\u0027s why this functionality couldn\u0027t have been done outside the class.",
+      "parentUuid": "2093d0e1_9226e561",
+      "range": {
+        "startLine": 3949,
+        "startChar": 3,
+        "endLine": 3949,
+        "endChar": 85
+      },
+      "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1c54cac_e36a9f3e",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 5
@@ -98,6 +122,30 @@
       "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4fcfebe_47ac560b",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T03:40:54Z",
+      "side": 1,
+      "message": "Yes. The new code exposes a bug in SwiftShader. The issue is filed in buganizer (per their request)",
+      "parentUuid": "e1c54cac_e36a9f3e",
+      "range": {
+        "startLine": 859,
+        "startChar": 47,
+        "endLine": 860,
+        "endChar": 4
+      },
+      "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
