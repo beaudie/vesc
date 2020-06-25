@@ -16,6 +16,24 @@
       "revId": "054aeeed3b4c6d57c2fd0b8f1a77a49471937f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fd353cf_d2c4ccdc",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-25T21:50:20Z",
+      "side": 0,
+      "message": "Awesome, that makes sense. I\u0027ll add comments to the DEPS, I haven\u0027t actually seen this use case before. We use jsoncpp in openscreen, but have our own separate BUILD.gn so don\u0027t run into this.",
+      "parentUuid": "ae39d153_60686c33",
+      "revId": "054aeeed3b4c6d57c2fd0b8f1a77a49471937f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
