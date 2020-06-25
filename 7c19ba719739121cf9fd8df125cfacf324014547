@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0769b84f_236713e0",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:35:13Z",
+      "side": 1,
+      "message": "sorry, I should have mentioned to use the same layout as the TexureImpl setImage method ordering for args:\n\ncontext, input args, state \u0026 buffer, output args\n\nso it works out to:\n\ncontext, area, format, type, pack, packBuffer, pixels",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 357,
+        "endChar": 48
+      },
+      "revId": "7c19ba719739121cf9fd8df125cfacf324014547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
