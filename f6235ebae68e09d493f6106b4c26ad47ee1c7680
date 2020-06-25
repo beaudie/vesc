@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4e94f019_eca946ea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-25T15:40:56Z",
+      "side": 1,
+      "message": "Done.\n\nI had thought about this.  I was trying to be consistent with the code below, that assigns .x and .y.  I\u0027ll change it since it sticks out to you.",
+      "parentUuid": "afe413f4_fc7365e1",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff03bf9d_8a620311",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 15
@@ -33,6 +51,24 @@
       "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc1037e4_68162b86",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-25T15:40:56Z",
+      "side": 1,
+      "message": "Yes, the only cases for 90, 180, and 270 will have isSrcFlipY set (i.e. for onscreen objects).\n\nIn general, we get GLES coordinates (which are different than Vulkan coordinates in the y-axis).  For rotation, the Vulkan origin moves to a different corner of the screen.  y-flip (whether for source or destination) affects where things are looked for or rendered to, AND affects the calculation(s) that the shader does to find the correct source pixel.  When flipX or flipY is set for the shader, it means that it\u0027s \"going long\" for that axis (relative to the Vulkan origin for that orientation) in order to find the first pixel.\n\nBecause of the above, and because of what gets done between here and there, I set it here, and possibly set it differently in the shader.\n\nI\u0027ll add comments and more asserts",
+      "parentUuid": "ff03bf9d_8a620311",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "d3356c5c_c0cae393",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-25T15:40:56Z",
+      "side": 1,
+      "message": "Explained above.  Setting it here affects what happens between the two places.",
+      "parentUuid": "e9fdadf3_5e6932a7",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dba18bb4_5d28b5d0",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 15
@@ -67,6 +121,24 @@
       "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9cff545_f380b503",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 15
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-25T15:40:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dba18bb4_5d28b5d0",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
