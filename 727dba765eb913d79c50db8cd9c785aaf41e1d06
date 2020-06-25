@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdaac4a7_f4c364c9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Framebuffer11.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T17:22:39Z",
+      "side": 1,
+      "message": "nit: can you find/replace\n\nconst gl::PixelPackState \u0026pixelPackState\n\nto\n\nconst gl::PixelPackState \u0026pack\n\nSorry didn\u0027t notice this before. A very small inconsistency thing.",
+      "range": {
+        "startLine": 72,
+        "startChar": 59,
+        "endLine": 72,
+        "endChar": 63
+      },
+      "revId": "727dba765eb913d79c50db8cd9c785aaf41e1d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
