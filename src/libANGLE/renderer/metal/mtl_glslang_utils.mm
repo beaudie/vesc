@@ -243,6 +243,7 @@ angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
                                         gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
 {
     gl::ShaderMap<SpirvBlob> initialSpirvBlobs;
+    const bool removeDebugInfo = context->getRenderer()->getEnableValidationLayers();
 
     ANGLE_TRY(rx::GlslangGetShaderSpirvCode(
         [context](GlslangError error) { return HandleError(context, error); }, linkedShaderStages,
@@ -256,7 +257,7 @@ angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
         // do not have ability to add back in at initProgram time.
         angle::Result status = GlslangTransformSpirvCode(
             [context](GlslangError error) { return HandleError(context, error); }, shaderType,
-            false, variableInfoMap[shaderType], initialSpirvBlobs[shaderType],
+            false, removeDebugInfo, variableInfoMap[shaderType], initialSpirvBlobs[shaderType],
             &(*shaderCodeOut)[shaderType]);
         if (status != angle::Result::Continue)
         {
