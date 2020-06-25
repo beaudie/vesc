@@ -477,6 +477,30 @@
     },
     {
       "key": {
+        "uuid": "e9e8816e_5aebd7c0",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T13:45:59Z",
+      "side": 1,
+      "message": "I\u0027m planning to be out next week, but otherwise available.\nSounds like there are two clip regions involved, one rotated and one not and we are using the same values for both. E.g. viewport \u0026 scissor",
+      "parentUuid": "dc8979ce_df74c449",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1794,
+        "endChar": 38
+      },
+      "revId": "400f0433b2a3fc7c6b7edb28c5d5ab92bc37d23d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95082d01_f97d506d",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 6

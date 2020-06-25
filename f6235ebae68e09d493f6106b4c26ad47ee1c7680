@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afe413f4_fc7365e1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T13:45:59Z",
+      "side": 1,
+      "message": "Curious, why assignments here and std::swap for width \u0026 height below?\nIs there a perf difference?",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff03bf9d_8a620311",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T13:45:59Z",
+      "side": 1,
+      "message": "This seems odd. This value is passed in, but if rotation is 90 or 270 we disable it. I would have thought we might invert it, but disable seems unsymmetrical. Or maybe the only cases where you can rotate 90 or 270 are those that require disabling isSrcFlipY?",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9fdadf3_5e6932a7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T13:45:59Z",
+      "side": 1,
+      "message": "In UtilsVk::copyImage we set flipY to true, why is here different?",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dba18bb4_5d28b5d0",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 15
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-25T13:45:59Z",
+      "side": 1,
+      "message": "nit: style: {} around conditional statement, like params.flipY below.",
+      "revId": "f6235ebae68e09d493f6106b4c26ad47ee1c7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
