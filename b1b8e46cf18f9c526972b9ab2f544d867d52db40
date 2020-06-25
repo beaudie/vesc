@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ceb3f0c_38a0b717",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:02:35Z",
+      "side": 1,
+      "message": "nit: onWrite to be consistent with the reset of ANGLE",
+      "range": {
+        "startLine": 1384,
+        "startChar": 9,
+        "endLine": 1384,
+        "endChar": 22
+      },
+      "revId": "b1b8e46cf18f9c526972b9ab2f544d867d52db40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e09c5616_39fd42b8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:02:35Z",
+      "side": 1,
+      "message": "nit: members before data. if you want to use memcmp you also need to check that the struct is packed using the padding warning helpers",
+      "range": {
+        "startLine": 1400,
+        "startChar": 0,
+        "endLine": 1403,
+        "endChar": 9
+      },
+      "revId": "b1b8e46cf18f9c526972b9ab2f544d867d52db40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94daf7e8_2b37c246",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:02:35Z",
+      "side": 1,
+      "message": "nit: you can wrap to 100 chars.",
+      "range": {
+        "startLine": 1525,
+        "startChar": 0,
+        "endLine": 1528,
+        "endChar": 53
+      },
+      "revId": "b1b8e46cf18f9c526972b9ab2f544d867d52db40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33f21e9b_14e2316a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:02:35Z",
+      "side": 1,
+      "message": "nit: use angle::Optional instead of unique_ptr.",
+      "range": {
+        "startLine": 1529,
+        "startChar": 9,
+        "endLine": 1529,
+        "endChar": 19
+      },
+      "revId": "b1b8e46cf18f9c526972b9ab2f544d867d52db40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e1977e2_cf5734d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:02:35Z",
+      "side": 1,
+      "message": "suggest mPreviousSingleClearValue or something like that.",
+      "range": {
+        "startLine": 1529,
+        "startChar": 33,
+        "endLine": 1529,
+        "endChar": 51
+      },
+      "revId": "b1b8e46cf18f9c526972b9ab2f544d867d52db40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
