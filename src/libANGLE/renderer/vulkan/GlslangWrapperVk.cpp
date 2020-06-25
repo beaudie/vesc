@@ -87,12 +87,14 @@ angle::Result GlslangWrapperVk::TransformSpirV(
     vk::Context *context,
     const gl::ShaderType shaderType,
     bool removeEarlyFragmentTestsOptimization,
+    bool removeDebugInfo,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const SpirvBlob &initialSpirvBlob,
     SpirvBlob *shaderCodeOut)
 {
     return GlslangTransformSpirvCode(
         [context](GlslangError error) { return ErrorHandler(context, error); }, shaderType,
-        removeEarlyFragmentTestsOptimization, variableInfoMap, initialSpirvBlob, shaderCodeOut);
+        removeEarlyFragmentTestsOptimization, removeDebugInfo, variableInfoMap, initialSpirvBlob,
+        shaderCodeOut);
 }
 }  // namespace rx

@@ -125,10 +125,16 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
          optionBits[ProgramTransformOption::RemoveEarlyFragmentTestsOptimization]);
     gl::ShaderMap<SpirvBlob> transformedSpirvBlobs;
     SpirvBlob &transformedSpirvBlob = transformedSpirvBlobs[shaderType];
+    bool removeDebugInfo            = false;
+
+// Only strip debug info for release builds
+#if !defined(ANGLE_ENABLE_RELEASE_ASSERTS)
+    removeDebugInfo = true;
+#endif
 
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(
-        contextVk, shaderType, removeEarlyFragmentTestsOptimization, variableInfoMap[shaderType],
-        originalSpirvBlob, &transformedSpirvBlob));
+        contextVk, shaderType, removeEarlyFragmentTestsOptimization, removeDebugInfo,
+        variableInfoMap[shaderType], originalSpirvBlob, &transformedSpirvBlob));
     ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
                                       transformedSpirvBlob.data(),
                                       transformedSpirvBlob.size() * sizeof(uint32_t)));
