@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "733dd4e4_1140497b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:10:45Z",
+      "side": 1,
+      "message": "can you please file a bug for this.",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "97220a59ffa87957e52583053c26fa18e794a67d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b45c9019_47d6caac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:10:45Z",
+      "side": 1,
+      "message": "nit: use LimitToInt, see below and above.",
+      "range": {
+        "startLine": 450,
+        "startChar": 8,
+        "endLine": 450,
+        "endChar": 19
+      },
+      "revId": "97220a59ffa87957e52583053c26fa18e794a67d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
