@@ -16,6 +16,24 @@
       "revId": "d29bee7bbf74a6c114ca2ade2c65a2f713f984a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a578cfe_dc527c79",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-25T03:00:43Z",
+      "side": 1,
+      "message": "While looking for the cause of another set of failures, I found the problem with this.  Turns out that UtilsVk::startRenderPass() should not rotate/swap the framebuffer dimensions.  It\u0027s not general, but only for use by UtilsVk::copyImage().  Fixing that (removing some lines) fixed both problems.",
+      "parentUuid": "4b800ff3_a129a5af",
+      "revId": "d29bee7bbf74a6c114ca2ade2c65a2f713f984a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
