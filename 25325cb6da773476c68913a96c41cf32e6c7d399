@@ -174,6 +174,30 @@
     },
     {
       "key": {
+        "uuid": "5866c248_032139d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T20:23:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "23bc7339_863fd76a",
+      "range": {
+        "startLine": 3949,
+        "startChar": 3,
+        "endLine": 3949,
+        "endChar": 85
+      },
+      "revId": "25325cb6da773476c68913a96c41cf32e6c7d399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1c54cac_e36a9f3e",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 5
