@@ -349,6 +349,87 @@ void CopyLineLoopIndicesWithRestart(GLsizei indexCount, const uint8_t *srcPtr, u
 }
 
 void GetSamplePosition(GLsizei sampleCount, size_t index, GLfloat *xy);
+
+angle::Result MultiDrawArraysGeneral(ContextImpl *contextImpl,
+                                     const gl::Context *context,
+                                     gl::PrimitiveMode mode,
+                                     const GLint *firsts,
+                                     const GLsizei *counts,
+                                     GLsizei drawcount);
+angle::Result MultiDrawArraysInstancedGeneral(ContextImpl *contextImpl,
+                                              const gl::Context *context,
+                                              gl::PrimitiveMode mode,
+                                              const GLint *firsts,
+                                              const GLsizei *counts,
+                                              const GLsizei *instanceCounts,
+                                              GLsizei drawcount);
+angle::Result MultiDrawElementsGeneral(ContextImpl *contextImpl,
+                                       const gl::Context *context,
+                                       gl::PrimitiveMode mode,
+                                       const GLsizei *counts,
+                                       gl::DrawElementsType type,
+                                       const GLvoid *const *indices,
+                                       GLsizei drawcount);
+angle::Result MultiDrawElementsInstancedGeneral(ContextImpl *contextImpl,
+                                                const gl::Context *context,
+                                                gl::PrimitiveMode mode,
+                                                const GLsizei *counts,
+                                                gl::DrawElementsType type,
+                                                const GLvoid *const *indices,
+                                                const GLsizei *instanceCounts,
+                                                GLsizei drawcount);
+angle::Result MultiDrawArraysInstancedBaseInstanceGeneral(ContextImpl *contextImpl,
+                                                          const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          const GLint *firsts,
+                                                          const GLsizei *counts,
+                                                          const GLsizei *instanceCounts,
+                                                          const GLuint *baseInstances,
+                                                          GLsizei drawcount);
+angle::Result MultiDrawElementsInstancedBaseVertexBaseInstanceGeneral(ContextImpl *contextImpl,
+                                                                      const gl::Context *context,
+                                                                      gl::PrimitiveMode mode,
+                                                                      const GLsizei *counts,
+                                                                      gl::DrawElementsType type,
+                                                                      const GLvoid *const *indices,
+                                                                      const GLsizei *instanceCounts,
+                                                                      const GLint *baseVertices,
+                                                                      const GLuint *baseInstances,
+                                                                      GLsizei drawcount);
 }  // namespace rx
+
+// MultiDraw macro patterns
+// These macros are to avoid too much code duplication as we don't want to have if detect for
+// hasDrawID/BaseVertex/BaseInstance inside for loop in a multiDraw call Part of these are put in
+// the header as we want to share with specialized context impl on some platforms for multidraw
+#define SET_DRAW_ID_UNIFORM_0(drawID) \
+    {}
+#define SET_DRAW_ID_UNIFORM_1(drawID) programObject->setDrawIDUniform(drawID)
+#define SET_DRAW_ID_UNIFORM(cond) SET_DRAW_ID_UNIFORM_##cond
+
+#define SET_BASE_VERTEX_UNIFORM_0(baseVertex) \
+    {}
+#define SET_BASE_VERTEX_UNIFORM_1(baseVertex) programObject->setBaseVertexUniform(baseVertex);
+#define SET_BASE_VERTEX_UNIFORM(cond) SET_BASE_VERTEX_UNIFORM_##cond
+
+#define SET_BASE_INSTANCE_UNIFORM_0(baseInstance) \
+    {}
+#define SET_BASE_INSTANCE_UNIFORM_1(baseInstance) \
+    programObject->setBaseInstanceUniform(baseInstance)
+#define SET_BASE_INSTANCE_UNIFORM(cond) SET_BASE_INSTANCE_UNIFORM_##cond
+
+#define NOOP_DRAW_ context->noopDraw(mode, counts[drawID])
+#define NOOP_DRAW_INSTANCED context->noopDrawInstanced(mode, counts[drawID], instanceCounts[drawID])
+#define NOOP_DRAW(_instanced) NOOP_DRAW##_instanced
+
+#define NOOP_DRAW_ context->noopDraw(mode, counts[drawID])
+#define NOOP_DRAW_INSTANCED context->noopDrawInstanced(mode, counts[drawID], instanceCounts[drawID])
+#define NOOP_DRAW(_instanced) NOOP_DRAW##_instanced
+
+#define MARK_TRANSFORM_FEEDBACK_USAGE_ \
+    gl::MarkTransformFeedbackBufferUsage(context, counts[drawID], 1)
+#define MARK_TRANSFORM_FEEDBACK_USAGE_INSTANCED \
+    gl::MarkTransformFeedbackBufferUsage(context, counts[drawID], instanceCounts[drawID])
+#define MARK_TRANSFORM_FEEDBACK_USAGE(instanced) MARK_TRANSFORM_FEEDBACK_USAGE##instanced
 
 #endif  // LIBANGLE_RENDERER_RENDERER_UTILS_H_
