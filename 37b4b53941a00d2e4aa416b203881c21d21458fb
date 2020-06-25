@@ -176,6 +176,24 @@
       "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddec3cc1_9a682917",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-25T18:40:20Z",
+      "side": 1,
+      "message": "The whole point of this fix is to address the specific usage scenario that gfxbench is using, which is a single leveled texture. Use of a white texture is reasonable, but clear it every frame without other writes is not reasonable. To use such a white texture with mipmap and repeatedly clear all levels is even more silly. If anyone find a real app doing this way and we care about that, I have no object to optimize it. But right now we start with optimize an imagery silly usage case is something I am trying to avoid here.\n\nThe fix is pretty straight forward: Remember we just had a standalone clear call and reset that clear as soon as there is other operations on the imageHelper object. Other operations are:\n1) Render to it: CommandBufferHelper::imageWrite\n2) CopyTexSubImage etc that are outside RP modification: ContextVk::onImageWrite\n3) Respecify the level via glTexImage call:  ImageHelper::releaseStagingBuffer, ImageHelper::removeSingleSubresourceStagedUpdates\n\nIf we get another standalone clear call, we check against the current state, if we believe we have the exact cleared color already, then re just drop the clear call.\n\nLet me know if a ddoc is really desired.",
+      "parentUuid": "f53cc52f_4e50fb36",
+      "revId": "37b4b53941a00d2e4aa416b203881c21d21458fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
