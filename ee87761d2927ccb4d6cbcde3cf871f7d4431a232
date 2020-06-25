@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e83a095d_bf1ea832",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T15:12:18Z",
+      "side": 1,
+      "message": "you should probably comment here what this does.",
+      "range": {
+        "startLine": 450,
+        "startChar": 8,
+        "endLine": 450,
+        "endChar": 21
+      },
+      "revId": "ee87761d2927ccb4d6cbcde3cf871f7d4431a232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
