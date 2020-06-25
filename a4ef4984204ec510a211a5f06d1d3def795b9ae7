@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8a3466c_80286f2c",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T04:40:45Z",
+      "side": 1,
+      "message": "You need to test if the interface block is named here!",
+      "range": {
+        "startLine": 791,
+        "startChar": 24,
+        "endLine": 791,
+        "endChar": 29
+      },
+      "revId": "a4ef4984204ec510a211a5f06d1d3def795b9ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fee48406_0f4e336e",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T04:40:45Z",
+      "side": 1,
+      "message": "This should set a flag that would be used in the loop below to MarkActive the fields too. Also, add this to the comment above, to tell why the block itself is considered active:\n\n\u003e The uniform block itself is also considered active, even if no member of the block is referenced.",
+      "revId": "a4ef4984204ec510a211a5f06d1d3def795b9ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
