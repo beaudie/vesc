@@ -356,6 +356,8 @@ class Framebuffer final : public angle::ObserverInterface,
                              const Rectangle &area,
                              GLenum format,
                              GLenum type,
+                             const PixelPackState &pixelPackState,
+                             Buffer *packBuffer,
                              void *pixels);
 
     angle::Result blit(const Context *context,
