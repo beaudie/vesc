@@ -1632,17 +1632,18 @@ GLenum Framebuffer::getImplementationColorReadType(const Context *context)
 }
 
 angle::Result Framebuffer::readPixels(const Context *context,
+                                      const PixelPackState &pixelPackState,
+                                      Buffer *packBuffer,
                                       const Rectangle &area,
                                       GLenum format,
                                       GLenum type,
                                       void *pixels)
 {
-    ANGLE_TRY(mImpl->readPixels(context, area, format, type, pixels));
+    ANGLE_TRY(mImpl->readPixels(context, pixelPackState, packBuffer, area, format, type, pixels));
 
-    Buffer *unpackBuffer = context->getState().getTargetBuffer(BufferBinding::PixelUnpack);
-    if (unpackBuffer)
+    if (packBuffer)
     {
-        unpackBuffer->onDataChanged();
+        packBuffer->onDataChanged();
     }
 
     return angle::Result::Continue;

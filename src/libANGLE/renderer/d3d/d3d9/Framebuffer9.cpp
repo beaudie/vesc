@@ -77,11 +77,12 @@ angle::Result Framebuffer9::clearImpl(const gl::Context *context,
 }
 
 angle::Result Framebuffer9::readPixelsImpl(const gl::Context *context,
+                                           const gl::PixelPackState &pack,
+                                           gl::Buffer *packBuffer,
                                            const gl::Rectangle &area,
                                            GLenum format,
                                            GLenum type,
                                            size_t outputPitch,
-                                           const gl::PixelPackState &pack,
                                            uint8_t *pixels)
 {
     const gl::FramebufferAttachment *colorbuffer = mState.getColorAttachment(0);

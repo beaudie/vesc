@@ -60,11 +60,12 @@ class Framebuffer9 : public FramebufferD3D
                             const ClearParameters &clearParams) override;
 
     angle::Result readPixelsImpl(const gl::Context *context,
+                                 const gl::PixelPackState &pack,
+                                 gl::Buffer *packPixels,
                                  const gl::Rectangle &area,
                                  GLenum format,
                                  GLenum type,
                                  size_t outputPitch,
-                                 const gl::PixelPackState &pack,
                                  uint8_t *pixels) override;
 
     angle::Result blitImpl(const gl::Context *context,

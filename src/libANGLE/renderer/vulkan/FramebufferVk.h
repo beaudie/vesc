@@ -72,6 +72,8 @@ class FramebufferVk : public FramebufferImpl
     const gl::InternalFormat &getImplementationColorReadFormat(
         const gl::Context *context) const override;
     angle::Result readPixels(const gl::Context *context,
+                             const gl::PixelPackState &pixelPackState,
+                             gl::Buffer *packBuffer,
                              const gl::Rectangle &area,
                              GLenum format,
                              GLenum type,

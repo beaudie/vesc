@@ -52,6 +52,8 @@ class FramebufferNULL : public FramebufferImpl
                                 GLint stencil) override;
 
     angle::Result readPixels(const gl::Context *context,
+                             const gl::PixelPackState &pixelPackState,
+                             gl::Buffer *packBuffer,
                              const gl::Rectangle &area,
                              GLenum format,
                              GLenum type,

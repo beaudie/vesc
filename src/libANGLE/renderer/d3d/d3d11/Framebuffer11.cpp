@@ -247,17 +247,17 @@ angle::Result Framebuffer11::invalidateAttachment(const gl::Context *context,
 }
 
 angle::Result Framebuffer11::readPixelsImpl(const gl::Context *context,
+                                            const gl::PixelPackState &pack,
+                                            gl::Buffer *packBuffer,
                                             const gl::Rectangle &area,
                                             GLenum format,
                                             GLenum type,
                                             size_t outputPitch,
-                                            const gl::PixelPackState &pack,
                                             uint8_t *pixels)
 {
     const gl::FramebufferAttachment *readAttachment = mState.getReadPixelsAttachment(format);
     ASSERT(readAttachment);
 
-    gl::Buffer *packBuffer = context->getState().getTargetBuffer(gl::BufferBinding::PixelPack);
     if (packBuffer != nullptr)
     {
         Buffer11 *packBufferStorage      = GetImplAs<Buffer11>(packBuffer);

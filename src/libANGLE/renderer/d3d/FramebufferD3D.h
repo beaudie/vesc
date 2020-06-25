@@ -79,6 +79,8 @@ class FramebufferD3D : public FramebufferImpl
                                 GLint stencil) override;
 
     angle::Result readPixels(const gl::Context *context,
+                             const gl::PixelPackState &pixelPackState,
+                             gl::Buffer *packBuffer,
                              const gl::Rectangle &area,
                              GLenum format,
                              GLenum type,
@@ -110,11 +112,12 @@ class FramebufferD3D : public FramebufferImpl
                                     const ClearParameters &clearParams) = 0;
 
     virtual angle::Result readPixelsImpl(const gl::Context *context,
+                                         const gl::PixelPackState &pack,
+                                         gl::Buffer *packBuffer,
                                          const gl::Rectangle &area,
                                          GLenum format,
                                          GLenum type,
                                          size_t outputPitch,
-                                         const gl::PixelPackState &pack,
                                          uint8_t *pixels) = 0;
 
     virtual angle::Result blitImpl(const gl::Context *context,

@@ -518,6 +518,8 @@ const gl::InternalFormat &FramebufferVk::getImplementationColorReadFormat(
 }
 
 angle::Result FramebufferVk::readPixels(const gl::Context *context,
+                                        const gl::PixelPackState &pixelPackState,
+                                        gl::Buffer *packBuffer,
                                         const gl::Rectangle &area,
                                         GLenum format,
                                         GLenum type,
@@ -538,13 +540,10 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     // Flush any deferred clears.
     ANGLE_TRY(flushDeferredClears(contextVk, fbRect));
 
-    const gl::State &glState = contextVk->getState();
-    gl::Buffer *packBuffer   = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
-
     GLuint outputSkipBytes = 0;
     PackPixelsParams params;
-    ANGLE_TRY(vk::ImageHelper::GetReadPixelsParams(contextVk, glState.getPackState(), packBuffer,
-                                                   format, type, area, clippedArea, &params,
+    ANGLE_TRY(vk::ImageHelper::GetReadPixelsParams(contextVk, pixelPackState, packBuffer, format,
+                                                   type, area, clippedArea, &params,
                                                    &outputSkipBytes));
 
     bool flipY = contextVk->isViewportFlipEnabledForReadFBO();

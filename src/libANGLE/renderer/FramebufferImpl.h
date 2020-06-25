@@ -16,10 +16,12 @@
 
 namespace gl
 {
-class State;
+class Buffer;
 class Framebuffer;
 class FramebufferAttachment;
+struct PixelPackState;
 struct Rectangle;
+class State;
 }  // namespace gl
 
 namespace rx
@@ -66,6 +68,8 @@ class FramebufferImpl : angle::NonCopyable
     virtual const gl::InternalFormat &getImplementationColorReadFormat(
         const gl::Context *context) const;
     virtual angle::Result readPixels(const gl::Context *context,
+                                     const gl::PixelPackState &pixelPackState,
+                                     gl::Buffer *packBuffer,
                                      const gl::Rectangle &area,
                                      GLenum format,
                                      GLenum type,
