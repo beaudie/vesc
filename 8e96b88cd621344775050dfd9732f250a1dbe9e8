@@ -234,6 +234,30 @@
       "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dbd51b0c_7a6083c0",
+        "filename": "src/feature_support_util/feature_support_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-25T19:18:19Z",
+      "side": 1,
+      "message": "Right, this doesn\u0027t copy if you pass it with `std::move(gpu)`, but it still does an unnecessary move. Here\u0027s a test that demonstrates this: https://ideone.com/Ef4EiK\n\nThank you for having added the \u0026\u0026.",
+      "parentUuid": "afee7d0b_7b7d228e",
+      "range": {
+        "startLine": 537,
+        "startChar": 16,
+        "endLine": 537,
+        "endChar": 20
+      },
+      "revId": "8e96b88cd621344775050dfd9732f250a1dbe9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
