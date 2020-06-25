@@ -32,6 +32,8 @@ void ProgramPipelineVk::destroy(const gl::Context *context)
 void ProgramPipelineVk::reset(ContextVk *contextVk)
 {
     mExecutable.reset(contextVk);
+    // Not done in ProgramExecutableVk::reset() since that's called more often.
+    mExecutable.getTransformedShaderInfo().release(contextVk);
 }
 
 // TODO: http://anglebug.com/3570: Move/Copy all of the necessary information into
@@ -104,19 +106,15 @@ angle::Result ProgramPipelineVk::transformShaderSpirV(const gl::Context *glConte
         {
             ShaderInterfaceVariableInfoMap &variableInfoMap =
                 mExecutable.mVariableInfoMap[shaderType];
-            std::vector<uint32_t> transformedSpirvBlob;
+            SpirvBlob &transformedSpirvBlob =
+                mExecutable.getTransformedShaderInfo().getSpirvBlobs()[shaderType];
 
             // We skip early fragment tests optimization modification here since we need to keep
             // original spriv blob here.
             ANGLE_TRY(GlslangWrapperVk::TransformSpirV(
                 contextVk, shaderType, false, variableInfoMap,
-                programVk->getShaderInfo().getSpirvBlobs()[shaderType], &transformedSpirvBlob));
-
-            // Save the newly transformed SPIR-V
-            // TODO: http://anglebug.com/4513: Keep the original SPIR-V and
-            // translated SPIR-V in separate buffers in ShaderInfo to avoid the
-            // extra copy here.
-            programVk->getShaderInfo().getSpirvBlobs()[shaderType] = transformedSpirvBlob;
+                programVk->getOriginalShaderInfo().getSpirvBlobs()[shaderType],
+                &transformedSpirvBlob));
         }
     }
     return angle::Result::Continue;
