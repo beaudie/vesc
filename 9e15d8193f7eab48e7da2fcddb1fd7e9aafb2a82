@@ -62,6 +62,29 @@
       "revId": "9e15d8193f7eab48e7da2fcddb1fd7e9aafb2a82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8fa66c3_5790a03d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-25T17:47:02Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that invalidateContent also be called in the if() clause as well? The purpose of invalidateContent is to mark its data undefined so that next time you don\u0027t need to load it. This appears to me should be done regardless of RP started or not?",
+      "range": {
+        "startLine": 1245,
+        "startChar": 35,
+        "endLine": 1245,
+        "endChar": 52
+      },
+      "revId": "9e15d8193f7eab48e7da2fcddb1fd7e9aafb2a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
