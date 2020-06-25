@@ -412,6 +412,7 @@ class ContextVk : public ContextImpl, public vk::Context
     }
 
     RenderPassCache &getRenderPassCache() { return mRenderPassCache; }
+    const vk::Framebuffer *getRenderPassFramebuffer() { return mRenderPassFramebuffer; }
 
     vk::DescriptorSetLayoutDesc getDriverUniformsDescriptorSetDesc(
         VkShaderStageFlags shaderStages) const;
@@ -795,7 +796,11 @@ class ContextVk : public ContextImpl, public vk::Context
     void dumpCommandStreamDiagnostics();
     angle::Result flushOutsideRenderPassCommands();
 
-    ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
+    ANGLE_INLINE void onRenderPassFinished()
+    {
+        mRenderPassCommandBuffer = nullptr;
+        mRenderPassFramebuffer   = nullptr;
+    }
 
     angle::Result onBufferRead(VkAccessFlags readAccessType,
                                vk::PipelineStage readStage,
@@ -949,6 +954,7 @@ class ContextVk : public ContextImpl, public vk::Context
 
     vk::CommandBufferHelper *mOutsideRenderPassCommands;
     vk::CommandBufferHelper *mRenderPassCommands;
+    const vk::Framebuffer *mRenderPassFramebuffer;
     vk::PrimaryCommandBuffer mPrimaryCommands;
     // Function recycleCommandBuffer() is public above
     bool mHasPrimaryCommands;
