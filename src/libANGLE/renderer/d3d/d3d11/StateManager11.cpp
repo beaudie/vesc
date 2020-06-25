@@ -2169,7 +2169,9 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                                           const void *indices,
                                           GLsizei instanceCount,
                                           GLint baseVertex,
-                                          GLuint baseInstance)
+                                          //   GLuint baseInstance)
+                                          GLuint baseInstance,
+                                          bool promoteDynamic)
 {
     const gl::State &glState = context->getState();
 
@@ -2213,7 +2215,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
 
     ANGLE_TRY(mVertexArray11->syncStateForDraw(context, firstVertex, vertexOrIndexCount,
                                                indexTypeOrInvalid, indices, instanceCount,
-                                               baseVertex, baseInstance));
+                                               baseVertex, baseInstance, promoteDynamic));
 
     // Changes in the draw call can affect the vertex buffer translations.
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != firstVertex)
