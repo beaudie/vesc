@@ -64,7 +64,7 @@ ANGLE_INLINE void MarkShaderStorageBufferUsage(const Context *context)
 //  an error. ANGLE will treat this as a no-op.
 //  A no-op draw occurs if the count of vertices is less than the minimum required to
 //  have a valid primitive for this mode (0 for points, 0-1 for lines, 0-2 for tris).
-ANGLE_INLINE bool Context::noopDraw(PrimitiveMode mode, GLsizei count)
+ANGLE_INLINE bool Context::noopDraw(PrimitiveMode mode, GLsizei count) const
 {
     if (!mStateCache.getCanDraw())
     {
@@ -151,5 +151,45 @@ ANGLE_INLINE void Context::bindBuffer(BufferBinding target, BufferID buffer)
 }
 
 }  // namespace gl
+
+namespace
+{
+
+// RAII object making sure reset uniforms is called no matter whether there's an error in draw calls
+class ResetBaseVertexBaseInstance : angle::NonCopyable
+{
+  public:
+    ResetBaseVertexBaseInstance(gl::Program *programObject,
+                                bool resetBaseVertex,
+                                bool resetBaseInstance)
+        : mProgramObject(programObject),
+          mResetBaseVertex(resetBaseVertex),
+          mResetBaseInstance(resetBaseInstance)
+    {}
+
+    ~ResetBaseVertexBaseInstance()
+    {
+        if (mProgramObject)
+        {
+            // Reset emulated uniforms to zero to avoid affecting other draw calls
+            if (mResetBaseVertex)
+            {
+                mProgramObject->setBaseVertexUniform(0);
+            }
+
+            if (mResetBaseInstance)
+            {
+                mProgramObject->setBaseInstanceUniform(0);
+            }
+        }
+    }
+
+  private:
+    gl::Program *mProgramObject;
+    bool mResetBaseVertex;
+    bool mResetBaseInstance;
+};
+
+}  // anonymous namespace
 
 #endif  // LIBANGLE_CONTEXT_INL_H_
