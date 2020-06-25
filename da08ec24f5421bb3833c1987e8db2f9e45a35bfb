@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f1a4105_e359218c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-25T19:38:17Z",
+      "side": 1,
+      "message": "you should only enable this when vvl is enabled.",
+      "range": {
+        "startLine": 717,
+        "startChar": 8,
+        "endLine": 717,
+        "endChar": 23
+      },
+      "revId": "da08ec24f5421bb3833c1987e8db2f9e45a35bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
