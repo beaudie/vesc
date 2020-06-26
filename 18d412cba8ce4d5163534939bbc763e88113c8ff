@@ -34,6 +34,24 @@
       "revId": "18d412cba8ce4d5163534939bbc763e88113c8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "768bcc8d_efa20742",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T03:48:24Z",
+      "side": 0,
+      "message": "I take it back. It\u0027s not really a bug, the CHROMIUM copy cannot have flipped source, and if source is flipped (default framebuffer), the image doesn\u0027t have mips.",
+      "parentUuid": "79fbda35_36abea11",
+      "revId": "18d412cba8ce4d5163534939bbc763e88113c8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
