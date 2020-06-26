@@ -188,7 +188,6 @@ void DisplayAndroid::terminate()
     }
 
     mRenderer.reset();
-    mCurrentNativeContext.clear();
 
     egl::Error result = mEGL->terminate();
     if (result.isError())
@@ -331,17 +330,6 @@ egl::Error DisplayAndroid::makeCurrent(egl::Surface *drawSurface,
 void DisplayAndroid::destroyNativeContext(EGLContext context)
 {
     DisplayEGL::destroyNativeContext(context);
-
-    // If this context is current, remove it from the tracking of current contexts to make sure we
-    // don't try to make it current again.
-    for (auto &currentContext : mCurrentNativeContext)
-    {
-        if (currentContext.second.context == context)
-        {
-            currentContext.second.surface = EGL_NO_SURFACE;
-            currentContext.second.context = EGL_NO_CONTEXT;
-        }
-    }
 }
 
 void DisplayAndroid::generateExtensions(egl::DisplayExtensions *outExtensions) const
