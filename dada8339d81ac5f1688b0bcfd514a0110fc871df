@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a5db3ac1_4cfb0bd5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T15:56:25Z",
+      "side": 1,
+      "message": "Added a comment. As you figured it out, it\u0027s because I use a bitmask.",
+      "parentUuid": "2311fddc_224a18b5",
+      "range": {
+        "startLine": 4200,
+        "startChar": 22,
+        "endLine": 4200,
+        "endChar": 24
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "511f5b70_7da1426e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -39,6 +63,24 @@
       "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b9adfcd_38a21247",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T15:56:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "511f5b70_7da1426e",
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -112,6 +154,54 @@
     },
     {
       "key": {
+        "uuid": "a7abbabb_11164428",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T15:56:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3ab150c0_dc8c4e86",
+      "range": {
+        "startLine": 4248,
+        "startChar": 8,
+        "endLine": 4248,
+        "endChar": 33
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97cc08b7_dc764f4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T15:56:25Z",
+      "side": 1,
+      "message": "I don\u0027t think this can ever happen, but put it just in case. Like if somehow it\u0027s possible to redefine a level to have more layers than the image and through some mistake it\u0027s not marked in `skipLevelsMask` and it\u0027s a release build so no ASSERTs, then it would still do the right thing :D\n\nPerformance-wise it should be the same number of instructions.",
+      "parentUuid": "a48e17d7_81d122b3",
+      "range": {
+        "startLine": 4248,
+        "startChar": 36,
+        "endLine": 4248,
+        "endChar": 58
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e8601d6_77411691",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -126,6 +216,24 @@
       "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "810694a0_c4b8bc4d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T15:56:25Z",
+      "side": 1,
+      "message": "Note the -1. updateLayerCount \u003d 63 gives a mask of 0x7FFFFFFF, with base layer 5, it still has 1s in it.\n\nIn fact, with all the asserts and such, I don\u0027t think updateLayersMask can ever be 0.",
+      "parentUuid": "6e8601d6_77411691",
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -149,6 +257,30 @@
       "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf53f8aa_fd8ee90f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4285,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T15:56:25Z",
+      "side": 1,
+      "message": "The bool, given the same expression has the same number of short-circuit possibilities (I verified this in the generated assembly)\n\nI\u0027m surprised that the compiler did actually generate many branches. In this particular case, short-circuiting is not exactly necessary (there is nothing that can go wrong if the other expressions are evaluated (unlike for example if (p \u0026\u0026 p-\u003ex))), so the compiler could have created a number of \"and\" instructions.\n\nI guess it\u0027s a trade off with many-branches-but-hope-for-early-out vs no-branches-but-evaluate-everything.\n\nSince x/y/z at least are always \u003e\u003d, one could instead do `area.x + area.y + area.z \u003d\u003d 0`, but yeah, I would say that\u0027s really in the realm of micro optimization.\n\n---\n\nDone regarding refactoring.",
+      "parentUuid": "27e1d3a0_29f76b5d",
+      "range": {
+        "startLine": 4283,
+        "startChar": 0,
+        "endLine": 4285,
+        "endChar": 52
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
