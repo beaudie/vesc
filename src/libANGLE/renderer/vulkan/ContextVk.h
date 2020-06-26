@@ -540,6 +540,17 @@ class ContextVk : public ContextImpl, public vk::Context
         return mWriteInfos[oldSize];
     }
 
+    void newBindProgramWillLoadUniformData(bool extraUniformDataUpdate, gl::ShaderType shaderType)
+    {
+        // statistics for default uniform data loads upon glUseProgram call. If uniform data is
+        // dirty, we have to load the data. Otherwise if we chose to load unifoirm data upon
+        // glUseProgram call, that load is extra.
+        if (extraUniformDataUpdate)
+            mNewBindProgramUniformDataExtraLoad[shaderType]++;
+        else
+            mNewBindProgramUniformDataMustLoad[shaderType]++;
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1010,6 +1021,9 @@ class ContextVk : public ContextImpl, public vk::Context
       private:
         ContextVk *mContextVk;
     };
+
+    gl::ShaderMap<uint64_t> mNewBindProgramUniformDataExtraLoad;
+    gl::ShaderMap<uint64_t> mNewBindProgramUniformDataMustLoad;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };

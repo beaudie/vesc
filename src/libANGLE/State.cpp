@@ -26,6 +26,7 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/renderer/ContextImpl.h"
+#include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/TextureImpl.h"
 
 namespace gl
@@ -3263,6 +3264,7 @@ void State::setObjectDirty(GLenum target)
 
 angle::Result State::onProgramExecutableChange(const Context *context, Program *program)
 {
+    program->getImplementation()->onProgramBind();
     // OpenGL Spec:
     // "If LinkProgram or ProgramBinary successfully re-links a program object
     //  that was already in use as a result of a previous call to UseProgram, then the

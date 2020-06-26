@@ -157,6 +157,7 @@ class ProgramImpl : angle::NonCopyable
 
     virtual angle::Result syncState(const gl::Context *context,
                                     const gl::Program::DirtyBits &dirtyBits);
+    virtual void onProgramBind() {}
 
   protected:
     const gl::ProgramState &mState;
