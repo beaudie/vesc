@@ -22,6 +22,30 @@
       "revId": "bd91d89a4e8709bbb35da7c4e14b6d1ff2611083",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70f20190_9c7b2109",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T17:05:56Z",
+      "side": 1,
+      "message": "I don\u0027t think so. At this point I\u0027m working with the buffers of the currently active framebuffer, I\u0027m not changing anything in the current renderpass. These are the buffers who\u0027s content is becoming invalid. When we next process a begin renderpass it can check if the contents are valid and set the load ops appropriately.",
+      "parentUuid": "5469a0b1_75cb66c9",
+      "range": {
+        "startLine": 1252,
+        "startChar": 31,
+        "endLine": 1252,
+        "endChar": 49
+      },
+      "revId": "bd91d89a4e8709bbb35da7c4e14b6d1ff2611083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

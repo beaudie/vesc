@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5ee5d27d_9f54e222",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T17:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "469aa63f_66c88759",
+      "range": {
+        "startLine": 240,
+        "startChar": 57,
+        "endLine": 240,
+        "endChar": 61
+      },
+      "revId": "9e15d8193f7eab48e7da2fcddb1fd7e9aafb2a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a98d8ca_03da4a85",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 1
@@ -86,6 +110,24 @@
       "revId": "9e15d8193f7eab48e7da2fcddb1fd7e9aafb2a82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a591100_c8863693",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T17:05:56Z",
+      "side": 1,
+      "message": "I added a test and stepped through to verify that we don\u0027t modify the renderpass if it doesn\u0027t match the current framebuffer. However, not sure I can make that validation happen automatically. How do you verify that the invalidate was processed if it\u0027s okay to not invalidate (e.g. flush the contents to memory)?\nI tried to capture the offending frame(s) on templerun but wasn\u0027t having any luck grabbing a frame with a glInvalidateFramebuffer in it via RenderDoc.",
+      "parentUuid": "1a98d8ca_03da4a85",
+      "revId": "9e15d8193f7eab48e7da2fcddb1fd7e9aafb2a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

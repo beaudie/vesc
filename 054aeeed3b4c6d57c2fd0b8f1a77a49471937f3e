@@ -22,6 +22,30 @@
       "revId": "054aeeed3b4c6d57c2fd0b8f1a77a49471937f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dd66fa4_df3dd2bc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T17:05:56Z",
+      "side": 0,
+      "message": "Yes, looks great. Adding the check for matching renderpass fixes the ghosting.",
+      "parentUuid": "97d9c5a0_0da8377d",
+      "range": {
+        "startLine": 237,
+        "startChar": 44,
+        "endLine": 237,
+        "endChar": 52
+      },
+      "revId": "054aeeed3b4c6d57c2fd0b8f1a77a49471937f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
