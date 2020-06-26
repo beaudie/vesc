@@ -16,6 +16,24 @@
       "revId": "18d412cba8ce4d5163534939bbc763e88113c8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79fbda35_36abea11",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-26T03:33:51Z",
+      "side": 0,
+      "message": "I don\u0027t follow.\n\nI used a variable so that I could swap width and height for 90 \u0026 270 (above).  I think your concern is that I\u0027m getting it from the framebuffer (your previous comment).  However, your previous comment suggests I pass this variable from the calling function.  Should I call this from the calling function, or the new one you suggest, or can I call one of them in this function (before my rotation code)?",
+      "parentUuid": "502150e7_6f72d07c",
+      "revId": "18d412cba8ce4d5163534939bbc763e88113c8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
