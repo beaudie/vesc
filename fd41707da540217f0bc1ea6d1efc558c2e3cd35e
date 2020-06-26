@@ -22,6 +22,30 @@
       "revId": "fd41707da540217f0bc1ea6d1efc558c2e3cd35e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a1510a3_aa808781",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-06-26T19:08:40Z",
+      "side": 1,
+      "message": "Hmm I think the main issue here is we don\u0027t want to check if there\u0027s drawId, baseVertex or baseInstance inside for loop. Thus separate them into different if branch entry. and use macro to avoid some code duplications.\n\nThinking about using template, there are functions variations with different args definition from parent function. I think to work with template we are gonna use typedef int (*F)(int,...); but that has the constraint for args passed in. If we pass in the most args version (from multiDrawElementsInstancedBaseVertexBaseInstance) there would be undefined args for multiDrawArrays.\n\nSince this set of macro is only used locally I think it would be okay? I could add more comments.",
+      "parentUuid": "4d3e469f_cedc8e24",
+      "range": {
+        "startLine": 474,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 23
+      },
+      "revId": "fd41707da540217f0bc1ea6d1efc558c2e3cd35e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
