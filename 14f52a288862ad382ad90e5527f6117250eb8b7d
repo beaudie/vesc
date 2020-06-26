@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7603f0b3_0058a8d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T23:48:30Z",
+      "side": 1,
+      "message": "Good point.  The CL that removes storing the transformed SPIR-V entirely is here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2270718",
+      "parentUuid": "c70a23fd_01b8f95a",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 43
+      },
+      "revId": "14f52a288862ad382ad90e5527f6117250eb8b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06f4fe1c_ac85f2fa",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
         "patchSetId": 6
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "f987e8e0_06b4d7cd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T23:48:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06f4fe1c_ac85f2fa",
+      "range": {
+        "startLine": 130,
+        "startChar": 57,
+        "endLine": 130,
+        "endChar": 69
+      },
+      "revId": "14f52a288862ad382ad90e5527f6117250eb8b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8e36f88_1eaa5d84",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
         "patchSetId": 6
@@ -92,6 +140,30 @@
       "revId": "14f52a288862ad382ad90e5527f6117250eb8b7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a20c426_285ada2c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T23:48:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8e36f88_1eaa5d84",
+      "range": {
+        "startLine": 137,
+        "startChar": 50,
+        "endLine": 137,
+        "endChar": 62
+      },
+      "revId": "14f52a288862ad382ad90e5527f6117250eb8b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
