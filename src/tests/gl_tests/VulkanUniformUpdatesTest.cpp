@@ -475,6 +475,77 @@ TEST_P(VulkanUniformUpdatesTest, TextureStagingBufferRecycling)
     }
 }
 
+// This test try to create a situation that VS and FS's uniform data might gets updated in
+// different buffer. Driver is expected to force update both uniforms into one buffer and render
+// correctly. Otherwise it will access VS uniform from wrong buffer and render incorrectly.
+TEST_P(VulkanUniformUpdatesTest, UpdateAfterNewBufferIsAllocated)
+{
+    ASSERT_TRUE(IsVulkan());
+
+    constexpr char kPositionUniformVertexShader[] = R"(attribute vec2 position;
+uniform float uniformVS;
+varying vec4 outVS;
+void main()
+{
+    outVS = vec4(uniformVS, uniformVS, uniformVS, uniformVS);
+    gl_Position = vec4(position, 0, 1);
+})";
+
+    constexpr char kColorUniformFragmentShader[] = R"(precision mediump float;
+varying vec4 outVS;
+uniform float uniformFS;
+void main()
+{
+    if(outVS[0] > uniformFS)
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    else
+        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kPositionUniformVertexShader, kColorUniformFragmentShader);
+    glUseProgram(program);
+
+    limitMaxSets(program);
+
+    rx::ProgramVk *programVk = hackProgram(program);
+
+    // Set a really small min size so that every uniform updates actually allocates a new buffer.
+    programVk->setDefaultUniformBlocksMinSizeForTesting(128);
+
+    GLint uniformVSLocation = glGetUniformLocation(program, "uniformVS");
+    ASSERT_NE(uniformVSLocation, -1);
+    GLint uniformFSLocation = glGetUniformLocation(program, "uniformFS");
+    ASSERT_NE(uniformFSLocation, -1);
+
+    glUniform1f(uniformVSLocation, 10.0);
+    glUniform1f(uniformFSLocation, 11.0);
+    drawQuad(program, "position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+
+    const GLsizei kHalfX  = getWindowWidth() / 2;
+    const GLsizei kHalfY  = getWindowHeight() / 2;
+    const GLsizei xoffset = kHalfX;
+    const GLsizei yoffset = kHalfY;
+    // 10.0f < 11.0f, should see green
+    EXPECT_PIXEL_RECT_EQ(xoffset, yoffset, kHalfX, kHalfY, GLColor::green);
+
+    // Now only update FS's uniform
+    for (int i = 0; i < 3; i++)
+    {
+        glUniform1f(uniformFSLocation, 9.0f);
+        drawQuad(program, "position", 0.5f, 1.0f);
+        ASSERT_GL_NO_ERROR();
+    }
+    // 10.0f > 9.0f, should see red
+    EXPECT_PIXEL_RECT_EQ(xoffset, yoffset, kHalfX, kHalfY, GLColor::red);
+
+    // 10.0f < 11.0f, should see green again
+    glUniform1f(uniformFSLocation, 11.0f);
+    drawQuad(program, "position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(xoffset, yoffset, kHalfX, kHalfY, GLColor::green);
+}
+
 ANGLE_INSTANTIATE_TEST(VulkanUniformUpdatesTest, ES2_VULKAN(), ES3_VULKAN());
 
 }  // anonymous namespace
