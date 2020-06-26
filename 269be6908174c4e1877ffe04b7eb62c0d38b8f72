@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5055058e_1e8b2184",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "nit: serializedStateOffset/Length",
+      "range": {
+        "startLine": 924,
+        "startChar": 37,
+        "endLine": 924,
+        "endChar": 60
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2b70dab_4aea03e8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "can we resolve this to just including util_gl.h?",
+      "range": {
+        "startLine": 934,
+        "startChar": 0,
+        "endLine": 942,
+        "endChar": 5
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecf0dcef_3e8cb02f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "nit: GetSerializedContextState",
+      "range": {
+        "startLine": 983,
+        "startChar": 40,
+        "endLine": 983,
+        "endChar": 60
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97cd58b3_ded80a0f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3241,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 3241,
+        "startChar": 16,
+        "endLine": 3241,
+        "endChar": 47
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba4053f7_465a9974",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3917,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "you can move this code into WriteCppReplayIndexFiles by passing mSerializeStateEnabled and the binary data.",
+      "range": {
+        "startLine": 3904,
+        "startChar": 0,
+        "endLine": 3917,
+        "endChar": 0
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d56bdc1_9c2042ee",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "nit: mSerializeStateEnabled",
+      "range": {
+        "startLine": 314,
+        "startChar": 9,
+        "endLine": 314,
+        "endChar": 33
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f0279db_4ab4d48d",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "nit: getState",
+      "range": {
+        "startLine": 251,
+        "startChar": 28,
+        "endLine": 251,
+        "endChar": 47
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfa4142a_d4ed2d9b",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "can you remove this cast please?",
+      "range": {
+        "startLine": 279,
+        "startChar": 4,
+        "endLine": 279,
+        "endChar": 14
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b58fcf4_49f7c6bc",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 12
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "fyi, another reason to use frame_capture_utils is that these methods will only show up in the libANGLE with frame capture enabled, saving binary size.",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 38
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3ccee2_da61126b",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "can you add an accessor to BinaryOutputStream that gets the data (const) so we can compare using operator\u003d\u003d ? We\u0027ll need to make a separate patch to BinaryOutputStream to internally switch from char to uint8_t.",
+      "range": {
+        "startLine": 142,
+        "startChar": 64,
+        "endLine": 142,
+        "endChar": 91
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ce32ec9_0f1bfc24",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "nit: return bool",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 8
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc43ac72_c8d11175",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "compareSerializedState?",
+      "range": {
+        "startLine": 142,
+        "startChar": 8,
+        "endLine": 142,
+        "endChar": 33
+      },
+      "revId": "269be6908174c4e1877ffe04b7eb62c0d38b8f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -357,6 +357,30 @@
     },
     {
       "key": {
+        "uuid": "64495f4c_d72f7e17",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "Looks like it\u0027s b/c of an unrelated change. Can you split off this fix?",
+      "parentUuid": "0eeef55d_58271f0d",
+      "range": {
+        "startLine": 936,
+        "startChar": 35,
+        "endLine": 936,
+        "endChar": 53
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fcdb1a9_649b7c6e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 7
@@ -1413,6 +1437,24 @@
       "side": 1,
       "message": "I am assuming that frame_capture_utils.cpp will be the implementation of frame_capture_utils.h, which is part of a testonly target. I dont think it can be linked to non-testonly targets, and FrameCapture is in one.",
       "parentUuid": "525bd413_2b5ea7eb",
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bcc8323_d4523e92",
+        "filename": "src/libANGLE/SerializeContext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 1,
+      "message": "frame_capture_utils is part of libangle_capture_sources, which is part of libANGLE_with_capture. I don\u0027t see any mention of testonly.",
+      "parentUuid": "56f4e9be_a501b4bc",
       "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a04078ac_79df7aca",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 8440,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:52:28Z",
+      "side": 0,
+      "message": "nit: you can leave this comment.",
+      "range": {
+        "startLine": 8440,
+        "startChar": 3,
+        "endLine": 8440,
+        "endChar": 37
+      },
+      "revId": "5046324e5fc5a42913f00c285b21ce19e32fa307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
