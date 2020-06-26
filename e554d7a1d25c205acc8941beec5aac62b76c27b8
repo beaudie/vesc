@@ -281,6 +281,30 @@
       "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f6f8e7b_93cdd25f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 52
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T18:23:18Z",
+      "side": 1,
+      "message": "Isn\u0027t the VkSampler handle sufficient to encompass everything?",
+      "parentUuid": "136eadce_878c2f0a",
+      "range": {
+        "startLine": 622,
+        "startChar": 13,
+        "endLine": 622,
+        "endChar": 28
+      },
+      "revId": "e554d7a1d25c205acc8941beec5aac62b76c27b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
