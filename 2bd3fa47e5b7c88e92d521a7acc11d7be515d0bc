@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f3400a4_7f84442f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/VertexArray11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T18:21:58Z",
+      "side": 1,
+      "message": "this looks much better!",
+      "range": {
+        "startLine": 327,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 0
+      },
+      "revId": "2bd3fa47e5b7c88e92d521a7acc11d7be515d0bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
