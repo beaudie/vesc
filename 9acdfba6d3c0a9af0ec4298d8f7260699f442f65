@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "682b2ae9_9229c8eb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-26T05:52:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34a24f09_e2ff50cb",
+      "range": {
+        "startLine": 820,
+        "startChar": 25,
+        "endLine": 820,
+        "endChar": 29
+      },
+      "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9470d4a_2a61752a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 16
@@ -45,6 +69,30 @@
       "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28017907_4c4a8b92",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-26T05:52:18Z",
+      "side": 1,
+      "message": "Per a private chat, as summarized in the comment below, this is replaced with some new code that Shabi pefers",
+      "parentUuid": "b9470d4a_2a61752a",
+      "range": {
+        "startLine": 823,
+        "startChar": 0,
+        "endLine": 824,
+        "endChar": 89
+      },
+      "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
