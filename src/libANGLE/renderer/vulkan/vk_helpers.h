@@ -108,7 +108,7 @@ class DynamicBuffer : angle::NonCopyable
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
 
-    BufferHelper *getCurrentBuffer() { return mBuffer; }
+    BufferHelper *getCurrentBuffer() const { return mBuffer; }
 
     // **Accumulate** an alignment requirement.  A dynamic buffer is used as the staging buffer for
     // image uploads, which can contain updates to unrelated mips, possibly with different formats.
