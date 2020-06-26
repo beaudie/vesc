@@ -69,6 +69,53 @@
       "revId": "f6d3223d86f027972d972e8f6b4fce95b05aeaa4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ef1d2e_1b8a5042",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:53:52Z",
+      "side": 1,
+      "message": "It is overridden below, not possible.",
+      "parentUuid": "28a8ff66_d54d35a1",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 45
+      },
+      "revId": "f6d3223d86f027972d972e8f6b4fce95b05aeaa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "912625df_b374351d",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T14:53:52Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 677,
+        "startChar": 8,
+        "endLine": 677,
+        "endChar": 41
+      },
+      "revId": "f6d3223d86f027972d972e8f6b4fce95b05aeaa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
