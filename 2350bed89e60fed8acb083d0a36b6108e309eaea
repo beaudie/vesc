@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41561f2f_2e152e05",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T18:25:11Z",
+      "side": 1,
+      "message": "Shouldn\u0027t keep this pointer. See UtilsVk::startRenderPass for example, the vk::Framebuffer is on the stack, which gets unwound after it returns.",
+      "range": {
+        "startLine": 4217,
+        "startChar": 29,
+        "endLine": 4217,
+        "endChar": 41
+      },
+      "revId": "2350bed89e60fed8acb083d0a36b6108e309eaea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f326f490_35e9a347",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T18:25:11Z",
+      "side": 1,
+      "message": "Ok I agree it\u0027s impossible to write a test for this. Maybe just draw blue and verify it. It would be a good test to have around to verify load/store ops through RenderDoc.",
+      "revId": "2350bed89e60fed8acb083d0a36b6108e309eaea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
