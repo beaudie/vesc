@@ -145,6 +145,8 @@ class ProgramVk : public ProgramImpl
         return mGlslangProgramInterfaceInfo;
     }
 
+    void onProgramBind() override { mProgramJustBound = true; }
+
   private:
     template <int cols, int rows>
     void setUniformMatrixfv(GLint location,
@@ -196,6 +198,7 @@ class ProgramVk : public ProgramImpl
     GlslangProgramInterfaceInfo mGlslangProgramInterfaceInfo;
 
     ProgramExecutableVk mExecutable;
+    bool mProgramJustBound;
 };
 
 }  // namespace rx

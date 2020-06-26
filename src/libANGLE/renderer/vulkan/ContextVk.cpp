@@ -723,6 +723,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mBufferInfos.reserve(kDescriptorBufferInfosInitialSize);
     mImageInfos.reserve(kDescriptorImageInfosInitialSize);
     mWriteInfos.reserve(kDescriptorWriteInfosInitialSize);
+
+    mNewBindProgramUniformDataExtraLoad.fill(0);
+    mNewBindProgramUniformDataMustLoad.fill(0);
 }
 
 ContextVk::~ContextVk() = default;
@@ -768,6 +771,19 @@ void ContextVk::onDestroy(const gl::Context *context)
     mGpuEventQueryPool.destroy(device);
     mCommandPool.destroy(device);
     mPrimaryCommands.destroy(device);
+
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        double extraLoadPercentage =
+            (100.0 * (double)mNewBindProgramUniformDataExtraLoad[shaderType] /
+             (double)(mNewBindProgramUniformDataExtraLoad[shaderType] +
+                      mNewBindProgramUniformDataMustLoad[shaderType]));
+        WARN() << gl::GetShaderTypeString(shaderType) << " mNewBindProgramUniformDataMustLoad:"
+               << mNewBindProgramUniformDataMustLoad[shaderType]
+               << " mNewBindProgramUniformDataLoadCanAvoid:"
+               << mNewBindProgramUniformDataExtraLoad[shaderType]
+               << " extraLoadPercentage:" << extraLoadPercentage;
+    }
 }
 
 angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,

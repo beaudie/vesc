@@ -189,6 +189,8 @@ void ProgramVk::reset(ContextVk *contextVk)
     GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(&mGlslangProgramInterfaceInfo);
 
     mExecutable.reset(contextVk);
+
+    mProgramJustBound = false;
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
@@ -758,6 +760,19 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     uint32_t offsetIndex                      = 0;
     const gl::ProgramExecutable &glExecutable = mState.getExecutable();
 
+    if (mProgramJustBound)
+    {
+        for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+        {
+            // If this program is just bound, and uniform data is clean and not empty, right now we
+            // will not update it. If we move the storage to context, then this will have to be
+            // updated. That update will be extra update.
+            bool extraUniformDataUpdate = !mDefaultUniformBlocksDirty.test(shaderType) &&
+                                          !mDefaultUniformBlocks[shaderType].uniformData.empty();
+            contextVk->newBindProgramWillLoadUniformData(extraUniformDataUpdate, shaderType);
+        }
+        mProgramJustBound = false;
+    }
     // Update buffer memory by immediate mapping. This immediate update only works once.
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
