@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25abd488_4b30d3df",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T16:15:09Z",
+      "side": 1,
+      "message": "!\n\nSo, was imageOffset negative before this? If not, what about the two columns of pixels that are not being updated?\n\nAlso, please add a bug tag. If you intend to close b/158337857 before resolving this, open a new bug. I suspect this is due to two off-by-one errors when flipping coordinates, and would really like to see that properly fixed eventually.",
+      "revId": "62d884aa0854139e5fe76d3767b8c054724e5905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
