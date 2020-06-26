@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0399557c_25aefbe1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4217,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T20:34:09Z",
+      "side": 1,
+      "message": "framebuffer is a reference (const vk::Framebuffer \u0026framebuffer), doesn\u0027t \u0026framebuffer get me the address of where the real object is? It seems to work in the debugger.\nWhen I check mRenderPassFramebuffer in the invalidate function it appears to be good.",
+      "parentUuid": "41561f2f_2e152e05",
+      "range": {
+        "startLine": 4217,
+        "startChar": 29,
+        "endLine": 4217,
+        "endChar": 41
+      },
+      "revId": "2350bed89e60fed8acb083d0a36b6108e309eaea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f326f490_35e9a347",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 6
