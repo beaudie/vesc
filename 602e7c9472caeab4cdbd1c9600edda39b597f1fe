@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "585d1a5e_f9840028",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-26T04:24:51Z",
+      "side": 1,
+      "message": "Updated comment. The hashes aren\u0027t the same unfortunately, since they come from separate repos.",
+      "parentUuid": "5123226a_0f5be034",
+      "range": {
+        "startLine": 39,
+        "startChar": 14,
+        "endLine": 39,
+        "endChar": 63
+      },
+      "revId": "602e7c9472caeab4cdbd1c9600edda39b597f1fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89859be0_a58b07b3",
         "filename": "DEPS",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "602e7c9472caeab4cdbd1c9600edda39b597f1fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edcd86d1_002733ff",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1323871
+      },
+      "writtenOn": "2020-06-26T04:24:51Z",
+      "side": 1,
+      "message": "\"\"",
+      "parentUuid": "89859be0_a58b07b3",
+      "range": {
+        "startLine": 143,
+        "startChar": 61,
+        "endLine": 143,
+        "endChar": 86
+      },
+      "revId": "602e7c9472caeab4cdbd1c9600edda39b597f1fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
