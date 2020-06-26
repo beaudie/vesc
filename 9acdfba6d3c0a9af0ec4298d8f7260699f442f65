@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34a24f09_e2ff50cb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T03:16:00Z",
+      "side": 1,
+      "message": "nit: Either make the type `gl::Rectangle` (preferred) or call this `Box`.",
+      "range": {
+        "startLine": 820,
+        "startChar": 25,
+        "endLine": 820,
+        "endChar": 29
+      },
+      "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9470d4a_2a61752a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T03:16:00Z",
+      "side": 1,
+      "message": "You can\u0027t assume the call came from glTex[Sub]Image. It could also come from glCopy[Sub]TextureCHROMIUM, which copies from arbitrary textures.\n\nYou need to pass the srcDimensions from the caller.",
+      "range": {
+        "startLine": 823,
+        "startChar": 0,
+        "endLine": 824,
+        "endChar": 89
+      },
+      "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c03b88c_bb80c196",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-26T03:16:00Z",
+      "side": 1,
+      "message": "Cannot wait for support from trybots to test these. Seems like it would be quite easy to introduce bugs with prerotation.",
+      "range": {
+        "startLine": 1731,
+        "startChar": 38,
+        "endLine": 1731,
+        "endChar": 39
+      },
+      "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
