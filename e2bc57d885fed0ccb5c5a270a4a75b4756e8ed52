@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc759411_b66e6419",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-26T15:01:56Z",
+      "side": 1,
+      "message": "nit: you can omit this namespace marker in the header, doesn\u0027t really do anything afaik.",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 1
+      },
+      "revId": "e2bc57d885fed0ccb5c5a270a4a75b4756e8ed52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
