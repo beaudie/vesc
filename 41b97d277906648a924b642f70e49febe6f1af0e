@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "741b5ed0_d1aa4a4b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T13:49:04Z",
+      "side": 1,
+      "message": "Only dest needs to rotate during a resolve?\nI think that makes sense. The multi-sample buffer isn\u0027t a presentable buffer so it doesn\u0027t need rotation, but the resolved image could be presentable and thus require rotation.",
+      "range": {
+        "startLine": 781,
+        "startChar": 59,
+        "endLine": 781,
+        "endChar": 75
+      },
+      "revId": "41b97d277906648a924b642f70e49febe6f1af0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "056bbc71_d82d4a85",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T13:49:04Z",
+      "side": 1,
+      "message": "BTW, AdjustBlitAreaForPreRotation depends on the output clip area to be pre-loaded so that the function can swap the width \u0026 height if needed. That\u0027s not obvious unless you look at the code. Might be more intuitive if width \u0026 height were taken from the input area as appropriate.",
+      "revId": "41b97d277906648a924b642f70e49febe6f1af0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "480df328_e6ad88da",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-26T13:49:04Z",
+      "side": 1,
+      "message": "Need bug tag here.",
+      "range": {
+        "startLine": 1698,
+        "startChar": 11,
+        "endLine": 1698,
+        "endChar": 15
+      },
+      "revId": "41b97d277906648a924b642f70e49febe6f1af0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
