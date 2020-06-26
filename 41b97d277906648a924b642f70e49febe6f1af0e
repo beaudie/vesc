@@ -104,6 +104,30 @@
       "revId": "41b97d277906648a924b642f70e49febe6f1af0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe12a681_dd0ed32c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-26T15:53:19Z",
+      "side": 1,
+      "message": "I don\u0027t want to keep this work-around.\n\nShabi, do you have any insights (since you wrote this code)?  Why might things get off by 2 pixels in one dimension, when we rotate 270 degrees?\n\nThis causes a Vulkan validation error for the end2end tests, but not for the following tests (where the copy from the temporary buffer is off by 2 pixels):\n\ndEQP.GLES3/functional_fbo_invalidate_sub_unbind_blit_msaa_color\ndEQP.GLES3/functional_fbo_invalidate_sub_unbind_blit_msaa_depth\ndEQP.GLES3/functional_fbo_invalidate_whole_unbind_blit_msaa_color\ndEQP.GLES3/functional_fbo_invalidate_whole_unbind_blit_msaa_depth",
+      "parentUuid": "480df328_e6ad88da",
+      "range": {
+        "startLine": 1698,
+        "startChar": 11,
+        "endLine": 1698,
+        "endChar": 15
+      },
+      "revId": "41b97d277906648a924b642f70e49febe6f1af0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
