@@ -88,6 +88,30 @@
     },
     {
       "key": {
+        "uuid": "a48e17d7_81d122b3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T06:31:49Z",
+      "side": 1,
+      "message": "Based on your other CL, it looks like you can disregard the second half of this comment.",
+      "parentUuid": "e79dcbf2_a02644b0",
+      "range": {
+        "startLine": 4248,
+        "startChar": 36,
+        "endLine": 4248,
+        "endChar": 58
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e8601d6_77411691",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
