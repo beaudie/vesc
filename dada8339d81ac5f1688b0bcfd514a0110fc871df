@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2311fddc_224a18b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4200,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T06:22:23Z",
+      "side": 1,
+      "message": "This magic number pops up a few times in here and should be constant defined somewhere.",
+      "range": {
+        "startLine": 4200,
+        "startChar": 22,
+        "endLine": 4200,
+        "endChar": 24
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "511f5b70_7da1426e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4202,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T06:22:23Z",
+      "side": 1,
+      "message": "Why is there a cap on the number of layers and why is it 64?",
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ab150c0_dc8c4e86",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T06:22:23Z",
+      "side": 1,
+      "message": "Ah, you\u0027re using a bit mask which is why there\u0027s a 64 layer cap.   Makes sense, just need to make it a little more clear above.",
+      "range": {
+        "startLine": 4248,
+        "startChar": 8,
+        "endLine": 4248,
+        "endChar": 33
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e79dcbf2_a02644b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T06:22:23Z",
+      "side": 1,
+      "message": "You just asserted above that updateLayerCount \u003c\u003d 64, so the \"\u003e\" can be removed from here.\n\nThis should also just work with \u002764\u0027, since the 1 will shift off the left so angle::Bit(0) returns 0, which will then turn into all 1s after the subtraction.\n\n        uint64_t updateLayersMask \u003d angle::Bit\u003cuint64_t\u003e(updateLayerCount) - 1;",
+      "range": {
+        "startLine": 4248,
+        "startChar": 36,
+        "endLine": 4248,
+        "endChar": 58
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e8601d6_77411691",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4251,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T06:22:23Z",
+      "side": 1,
+      "message": "What about:\n    updateLayerCount \u003d 63\n    updateBaseLayer \u003d 5\n\nSince you\u0027ll get 0s, the rest of the work here can be skipped:\n\n    if (!updateLayersMask}\n    {\n        return false;\n    }",
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27e1d3a0_29f76b5d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4285,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-26T06:22:23Z",
+      "side": 1,
+      "message": "A bit of a micro-optimization, but is having this many checks in the same conditional the right thing?   All of the short-circuit possibilities could misguide the branch prediction (and certainly eats up slots in it), versus having a single \u0027fullSubResourceUpdate\u0027 bool that\u0027s checked in the conditional.\n\n\nAlso, it looks like this kind of check has come up a couple times:\n\n    Texture::doesSubImageNeedInit()\n        bool coversWholeImage \u003d area.x \u003d\u003d 0 \u0026\u0026 area.y \u003d\u003d 0 \u0026\u0026 area.z \u003d\u003d 0 \u0026\u0026\n                                area.width \u003d\u003d desc.size.width \u0026\u0026 area.height \u003d\u003d desc.size.height \u0026\u0026\n                                area.depth \u003d\u003d desc.size.depth;\n\n    TextureStorage11::updateSubresourceLevel()\n        bool fullCopy \u003d copyArea.x \u003d\u003d 0 \u0026\u0026 copyArea.y \u003d\u003d 0 \u0026\u0026 copyArea.z \u003d\u003d 0 \u0026\u0026\n                        copyArea.width \u003d\u003d texSize.width \u0026\u0026 copyArea.height \u003d\u003d texSize.height \u0026\u0026\n                        copyArea.depth \u003d\u003d texSize.depth;\n\nMight be outside of the scope here, but it looks like this pattern is starting to repeat enough to warrant a utility function if the parameters can be generalized easily enough (or maybe they already are).",
+      "range": {
+        "startLine": 4283,
+        "startChar": 0,
+        "endLine": 4285,
+        "endChar": 52
+      },
+      "revId": "dada8339d81ac5f1688b0bcfd514a0110fc871df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
