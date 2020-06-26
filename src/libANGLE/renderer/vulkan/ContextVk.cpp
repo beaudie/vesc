@@ -1466,7 +1466,8 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
 
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
-        mProgram->getState(), mProgram->getDefaultUniformBlocks(), this);
+        mProgram->getState(), mProgram->getDefaultUniformBlocks(),
+        mProgram->getDefaultUniformBuffer(), this);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
@@ -1548,6 +1549,10 @@ angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
     ANGLE_TRY(mExecutable->updateDescriptorSets(this, commandBuffer));
+    if (mProgram)
+    {
+        mProgram->getDefaultUniformStorage()->releaseInFlightBuffers(this);
+    }
     return angle::Result::Continue;
 }
 
