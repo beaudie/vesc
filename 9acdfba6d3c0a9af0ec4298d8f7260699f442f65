@@ -68,6 +68,30 @@
       "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f7adb569_566b9b46",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-06-26T03:35:57Z",
+      "side": 1,
+      "message": "I\u0027ve tested this with all rotations on Android (manually) because we have no trybots that are rotated",
+      "parentUuid": "2c03b88c_bb80c196",
+      "range": {
+        "startLine": 1731,
+        "startChar": 38,
+        "endLine": 1731,
+        "endChar": 39
+      },
+      "revId": "9acdfba6d3c0a9af0ec4298d8f7260699f442f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
