@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bce1c330_565f91ff",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-27T03:14:14Z",
+      "side": 1,
+      "message": "Just say:\n\n    SpirvBlob transformedSpirvBlob;",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 72
+      },
+      "revId": "4da7c1d4fdcc13f6d62815857a166528d6f9e5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
