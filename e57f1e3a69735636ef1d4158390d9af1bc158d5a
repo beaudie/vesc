@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14e8eb27_264163fe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-27T03:07:26Z",
+      "side": 1,
+      "message": "One final nit. Since the only use of this is to test if a framebuffer is the same as the one whose renderpass is current, I suggest changing this to:\n\n    bool isRenderPassOfFramebuffer(vk::Framebuffer *framebuffer) const\n    {\n        return mRenderPassFramebuffer !\u003d VK_NULL_HANDLE \u0026\u0026\n               framebuffer !\u003d nullptr \u0026\u0026\n               mRenderPassFramebuffer \u003d\u003d framebuffer-\u003egetHandle();\n    }\n\nThis way we don\u0027t expose the framebuffer handle.\n\nThe function name could be better though, maybe `isCurrentRenderPassOfFramebuffer`?",
+      "range": {
+        "startLine": 415,
+        "startChar": 18,
+        "endLine": 415,
+        "endChar": 42
+      },
+      "revId": "e57f1e3a69735636ef1d4158390d9af1bc158d5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
