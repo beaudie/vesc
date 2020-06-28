@@ -45,6 +45,29 @@
       "revId": "f92033b5540940e327681e1c1ce38ba2d5cdbe07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0719e8c2_60793212",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-06-28T02:51:39Z",
+      "side": 1,
+      "message": "Offline talked with Xinghua. It seems that only below two situations don\u0027t satisfy the condition to translate to a structured buffer.\n1. Uniform block includes a member (or it\u0027s a member of a structure) which is an array of scalars or vectors (vec4 is excluded).\n2. Uniform block includes a member (or it\u0027s a member of a structure) which is a matrix and needs padding based on std140 rules.\n\nThe reason is because above two types in HLSL structured buffer is tightly stored in memory. However, std140 requires rounded up to the base alignment of a vec4. So we should exclude above two conditions when translating to HLSL structured buffer.\n\nThe checking in this patch is too narrow, which will result some cases can\u0027t be translated into structure buffer. For example:\nstruct S\n{\nfloat b1;\nfloat b2;\n}",
+      "range": {
+        "startLine": 109,
+        "startChar": 5,
+        "endLine": 109,
+        "endChar": 50
+      },
+      "revId": "f92033b5540940e327681e1c1ce38ba2d5cdbe07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
