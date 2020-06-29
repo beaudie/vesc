@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73d26b4f_7283c1ba",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-29T20:12:32Z",
+      "side": 1,
+      "message": "shabi, this might need to change to depth/stencil as well - we will address it when usecase shows up?\n\nMight need to add a TODO for accommodating other values when we add support for YUV, heads up to courtney?",
+      "range": {
+        "startLine": 1089,
+        "startChar": 37,
+        "endLine": 1089,
+        "endChar": 62
+      },
+      "revId": "58ff77a835025f67c04015b4bdcee3bb30fa8f80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
