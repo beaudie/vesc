@@ -68,6 +68,30 @@
       "revId": "f92033b5540940e327681e1c1ce38ba2d5cdbe07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffe251fb_19eef6cd",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-06-29T03:22:48Z",
+      "side": 1,
+      "message": "Further look at this issue. Except above two situations, we still need to consider implicitly padding in HLSL. For example, \nlayout(std140) uniform blockName0 {\n    vec2 f1;\n    vec3 f2;\n}\nThis block can be directly translated into\ncbuffer blockName0 : register(b2)\n{\n    float2 _f1;\n    float3 _f2;\n};\nHowever, if we want to translate it into structuredbuffer, we need it looks like below:\nstruct S {\n    vec2 f1;\n    float padding1;\n    float padding2;\n    vec3 f2;\n    float padding3;\n}\n\nSo we should explicitly add those paddings in ANGLE to get correct structuredbuffer. I agree to land this patch first to make sure the functionality correct. Then, we can consider how to add those paddings for structured buffer as follow-up. Thanks.",
+      "parentUuid": "0719e8c2_60793212",
+      "range": {
+        "startLine": 109,
+        "startChar": 5,
+        "endLine": 109,
+        "endChar": 50
+      },
+      "revId": "f92033b5540940e327681e1c1ce38ba2d5cdbe07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
