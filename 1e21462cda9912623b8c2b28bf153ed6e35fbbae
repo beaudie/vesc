@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "685307ca_4efd7186",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T15:08:07Z",
+      "side": 1,
+      "message": "nit: Caps for static functions.",
+      "range": {
+        "startLine": 109,
+        "startChar": 5,
+        "endLine": 109,
+        "endChar": 51
+      },
+      "revId": "1e21462cda9912623b8c2b28bf153ed6e35fbbae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17c1a5bd_6aa3ba07",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2698,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T15:08:07Z",
+      "side": 1,
+      "message": "nit: recommend using std::stringstream for building strings.",
+      "range": {
+        "startLine": 2698,
+        "startChar": 23,
+        "endLine": 2698,
+        "endChar": 27
+      },
+      "revId": "1e21462cda9912623b8c2b28bf153ed6e35fbbae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f8bc399_ff12ecf4",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2789,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T15:08:07Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 2789,
+        "startChar": 8,
+        "endLine": 2789,
+        "endChar": 14
+      },
+      "revId": "1e21462cda9912623b8c2b28bf153ed6e35fbbae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
