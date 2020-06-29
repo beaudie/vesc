@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45613f3a_fef43502",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T15:04:28Z",
+      "side": 1,
+      "message": "nit: this isn\u0027t covers (which would be an inequality check), it\u0027s an equality check of some kind. might reword the name to something like coversSameExtent.",
+      "range": {
+        "startLine": 589,
+        "startChar": 10,
+        "endLine": 589,
+        "endChar": 27
+      },
+      "revId": "dd16487889d033e836bbc78bb5da40ade8750f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
