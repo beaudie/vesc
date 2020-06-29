@@ -16,6 +16,24 @@
       "revId": "d6e38300f46eb51f9c0f56ca9e008abd7306f880",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aed47ee5_f726917c",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T21:34:23Z",
+      "side": 1,
+      "message": "My thinking is that if 4 files are present, then it must be the binary data file is missing, unless the user manually deletes something. But I agree that your way is much stricter.",
+      "parentUuid": "51c75d16_0bc3a653",
+      "revId": "d6e38300f46eb51f9c0f56ca9e008abd7306f880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
