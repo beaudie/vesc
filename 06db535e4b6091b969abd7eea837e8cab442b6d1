@@ -16,6 +16,29 @@
       "revId": "06db535e4b6091b969abd7eea837e8cab442b6d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcf810e6_7d5d3f53",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T15:06:32Z",
+      "side": 1,
+      "message": "nit: these can all be const.",
+      "range": {
+        "startLine": 1131,
+        "startChar": 22,
+        "endLine": 1131,
+        "endChar": 30
+      },
+      "revId": "06db535e4b6091b969abd7eea837e8cab442b6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
