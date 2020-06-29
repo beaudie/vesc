@@ -829,16 +829,14 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
-        ANGLE_TRY(mExecutable.allocateDescriptorSet(contextVk, kUniformsAndXfbDescriptorSetIndex));
+        ANGLE_TRY(mExecutable.allocDefaultUniformDescriptorSet(
+            contextVk, mDefaultUniformBlocks, mDefaultUniformStorage.getCurrentBuffer()));
 
-        mExecutable.mDescriptorBuffersCache.clear();
-        for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
-        {
-            mExecutable.updateDefaultUniformsDescriptorSet(
-                shaderType, mDefaultUniformBlocks, mDefaultUniformStorage.getCurrentBuffer(),
-                contextVk);
-            mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
-        }
+        // The executable keeps an array of cached descriptor set. We might get a cached descriptor
+        // set instead of allocate one. But the cached descripot set only cares about the default
+        // uniform buffer. It does not maintain the XFB buffers. We must update XFB buffers as long
+        // as there is a descriptor set change.
+        mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
     }
 
     return angle::Result::Continue;
