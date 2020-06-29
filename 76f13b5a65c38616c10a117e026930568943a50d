@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3d218db_8e85054e",
+        "filename": "src/libANGLE/BinaryStream.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T16:00:50Z",
+      "side": 1,
+      "message": "nit: can call this just getData",
+      "range": {
+        "startLine": 239,
+        "startChar": 32,
+        "endLine": 239,
+        "endChar": 45
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51161dd_9660bc6f",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T16:00:50Z",
+      "side": 1,
+      "message": "I\u0027d recommend everywhere you can generate an error you return angle::Result and use ANGLE_TRY, then in FrameCapture.cpp / test you handle the Stop case as an implementation error.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23c8d0c1_0c7d93ed",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T16:00:50Z",
+      "side": 1,
+      "message": "nit: prefer c++-style casts.\n\nhttps://google.github.io/styleguide/cppguide.html#Casting",
+      "range": {
+        "startLine": 77,
+        "startChar": 75,
+        "endLine": 77,
+        "endChar": 89
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51abe95e_464a6674",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T16:00:50Z",
+      "side": 1,
+      "message": "can this be a const \u0026?",
+      "range": {
+        "startLine": 89,
+        "startChar": 69,
+        "endLine": 89,
+        "endChar": 90
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33345f0f_83bec271",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T16:00:50Z",
+      "side": 1,
+      "message": "can you get this from the attachment \"binding\"?",
+      "range": {
+        "startLine": 105,
+        "startChar": 24,
+        "endLine": 105,
+        "endChar": 28
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77cc9b2e_05749250",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T16:00:50Z",
+      "side": 1,
+      "message": "can this be a private function in the cpp?",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 53
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8869ad2b_76cfbc38",
+        "filename": "util/frame_capture_test_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T16:00:50Z",
+      "side": 1,
+      "message": "can you make this rename a separate CL?",
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
