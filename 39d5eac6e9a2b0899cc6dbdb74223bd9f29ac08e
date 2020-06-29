@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "11247509_f3fb5056",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 53
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-29T16:02:07Z",
+      "side": 1,
+      "message": "At this point I want the VkSampler. externalFormat is only for the YcbcrSampler that is used when creating VkSampler. The immutable sampler used by the descriptor set has to be the actual VkSampler.",
+      "parentUuid": "7b31ce4c_c7a26b4e",
+      "range": {
+        "startLine": 517,
+        "startChar": 25,
+        "endLine": 517,
+        "endChar": 31
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f44ee3bd_7c8e2473",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 53
@@ -45,6 +69,30 @@
       "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5db43b2b_dcec6aee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 53
+      },
+      "lineNbr": 2256,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-29T16:02:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f44ee3bd_7c8e2473",
+      "range": {
+        "startLine": 2256,
+        "startChar": 4,
+        "endLine": 2256,
+        "endChar": 9
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f6757ce1_4e4f8cef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 53
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-29T16:02:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a96906c_e9381213",
+      "range": {
+        "startLine": 2263,
+        "startChar": 11,
+        "endLine": 2263,
+        "endChar": 25
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8240676_928c366c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 53
@@ -91,6 +163,30 @@
       "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21ca4ae5_9e8fb4b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-29T16:02:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8240676_928c366c",
+      "range": {
+        "startLine": 1076,
+        "startChar": 29,
+        "endLine": 1076,
+        "endChar": 45
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
