@@ -193,6 +193,7 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
     mTextureDescriptorsCache.clear();
     mDescriptorBuffersCache.clear();
+    mDefaultUniformDescriptorSetCache.clear();
 
     for (ProgramInfo &programInfo : mGraphicsProgramInfos)
     {
@@ -334,6 +335,36 @@ uint32_t GetInterfaceBlockArraySize(const std::vector<gl::InterfaceBlock> &block
     }
 
     return arraySize;
+}
+
+angle::Result ProgramExecutableVk::allocDefaultUniformDescriptorSet(ContextVk *contextVk,
+                                                                    BufferSerial serial,
+                                                                    bool *newDescriptorSetAllocated)
+{
+    auto iter = mDefaultUniformDescriptorSetCache.find(serial);
+    if (iter != mDefaultUniformDescriptorSetCache.end())
+    {
+        mDescriptorSets[kUniformsAndXfbDescriptorSetIndex] = iter->second;
+        *newDescriptorSetAllocated                         = false;
+        return angle::Result::Continue;
+    }
+
+    bool newPoolAllocated;
+    ANGLE_TRY(allocateDescriptorSetAndGetInfo(contextVk, kUniformsAndXfbDescriptorSetIndex,
+                                              &newPoolAllocated));
+
+    // Clear descriptor set cache. It may no longer be valid.
+    if (newPoolAllocated)
+    {
+        mDefaultUniformDescriptorSetCache.clear();
+    }
+
+    // Add the descriptorset into cache
+    mDefaultUniformDescriptorSetCache.emplace(serial,
+                                              mDescriptorSets[kUniformsAndXfbDescriptorSetIndex]);
+    *newDescriptorSetAllocated = true;
+
+    return angle::Result::Continue;
 }
 
 angle::Result ProgramExecutableVk::allocateDescriptorSet(ContextVk *contextVk,
