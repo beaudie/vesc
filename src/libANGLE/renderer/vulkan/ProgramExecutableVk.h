@@ -147,6 +147,9 @@ class ProgramExecutableVk
         vk::BufferHelper *defaultUniformBuffer,
         ContextVk *contextVk);
 
+    void updateTransformFeedbackDescriptorSetImpl(const gl::ProgramState &programState,
+                                                  ContextVk *contextVk);
+
     angle::Result updateDescriptorSets(ContextVk *contextVk, vk::CommandBuffer *commandBuffer);
 
     void updateEarlyFragmentTestsOptimization(ContextVk *contextVk);
@@ -166,6 +169,10 @@ class ProgramExecutableVk
     friend class ProgramVk;
     friend class ProgramPipelineVk;
 
+    angle::Result allocDefaultUniformDescriptorSet(
+        ContextVk *contextVk,
+        gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
+        vk::BufferHelper *defaultUniformBuffer);
     angle::Result allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex);
     angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
                                                   uint32_t descriptorSetIndex,
@@ -189,8 +196,6 @@ class ProgramExecutableVk
         gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
         vk::BufferHelper *defaultUniformBuffer,
         ContextVk *contextVk);
-    void updateTransformFeedbackDescriptorSetImpl(const gl::ProgramState &programState,
-                                                  ContextVk *contextVk);
     void updateBuffersDescriptorSet(ContextVk *contextVk,
                                     const gl::ShaderType shaderType,
                                     vk::ResourceUseList *resourceUseList,
@@ -217,6 +222,7 @@ class ProgramExecutableVk
     std::vector<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
     std::vector<vk::BufferHelper *> mDescriptorBuffersCache;
+    std::unordered_map<vk::BufferHelper *, VkDescriptorSet> mDefaultUniformDescriptorSetCache;
     size_t mNumDefaultUniformDescriptors;
 
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
