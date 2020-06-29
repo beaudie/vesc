@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bf9ad54_6de18984",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4043,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-29T16:21:20Z",
+      "side": 1,
+      "message": "Doesn\u0027t it make more sense for this to be done when staging the clear instead of when flushing it?",
+      "range": {
+        "startLine": 4031,
+        "startChar": 0,
+        "endLine": 4043,
+        "endChar": 5
+      },
+      "revId": "3a6f7c9f9a949aac659364b0aca50efc76c49a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
