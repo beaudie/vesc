@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "117fbefe_1c6b70c4",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "127915ec_1781bbb2",
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3d218db_8e85054e",
         "filename": "src/libANGLE/BinaryStream.h",
         "patchSetId": 18
@@ -154,6 +172,30 @@
     },
     {
       "key": {
+        "uuid": "d0c86495_89d7fb38",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "I think maybe memcpy doesn\u0027t handle 16-byte alignment, only 4 and 8? I\u0027m not sure however, I\u0027m just following the example here https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/FrameCapture.cpp;l\u003d419-421?q\u003dFrameCapture\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F",
+      "parentUuid": "bafe2d7a_85f17220",
+      "range": {
+        "startLine": 936,
+        "startChar": 34,
+        "endLine": 936,
+        "endChar": 83
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff05f0f5_f4d2cf2d",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 18
@@ -174,6 +216,30 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4fdb921_0e4000d7",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff05f0f5_f4d2cf2d",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 49
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -200,6 +266,30 @@
     },
     {
       "key": {
+        "uuid": "1a04ecaa_d35eae25",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b51161dd_9660bc6f",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab593bc_f9a1533e",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 18
@@ -220,6 +310,54 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7a82f5a_c4231845",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab593bc_f9a1533e",
+      "range": {
+        "startLine": 44,
+        "startChar": 46,
+        "endLine": 44,
+        "endChar": 49
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5d99e24_c836e7a1",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab593bc_f9a1533e",
+      "range": {
+        "startLine": 44,
+        "startChar": 46,
+        "endLine": 44,
+        "endChar": 49
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -281,6 +419,30 @@
       "writtenOn": "2020-06-29T18:29:57Z",
       "side": 1,
       "message": "We prefer not to use non-const refs, so this should be a pointer.\n\nGoing further, does this need to be passed in?   Can you give ReadPixelsFromAttachment the BinaryOutputStream (and rename it to SerializePixelsFromAttachment) and let it do whatever it takes to serialize the data?",
+      "range": {
+        "startLine": 87,
+        "startChar": 36,
+        "endLine": 87,
+        "endChar": 64
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f8e2843_3ace3422",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s possible. The readPixels method needs a pointer to an allocated block. I would need to call binaryOutputStream.writeBytes(sizeOfAllocatedBlock)then get the data pointer and subtract from it the size of the allocation block just to get the pointer to the start of the allocation block. So we still need either vector or scratch buffer. Jamie prefers scratch buffer because it will save us from unnecessary allocations, and there might be many since most framebuffer attachments will always have the same size.",
+      "parentUuid": "bf3ed076_4b661879",
       "range": {
         "startLine": 87,
         "startChar": 36,
@@ -445,6 +607,30 @@
     },
     {
       "key": {
+        "uuid": "f959981c_4a0d39ed",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "I think Cody mentioned to me once that it might be useful for mid-frame capture? I dont know how that works though. Anyway, I think Jamie prefers this name to my last name which is SerializeContext.h",
+      "parentUuid": "362441c6_baa8f57a",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 88
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77cc9b2e_05749250",
         "filename": "src/libANGLE/frame_capture_utils.h",
         "patchSetId": 18
@@ -515,6 +701,30 @@
     },
     {
       "key": {
+        "uuid": "693aaee0_5aac2c60",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dec596c_98a1fc6f",
+      "range": {
+        "startLine": 169,
+        "startChar": 28,
+        "endLine": 169,
+        "endChar": 42
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92f0e24d_fc4f66ee",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 18
@@ -538,6 +748,30 @@
     },
     {
       "key": {
+        "uuid": "7482e226_a3ba83dc",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92f0e24d_fc4f66ee",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 53
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf44cd49_fbbdb0a8",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 18
@@ -558,6 +792,30 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f63e75d_f578a18b",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:56:57Z",
+      "side": 1,
+      "message": "Done. I will get fix the two places you point out here and fix the rest on a separate CL.",
+      "parentUuid": "cf44cd49_fbbdb0a8",
+      "range": {
+        "startLine": 221,
+        "startChar": 30,
+        "endLine": 221,
+        "endChar": 57
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
