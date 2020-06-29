@@ -22,6 +22,30 @@
       "revId": "3a6f7c9f9a949aac659364b0aca50efc76c49a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7161c48a_322410cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4043,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-29T16:48:26Z",
+      "side": 1,
+      "message": "Not sure if it makes more sense or not, but either way should work. I picked this way mostly because there are multiple APIs to stage the clear and  I want to avoid the check for every staging call. The flush code is central, thus more robust in some sense.",
+      "parentUuid": "4bf9ad54_6de18984",
+      "range": {
+        "startLine": 4031,
+        "startChar": 0,
+        "endLine": 4043,
+        "endChar": 5
+      },
+      "revId": "3a6f7c9f9a949aac659364b0aca50efc76c49a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
