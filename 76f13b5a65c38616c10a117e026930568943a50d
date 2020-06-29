@@ -196,6 +196,30 @@
     },
     {
       "key": {
+        "uuid": "0db1f315_38a416d9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-29T20:50:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d0c86495_89d7fb38",
+      "range": {
+        "startLine": 936,
+        "startChar": 34,
+        "endLine": 936,
+        "endChar": 83
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff05f0f5_f4d2cf2d",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 18
@@ -455,6 +479,30 @@
     },
     {
       "key": {
+        "uuid": "8f8fe9b1_0057958c",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-29T20:50:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4f8e2843_3ace3422",
+      "range": {
+        "startLine": 87,
+        "startChar": 36,
+        "endLine": 87,
+        "endChar": 64
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51abe95e_464a6674",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 18
@@ -628,6 +676,30 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0d8abc3_20ee3cb5",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-29T20:50:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f959981c_4a0d39ed",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 88
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51c75d16_0bc3a653",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-29T20:50:30Z",
+      "side": 1,
+      "message": "You aren\u0027t guaranteed angle_capture_context1.angledata.gz is what\u0027s missing here, just that you\u0027ve seen 4 of the files in the list.\n\nInstead, I\u0027d suggest removing angle_capture_context1.angledata.gz from trace_files and then checking that trace_files_count \u003d\u003d len(trace_files).   Renaming it to required_trace_files would be good in that case too.",
+      "revId": "d6e38300f46eb51f9c0f56ca9e008abd7306f880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
