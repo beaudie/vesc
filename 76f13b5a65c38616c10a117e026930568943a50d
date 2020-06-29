@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c51e2412_0c1f5d13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "I will try that from the next cl. It\u0027s just that I set out to do something, then something else comes up and I need to include it.",
+      "parentUuid": "d1359735_a9441090",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 27
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "156ee4e8_4b755e1b",
         "filename": "samples/capture_replay/CaptureReplay.cpp",
         "patchSetId": 18
@@ -80,6 +104,30 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa5f7f4b_74b8efb1",
+        "filename": "src/libANGLE/BinaryStream.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3d218db_8e85054e",
+      "range": {
+        "startLine": 239,
+        "startChar": 32,
+        "endLine": 239,
+        "endChar": 45
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -198,6 +246,30 @@
     },
     {
       "key": {
+        "uuid": "af8b538d_39ff6e0f",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23c8d0c1_0c7d93ed",
+      "range": {
+        "startLine": 77,
+        "startChar": 75,
+        "endLine": 77,
+        "endChar": 89
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf3ed076_4b661879",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 18
@@ -244,6 +316,30 @@
     },
     {
       "key": {
+        "uuid": "3a9afcdb_2c44efb9",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51abe95e_464a6674",
+      "range": {
+        "startLine": 89,
+        "startChar": 69,
+        "endLine": 89,
+        "endChar": 90
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0237f349_5863babc",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 18
@@ -258,6 +354,24 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f885675d_4a15a425",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "Oh, I put it there because target member variable, unlike other member variables, has its own member variables that need to be serialized.",
+      "parentUuid": "0237f349_5863babc",
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -281,6 +395,30 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea41b1dc_5936e9ce",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33345f0f_83bec271",
+      "range": {
+        "startLine": 105,
+        "startChar": 24,
+        "endLine": 105,
+        "endChar": 28
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -327,6 +465,30 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38af620e_a9590fca",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77cc9b2e_05749250",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 53
+      },
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -413,6 +575,24 @@
       "revId": "76f13b5a65c38616c10a117e026930568943a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b8df560_14e351d1",
+        "filename": "util/frame_capture_test_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T19:03:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8869ad2b_76cfbc38",
+      "revId": "76f13b5a65c38616c10a117e026930568943a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
