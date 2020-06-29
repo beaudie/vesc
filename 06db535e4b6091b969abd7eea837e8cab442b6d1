@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1232803c_6096bfb8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-29T15:23:08Z",
+      "side": 1,
+      "message": "the old behavior before i touched any code here was \"vk::ImageLayout::AllGraphicsShadersReadOnly\" and it seemed to work fine for all other usecases. Hence left it as the default choice to avoid a branch and any general layout related sub-optimal transitions.\n\nLet me know if you want it anyway",
+      "parentUuid": "b6a41ba1_9619e3ae",
+      "revId": "06db535e4b6091b969abd7eea837e8cab442b6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bcf810e6_7d5d3f53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "06db535e4b6091b969abd7eea837e8cab442b6d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc75df44_773fd375",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-29T15:23:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcf810e6_7d5d3f53",
+      "range": {
+        "startLine": 1131,
+        "startChar": 22,
+        "endLine": 1131,
+        "endChar": 30
+      },
+      "revId": "06db535e4b6091b969abd7eea837e8cab442b6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
