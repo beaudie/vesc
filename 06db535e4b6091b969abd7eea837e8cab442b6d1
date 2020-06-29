@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6a41ba1_9619e3ae",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-29T14:57:27Z",
+      "side": 1,
+      "message": "I thought one issue was that some image didn\u0027t have SAMPLED usage? Should this then also check for that? Like:\n\n        vk::ImageLayout newLayout \u003d mImage-\u003egetUsage() \u0026 K_IMAGE_USAGE_COLOR_ATTACHMENT_BIT\n                                        ? vk::ImageLayout::ColorAttachment\n                                        : mImage-\u003egetUsage() \u0026 K_IMAGE_USAGE_SAMPLED_BIT\n                                          ? vk::ImageLayout::AllGraphicsShadersReadOnly\n                                          : vk::ImageLayout::AllGraphicsShadersReadWrite;",
+      "revId": "06db535e4b6091b969abd7eea837e8cab442b6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
