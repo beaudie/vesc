@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b31ce4c_c7a26b4e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 53
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:43:31Z",
+      "side": 1,
+      "message": "I believe you should be able to get the external format from the ImageHelper here.",
+      "range": {
+        "startLine": 517,
+        "startChar": 25,
+        "endLine": 517,
+        "endChar": 31
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f44ee3bd_7c8e2473",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 53
+      },
+      "lineNbr": 2256,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:43:31Z",
+      "side": 1,
+      "message": "should be able to make this const.",
+      "range": {
+        "startLine": 2256,
+        "startChar": 4,
+        "endLine": 2256,
+        "endChar": 9
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a96906c_e9381213",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 53
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:43:31Z",
+      "side": 1,
+      "message": "ASSERT here as well.",
+      "range": {
+        "startLine": 2263,
+        "startChar": 11,
+        "endLine": 2263,
+        "endChar": 25
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8240676_928c366c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:43:31Z",
+      "side": 1,
+      "message": "use a new  name for readability (not an overload), and make this const",
+      "range": {
+        "startLine": 1076,
+        "startChar": 29,
+        "endLine": 1076,
+        "endChar": 45
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9610214a_1f2f3b0e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:43:31Z",
+      "side": 1,
+      "message": "can be const.",
+      "range": {
+        "startLine": 1387,
+        "startChar": 13,
+        "endLine": 1387,
+        "endChar": 30
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bc1f111_25179617",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:43:31Z",
+      "side": 1,
+      "message": "if we could store the external format here that would be nice.",
+      "range": {
+        "startLine": 1518,
+        "startChar": 51,
+        "endLine": 1518,
+        "endChar": 72
+      },
+      "revId": "39d5eac6e9a2b0899cc6dbdb74223bd9f29ac08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
