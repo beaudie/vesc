@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4f489578_a03cd55f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-29T15:29:10Z",
+      "side": 1,
+      "message": "Well that just makes it more \"correct\". GENERAL is not used unless the image neither has COLOR_ATTACHMENT nor SAMPLED.\n\nAlso, should we care about DEPTH_STENCIL_ATTACHMENT? I understand we don\u0027t have an application that actually uses such images. You could either add the four possibilities (ColorAttachment, DepthStencilAttachment, ReadOnly and ReadWrite), or keep the two as is and ASSERT that usage has either COLOR_ATTACHMENT or SAMPLED.",
+      "parentUuid": "1232803c_6096bfb8",
+      "revId": "06db535e4b6091b969abd7eea837e8cab442b6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bcf810e6_7d5d3f53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
