@@ -381,6 +381,30 @@
     },
     {
       "key": {
+        "uuid": "a44b9a52_bcc6e344",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T14:19:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64495f4c_d72f7e17",
+      "range": {
+        "startLine": 936,
+        "startChar": 35,
+        "endLine": 936,
+        "endChar": 53
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fcdb1a9_649b7c6e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 7
@@ -1461,6 +1485,24 @@
     },
     {
       "key": {
+        "uuid": "37d2bb44_dc639c2a",
+        "filename": "src/libANGLE/SerializeContext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T14:19:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bcc8323_d4523e92",
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7594ebcf_f1d2136b",
         "filename": "src/libANGLE/SerializeContext.h",
         "patchSetId": 7
@@ -1670,6 +1712,30 @@
       "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b8b61a2_15051e5c",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-29T14:19:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2f65300_f01979be",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 38
+      },
+      "revId": "4dc3a2aa28d17b5583a86b282fc6ad31c71f3233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
