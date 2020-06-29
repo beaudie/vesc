@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f4a54ae_7412bc3f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:48:45Z",
+      "side": 1,
+      "message": "avoid the comma operator. you can use a semi colon here.",
+      "range": {
+        "startLine": 923,
+        "startChar": 42,
+        "endLine": 923,
+        "endChar": 43
+      },
+      "revId": "144ab72ae608f2a520bcffed02710a8c734399ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceda5c94_74ccf5a1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-29T14:48:45Z",
+      "side": 1,
+      "message": "you can get this flag from !contextVk-\u003egetRenderer()-\u003emEnableValidationLayers (you will need to add an accessor). You can do it in WrapperVk since that already has the ContextVk.",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 6
+      },
+      "revId": "144ab72ae608f2a520bcffed02710a8c734399ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
