@@ -1687,6 +1687,33 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
     return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
 }
 
+// UniformsAndXfbDesc implementation.
+UniformsAndXfbDesc::UniformsAndXfbDesc()
+{
+    reset();
+}
+
+UniformsAndXfbDesc::~UniformsAndXfbDesc()                               = default;
+UniformsAndXfbDesc::UniformsAndXfbDesc(const UniformsAndXfbDesc &other) = default;
+UniformsAndXfbDesc &UniformsAndXfbDesc::operator=(const UniformsAndXfbDesc &other) = default;
+
+size_t UniformsAndXfbDesc::hash() const
+{
+    return angle::ComputeGenericHash(&mBufferObjectIDs, sizeof(BufferSerial) * mBufferCount);
+}
+
+void UniformsAndXfbDesc::reset()
+{
+    mBufferCount = 0;
+    memset(&mBufferObjectIDs, 0, sizeof(BufferSerial) * kMaxBufferCount);
+}
+
+bool UniformsAndXfbDesc::operator==(const UniformsAndXfbDesc &other) const
+{
+    return memcmp(&mBufferObjectIDs, &other.mBufferObjectIDs,
+                  sizeof(BufferSerial) * mBufferCount) == 0;
+}
+
 // FramebufferDesc implementation.
 
 FramebufferDesc::FramebufferDesc()
