@@ -82,6 +82,8 @@ class Serial final
 // Used as default/initial serial
 static constexpr Serial kZeroSerial = Serial();
 
+using UniqueObjectID = Serial;
+
 template <typename SerialBaseType>
 class SerialFactoryBase final : angle::NonCopyable
 {

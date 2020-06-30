@@ -13,6 +13,7 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Semaphore.h"
 #include "libANGLE/Surface.h"
@@ -20,6 +21,7 @@
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FenceNVVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/MemoryObjectVk.h"
@@ -52,6 +54,9 @@ constexpr size_t kDescriptorBufferInfosInitialSize = 8;
 constexpr size_t kDescriptorImageInfosInitialSize  = 4;
 constexpr size_t kDescriptorWriteInfosInitialSize =
     kDescriptorBufferInfosInitialSize + kDescriptorImageInfosInitialSize;
+
+// This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
+constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
 
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
@@ -630,7 +635,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentIndirectBuffer(nullptr),
       mBufferInfos(),
       mImageInfos(),
-      mWriteInfos()
+      mWriteInfos(),
+      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -744,6 +750,9 @@ void ContextVk::onDestroy(const gl::Context *context)
     }
 
     mDriverUniformsDescriptorPool.destroy(device);
+
+    mDefaultUniformStorage.release(mRenderer);
+    mEmptyBuffer.release(mRenderer);
 
     for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
     {
@@ -876,6 +885,27 @@ angle::Result ContextVk::initialize()
         ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
                                 TRACE_EVENT_PHASE_BEGIN, eventName));
     }
+
+    size_t minAlignment = static_cast<size_t>(
+        mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
+    mDefaultUniformStorage.init(
+        mRenderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        minAlignment, kUniformBlockDynamicBufferMinSize, true);
+
+    // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
+    // or atomic counter buffer array indices that are unused.
+    constexpr VkBufferUsageFlags kEmptyBufferUsage =
+        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+    VkBufferCreateInfo emptyBufferInfo          = {};
+    emptyBufferInfo.sType                       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    emptyBufferInfo.flags                       = 0;
+    emptyBufferInfo.size                        = 4;
+    emptyBufferInfo.usage                       = kEmptyBufferUsage;
+    emptyBufferInfo.sharingMode                 = VK_SHARING_MODE_EXCLUSIVE;
+    emptyBufferInfo.queueFamilyIndexCount       = 0;
+    emptyBufferInfo.pQueueFamilyIndices         = nullptr;
+    constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
 
     return angle::Result::Continue;
 }
@@ -1467,7 +1497,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(),
-        mProgram->getDefaultUniformBuffer(), this);
+        mDefaultUniformStorage.getCurrentBuffer(), this);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
@@ -2658,6 +2688,15 @@ void ContextVk::invalidateProgramBindingHelper(const gl::State &glState)
             // A bound program always overrides a program pipeline
             mExecutable = &mProgramPipeline->getExecutable();
         }
+    }
+
+    if (mProgram)
+    {
+        mProgram->onProgramBind();
+    }
+    else if (mProgramPipeline)
+    {
+        mProgramPipeline->onProgramBind(this);
     }
 }
 
@@ -4636,6 +4675,20 @@ ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::~ScopedDescriptorSetUpdates(
     mContextVk->mWriteInfos.clear();
     mContextVk->mBufferInfos.clear();
     mContextVk->mImageInfos.clear();
+}
+
+UniqueObjectID ContextVk::generateUniqueID()
+{
+    return mShareGroupVk->generateUniqueID();
+}
+
+void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
+{
+    mDefaultUniformStorage.setMinimumSizeForTesting(minSize);
+}
+void ContextVk::restoreDefaultUniformBlocksMinSizeForTesting()
+{
+    mDefaultUniformStorage.setMinimumSizeForTesting(kUniformBlockDynamicBufferMinSize);
 }
 
 }  // namespace rx
