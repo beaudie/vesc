@@ -540,6 +540,11 @@ class ContextVk : public ContextImpl, public vk::Context
         return mWriteInfos[oldSize];
     }
 
+    vk::DynamicBuffer &getDefaultUniformStorage() { return mDefaultUniformStorage; }
+    // For testing only.
+    void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
+    void restoreDefaultUniformBlocksMinSizeForTesting();
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1010,6 +1015,8 @@ class ContextVk : public ContextImpl, public vk::Context
       private:
         ContextVk *mContextVk;
     };
+
+    vk::DynamicBuffer mDefaultUniformStorage;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };

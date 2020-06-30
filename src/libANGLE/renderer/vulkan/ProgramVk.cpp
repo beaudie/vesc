@@ -24,9 +24,6 @@ namespace rx
 
 namespace
 {
-// This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
-constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
-
 // Identical to Std140 encoder in all aspects, except it ignores opaque uniform types.
 class VulkanDefaultBlockEncoder : public sh::Std140BlockEncoder
 {
@@ -177,11 +174,7 @@ void ProgramVk::destroy(const gl::Context *context)
 
 void ProgramVk::reset(ContextVk *contextVk)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     mShaderInfo.release(contextVk);
-
-    mDefaultUniformStorage.release(renderer);
 
     GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(&mGlslangProgramInterfaceInfo);
 
@@ -409,7 +402,6 @@ void ProgramVk::initDefaultUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap
 angle::Result ProgramVk::resizeUniformBlockMemory(ContextVk *contextVk,
                                                   gl::ShaderMap<size_t> &requiredBufferSize)
 {
-    RendererVk *renderer                      = contextVk->getRenderer();
     const gl::ProgramExecutable &glExecutable = mState.getExecutable();
 
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
@@ -421,12 +413,6 @@ angle::Result ProgramVk::resizeUniformBlockMemory(ContextVk *contextVk,
             {
                 ANGLE_VK_CHECK(contextVk, false, VK_ERROR_OUT_OF_HOST_MEMORY);
             }
-            size_t minAlignment = static_cast<size_t>(
-                renderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
-
-            mDefaultUniformStorage.init(
-                renderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                minAlignment, kUniformBlockDynamicBufferMinSize, true);
 
             // Initialize uniform buffer memory to zero by default.
             mDefaultUniformBlocks[shaderType].uniformData.fill(0);
@@ -734,7 +720,7 @@ angle::Result ProgramVk::updateShaderUniforms(ContextVk *contextVk,
     if (mDefaultUniformBlocksDirty[shaderType])
     {
         bool bufferModified = false;
-        ANGLE_TRY(SyncDefaultUniformBlock(contextVk, &mDefaultUniformStorage,
+        ANGLE_TRY(SyncDefaultUniformBlock(contextVk, &contextVk->getDefaultUniformStorage(),
                                           uniformBlock.uniformData, outOffset, &bufferModified));
         mDefaultUniformBlocksDirty.reset(shaderType);
 
@@ -767,6 +753,7 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 {
     ASSERT(dirtyUniforms());
 
+    vk::DynamicBuffer &defaultUniformStorage  = contextVk->getDefaultUniformStorage();
     bool anyNewBufferAllocated                = false;
     uint8_t *bufferData                       = nullptr;
     VkDeviceSize bufferOffset                 = 0;
@@ -787,10 +774,10 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
         if (requiredSpace)
         {
             // Allocate space from dynamicBuffer
-            mDefaultUniformStorage.releaseInFlightBuffers(contextVk);
+            defaultUniformStorage.releaseInFlightBuffers(contextVk);
             bool bufferModified = false;
-            ANGLE_TRY(mDefaultUniformStorage.allocate(contextVk, requiredSpace, &bufferData,
-                                                      nullptr, &bufferOffset, &bufferModified));
+            ANGLE_TRY(defaultUniformStorage.allocate(contextVk, requiredSpace, &bufferData, nullptr,
+                                                     &bufferOffset, &bufferModified));
             if (bufferModified)
             {
                 // We only need to retry if we actually end up adding new dirty bits
@@ -822,7 +809,7 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     }
     if (requiredSpace)
     {
-        ANGLE_TRY(mDefaultUniformStorage.flush(contextVk));
+        ANGLE_TRY(defaultUniformStorage.flush(contextVk));
     }
 
     if (anyNewBufferAllocated)
@@ -832,17 +819,12 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
         ANGLE_TRY(mExecutable.allocDefaultUniformDescriptorSet(
-            contextVk, mDefaultUniformBlocks, mDefaultUniformStorage.getCurrentBuffer()));
+            contextVk, mDefaultUniformBlocks, defaultUniformStorage.getCurrentBuffer()));
 
         mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
     }
 
     return angle::Result::Continue;
-}
-
-void ProgramVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
-{
-    mDefaultUniformStorage.setMinimumSizeForTesting(minSize);
 }
 
 }  // namespace rx
