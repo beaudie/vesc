@@ -49,6 +49,12 @@ struct FrontendFeatures : angle::FeatureSetBase
         "scalarize_vec_and_mat_constructor_args", angle::FeatureCategory::FrontendWorkarounds,
         "Always rewrite vec/mat constructors to be consistent", &members,
         "http://crbug.com/398694"};
+
+    // Allow disabling of GL_EXT_texture_filter_anisotropic through a runtime feature for
+    // performance comparisons.
+    angle::Feature disableAnisotropicFiltering = {
+        "disable_anisotropic_filtering", angle::FeatureCategory::FrontendWorkarounds,
+        "Disable support for anisotropic filtering", &members};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
