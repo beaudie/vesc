@@ -463,6 +463,37 @@ TEST_P(IOSurfaceClientBufferTest, RenderToR16IOSurface)
 // TODO(cwallez@chromium.org): test reading from R16? It returns 0 maybe because samplerRect is
 // only for floating textures?
 
+// Test using BGRA_1010102 IOSurfaces for rendering
+TEST_P(IOSurfaceClientBufferTest, RenderToBGRA1010102IOSurface)
+{
+    ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
+
+    // This test only works on ES3.
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    // TODO(http://anglebug.com/4369)
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
+
+    ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'l10r', 4);
+
+    uint32_t color = (0 << 30) | (1 << 22) | (2 << 12) | (3 << 2);
+    doClearTest(ioSurface, GL_RGB10_A2, GL_UNSIGNED_INT_2_10_10_10_REV, &color, sizeof(color));
+}
+
+// Test reading from BGRA_1010102 IOSurfaces
+TEST_P(IOSurfaceClientBufferTest, ReadFromBGRA1010102IOSurface)
+{
+    ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
+
+    // This test only works on ES3.
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+
+    ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'l10r', 4);
+
+    uint32_t color = (3 << 30) | (1 << 22) | (2 << 12) | (3 << 2);
+    doSampleTest(ioSurface, GL_RGB10_A2, GL_UNSIGNED_INT_2_10_10_10_REV, &color, sizeof(color),
+                 R | G | B);  // Don't test alpha, unorm '4' can't be represented with 2 bits.
+}
+
 // TODO(cwallez@chromium.org): Test using RGBA half float IOSurfaces ('RGhA')
 
 // Test blitting from IOSurface
