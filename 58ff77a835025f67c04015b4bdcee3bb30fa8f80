@@ -22,6 +22,30 @@
       "revId": "58ff77a835025f67c04015b4bdcee3bb30fa8f80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35252831_d3f029c8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-30T01:33:38Z",
+      "side": 1,
+      "message": "You can just change it to `mImage-\u003egetAspactFlags()`, no need to wait.\n\nIf you can write tests for these, that would be ideal.",
+      "parentUuid": "73d26b4f_7283c1ba",
+      "range": {
+        "startLine": 1089,
+        "startChar": 37,
+        "endLine": 1089,
+        "endChar": 62
+      },
+      "revId": "58ff77a835025f67c04015b4bdcee3bb30fa8f80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
