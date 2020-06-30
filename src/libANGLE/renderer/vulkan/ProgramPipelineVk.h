@@ -51,7 +51,15 @@ class ProgramPipelineVk : public ProgramPipelineImpl
 
     bool dirtyUniforms(const gl::State &glState);
 
+    void onProgramBind(ContextVk *contextVk) { setAllDefaultUniformsDirty(contextVk); }
+
   private:
+    size_t calcUniformUpdateRequiredSpace(ContextVk *contextVk,
+                                          const gl::ProgramExecutable &glExecutable,
+                                          const gl::State &glState,
+                                          gl::ShaderMap<VkDeviceSize> &uniformOffsets) const;
+    bool setAllDefaultUniformsDirty(ContextVk *contextVk);
+
     ProgramExecutableVk mExecutable;
 };
 
