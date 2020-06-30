@@ -70,6 +70,30 @@
       "revId": "58ff77a835025f67c04015b4bdcee3bb30fa8f80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20dae23b_b740e2fc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-06-30T16:26:58Z",
+      "side": 1,
+      "message": "FYI - follow up change to fix aspect is here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/2274868",
+      "parentUuid": "b42938ce_ceb8541c",
+      "range": {
+        "startLine": 1089,
+        "startChar": 37,
+        "endLine": 1089,
+        "endChar": 62
+      },
+      "revId": "58ff77a835025f67c04015b4bdcee3bb30fa8f80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
