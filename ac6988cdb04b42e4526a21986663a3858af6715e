@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a923bb07_8fbceca6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001534
+      },
+      "writtenOn": "2020-06-30T16:02:20Z",
+      "side": 1,
+      "message": "CFI bug?",
+      "revId": "ac6988cdb04b42e4526a21986663a3858af6715e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
