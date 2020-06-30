@@ -51,6 +51,8 @@ class ProgramPipelineVk : public ProgramPipelineImpl
 
     bool dirtyUniforms(const gl::State &glState);
 
+    void onProgramBind();
+
   private:
     ProgramExecutableVk mExecutable;
 };

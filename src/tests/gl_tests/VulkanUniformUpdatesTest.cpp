@@ -117,10 +117,9 @@ void main()
 
     limitMaxSets(program);
 
-    rx::ProgramVk *programVk = hackProgram(program);
-
+    rx::ContextVk *contextVk = hackANGLE();
     // Set a really small min size so that uniform updates often allocates a new buffer.
-    programVk->setDefaultUniformBlocksMinSizeForTesting(128);
+    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
 
     GLint posUniformLocation = glGetUniformLocation(program, "uniPosModifier");
     ASSERT_NE(posUniformLocation, -1);
@@ -137,6 +136,9 @@ void main()
         swapBuffers();
         ASSERT_GL_NO_ERROR();
     }
+
+    // Restore default uniform buffer size
+    contextVk->restoreDefaultUniformBlocksMinSizeForTesting();
 }
 
 void InitTexture(GLColor color, GLTexture *texture)
@@ -360,12 +362,9 @@ void main()
     limitMaxSets(program1);
     limitMaxSets(program2);
 
-    rx::ProgramVk *program1Vk = hackProgram(program1);
-    rx::ProgramVk *program2Vk = hackProgram(program2);
-
+    rx::ContextVk *contextVk = hackANGLE();
     // Set a really small min size so that uniform updates often allocates a new buffer.
-    program1Vk->setDefaultUniformBlocksMinSizeForTesting(128);
-    program2Vk->setDefaultUniformBlocksMinSizeForTesting(128);
+    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
 
     // Get uniform locations.
     GLint colorMaskLoc1 = glGetUniformLocation(program1, "colorMask");
@@ -409,6 +408,9 @@ void main()
     drawQuad(program1, "position", 0.5f, 1.0f, true);
     swapBuffers();
     ASSERT_GL_NO_ERROR();
+
+    // Restore the limit
+    contextVk->restoreDefaultUniformBlocksMinSizeForTesting();
 }
 
 // Verify that overflowing a Texture's staging buffer doesn't overwrite current data.

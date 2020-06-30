@@ -127,7 +127,7 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
             {
                 mExecutable.updateDefaultUniformsDescriptorSet(
                     shaderType, programVk->getDefaultUniformBlocks(),
-                    programVk->getDefaultUniformBuffer(), contextVk);
+                    contextVk->getDefaultUniformStorage().getCurrentBuffer(), contextVk);
                 mExecutable.updateTransformFeedbackDescriptorSetImpl(programVk->getState(),
                                                                      contextVk);
             }
@@ -150,5 +150,7 @@ bool ProgramPipelineVk::dirtyUniforms(const gl::State &glState)
 
     return false;
 }
+
+void ProgramPipelineVk::onProgramBind() {}
 
 }  // namespace rx

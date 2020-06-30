@@ -108,9 +108,6 @@ class ProgramVk : public ProgramImpl
                                        bool *anyNewBufferAllocated);
     angle::Result updateUniforms(ContextVk *contextVk);
 
-    // For testing only.
-    void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
-
     bool dirtyUniforms() const { return mDefaultUniformBlocksDirty.any(); }
 
     // Used in testing only.
@@ -123,10 +120,6 @@ class ProgramVk : public ProgramImpl
     ProgramExecutableVk &getExecutable() { return mExecutable; }
 
     gl::ShaderMap<DefaultUniformBlock> &getDefaultUniformBlocks() { return mDefaultUniformBlocks; }
-    vk::BufferHelper *getDefaultUniformBuffer() const
-    {
-        return mDefaultUniformStorage.getCurrentBuffer();
-    }
     size_t getDefaultUniformAlignedSize(ContextVk *contextVk, const gl::ShaderType shaderType) const
     {
         RendererVk *renderer = contextVk->getRenderer();
@@ -163,6 +156,9 @@ class ProgramVk : public ProgramImpl
     {
         return mGlslangProgramInterfaceInfo;
     }
+
+    bool setAllDefaultUniformsDirty();
+    void onProgramBind();
 
   private:
     template <int cols, int rows>
@@ -209,7 +205,6 @@ class ProgramVk : public ProgramImpl
 
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
-    vk::DynamicBuffer mDefaultUniformStorage;
 
     // We keep the SPIR-V code to use for draw call pipeline creation.
     ShaderInfo mOriginalShaderInfo;

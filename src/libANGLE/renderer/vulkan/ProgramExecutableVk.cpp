@@ -202,6 +202,7 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     mTextureDescriptorsCache.clear();
     mDescriptorBuffersCache.clear();
     mDefaultUniformDescriptorSetCache.clear();
+    mCurrentDefaultUniformBuffer = nullptr;
 
     for (ProgramInfo &programInfo : mGraphicsProgramInfos)
     {
@@ -367,6 +368,7 @@ angle::Result ProgramExecutableVk::allocDefaultUniformDescriptorSet(
     if (iter != mDefaultUniformDescriptorSetCache.end())
     {
         mDescriptorSets[kUniformsAndXfbDescriptorSetIndex] = iter->second;
+        mCurrentDefaultUniformBuffer                       = defaultUniformBuffer;
         return angle::Result::Continue;
     }
 
@@ -388,6 +390,7 @@ angle::Result ProgramExecutableVk::allocDefaultUniformDescriptorSet(
         updateDefaultUniformsDescriptorSet(shaderType, defaultUniformBlocks, defaultUniformBuffer,
                                            contextVk);
     }
+    mCurrentDefaultUniformBuffer = defaultUniformBuffer;
 
     // Add the descriptorset into cache
     mDefaultUniformDescriptorSetCache.emplace(defaultUniformBuffer,
@@ -1222,6 +1225,7 @@ angle::Result ProgramExecutableVk::updateTransformFeedbackDescriptorSet(
         updateDefaultUniformsDescriptorSet(shaderType, defaultUniformBlocks, defaultUniformBuffer,
                                            contextVk);
     }
+    mCurrentDefaultUniformBuffer = defaultUniformBuffer;
 
     updateTransformFeedbackDescriptorSetImpl(programState, contextVk);
 

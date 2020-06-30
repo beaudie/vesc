@@ -211,7 +211,10 @@ class ProgramExecutableVk
     angle::Result updateImagesDescriptorSet(const gl::ProgramExecutable &executable,
                                             const gl::ShaderType shaderType,
                                             ContextVk *contextVk);
-
+    bool isDefaultUniformDescriptorSetValid(vk::BufferHelper *newDefaultUniformBuffer) const
+    {
+        return mCurrentDefaultUniformBuffer == newDefaultUniformBuffer;
+    }
     // This is a special "empty" placeholder buffer for when a shader has no uniforms or doesn't
     // use all slots in the atomic counter buffer array.
     //
@@ -224,6 +227,7 @@ class ProgramExecutableVk
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
     std::vector<vk::BufferHelper *> mDescriptorBuffersCache;
     std::unordered_map<vk::BufferHelper *, VkDescriptorSet> mDefaultUniformDescriptorSetCache;
+    vk::BufferHelper *mCurrentDefaultUniformBuffer;
     size_t mNumDefaultUniformDescriptors;
 
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
