@@ -20,7 +20,11 @@ class RendererVk;
 
 class ShareGroupVk : public ShareGroupImpl
 {
+  public:
+    UniqueObjectID generateUniqueID() { return mUniqueIDFactory.generate(); }
+
   private:
+    SerialFactory mUniqueIDFactory;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context
