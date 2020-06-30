@@ -108,10 +108,13 @@ class ProgramVk : public ProgramImpl
                                        bool *anyNewBufferAllocated);
     angle::Result updateUniforms(ContextVk *contextVk);
 
-    // For testing only.
-    void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
-
     bool dirtyUniforms() const { return mDefaultUniformBlocksDirty.any(); }
+    bool isShaderUniformDirty(gl::ShaderType shaderType) const
+    {
+        return mDefaultUniformBlocksDirty[shaderType];
+    }
+    bool setShaderUniformDirty(gl::ShaderType shaderType);
+    void onProgramBind() { setAllDefaultUniformsDirty(); }
 
     // Used in testing only.
     vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t poolIndex)
@@ -123,10 +126,6 @@ class ProgramVk : public ProgramImpl
     ProgramExecutableVk &getExecutable() { return mExecutable; }
 
     gl::ShaderMap<DefaultUniformBlock> &getDefaultUniformBlocks() { return mDefaultUniformBlocks; }
-    vk::BufferHelper *getDefaultUniformBuffer() const
-    {
-        return mDefaultUniformStorage.getCurrentBuffer();
-    }
     size_t getDefaultUniformAlignedSize(ContextVk *contextVk, const gl::ShaderType shaderType) const
     {
         RendererVk *renderer = contextVk->getRenderer();
@@ -134,10 +133,6 @@ class ProgramVk : public ProgramImpl
             renderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
         return roundUp(mDefaultUniformBlocks[shaderType].uniformData.size(), alignment);
     }
-
-    size_t calcUniformUpdateRequiredSpace(ContextVk *contextVk,
-                                          const gl::ProgramExecutable &glExecutable,
-                                          gl::ShaderMap<VkDeviceSize> &uniformOffsets) const;
 
     ANGLE_INLINE angle::Result initGraphicsShaderProgram(ContextVk *contextVk,
                                                          const gl::ShaderType shaderType,
@@ -207,9 +202,13 @@ class ProgramVk : public ProgramImpl
         return angle::Result::Continue;
     }
 
+    size_t calcUniformUpdateRequiredSpace(ContextVk *contextVk,
+                                          const gl::ProgramExecutable &glExecutable,
+                                          gl::ShaderMap<VkDeviceSize> &uniformOffsets) const;
+    bool setAllDefaultUniformsDirty();
+
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
-    vk::DynamicBuffer mDefaultUniformStorage;
 
     // We keep the SPIR-V code to use for draw call pipeline creation.
     ShaderInfo mOriginalShaderInfo;
