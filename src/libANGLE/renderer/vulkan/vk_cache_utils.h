@@ -890,6 +890,12 @@ struct hash<rx::vk::LayerLevel>
         return layerLevel.layer | (layerLevel.level << 11);
     }
 };
+
+template <>
+struct hash<rx::Serial>
+{
+    size_t operator()(const rx::Serial &key) const { return (size_t)(key.getValue() & 0xffffffff); }
+};
 }  // namespace std
 
 namespace rx
