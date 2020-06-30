@@ -211,19 +211,17 @@ class ProgramExecutableVk
     angle::Result updateImagesDescriptorSet(const gl::ProgramExecutable &executable,
                                             const gl::ShaderType shaderType,
                                             ContextVk *contextVk);
-
-    // This is a special "empty" placeholder buffer for when a shader has no uniforms or doesn't
-    // use all slots in the atomic counter buffer array.
-    //
-    // It is necessary because we want to keep a compatible pipeline layout in all cases,
-    // and Vulkan does not tolerate having null handles in a descriptor set.
-    vk::BufferHelper mEmptyBuffer;
+    bool isDefaultUniformDescriptorSetValid(vk::BufferHelper *newDefaultUniformBuffer) const
+    {
+        return mCurrentDefaultUniformBuffer == newDefaultUniformBuffer;
+    }
 
     // Descriptor sets for uniform blocks and textures for this program.
     std::vector<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
     std::vector<vk::BufferHelper *> mDescriptorBuffersCache;
     std::unordered_map<vk::BufferHelper *, VkDescriptorSet> mDefaultUniformDescriptorSetCache;
+    vk::BufferHelper *mCurrentDefaultUniformBuffer;
     size_t mNumDefaultUniformDescriptors;
 
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;

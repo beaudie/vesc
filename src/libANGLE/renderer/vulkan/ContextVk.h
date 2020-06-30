@@ -545,6 +545,12 @@ class ContextVk : public ContextImpl, public vk::Context
         return mWriteInfos[oldSize];
     }
 
+    vk::DynamicBuffer &getDefaultUniformStorage() { return mDefaultUniformStorage; }
+    vk::BufferHelper &getEmptyBuffer() { return mEmptyBuffer; }
+    // For testing only.
+    void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
+    void restoreDefaultUniformBlocksMinSizeForTesting();
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1020,6 +1026,15 @@ class ContextVk : public ContextImpl, public vk::Context
       private:
         ContextVk *mContextVk;
     };
+
+    vk::DynamicBuffer mDefaultUniformStorage;
+
+    // This is a special "empty" placeholder buffer for when a shader has no uniforms or doesn't
+    // use all slots in the atomic counter buffer array.
+    //
+    // It is necessary because we want to keep a compatible pipeline layout in all cases,
+    // and Vulkan does not tolerate having null handles in a descriptor set.
+    vk::BufferHelper mEmptyBuffer;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };
