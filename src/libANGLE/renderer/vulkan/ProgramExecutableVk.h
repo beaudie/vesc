@@ -211,7 +211,11 @@ class ProgramExecutableVk
     angle::Result updateImagesDescriptorSet(const gl::ProgramExecutable &executable,
                                             const gl::ShaderType shaderType,
                                             ContextVk *contextVk);
-
+    bool hasDefaultUniformDescriptorSet() const
+    {
+        return mDescriptorSets.size() > kUniformsAndXfbDescriptorSetIndex &&
+               mDescriptorSets[kUniformsAndXfbDescriptorSetIndex];
+    }
     // This is a special "empty" placeholder buffer for when a shader has no uniforms or doesn't
     // use all slots in the atomic counter buffer array.
     //

@@ -53,6 +53,9 @@ constexpr size_t kDescriptorImageInfosInitialSize  = 4;
 constexpr size_t kDescriptorWriteInfosInitialSize =
     kDescriptorBufferInfosInitialSize + kDescriptorImageInfosInitialSize;
 
+// This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
+constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
+
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
 {
@@ -724,6 +727,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mBufferInfos.reserve(kDescriptorBufferInfosInitialSize);
     mImageInfos.reserve(kDescriptorImageInfosInitialSize);
     mWriteInfos.reserve(kDescriptorWriteInfosInitialSize);
+
+    size_t minAlignment = static_cast<size_t>(
+        mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
+    mDefaultUniformStorage.init(
+        renderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        minAlignment, kUniformBlockDynamicBufferMinSize, true);
 }
 
 ContextVk::~ContextVk() = default;
@@ -744,6 +753,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     }
 
     mDriverUniformsDescriptorPool.destroy(device);
+
+    mDefaultUniformStorage.release(mRenderer);
 
     for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
     {
@@ -1467,7 +1478,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(),
-        mProgram->getDefaultUniformBuffer(), this);
+        mDefaultUniformStorage.getCurrentBuffer(), this);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
@@ -4566,6 +4577,15 @@ ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::~ScopedDescriptorSetUpdates(
     mContextVk->mWriteInfos.clear();
     mContextVk->mBufferInfos.clear();
     mContextVk->mImageInfos.clear();
+}
+
+void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
+{
+    mDefaultUniformStorage.setMinimumSizeForTesting(minSize);
+}
+void ContextVk::restoreDefaultUniformBlocksMinSizeForTesting()
+{
+    mDefaultUniformStorage.setMinimumSizeForTesting(kUniformBlockDynamicBufferMinSize);
 }
 
 }  // namespace rx
