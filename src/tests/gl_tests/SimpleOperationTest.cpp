@@ -496,9 +496,11 @@ TEST_P(SimpleOperationTest, DrawTriangleFan)
 
     // Check 4 lines accross de triangles to make sure we filled it.
     // Don't check every pixel as it would slow down our tests.
-    for (auto x = 0; x < getWindowWidth(); x++)
+    for (auto x = 0; x < getWindowWidth() - 1; x++)
     {
-        EXPECT_PIXEL_COLOR_EQ(x, x, GLColor::green);
+        // Depending on an Android device's rotation, the pixels right on the upper edge of the
+        // triangle may or may not be drawn green, so look one pixel towards the interior
+        EXPECT_PIXEL_COLOR_EQ(x + 1, x, GLColor::green);
     }
 
     for (auto x = getWindowWidth() / 3, y = 0; x < getWindowWidth(); x++, y++)
