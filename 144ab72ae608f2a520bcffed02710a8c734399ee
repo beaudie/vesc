@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6a2ec3c8_a9bbf913",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-30T16:18:55Z",
+      "side": 1,
+      "message": "Weird.   Not sure how that got in there.",
+      "parentUuid": "3f4a54ae_7412bc3f",
+      "range": {
+        "startLine": 923,
+        "startChar": 42,
+        "endLine": 923,
+        "endChar": 43
+      },
+      "revId": "144ab72ae608f2a520bcffed02710a8c734399ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ceda5c94_74ccf5a1",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "144ab72ae608f2a520bcffed02710a8c734399ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a63c7e_06a9f8eb",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-30T16:18:55Z",
+      "side": 1,
+      "message": "Oh, cool.   Done.",
+      "parentUuid": "ceda5c94_74ccf5a1",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 6
+      },
+      "revId": "144ab72ae608f2a520bcffed02710a8c734399ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
