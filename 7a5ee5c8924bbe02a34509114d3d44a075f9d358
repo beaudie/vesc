@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47257fb8_d33cf68e",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-30T23:55:02Z",
+      "side": 1,
+      "message": "The line break is weird here.",
+      "range": {
+        "startLine": 574,
+        "startChar": 3,
+        "endLine": 574,
+        "endChar": 113
+      },
+      "revId": "7a5ee5c8924bbe02a34509114d3d44a075f9d358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
