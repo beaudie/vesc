@@ -55,6 +55,24 @@ struct FrontendFeatures : angle::FeatureSetBase
     angle::Feature disableAnisotropicFiltering = {
         "disable_anisotropic_filtering", angle::FeatureCategory::FrontendWorkarounds,
         "Disable support for anisotropic filtering", &members};
+
+    // Force a level-of-detail offset to all texture sampling. Arbitrary offsets up to 15 can be
+    // encoded using a combination of force_texture_lod_offset_* features. Using these features
+    // makes ANGLE non-conformant.
+    std::array<angle::Feature, 4> forceTextureLODOffset = {
+        angle::Feature{"force_texture_lod_offset_1", angle::FeatureCategory::FrontendWorkarounds,
+                       "Increase the minimum texture level-of-detail by 1 when sampling.",
+                       &members},
+        angle::Feature{"force_texture_lod_offset_2", angle::FeatureCategory::FrontendWorkarounds,
+                       "Increase the minimum texture level-of-detail by 2 when sampling.",
+                       &members},
+        angle::Feature{"force_texture_lod_offset_4", angle::FeatureCategory::FrontendWorkarounds,
+                       "Increase the minimum texture level-of-detail by 4 when sampling.",
+                       &members},
+        angle::Feature{"force_texture_lod_offset_8", angle::FeatureCategory::FrontendWorkarounds,
+                       "Increase the minimum texture level-of-detail by 8 when sampling.",
+                       &members},
+    };
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

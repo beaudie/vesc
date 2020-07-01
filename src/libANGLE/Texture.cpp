@@ -18,6 +18,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/TextureImpl.h"
+#include "platform/FrontendFeatures.h"
 
 namespace gl
 {
@@ -807,7 +808,26 @@ float Texture::getMaxAnisotropy() const
 
 void Texture::setMinLod(const Context *context, GLfloat minLod)
 {
-    mState.mSamplerState.setMinLod(minLod);
+    const angle::FrontendFeatures &frontendFeatures = context->getFrontendFeatures();
+    float lodOffset                                 = 0.0f;
+    for (size_t i = 0; i < frontendFeatures.forceTextureLODOffset.size(); i++)
+    {
+        if (frontendFeatures.forceTextureLODOffset[i].enabled)
+        {
+            lodOffset += (1 << i);
+        }
+    }
+
+    if (lodOffset > 0)
+    {
+        // Min LoD can be negative, make sure it is always at least lodOffset if one is specified
+        mState.mSamplerState.setMinLod(std::max(minLod + lodOffset, lodOffset));
+    }
+    else
+    {
+        mState.mSamplerState.setMinLod(minLod);
+    }
+
     signalDirtyState(DIRTY_BIT_MIN_LOD);
 }
 
