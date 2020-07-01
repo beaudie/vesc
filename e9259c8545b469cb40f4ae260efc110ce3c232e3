@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbc2ddff_8f94f803",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-01T17:03:24Z",
+      "side": 1,
+      "message": "I only see this used in this file, can it move here instead?\n\nOtherwise let\u0027s move this struct into angletypes.h instead of the context headers.",
+      "range": {
+        "startLine": 1074,
+        "startChar": 4,
+        "endLine": 1074,
+        "endChar": 32
+      },
+      "revId": "e9259c8545b469cb40f4ae260efc110ce3c232e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "168ade6f_552e4266",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-01T17:03:24Z",
+      "side": 1,
+      "message": "If these are now going to live in a header, can they be prefixed with ANGLE_?",
+      "range": {
+        "startLine": 401,
+        "startChar": 3,
+        "endLine": 401,
+        "endChar": 27
+      },
+      "revId": "e9259c8545b469cb40f4ae260efc110ce3c232e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
