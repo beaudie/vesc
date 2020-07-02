@@ -681,6 +681,8 @@ angle::Result TextureGL::copyImage(const gl::Context *context,
                 GLuint attachedTextureLevel = readBuffer->mipLevel();
                 if (attachedTextureLevel != mState.getEffectiveBaseLevel())
                 {
+                    // Possible bug: is this getting recorded in the internal texture state caching?
+                    // If not we better undo this before returning!
                     ANGLE_TRY(setBaseLevel(context, attachedTextureLevel));
                     ANGLE_TRY(setMaxLevel(context, attachedTextureLevel));
                 }

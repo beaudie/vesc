@@ -2821,13 +2821,11 @@ TEST_P(WebGL2CompatibilityTest, CopyMip1ToMip0)
     EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
                      glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
-    // http://anglebug.com/4802
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsNVIDIA());
-
     // http://anglebug.com/4803
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsAMD() && IsOSX());
 
     // Bind framebuffer to mip 0 and make sure the copy was done.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);

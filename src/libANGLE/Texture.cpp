@@ -883,7 +883,9 @@ const SamplerState &Texture::getSamplerState() const
 
 angle::Result Texture::setBaseLevel(const Context *context, GLuint baseLevel)
 {
-    if (mState.setBaseLevel(baseLevel))
+    // Hack to force setting of the state always. I believe the cached state is incorrect because of
+    // the WAR.
+    if (mState.setBaseLevel(baseLevel) || true)
     {
         ANGLE_TRY(mTexture->setBaseLevel(context, mState.getEffectiveBaseLevel()));
         signalDirtyState(DIRTY_BIT_BASE_LEVEL);
