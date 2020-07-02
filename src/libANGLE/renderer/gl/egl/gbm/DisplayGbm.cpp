@@ -922,26 +922,64 @@ egl::Error DisplayGbm::makeCurrent(egl::Surface *drawSurface,
     return DisplayGL::makeCurrent(drawSurface, readSurface, context);
 }
 
+bool DisplayGbm::ValidateEglConfig(const EGLint *configAttribs)
+{
+    EGLint numConfigs;
+    if (!mEGL->chooseConfig(configAttribs, NULL, 0, &numConfigs))
+    {
+        ERR() << "eglChooseConfig failed with error " << egl::Error(mEGL->getError());
+        return false;
+    }
+    if (numConfigs == 0)
+    {
+        return false;
+    }
+    return true;
+}
+
 egl::ConfigSet DisplayGbm::generateConfigs()
 {
-    egl::ConfigSet configs;
 
-    egl::Config config;
-    config.bufferSize         = 32;
-    config.redSize            = 8;
-    config.greenSize          = 8;
-    config.blueSize           = 8;
-    config.alphaSize          = 8;
-    config.depthSize          = 24;
-    config.stencilSize        = 8;
-    config.bindToTextureRGBA  = EGL_TRUE;
-    config.renderableType     = EGL_OPENGL_ES2_BIT;
-    config.surfaceType        = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
-    config.renderTargetFormat = GL_RGBA8;
-    config.depthStencilFormat = GL_DEPTH24_STENCIL8;
+    gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
+    ASSERT(eglVersion >= gl::Version(1, 4));
 
-    configs.add(config);
-    return configs;
+    bool supportES3 =
+        (eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_create_context")) &&
+        (mRenderer->getMaxSupportedESVersion() >= gl::Version(3, 0));
+    EGLint renderType = EGL_OPENGL_ES2_BIT | (supportES3 ? EGL_OPENGL_ES3_BIT : 0);
+
+    std::vector<EGLint> surfaceTypes = {EGL_PBUFFER_BIT, EGL_WINDOW_BIT};
+    for (auto surfaceType : surfaceTypes)
+    {
+        // clang-format off
+        std::vector<EGLint> configAttribs8888 =
+        {
+            EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
+            EGL_SURFACE_TYPE, surfaceType,
+            EGL_CONFIG_CAVEAT, EGL_NONE,
+            EGL_CONFORMANT, renderType,
+            EGL_RENDERABLE_TYPE, renderType,
+            EGL_RED_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_BLUE_SIZE, 8,
+            EGL_ALPHA_SIZE, 8,
+            EGL_BUFFER_SIZE, 32,
+            EGL_DEPTH_SIZE, 24,
+            EGL_NONE
+        };
+        // clang-format on
+
+        if (!ValidateEglConfig(configAttribs8888.data()))
+        {
+            // Try the next surface type.
+            continue;
+        }
+        mConfigAttribList = configAttribs8888;
+        return DisplayEGL::generateConfigs();
+    }
+
+    ERR() << "No suitable EGL configs found.";
+    return egl::ConfigSet();
 }
 
 bool DisplayGbm::isValidNativeWindow(EGLNativeWindowType window) const
