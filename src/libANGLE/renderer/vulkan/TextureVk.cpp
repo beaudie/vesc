@@ -125,6 +125,42 @@ bool ForceCPUPathForCopy(RendererVk *renderer, const vk::ImageHelper &image)
     return image.getLayerCount() > 1 && renderer->getFeatures().forceCPUPathForCubeMapCopy.enabled;
 }
 
+bool CanGenerateMipmapWithCompute(RendererVk *renderer,
+                                  VkImageType imageType,
+                                  const vk::Format &format,
+                                  uint32_t levelCount,
+                                  GLint samples)
+{
+    const angle::Format &angleFormat = format.actualImageFormat();
+
+    if (renderer->getFeatures().disallowGenerateMipmapWithCompute.enabled)
+    {
+        return false;
+    }
+
+    // Format must have STORAGE support.
+    const bool hasStorageSupport = renderer->hasImageFormatFeatureBits(
+        format.vkImageFormat, VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT);
+
+    // No support for sRGB formats yet.
+    const bool isSRGB =
+        gl::GetSizedInternalFormatInfo(format.internalFormat).colorEncoding == GL_SRGB;
+
+    // No support for integer formats yet.
+    const bool isInt = angleFormat.isInt();
+
+    // Only 2D images are supported.
+    const bool is2D = imageType == VK_IMAGE_TYPE_2D;
+
+    // No support for multisampled images yet.
+    const bool isMultisampled = samples > 1;
+
+    // Only color formats are supported.
+    const bool isColorFormat = !angleFormat.hasDepthOrStencilBits();
+
+    return hasStorageSupport && !isSRGB && !isInt && is2D && !isMultisampled && isColorFormat;
+}
+
 void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
                                        const gl::ImageIndex &index,
                                        GLuint *layerCount,
@@ -1387,6 +1423,167 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk,
+                                                    vk::ImageHelper *dest,
+                                                    vk::ImageViewHelper *destViews)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // Requires that the image:
+    //
+    // - is not sRGB
+    // - is not integer
+    // - is 2D or 2D array
+    // - is single sample
+    // - is color image
+    // - has at most 13 mips
+    //
+    // Support for the first two can be added easily.  Supporting 3D textures, MSAA and
+    // depth/stencil would be more involved.  Supporting textures with more than 13 mips could be
+    // possible by generating 12 mips at a time.
+    ASSERT(gl::GetSizedInternalFormatInfo(mImage->getFormat().internalFormat).colorEncoding !=
+           GL_SRGB);
+    ASSERT(!mImage->getFormat().actualImageFormat().isInt());
+    ASSERT(mImage->getType() == VK_IMAGE_TYPE_2D);
+    ASSERT(mImage->getSamples() == 1);
+    ASSERT(mImage->getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT);
+
+    const bool isGenerateToSelf = dest == mImage;
+
+    // Transition this image to compute-write if generating to self, and read-only if generating
+    // to temp.  In the latter case, transition the temp image to compute-write.
+    if (!isGenerateToSelf)
+    {
+        ANGLE_TRY(contextVk->onImageRead(VK_IMAGE_ASPECT_COLOR_BIT,
+                                         vk::ImageLayout::ComputeShaderReadOnly, mImage));
+    }
+
+    // Create the appropriate sampler.
+    const bool formatSupportsLinearFiltering = renderer->hasImageFormatFeatureBits(
+        mImage->getFormat().vkImageFormat, VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT);
+    const bool hintFastest = contextVk->getState().getGenerateMipmapHint() == GL_FASTEST;
+    GLenum filter          = formatSupportsLinearFiltering && !hintFastest ? GL_LINEAR : GL_NEAREST;
+
+    gl::SamplerState samplerState;
+    samplerState.setMinFilter(filter);
+    samplerState.setMagFilter(filter);
+    samplerState.setWrapS(GL_CLAMP_TO_EDGE);
+    samplerState.setWrapT(GL_CLAMP_TO_EDGE);
+    samplerState.setWrapR(GL_CLAMP_TO_EDGE);
+
+    vk::BindingPointer<vk::Sampler> sampler;
+    vk::SamplerDesc samplerDesc(samplerState, false);
+    ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &sampler));
+
+    // If the image has more levels than supported, generate as many mips as possible at a time.
+    const uint32_t maxGenerateLevels =
+        std::min(UtilsVk::kGenerateMipmapMaxLevels,
+                 renderer->getPhysicalDeviceProperties().limits.maxPerStageDescriptorStorageImages);
+
+    for (uint32_t destBaseLevel = isGenerateToSelf ? 1 : 0; destBaseLevel < dest->getLevelCount();
+         destBaseLevel += maxGenerateLevels)
+    {
+        ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT,
+                                          vk::ImageLayout::ComputeShaderWrite, dest));
+
+        // Generate mipmaps for every layer separately.
+        for (uint32_t layer = 0; layer < mImage->getLayerCount(); ++layer)
+        {
+            // Create the necessary views.
+            const vk::ImageView *srcView                         = nullptr;
+            UtilsVk::GenerateMipmapDestLevelViews destLevelViews = {};
+
+            uint32_t srcLevel = 0;
+
+            // If not generating to self, the call for the first mips should take the source from
+            // the original image, while subsequent calls should read back from the destination
+            // image.  If generating to self, the original and destination images are the same, and
+            // the source is always taken from the destination image.
+            if (!isGenerateToSelf && destBaseLevel <= 1)
+            {
+                ANGLE_TRY(
+                    mImageViews.getLevelLayerDrawImageView(contextVk, *mImage, 0, layer, &srcView));
+            }
+            else
+            {
+                srcLevel = destBaseLevel - 1;
+                ASSERT(destBaseLevel > 0);
+                ANGLE_TRY(mImageViews.getLevelLayerDrawImageView(contextVk, *dest, srcLevel, layer,
+                                                                 &srcView));
+            }
+
+            uint32_t destLevelCount = maxGenerateLevels;
+            for (uint32_t level = 0; level < maxGenerateLevels; ++level)
+            {
+                uint32_t destLevel = destBaseLevel + level;
+
+                // If levelCount is not a multiple of maxGenerateLevels, cut the loop short.
+                if (destLevel >= dest->getLevelCount())
+                {
+                    destLevelCount = level;
+                    break;
+                }
+
+                ANGLE_TRY(destViews->getLevelLayerDrawImageView(contextVk, *dest, destLevel, layer,
+                                                                &destLevelViews[level]));
+            }
+
+            // If not as many as UtilsVk::kGenerateMipmapMaxLevels storage images are supported by
+            // the device, or if the image has fewer than maximum levels, fill the last views with a
+            // dummy view.
+            ASSERT(destLevelCount > 0);
+            for (uint32_t level = destLevelCount; level < UtilsVk::kGenerateMipmapMaxLevels;
+                 ++level)
+            {
+                destLevelViews[level] = destLevelViews[level - 1];
+            }
+
+            // Generate mipmaps.
+            UtilsVk::GenerateMipmapParameters params = {};
+            params.srcLevel                          = srcLevel;
+            params.destLevelCount                    = destLevelCount;
+
+            ANGLE_TRY(contextVk->getUtils().generateMipmap(contextVk, mImage, srcView, dest,
+                                                           destLevelViews, sampler.get(), params));
+        }
+    }
+
+    // If generating to temp, copy the temp into this image.
+    if (!isGenerateToSelf)
+    {
+        VkImageSubresourceLayers srcSubresource = {};
+        srcSubresource.aspectMask               = VK_IMAGE_ASPECT_COLOR_BIT;
+        srcSubresource.baseArrayLayer           = 0;
+        srcSubresource.layerCount               = mImage->getLayerCount();
+
+        VkImageSubresourceLayers destSubresource = srcSubresource;
+
+        // Put the images in the correct layout.
+        ANGLE_TRY(
+            contextVk->onImageRead(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc, dest));
+        ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
+                                          mImage));
+
+        vk::CommandBuffer *commandBuffer = nullptr;
+        ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
+
+        // Copy every level.
+        for (uint32_t level = 0; level < dest->getLevelCount(); ++level)
+        {
+            srcSubresource.mipLevel  = level;
+            destSubresource.mipLevel = level + 1;
+
+            ASSERT(mImage->getLevelExtents(level + 1) == dest->getLevelExtents(level));
+
+            vk::ImageHelper::Copy(dest, mImage, gl::kOffsetZero, gl::kOffsetZero,
+                                  dest->getLevelExtents(level), srcSubresource, destSubresource,
+                                  commandBuffer);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
@@ -1437,19 +1634,60 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     // Only staged update here is the robust resource init if any.
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
-    // Check if the image supports blit. If it does, we can do the mipmap generation on the gpu
-    // only.
-    if (renderer->hasImageFormatFeatureBits(mImage->getFormat().vkImageFormat, kBlitFeatureFlags))
+    uint32_t maxLevel = mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel();
+
+    if (maxLevel == 0)
     {
-        ANGLE_TRY(mImage->generateMipmapsWithBlit(
-            contextVk, mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel()));
-    }
-    else
-    {
-        ANGLE_TRY(generateMipmapsWithCPU(context));
+        // TODO: add a test for mip generation of a 1x1 image.
+        return angle::Result::Continue;
     }
 
-    return angle::Result::Continue;
+    if (CanGenerateMipmapWithCompute(renderer, mImage->getType(), mImage->getFormat(),
+                                     mImage->getLevelCount(), mImage->getSamples()))
+    {
+        // If it's possible to generate mipmap in compute, that would give the best possible
+        // performance.
+        vk::ImageHelper *dest          = mImage;
+        vk::ImageViewHelper *destViews = &mImageViews;
+
+        vk::RendererScoped<vk::ImageHelper> intermediate(renderer);
+        vk::RendererScoped<vk::ImageViewHelper> intermediateViews(renderer);
+
+        // If image doesn't have storage format support, create a temp image for mipmap generation.
+        if ((mImageUsageFlags & VK_IMAGE_USAGE_STORAGE_BIT) == 0)
+        {
+            VkExtent3D mip1Extents;
+            gl_vk::GetExtent(mImage->getLevelExtents(1), &mip1Extents);
+
+            ANGLE_TRY(intermediate.get().init(
+                contextVk, mState.getType(), mip1Extents, mImage->getFormat(), 1,
+                VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT, 0, maxLevel - 1,
+                maxLevel, mImage->getLayerCount()));
+
+            ANGLE_TRY(intermediate.get().initMemory(contextVk, renderer->getMemoryProperties(),
+                                                    VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+
+            dest      = &intermediate.get();
+            destViews = &intermediateViews.get();
+
+            dest->retain(&contextVk->getResourceUseList());
+            destViews->retain(&contextVk->getResourceUseList());
+        }
+
+        mImage->retain(&contextVk->getResourceUseList());
+        mImageViews.retain(&contextVk->getResourceUseList());
+
+        return generateMipmapsWithCompute(contextVk, dest, destViews);
+    }
+    else if (renderer->hasImageFormatFeatureBits(mImage->getFormat().vkImageFormat,
+                                                 kBlitFeatureFlags))
+    {
+        // Otherwise, use blit if possible.
+        return mImage->generateMipmapsWithBlit(contextVk, maxLevel);
+    }
+
+    // If not possible to generate mipmaps on the GPU, do it on the CPU for conformance.
+    return generateMipmapsWithCPU(context);
 }
 
 angle::Result TextureVk::copyAndStageImageSubresource(ContextVk *contextVk,
@@ -1562,6 +1800,12 @@ angle::Result TextureVk::respecifyImageAttributesAndLevels(ContextVk *contextVk,
 
     // After flushing, track the new levels (they are used in the flush, hence the wait)
     mImage->setBaseAndMaxLevels(baseLevel, maxLevel);
+
+    if (!mImage->valid())
+    {
+        releaseImage(contextVk);
+        return angle::Result::Continue;
+    }
 
     // Next, back up any data we need to preserve by staging it as updates to the new image.
 
@@ -1735,6 +1979,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                    gl::TextureCommand source)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
 
     VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
     VkImageCreateFlags oldCreateFlags = mImageCreateFlags;
@@ -1788,6 +2033,27 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         }
 
         mRedefinedLevels &= gl::TexLevelMask(~levelsMask);
+
+        // If generating mipmap and base level is incompatibly redefined, the image is going to be
+        // recreated.  Don't try to preserve the other mips.
+        if (mRedefinedLevels.test(0))
+        {
+            releaseImage(contextVk);
+        }
+
+        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+        VkImageType imageType              = gl_vk::GetImageType(mState.getType());
+        const vk::Format &format           = getBaseLevelFormat(contextVk->getRenderer());
+        const uint32_t levelCount          = getMipLevelCount(ImageMipLevels::FullMipChain);
+        const GLint samples                = baseLevelDesc.samples ? baseLevelDesc.samples : 1;
+
+        // If the compute path is to be used to generate mipmaps, and it's ok to create the image
+        // with STORAGE usage, add that usage.
+        if (!renderer->getFeatures().avoidStorageFlagAfterGenerateMipmap.enabled &&
+            CanGenerateMipmapWithCompute(renderer, imageType, format, levelCount, samples))
+        {
+            mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+        }
     }
 
     // Set base and max level before initializing the image
@@ -1816,16 +2082,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
         mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
     {
-        // If generating mipmap and base level is incompatibly redefined, the image is going to be
-        // recreated.  Don't try to preserve the other mips.
-        if (isGenerateMipmap && mRedefinedLevels.test(0))
-        {
-            releaseImage(contextVk);
-        }
-        else
-        {
-            ANGLE_TRY(respecifyImageAttributes(contextVk));
-        }
+        ANGLE_TRY(respecifyImageAttributes(contextVk));
     }
 
     // If generating mipmaps and the image is not full-mip already, make sure it's recreated to the
@@ -1860,7 +2117,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    RendererVk *renderer = contextVk->getRenderer();
     if (mSampler.valid())
     {
         mSampler.reset();
