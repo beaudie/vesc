@@ -22,6 +22,30 @@
       "revId": "17a81938782685763fae83785792900b689c13f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "794775d0_9beff8f5",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1003232
+      },
+      "writtenOn": "2020-07-02T20:27:59Z",
+      "side": 1,
+      "message": "Ah, you\u0027re right. The files are referenced in the //testing:run_perf_test target, so I didn\u0027t double-check that.",
+      "parentUuid": "650a6c83_e763a22d",
+      "range": {
+        "startLine": 368,
+        "startChar": 6,
+        "endLine": 368,
+        "endChar": 32
+      },
+      "revId": "17a81938782685763fae83785792900b689c13f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
