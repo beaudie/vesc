@@ -926,16 +926,23 @@ egl::ConfigSet DisplayGbm::generateConfigs()
 {
     egl::ConfigSet configs;
 
+    gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
+    ASSERT(eglVersion >= gl::Version(1, 4));
+
+    EGLint supportES3 =
+        (eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_create_context"));
+
     egl::Config config;
-    config.bufferSize         = 32;
-    config.redSize            = 8;
-    config.greenSize          = 8;
-    config.blueSize           = 8;
-    config.alphaSize          = 8;
-    config.depthSize          = 24;
-    config.stencilSize        = 8;
-    config.bindToTextureRGBA  = EGL_TRUE;
-    config.renderableType     = EGL_OPENGL_ES2_BIT;
+    config.bufferSize        = 32;
+    config.redSize           = 8;
+    config.greenSize         = 8;
+    config.blueSize          = 8;
+    config.alphaSize         = 8;
+    config.depthSize         = 24;
+    config.stencilSize       = 8;
+    config.bindToTextureRGBA = EGL_TRUE;
+    config.renderableType =
+        supportES3 ? EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT : EGL_OPENGL_ES2_BIT;
     config.surfaceType        = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
     config.renderTargetFormat = GL_RGBA8;
     config.depthStencilFormat = GL_DEPTH24_STENCIL8;
