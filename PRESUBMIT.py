@@ -44,6 +44,33 @@ def _CheckCommitMessageFormatting(input_api, output_api):
     def _IsTagLine(line):
         return ":" in line
 
+    def _SplitIntoMultipleCommits(description_text):
+        description_lines = description_text.splitlines()
+        multiple_commits = []
+        change_id_pattern = re.compile(r"^Change-Id: [a-zA-Z0-9]*$")
+        index = 0
+        while index < len(description_lines):
+            commit = []
+            while index < len(description_lines) and \
+            not change_id_pattern.match(description_lines[index]):
+                commit.append(description_lines[index])
+                index += 1
+            if index < len(description_lines):
+                commit.append(description_lines[index])
+                index += 1
+            # reach the first blank line after Change-Id line
+            while index < len(description_lines) and not _IsLineBlank(description_lines[index]):
+                commit.append(description_lines[index])
+                index += 1
+            if index < len(description_lines):
+                # do not add the blank line between commit messages into commit
+                index += 1
+            multiple_commits.append(commit)
+        return multiple_commits
+
+    def _CheckTabInCommit(lines):
+        return all([line.find("\t") == -1 for line in lines])
+
     whitelist_strings = ['Revert "', 'Roll ', 'Reland ']
     summary_linelength_warning_lower_limit = 65
     summary_linelength_warning_upper_limit = 70
@@ -51,14 +78,13 @@ def _CheckCommitMessageFormatting(input_api, output_api):
 
     git_output = input_api.change.DescriptionText()
 
-    multiple_commits = re.split(r"Change-Id: [a-zA-Z0-9]*\n", git_output)
+    multiple_commits = _SplitIntoMultipleCommits(git_output)
     errors = []
 
     for k in range(len(multiple_commits)):
-        commit = multiple_commits[k]
+        commit_msg_lines = multiple_commits[k]
         commit_number = len(multiple_commits) - k
         commit_tag = "Commit " + str(commit_number) + ":"
-        commit_msg_lines = commit.splitlines()
         commit_msg_line_numbers = {}
         for i in range(len(commit_msg_lines)):
             commit_msg_line_numbers[commit_msg_lines[i]] = i + 1
@@ -73,7 +99,7 @@ def _CheckCommitMessageFormatting(input_api, output_api):
         if whitelisted:
             continue
 
-        if commit.find("\t") != -1:
+        if not _CheckTabInCommit(commit_msg_lines):
             errors.append(
                 output_api.PresubmitError(commit_tag + "Tabs are not allowed in commit message."))
 
