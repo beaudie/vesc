@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "232d977d_6336bbb1",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-02T16:46:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ec15d15_b6601c4b",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c01c6fab_894c5ed6",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 26
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "640009c8_3f4b6548",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-02T16:46:05Z",
+      "side": 1,
+      "message": "Some tests dont generate output files. If I remember correctly, most egl tests dont really generate anything.",
+      "parentUuid": "c01c6fab_894c5ed6",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 32
+      },
+      "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48f84b4f_b43034cd",
         "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
         "patchSetId": 26
@@ -91,6 +139,30 @@
       "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33afdbd8_a7227385",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-02T16:46:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48f84b4f_b43034cd",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 74
+      },
+      "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
