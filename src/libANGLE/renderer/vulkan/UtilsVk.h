@@ -19,6 +19,7 @@
 //      on color images.
 //    - Depth/Stencil blit/resolve: Used by FramebufferVk::blit() to implement blit or multisample
 //      resolve on depth/stencil images.
+//    - Generate mipmap: Used by TextureVk::generateMipmapsWithCompute().
 //    - Overlay Cull/Draw: Used by OverlayVk to efficiently draw a UI for debugging.
 //    - Mipmap generation: Not yet implemented
 //
@@ -38,7 +39,7 @@ class UtilsVk : angle::NonCopyable
     UtilsVk();
     ~UtilsVk();
 
-    void destroy(VkDevice device);
+    void destroy(RendererVk *renderer);
 
     struct ClearParameters
     {
@@ -158,6 +159,14 @@ class UtilsVk : angle::NonCopyable
         uint32_t subgroupSize[2];
     };
 
+    struct GenerateMipmapParameters
+    {
+        // TODO
+    };
+
+    // Based on the maximum number of levels in GenerateMipmap.comp.
+    static constexpr uint32_t kGenerateMipmapMaxLevels = 12;
+
     angle::Result clearBuffer(ContextVk *contextVk,
                               vk::BufferHelper *dest,
                               const ClearParameters &params);
@@ -220,6 +229,16 @@ class UtilsVk : angle::NonCopyable
                             vk::ImageHelper *src,
                             const vk::ImageView *srcView,
                             const CopyImageParameters &params);
+
+    using GenerateMipmapDestLevelViews =
+        std::array<const vk::ImageView *, UtilsVk::kGenerateMipmapMaxLevels>;
+    angle::Result generateMipmap(ContextVk *contextVk,
+                                 vk::ImageHelper *src,
+                                 const vk::ImageView *srcLevelZeroView,
+                                 vk::ImageHelper *dest,
+                                 const GenerateMipmapDestLevelViews &destLevelViews,
+                                 const vk::Sampler &sampler,
+                                 const GenerateMipmapParameters &params);
 
     // Overlay utilities.
     angle::Result cullOverlayWidgets(ContextVk *contextVk,
@@ -374,6 +393,14 @@ class UtilsVk : angle::NonCopyable
         uint32_t outputSize[2] = {};
     };
 
+    struct GenerateMipmapShaderParams
+    {
+        // Structure matching PushConstants in GenerateMipmap.comp
+        uint32_t levelCount    = 0;
+        uint32_t numWorkGroups = 0;
+        float invSrcExtent[2]  = {};
+    };
+
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
     // Functions implemented by the class:
@@ -395,9 +422,10 @@ class UtilsVk : angle::NonCopyable
         ConvertIndexIndirectBuffer = 9,
         ConvertIndexIndirectLineLoopBuffer = 10,
         ConvertIndirectLineLoopBuffer      = 11,
+        GenerateMipmap                     = 12,
 
-        InvalidEnum = 12,
-        EnumCount   = 12,
+        InvalidEnum = 13,
+        EnumCount   = 13,
     };
 
     // Common function that creates the pipeline for the specified function, binds it and prepares
@@ -441,6 +469,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureBlitResolveStencilNoExportResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureOverlayCullResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureOverlayDrawResourcesInitialized(ContextVk *contextVk);
+    angle::Result ensureGenerateMipmapResourcesInitialized(ContextVk *contextVk);
 
     angle::Result ensureSamplersInitialized(ContextVk *context);
 
@@ -486,9 +515,12 @@ class UtilsVk : angle::NonCopyable
         [vk::InternalShader::BlitResolveStencilNoExport_comp::kArrayLen];
     vk::ShaderProgramHelper mOverlayCullPrograms[vk::InternalShader::OverlayCull_comp::kArrayLen];
     vk::ShaderProgramHelper mOverlayDrawPrograms[vk::InternalShader::OverlayDraw_comp::kArrayLen];
+    vk::ShaderProgramHelper
+        mGenerateMipmapPrograms[vk::InternalShader::GenerateMipmap_comp::kArrayLen];
 
     vk::Sampler mPointSampler;
     vk::Sampler mLinearSampler;
+    vk::DynamicBuffer mScratchBuffer;
 };
 
 }  // namespace rx
