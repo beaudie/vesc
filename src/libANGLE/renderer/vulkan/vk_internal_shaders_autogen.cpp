@@ -64,6 +64,8 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000006.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000007.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/GenerateMipmap.comp.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/GenerateMipmap.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000002.inc"
@@ -192,6 +194,10 @@ constexpr CompressedShaderBlob kConvertVertex_comp_shaders[] = {
 };
 constexpr CompressedShaderBlob kFullScreenQuad_vert_shaders[] = {
     {kFullScreenQuad_vert_00000000, sizeof(kFullScreenQuad_vert_00000000)},
+};
+constexpr CompressedShaderBlob kGenerateMipmap_comp_shaders[] = {
+    {kGenerateMipmap_comp_00000000, sizeof(kGenerateMipmap_comp_00000000)},
+    {kGenerateMipmap_comp_00000001, sizeof(kGenerateMipmap_comp_00000001)},
 };
 constexpr CompressedShaderBlob kImageClear_frag_shaders[] = {
     {kImageClear_frag_00000000, sizeof(kImageClear_frag_00000000)},
@@ -350,6 +356,10 @@ void ShaderLibrary::destroy(VkDevice device)
     {
         shader.get().destroy(device);
     }
+    for (RefCounted<ShaderAndSerial> &shader : mGenerateMipmap_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
     for (RefCounted<ShaderAndSerial> &shader : mImageClear_frag_shaders)
     {
         shader.get().destroy(device);
@@ -428,6 +438,14 @@ angle::Result ShaderLibrary::getFullScreenQuad_vert(Context *context,
 {
     return GetShader(context, mFullScreenQuad_vert_shaders, kFullScreenQuad_vert_shaders,
                      ArraySize(kFullScreenQuad_vert_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getGenerateMipmap_comp(Context *context,
+                                                    uint32_t shaderFlags,
+                                                    RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mGenerateMipmap_comp_shaders, kGenerateMipmap_comp_shaders,
+                     ArraySize(kGenerateMipmap_comp_shaders), shaderFlags, shaderOut);
 }
 
 angle::Result ShaderLibrary::getImageClear_frag(Context *context,
