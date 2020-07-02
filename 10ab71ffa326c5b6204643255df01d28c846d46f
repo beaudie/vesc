@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caad7ed6_5bb8eb67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T03:55:07Z",
+      "side": 1,
+      "message": "Please add `\u003d {};` to declaration of `blendAttachmentState` instead.",
+      "range": {
+        "startLine": 904,
+        "startChar": 0,
+        "endLine": 905,
+        "endChar": 67
+      },
+      "revId": "10ab71ffa326c5b6204643255df01d28c846d46f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af147d55_937b324c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T03:55:07Z",
+      "side": 1,
+      "message": "It would be much better to put the actual validation rule here.",
+      "range": {
+        "startLine": 913,
+        "startChar": 15,
+        "endLine": 913,
+        "endChar": 66
+      },
+      "revId": "10ab71ffa326c5b6204643255df01d28c846d46f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e1c7c27_da4f4859",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T03:55:07Z",
+      "side": 1,
+      "message": "For simple types, we prefer the type be explicit: angle::FormatID",
+      "range": {
+        "startLine": 914,
+        "startChar": 18,
+        "endLine": 914,
+        "endChar": 22
+      },
+      "revId": "10ab71ffa326c5b6204643255df01d28c846d46f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c123664_d5322466",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T03:55:07Z",
+      "side": 1,
+      "message": "nit: Please use mNativeExtensions.drawBuffersIndexedOES to avoid recalculating the expression that enables the extension.",
+      "range": {
+        "startLine": 111,
+        "startChar": 46,
+        "endLine": 111,
+        "endChar": 97
+      },
+      "revId": "10ab71ffa326c5b6204643255df01d28c846d46f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
