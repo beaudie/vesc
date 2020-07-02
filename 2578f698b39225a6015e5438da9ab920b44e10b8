@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aac8effb_9b32a94a",
+        "filename": "src/libANGLE/renderer/gl/egl/gbm/DisplayGbm.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T15:09:26Z",
+      "side": 1,
+      "message": "Suggest:\n\n    EGL_OPENGL_ES2_BIT | (supportES3 ? EGL_OPENGL_ES3_BIT : 0);\n\nso it\u0027s clear that ES2 is unconditional.",
+      "range": {
+        "startLine": 945,
+        "startChar": 8,
+        "endLine": 945,
+        "endChar": 81
+      },
+      "revId": "2578f698b39225a6015e5438da9ab920b44e10b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
