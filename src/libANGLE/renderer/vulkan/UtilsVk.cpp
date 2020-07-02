@@ -1972,6 +1972,7 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     {
         flags |= GenerateMipmap_comp::kUseFloat16;
     }
+    fprintf(stderr, "Generating with compute. Supports float16? %d\n", flags);
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;

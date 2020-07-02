@@ -1759,6 +1759,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
         maxPerStageDescriptorStorageImages < UtilsVk::kGenerateMipmapMaxLevels ||
             maxComputeWorkGroupInvocations < 256);
 
+    fprintf(stderr,
+            "Device supports mipmap gen with compute? %d. Max per-stage storage images: %u, max "
+            "compute workgroup size: %u\n",
+            !mFeatures.disallowGenerateMipmapWithCompute.enabled,
+            maxPerStageDescriptorStorageImages, maxComputeWorkGroupInvocations);
+
     // On the following platforms, VK_IMAGE_USAGE_STORAGE_BIT is detrimental to sampling
     // performance so it's avoided in GenerateMipmap:
     //
