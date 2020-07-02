@@ -91,6 +91,16 @@
     "c9e0fad17170e97662b0fa0d37919ea3",
   "src/libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.00000000.inc":
     "3a4ab796f02d3f1c306c92f7da2c68ee",
+  "src/libANGLE/renderer/vulkan/shaders/gen/GenerateMipmap.comp.00000000.inc":
+    "9bd60579fb0f459242d77026661124c4",
+  "src/libANGLE/renderer/vulkan/shaders/gen/GenerateMipmap.comp.00000001.inc":
+    "81497d156b1404947994980a706db1f3",
+  "src/libANGLE/renderer/vulkan/shaders/gen/GenerateMipmap.comp.00000002.inc":
+    "243a2a2f45dd38b59b4af10deb7a77bd",
+  "src/libANGLE/renderer/vulkan/shaders/gen/GenerateMipmap.comp.00000003.inc":
+    "ee0877a143fa13c93fbf438986090c08",
+  "src/libANGLE/renderer/vulkan/shaders/gen/GenerateMipmap.comp.00000004.inc":
+    "08fd772d2b43b89a9a8ec867fc53b247",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000000.inc":
     "d5a8184fad9c4a315bc3146ad07d3991",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000001.inc":
@@ -235,6 +245,10 @@
     "e4a95aae7f216780946e7332d22aa74e",
   "src/libANGLE/renderer/vulkan/shaders/src/FullScreenQuad.vert":
     "805ec8b2f87d4bd4242dc5b1c58ba3b4",
+  "src/libANGLE/renderer/vulkan/shaders/src/GenerateMipmap.comp":
+    "8406baf961eed1fd05a50cb41485f869",
+  "src/libANGLE/renderer/vulkan/shaders/src/GenerateMipmap.comp.json":
+    "07aa2be005ccf4c3fc1dddafdd26de4e",
   "src/libANGLE/renderer/vulkan/shaders/src/ImageClear.frag":
     "8889ae8014a657a0efd5607954126945",
   "src/libANGLE/renderer/vulkan/shaders/src/ImageClear.frag.json":
@@ -252,9 +266,9 @@
   "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.comp.json":
     "af79e5153c99cdb1e6b551b11bbf7f6b",
   "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp":
-    "6cd9f03e2a574c99570651e033fb6269",
+    "b824e2633c7a2d67d8593b8dce16bda5",
   "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h":
-    "4dc3b23be0176a3e8e092dbb20522a9d",
+    "8927f888609e90d5e2552cde67fe598d",
   "tools/glslang/glslang_validator.exe.sha1":
     "17e862cc6f462fecbf50b24ed6544a27",
   "tools/glslang/glslang_validator.sha1":
