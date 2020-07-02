@@ -22,6 +22,30 @@
       "revId": "a0771c5fb8a986b5692f825481f204a1e89fd2ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba644177_696be35a",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-02T16:01:29Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "5e1a6d61_ee107c1d",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 21
+      },
+      "revId": "a0771c5fb8a986b5692f825481f204a1e89fd2ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
