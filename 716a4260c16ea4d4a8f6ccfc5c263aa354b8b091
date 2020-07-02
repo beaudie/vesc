@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "895ed14a_fc669ef1",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T15:07:45Z",
+      "side": 1,
+      "message": "Would be nice to make these more pythonic with list comprehensions. You can then advance `index` by `len(result_of_list_comprehension)`",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 26
+      },
+      "revId": "716a4260c16ea4d4a8f6ccfc5c263aa354b8b091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a7c1c18_9bba395d",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T15:07:45Z",
+      "side": 1,
+      "message": "return all([line.find(\"\\t\") \u003d\u003d -1 for line in lines])",
+      "revId": "716a4260c16ea4d4a8f6ccfc5c263aa354b8b091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
