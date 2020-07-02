@@ -95,6 +95,19 @@ namespace FullScreenQuad_vert
 constexpr size_t kArrayLen = 0x00000001;
 }  // namespace FullScreenQuad_vert
 
+namespace GenerateMipmap_comp
+{
+enum Format
+{
+    kIsRGBA8          = 0x00000000,
+    kIsRGBA8_UseHalf  = 0x00000001,
+    kIsRGBA16         = 0x00000002,
+    kIsRGBA16_UseHalf = 0x00000003,
+    kIsRGBA32F        = 0x00000004,
+};
+constexpr size_t kArrayLen = 0x00000005;
+}  // namespace GenerateMipmap_comp
+
 namespace ImageClear_frag
 {
 enum AttachmentIndex
@@ -197,6 +210,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getFullScreenQuad_vert(Context *context,
                                          uint32_t shaderFlags,
                                          RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getGenerateMipmap_comp(Context *context,
+                                         uint32_t shaderFlags,
+                                         RefCounted<ShaderAndSerial> **shaderOut);
     angle::Result getImageClear_frag(Context *context,
                                      uint32_t shaderFlags,
                                      RefCounted<ShaderAndSerial> **shaderOut);
@@ -225,6 +241,8 @@ class ShaderLibrary final : angle::NonCopyable
         mConvertVertex_comp_shaders[InternalShader::ConvertVertex_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mFullScreenQuad_vert_shaders[InternalShader::FullScreenQuad_vert::kArrayLen];
+    RefCounted<ShaderAndSerial>
+        mGenerateMipmap_comp_shaders[InternalShader::GenerateMipmap_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mImageClear_frag_shaders[InternalShader::ImageClear_frag::kArrayLen];
     RefCounted<ShaderAndSerial> mImageCopy_frag_shaders[InternalShader::ImageCopy_frag::kArrayLen];
