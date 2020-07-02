@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f640528c_2a2e721a",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-02T16:28:11Z",
+      "side": 1,
+      "message": "we actually have an ANGLE_CHECK_GL_ALLOC macro for this use case",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ec15d15_b6601c4b",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-02T16:28:11Z",
+      "side": 1,
+      "message": "nit: use / for slashes in code",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c01c6fab_894c5ed6",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-02T16:28:11Z",
+      "side": 1,
+      "message": "this should be an error, right? or does it mean the test didn\u0027t generate any output files.",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 32
+      },
+      "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48f84b4f_b43034cd",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTest.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-02T16:28:11Z",
+      "side": 1,
+      "message": "I disagree with this TODO - it shouldn\u0027t be necessary to do a fuzzy compare in this test as we\u0027re generating the trace on the same machine (always)",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 74
+      },
+      "revId": "ab08d155f750ca4d05fee37bfeeb2017ba6cdfe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
