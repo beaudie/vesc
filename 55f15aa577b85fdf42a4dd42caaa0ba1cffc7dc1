@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83cca531_89091b8c",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T02:25:32Z",
+      "side": 1,
+      "message": "Missing `!`",
+      "range": {
+        "startLine": 94,
+        "startChar": 32,
+        "endLine": 94,
+        "endChar": 33
+      },
+      "revId": "55f15aa577b85fdf42a4dd42caaa0ba1cffc7dc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
