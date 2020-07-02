@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0d3bf928_10649bc4",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T17:57:15Z",
+      "side": 1,
+      "message": "How about something like this (needs testing):\n\n    change_id_pattern \u003d re.compile(r\"(?m)^Change-Id: [a-zA-Z0-9]*$\")\n\n    def _Concat(commits, paragraph):\n        # Drop tags paragraph and start a new commit message\n        if change_id_pattern.search(paragraph) !\u003d None:\n            return commits + [\u0027\u0027]\n\n        # Concat to the last commit message\n        return commits[0:-1] + [commits[-1] + paragraph]\n\n    # Split to paragraphs\n    multiple_commits \u003d re.split(r\"((?m)^\\s*$\\n)\", content)\n\n    # Concat paragraphs into commit messages, dropping tags paragraphs.\n    commits \u003d functools.reduce(_Concat, multiple_commits, [\u0027\u0027])\n    if commits[-1] \u003d\u003d \u0027\u0027:\n        commits \u003d commits[0:-1]\n\nI didn\u0027t think too much about it, but perhaps that last `if` could also be avoided. Also, would need to remove the starting empty line added to the not-first commits.\n\nIf you think along these lines, you could probably find an even simpler solution.",
+      "parentUuid": "f21a6749_29736bb1",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 26
+      },
+      "revId": "716a4260c16ea4d4a8f6ccfc5c263aa354b8b091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a7c1c18_9bba395d",
         "filename": "PRESUBMIT.py",
         "patchSetId": 2
