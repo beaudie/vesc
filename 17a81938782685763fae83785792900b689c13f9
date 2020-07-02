@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "650a6c83_e763a22d",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-02T20:20:06Z",
+      "side": 1,
+      "message": "I believe you\u0027ll need to put this behind if (build_with_chromium). I don\u0027t think we check out tools/perf in standalone.",
+      "range": {
+        "startLine": 368,
+        "startChar": 6,
+        "endLine": 368,
+        "endChar": 32
+      },
+      "revId": "17a81938782685763fae83785792900b689c13f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
