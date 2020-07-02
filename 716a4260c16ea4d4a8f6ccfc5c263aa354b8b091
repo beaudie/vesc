@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f21a6749_29736bb1",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-02T16:33:03Z",
+      "side": 1,
+      "message": "Maybe I\u0027m misunderstanding. I don\u0027t think while loop can be turned into list comprehension, since you cant break out of list comprehension?",
+      "parentUuid": "895ed14a_fc669ef1",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 26
+      },
+      "revId": "716a4260c16ea4d4a8f6ccfc5c263aa354b8b091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a7c1c18_9bba395d",
         "filename": "PRESUBMIT.py",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "716a4260c16ea4d4a8f6ccfc5c263aa354b8b091",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6f29a05_3ec2747c",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-02T16:33:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a7c1c18_9bba395d",
+      "revId": "716a4260c16ea4d4a8f6ccfc5c263aa354b8b091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
