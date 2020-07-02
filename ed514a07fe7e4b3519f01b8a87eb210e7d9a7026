@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9718a1e_e52f9d50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-02T02:30:23Z",
+      "side": 1,
+      "message": "Are we sure the rotation code doesn\u0027t have precision issues? What if the rotation code also has an off-by-one-pixel error?",
+      "range": {
+        "startLine": 12,
+        "startChar": 61,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "ed514a07fe7e4b3519f01b8a87eb210e7d9a7026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
