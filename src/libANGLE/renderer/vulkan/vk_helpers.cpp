@@ -3254,8 +3254,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, this));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
-    // We are able to use blitImage since the image format we are using supports it. This
-    // is a faster way we can generate the mips.
+    // We are able to use blitImage since the image format we are using supports it.
     int32_t mipWidth  = mExtents.width;
     int32_t mipHeight = mExtents.height;
     int32_t mipDepth  = mExtents.depth;
