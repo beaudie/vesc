@@ -365,6 +365,7 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
     data_deps = [
       "${angle_root}:libEGL",
       "${angle_root}:libGLESv2",
+      "//testing:run_perf_test",
     ]
 
     if (is_win || is_linux) {
