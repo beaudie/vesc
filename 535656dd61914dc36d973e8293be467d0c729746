@@ -45,6 +45,53 @@
       "revId": "535656dd61914dc36d973e8293be467d0c729746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0cf467_2737fdce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-03T16:21:49Z",
+      "side": 1,
+      "message": "I fell for this trap too. It\u0027s `gzip` that stores the uncompressed size, while python\u0027s `zlib` uses the zlib container. See Ref for confirmation.",
+      "parentUuid": "9ed5bb40_a8cffda0",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "535656dd61914dc36d973e8293be467d0c729746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b328b30f_4dc48798",
+        "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-03T16:21:49Z",
+      "side": 1,
+      "message": "Ref",
+      "range": {
+        "startLine": 410,
+        "startChar": 8,
+        "endLine": 410,
+        "endChar": 27
+      },
+      "revId": "535656dd61914dc36d973e8293be467d0c729746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
