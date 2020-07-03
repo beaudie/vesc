@@ -30,6 +30,7 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
 #include <array>
 #include <numeric>
+#include <thread>
 
 #include "common/FixedVector.h"
 #include "common/string_utils.h"
@@ -1710,7 +1711,7 @@ void GlslangInitialize()
 {
     int result = ShInitialize();
     ASSERT(result != 0);
-    GlslangWarmup();
+    std::thread{GlslangWarmup}.detach();
 }
 
 void GlslangRelease()
