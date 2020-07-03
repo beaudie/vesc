@@ -22,6 +22,29 @@
       "revId": "535656dd61914dc36d973e8293be467d0c729746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ed5bb40_a8cffda0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-03T16:15:54Z",
+      "side": 1,
+      "message": "You shouldn\u0027t have to store the uncompressed size if you\u0027re storing them compressed. It\u0027s determinable from a zlib call.",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "535656dd61914dc36d973e8293be467d0c729746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
