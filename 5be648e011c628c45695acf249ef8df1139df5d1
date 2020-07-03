@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fc37514_224c90c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-03T15:07:19Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5be648e011c628c45695acf249ef8df1139df5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25c59c6e_03b0ad1d",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-03T15:07:19Z",
+      "side": 1,
+      "message": "You may have to put this include below the others (with a space between). Seems to conflict with some linux X headers.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "5be648e011c628c45695acf249ef8df1139df5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
