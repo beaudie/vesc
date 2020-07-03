@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e160dbbc_768fce55",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-03T17:02:04Z",
+      "side": 1,
+      "message": "nit: could be a standalone static method. Also if you make the tests below check for ahb support in a single line it\u0027ll automatically print the skip reason:\n\nANGLE_SKIP_TEST_IF(!HasAHardwardBufferSupport())\n\nwill print\n\nTest skiped: !HasAHardwareBufferSupport",
+      "range": {
+        "startLine": 591,
+        "startChar": 0,
+        "endLine": 599,
+        "endChar": 5
+      },
+      "revId": "2d2b366dd5fb2b94e7763bd7084bd5bc2332ceca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
