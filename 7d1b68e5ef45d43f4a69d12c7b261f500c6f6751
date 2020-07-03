@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19b18296_6f291328",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-07-03T03:08:00Z",
+      "side": 1,
+      "message": "I think you are losing the current test.\nDon\u0027t you need to push it into the new batch?",
+      "range": {
+        "startLine": 697,
+        "startChar": 0,
+        "endLine": 699,
+        "endChar": 0
+      },
+      "revId": "7d1b68e5ef45d43f4a69d12c7b261f500c6f6751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9586bf5a_5d568876",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-07-03T03:08:00Z",
+      "side": 1,
+      "message": "Does it matter if this is ORed with the whole group, instead of being inside the ()?",
+      "range": {
+        "startLine": 970,
+        "startChar": 56,
+        "endLine": 971,
+        "endChar": 72
+      },
+      "revId": "7d1b68e5ef45d43f4a69d12c7b261f500c6f6751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
