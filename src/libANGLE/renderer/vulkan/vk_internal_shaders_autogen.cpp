@@ -10,6 +10,9 @@
 
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
 
+#define USE_SYSTEM_ZLIB
+#include "compression_utils_portable.h"
+
 namespace rx
 {
 namespace vk
@@ -121,162 +124,267 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.comp.00000001.inc"
 
-// This is SPIR-V binary blob and the size.
-struct ShaderBlob
+// This is compressed SPIR-V binary blob and size as well as uncompressedSize.
+struct CompressedShaderBlob
 {
-    const uint32_t *code;
-    size_t codeSize;
+    const uint8_t *code;
+    uint32_t size;
+    uint32_t uncompressedSize;
 };
 
-constexpr ShaderBlob kBlitResolve_frag_shaders[] = {
-    {kBlitResolve_frag_00000000, sizeof(kBlitResolve_frag_00000000)},
-    {kBlitResolve_frag_00000001, sizeof(kBlitResolve_frag_00000001)},
-    {kBlitResolve_frag_00000002, sizeof(kBlitResolve_frag_00000002)},
-    {kBlitResolve_frag_00000003, sizeof(kBlitResolve_frag_00000003)},
-    {kBlitResolve_frag_00000004, sizeof(kBlitResolve_frag_00000004)},
-    {kBlitResolve_frag_00000005, sizeof(kBlitResolve_frag_00000005)},
-    {kBlitResolve_frag_00000006, sizeof(kBlitResolve_frag_00000006)},
-    {kBlitResolve_frag_00000007, sizeof(kBlitResolve_frag_00000007)},
-    {kBlitResolve_frag_00000008, sizeof(kBlitResolve_frag_00000008)},
-    {kBlitResolve_frag_00000009, sizeof(kBlitResolve_frag_00000009)},
-    {kBlitResolve_frag_0000000A, sizeof(kBlitResolve_frag_0000000A)},
-    {kBlitResolve_frag_0000000B, sizeof(kBlitResolve_frag_0000000B)},
-    {kBlitResolve_frag_0000000C, sizeof(kBlitResolve_frag_0000000C)},
-    {kBlitResolve_frag_0000000D, sizeof(kBlitResolve_frag_0000000D)},
-    {kBlitResolve_frag_0000000E, sizeof(kBlitResolve_frag_0000000E)},
-    {kBlitResolve_frag_0000000F, sizeof(kBlitResolve_frag_0000000F)},
-    {kBlitResolve_frag_00000010, sizeof(kBlitResolve_frag_00000010)},
-    {kBlitResolve_frag_00000011, sizeof(kBlitResolve_frag_00000011)},
-    {kBlitResolve_frag_00000012, sizeof(kBlitResolve_frag_00000012)},
-    {kBlitResolve_frag_00000013, sizeof(kBlitResolve_frag_00000013)},
-    {kBlitResolve_frag_00000014, sizeof(kBlitResolve_frag_00000014)},
-    {kBlitResolve_frag_00000015, sizeof(kBlitResolve_frag_00000015)},
-    {kBlitResolve_frag_00000016, sizeof(kBlitResolve_frag_00000016)},
-    {kBlitResolve_frag_00000017, sizeof(kBlitResolve_frag_00000017)},
+constexpr CompressedShaderBlob kBlitResolve_frag_shaders[] = {
+    {kBlitResolve_frag_00000000, sizeof(kBlitResolve_frag_00000000),
+     kBlitResolve_frag_00000000_UncompressedSize},
+    {kBlitResolve_frag_00000001, sizeof(kBlitResolve_frag_00000001),
+     kBlitResolve_frag_00000001_UncompressedSize},
+    {kBlitResolve_frag_00000002, sizeof(kBlitResolve_frag_00000002),
+     kBlitResolve_frag_00000002_UncompressedSize},
+    {kBlitResolve_frag_00000003, sizeof(kBlitResolve_frag_00000003),
+     kBlitResolve_frag_00000003_UncompressedSize},
+    {kBlitResolve_frag_00000004, sizeof(kBlitResolve_frag_00000004),
+     kBlitResolve_frag_00000004_UncompressedSize},
+    {kBlitResolve_frag_00000005, sizeof(kBlitResolve_frag_00000005),
+     kBlitResolve_frag_00000005_UncompressedSize},
+    {kBlitResolve_frag_00000006, sizeof(kBlitResolve_frag_00000006),
+     kBlitResolve_frag_00000006_UncompressedSize},
+    {kBlitResolve_frag_00000007, sizeof(kBlitResolve_frag_00000007),
+     kBlitResolve_frag_00000007_UncompressedSize},
+    {kBlitResolve_frag_00000008, sizeof(kBlitResolve_frag_00000008),
+     kBlitResolve_frag_00000008_UncompressedSize},
+    {kBlitResolve_frag_00000009, sizeof(kBlitResolve_frag_00000009),
+     kBlitResolve_frag_00000009_UncompressedSize},
+    {kBlitResolve_frag_0000000A, sizeof(kBlitResolve_frag_0000000A),
+     kBlitResolve_frag_0000000A_UncompressedSize},
+    {kBlitResolve_frag_0000000B, sizeof(kBlitResolve_frag_0000000B),
+     kBlitResolve_frag_0000000B_UncompressedSize},
+    {kBlitResolve_frag_0000000C, sizeof(kBlitResolve_frag_0000000C),
+     kBlitResolve_frag_0000000C_UncompressedSize},
+    {kBlitResolve_frag_0000000D, sizeof(kBlitResolve_frag_0000000D),
+     kBlitResolve_frag_0000000D_UncompressedSize},
+    {kBlitResolve_frag_0000000E, sizeof(kBlitResolve_frag_0000000E),
+     kBlitResolve_frag_0000000E_UncompressedSize},
+    {kBlitResolve_frag_0000000F, sizeof(kBlitResolve_frag_0000000F),
+     kBlitResolve_frag_0000000F_UncompressedSize},
+    {kBlitResolve_frag_00000010, sizeof(kBlitResolve_frag_00000010),
+     kBlitResolve_frag_00000010_UncompressedSize},
+    {kBlitResolve_frag_00000011, sizeof(kBlitResolve_frag_00000011),
+     kBlitResolve_frag_00000011_UncompressedSize},
+    {kBlitResolve_frag_00000012, sizeof(kBlitResolve_frag_00000012),
+     kBlitResolve_frag_00000012_UncompressedSize},
+    {kBlitResolve_frag_00000013, sizeof(kBlitResolve_frag_00000013),
+     kBlitResolve_frag_00000013_UncompressedSize},
+    {kBlitResolve_frag_00000014, sizeof(kBlitResolve_frag_00000014),
+     kBlitResolve_frag_00000014_UncompressedSize},
+    {kBlitResolve_frag_00000015, sizeof(kBlitResolve_frag_00000015),
+     kBlitResolve_frag_00000015_UncompressedSize},
+    {kBlitResolve_frag_00000016, sizeof(kBlitResolve_frag_00000016),
+     kBlitResolve_frag_00000016_UncompressedSize},
+    {kBlitResolve_frag_00000017, sizeof(kBlitResolve_frag_00000017),
+     kBlitResolve_frag_00000017_UncompressedSize},
 };
-constexpr ShaderBlob kBlitResolveStencilNoExport_comp_shaders[] = {
-    {kBlitResolveStencilNoExport_comp_00000000, sizeof(kBlitResolveStencilNoExport_comp_00000000)},
-    {kBlitResolveStencilNoExport_comp_00000001, sizeof(kBlitResolveStencilNoExport_comp_00000001)},
-    {kBlitResolveStencilNoExport_comp_00000002, sizeof(kBlitResolveStencilNoExport_comp_00000002)},
-    {kBlitResolveStencilNoExport_comp_00000003, sizeof(kBlitResolveStencilNoExport_comp_00000003)},
+constexpr CompressedShaderBlob kBlitResolveStencilNoExport_comp_shaders[] = {
+    {kBlitResolveStencilNoExport_comp_00000000, sizeof(kBlitResolveStencilNoExport_comp_00000000),
+     kBlitResolveStencilNoExport_comp_00000000_UncompressedSize},
+    {kBlitResolveStencilNoExport_comp_00000001, sizeof(kBlitResolveStencilNoExport_comp_00000001),
+     kBlitResolveStencilNoExport_comp_00000001_UncompressedSize},
+    {kBlitResolveStencilNoExport_comp_00000002, sizeof(kBlitResolveStencilNoExport_comp_00000002),
+     kBlitResolveStencilNoExport_comp_00000002_UncompressedSize},
+    {kBlitResolveStencilNoExport_comp_00000003, sizeof(kBlitResolveStencilNoExport_comp_00000003),
+     kBlitResolveStencilNoExport_comp_00000003_UncompressedSize},
 };
-constexpr ShaderBlob kConvertIndex_comp_shaders[] = {
-    {kConvertIndex_comp_00000000, sizeof(kConvertIndex_comp_00000000)},
-    {kConvertIndex_comp_00000001, sizeof(kConvertIndex_comp_00000001)},
-    {kConvertIndex_comp_00000002, sizeof(kConvertIndex_comp_00000002)},
-    {kConvertIndex_comp_00000003, sizeof(kConvertIndex_comp_00000003)},
+constexpr CompressedShaderBlob kConvertIndex_comp_shaders[] = {
+    {kConvertIndex_comp_00000000, sizeof(kConvertIndex_comp_00000000),
+     kConvertIndex_comp_00000000_UncompressedSize},
+    {kConvertIndex_comp_00000001, sizeof(kConvertIndex_comp_00000001),
+     kConvertIndex_comp_00000001_UncompressedSize},
+    {kConvertIndex_comp_00000002, sizeof(kConvertIndex_comp_00000002),
+     kConvertIndex_comp_00000002_UncompressedSize},
+    {kConvertIndex_comp_00000003, sizeof(kConvertIndex_comp_00000003),
+     kConvertIndex_comp_00000003_UncompressedSize},
 };
-constexpr ShaderBlob kConvertIndexIndirectLineLoop_comp_shaders[] = {
+constexpr CompressedShaderBlob kConvertIndexIndirectLineLoop_comp_shaders[] = {
     {kConvertIndexIndirectLineLoop_comp_00000000,
-     sizeof(kConvertIndexIndirectLineLoop_comp_00000000)},
+     sizeof(kConvertIndexIndirectLineLoop_comp_00000000),
+     kConvertIndexIndirectLineLoop_comp_00000000_UncompressedSize},
     {kConvertIndexIndirectLineLoop_comp_00000001,
-     sizeof(kConvertIndexIndirectLineLoop_comp_00000001)},
+     sizeof(kConvertIndexIndirectLineLoop_comp_00000001),
+     kConvertIndexIndirectLineLoop_comp_00000001_UncompressedSize},
     {kConvertIndexIndirectLineLoop_comp_00000002,
-     sizeof(kConvertIndexIndirectLineLoop_comp_00000002)},
+     sizeof(kConvertIndexIndirectLineLoop_comp_00000002),
+     kConvertIndexIndirectLineLoop_comp_00000002_UncompressedSize},
 };
-constexpr ShaderBlob kConvertIndirectLineLoop_comp_shaders[] = {
-    {kConvertIndirectLineLoop_comp_00000000, sizeof(kConvertIndirectLineLoop_comp_00000000)},
+constexpr CompressedShaderBlob kConvertIndirectLineLoop_comp_shaders[] = {
+    {kConvertIndirectLineLoop_comp_00000000, sizeof(kConvertIndirectLineLoop_comp_00000000),
+     kConvertIndirectLineLoop_comp_00000000_UncompressedSize},
 };
-constexpr ShaderBlob kConvertVertex_comp_shaders[] = {
-    {kConvertVertex_comp_00000000, sizeof(kConvertVertex_comp_00000000)},
-    {kConvertVertex_comp_00000001, sizeof(kConvertVertex_comp_00000001)},
-    {kConvertVertex_comp_00000002, sizeof(kConvertVertex_comp_00000002)},
-    {kConvertVertex_comp_00000003, sizeof(kConvertVertex_comp_00000003)},
-    {kConvertVertex_comp_00000004, sizeof(kConvertVertex_comp_00000004)},
-    {kConvertVertex_comp_00000005, sizeof(kConvertVertex_comp_00000005)},
-    {kConvertVertex_comp_00000006, sizeof(kConvertVertex_comp_00000006)},
-    {kConvertVertex_comp_00000007, sizeof(kConvertVertex_comp_00000007)},
+constexpr CompressedShaderBlob kConvertVertex_comp_shaders[] = {
+    {kConvertVertex_comp_00000000, sizeof(kConvertVertex_comp_00000000),
+     kConvertVertex_comp_00000000_UncompressedSize},
+    {kConvertVertex_comp_00000001, sizeof(kConvertVertex_comp_00000001),
+     kConvertVertex_comp_00000001_UncompressedSize},
+    {kConvertVertex_comp_00000002, sizeof(kConvertVertex_comp_00000002),
+     kConvertVertex_comp_00000002_UncompressedSize},
+    {kConvertVertex_comp_00000003, sizeof(kConvertVertex_comp_00000003),
+     kConvertVertex_comp_00000003_UncompressedSize},
+    {kConvertVertex_comp_00000004, sizeof(kConvertVertex_comp_00000004),
+     kConvertVertex_comp_00000004_UncompressedSize},
+    {kConvertVertex_comp_00000005, sizeof(kConvertVertex_comp_00000005),
+     kConvertVertex_comp_00000005_UncompressedSize},
+    {kConvertVertex_comp_00000006, sizeof(kConvertVertex_comp_00000006),
+     kConvertVertex_comp_00000006_UncompressedSize},
+    {kConvertVertex_comp_00000007, sizeof(kConvertVertex_comp_00000007),
+     kConvertVertex_comp_00000007_UncompressedSize},
 };
-constexpr ShaderBlob kFullScreenQuad_vert_shaders[] = {
-    {kFullScreenQuad_vert_00000000, sizeof(kFullScreenQuad_vert_00000000)},
+constexpr CompressedShaderBlob kFullScreenQuad_vert_shaders[] = {
+    {kFullScreenQuad_vert_00000000, sizeof(kFullScreenQuad_vert_00000000),
+     kFullScreenQuad_vert_00000000_UncompressedSize},
 };
-constexpr ShaderBlob kImageClear_frag_shaders[] = {
-    {kImageClear_frag_00000000, sizeof(kImageClear_frag_00000000)},
-    {kImageClear_frag_00000001, sizeof(kImageClear_frag_00000001)},
-    {kImageClear_frag_00000002, sizeof(kImageClear_frag_00000002)},
-    {kImageClear_frag_00000003, sizeof(kImageClear_frag_00000003)},
-    {kImageClear_frag_00000004, sizeof(kImageClear_frag_00000004)},
-    {kImageClear_frag_00000005, sizeof(kImageClear_frag_00000005)},
-    {kImageClear_frag_00000006, sizeof(kImageClear_frag_00000006)},
-    {kImageClear_frag_00000007, sizeof(kImageClear_frag_00000007)},
-    {kImageClear_frag_00000008, sizeof(kImageClear_frag_00000008)},
-    {kImageClear_frag_00000009, sizeof(kImageClear_frag_00000009)},
-    {kImageClear_frag_0000000A, sizeof(kImageClear_frag_0000000A)},
-    {kImageClear_frag_0000000B, sizeof(kImageClear_frag_0000000B)},
-    {kImageClear_frag_0000000C, sizeof(kImageClear_frag_0000000C)},
-    {kImageClear_frag_0000000D, sizeof(kImageClear_frag_0000000D)},
-    {kImageClear_frag_0000000E, sizeof(kImageClear_frag_0000000E)},
-    {kImageClear_frag_0000000F, sizeof(kImageClear_frag_0000000F)},
-    {kImageClear_frag_00000010, sizeof(kImageClear_frag_00000010)},
-    {kImageClear_frag_00000011, sizeof(kImageClear_frag_00000011)},
-    {kImageClear_frag_00000012, sizeof(kImageClear_frag_00000012)},
-    {kImageClear_frag_00000013, sizeof(kImageClear_frag_00000013)},
-    {kImageClear_frag_00000014, sizeof(kImageClear_frag_00000014)},
-    {kImageClear_frag_00000015, sizeof(kImageClear_frag_00000015)},
-    {kImageClear_frag_00000016, sizeof(kImageClear_frag_00000016)},
-    {kImageClear_frag_00000017, sizeof(kImageClear_frag_00000017)},
+constexpr CompressedShaderBlob kImageClear_frag_shaders[] = {
+    {kImageClear_frag_00000000, sizeof(kImageClear_frag_00000000),
+     kImageClear_frag_00000000_UncompressedSize},
+    {kImageClear_frag_00000001, sizeof(kImageClear_frag_00000001),
+     kImageClear_frag_00000001_UncompressedSize},
+    {kImageClear_frag_00000002, sizeof(kImageClear_frag_00000002),
+     kImageClear_frag_00000002_UncompressedSize},
+    {kImageClear_frag_00000003, sizeof(kImageClear_frag_00000003),
+     kImageClear_frag_00000003_UncompressedSize},
+    {kImageClear_frag_00000004, sizeof(kImageClear_frag_00000004),
+     kImageClear_frag_00000004_UncompressedSize},
+    {kImageClear_frag_00000005, sizeof(kImageClear_frag_00000005),
+     kImageClear_frag_00000005_UncompressedSize},
+    {kImageClear_frag_00000006, sizeof(kImageClear_frag_00000006),
+     kImageClear_frag_00000006_UncompressedSize},
+    {kImageClear_frag_00000007, sizeof(kImageClear_frag_00000007),
+     kImageClear_frag_00000007_UncompressedSize},
+    {kImageClear_frag_00000008, sizeof(kImageClear_frag_00000008),
+     kImageClear_frag_00000008_UncompressedSize},
+    {kImageClear_frag_00000009, sizeof(kImageClear_frag_00000009),
+     kImageClear_frag_00000009_UncompressedSize},
+    {kImageClear_frag_0000000A, sizeof(kImageClear_frag_0000000A),
+     kImageClear_frag_0000000A_UncompressedSize},
+    {kImageClear_frag_0000000B, sizeof(kImageClear_frag_0000000B),
+     kImageClear_frag_0000000B_UncompressedSize},
+    {kImageClear_frag_0000000C, sizeof(kImageClear_frag_0000000C),
+     kImageClear_frag_0000000C_UncompressedSize},
+    {kImageClear_frag_0000000D, sizeof(kImageClear_frag_0000000D),
+     kImageClear_frag_0000000D_UncompressedSize},
+    {kImageClear_frag_0000000E, sizeof(kImageClear_frag_0000000E),
+     kImageClear_frag_0000000E_UncompressedSize},
+    {kImageClear_frag_0000000F, sizeof(kImageClear_frag_0000000F),
+     kImageClear_frag_0000000F_UncompressedSize},
+    {kImageClear_frag_00000010, sizeof(kImageClear_frag_00000010),
+     kImageClear_frag_00000010_UncompressedSize},
+    {kImageClear_frag_00000011, sizeof(kImageClear_frag_00000011),
+     kImageClear_frag_00000011_UncompressedSize},
+    {kImageClear_frag_00000012, sizeof(kImageClear_frag_00000012),
+     kImageClear_frag_00000012_UncompressedSize},
+    {kImageClear_frag_00000013, sizeof(kImageClear_frag_00000013),
+     kImageClear_frag_00000013_UncompressedSize},
+    {kImageClear_frag_00000014, sizeof(kImageClear_frag_00000014),
+     kImageClear_frag_00000014_UncompressedSize},
+    {kImageClear_frag_00000015, sizeof(kImageClear_frag_00000015),
+     kImageClear_frag_00000015_UncompressedSize},
+    {kImageClear_frag_00000016, sizeof(kImageClear_frag_00000016),
+     kImageClear_frag_00000016_UncompressedSize},
+    {kImageClear_frag_00000017, sizeof(kImageClear_frag_00000017),
+     kImageClear_frag_00000017_UncompressedSize},
 };
-constexpr ShaderBlob kImageCopy_frag_shaders[] = {
-    {kImageCopy_frag_00000000, sizeof(kImageCopy_frag_00000000)},
-    {kImageCopy_frag_00000001, sizeof(kImageCopy_frag_00000001)},
-    {kImageCopy_frag_00000002, sizeof(kImageCopy_frag_00000002)},
-    {nullptr, 0},  // 0x00000003
-    {kImageCopy_frag_00000004, sizeof(kImageCopy_frag_00000004)},
-    {kImageCopy_frag_00000005, sizeof(kImageCopy_frag_00000005)},
-    {kImageCopy_frag_00000006, sizeof(kImageCopy_frag_00000006)},
-    {nullptr, 0},  // 0x00000007
-    {kImageCopy_frag_00000008, sizeof(kImageCopy_frag_00000008)},
-    {kImageCopy_frag_00000009, sizeof(kImageCopy_frag_00000009)},
-    {kImageCopy_frag_0000000A, sizeof(kImageCopy_frag_0000000A)},
-    {nullptr, 0},  // 0x0000000B
-    {nullptr, 0},  // 0x0000000C
-    {nullptr, 0},  // 0x0000000D
-    {nullptr, 0},  // 0x0000000E
-    {nullptr, 0},  // 0x0000000F
-    {kImageCopy_frag_00000010, sizeof(kImageCopy_frag_00000010)},
-    {kImageCopy_frag_00000011, sizeof(kImageCopy_frag_00000011)},
-    {kImageCopy_frag_00000012, sizeof(kImageCopy_frag_00000012)},
-    {nullptr, 0},  // 0x00000013
-    {kImageCopy_frag_00000014, sizeof(kImageCopy_frag_00000014)},
-    {kImageCopy_frag_00000015, sizeof(kImageCopy_frag_00000015)},
-    {kImageCopy_frag_00000016, sizeof(kImageCopy_frag_00000016)},
-    {nullptr, 0},  // 0x00000017
-    {kImageCopy_frag_00000018, sizeof(kImageCopy_frag_00000018)},
-    {kImageCopy_frag_00000019, sizeof(kImageCopy_frag_00000019)},
-    {kImageCopy_frag_0000001A, sizeof(kImageCopy_frag_0000001A)},
-    {nullptr, 0},  // 0x0000001B
-    {nullptr, 0},  // 0x0000001C
-    {nullptr, 0},  // 0x0000001D
-    {nullptr, 0},  // 0x0000001E
-    {nullptr, 0},  // 0x0000001F
-    {kImageCopy_frag_00000020, sizeof(kImageCopy_frag_00000020)},
-    {kImageCopy_frag_00000021, sizeof(kImageCopy_frag_00000021)},
-    {kImageCopy_frag_00000022, sizeof(kImageCopy_frag_00000022)},
-    {nullptr, 0},  // 0x00000023
-    {kImageCopy_frag_00000024, sizeof(kImageCopy_frag_00000024)},
-    {kImageCopy_frag_00000025, sizeof(kImageCopy_frag_00000025)},
-    {kImageCopy_frag_00000026, sizeof(kImageCopy_frag_00000026)},
-    {nullptr, 0},  // 0x00000027
-    {kImageCopy_frag_00000028, sizeof(kImageCopy_frag_00000028)},
-    {kImageCopy_frag_00000029, sizeof(kImageCopy_frag_00000029)},
-    {kImageCopy_frag_0000002A, sizeof(kImageCopy_frag_0000002A)},
+constexpr CompressedShaderBlob kImageCopy_frag_shaders[] = {
+    {kImageCopy_frag_00000000, sizeof(kImageCopy_frag_00000000),
+     kImageCopy_frag_00000000_UncompressedSize},
+    {kImageCopy_frag_00000001, sizeof(kImageCopy_frag_00000001),
+     kImageCopy_frag_00000001_UncompressedSize},
+    {kImageCopy_frag_00000002, sizeof(kImageCopy_frag_00000002),
+     kImageCopy_frag_00000002_UncompressedSize},
+    {nullptr, 0, 0},  // 0x00000003
+    {kImageCopy_frag_00000004, sizeof(kImageCopy_frag_00000004),
+     kImageCopy_frag_00000004_UncompressedSize},
+    {kImageCopy_frag_00000005, sizeof(kImageCopy_frag_00000005),
+     kImageCopy_frag_00000005_UncompressedSize},
+    {kImageCopy_frag_00000006, sizeof(kImageCopy_frag_00000006),
+     kImageCopy_frag_00000006_UncompressedSize},
+    {nullptr, 0, 0},  // 0x00000007
+    {kImageCopy_frag_00000008, sizeof(kImageCopy_frag_00000008),
+     kImageCopy_frag_00000008_UncompressedSize},
+    {kImageCopy_frag_00000009, sizeof(kImageCopy_frag_00000009),
+     kImageCopy_frag_00000009_UncompressedSize},
+    {kImageCopy_frag_0000000A, sizeof(kImageCopy_frag_0000000A),
+     kImageCopy_frag_0000000A_UncompressedSize},
+    {nullptr, 0, 0},  // 0x0000000B
+    {nullptr, 0, 0},  // 0x0000000C
+    {nullptr, 0, 0},  // 0x0000000D
+    {nullptr, 0, 0},  // 0x0000000E
+    {nullptr, 0, 0},  // 0x0000000F
+    {kImageCopy_frag_00000010, sizeof(kImageCopy_frag_00000010),
+     kImageCopy_frag_00000010_UncompressedSize},
+    {kImageCopy_frag_00000011, sizeof(kImageCopy_frag_00000011),
+     kImageCopy_frag_00000011_UncompressedSize},
+    {kImageCopy_frag_00000012, sizeof(kImageCopy_frag_00000012),
+     kImageCopy_frag_00000012_UncompressedSize},
+    {nullptr, 0, 0},  // 0x00000013
+    {kImageCopy_frag_00000014, sizeof(kImageCopy_frag_00000014),
+     kImageCopy_frag_00000014_UncompressedSize},
+    {kImageCopy_frag_00000015, sizeof(kImageCopy_frag_00000015),
+     kImageCopy_frag_00000015_UncompressedSize},
+    {kImageCopy_frag_00000016, sizeof(kImageCopy_frag_00000016),
+     kImageCopy_frag_00000016_UncompressedSize},
+    {nullptr, 0, 0},  // 0x00000017
+    {kImageCopy_frag_00000018, sizeof(kImageCopy_frag_00000018),
+     kImageCopy_frag_00000018_UncompressedSize},
+    {kImageCopy_frag_00000019, sizeof(kImageCopy_frag_00000019),
+     kImageCopy_frag_00000019_UncompressedSize},
+    {kImageCopy_frag_0000001A, sizeof(kImageCopy_frag_0000001A),
+     kImageCopy_frag_0000001A_UncompressedSize},
+    {nullptr, 0, 0},  // 0x0000001B
+    {nullptr, 0, 0},  // 0x0000001C
+    {nullptr, 0, 0},  // 0x0000001D
+    {nullptr, 0, 0},  // 0x0000001E
+    {nullptr, 0, 0},  // 0x0000001F
+    {kImageCopy_frag_00000020, sizeof(kImageCopy_frag_00000020),
+     kImageCopy_frag_00000020_UncompressedSize},
+    {kImageCopy_frag_00000021, sizeof(kImageCopy_frag_00000021),
+     kImageCopy_frag_00000021_UncompressedSize},
+    {kImageCopy_frag_00000022, sizeof(kImageCopy_frag_00000022),
+     kImageCopy_frag_00000022_UncompressedSize},
+    {nullptr, 0, 0},  // 0x00000023
+    {kImageCopy_frag_00000024, sizeof(kImageCopy_frag_00000024),
+     kImageCopy_frag_00000024_UncompressedSize},
+    {kImageCopy_frag_00000025, sizeof(kImageCopy_frag_00000025),
+     kImageCopy_frag_00000025_UncompressedSize},
+    {kImageCopy_frag_00000026, sizeof(kImageCopy_frag_00000026),
+     kImageCopy_frag_00000026_UncompressedSize},
+    {nullptr, 0, 0},  // 0x00000027
+    {kImageCopy_frag_00000028, sizeof(kImageCopy_frag_00000028),
+     kImageCopy_frag_00000028_UncompressedSize},
+    {kImageCopy_frag_00000029, sizeof(kImageCopy_frag_00000029),
+     kImageCopy_frag_00000029_UncompressedSize},
+    {kImageCopy_frag_0000002A, sizeof(kImageCopy_frag_0000002A),
+     kImageCopy_frag_0000002A_UncompressedSize},
 };
-constexpr ShaderBlob kOverlayCull_comp_shaders[] = {
-    {kOverlayCull_comp_00000000, sizeof(kOverlayCull_comp_00000000)},
-    {kOverlayCull_comp_00000001, sizeof(kOverlayCull_comp_00000001)},
-    {kOverlayCull_comp_00000002, sizeof(kOverlayCull_comp_00000002)},
-    {kOverlayCull_comp_00000003, sizeof(kOverlayCull_comp_00000003)},
-    {kOverlayCull_comp_00000004, sizeof(kOverlayCull_comp_00000004)},
-    {kOverlayCull_comp_00000005, sizeof(kOverlayCull_comp_00000005)},
+constexpr CompressedShaderBlob kOverlayCull_comp_shaders[] = {
+    {kOverlayCull_comp_00000000, sizeof(kOverlayCull_comp_00000000),
+     kOverlayCull_comp_00000000_UncompressedSize},
+    {kOverlayCull_comp_00000001, sizeof(kOverlayCull_comp_00000001),
+     kOverlayCull_comp_00000001_UncompressedSize},
+    {kOverlayCull_comp_00000002, sizeof(kOverlayCull_comp_00000002),
+     kOverlayCull_comp_00000002_UncompressedSize},
+    {kOverlayCull_comp_00000003, sizeof(kOverlayCull_comp_00000003),
+     kOverlayCull_comp_00000003_UncompressedSize},
+    {kOverlayCull_comp_00000004, sizeof(kOverlayCull_comp_00000004),
+     kOverlayCull_comp_00000004_UncompressedSize},
+    {kOverlayCull_comp_00000005, sizeof(kOverlayCull_comp_00000005),
+     kOverlayCull_comp_00000005_UncompressedSize},
 };
-constexpr ShaderBlob kOverlayDraw_comp_shaders[] = {
-    {kOverlayDraw_comp_00000000, sizeof(kOverlayDraw_comp_00000000)},
-    {kOverlayDraw_comp_00000001, sizeof(kOverlayDraw_comp_00000001)},
+constexpr CompressedShaderBlob kOverlayDraw_comp_shaders[] = {
+    {kOverlayDraw_comp_00000000, sizeof(kOverlayDraw_comp_00000000),
+     kOverlayDraw_comp_00000000_UncompressedSize},
+    {kOverlayDraw_comp_00000001, sizeof(kOverlayDraw_comp_00000001),
+     kOverlayDraw_comp_00000001_UncompressedSize},
 };
 
 angle::Result GetShader(Context *context,
                         RefCounted<ShaderAndSerial> *shaders,
-                        const ShaderBlob *shaderBlobs,
+                        const CompressedShaderBlob *compressedShaderBlobs,
                         size_t shadersCount,
                         uint32_t shaderFlags,
                         RefCounted<ShaderAndSerial> **shaderOut)
@@ -291,10 +399,24 @@ angle::Result GetShader(Context *context,
     }
 
     // Create shader lazily. Access will need to be locked for multi-threading.
-    const ShaderBlob &shaderCode = shaderBlobs[shaderFlags];
-    ASSERT(shaderCode.code != nullptr);
+    const CompressedShaderBlob &compressedShaderCode = compressedShaderBlobs[shaderFlags];
+    ASSERT(compressedShaderCode.code != nullptr);
 
-    return InitShaderAndSerial(context, &shader.get(), shaderCode.code, shaderCode.codeSize);
+    uLong uncompressedSize = compressedShaderCode.uncompressedSize;
+    std::vector<uint32_t> shaderCode((uncompressedSize + 3) / 4, 0);
+
+    // Note: we assume a little-endian environment throughout ANGLE.
+    int zResult = zlib_internal::UncompressHelper(
+        zlib_internal::ZLIB, reinterpret_cast<uint8_t *>(shaderCode.data()), &uncompressedSize,
+        compressedShaderCode.code, compressedShaderCode.size);
+
+    if (zResult != Z_OK)
+    {
+        ERR() << "Failure to decompressed internal shader: " << zResult << "\n";
+        return angle::Result::Stop;
+    }
+
+    return InitShaderAndSerial(context, &shader.get(), shaderCode.data(), shaderCode.size() * 4);
 }
 }  // anonymous namespace
 
