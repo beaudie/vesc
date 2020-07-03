@@ -6,6 +6,7 @@
         "",
         "OverlayDraw.comp.json: Build parameters for OverlayDraw.comp."
     ],
+    "Condition": "ANGLE_ENABLE_OVERLAY",
     "SubgroupSize": [
         "Is8x4",
         "Is8x8"
