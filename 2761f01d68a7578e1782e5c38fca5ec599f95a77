@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5b71248_98f22ce4",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-03T14:17:46Z",
+      "side": 0,
+      "message": "The change should fix these two at least, can you please remove the suppressions already?",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 85
+      },
+      "revId": "2761f01d68a7578e1782e5c38fca5ec599f95a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
