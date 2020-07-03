@@ -63,6 +63,30 @@
       "revId": "5be648e011c628c45695acf249ef8df1139df5d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f41fba75_aea4cb57",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-03T16:04:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e7f8959_85b00183",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "5be648e011c628c45695acf249ef8df1139df5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
