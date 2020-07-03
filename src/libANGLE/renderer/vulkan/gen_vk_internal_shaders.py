@@ -188,8 +188,8 @@ template_spirv_blob_inc = u"""// GENERATED FILE - DO NOT EDIT.
 
 #pragma once
 constexpr uint8_t {variable_name}[] = {{
-    {blob}
-}};
+{condition_start}    {blob}
+{condition_end}}};
 constexpr uint32_t {variable_name}_UncompressedSize = {uncompressed_size};
 
 // Generated from:
@@ -262,16 +262,19 @@ def get_shader_variations(shader):
     variation_file = get_variations_path(shader)
     if variation_file is None:
         # If there is no variation file, assume none.
-        return ({}, [])
+        return ('', {}, [])
 
     with open(variation_file) as fin:
         variations = json.loads(fin.read())
+        condition = ''
         flags = {}
         enums = []
 
         for key, value in variations.iteritems():
             if key == "Description":
                 continue
+            elif key == "Condition":
+                condition = value
             elif key == "Flags":
                 flags = value
             elif len(value) > 0:
@@ -280,7 +283,7 @@ def get_shader_variations(shader):
         # sort enums so the ones with the most waste ends up last, reducing the table size
         enums.sort(key=lambda enum: (1 << (len(enum[1]) - 1).bit_length()) / float(len(enum[1])))
 
-        return (flags, enums)
+        return (condition, flags, enums)
 
 
 def get_variation_bits(flags, enums):
@@ -321,10 +324,16 @@ def read_and_compress_spirv_blob(blob_path):
     return zlib.compress(blob, 9), len(blob)
 
 
-def write_compressed_spirv_blob_as_c_array(output_path, variable_name, compressed_blob,
+def write_compressed_spirv_blob_as_c_array(output_path, condition, variable_name, compressed_blob,
                                            uncompressed_size, preprocessed_source):
     hex_array = ['0x{:02x}'.format(ord(byte)) for byte in compressed_blob]
     blob = ',\n    '.join(','.join(hex_array[i:i + 16]) for i in range(0, len(hex_array), 16))
+
+    condition_start = ''
+    condition_end = ''
+    if condition != '':
+        condition_start = '#if ' + condition + '\n'
+        condition_end = '#endif\n'
 
     with open(output_path, 'wb') as incfile:
         incfile.write(
@@ -333,6 +342,8 @@ def write_compressed_spirv_blob_as_c_array(output_path, variable_name, compresse
                 copyright_year=date.today().year,
                 out_file_name=output_path,
                 variable_name=variable_name,
+                condition_start=condition_start,
+                condition_end=condition_end,
                 blob=blob,
                 uncompressed_size=uncompressed_size,
                 preprocessed_source=preprocessed_source))
@@ -342,13 +353,14 @@ class CompileQueue:
 
     class CompressAndAppendPreprocessorOutput:
 
-        def __init__(self, shader_file, preprocessor_args, output_path, variable_name):
+        def __init__(self, shader_file, preprocessor_args, output_path, variable_name, condition):
             # Asynchronously launch the preprocessor job.
             self.process = subprocess.Popen(
                 preprocessor_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # Store the file name for output to be appended to.
             self.output_path = output_path
             self.variable_name = variable_name
+            self.condition = condition
             # Store info for error description.
             self.shader_file = shader_file
 
@@ -366,8 +378,9 @@ class CompileQueue:
                 compressed_blob, uncompressed_size = read_and_compress_spirv_blob(self.output_path)
 
                 # Write the compressed blob as a C array in the output file, followed by the preprocessor output.
-                write_compressed_spirv_blob_as_c_array(self.output_path, self.variable_name,
-                                                       compressed_blob, uncompressed_size, out)
+                write_compressed_spirv_blob_as_c_array(self.output_path, self.condition,
+                                                       self.variable_name, compressed_blob,
+                                                       uncompressed_size, out)
 
                 out = None
             return (out, err, self.process.returncode, None,
@@ -376,7 +389,7 @@ class CompileQueue:
     class CompileToSPIRV:
 
         def __init__(self, shader_file, shader_basename, variation_string, output_path,
-                     compile_args, preprocessor_args, variable_name):
+                     compile_args, preprocessor_args, variable_name, condition):
             # Asynchronously launch the compile job.
             self.process = subprocess.Popen(
                 compile_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -388,6 +401,7 @@ class CompileQueue:
             self.shader_basename = shader_basename
             self.variation_string = variation_string
             self.variable_name = variable_name
+            self.condition = condition
 
         def wait(self, queue):
             (out, err) = self.process.communicate()
@@ -397,7 +411,8 @@ class CompileQueue:
                     CompileQueue.CompressAndAppendPreprocessorOutput(self.shader_file,
                                                                      self.preprocessor_args,
                                                                      self.output_path,
-                                                                     self.variable_name))
+                                                                     self.variable_name,
+                                                                     self.condition))
             # If all the output says is the source file name, don't bother printing it.
             if out.strip() == self.shader_file:
                 out = None
@@ -441,7 +456,7 @@ class CompileQueue:
         return exception_description
 
     def add_job(self, shader_file, shader_basename, variation_string, output_path, compile_args,
-                preprocessor_args, variable_name):
+                preprocessor_args, variable_name, condition):
         # If the queue is full, wait until there is at least one slot available.
         while len(self.queue) >= self.thread_count:
             exception = self._wait_first(False)
@@ -454,7 +469,7 @@ class CompileQueue:
         self.queue.append(
             CompileQueue.CompileToSPIRV(shader_file, shader_basename, variation_string,
                                         output_path, compile_args, preprocessor_args,
-                                        variable_name))
+                                        variable_name, condition))
 
     def finish(self):
         exception = self._wait_all(False)
@@ -474,8 +489,8 @@ def get_variation_args(option):
     return [] if isinstance(option, unicode) else option[1:]
 
 
-def compile_variation(glslang_path, compile_queue, shader_file, shader_basename, flags, enums,
-                      flags_active, enum_indices, flags_bits, enum_bits, output_shaders):
+def compile_variation(glslang_path, compile_queue, shader_file, shader_basename, condition, flags,
+                      enums, flags_active, enum_indices, flags_bits, enum_bits, output_shaders):
 
     glslang_args = [glslang_path]
 
@@ -526,14 +541,14 @@ def compile_variation(glslang_path, compile_queue, shader_file, shader_basename,
 
         compile_queue.add_job(shader_file, shader_basename, variation_string, output_path,
                               glslang_args, glslang_preprocessor_output_args,
-                              get_var_name(output_name))
+                              get_var_name(output_name), condition)
 
 
 class ShaderAndVariations:
 
     def __init__(self, shader_file):
         self.shader_file = shader_file
-        (self.flags, self.enums) = get_shader_variations(shader_file)
+        (self.condition, self.flags, self.enums) = get_shader_variations(shader_file)
         get_variation_bits(self.flags, self.enums)
         (self.flags_bits, self.enum_bits) = get_variation_bits(self.flags, self.enums)
         # Maximum index value has all flags set and all enums at max value.
@@ -724,6 +739,7 @@ def main():
 
     for shader_and_variation in input_shaders_and_variations:
         shader_file = shader_and_variation.shader_file
+        condition = shader_and_variation.condition
         flags = shader_and_variation.flags
         enums = shader_and_variation.enums
         flags_bits = shader_and_variation.flags_bits
@@ -741,7 +757,7 @@ def main():
             # with values in [0, 2^len(flags))
             for flags_active in range(1 << len(flags)):
                 compile_variation(glslang_path if do_compile else None, compile_queue, shader_file,
-                                  output_name, flags, enums, flags_active, enum_indices,
+                                  output_name, condition, flags, enums, flags_active, enum_indices,
                                   flags_bits, enum_bits, output_shaders)
 
             if not next_enum_variation(enums, enum_indices):
