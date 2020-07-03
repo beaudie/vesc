@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bec89ba2_6b197443",
+        "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-03T16:26:27Z",
+      "side": 1,
+      "message": "I see. Yes, you need to use the Chromium wrapper to get the additional features. You could consider importing https://docs.python.org/2/library/gzip.html",
+      "parentUuid": "ae0cf467_2737fdce",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "535656dd61914dc36d973e8293be467d0c729746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b328b30f_4dc48798",
         "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp",
         "patchSetId": 1
