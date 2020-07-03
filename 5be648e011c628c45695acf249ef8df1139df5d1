@@ -39,6 +39,30 @@
       "revId": "5be648e011c628c45695acf249ef8df1139df5d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e7f8959_85b00183",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-03T15:08:39Z",
+      "side": 1,
+      "message": "By space I mean and empty line so the format script doesn\u0027t re-order them.",
+      "parentUuid": "25c59c6e_03b0ad1d",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "5be648e011c628c45695acf249ef8df1139df5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
