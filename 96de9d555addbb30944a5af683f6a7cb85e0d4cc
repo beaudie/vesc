@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af5c5642_25c1e0c9",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-03T16:22:07Z",
+      "side": 1,
+      "message": "can you make this into a function and do ANGLE_SKIP_TEST_IF(!HasAHardwareBufferSupport()), etc",
+      "range": {
+        "startLine": 1544,
+        "startChar": 0,
+        "endLine": 1544,
+        "endChar": 44
+      },
+      "revId": "96de9d555addbb30944a5af683f6a7cb85e0d4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
