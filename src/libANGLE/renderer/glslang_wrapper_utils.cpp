@@ -36,6 +36,7 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/ProgramLinkedResources.h"
+#include "libANGLE/trace.h"
 
 #define ANGLE_GLSLANG_CHECK(CALLBACK, TEST, ERR) \
     do                                           \
@@ -1917,6 +1918,8 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
         {
             continue;
         }
+
+        ANGLE_TRACE_EVENT0("gpu.angle", "GlslangGetShaderSpirvCode TShader::parse");
 
         const char *shaderString = shaderSources[shaderType].c_str();
         int shaderLength         = static_cast<int>(shaderSources[shaderType].size());
