@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aff6334_86aeed81",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "add a wrapper method to format class to hide its data related logic instead of unpacking it here -\n\ngetValidImageCopyBufferAlignment()\n{\n    constexpr size_t kMinimumAlignment \u003d 16;\n    return (intendedFormatID \u003d\u003d angle::FormatID::NONE) ? kMinimumAlignment : getImageCopyBufferAlignment();\n}",
+      "range": {
+        "startLine": 103,
+        "startChar": 8,
+        "endLine": 103,
+        "endChar": 74
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50263cb0_0763f0c3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "is it possible for me to get access to this bug?",
+      "range": {
+        "startLine": 506,
+        "startChar": 21,
+        "endLine": 506,
+        "endChar": 69
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bd71442_80a823be",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "put all input-only parameters before any output parameters",
+      "range": {
+        "startLine": 189,
+        "startChar": 37,
+        "endLine": 189,
+        "endChar": 98
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7992b35b_88d30b29",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "is it standard to reference a vulkan bit in error message from a GLES \"driver\"?\n\nWe could instead say something like - \"Sampling from AHardwareBuffer format 0x%x is unsupported\"",
+      "range": {
+        "startLine": 80,
+        "startChar": 46,
+        "endLine": 80,
+        "endChar": 81
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c80c13b7_804bc7a8",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "use constexpr with descriptive labels instead?",
+      "range": {
+        "startLine": 208,
+        "startChar": 40,
+        "endLine": 208,
+        "endChar": 50
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cdbf28e_e8d78f0a",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "isn\u0027t it possible that \"bufferFormatProperties.format\" is \"VK_FORMAT_UNDEFINED\" for non-YUV formats? Don\u0027t we need a check that \"externalFormat.externalFormat\" is a YUV format?",
+      "range": {
+        "startLine": 226,
+        "startChar": 41,
+        "endLine": 226,
+        "endChar": 60
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e96d9b35_048c3486",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "can be more explicit and set it to \"VK_FORMAT_UNDEFINED\"",
+      "range": {
+        "startLine": 237,
+        "startChar": 42,
+        "endLine": 237,
+        "endChar": 71
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64228e6a_3b5fe930",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "external format",
+      "range": {
+        "startLine": 637,
+        "startChar": 81,
+        "endLine": 637,
+        "endChar": 93
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "720bb235_8f970306",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "can it though?\n\nsay the external format is \"AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420\", the data in the buffer can be in either BT.601 or BT.709 colorspace, in which case some members of the sampler will be different.\n\ni think to uniquely identify a sampler, the key needs to be a tuple - (external format, VkSamplerYcbcrModelConversion, VkSamplerYcbcrRange)",
+      "range": {
+        "startLine": 637,
+        "startChar": 94,
+        "endLine": 638,
+        "endChar": 38
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "152cc1db_a68d61fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-04T22:30:58Z",
+      "side": 1,
+      "message": "you can be explicit and call this \"initExternalYuvMemory\" and the existing method \"initExternalMemory\" calls into \"initExternalYuvMemory\" with a \"nullptr\" for the parameter \"samplerYcbcrConversionCreateInfo\"",
+      "range": {
+        "startLine": 1063,
+        "startChar": 18,
+        "endLine": 1063,
+        "endChar": 36
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
