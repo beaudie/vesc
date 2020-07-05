@@ -13,6 +13,7 @@
 #include <spirv_msl.hpp>
 
 #include "common/apple_platform_utils.h"
+#include "compiler/translator/TranslatorMetal.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 
@@ -171,6 +172,22 @@ void GetAssignedSamplerBindings(const spirv_cross::CompilerMSL &compilerMsl,
     }
 }
 
+std::string PostProcessTranslatedMsl(const std::string &translatedSource)
+{
+    // Add function_constant attribute to gl_SampleMask.
+    // Even though this varying is only used when ANGLECoverageMaskEnabled is true,
+    // the spirv-cross doesn't assign function_constant attribute to it. Thus it won't be dead-code
+    // removed when ANGLECoverageMaskEnabled=false.
+    std::string sampleMaskReplaceStr = std::string("[[sample_mask, function_constant(") +
+                                       sh::TranslatorMetal::GetCoverageMaskEnabledConstName() +
+                                       ")]]";
+
+    // This replaces "gl_SampleMask [[sample_mask]]"
+    //          with "gl_SampleMask [[sample_mask, function_constant(ANGLECoverageMaskEnabled)]]"
+    std::regex sampleMaskDeclareRegex(R"(\[\s*\[\s*sample_mask\s*\]\s*\])");
+    return std::regex_replace(translatedSource, sampleMaskDeclareRegex, sampleMaskReplaceStr);
+}
+
 // Customized spirv-cross compiler
 class SpirvToMslCompiler : public spirv_cross::CompilerMSL
 {
@@ -210,7 +227,7 @@ class SpirvToMslCompiler : public spirv_cross::CompilerMSL
         spirv_cross::CompilerMSL::set_msl_options(compOpt);
 
         // Actual compilation
-        std::string translatedMsl = spirv_cross::CompilerMSL::compile();
+        std::string translatedMsl = PostProcessTranslatedMsl(spirv_cross::CompilerMSL::compile());
 
         // Retrieve automatic texture slot assignments
         GetAssignedSamplerBindings(*this, originalSamplerBindings,
