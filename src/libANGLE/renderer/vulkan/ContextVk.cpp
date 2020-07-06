@@ -1485,6 +1485,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     size_t bufferCount                       = executable->getTransformFeedbackBufferCount();
     const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
         transformFeedbackVk->getBufferHelpers();
+    vk::TransformFeedbackDesc *xfbBufferDesc = &transformFeedbackVk->getTransformFeedbackDesc();
 
     for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
@@ -1497,7 +1498,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(),
-        mDefaultUniformStorage.getCurrentBuffer(), this);
+        mDefaultUniformStorage.getCurrentBuffer(), this, xfbBufferDesc);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
