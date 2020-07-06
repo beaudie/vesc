@@ -34,6 +34,24 @@
       "revId": "05e2fe788cfd88db21d94bf31fb8aab8dc8deaf5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c38553c_3b3e54f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T16:43:25Z",
+      "side": 1,
+      "message": "Seemed like we needed at least 3 different values for each assert depending on platform. At that point it becomes too complicated to maintain. If we can get the testing script working we should be able to find bugs with that instead of the ASSERTs.",
+      "parentUuid": "6cde7678_5a2b56df",
+      "revId": "05e2fe788cfd88db21d94bf31fb8aab8dc8deaf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
