@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d15b4669_ed33497b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-06T16:51:51Z",
+      "side": 1,
+      "message": "That\u0027s a good reduction.",
+      "revId": "a21fdc31448419a3a02bf6f09ceb012e7909fcd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b844b00_fe469ffe",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-06T16:51:51Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "revId": "a21fdc31448419a3a02bf6f09ceb012e7909fcd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
