@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "f205b3b4_0be87aaa",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-06T23:24:02Z",
+      "side": 1,
+      "message": "http://anglebug.com/4819",
+      "parentUuid": "1bbac99d_342741bf",
+      "range": {
+        "startLine": 208,
+        "startChar": 40,
+        "endLine": 208,
+        "endChar": 50
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4cdbf28e_e8d78f0a",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 56
@@ -272,6 +296,30 @@
       "side": 1,
       "message": "externalFormat does not have documented values (other than 0 meaning NA).\nFrom the spec: \"externalFormat is an implementation-defined identifier for the external format\"\nMy understanding is that the only time the system returns VK_FORMAT_UNDEFINED are for buffers that use some sort of internal formatting, that implies YUV but could be other formats where the YUV information may or may not be used.\nWhen an external buffer with a known pixel format is used, then format should be a recognized Vulkan format and externalFormat should be 0.",
       "parentUuid": "4cdbf28e_e8d78f0a",
+      "range": {
+        "startLine": 226,
+        "startChar": 41,
+        "endLine": 226,
+        "endChar": 60
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11b452b3_a21f51d9",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-06T23:24:02Z",
+      "side": 1,
+      "message": "fair enough, though there are vendors that have non-YUV implementation defined formats like \"HAL_PIXEL_FORMAT_XRGB_2101010\" which AFAIK has no vulkan equivalent. Wouldn\u0027t sending in a YUV sampler in such cases cause issues?",
+      "parentUuid": "20f80850_0d97c2b6",
       "range": {
         "startLine": 226,
         "startChar": 41,
@@ -425,6 +473,30 @@
     },
     {
       "key": {
+        "uuid": "016fa5c8_d51116fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-06T23:24:02Z",
+      "side": 1,
+      "message": "\u003e I read that to mean that there is a one to one mapping between externalFormat and VkSamplerYcbcrModelConversion\n\nthat would be true if the format embedded information about colorspace. On Android that is not the case.\n\nFor example, the format enum for NV12 buffer would be \"AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420\". But the information about which colorspace it belongs to, BT.601 or BT.709, is not encoded in the format, it needs to be obtained through the dataspace queries like \"ANativeWindow_getBuffersDataSpace\".\n\n(AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420 + BT.709 + narrow range) will have a different color conversion matrix than (AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420 + BT.709 + full range)\n\nadding end2end tests would help clarify a few things i suppose?",
+      "parentUuid": "09cbe907_36ff14fa",
+      "range": {
+        "startLine": 637,
+        "startChar": 94,
+        "endLine": 638,
+        "endChar": 38
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "152cc1db_a68d61fb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 56
@@ -469,6 +541,30 @@
       "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa165e8f_6ff1d3b3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-06T23:24:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f562d60b_6d493f65",
+      "range": {
+        "startLine": 1063,
+        "startChar": 18,
+        "endLine": 1063,
+        "endChar": 36
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
