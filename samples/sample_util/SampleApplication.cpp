@@ -251,7 +251,6 @@ int SampleApplication::run()
 
         draw();
         swap();
-
         mOSWindow->messageLoop();
 
         prevTime = elapsedTime;
