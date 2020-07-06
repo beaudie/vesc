@@ -46,6 +46,30 @@
       "revId": "55f15aa577b85fdf42a4dd42caaa0ba1cffc7dc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61d90b00_43bad5db",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-06T18:28:24Z",
+      "side": 1,
+      "message": "Oops. Done.",
+      "parentUuid": "9bc5ffd3_a2dfeab4",
+      "range": {
+        "startLine": 94,
+        "startChar": 32,
+        "endLine": 94,
+        "endChar": 33
+      },
+      "revId": "55f15aa577b85fdf42a4dd42caaa0ba1cffc7dc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
