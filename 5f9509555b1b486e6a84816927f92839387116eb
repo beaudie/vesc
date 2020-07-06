@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "4510ccd3_0373fd94",
+        "filename": "build_overrides/glslang.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-06T18:02:59Z",
+      "side": 1,
+      "message": "I probably should have. I started with a too-generic solution, and this was left over from that.\n\nThe only other user of glslang in Chromium is dawn\u0027s testing code, which theoretically could use the same optimizations, but work is needed in shaderc not to assume HLSL functionality. There are indeed two targets now in glslang\u0027s BUILD.gn, one that is the full functionality, used by glslang_validator etc (and in the above case, shaderc), one that is controlled by this. The latter will be heavily optimized for ANGLE in particular, so it\u0027s either going to be a generic target with a flag to control that, or a very angle-specific target name.\n\nAdmittedly I kind of got rushed into this. I opened a PR for feedback on how to best approach it, but it just got merged quickly!\n\n---\n\nRegarding chromium, yes, that is done.",
+      "parentUuid": "fa908899_c7a10a47",
+      "revId": "5f9509555b1b486e6a84816927f92839387116eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f0f948b_a4f24f88",
         "filename": "scripts/export_targets.py",
         "patchSetId": 9
@@ -66,6 +84,30 @@
       "writtenOn": "2020-07-06T17:07:48Z",
       "side": 1,
       "message": "ah - I had fixed this before. Is it possible to resolve?",
+      "range": {
+        "startLine": 221,
+        "startChar": 4,
+        "endLine": 221,
+        "endChar": 28
+      },
+      "revId": "5f9509555b1b486e6a84816927f92839387116eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba3159a2_08a3db56",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-06T18:02:59Z",
+      "side": 1,
+      "message": "I probably accidentally fixed half of the issues. I may be able to fix the rest.\n\nThere are some gn complaints on the bots I have to look at (though hopefully removed since I just rolled glslang into chromium). If there are more changes I need to make to glslang, I\u0027ll see if I can address this at the same time.",
+      "parentUuid": "3f0f948b_a4f24f88",
       "range": {
         "startLine": 221,
         "startChar": 4,
