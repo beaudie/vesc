@@ -215,7 +215,6 @@ int SampleApplication::run()
 
     mTimer.start();
     double prevTime = 0.0;
-
     while (mRunning)
     {
         double elapsedTime = mTimer.getElapsedTime();
@@ -248,10 +247,8 @@ int SampleApplication::run()
         {
             break;
         }
-
         draw();
         swap();
-
         mOSWindow->messageLoop();
 
         prevTime = elapsedTime;

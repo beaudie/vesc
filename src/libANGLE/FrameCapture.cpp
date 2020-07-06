@@ -214,6 +214,22 @@ std::ostream &operator<<(std::ostream &os, const FmtReplayFunction &fmt)
     return os;
 }
 
+struct FMTGetSerializedContextStateDataFunction
+{
+    FMTGetSerializedContextStateDataFunction(gl::ContextID contextIdIn, uint32_t frameIndexIn)
+        : contextId(contextIdIn), frameIndex(frameIndexIn)
+    {}
+    gl::ContextID contextId;
+    uint32_t frameIndex;
+};
+
+std::ostream &operator<<(std::ostream &os, const FMTGetSerializedContextStateDataFunction &fmt)
+{
+    os << "GetSerializedContext" << static_cast<int>(fmt.contextId) << "StateFrame"
+       << fmt.frameIndex << "Data()";
+    return os;
+}
+
 std::string GetCaptureFileName(gl::ContextID contextId,
                                const std::string &captureLabel,
                                uint32_t frameIndex,
@@ -608,8 +624,8 @@ struct SaveFileHelper
 {
   public:
     // We always use ios::binary to avoid inconsistent line endings when captured on Linux vs Win.
-    SaveFileHelper(const std::string &filePathIn)
-        : mOfs(filePathIn, std::ios::binary | std::ios::out), mFilePath(filePathIn)
+    SaveFileHelper(const std::string &filePathIn, std::ios_base::openmode openMode)
+        : mOfs(filePathIn, std::ios::binary | openMode), mFilePath(filePathIn)
     {
         if (!mOfs.is_open())
         {
@@ -662,7 +678,7 @@ void SaveBinaryData(bool compression,
     std::string binaryDataFileName = GetBinaryDataFilePath(compression, contextId, captureLabel);
     std::string dataFilepath       = outDir + binaryDataFileName;
 
-    SaveFileHelper saveData(dataFilepath);
+    SaveFileHelper saveData(dataFilepath, std::ios::trunc);
 
     if (compression)
     {
@@ -806,21 +822,24 @@ void MaybeResetResources(std::stringstream &out,
 
 void WriteCppReplay(bool compression,
                     const std::string &outDir,
-                    gl::ContextID contextId,
+                    const gl::Context *context,
                     const std::string &captureLabel,
                     uint32_t frameIndex,
+                    uint32_t frameStart,
                     uint32_t frameEnd,
                     const std::vector<CallCapture> &frameCalls,
                     const std::vector<CallCapture> &setupCalls,
                     ResourceTracker *resourceTracker,
-                    std::vector<uint8_t> *binaryData)
+                    std::vector<uint8_t> *binaryData,
+                    bool serializeStateEnabled,
+                    bool isBuffersSwapped)
 {
     DataCounters counters;
 
     std::stringstream out;
     std::stringstream header;
 
-    header << "#include \"" << FmtCapturePrefix(contextId, captureLabel) << ".h\"\n";
+    header << "#include \"" << FmtCapturePrefix(context->id(), captureLabel) << ".h\"\n";
     header << "";
     header << "\n";
     header << "namespace\n";
@@ -832,14 +851,14 @@ void WriteCppReplay(bool compression,
         out << "{\n";
     }
 
-    if (frameIndex == 0 || !setupCalls.empty())
+    if (frameIndex == frameStart || !setupCalls.empty())
     {
-        out << "void SetupContext" << Str(static_cast<int>(contextId)) << "Replay()\n";
+        out << "void SetupContext" << Str(static_cast<int>(context->id())) << "Replay()\n";
         out << "{\n";
 
         std::stringstream setupCallStream;
 
-        WriteLoadBinaryDataCall(compression, setupCallStream, contextId, captureLabel);
+        WriteLoadBinaryDataCall(compression, setupCallStream, context->id(), captureLabel);
 
         for (const CallCapture &call : setupCalls)
         {
@@ -857,7 +876,7 @@ void WriteCppReplay(bool compression,
     if (frameIndex == frameEnd)
     {
         // Emit code to reset back to starting state
-        out << "void ResetContext" << Str(static_cast<int>(contextId)) << "Replay()\n";
+        out << "void ResetContext" << Str(static_cast<int>(context->id())) << "Replay()\n";
         out << "{\n";
 
         std::stringstream restoreCallStream;
@@ -876,7 +895,7 @@ void WriteCppReplay(bool compression,
         out << "\n";
     }
 
-    out << "void " << FmtReplayFunction(contextId, frameIndex) << "\n";
+    out << "void " << FmtReplayFunction(context->id(), frameIndex) << "\n";
     out << "{\n";
 
     std::stringstream callStream;
@@ -891,6 +910,30 @@ void WriteCppReplay(bool compression,
     out << callStream.str();
     out << "}\n";
 
+    if (serializeStateEnabled)
+    {
+        gl::BinaryOutputStream serializedContextData{};
+        if (SerializeContext(&serializedContextData, const_cast<gl::Context *>(context),
+                             isBuffersSwapped) == Result::Continue)
+        {
+            size_t serializedContextLength = serializedContextData.length();
+            size_t serializedContextOffset = rx::roundUp(binaryData->size(), kBinaryAlignment);
+            binaryData->resize(serializedContextOffset + serializedContextLength);
+            memcpy(binaryData->data() + serializedContextOffset, serializedContextData.data(),
+                   serializedContextLength);
+            out << "std::vector<uint8_t> "
+                << FMTGetSerializedContextStateDataFunction(context->id(), frameIndex) << "\n";
+            out << "{\n";
+            out << "    std::vector<uint8_t> serializedContextData(" << serializedContextLength
+                << ");\n";
+            out << "    memcpy(serializedContextData.data(), &gBinaryData["
+                << serializedContextOffset << "], " << serializedContextLength << ");\n";
+            out << "    return serializedContextData;\n";
+            out << "}\n";
+            out << "\n";
+        }
+    }
+
     if (!captureLabel.empty())
     {
         out << "} // namespace " << captureLabel << "\n";
@@ -903,16 +946,16 @@ void WriteCppReplay(bool compression,
         std::string headerString = header.str();
 
         std::string cppFilePath =
-            GetCaptureFilePath(outDir, contextId, captureLabel, frameIndex, ".cpp");
+            GetCaptureFilePath(outDir, context->id(), captureLabel, frameIndex, ".cpp");
 
-        SaveFileHelper saveCpp(cppFilePath);
+        SaveFileHelper saveCpp(cppFilePath, std::ios::trunc);
         saveCpp << headerString << "\n" << outString;
     }
 }
 
 void WriteCppReplayIndexFiles(bool compression,
                               const std::string &outDir,
-                              const gl::Context *context,
+                              const gl::ContextID contextId,
                               const std::string &captureLabel,
                               uint32_t frameStart,
                               uint32_t frameEnd,
@@ -922,26 +965,9 @@ void WriteCppReplayIndexFiles(bool compression,
                               const gl::AttribArray<size_t> &clientArraySizes,
                               const HasResourceTypeMap &hasResourceType,
                               bool serializeStateEnabled,
+                              bool isBufferSwapped,
                               std::vector<uint8_t> &binaryData)
 {
-    gl::ContextID contextId        = context->id();
-    size_t serializedContextLength = 0;
-    size_t serializedContextOffset = 0;
-    if (serializeStateEnabled)
-    {
-        gl::BinaryOutputStream serializedContextData{};
-        if (SerializeContext(&serializedContextData, const_cast<gl::Context *>(context)) !=
-            Result::Continue)
-        {
-            return;
-        }
-        // store serialized context behind capture replay data
-        serializedContextLength = serializedContextData.length();
-        serializedContextOffset = rx::roundUp(binaryData.size(), kBinaryAlignment);
-        binaryData.resize(serializedContextOffset + serializedContextLength);
-        memcpy(binaryData.data() + serializedContextOffset, serializedContextData.data(),
-               serializedContextLength);
-    }
     size_t maxClientArraySize = MaxClientArraySize(clientArraySizes);
 
     std::stringstream header;
@@ -983,6 +1009,11 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "constexpr uint32_t kReplayFrameEnd = " << frameEnd << ";\n";
     header << "constexpr EGLint kReplayDrawSurfaceWidth = " << drawSurfaceWidth << ";\n";
     header << "constexpr EGLint kReplayDrawSurfaceHeight = " << drawSurfaceHeight << ";\n";
+    if (serializeStateEnabled)
+    {
+        header << "constexpr bool kIsBuffersSwappedInLastFrame = " << std::boolalpha
+               << isBufferSwapped << ";\n";
+    }
     header << "\n";
     header << "void SetupContext" << static_cast<int>(contextId) << "Replay();\n";
     header << "void ReplayContext" << static_cast<int>(contextId)
@@ -990,8 +1021,8 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "void ResetContext" << static_cast<int>(contextId) << "Replay();\n";
     if (serializeStateEnabled)
     {
-        header << "std::vector<uint8_t> GetSerializedContextState" << static_cast<int>(contextId)
-               << "Data();\n";
+        header << "std::vector<uint8_t> GetSerializedContext" << static_cast<int>(contextId)
+               << "StateData(uint32_t frameIndex);\n";
     }
     header << "\n";
     header << "using FramebufferChangeCallback = void(*)(void *userData, GLenum target, GLuint "
@@ -1005,6 +1036,16 @@ void WriteCppReplayIndexFiles(bool compression,
         header << "void " << FmtReplayFunction(contextId, frameIndex) << ";\n";
     }
     header << "\n";
+    if (serializeStateEnabled)
+    {
+        for (uint32_t frameIndex = frameStart; frameIndex <= frameEnd; ++frameIndex)
+        {
+            header << "std::vector<uint8_t> "
+                   << FMTGetSerializedContextStateDataFunction(contextId, frameIndex) << ";\n";
+        }
+    }
+    header << "\n";
+
     header << "constexpr bool kIsBinaryDataCompressed = " << (compression ? "true" : "false")
            << ";\n";
     header << "\n";
@@ -1125,16 +1166,22 @@ void WriteCppReplayIndexFiles(bool compression,
     source << "}\n";
     source << "\n";
 
+    source << "std::vector<uint8_t> GetSerializedContext" << static_cast<int>(contextId)
+           << "StateData(uint32_t frameIndex)\n";
+    source << "{\n";
+    source << "    switch (frameIndex)\n";
+    source << "    {\n";
     if (serializeStateEnabled)
     {
-        source << "std::vector<uint8_t> GetSerializedContextState" << static_cast<int>(contextId)
-               << "Data()\n";
-        source << "{\n";
-        source << "    std::vector<uint8_t> serializedContextData(" << serializedContextLength
-               << ");\n";
-        source << "    memcpy(serializedContextData.data(), &gBinaryData["
-               << serializedContextOffset << "], " << serializedContextLength << ");\n";
-        source << "    return serializedContextData;\n";
+        for (uint32_t frameIndex = frameStart; frameIndex <= frameEnd; ++frameIndex)
+        {
+            source << "        case " << frameIndex << ":\n";
+            source << "            return GetSerializedContext" << static_cast<int>(contextId)
+                   << "StateFrame" << frameIndex << "Data();\n";
+        }
+        source << "        default:\n";
+        source << "            return {};\n";
+        source << "    }\n";
         source << "}\n";
         source << "\n";
     }
@@ -1241,7 +1288,7 @@ void WriteCppReplayIndexFiles(bool compression,
         headerPathStream << outDir << FmtCapturePrefix(contextId, captureLabel) << ".h";
         std::string headerPath = headerPathStream.str();
 
-        SaveFileHelper saveHeader(headerPath);
+        SaveFileHelper saveHeader(headerPath, std::ios::trunc);
         saveHeader << headerContents;
     }
 
@@ -1252,7 +1299,7 @@ void WriteCppReplayIndexFiles(bool compression,
         sourcePathStream << outDir << FmtCapturePrefix(contextId, captureLabel) << ".cpp";
         std::string sourcePath = sourcePathStream.str();
 
-        SaveFileHelper saveSource(sourcePath);
+        SaveFileHelper saveSource(sourcePath, std::ios::trunc);
         saveSource << sourceContents;
     }
 
@@ -1261,7 +1308,7 @@ void WriteCppReplayIndexFiles(bool compression,
         indexPathStream << outDir << FmtCapturePrefix(contextId, captureLabel) << "_files.txt";
         std::string indexPath = indexPathStream.str();
 
-        SaveFileHelper saveIndex(indexPath);
+        SaveFileHelper saveIndex(indexPath, std::ios::trunc);
         for (uint32_t frameIndex = frameStart; frameIndex <= frameEnd; ++frameIndex)
         {
             saveIndex << GetCaptureFileName(contextId, captureLabel, frameIndex, ".cpp") << "\n";
@@ -2679,7 +2726,11 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
     // Bind the current XFB buffer after populating XFB objects
     gl::TransformFeedback *currentXFB = apiState.getCurrentTransformFeedback();
-    cap(CaptureBindTransformFeedback(replayState, true, GL_TRANSFORM_FEEDBACK, currentXFB->id()));
+    if (currentXFB)
+    {
+        cap(CaptureBindTransformFeedback(replayState, true, GL_TRANSFORM_FEEDBACK,
+                                         currentXFB->id()));
+    }
 
     // Capture Sampler Objects
     const gl::SamplerManager &samplers = apiState.getSamplerManagerForCapture();
@@ -3900,27 +3951,68 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
     (void)buffer->unmap(context, &dontCare);
 }
 
-void FrameCapture::onEndFrame(const gl::Context *context)
+void FrameCapture::onEndFrame(const gl::Context *context, bool destroyContext)
 {
+    if (!mEnabled)
+    {
+        return;
+    }
+    bool isBuffersSwapped = true;
+    // If context is destroyed before end frame is reached
+    if (mFrameIndex < mFrameEnd && destroyContext)
+    {
+        // If no GL calls are made between the last swapBuffers call and context->onDestroy()
+        // Edit replay cpp file of the previous frame instead of making a new replay file.
+        if (mFrameCalls.empty())
+        {
+            mFrameIndex -= 1;
+            std::string cppFilePath = GetCaptureFilePath(mOutDirectory, context->id(),
+                                                         mCaptureLabel, mFrameIndex, ".cpp");
+
+            SaveFileHelper saveCpp(cppFilePath, std::ios::app);
+            // Append reset context method to the file of last frame
+            saveCpp << "void ResetContext" << Str(static_cast<int>(context->id())) << "Replay()\n";
+            saveCpp << "{\n";
+            saveCpp << "}\n";
+            saveCpp << "\n";
+        }
+        else
+        {
+            // Treat this as a separate frame. The cpp replay file for it is created below
+            isBuffersSwapped = false;
+        }
+        mFrameEnd = mFrameIndex;
+    }
     // Note that we currently capture before the start frame to collect shader and program sources.
     if (!mFrameCalls.empty() && mFrameIndex >= mFrameStart)
     {
-        WriteCppReplay(mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameIndex,
-                       mFrameEnd, mFrameCalls, mSetupCalls, &mResourceTracker, &mBinaryData);
-
-        // Save the index files after the last frame.
-        if (mFrameIndex == mFrameEnd)
+        if (isFirstFrame)
         {
-            WriteCppReplayIndexFiles(mCompression, mOutDirectory, context, mCaptureLabel,
+            mFrameStart  = mFrameIndex;
+            isFirstFrame = false;
+        }
+        WriteCppReplay(mCompression, mOutDirectory, context, mCaptureLabel, mFrameIndex,
+                       mFrameStart, mFrameEnd, mFrameCalls, mSetupCalls, &mResourceTracker,
+                       &mBinaryData, mSerializeStateEnabled, isBuffersSwapped);
+    }
+    if (mFrameIndex == mFrameEnd)
+    {
+        // Save the index files after the last frame.
+        // If mFrameEnd is reached before context is destroyed, do not rewrite index files
+        // when context is destroyed
+        if (!mWroteIndexFiles)
+        {
+            WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel,
                                      mFrameStart, mFrameEnd, mDrawSurfaceWidth, mDrawSurfaceHeight,
                                      mReadBufferSize, mClientArraySizes, mHasResourceType,
-                                     mSerializeStateEnabled, mBinaryData);
+                                     mSerializeStateEnabled, isBuffersSwapped, mBinaryData);
             if (!mBinaryData.empty())
             {
                 SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel,
                                mBinaryData);
                 mBinaryData.clear();
             }
+            mWroteIndexFiles = true;
         }
     }
 
@@ -3941,7 +4033,7 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     reset();
     mFrameIndex++;
 
-    if (enabled() && mFrameIndex == mFrameStart)
+    if (mFrameIndex == mFrameStart)
     {
         mSetupCalls.clear();
         CaptureMidExecutionSetup(context, &mSetupCalls, &mResourceTracker, mCachedShaderSources,
