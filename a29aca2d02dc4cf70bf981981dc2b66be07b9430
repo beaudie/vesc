@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b06477b0_59dedc38",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aff6334_86aeed81",
+      "range": {
+        "startLine": 103,
+        "startChar": 8,
+        "endLine": 103,
+        "endChar": 74
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50263cb0_0763f0c3",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 56
@@ -45,6 +69,30 @@
       "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97c7e7b3_f2fe4d0d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "Access has been fixed.",
+      "parentUuid": "50263cb0_0763f0c3",
+      "range": {
+        "startLine": 506,
+        "startChar": 21,
+        "endLine": 506,
+        "endChar": 69
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b733e455_cdf90a6e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bd71442_80a823be",
+      "range": {
+        "startLine": 189,
+        "startChar": 37,
+        "endLine": 189,
+        "endChar": 98
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7992b35b_88d30b29",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 56
@@ -91,6 +163,30 @@
       "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e25c1cdb_21e7ae7b",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "Hmm. My preference was to indicate the error condition in the error message so that I didn\u0027t have to search for it if I had to debug this.",
+      "parentUuid": "7992b35b_88d30b29",
+      "range": {
+        "startLine": 80,
+        "startChar": 46,
+        "endLine": 80,
+        "endChar": 81
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1bbac99d_342741bf",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "I\u0027m not changing that in this CL.\nMohan, want to file cleanup bug for this?",
+      "parentUuid": "c80c13b7_804bc7a8",
+      "range": {
+        "startLine": 208,
+        "startChar": 40,
+        "endLine": 208,
+        "endChar": 50
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4cdbf28e_e8d78f0a",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 56
@@ -128,6 +248,30 @@
       "writtenOn": "2020-07-04T22:30:58Z",
       "side": 1,
       "message": "isn\u0027t it possible that \"bufferFormatProperties.format\" is \"VK_FORMAT_UNDEFINED\" for non-YUV formats? Don\u0027t we need a check that \"externalFormat.externalFormat\" is a YUV format?",
+      "range": {
+        "startLine": 226,
+        "startChar": 41,
+        "endLine": 226,
+        "endChar": 60
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20f80850_0d97c2b6",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "externalFormat does not have documented values (other than 0 meaning NA).\nFrom the spec: \"externalFormat is an implementation-defined identifier for the external format\"\nMy understanding is that the only time the system returns VK_FORMAT_UNDEFINED are for buffers that use some sort of internal formatting, that implies YUV but could be other formats where the YUV information may or may not be used.\nWhen an external buffer with a known pixel format is used, then format should be a recognized Vulkan format and externalFormat should be 0.",
+      "parentUuid": "4cdbf28e_e8d78f0a",
       "range": {
         "startLine": 226,
         "startChar": 41,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "58222467_7c0b458d",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e96d9b35_048c3486",
+      "range": {
+        "startLine": 237,
+        "startChar": 42,
+        "endLine": 237,
+        "endChar": 71
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64228e6a_3b5fe930",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 56
@@ -183,6 +351,30 @@
       "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78bbc361_1f96dad7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64228e6a_3b5fe930",
+      "range": {
+        "startLine": 637,
+        "startChar": 81,
+        "endLine": 637,
+        "endChar": 93
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "09cbe907_36ff14fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "In the spec for vkCreateSamplerYcbcrConversionKHR there is:\nIf the pNext chain includes a VkExternalFormatANDROID structure with non-zero externalFormat member, the sampler Y′CBCR conversion object represents an external format conversion, and format must be VK_FORMAT_UNDEFINED. Such conversions must only be used to sample image views with a matching external format. When creating an external format conversion, the value of components is ignored.\n\nI read that to mean that there is a one to one mapping between externalFormat and VkSamplerYcbcrModelConversion. Thus two YUV buffers with different encoding parameters would use different externalFormats.",
+      "parentUuid": "720bb235_8f970306",
+      "range": {
+        "startLine": 637,
+        "startChar": 94,
+        "endLine": 638,
+        "endChar": 38
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "152cc1db_a68d61fb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 56
@@ -220,6 +436,30 @@
       "writtenOn": "2020-07-04T22:30:58Z",
       "side": 1,
       "message": "you can be explicit and call this \"initExternalYuvMemory\" and the existing method \"initExternalMemory\" calls into \"initExternalYuvMemory\" with a \"nullptr\" for the parameter \"samplerYcbcrConversionCreateInfo\"",
+      "range": {
+        "startLine": 1063,
+        "startChar": 18,
+        "endLine": 1063,
+        "endChar": 36
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f562d60b_6d493f65",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-06T21:11:30Z",
+      "side": 1,
+      "message": "There was another function that I did that on and I was told the preference was to just add the argument and have it be nullptr. That other example I used an overloaded function name as well I believe.\nCall it good for now?",
+      "parentUuid": "152cc1db_a68d61fb",
       "range": {
         "startLine": 1063,
         "startChar": 18,
