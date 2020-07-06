@@ -144,7 +144,8 @@ class ProgramExecutableVk
         const gl::ProgramState &programState,
         gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
         vk::BufferHelper *defaultUniformBuffer,
-        ContextVk *contextVk);
+        ContextVk *contextVk,
+        vk::TransformFeedbackDesc *xfbBufferDesc);
 
     angle::Result updateDescriptorSets(ContextVk *contextVk, vk::CommandBuffer *commandBuffer);
 
@@ -167,10 +168,14 @@ class ProgramExecutableVk
     friend class ProgramVk;
     friend class ProgramPipelineVk;
 
-    angle::Result allocDefaultUniformDescriptorSet(
-        ContextVk *contextVk,
-        gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
-        vk::BufferHelper *defaultUniformBuffer);
+    angle::Result allocDefaultUniformDescriptorSet(ContextVk *contextVk,
+                                                   vk::BufferHelper *defaultUniformBuffer,
+                                                   bool *newDescriptorSetAllocated);
+    angle::Result allocTransformFeedbackDescriptorSet(ContextVk *contextVk,
+                                                      vk::TransformFeedbackDesc *xfbBufferDesc,
+                                                      vk::BufferHelper *defaultUniformBuffer,
+                                                      bool *newDescriptorSetAllocated);
+
     angle::Result allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex);
     angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
                                                   uint32_t descriptorSetIndex,
@@ -189,11 +194,10 @@ class ProgramExecutableVk
                                      bool useOldRewriteStructSamplers,
                                      vk::DescriptorSetLayoutDesc *descOut);
 
-    void updateDefaultUniformsDescriptorSet(
-        const gl::ShaderType shaderType,
-        gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
-        vk::BufferHelper *defaultUniformBuffer,
-        ContextVk *contextVk);
+    void updateDefaultUniformsDescriptorSet(const gl::ShaderType shaderType,
+                                            const DefaultUniformBlock &defaultUniformBlocks,
+                                            vk::BufferHelper *defaultUniformBuffer,
+                                            ContextVk *contextVk);
     void updateTransformFeedbackDescriptorSetImpl(const gl::ProgramState &programState,
                                                   ContextVk *contextVk);
     void updateBuffersDescriptorSet(ContextVk *contextVk,
@@ -222,6 +226,9 @@ class ProgramExecutableVk
     std::unordered_map<UniqueObjectID, VkDescriptorSet> mDefaultUniformDescriptorSetCache;
     Serial mCurrentDefaultUniformBufferID;
     size_t mNumDefaultUniformDescriptors;
+
+    std::unordered_map<vk::TransformFeedbackDesc, VkDescriptorSet>
+        mTransformFeedbackDescriptorSetCache;
 
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
 
