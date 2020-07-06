@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1eae324c_35508355",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424723
+      },
+      "writtenOn": "2020-07-06T08:41:42Z",
+      "side": 1,
+      "message": "Sorry to jump in.\nWhat will happen in following case:\nvs:\nvarying highp vec2 vTextureCoord;\nfs:\nvarying midiump vec2 vTextureCoord;\n\nwill fs\u0027 varying be promoted or not?\n",
+      "revId": "73470393b156e617f858c61fe82ab9f42f8dd195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
