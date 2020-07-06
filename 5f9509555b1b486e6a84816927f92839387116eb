@@ -117,6 +117,30 @@
       "revId": "5f9509555b1b486e6a84816927f92839387116eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f419fa30_ba8fd824",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-06T18:22:03Z",
+      "side": 1,
+      "message": "I have a fix for it. Ok if I proceed with this and remove it when the change gets to glslang and rolls in?",
+      "parentUuid": "ba3159a2_08a3db56",
+      "range": {
+        "startLine": 221,
+        "startChar": 4,
+        "endLine": 221,
+        "endChar": 28
+      },
+      "revId": "5f9509555b1b486e6a84816927f92839387116eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
