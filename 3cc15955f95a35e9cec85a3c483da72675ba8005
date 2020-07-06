@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44fba078_3192e1a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237274
+      },
+      "writtenOn": "2020-07-06T09:30:59Z",
+      "side": 1,
+      "message": "It brings some more flexibility, but arguably the flexibility may be of little practical use, so the motivation here is just to make things look more consistent with libpng. Alternatively, perhaps we can remove angle_libjpeg_turbo_dir (as well as angle_libpng_dir) from //build_overrides/angle.gni.\n\nPTAL, thanks!\n",
+      "revId": "3cc15955f95a35e9cec85a3c483da72675ba8005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
