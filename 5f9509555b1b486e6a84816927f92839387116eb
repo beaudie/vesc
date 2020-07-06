@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6acd3e_f8ca9292",
+        "filename": "build_overrides/glslang.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-06T15:47:19Z",
+      "side": 1,
+      "message": "Does this get picked up in glslang\u0027s build files? I don\u0027t see another use of it here.",
+      "revId": "5f9509555b1b486e6a84816927f92839387116eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
