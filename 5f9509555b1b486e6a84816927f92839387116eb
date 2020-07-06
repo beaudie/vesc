@@ -34,6 +34,47 @@
       "revId": "5f9509555b1b486e6a84816927f92839387116eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa908899_c7a10a47",
+        "filename": "build_overrides/glslang.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T17:07:48Z",
+      "side": 1,
+      "message": "I was imagining you\u0027d add new GN targets to build different libs in glslang. Are you sure all other Chromium consumers of glslang are okay with setting this flag? You\u0027ll need to set it in Chromium as well to have any effect on non-standalone builds.",
+      "parentUuid": "1404a414_9181a843",
+      "revId": "5f9509555b1b486e6a84816927f92839387116eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f0f948b_a4f24f88",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T17:07:48Z",
+      "side": 1,
+      "message": "ah - I had fixed this before. Is it possible to resolve?",
+      "range": {
+        "startLine": 221,
+        "startChar": 4,
+        "endLine": 221,
+        "endChar": 28
+      },
+      "revId": "5f9509555b1b486e6a84816927f92839387116eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
