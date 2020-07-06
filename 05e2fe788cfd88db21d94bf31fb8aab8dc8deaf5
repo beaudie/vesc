@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73020c9d_3a1c9dec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-06T15:17:40Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Code-Review+2 Commit-Queue+2\n\u003e \n\u003e Thanks Manh. Landing to unblock the ANGLE auto-roller.\n\nI was out when this happened, but I really liked seeing the static asserts to keep this serialization scheme robust.  Which configurations had problems?  Would it be possible to add them back, but wrap the constants in platform specific assignments?",
+      "revId": "05e2fe788cfd88db21d94bf31fb8aab8dc8deaf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
