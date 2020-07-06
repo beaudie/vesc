@@ -793,6 +793,28 @@ class TextureDescriptorDesc
     gl::ActiveTextureArray<TexUnitSerials> mSerials;
 };
 
+class TransformFeedbackDesc
+{
+  public:
+    TransformFeedbackDesc();
+    ~TransformFeedbackDesc();
+
+    TransformFeedbackDesc(const TransformFeedbackDesc &other);
+    TransformFeedbackDesc &operator=(const TransformFeedbackDesc &other);
+
+    void updateDefaultUniformBuffer(UniqueObjectID objectID) { mBufferObjectIDs[0] = objectID; }
+    void update(size_t index, UniqueObjectID objectID) { mBufferObjectIDs[index + 1] = objectID; }
+    size_t hash() const;
+    void reset();
+
+    bool operator==(const TransformFeedbackDesc &other) const;
+
+  private:
+    // The array index 0 is used for default uniform buffer
+    static constexpr size_t kMaxKeyCount = gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS + 1;
+    std::array<UniqueObjectID, kMaxKeyCount> mBufferObjectIDs;
+};
+
 // This is IMPLEMENTATION_MAX_DRAW_BUFFERS + 1 for DS attachment
 constexpr size_t kMaxFramebufferAttachments = gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS;
 // Color serials are at index [0:gl::IMPLEMENTATION_MAX_DRAW_BUFFERS-1]
@@ -871,6 +893,12 @@ template <>
 struct hash<rx::vk::TextureDescriptorDesc>
 {
     size_t operator()(const rx::vk::TextureDescriptorDesc &key) const { return key.hash(); }
+};
+
+template <>
+struct hash<rx::vk::TransformFeedbackDesc>
+{
+    size_t operator()(const rx::vk::TransformFeedbackDesc &key) const { return key.hash(); }
 };
 
 template <>
