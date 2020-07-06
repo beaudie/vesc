@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88c87293_0ef57d1a",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T18:26:16Z",
+      "side": 1,
+      "message": "I looked around at this flag, we shouldn\u0027t need it.\n\nhttps://stackoverflow.com/questions/18040810/what-is-the-purpose-of-using-stdios-basetrunc-flag-with-stdios-baseout/18040902\n\n\"The point of std::ios_base::trunc is when std::ios_base::in and std::ios_base::out are used the same time.\"",
+      "range": {
+        "startLine": 681,
+        "startChar": 42,
+        "endLine": 681,
+        "endChar": 57
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d9275dd_5eaf6b4c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T18:26:16Z",
+      "side": 1,
+      "message": "you can omit this now.",
+      "range": {
+        "startLine": 854,
+        "startChar": 32,
+        "endLine": 854,
+        "endChar": 56
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f8290de_fdbc619d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T18:26:16Z",
+      "side": 1,
+      "message": "can we get rid of this as well?",
+      "range": {
+        "startLine": 3989,
+        "startChar": 12,
+        "endLine": 3989,
+        "endChar": 24
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c46dbb_1a796f2e",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T18:26:16Z",
+      "side": 1,
+      "message": "offline chat - this is a bit fragile as it\u0027s serializing state after some tear down. suggested to manh that we don\u0027t serialize stuff between the last swap and destroy. \n\nmaybe add a new method FrameCapture::onDestroyContext that simply writes stuff out instead of calling onEndFrame from Context::onDestroy",
+      "range": {
+        "startLine": 35,
+        "startChar": 29,
+        "endLine": 35,
+        "endChar": 56
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9f4bc13_e6ed758a",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T18:26:16Z",
+      "side": 1,
+      "message": "I don\u0027t quite follow why you\u0027re special casing context1 here?",
+      "range": {
+        "startLine": 172,
+        "startChar": 7,
+        "endLine": 174,
+        "endChar": 48
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
