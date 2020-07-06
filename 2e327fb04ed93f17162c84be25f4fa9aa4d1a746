@@ -16,6 +16,24 @@
       "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40653464_fd825b57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-07-06T18:00:45Z",
+      "side": 1,
+      "message": "Linux NVIDIA bots are on 418.56 since August 2019.",
+      "parentUuid": "a1cdecdf_bfbd685c",
+      "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
