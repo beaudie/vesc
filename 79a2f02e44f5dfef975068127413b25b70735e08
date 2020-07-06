@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "219afff2_07a4baf3",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-06T18:33:37Z",
+      "side": 1,
+      "message": "Added this to make output invariant to time as gzip puts the timestamp in the header.",
+      "range": {
+        "startLine": 320,
+        "startChar": 64,
+        "endLine": 320,
+        "endChar": 71
+      },
+      "revId": "79a2f02e44f5dfef975068127413b25b70735e08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

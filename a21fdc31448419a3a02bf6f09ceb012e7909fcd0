@@ -33,6 +33,24 @@
       "revId": "a21fdc31448419a3a02bf6f09ceb012e7909fcd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c87f975b_cae90ed6",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-06T18:33:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b844b00_fe469ffe",
+      "revId": "a21fdc31448419a3a02bf6f09ceb012e7909fcd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
