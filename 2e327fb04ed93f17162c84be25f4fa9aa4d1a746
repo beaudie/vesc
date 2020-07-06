@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1cdecdf_bfbd685c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-07-06T17:15:44Z",
+      "side": 1,
+      "message": "\u003e Patch Set 8:\n\u003e \n\u003e (1 comment)\n\u003e \n\u003e \u003e Patch Set 8:\n\u003e \u003e \n\u003e \u003e \u003e Patch Set 7:\n\u003e \u003e \u003e \n\u003e \u003e \u003e \u003e Patch Set 7: Code-Review+1\n\u003e \u003e \u003e \u003e \n\u003e \u003e \u003e \u003e Sorry again about the delays. I can verify that the fix is correct, and the added suppressions match the list I provided to Khronos.\n\u003e \u003e \u003e \u003e \n\u003e \u003e \u003e \u003e Our Nvidia bots currently don\u0027t have support for the extension, so it\u0027s unfortunate we would be losing coverage of some tests. Might be a good idea to keep the tests enabled, and have a separate change that adds the suppressions (which we could delay merging until the bots are upgraded).\n\u003e \u003e \u003e \n\u003e \u003e \u003e Yes, would prefer to keep the tests enabled. I guess ideally we could identify other tags in the expectations files for these suppressions.\n\u003e \u003e \n\u003e \u003e If it kept these tests enabled, it would fail on NV...Maybe they are already upgraded?\n\u003e \n\u003e Something doesn\u0027t add up. If the bots included the extension, you would have seen the failure with both gles31 and khr_gles31. But the failures are only on khr_gles31.\n\u003e \n\u003e Nevertheless, @Yuly, do you know if the nvidia bots were upgraded recently?\n\nWin NVIDIA bots are on 26.21.14.3102 since September 2019.",
+      "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
