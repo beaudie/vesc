@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aed27556_2f2bb761",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 58
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-06T23:30:13Z",
+      "side": 1,
+      "message": "also just a request but when adding such major features a nice descriptive commit message highlighting the important things that were added would be real helpful. More specifically angry birds is just one usecase benefiting from this feature.\n\nAlso, can we have atleast 1 end2end test for this or is it being tracked by another bug?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
