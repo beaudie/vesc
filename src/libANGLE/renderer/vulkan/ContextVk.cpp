@@ -1474,9 +1474,13 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     }
 
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
+    vk::BufferHelper *uniformBuffer         = mProgram->getDefaultUniformBuffer();
+    vk::TransformFeedbackDesc xfbBufferDesc = transformFeedbackVk->getTransformFeedbackDesc();
+    xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getUniqueObjectID()
+                                                           : UniqueObjectID());
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
-        mProgram->getState(), mProgram->getDefaultUniformBlocks(),
-        mProgram->getDefaultUniformBuffer(), this);
+        mProgram->getState(), mProgram->getDefaultUniformBlocks(), uniformBuffer, this,
+        xfbBufferDesc);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(

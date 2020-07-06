@@ -1688,6 +1688,33 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
                   sizeof(TexUnitObjectIDs) * mMaxIndex) == 0;
 }
 
+// TransformFeedbackDesc implementation.
+TransformFeedbackDesc::TransformFeedbackDesc()
+{
+    reset();
+}
+
+TransformFeedbackDesc::~TransformFeedbackDesc()                                  = default;
+TransformFeedbackDesc::TransformFeedbackDesc(const TransformFeedbackDesc &other) = default;
+TransformFeedbackDesc &TransformFeedbackDesc::operator=(const TransformFeedbackDesc &other) =
+    default;
+
+size_t TransformFeedbackDesc::hash() const
+{
+    return angle::ComputeGenericHash(&mBufferObjectIDs, sizeof(UniqueObjectID) * kMaxKeyCount);
+}
+
+void TransformFeedbackDesc::reset()
+{
+    memset(&mBufferObjectIDs, 0, sizeof(UniqueObjectID) * kMaxKeyCount);
+}
+
+bool TransformFeedbackDesc::operator==(const TransformFeedbackDesc &other) const
+{
+    return memcmp(&mBufferObjectIDs, &other.mBufferObjectIDs,
+                  sizeof(UniqueObjectID) * kMaxKeyCount) == 0;
+}
+
 // FramebufferDesc implementation.
 
 FramebufferDesc::FramebufferDesc()
