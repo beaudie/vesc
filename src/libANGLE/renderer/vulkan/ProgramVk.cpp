@@ -760,16 +760,54 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
         ANGLE_TRY(defaultUniformStorage.flush(contextVk));
     }
 
-    if (!mExecutable.isDefaultUniformDescriptorSetValid(defaultUniformStorage.getCurrentBuffer()))
+    vk::BufferHelper *defaultUniformBuffer = defaultUniformStorage.getCurrentBuffer();
+
+    // Now allocate or find a cached descriptor set for the given buffers
+    if (glExecutable.hasTransformFeedbackOutput())
+    {
+        const gl::State &glState = contextVk->getState();
+        TransformFeedbackVk *transformFeedbackVk =
+            vk::GetImpl(glState.getCurrentTransformFeedback());
+        vk::TransformFeedbackDesc *xfbBufferDesc = &transformFeedbackVk->getTransformFeedbackDesc();
+
+        mExecutable.mDescriptorBuffersCache.clear();
+
+        // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
+        // modify the descriptor sets once initialized.
+        bool newDescriptorSetAllocated;
+        ANGLE_TRY(mExecutable.allocTransformFeedbackDescriptorSet(
+            contextVk, xfbBufferDesc, defaultUniformBuffer, &newDescriptorSetAllocated));
+
+        if (newDescriptorSetAllocated)
+        {
+            // Update the descriptor set with the bufferInfo
+            for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+            {
+                mExecutable.updateDefaultUniformsDescriptorSet(
+                    contextVk, shaderType, mDefaultUniformBlocks[shaderType], defaultUniformBuffer);
+            }
+            mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
+        }
+    }
+    else if (!mExecutable.isDefaultUniformDescriptorSetValid(defaultUniformBuffer))
     {
         mExecutable.mDescriptorBuffersCache.clear();
 
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
-        ANGLE_TRY(mExecutable.allocDefaultUniformDescriptorSet(
-            contextVk, mDefaultUniformBlocks, defaultUniformStorage.getCurrentBuffer()));
+        bool newDescriptorSetAllocated;
+        ANGLE_TRY(mExecutable.allocDefaultUniformDescriptorSet(contextVk, defaultUniformBuffer,
+                                                               &newDescriptorSetAllocated));
 
-        mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
+        if (newDescriptorSetAllocated)
+        {
+            // Update the descriptor set with the bufferInfo
+            for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+            {
+                mExecutable.updateDefaultUniformsDescriptorSet(
+                    contextVk, shaderType, mDefaultUniformBlocks[shaderType], defaultUniformBuffer);
+            }
+        }
     }
 
     return angle::Result::Continue;

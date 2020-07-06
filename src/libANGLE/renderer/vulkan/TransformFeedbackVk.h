@@ -13,6 +13,7 @@
 #include "libANGLE/renderer/TransformFeedbackImpl.h"
 
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
+#include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace gl
@@ -91,6 +92,8 @@ class TransformFeedbackVk : public TransformFeedbackImpl
         return mCounterBufferHandles;
     }
 
+    vk::TransformFeedbackDesc &getTransformFeedbackDesc() { return mXFBBuffersDesc; }
+
   private:
     void writeDescriptorSet(ContextVk *contextVk,
                             size_t xfbBufferCount,
@@ -114,6 +117,9 @@ class TransformFeedbackVk : public TransformFeedbackImpl
     // Counter buffer used for pause and resume.
     gl::TransformFeedbackBuffersArray<vk::BufferHelper> mCounterBufferHelpers;
     gl::TransformFeedbackBuffersArray<VkBuffer> mCounterBufferHandles;
+
+    // Keys to look up in the descriptor set cache
+    vk::TransformFeedbackDesc mXFBBuffersDesc;
 };
 
 }  // namespace rx
