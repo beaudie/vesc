@@ -215,7 +215,7 @@ int SampleApplication::run()
 
     mTimer.start();
     double prevTime = 0.0;
-
+    int counterTest = 0;
     while (mRunning)
     {
         double elapsedTime = mTimer.getElapsedTime();
@@ -248,16 +248,19 @@ int SampleApplication::run()
         {
             break;
         }
-
+        counterTest += 1;
         draw();
         swap();
-
+        if (counterTest == 3)
+        {
+            break;
+        }
         mOSWindow->messageLoop();
 
         prevTime = elapsedTime;
     }
 
-    destroy();
+    // destroy();
     mGLWindow->destroyGL();
     mOSWindow->destroy();
 

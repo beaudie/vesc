@@ -30,7 +30,9 @@ namespace angle
 class MemoryBuffer;
 class ScratchBuffer;
 
-Result SerializeContext(gl::BinaryOutputStream *bos, gl::Context *context);
+Result SerializeContext(gl::BinaryOutputStream *bos,
+                        gl::Context *context,
+                        bool serializeDefaultFramebuffer);
 
 Result SerializeFramebuffer(gl::Context *context,
                             gl::BinaryOutputStream *bos,

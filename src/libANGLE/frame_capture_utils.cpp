@@ -35,13 +35,19 @@ Result ReadPixelsFromAttachment(gl::Context *context,
     return Result::Continue;
 }
 
-Result SerializeContext(gl::BinaryOutputStream *bos, gl::Context *context)
+Result SerializeContext(gl::BinaryOutputStream *bos,
+                        gl::Context *context,
+                        bool serializeDefaultFramebuffer)
 {
     const gl::FramebufferManager &framebufferManager =
         context->getState().getFramebufferManagerForCapture();
     for (const auto &framebuffer : framebufferManager)
     {
         gl::Framebuffer *framebufferPtr = framebuffer.second;
+        if (!serializeDefaultFramebuffer && framebufferPtr->id().value == 0)
+        {
+            continue;
+        }
         ANGLE_TRY(SerializeFramebuffer(context, bos, framebufferPtr));
     }
     return Result::Continue;

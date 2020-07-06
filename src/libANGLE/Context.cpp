@@ -531,7 +531,7 @@ void Context::initialize()
 egl::Error Context::onDestroy(const egl::Display *display)
 {
     // Dump frame capture if enabled.
-    mFrameCapture->onEndFrame(this);
+    mFrameCapture->onEndFrame(this, true);
 
     if (mGLES1Renderer)
     {
@@ -8440,7 +8440,7 @@ egl::Error Context::unsetDefaultFramebuffer()
 void Context::onPreSwap() const
 {
     // Dump frame capture if enabled.
-    mFrameCapture->onEndFrame(this);
+    mFrameCapture->onEndFrame(this, false);
 }
 
 void Context::getTexImage(TextureTarget target,

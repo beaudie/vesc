@@ -168,7 +168,7 @@ def CanRunReplay(path):
         if f in required_trace_files:
             required_trace_files_count += 1
         elif os.path.isfile(os.path.join(path, f)) and f != binary_data_file and \
-            f.startswith("angle_capture_context"):
+            f.startswith("angle_capture_context") and not f.startswith("angle_capture_context1"):
             # if trace_files of another context exists, then the test creates multiple contexts
             # or capture multiple frames
             return False
@@ -190,7 +190,7 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     capture_out_dir = "src/tests/capture_replay_tests/traces"  # relative to ANGLE folder
     if not os.path.isdir(capture_out_dir):
         os.mkdir(capture_out_dir)
-    environment_vars = [("ANGLE_CAPTURE_FRAME_END", "0"),
+    environment_vars = [("ANGLE_CAPTURE_FRAME_END", "100"),
                         ("ANGLE_CAPTURE_OUT_DIR", capture_out_dir),
                         ("ANGLE_CAPTURE_SERIALIZE_STATE", "1")]
     replay_exec = "capture_replay_tests"
@@ -248,7 +248,8 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     if os.path.isdir(capture_out_dir):
         shutil.rmtree(capture_out_dir)
     print("\n\n\n")
-    print("Passed:", passed_count, "Failed:", failed_count, "Skipped:", skipped_count)
+    print("Passed: "+ str(passed_count) + " Failed: " + str(failed_count) + \
+    " Skipped: " + str(skipped_count))
     print("Failed tests:")
     for failed_test in failed_tests:
         print("\t" + failed_test)
