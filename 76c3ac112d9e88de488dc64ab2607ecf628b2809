@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3d747d6_032626d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-06T14:56:32Z",
+      "side": 1,
+      "message": "Nice, this should fix some of these failures: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1100975",
+      "revId": "76c3ac112d9e88de488dc64ab2607ecf628b2809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2a9b302_2b30e7d1",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-06T14:56:32Z",
+      "side": 1,
+      "message": "Are you sure this is true for this format?",
+      "range": {
+        "startLine": 473,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 40
+      },
+      "revId": "76c3ac112d9e88de488dc64ab2607ecf628b2809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
