@@ -845,14 +845,26 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 
         if (glExecutable.hasTransformFeedbackOutput())
         {
-            ANGLE_TRY(
-                mExecutable.allocateDescriptorSet(contextVk, kUniformsAndXfbDescriptorSetIndex));
-            for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+            const gl::State &glState = contextVk->getState();
+            TransformFeedbackVk *transformFeedbackVk =
+                vk::GetImpl(glState.getCurrentTransformFeedback());
+            vk::TransformFeedbackDesc &xfbBufferDesc =
+                transformFeedbackVk->getTransformFeedbackDesc();
+            xfbBufferDesc.updateDefaultUniformBuffer(defaultUniformBuffer->getUniqueObjectID());
+
+            bool newDescriptorSetAllocated;
+            ANGLE_TRY(mExecutable.allocTransformFeedbackDescriptorSet(contextVk, xfbBufferDesc,
+                                                                      &newDescriptorSetAllocated));
+            if (newDescriptorSetAllocated)
             {
-                mExecutable.updateDefaultUniformsDescriptorSet(shaderType, mDefaultUniformBlocks,
-                                                               defaultUniformBuffer, contextVk);
+                for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+                {
+                    mExecutable.updateDefaultUniformsDescriptorSet(
+                        shaderType, mDefaultUniformBlocks[shaderType], defaultUniformBuffer,
+                        contextVk);
+                }
+                mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
             }
-            mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
         }
         else
         {
@@ -868,7 +880,8 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
                 for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
                 {
                     mExecutable.updateDefaultUniformsDescriptorSet(
-                        shaderType, mDefaultUniformBlocks, defaultUniformBuffer, contextVk);
+                        shaderType, mDefaultUniformBlocks[shaderType], defaultUniformBuffer,
+                        contextVk);
                 }
             }
         }
