@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "64328002_aee3f555",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-07-06T17:43:32Z",
+      "side": 1,
+      "message": "Moved to angletypes.h. These defines are used by Context11.cpp in the subsequent CL.",
+      "parentUuid": "bbc2ddff_8f94f803",
+      "range": {
+        "startLine": 1074,
+        "startChar": 4,
+        "endLine": 1074,
+        "endChar": 32
+      },
+      "revId": "e9259c8545b469cb40f4ae260efc110ce3c232e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "168ade6f_552e4266",
         "filename": "src/libANGLE/renderer/renderer_utils.h",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "e9259c8545b469cb40f4ae260efc110ce3c232e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "370fa810_778f1113",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-07-06T17:43:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "168ade6f_552e4266",
+      "range": {
+        "startLine": 401,
+        "startChar": 3,
+        "endLine": 401,
+        "endChar": 27
+      },
+      "revId": "e9259c8545b469cb40f4ae260efc110ce3c232e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
