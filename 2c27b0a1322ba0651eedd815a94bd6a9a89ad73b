@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b0f24a6_d179b940",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-06T15:12:38Z",
+      "side": 1,
+      "message": "Unrelated to this CL:\nIt seems like this test runner uses \"Skip\" as a way to mark unknown results. I think this works because our tests don\u0027t have a true \"Skip\" return value, they just return success.\nAre you planning to add an actual separate \"Skip\" result for tests?",
+      "revId": "2c27b0a1322ba0651eedd815a94bd6a9a89ad73b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
