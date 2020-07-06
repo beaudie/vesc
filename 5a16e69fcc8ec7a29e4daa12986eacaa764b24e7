@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77270c35_63bb607e",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-06T17:45:09Z",
+      "side": 1,
+      "message": "try renderer_utils for this if you can",
+      "range": {
+        "startLine": 952,
+        "startChar": 0,
+        "endLine": 968,
+        "endChar": 0
+      },
+      "revId": "5a16e69fcc8ec7a29e4daa12986eacaa764b24e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
