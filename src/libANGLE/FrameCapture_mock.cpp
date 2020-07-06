@@ -23,7 +23,7 @@ ResourceTracker::~ResourceTracker() {}
 
 FrameCapture::FrameCapture() {}
 FrameCapture::~FrameCapture() {}
-void FrameCapture::onEndFrame(const gl::Context *context) {}
+void FrameCapture::onEndFrame(const gl::Context *context, bool destroyContext) {}
 void FrameCapture::onMakeCurrent(const egl::Surface *drawSurface) {}
 void FrameCapture::replay(gl::Context *context) {}
 }  // namespace angle

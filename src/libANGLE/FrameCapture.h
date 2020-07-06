@@ -272,7 +272,7 @@ class FrameCapture final : angle::NonCopyable
     ~FrameCapture();
 
     void captureCall(const gl::Context *context, CallCapture &&call);
-    void onEndFrame(const gl::Context *context);
+    void onEndFrame(const gl::Context *context, bool destroyContext);
     void onMakeCurrent(const egl::Surface *drawSurface);
     bool enabled() const { return mEnabled; }
 
@@ -312,6 +312,7 @@ class FrameCapture final : angle::NonCopyable
 
     bool mEnabled = false;
     bool mSerializeStateEnabled;
+    bool mWroteIndexFiles = false;
     std::string mOutDirectory;
     std::string mCaptureLabel;
     bool mCompression;
@@ -319,6 +320,7 @@ class FrameCapture final : angle::NonCopyable
     uint32_t mFrameIndex;
     uint32_t mFrameStart;
     uint32_t mFrameEnd;
+    bool isFirstFrame         = true;
     EGLint mDrawSurfaceWidth  = 0;
     EGLint mDrawSurfaceHeight = 0;
     gl::AttribArray<size_t> mClientArraySizes;
