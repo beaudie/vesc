@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e361a6d_fdb01431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T22:47:01Z",
+      "side": 1,
+      "message": "There are some other fixes in here that Clion suggested to make the code more Python-ey and match the PEP8 guidelines.",
+      "revId": "82ae71e79ac73fa175a81861e5111f6c15a43d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "43fa3c62_43c07cac",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T22:47:01Z",
+      "side": 1,
+      "message": "The \"third_party/angle\" stuff is necessary since I can\u0027t \u0027gn args\u0027 an Android build from within ANGLE\u0027s directory.   Instead, it needs to be done in Chromium\u0027s src/.\n\nI\u0027m not sure how this worked before, but maybe it\u0027s related to the NDK stuff that was removed from ANGLE\u0027s checkout?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "82ae71e79ac73fa175a81861e5111f6c15a43d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed31b084_d963134e",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T22:47:01Z",
+      "side": 1,
+      "message": "library_target_to_blueprint() is looping over each target for each ABI essentially 3 loops deep.   It\u0027s ugly, but seems to at least work at first glance.   \n\nI\u0027m open to suggestions or shortcuts we can take to help simplify things, but I wanted to try and get something working that re-used as much already existing code in this script as possible.   Let me know if anything jumps out on how to get fancier here.",
+      "revId": "82ae71e79ac73fa175a81861e5111f6c15a43d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
