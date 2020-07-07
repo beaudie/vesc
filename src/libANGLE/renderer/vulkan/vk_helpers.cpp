@@ -1139,6 +1139,14 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
     mInFlightBuffers.clear();
 }
 
+void DynamicBuffer::retainInFlightBuffers(ResourceUseList *resourceUseList)
+{
+    for (BufferHelper *toRetain : mInFlightBuffers)
+    {
+        toRetain->retain(resourceUseList);
+    }
+}
+
 void DynamicBuffer::destroy(RendererVk *renderer)
 {
     reset();
