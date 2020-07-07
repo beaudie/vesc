@@ -195,6 +195,30 @@
     },
     {
       "key": {
+        "uuid": "a738d0f2_e9cd8031",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-07T21:55:19Z",
+      "side": 1,
+      "message": "I dont think thats possible. Since Context::readBuffer https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/Context.cpp;l\u003d4054?q\u003dContext.cpp\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F \nwill use the currently bound read framebuffer. If we don\u0027t set bindFramebuffer, we will forever be serializing the content of default framebuffer. In cases where the default framebuffer doesnt have certain attachments that the framebuffer we want to serialize has, it even will trigger assertion crashes.",
+      "parentUuid": "1bafaf98_831d12a7",
+      "range": {
+        "startLine": 915,
+        "startChar": 53,
+        "endLine": 915,
+        "endChar": 63
+      },
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4db131ff_df8752a2",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 5
@@ -247,6 +271,24 @@
       "side": 1,
       "message": "Weird... let me think about this. I\u0027m not sure we should be opening the cpp file after writing it.",
       "parentUuid": "30eae6f3_812666a2",
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58e08be6_1708be24",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4016,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-07T21:55:19Z",
+      "side": 1,
+      "message": "I initially put the resetContext in the angle_capture_context.cpp file, but I feel like since in other cases it is written in the frame files, this case should do that also.",
+      "parentUuid": "ff7373bb_e495cf39",
       "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
