@@ -16,6 +16,23 @@
       "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "80783ba0_fcdf1bdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-07T21:57:09Z",
+      "side": 1,
+      "message": "\u003e ARM\u0027s perfdoc layer\n\nlooks like this is ARM specific recommendations. I am fine with enabling this layer when validation layers are enabled but would it be better to enable this layer only for Mali platform?",
+      "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
