@@ -56,7 +56,7 @@ constexpr size_t kDescriptorWriteInfosInitialSize =
     kDescriptorBufferInfosInitialSize + kDescriptorImageInfosInitialSize;
 
 // This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
-constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
+constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u << 4;
 
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
