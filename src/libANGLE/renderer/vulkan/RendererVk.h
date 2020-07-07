@@ -258,7 +258,14 @@ class RendererVk : angle::NonCopyable
 
     vk::BufferHelper &getNullBuffer() { return mTheNullBuffer; }
 
-    bool getEnableValidationLayers() const { return mEnableValidationLayers; }
+    void dynamicBufferAllocated(VkDeviceSize size)
+    {
+        mTotalDynamicBufferSize += size;
+        mPeakDynamicBufferSize = std::max(mPeakDynamicBufferSize, mTotalDynamicBufferSize);
+    }
+    void dynamicBufferFreed(VkDeviceSize size) { mTotalDynamicBufferSize -= size; }
+    VkDeviceSize getDynamicBufferPeakSize() const { return mPeakDynamicBufferSize; }
+    VkDeviceSize getDynamicBufferTotalSize() const { return mTotalDynamicBufferSize; }
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
@@ -386,6 +393,9 @@ class RendererVk : angle::NonCopyable
 
     // Vulkan does not allow binding a null vertex buffer. We use a dummy as a placeholder.
     vk::BufferHelper mTheNullBuffer;
+
+    VkDeviceSize mTotalDynamicBufferSize;
+    VkDeviceSize mPeakDynamicBufferSize;
 };
 
 }  // namespace rx

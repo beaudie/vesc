@@ -137,6 +137,10 @@ class DynamicBuffer : angle::NonCopyable
     size_t mAlignment;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
 
+    // statistics for total dynamicBuffer size
+    RendererVk *mRenderer;
+    size_t mTotalSize;
+
     std::vector<BufferHelper *> mInFlightBuffers;
     std::vector<BufferHelper *> mBufferFreeList;
 };
