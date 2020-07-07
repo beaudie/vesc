@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9da17fd2_d5dd67dc",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-07-07T14:18:55Z",
+      "side": 1,
+      "message": "Ohhhh, here is the trace event I want! 😊\nThanks!",
+      "revId": "f3f49819cae6e64bb3d3b43d27b9cd7c91c8f016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
