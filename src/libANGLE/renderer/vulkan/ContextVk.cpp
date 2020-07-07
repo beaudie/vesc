@@ -776,6 +776,10 @@ ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    // Enable if needed to log the peak dynamic buffer usage
+    // WARN() << "Peak dynamic buffer allocated: " << mRenderer->getDynamicBufferPeakSize()
+    //       << std::endl;
+
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
