@@ -800,6 +800,7 @@ void ReleaseBufferListToRenderer(RendererVk *renderer, BufferHelperPointerVector
 {
     for (std::unique_ptr<BufferHelper> &toFree : *buffers)
     {
+        renderer->onDynamicBufferRelease(toFree->getSize());
         toFree->release(renderer);
     }
     buffers->clear();
@@ -809,6 +810,7 @@ void DestroyBufferList(RendererVk *renderer, BufferHelperPointerVector *buffers)
 {
     for (std::unique_ptr<BufferHelper> &toDestroy : *buffers)
     {
+        renderer->onDynamicBufferRelease(toDestroy->getSize());
         toDestroy->destroy(renderer);
     }
     buffers->clear();
@@ -2035,7 +2037,10 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    return mBuffer->init(contextVk, createInfo, mMemoryPropertyFlags);
+    ANGLE_TRY(mBuffer->init(contextVk, createInfo, mMemoryPropertyFlags));
+    contextVk->getRenderer()->onDynamicBufferAllocate(mBuffer->getSize());
+
+    return angle::Result::Continue;
 }
 
 bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes,
@@ -2186,6 +2191,7 @@ void DynamicBuffer::release(RendererVk *renderer)
 
     if (mBuffer)
     {
+        renderer->onDynamicBufferRelease(mBuffer->getSize());
         mBuffer->release(renderer);
         mBuffer.reset(nullptr);
     }
@@ -2200,6 +2206,7 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
 
         if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
         {
+            contextVk->getRenderer()->onDynamicBufferRelease(bufferHelper->getSize());
             bufferHelper->release(contextVk->getRenderer());
         }
         else
@@ -2217,6 +2224,7 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
     {
         if (ShouldReleaseFreeBuffer(*toRelease, mSize, mPolicy, mBufferFreeList.size()))
         {
+            contextVk->getRenderer()->onDynamicBufferRelease(toRelease->getSize());
             toRelease->release(contextVk->getRenderer());
         }
         else
@@ -2238,6 +2246,7 @@ void DynamicBuffer::destroy(RendererVk *renderer)
 
     if (mBuffer)
     {
+        renderer->onDynamicBufferRelease(mBuffer->getSize());
         mBuffer->unmap(renderer);
         mBuffer->destroy(renderer);
         mBuffer.reset(nullptr);

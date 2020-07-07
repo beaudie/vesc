@@ -583,6 +583,10 @@ void ContextVk::onDestroy(const gl::Context *context)
     // Remove context from the share group
     mShareGroupVk->getShareContextSet()->erase(this);
 
+    // Enable if needed to log the peak dynamic buffer usage
+    // WARN() << "Peak dynamic buffer allocated: " << mRenderer->getDynamicBufferPeakSize()
+    //       << std::endl;
+
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
