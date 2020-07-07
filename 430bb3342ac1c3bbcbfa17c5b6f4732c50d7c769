@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "689a9a75_64f3e9f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T18:57:04Z",
+      "side": 1,
+      "message": "I saw this was WIP - left some comments below.",
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0491bee9_174e88e0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T18:57:04Z",
+      "side": 1,
+      "message": "you should be able to revert this change.",
+      "range": {
+        "startLine": 627,
+        "startChar": 50,
+        "endLine": 627,
+        "endChar": 82
+      },
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df10252f_7bcb5013",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T18:57:04Z",
+      "side": 1,
+      "message": "same here as other nits.",
+      "range": {
+        "startLine": 681,
+        "startChar": 43,
+        "endLine": 681,
+        "endChar": 55
+      },
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b98fe29_de239efb",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T18:57:04Z",
+      "side": 1,
+      "message": "we should update SerializeContext to take a const context. If there\u0027s tricky issues with that implementation let me know what you run into.",
+      "range": {
+        "startLine": 915,
+        "startChar": 53,
+        "endLine": 915,
+        "endChar": 63
+      },
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4db131ff_df8752a2",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T18:57:04Z",
+      "side": 1,
+      "message": "you can omit this, it\u0027s default.",
+      "range": {
+        "startLine": 950,
+        "startChar": 44,
+        "endLine": 950,
+        "endChar": 57
+      },
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

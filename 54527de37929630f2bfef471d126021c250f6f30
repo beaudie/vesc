@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "ea37d86a_63477c1e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T18:57:04Z",
+      "side": 1,
+      "message": "Try removing it and see if you run into issues?",
+      "parentUuid": "c46d24af_fefd7095",
+      "range": {
+        "startLine": 3989,
+        "startChar": 12,
+        "endLine": 3989,
+        "endChar": 24
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8c46dbb_1a796f2e",
         "filename": "src/libANGLE/frame_capture_utils.h",
         "patchSetId": 4
@@ -234,6 +258,30 @@
       "revId": "54527de37929630f2bfef471d126021c250f6f30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c53055e_8fa69d84",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T18:57:04Z",
+      "side": 1,
+      "message": "Ah, no, this is fine. We can always update this later. Marking as resolved.",
+      "parentUuid": "f9ec65e3_a5776f35",
+      "range": {
+        "startLine": 172,
+        "startChar": 7,
+        "endLine": 174,
+        "endChar": 48
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
