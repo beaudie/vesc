@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "65fb0697_09ad61df",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-07T21:18:18Z",
+      "side": 1,
+      "message": "https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/FrameCapture.cpp;l\u003d833;drc\u003d5ba77dad98cf94506cf3700f9e12fcdc65fadfb6?q\u003dFrameCapture\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nWe still get swapBuffers onEndFrame after the first swap. The problem is that frame0 is not recorded because say its empty. So the code inside the \"if\" I link will not execute, and we wont have a setupContext call definition in our trace files. That\u0027s why I set frameStart \u003d first_frame_recorded, so that setupContext call will always be written.",
+      "parentUuid": "1a0c58e7_c6f0d677",
+      "range": {
+        "startLine": 3989,
+        "startChar": 12,
+        "endLine": 3989,
+        "endChar": 24
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8c46dbb_1a796f2e",
         "filename": "src/libANGLE/frame_capture_utils.h",
         "patchSetId": 4
