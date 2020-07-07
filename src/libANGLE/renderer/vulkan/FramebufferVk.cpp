@@ -374,19 +374,37 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
 
     if (clearAnyWithRenderPassLoadOp)
     {
-        // Clearing color is indicated by the set bits in this mask.  If not clearing colors with
-        // render pass loadOp, the default value of all-zeros means the clear is not done in
-        // clearWithRenderPassOp below.  In that case, only clear depth/stencil with render pass
-        // loadOp.
-        gl::DrawBufferMask clearBuffersWithRenderPassLoadOp;
-        if (clearColorWithRenderPassLoadOp)
-        {
-            clearBuffersWithRenderPassLoadOp = clearColorBuffers;
-        }
+        vk::Framebuffer *currentFramebuffer = nullptr;
+        ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer));
+        bool framebufferIsCurrent = contextVk->isCurrentRenderPassOfFramebuffer(currentFramebuffer);
 
-        clearWithRenderPassOp(clearBuffersWithRenderPassLoadOp, clearDepthWithRenderPassLoadOp,
-                              clearStencilWithRenderPassLoadOp, clearColorValue,
-                              clearDepthStencilValue);
+        // If we have not already started a render pass OR the framebuffer binding has changed then
+        // setup clear using loadop as we will be starting a renderpass anyway.
+        if (!contextVk->hasStartedRenderPass() || !framebufferIsCurrent)
+        {
+
+            // Clearing color is indicated by the set bits in this mask.  If not clearing colors
+            // with render pass loadOp, the default value of all-zeros means the clear is not done
+            // in clearWithRenderPassOp below.  In that case, only clear depth/stencil with render
+            // pass loadOp.
+            gl::DrawBufferMask clearBuffersWithRenderPassLoadOp;
+            if (clearColorWithRenderPassLoadOp)
+            {
+                clearBuffersWithRenderPassLoadOp = clearColorBuffers;
+            }
+
+            clearWithRenderPassOp(clearBuffersWithRenderPassLoadOp, clearDepthWithRenderPassLoadOp,
+                                  clearStencilWithRenderPassLoadOp, clearColorValue,
+                                  clearDepthStencilValue);
+        }
+        else
+        {
+            // Have active renderpass, add inline clear
+            clearWithClearAttachment(contextVk->getStartedRenderPassCommands().getCommandBuffer(),
+                                     clearColorBuffers, clearDepthWithRenderPassLoadOp,
+                                     clearStencilWithRenderPassLoadOp, clearColorValue,
+                                     clearDepthStencilValue);
+        }
 
         // Fallback to other methods for whatever isn't cleared here.
         if (clearColorWithRenderPassLoadOp)
@@ -1751,6 +1769,46 @@ void FramebufferVk::clearWithRenderPassOp(gl::DrawBufferMask clearColorBuffers,
         gl::ImageIndex imageIndex = renderTarget->getImageIndex();
         renderTarget->getImage().stageClear(imageIndex, dsAspectFlags, clearValue);
     }
+}
+
+void FramebufferVk::clearWithClearAttachment(vk::CommandBuffer &renderPassCommandBuffer,
+                                             gl::DrawBufferMask clearColorBuffers,
+                                             bool clearDepth,
+                                             bool clearStencil,
+                                             const VkClearColorValue &clearColorValue,
+                                             const VkClearDepthStencilValue &clearDepthStencilValue)
+{
+    std::vector<VkClearAttachment> attachments;
+    // Go through clearColorBuffers and set the appropriate loadOp and clear values.
+    for (size_t colorIndexGL : clearColorBuffers)
+    {
+        ASSERT(mState.getEnabledDrawBuffers().test(colorIndexGL));
+        VkClearValue clearValue = getCorrectedColorClearValue(colorIndexGL, clearColorValue);
+        attachments.emplace_back(VkClearAttachment{
+            VK_IMAGE_ASPECT_COLOR_BIT, static_cast<uint32_t>(colorIndexGL), clearValue});
+    }
+
+    // Set the appropriate loadOp and clear values for depth and stencil.
+    if (clearDepth)
+    {
+        VkClearValue depth = {};
+        depth.depthStencil = clearDepthStencilValue;
+        attachments.emplace_back(VkClearAttachment{VK_IMAGE_ASPECT_DEPTH_BIT, 0, depth});
+    }
+
+    if (clearStencil)
+    {
+        VkClearValue stencil = {};
+        stencil.depthStencil = clearDepthStencilValue;
+        attachments.emplace_back(VkClearAttachment{VK_IMAGE_ASPECT_STENCIL_BIT, 0, stencil});
+    }
+
+    VkClearRect rect        = {};
+    rect.rect.extent.width  = mState.getDimensions().width;
+    rect.rect.extent.height = mState.getDimensions().height;
+    rect.layerCount         = 1;
+    renderPassCommandBuffer.clearAttachments(static_cast<uint32_t>(attachments.size()),
+                                             attachments.data(), 1, &rect);
 }
 
 angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
