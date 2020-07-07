@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2d24c71_9cf541d5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-07-07T14:17:51Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with Angle at all. But, would it be a case to use the PlatformMethod postTask API?\n\nAs far as I get, outside of chrome it will have a std::async(...) call.\nThat said, it may have the restriction on the amount of threads.\n\nWithin chromium code base, this will use worker thread pool.\n\nAlso, I would like to see a trace event on these tasks (when possible).\nA thread without a trace event is not visible at all in chrome://tracing and this is making it really hard to know what is happening in case of jank/hangs or slow startup.\n\nWDYT?",
+      "revId": "8b867ff7991aa4da219cc4faea0e6b0f0325e33e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
