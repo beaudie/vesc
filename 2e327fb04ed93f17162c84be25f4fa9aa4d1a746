@@ -34,6 +34,41 @@
       "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "172b8a17_5346314e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2020-07-07T05:54:19Z",
+      "side": 1,
+      "message": "\nThe change is in the AssignTransformFeedbackExtensionQualifiers(), and it is called by the condition of enabled options.supportsTransformFeedbackExtension. It should not make the khr_gles31 fail. Maybe there is a bug in ANGLE, but our NV machine has not been available for this week. Do you need a ticket for it?",
+      "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "46678ce7_77ca6937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2020-07-07T05:54:19Z",
+      "side": 1,
+      "message": "Thanks Yuly.",
+      "parentUuid": "40653464_fd825b57",
+      "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
