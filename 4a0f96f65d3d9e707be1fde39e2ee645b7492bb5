@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "70ebaa2a_e228f1f1",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-07T19:18:53Z",
+      "side": 1,
+      "message": "Oh, I am using the \"if\" to check if the attachment is color attachment. Because it doesnt make sense to call readBuffer for d/s attachments and also I think theres an assert somewhere inside context-\u003ereadBuffer that forces the binding to be those values above",
+      "parentUuid": "11fae9ce_167625a7",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "4a0f96f65d3d9e707be1fde39e2ee645b7492bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01e0fc43_c8ff611a",
         "filename": "src/libANGLE/frame_capture_utils.h",
         "patchSetId": 2
@@ -53,6 +77,30 @@
       "writtenOn": "2020-07-07T19:05:19Z",
       "side": 1,
       "message": "you should be able to pass a const \u0026 if you require non-null (Which you do)",
+      "range": {
+        "startLine": 48,
+        "startChar": 48,
+        "endLine": 48,
+        "endChar": 69
+      },
+      "revId": "4a0f96f65d3d9e707be1fde39e2ee645b7492bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "247360d8_33416d13",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-07T19:18:53Z",
+      "side": 1,
+      "message": "I change the param to pointer to make everything more unified because I get depth and stencil buffers as pointers",
+      "parentUuid": "01e0fc43_c8ff611a",
       "range": {
         "startLine": 48,
         "startChar": 48,
