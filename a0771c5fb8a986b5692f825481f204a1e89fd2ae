@@ -46,6 +46,30 @@
       "revId": "a0771c5fb8a986b5692f825481f204a1e89fd2ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "184c2518_d35be5bf",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-07-07T14:27:23Z",
+      "side": 1,
+      "message": "I am soooo used to chromium coding style!",
+      "parentUuid": "ba644177_696be35a",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 21
+      },
+      "revId": "a0771c5fb8a986b5692f825481f204a1e89fd2ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
