@@ -222,7 +222,6 @@ class ProgramExecutableVk
     // Descriptor sets for uniform blocks and textures for this program.
     std::vector<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
-    std::vector<vk::BufferHelper *> mDescriptorBuffersCache;
     std::unordered_map<UniqueObjectID, VkDescriptorSet> mDefaultUniformDescriptorSetCache;
     Serial mCurrentDefaultUniformBufferID;
     size_t mNumDefaultUniformDescriptors;

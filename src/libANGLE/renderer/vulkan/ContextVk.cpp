@@ -1580,6 +1580,8 @@ angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
     ANGLE_TRY(mExecutable->updateDescriptorSets(this, commandBuffer));
+    mDefaultUniformStorage.retainInFlightBuffers(&mResourceUseList);
+    mDefaultUniformStorage.releaseInFlightBuffers(this);
     return angle::Result::Continue;
 }
 

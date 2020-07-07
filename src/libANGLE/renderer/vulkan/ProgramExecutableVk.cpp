@@ -196,7 +196,6 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     }
 
     mTextureDescriptorsCache.clear();
-    mDescriptorBuffersCache.clear();
     mDefaultUniformDescriptorSetCache.clear();
     mTransformFeedbackDescriptorSetCache.clear();
     mCurrentDefaultUniformBufferID = kZeroSerial;
@@ -909,14 +908,12 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
     if (!defaultUniformBlock.uniformData.empty())
     {
         bufferInfo.buffer = defaultUniformBuffer->getBuffer().getHandle();
-        mDescriptorBuffersCache.emplace_back(defaultUniformBuffer);
     }
     else
     {
         vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
         emptyBuffer.retain(&contextVk->getResourceUseList());
         bufferInfo.buffer = emptyBuffer.getBuffer().getHandle();
-        mDescriptorBuffersCache.emplace_back(&emptyBuffer);
     }
 
     bufferInfo.offset = 0;
@@ -1240,8 +1237,6 @@ angle::Result ProgramExecutableVk::updateTransformFeedbackDescriptorSet(
 
     if (newDescriptorSetAllocated)
     {
-        mDescriptorBuffersCache.clear();
-
         for (const gl::ShaderType shaderType : executable.getLinkedShaderStages())
         {
             updateDefaultUniformsDescriptorSet(shaderType, defaultUniformBlocks[shaderType],
@@ -1480,11 +1475,6 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
         commandBuffer->bindDescriptorSets(getPipelineLayout(), pipelineBindPoint,
                                           descriptorSetIndex, 1, &descSet, uniformBlockOffsetCount,
                                           mDynamicBufferOffsets.data());
-    }
-
-    for (vk::BufferHelper *buffer : mDescriptorBuffersCache)
-    {
-        buffer->retain(&contextVk->getResourceUseList());
     }
 
     return angle::Result::Continue;

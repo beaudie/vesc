@@ -174,8 +174,6 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
             vk::GetImpl(glState.getCurrentTransformFeedback());
         vk::TransformFeedbackDesc *xfbBufferDesc = &transformFeedbackVk->getTransformFeedbackDesc();
 
-        mExecutable.mDescriptorBuffersCache.clear();
-
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
         bool newDescriptorSetAllocated;
@@ -201,8 +199,6 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
     }
     else if (!mExecutable.isDefaultUniformDescriptorSetValid(defaultUniformBuffer))
     {
-        mExecutable.mDescriptorBuffersCache.clear();
-
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
         bool newDescriptorSetAllocated;

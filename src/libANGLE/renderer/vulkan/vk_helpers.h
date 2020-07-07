@@ -102,6 +102,8 @@ class DynamicBuffer : angle::NonCopyable
     // This releases all the buffers that have been allocated since this was last called.
     void releaseInFlightBuffers(ContextVk *contextVk);
 
+    void retainInFlightBuffers(ResourceUseList *resourceUseList);
+
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
 
