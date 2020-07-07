@@ -438,7 +438,9 @@ RendererVk::RendererVk()
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
-      mGlslangInitialized(false)
+      mGlslangInitialized(false),
+      mTotalDynamicBufferSize(0),
+      mPeakDynamicBufferSize(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
