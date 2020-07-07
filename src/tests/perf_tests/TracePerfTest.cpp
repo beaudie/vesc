@@ -1097,6 +1097,15 @@ void TracePerfTest::initializeBenchmark()
 
 void TracePerfTest::destroyBenchmark()
 {
+    int64_t peakBufferBytes = 0;
+    int64_t peakMemoryBytes = 0;
+    glGetInteger64v(9000, &peakBufferBytes);
+    glGetInteger64v(9001, &peakMemoryBytes);
+    if (gVerboseLogging)
+    {
+        printf("peakBufferBytes:%ld  peakMemoryBytes:%ld", peakBufferBytes, peakMemoryBytes);
+    }
+
     const auto &params = GetParam();
     if (params.surfaceType == SurfaceType::Offscreen)
     {
@@ -1244,13 +1253,13 @@ void TracePerfTest::drawBenchmark()
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
             glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
         }
-
-        mTotalFrameCount++;
     }
     else
     {
         swap();
     }
+
+    mTotalFrameCount++;
 
     endInternalTraceEvent(frameName);
 

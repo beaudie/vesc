@@ -3884,6 +3884,13 @@ bool GetQueryParameterInfo(const State &glState,
         }
     }
 
+    if (pname >= 9000 && pname <= 9999)
+    {
+        *type      = GL_INT_64_ANGLEX;
+        *numParams = 1;
+        return true;
+    }
+
     return false;
 }
 

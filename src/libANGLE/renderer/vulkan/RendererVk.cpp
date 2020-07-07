@@ -715,7 +715,11 @@ RendererVk::RendererVk()
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
       mCommandProcessor(this),
-      mSupportedVulkanPipelineStageMask(0)
+      mSupportedVulkanPipelineStageMask(0),
+      mTotalDynamicBufferSize(0),
+      mPeakDynamicBufferSize(0),
+      mTotalBufferSize(0),
+      mPeakBufferSize(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);

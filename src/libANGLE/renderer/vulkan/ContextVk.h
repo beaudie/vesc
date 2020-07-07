@@ -616,6 +616,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
+    GLint64 getBufferAllocationBytes() override { return mRenderer->getBufferTotalSize(); }
+    GLint64 getMemoryAllocationBytes() override { return mRenderer->getBufferTotalSize(); }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
