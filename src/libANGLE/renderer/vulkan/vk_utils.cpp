@@ -623,6 +623,7 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
                               renderer->getFeatures().persistentlyMappedBuffers.enabled,
                               &memoryTypeIndex, &mBuffer, &mAllocation));
     mSize = static_cast<size_t>(size);
+    renderer->onBufferAllocate(mSize);
 
     // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
     // invalid values ensures our testing doesn't assume zero-initialized memory.

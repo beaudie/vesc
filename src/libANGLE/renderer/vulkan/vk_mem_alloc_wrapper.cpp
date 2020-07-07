@@ -11,8 +11,35 @@
 
 #include <vk_mem_alloc.h>
 
+#include <algorithm>
+
 namespace vma
 {
+std::atomic<VkDeviceSize> totalDeviceMemorySize;
+std::atomic<VkDeviceSize> peakDeviceMemorySize;
+
+/// Callback function called after successful vkAllocateMemory.
+void VKAPI_PTR allocateDeviceMemoryCallback(VmaAllocator VMA_NOT_NULL allocator,
+                                            uint32_t memoryType,
+                                            VkDeviceMemory VMA_NOT_NULL_NON_DISPATCHABLE memory,
+                                            VkDeviceSize size,
+                                            void *VMA_NULLABLE pUserData)
+{
+    totalDeviceMemorySize += size;
+    // This is race prone, but don't want to eat extra cost of lock just because of this
+    peakDeviceMemorySize.store(std::max(peakDeviceMemorySize, totalDeviceMemorySize),
+                               std::memory_order_relaxed);
+}
+/// Callback function called before vkFreeMemory.
+void VKAPI_PTR freeDeviceMemoryCallback(VmaAllocator VMA_NOT_NULL allocator,
+                                        uint32_t memoryType,
+                                        VkDeviceMemory VMA_NOT_NULL_NON_DISPATCHABLE memory,
+                                        VkDeviceSize size,
+                                        void *VMA_NULLABLE pUserData)
+{
+    totalDeviceMemorySize -= size;
+}
+
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
                        VkInstance instance,
@@ -63,6 +90,14 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
     allocatorInfo.pVulkanFunctions            = &funcs;
     allocatorInfo.vulkanApiVersion            = apiVersion;
     allocatorInfo.preferredLargeHeapBlockSize = preferredLargeHeapBlockSize;
+
+    VmaDeviceMemoryCallbacks deviceMemoryCallbacks = {};
+    deviceMemoryCallbacks.pfnAllocate              = allocateDeviceMemoryCallback;
+    deviceMemoryCallbacks.pfnFree                  = freeDeviceMemoryCallback;
+    allocatorInfo.pDeviceMemoryCallbacks           = &deviceMemoryCallbacks;
+
+    totalDeviceMemorySize = 0;
+    peakDeviceMemorySize  = 0;
 
     return vmaCreateAllocator(&allocatorInfo, pAllocator);
 }

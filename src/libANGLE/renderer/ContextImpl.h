@@ -239,6 +239,9 @@ class ContextImpl : public GLImplFactory
     virtual egl::Error releaseHighPowerGPU(gl::Context *context);
     virtual egl::Error reacquireHighPowerGPU(gl::Context *context);
 
+    // Return the number of bytes of buffer objects has been allocated
+    virtual void getBufferAllocationStats(GLint64 *params) {}
+
   protected:
     const gl::State &mState;
     gl::MemoryProgramCache *mMemoryProgramCache;

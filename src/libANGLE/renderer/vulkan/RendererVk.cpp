@@ -960,7 +960,11 @@ RendererVk::RendererVk()
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
       mCommandProcessor(this),
-      mSupportedVulkanPipelineStageMask(0)
+      mSupportedVulkanPipelineStageMask(0),
+      mTotalDynamicBufferSize(0),
+      mPeakDynamicBufferSize(0),
+      mTotalBufferSize(0),
+      mPeakBufferSize(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1073,6 +1077,26 @@ void RendererVk::notifyDeviceLost()
 bool RendererVk::isDeviceLost() const
 {
     return mDeviceLost;
+}
+
+void RendererVk::getBufferAllocationStats(GLint64 *params) const
+{
+    typedef struct BufferAllocationStats
+    {
+        int64_t totalDynamicBufferSize;
+        int64_t peakDynamicBufferSize;
+        int64_t totalBufferSize;
+        int64_t peakBufferSize;
+        int64_t totalDeviceMemorySize;
+        int64_t peakDeviceMemorySize;
+    } BufferAllocationStats;
+    BufferAllocationStats *stats  = (BufferAllocationStats *)params;
+    stats->totalDynamicBufferSize = mTotalDynamicBufferSize;
+    stats->peakDynamicBufferSize  = mPeakDynamicBufferSize;
+    stats->totalBufferSize        = mTotalBufferSize;
+    stats->peakBufferSize         = mPeakBufferSize;
+    stats->totalDeviceMemorySize  = getDeviceMemoryTotalSize();
+    stats->peakDeviceMemorySize   = getDeviceMemoryPeakSize();
 }
 
 angle::Result RendererVk::initialize(DisplayVk *displayVk,

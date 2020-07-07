@@ -504,6 +504,32 @@ class RendererVk : angle::NonCopyable
         return mEnabledDeviceExtensions;
     }
 
+    void onDynamicBufferAllocate(VkDeviceSize size)
+    {
+        mTotalDynamicBufferSize += size;
+        // This is race prone, but don't want to eat extra cost of lock just because of this
+        mPeakDynamicBufferSize.store(std::max(mPeakDynamicBufferSize, mTotalDynamicBufferSize),
+                                     std::memory_order_relaxed);
+    }
+    void onDynamicBufferRelease(VkDeviceSize size) { mTotalDynamicBufferSize -= size; }
+    VkDeviceSize getDynamicBufferPeakSize() const { return mPeakDynamicBufferSize; }
+    VkDeviceSize getDynamicBufferTotalSize() const { return mTotalDynamicBufferSize; }
+
+    void onBufferAllocate(VkDeviceSize size)
+    {
+        mTotalBufferSize += size;
+        // This is race prone, but don't want to eat extra cost of lock just because of this
+        mPeakBufferSize.store(std::max(mPeakBufferSize, mTotalBufferSize),
+                              std::memory_order_relaxed);
+    }
+    void onBufferRelease(VkDeviceSize size) { mTotalBufferSize -= size; }
+    VkDeviceSize getBufferPeakSize() const { return mPeakBufferSize; }
+    VkDeviceSize getBufferTotalSize() const { return mTotalBufferSize; }
+
+    VkDeviceSize getDeviceMemoryPeakSize() const { return vma::peakDeviceMemorySize; }
+    VkDeviceSize getDeviceMemoryTotalSize() const { return vma::totalDeviceMemorySize; }
+    void getBufferAllocationStats(GLint64 *params) const;
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -670,6 +696,12 @@ class RendererVk : angle::NonCopyable
 
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
+
+    // statistics of allocation
+    std::atomic<VkDeviceSize> mTotalDynamicBufferSize;
+    std::atomic<VkDeviceSize> mPeakDynamicBufferSize;
+    std::atomic<VkDeviceSize> mTotalBufferSize;
+    std::atomic<VkDeviceSize> mPeakBufferSize;
 };
 
 }  // namespace rx
