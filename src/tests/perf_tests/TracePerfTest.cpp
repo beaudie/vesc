@@ -1097,6 +1097,26 @@ void TracePerfTest::initializeBenchmark()
 
 void TracePerfTest::destroyBenchmark()
 {
+    if (gVerboseLogging)
+    {
+        struct
+        {
+            int64_t totalDynamicBufferSize;
+            int64_t peakDynamicBufferSize;
+            int64_t totalBufferSize;
+            int64_t peakBufferSize;
+            int64_t totalDeviceMemorySize;
+            int64_t peakDeviceMemorySize;
+        } allocationStats;
+        glGetInteger64v(9000, &allocationStats.totalDynamicBufferSize);
+        printf(
+            "DynamicBuffer(total:%ld peak:%ld) Buffer(total:%ld peak:%ld) DeviceMemory(total:%ld "
+            "peak:%ld)\n",
+            allocationStats.totalDynamicBufferSize, allocationStats.peakDynamicBufferSize,
+            allocationStats.totalBufferSize, allocationStats.peakBufferSize,
+            allocationStats.totalDeviceMemorySize, allocationStats.peakDeviceMemorySize);
+    }
+
     const auto &params = GetParam();
     if (params.surfaceType == SurfaceType::Offscreen)
     {
@@ -1244,13 +1264,13 @@ void TracePerfTest::drawBenchmark()
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
             glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
         }
-
-        mTotalFrameCount++;
     }
     else
     {
         swap();
     }
+
+    mTotalFrameCount++;
 
     endInternalTraceEvent(frameName);
 
