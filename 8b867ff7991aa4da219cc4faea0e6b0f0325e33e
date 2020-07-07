@@ -16,6 +16,24 @@
       "revId": "8b867ff7991aa4da219cc4faea0e6b0f0325e33e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a87d76ae_c38a6736",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-07-07T15:08:01Z",
+      "side": 1,
+      "message": "I just realized I missed part of your comment.\nAbout thread priority : display.\n\nThat can probably be doable, but not trivial.\nWe may need to change the platform API.\nThe current ThreadGroupImpl only support two priority levels (Foreground and Background).\n\nThat said. It may worth to redirect these calls to the WorkerThread anyway.\nMaybe with a postTask with high priority. This will ensures a consistant\nTRACE_EVENT across the code base and ensures it is easy to redirect when\nthe code is ready for it.\n\nOn short term, that can still be your std::thread{call}.detach(), which\nis about the same than std::async.\n\nWe can sync off-line discussion if you want.",
+      "parentUuid": "e2d24c71_9cf541d5",
+      "revId": "8b867ff7991aa4da219cc4faea0e6b0f0325e33e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
