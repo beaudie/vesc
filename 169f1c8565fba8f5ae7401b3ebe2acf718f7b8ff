@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7995d33e_da3fdd68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-07T21:02:21Z",
+      "side": 1,
+      "message": "With these 6 added skips, this allows best practices to be enabled by default.\nReady to land if I can get +2.\nAny support?",
+      "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
