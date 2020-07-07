@@ -45,7 +45,7 @@ Result SerializeFramebufferAttachment(gl::Context *context,
                                       gl::BinaryOutputStream *bos,
                                       ScratchBuffer *scratchBuffer,
                                       gl::Framebuffer *framebuffer,
-                                      const gl::FramebufferAttachment &framebufferAttachment);
+                                      const gl::FramebufferAttachment *framebufferAttachment);
 
 void SerializeImageIndex(gl::BinaryOutputStream *bos, const gl::ImageIndex &imageIndex);
 
