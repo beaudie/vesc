@@ -22,6 +22,97 @@
       "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "712e6810_843f80d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 58
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T01:12:59Z",
+      "side": 1,
+      "message": "LGTM.\n\nI\u0027ll let Mohan +2 since it looks like he has a couple outstanding comments.",
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68134b7a_61f1c3e8",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T01:12:59Z",
+      "side": 1,
+      "message": "nit: unnecessary comment",
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9af72d1b_66b90219",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T01:12:59Z",
+      "side": 1,
+      "message": "Is there a good way to avoid building this structure every time even though we expect to typically have the result cached already?",
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9603379_c64d4ad7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T01:12:59Z",
+      "side": 1,
+      "message": "Where did this value come from?",
+      "range": {
+        "startLine": 194,
+        "startChar": 41,
+        "endLine": 194,
+        "endChar": 43
+      },
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5625c35_bf41acce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T01:12:59Z",
+      "side": 1,
+      "message": "Why does this do the same work as InitSamplerYcbcrKHRFunctions()?   Do we need both, and if so, can this just call InitSamplerYcbcrKHRFunctions()?",
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
