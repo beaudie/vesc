@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "b8a156b7_2ba4008d",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T20:48:14Z",
+      "side": 1,
+      "message": "Oh, right, readBuffer. My bad.",
+      "parentUuid": "70ebaa2a_e228f1f1",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "4a0f96f65d3d9e707be1fde39e2ee645b7492bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01e0fc43_c8ff611a",
         "filename": "src/libANGLE/frame_capture_utils.h",
         "patchSetId": 2
@@ -101,6 +125,30 @@
       "side": 1,
       "message": "I change the param to pointer to make everything more unified because I get depth and stencil buffers as pointers",
       "parentUuid": "01e0fc43_c8ff611a",
+      "range": {
+        "startLine": 48,
+        "startChar": 48,
+        "endLine": 48,
+        "endChar": 69
+      },
+      "revId": "4a0f96f65d3d9e707be1fde39e2ee645b7492bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8171226f_3f0e58ef",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T20:48:14Z",
+      "side": 1,
+      "message": "Minor preference for using \u0026 when possible.",
+      "parentUuid": "247360d8_33416d13",
       "range": {
         "startLine": 48,
         "startChar": 48,
