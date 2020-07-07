@@ -33,6 +33,41 @@
       "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2253af10_7769bf03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T23:05:43Z",
+      "side": 1,
+      "message": "LGTM. Hopefully this helps catch simple mistakes before they land.",
+      "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3753b9ea_e6d8d345",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-07T23:05:43Z",
+      "side": 1,
+      "message": "To prevent performance regressions, I think we should leave this enabled by default for everything.   If a change is failing CQ because of this perf layer, that change will likely regress performance on ARM at the very least, which we should probably address as part of the CL (or a follow-on bug).   As Tobin pointed out, we can skip specific warnings to prevent holding up new features/fixes for too long.\n\nWe can always tweak the warnings to make them more platform-specific once we have more running time with the layer.\n\nFrom a more pragmatic point of view: we don\u0027t have any ARM devices in CQ yet, so only enabling it for ARM wouldn\u0027t help us catch bad CLs before they land.",
+      "parentUuid": "80783ba0_fcdf1bdd",
+      "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
