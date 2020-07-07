@@ -356,6 +356,30 @@
     },
     {
       "key": {
+        "uuid": "e6773633_f1f878f5",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 56
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-07T18:59:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6d3b3dc4_e97557fb",
+      "range": {
+        "startLine": 226,
+        "startChar": 41,
+        "endLine": 226,
+        "endChar": 60
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e96d9b35_048c3486",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 56
@@ -542,6 +566,30 @@
       "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "711c420a_6d50f469",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 56
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-07T18:59:30Z",
+      "side": 1,
+      "message": "Ack\n\n\u003e How does native GL driver deal with that?\n\nuses the native_window API or gralloc APIs to query all that info and decides which matrix to use\n\n\u003e I can\u0027t find much documentation\n\nyup, code and comments is all that is there\n\n\u003e Logged https://issuetracker.google.com/issues/160697174 to follow-up on this question.\n\nthanks.could you cc me on that?\n\nFrom what i see, it will include expanding \"SamplerYcbcrConversionCache\" to use these 3 data points to generate the key for the cache search - \"bufferFormatProperties.format\", \"bufferFormatProperties.suggestedYcbcrModel\" and \"bufferFormatProperties.suggestedYcbcrRange\"",
+      "parentUuid": "92f9d0b1_5d850f99",
+      "range": {
+        "startLine": 637,
+        "startChar": 94,
+        "endLine": 638,
+        "endChar": 38
+      },
+      "revId": "a29aca2d02dc4cf70bf981981dc2b66be07b9430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
