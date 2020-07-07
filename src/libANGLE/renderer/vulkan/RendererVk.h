@@ -262,6 +262,17 @@ class RendererVk : angle::NonCopyable
 
     vk::ResourceSerialFactory &getResourceSerialFactory() { return mResourceSerialFactory; }
 
+    void onDynamicBufferAllocate(VkDeviceSize size)
+    {
+        mTotalDynamicBufferSize += size;
+        // This is race prone, but don't want to eat extra cost of lock just because of this
+        mPeakDynamicBufferSize.store(std::max(mPeakDynamicBufferSize, mTotalDynamicBufferSize),
+                                     std::memory_order_relaxed);
+    }
+    void onDynamicBufferFree(VkDeviceSize size) { mTotalDynamicBufferSize -= size; }
+    VkDeviceSize getDynamicBufferPeakSize() const { return mPeakDynamicBufferSize; }
+    VkDeviceSize getDynamicBufferTotalSize() const { return mTotalDynamicBufferSize; }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -392,6 +403,9 @@ class RendererVk : angle::NonCopyable
 
     // Tracks resource serials.
     vk::ResourceSerialFactory mResourceSerialFactory;
+
+    std::atomic<VkDeviceSize> mTotalDynamicBufferSize;
+    std::atomic<VkDeviceSize> mPeakDynamicBufferSize;
 };
 
 }  // namespace rx
