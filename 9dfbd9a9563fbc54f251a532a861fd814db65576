@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "e184f22a_9b00051a",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-07T17:19:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "512d2c73_f00c52f8",
+      "range": {
+        "startLine": 42,
+        "startChar": 40,
+        "endLine": 42,
+        "endChar": 42
+      },
+      "revId": "9dfbd9a9563fbc54f251a532a861fd814db65576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c02b77b0_973f8e37",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 40

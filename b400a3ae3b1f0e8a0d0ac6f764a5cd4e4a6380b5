@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "25339ac6_284aa04e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 58
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-07T17:19:41Z",
+      "side": 1,
+      "message": "I\u0027ve expanded the CL description.\n\nNeed for support for AHB in the ANGLE test environment in order to implement end2end test.",
+      "parentUuid": "aed27556_2f2bb761",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "712e6810_843f80d5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 58
@@ -59,6 +83,24 @@
     },
     {
       "key": {
+        "uuid": "cfd93b11_b8441d6f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-07T17:19:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68134b7a_61f1c3e8",
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af72d1b_66b90219",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 58
@@ -73,6 +115,24 @@
       "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8097478_9a3f2f97",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-07T17:19:41Z",
+      "side": 1,
+      "message": "This is only done when the external image is imported, so shouldn\u0027t be happening often.\nNot sure it could be avoided in any case, how would we know what to put into the struct to compute it in advance? I don\u0027t know a way of querying the properties in advance. E.g. there is not way to query all the externalFormats or VkAndroidHardwareBufferPropertiesANDROID.",
+      "parentUuid": "9af72d1b_66b90219",
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "d6153dda_64162dc4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-07T17:19:41Z",
+      "side": 1,
+      "message": "Good question. I just picked a number that would accommodate known data types.\nIt\u0027s somewhat meaningless in that this is only returned when the buffer format is unknown in which case you can\u0027t really read or write it because you don\u0027t know what\u0027s there, but structures and functions required something.",
+      "parentUuid": "d9603379_c64d4ad7",
+      "range": {
+        "startLine": 194,
+        "startChar": 41,
+        "endLine": 194,
+        "endChar": 43
+      },
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e5625c35_bf41acce",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 58
@@ -113,6 +197,24 @@
       "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87ff7203_0b5f6dd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 58
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-07T17:19:41Z",
+      "side": 1,
+      "message": "Well spotted. This function isn\u0027t called anywhere.\nRemoved.",
+      "parentUuid": "e5625c35_bf41acce",
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
