@@ -208,6 +208,24 @@
       "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff7373bb_e495cf39",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4016,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T20:50:49Z",
+      "side": 1,
+      "message": "Weird... let me think about this. I\u0027m not sure we should be opening the cpp file after writing it.",
+      "parentUuid": "30eae6f3_812666a2",
+      "revId": "430bb3342ac1c3bbcbfa17c5b6f4732c50d7c769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "1a0c58e7_c6f0d677",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T20:50:49Z",
+      "side": 1,
+      "message": "I see. Do we not get a swapbuffers onEndFrame call after this first swap or something? Do you know why not?",
+      "parentUuid": "1ee11c55_4829751a",
+      "range": {
+        "startLine": 3989,
+        "startChar": 12,
+        "endLine": 3989,
+        "endChar": 24
+      },
+      "revId": "54527de37929630f2bfef471d126021c250f6f30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8c46dbb_1a796f2e",
         "filename": "src/libANGLE/frame_capture_utils.h",
         "patchSetId": 4
