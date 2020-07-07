@@ -2089,6 +2089,9 @@ void Context::getInteger64vImpl(GLenum pname, GLint64 *params) const
         case GL_MAX_SHADER_STORAGE_BLOCK_SIZE:
             *params = mState.mCaps.maxShaderStorageBlockSize;
             break;
+        case 9000:
+            mImplementation->getBufferAllocationStats(params);
+            break;
         default:
             UNREACHABLE();
             break;

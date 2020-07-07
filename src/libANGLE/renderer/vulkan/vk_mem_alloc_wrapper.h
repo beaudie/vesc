@@ -12,11 +12,16 @@
 
 #include "common/vulkan/vk_headers.h"
 
+#include <atomic>
+
 VK_DEFINE_HANDLE(VmaAllocator)
 VK_DEFINE_HANDLE(VmaAllocation)
 
 namespace vma
 {
+extern std::atomic<VkDeviceSize> totalDeviceMemorySize;
+extern std::atomic<VkDeviceSize> peakDeviceMemorySize;
+
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
                        VkInstance instance,
