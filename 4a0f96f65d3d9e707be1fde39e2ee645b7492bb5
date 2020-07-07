@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "111ec8e7_12ff72d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T19:05:19Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4a0f96f65d3d9e707be1fde39e2ee645b7492bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "11fae9ce_167625a7",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T19:05:19Z",
+      "side": 1,
+      "message": "you should be able to remove the \"ifs\" here. binding is always present.",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "4a0f96f65d3d9e707be1fde39e2ee645b7492bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01e0fc43_c8ff611a",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-07T19:05:19Z",
+      "side": 1,
+      "message": "you should be able to pass a const \u0026 if you require non-null (Which you do)",
+      "range": {
+        "startLine": 48,
+        "startChar": 48,
+        "endLine": 48,
+        "endChar": 69
+      },
+      "revId": "4a0f96f65d3d9e707be1fde39e2ee645b7492bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
