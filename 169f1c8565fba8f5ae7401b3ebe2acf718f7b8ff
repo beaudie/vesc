@@ -68,6 +68,23 @@
       "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d20fefd_1528b809",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-07T23:36:12Z",
+      "side": 1,
+      "message": "Do we need to check that that feature is available before setting it?\nWe probably don\u0027t need to check because we are pulling in the version of the validation layers that we know has the feature. If it were a driver feature, we\u0027d need to check.",
+      "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
