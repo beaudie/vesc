@@ -1118,6 +1118,7 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
 
     ASSERT(!mBuffer);
     mBuffer = buffer.release();
+    contextVk->getRenderer()->dynamicBufferAllocated(mBuffer->getSize());
 
     return angle::Result::Continue;
 }
@@ -1178,6 +1179,7 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
             // Clear the free list since the free buffers are now too small.
             for (BufferHelper *toFree : mBufferFreeList)
             {
+                contextVk->getRenderer()->dynamicBufferFreed(toFree->getSize());
                 toFree->release(contextVk->getRenderer());
             }
             mBufferFreeList.clear();
@@ -1265,6 +1267,7 @@ void DynamicBuffer::releaseBufferListToRenderer(RendererVk *renderer,
 {
     for (BufferHelper *toFree : *buffers)
     {
+        renderer->dynamicBufferFreed(toFree->getSize());
         toFree->release(renderer);
         delete toFree;
     }
@@ -1276,6 +1279,7 @@ void DynamicBuffer::destroyBufferList(RendererVk *renderer, std::vector<BufferHe
 {
     for (BufferHelper *toFree : *buffers)
     {
+        renderer->dynamicBufferFreed(toFree->getSize());
         toFree->destroy(renderer);
         delete toFree;
     }
@@ -1292,6 +1296,7 @@ void DynamicBuffer::release(RendererVk *renderer)
 
     if (mBuffer)
     {
+        renderer->dynamicBufferFreed(mBuffer->getSize());
         mBuffer->release(renderer);
         SafeDelete(mBuffer);
     }
@@ -1307,6 +1312,7 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
         // If the dynamic buffer was resized we cannot reuse the retained buffer.
         if (bufferHelper->getSize() < mSize)
         {
+            contextVk->getRenderer()->dynamicBufferFreed(bufferHelper->getSize());
             bufferHelper->release(contextVk->getRenderer());
         }
         else
@@ -1324,6 +1330,7 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
         // If the dynamic buffer was resized we cannot reuse the retained buffer.
         if (toRelease->getSize() < mSize)
         {
+            contextVk->getRenderer()->dynamicBufferFreed(toRelease->getSize());
             toRelease->release(contextVk->getRenderer());
         }
         else
@@ -1344,6 +1351,7 @@ void DynamicBuffer::destroy(RendererVk *renderer)
 
     if (mBuffer)
     {
+        renderer->dynamicBufferFreed(mBuffer->getSize());
         mBuffer->unmap(renderer);
         mBuffer->destroy(renderer);
         delete mBuffer;
