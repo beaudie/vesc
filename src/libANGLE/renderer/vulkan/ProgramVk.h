@@ -109,7 +109,11 @@ class ProgramVk : public ProgramImpl
     {
         return mDefaultUniformBlocksDirty[shaderType];
     }
-    bool setShaderUniformDirty(gl::ShaderType shaderType);
+    bool setShaderUniformDirtyBit(gl::ShaderType shaderType);
+    void clearShaderUniformDirtyBit(gl::ShaderType shaderType)
+    {
+        mDefaultUniformBlocksDirty.reset(shaderType);
+    }
     void onProgramBind() { setAllDefaultUniformsDirty(); }
 
     // Used in testing only.

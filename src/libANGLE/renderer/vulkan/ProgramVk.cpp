@@ -756,6 +756,7 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     {
         ANGLE_TRY(defaultUniformStorage.flush(contextVk));
     }
+    mDefaultUniformBlocksDirty.reset();
 
     vk::BufferHelper *defaultUniformBuffer = defaultUniformStorage.getCurrentBuffer();
 
@@ -806,7 +807,7 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
-bool ProgramVk::setShaderUniformDirty(gl::ShaderType shaderType)
+bool ProgramVk::setShaderUniformDirtyBit(gl::ShaderType shaderType)
 {
     if (!mDefaultUniformBlocksDirty[shaderType] &&
         !mDefaultUniformBlocks[shaderType].uniformData.empty())
@@ -823,7 +824,7 @@ bool ProgramVk::setAllDefaultUniformsDirty()
     bool newDirtyBitAdded                     = false;
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
-        newDirtyBitAdded |= setShaderUniformDirty(shaderType);
+        newDirtyBitAdded |= setShaderUniformDirtyBit(shaderType);
     }
     return newDirtyBitAdded;
 }

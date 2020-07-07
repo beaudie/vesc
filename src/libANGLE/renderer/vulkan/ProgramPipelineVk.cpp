@@ -153,6 +153,7 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
             memcpy(&bufferData[offsets[shaderType]], uniformData.data(), uniformData.size());
             mExecutable.mDynamicBufferOffsets[offsetIndex] =
                 static_cast<uint32_t>(bufferOffset + offsets[shaderType]);
+            programVk->clearShaderUniformDirtyBit(shaderType);
         }
         ++offsetIndex;
     }
@@ -245,7 +246,7 @@ bool ProgramPipelineVk::setAllDefaultUniformsDirty(ContextVk *contextVk)
         ProgramVk *program = getShaderProgram(glState, shaderType);
         if (program)
         {
-            newDirtyBitAdded |= program->setShaderUniformDirty(shaderType);
+            newDirtyBitAdded |= program->setShaderUniformDirtyBit(shaderType);
         }
     }
     return newDirtyBitAdded;
