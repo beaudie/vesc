@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48849802_c226d79f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-08T18:37:32Z",
+      "side": 1,
+      "message": "Great stuff, just some nits.",
+      "revId": "370e0ba57d2b8ff36c3b4055c7549943acf528ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df91f856_e1e64ee1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-08T18:37:32Z",
+      "side": 1,
+      "message": "For consistency, the other structs in this file start with \"Fmt\".",
+      "range": {
+        "startLine": 217,
+        "startChar": 7,
+        "endLine": 217,
+        "endChar": 47
+      },
+      "revId": "370e0ba57d2b8ff36c3b4055c7549943acf528ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c987374f_c26cf8dd",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-08T18:37:32Z",
+      "side": 1,
+      "message": "I think this goes away when you rebase to your other CL.",
+      "range": {
+        "startLine": 915,
+        "startChar": 53,
+        "endLine": 915,
+        "endChar": 63
+      },
+      "revId": "370e0ba57d2b8ff36c3b4055c7549943acf528ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e5eba59_a2db4476",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4018,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-08T18:37:32Z",
+      "side": 1,
+      "message": "We should probably populate this function.  Or is the intent here that context destruction before end frame means we\u0027re in a weird state, and we don\u0027t care about looping?  Maybe add a comment to the output function stating as such, like \"This is empty on purpose because blah\".",
+      "range": {
+        "startLine": 4018,
+        "startChar": 29,
+        "endLine": 4018,
+        "endChar": 41
+      },
+      "revId": "370e0ba57d2b8ff36c3b4055c7549943acf528ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60a4753a_f8995476",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-08T18:37:32Z",
+      "side": 1,
+      "message": "What drove this change?",
+      "revId": "370e0ba57d2b8ff36c3b4055c7549943acf528ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
