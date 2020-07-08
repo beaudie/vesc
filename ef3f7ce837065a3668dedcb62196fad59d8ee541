@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7906faf_01d2d542",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T18:23:04Z",
+      "side": 1,
+      "message": "This is the first CL for descriptor set cache thing. The unfortunate thing is that after finish all changes and pass all tests, I am not seeing perf difference with trex offscreen. But overall I still think this DS cache is a good change to take for a few reasons: 1) By moving per shader stage uniform buffer to per program, and in future CLs to per context, we do save lots of memory for that. and 2) It saves descriptor set pool memory and CPU cycle to keep allocating the descriptor set for default uniforms. And 3) There was VK guideline that descriptor set caching is advised for perf reason. ",
+      "revId": "ef3f7ce837065a3668dedcb62196fad59d8ee541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
