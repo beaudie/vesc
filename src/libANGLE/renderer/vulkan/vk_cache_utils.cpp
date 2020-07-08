@@ -1640,7 +1640,7 @@ void PipelineHelper::addTransition(GraphicsPipelineTransitionBits bits,
 
 TextureDescriptorDesc::TextureDescriptorDesc() : mMaxIndex(0)
 {
-    mSerials.fill({0, 0});
+    mObjectIDs.fill({0, 0});
 }
 
 TextureDescriptorDesc::~TextureDescriptorDesc()                                  = default;
@@ -1648,7 +1648,9 @@ TextureDescriptorDesc::TextureDescriptorDesc(const TextureDescriptorDesc &other)
 TextureDescriptorDesc &TextureDescriptorDesc::operator=(const TextureDescriptorDesc &other) =
     default;
 
-void TextureDescriptorDesc::update(size_t index, Serial textureSerial, Serial samplerSerial)
+void TextureDescriptorDesc::update(size_t index,
+                                   TextureObjectID textureObjectID,
+                                   SamplerObjectID samplerObjectID)
 {
     if (index >= mMaxIndex)
     {
@@ -1657,20 +1659,20 @@ void TextureDescriptorDesc::update(size_t index, Serial textureSerial, Serial sa
 
     // If the serial number overflows we should defragment and regenerate all serials.
     // There should never be more than UINT_MAX textures alive at a time.
-    ASSERT(textureSerial.getValue() < std::numeric_limits<uint32_t>::max());
-    ASSERT(samplerSerial.getValue() < std::numeric_limits<uint32_t>::max());
-    mSerials[index].texture = static_cast<uint32_t>(textureSerial.getValue());
-    mSerials[index].sampler = static_cast<uint32_t>(samplerSerial.getValue());
+    ASSERT(textureObjectID.getValue() < std::numeric_limits<uint32_t>::max());
+    ASSERT(samplerObjectID.getValue() < std::numeric_limits<uint32_t>::max());
+    mObjectIDs[index].texture = static_cast<uint32_t>(textureObjectID.getValue());
+    mObjectIDs[index].sampler = static_cast<uint32_t>(samplerObjectID.getValue());
 }
 
 size_t TextureDescriptorDesc::hash() const
 {
-    return angle::ComputeGenericHash(&mSerials, sizeof(TexUnitSerials) * mMaxIndex);
+    return angle::ComputeGenericHash(&mObjectIDs, sizeof(TexUnitObjectIDs) * mMaxIndex);
 }
 
 void TextureDescriptorDesc::reset()
 {
-    memset(mSerials.data(), 0, sizeof(mSerials[0]) * mMaxIndex);
+    memset(mObjectIDs.data(), 0, sizeof(mObjectIDs[0]) * mMaxIndex);
     mMaxIndex = 0;
 }
 
@@ -1682,7 +1684,8 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
     if (mMaxIndex == 0)
         return true;
 
-    return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
+    return memcmp(mObjectIDs.data(), other.mObjectIDs.data(),
+                  sizeof(TexUnitObjectIDs) * mMaxIndex) == 0;
 }
 
 // FramebufferDesc implementation.
@@ -1696,33 +1699,33 @@ FramebufferDesc::~FramebufferDesc()                            = default;
 FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
 FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
 
-void FramebufferDesc::update(uint32_t index, Serial serial)
+void FramebufferDesc::update(uint32_t index, ImageViewObjectID objectID)
 {
     ASSERT(index < kMaxFramebufferAttachments);
-    mSerials[index] = serial;
+    mObjectIDs[index] = objectID;
 }
 
 size_t FramebufferDesc::hash() const
 {
-    return angle::ComputeGenericHash(&mSerials, sizeof(Serial) * kMaxFramebufferAttachments);
+    return angle::ComputeGenericHash(&mObjectIDs, sizeof(Serial) * kMaxFramebufferAttachments);
 }
 
 void FramebufferDesc::reset()
 {
-    memset(&mSerials, 0, sizeof(Serial) * kMaxFramebufferAttachments);
+    memset(&mObjectIDs, 0, sizeof(Serial) * kMaxFramebufferAttachments);
 }
 
 bool FramebufferDesc::operator==(const FramebufferDesc &other) const
 {
-    return memcmp(&mSerials, &other.mSerials, sizeof(Serial) * kMaxFramebufferAttachments) == 0;
+    return memcmp(&mObjectIDs, &other.mObjectIDs, sizeof(Serial) * kMaxFramebufferAttachments) == 0;
 }
 
 uint32_t FramebufferDesc::attachmentCount() const
 {
     uint32_t count = 0;
-    for (const Serial &serial : mSerials)
+    for (const ImageViewObjectID &objectID : mObjectIDs)
     {
-        if (serial.valid())
+        if (objectID.valid())
         {
             count++;
         }

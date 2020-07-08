@@ -20,7 +20,16 @@ class RendererVk;
 
 class ShareGroupVk : public ShareGroupImpl
 {
+  public:
+    ShareGroupVk() : mCurrentUniqueObjectID(1) {}
+
+    BufferObjectID generateBufferObjectID() { return ++mCurrentUniqueObjectID; }
+    TextureObjectID generateTextureObjectID() { return ++mCurrentUniqueObjectID; }
+    SamplerObjectID generateSamplerObjectID() { return ++mCurrentUniqueObjectID; }
+    ImageViewObjectID generateImageViewObjectID() { return ++mCurrentUniqueObjectID; }
+
   private:
+    uint32_t mCurrentUniqueObjectID;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context

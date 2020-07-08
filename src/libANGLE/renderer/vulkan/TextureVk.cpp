@@ -1206,7 +1206,7 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     }
     mRenderTargets.clear();
 
-    mSerial = contextVk->generateTextureSerial();
+    mObjectID = contextVk->generateTextureObjectID();
 }
 
 void TextureVk::updateImageHelper(ContextVk *contextVk, size_t imageCopyBufferAlignment)
@@ -1889,7 +1889,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &mSampler));
 
     // Regenerate the serial on a sampler change.
-    mSerial = contextVk->generateTextureSerial();
+    mObjectID = contextVk->generateTextureObjectID();
 
     return angle::Result::Continue;
 }
@@ -2027,7 +2027,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     ANGLE_TRY(initImageViews(contextVk, format, sized, levelCount, layerCount));
 
-    mSerial = contextVk->generateTextureSerial();
+    mObjectID = contextVk->generateTextureObjectID();
 
     return angle::Result::Continue;
 }

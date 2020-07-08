@@ -13,6 +13,7 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Semaphore.h"
 #include "libANGLE/Surface.h"
@@ -20,6 +21,7 @@
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FenceNVVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/MemoryObjectVk.h"
@@ -630,7 +632,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentIndirectBuffer(nullptr),
       mBufferInfos(),
       mImageInfos(),
-      mWriteInfos()
+      mWriteInfos(),
+      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -3769,16 +3772,16 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         TextureVk *textureVk = vk::GetImpl(texture);
 
         SamplerVk *samplerVk;
-        Serial samplerSerial;
+        SamplerObjectID samplerObjectID;
         if (sampler == nullptr)
         {
-            samplerVk     = nullptr;
-            samplerSerial = rx::kZeroSerial;
+            samplerVk       = nullptr;
+            samplerObjectID = rx::kInvalidSamplerID;
         }
         else
         {
-            samplerVk     = vk::GetImpl(sampler);
-            samplerSerial = samplerVk->getSerial();
+            samplerVk       = vk::GetImpl(sampler);
+            samplerObjectID = samplerVk->getObjectID();
         }
 
         if (textureVk->getImage().hasImmutableSampler())
@@ -3790,7 +3793,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         mActiveTextures[textureUnit].sampler = samplerVk;
         // Cache serials from sampler and texture, but re-use texture if no sampler bound
         ASSERT(textureVk != nullptr);
-        mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
+        mActiveTexturesDesc.update(textureUnit, textureVk->getObjectID(), samplerObjectID);
     }
 
     if (haveImmutableSampler)
@@ -4671,6 +4674,23 @@ ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::~ScopedDescriptorSetUpdates(
     mContextVk->mWriteInfos.clear();
     mContextVk->mBufferInfos.clear();
     mContextVk->mImageInfos.clear();
+}
+
+BufferObjectID ContextVk::generateBufferObjectID()
+{
+    return mShareGroupVk->generateBufferObjectID();
+}
+TextureObjectID ContextVk::generateTextureObjectID()
+{
+    return mShareGroupVk->generateTextureObjectID();
+}
+SamplerObjectID ContextVk::generateSamplerObjectID()
+{
+    return mShareGroupVk->generateSamplerObjectID();
+}
+ImageViewObjectID ContextVk::generateAttachmentImageViewObjectID()
+{
+    return mShareGroupVk->generateImageViewObjectID();
 }
 
 }  // namespace rx

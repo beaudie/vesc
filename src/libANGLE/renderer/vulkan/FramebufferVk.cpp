@@ -1301,11 +1301,11 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
     if (renderTarget && mState.getEnabledDrawBuffers()[colorIndexGL])
     {
         mCurrentFramebufferDesc.update(colorIndexGL,
-                                       renderTarget->getAssignImageViewSerial(contextVk));
+                                       renderTarget->getAssignImageViewObjectID(contextVk));
     }
     else
     {
-        mCurrentFramebufferDesc.update(colorIndexGL, kZeroSerial);
+        mCurrentFramebufferDesc.update(colorIndexGL, kInvalidImageViewID);
     }
 
     return angle::Result::Continue;
@@ -1343,11 +1343,11 @@ void FramebufferVk::updateDepthStencilAttachmentSerial(ContextVk *contextVk)
     if (depthStencilRT != nullptr)
     {
         mCurrentFramebufferDesc.update(vk::kFramebufferDescDepthStencilIndex,
-                                       depthStencilRT->getAssignImageViewSerial(contextVk));
+                                       depthStencilRT->getAssignImageViewObjectID(contextVk));
     }
     else
     {
-        mCurrentFramebufferDesc.update(vk::kFramebufferDescDepthStencilIndex, kZeroSerial);
+        mCurrentFramebufferDesc.update(vk::kFramebufferDescDepthStencilIndex, kInvalidImageViewID);
     }
 }
 
@@ -1387,7 +1387,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 {
                     mCurrentFramebufferDesc.update(
                         static_cast<uint32_t>(colorIndexGL),
-                        mRenderTargetCache.getColors()[colorIndexGL]->getAssignImageViewSerial(
+                        mRenderTargetCache.getColors()[colorIndexGL]->getAssignImageViewObjectID(
                             contextVk));
                 }
                 updateDepthStencilAttachmentSerial(contextVk);

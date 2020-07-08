@@ -100,6 +100,44 @@ class SerialFactoryBase final : angle::NonCopyable
 
 using SerialFactory       = SerialFactoryBase<uint64_t>;
 using AtomicSerialFactory = SerialFactoryBase<std::atomic<uint64_t>>;
+
+// Clang Format doesn't like the following X macro.
+// clang-format off
+#define UNIQUE_OBJECT_ID_TYPES_OP(X)    \
+    X(Buffer)                           \
+    X(Texture)                          \
+    X(Sampler)                          \
+    X(ImageView)
+// clang-format on
+
+#define DEFINE_UNIQUE_OBJECT_ID_TYPE(Type)                           \
+    class Type##ObjectID                                             \
+    {                                                                \
+      public:                                                        \
+        constexpr Type##ObjectID() : mObjectID(kInvalid) {}          \
+        Type##ObjectID(uint32_t objectID) : mObjectID(objectID) {}   \
+                                                                     \
+        constexpr bool operator==(const Type##ObjectID &other) const \
+        {                                                            \
+            ASSERT(mObjectID != 0);                                  \
+            return mObjectID == other.mObjectID;                     \
+        }                                                            \
+        constexpr bool operator!=(const Type##ObjectID &other) const \
+        {                                                            \
+            ASSERT(mObjectID != 0);                                  \
+            return mObjectID != other.mObjectID;                     \
+        }                                                            \
+        constexpr uint32_t getValue() const { return mObjectID; }    \
+        constexpr bool valid() const { return mObjectID != 0; }      \
+                                                                     \
+      private:                                                       \
+        uint32_t mObjectID;                                          \
+        static constexpr uint32_t kInvalid = 0;                      \
+    };                                                               \
+    static constexpr Type##ObjectID kInvalid##Type##ID = Type##ObjectID();
+
+UNIQUE_OBJECT_ID_TYPES_OP(DEFINE_UNIQUE_OBJECT_ID_TYPE)
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_SERIAL_UTILS_H_

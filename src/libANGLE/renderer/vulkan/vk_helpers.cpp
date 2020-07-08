@@ -2183,18 +2183,21 @@ BufferHelper::BufferHelper()
       mCurrentWriteAccess(0),
       mCurrentReadAccess(0),
       mCurrentWriteStages(0),
-      mCurrentReadStages(0)
+      mCurrentReadStages(0),
+      mObjectID()
 {}
 
 BufferHelper::~BufferHelper() = default;
 
 angle::Result BufferHelper::init(Context *context,
+                                 BufferObjectID objectID,
                                  const VkBufferCreateInfo &requestedCreateInfo,
                                  VkMemoryPropertyFlags memoryPropertyFlags)
 {
     RendererVk *renderer = context->getRenderer();
 
-    mSize = requestedCreateInfo.size;
+    mObjectID = objectID;
+    mSize     = requestedCreateInfo.size;
 
     VkBufferCreateInfo modifiedCreateInfo;
     const VkBufferCreateInfo *createInfo = &requestedCreateInfo;
@@ -2255,6 +2258,14 @@ angle::Result BufferHelper::init(Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::init(ContextVk *contextVk,
+                                 const VkBufferCreateInfo &createInfo,
+                                 VkMemoryPropertyFlags memoryPropertyFlags)
+{
+    BufferObjectID objectID = contextVk->generateBufferObjectID();
+    return init(contextVk, objectID, createInfo, memoryPropertyFlags);
 }
 
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSize size)
@@ -4958,7 +4969,7 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mStencilReadImageView, other.mStencilReadImageView);
     std::swap(mLevelDrawImageViews, other.mLevelDrawImageViews);
     std::swap(mLayerLevelDrawImageViews, other.mLayerLevelDrawImageViews);
-    std::swap(mSerialCache, other.mSerialCache);
+    std::swap(mObjectIDCache, other.mObjectIDCache);
 }
 
 ImageViewHelper::~ImageViewHelper()
@@ -5028,7 +5039,7 @@ void ImageViewHelper::release(RendererVk *renderer)
         mUse.init();
     }
 
-    mSerialCache.clear();
+    mObjectIDCache.clear();
 }
 
 void ImageViewHelper::destroy(VkDevice device)
@@ -5056,7 +5067,7 @@ void ImageViewHelper::destroy(VkDevice device)
     }
     mLayerLevelDrawImageViews.clear();
 
-    mSerialCache.clear();
+    mObjectIDCache.clear();
 }
 
 angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
@@ -5242,14 +5253,16 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                     imageView, level, 1, layer, 1);
 }
 
-Serial ImageViewHelper::getAssignSerial(ContextVk *contextVk, uint32_t level, uint32_t layer)
+ImageViewObjectID ImageViewHelper::getAssignObjectID(ContextVk *contextVk,
+                                                     uint32_t level,
+                                                     uint32_t layer)
 {
     LayerLevel layerLevelPair = {layer, level};
-    if (mSerialCache.find(layerLevelPair) == mSerialCache.end())
+    if (mObjectIDCache.find(layerLevelPair) == mObjectIDCache.end())
     {
-        mSerialCache[layerLevelPair] = contextVk->generateAttachmentImageViewSerial();
+        mObjectIDCache[layerLevelPair] = contextVk->generateAttachmentImageViewObjectID();
     }
-    return mSerialCache[layerLevelPair];
+    return mObjectIDCache[layerLevelPair];
 }
 
 // SamplerHelper implementation.

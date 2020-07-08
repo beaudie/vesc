@@ -774,7 +774,7 @@ class TextureDescriptorDesc
     TextureDescriptorDesc(const TextureDescriptorDesc &other);
     TextureDescriptorDesc &operator=(const TextureDescriptorDesc &other);
 
-    void update(size_t index, Serial textureSerial, Serial samplerSerial);
+    void update(size_t index, TextureObjectID textureObjectID, SamplerObjectID samplerObjectID);
     size_t hash() const;
     void reset();
 
@@ -785,12 +785,12 @@ class TextureDescriptorDesc
 
   private:
     uint32_t mMaxIndex;
-    struct TexUnitSerials
+    struct TexUnitObjectIDs
     {
         uint32_t texture;
         uint32_t sampler;
     };
-    gl::ActiveTextureArray<TexUnitSerials> mSerials;
+    gl::ActiveTextureArray<TexUnitObjectIDs> mObjectIDs;
 };
 
 // This is IMPLEMENTATION_MAX_DRAW_BUFFERS + 1 for DS attachment
@@ -808,7 +808,7 @@ class FramebufferDesc
     FramebufferDesc(const FramebufferDesc &other);
     FramebufferDesc &operator=(const FramebufferDesc &other);
 
-    void update(uint32_t index, Serial serial);
+    void update(uint32_t index, ImageViewObjectID objectID);
     size_t hash() const;
     void reset();
 
@@ -817,7 +817,7 @@ class FramebufferDesc
     uint32_t attachmentCount() const;
 
   private:
-    gl::AttachmentArray<Serial> mSerials;
+    gl::AttachmentArray<ImageViewObjectID> mObjectIDs;
 };
 
 // Layer/level pair type used to index into Serial Cache in ImageViewHelper
