@@ -22,6 +22,30 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccda9525_bb4565a8",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T19:23:23Z",
+      "side": 1,
+      "message": "The way it works is both VS and FS will always using the same buffer. If you look at bellow from line 794 to 807 in this file, if we are only updating FS\u0027s uniform and we can not find enough space in current buffer, we allocate in the new buffer and bufferModified will return true. Then we will dirty uniform for VS as well, forcing uniform update for VS.",
+      "parentUuid": "1bfa5975_2bdb5d4f",
+      "range": {
+        "startLine": 760,
+        "startChar": 29,
+        "endLine": 760,
+        "endChar": 57
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

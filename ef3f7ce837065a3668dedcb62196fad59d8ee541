@@ -34,6 +34,24 @@
       "revId": "ef3f7ce837065a3668dedcb62196fad59d8ee541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "888a992f_4793d992",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T19:23:23Z",
+      "side": 1,
+      "message": "No, this only handles default uniform. It does not handle UBO and driver uniform. Those should be another two CLs.\nI will test Manhattan shortly",
+      "parentUuid": "4c53b0c7_0488ade5",
+      "revId": "ef3f7ce837065a3668dedcb62196fad59d8ee541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
