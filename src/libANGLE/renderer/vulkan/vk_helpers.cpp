@@ -1125,6 +1125,8 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
 {
     for (BufferHelper *toRelease : mInFlightBuffers)
     {
+        toRelease->retain(&contextVk->getResourceUseList());
+
         // If the dynamic buffer was resized we cannot reuse the retained buffer.
         if (toRelease->getSize() < mSize)
         {
@@ -1210,6 +1212,9 @@ void DynamicBuffer::setMinimumSizeForTesting(size_t minSize)
 
 void DynamicBuffer::reset()
 {
+    // Before reset, there should not have any inflight buffer
+    ASSERT(mInFlightBuffers.empty());
+
     mSize                        = 0;
     mNextAllocationOffset        = 0;
     mLastFlushOrInvalidateOffset = 0;
