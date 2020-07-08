@@ -33,6 +33,24 @@
       "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c94bd7ce_df09fdd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T19:29:01Z",
+      "side": 1,
+      "message": "This basically is Serial class. I just redefined it to UniqueObjectID with \"using\" keyword. The reason is try to avoid the confusion with the serial we used to track the GPU completion. I am aware that TextureDescriptorCache also using Serial, I think we should all change to UniqueObjectID (I will do it in another CL if you do not mind). That way people know that they have nothing to do with tracking GPU completion and compiler is also able to catch errors if someone made errors using one for the other.",
+      "parentUuid": "ce26be58_67c70f7d",
+      "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
