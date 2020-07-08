@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "358cb515_53d3a519",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T18:25:59Z",
+      "side": 1,
+      "message": "This is the second CL for descriptor set cache. This is minor one, but needs to land before actual cache lookup since cache lookup is using buffer\u0027s unique object ID as the key.",
+      "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
