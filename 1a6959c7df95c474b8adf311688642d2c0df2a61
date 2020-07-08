@@ -46,6 +46,30 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e15c73f0_2adf61af",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-08T19:30:43Z",
+      "side": 1,
+      "message": "IIUC you\u0027re using one DynamicBuffer. DynamicBuffer can have any number of BufferHelpers. Initially you upload vertex uniforms, using BufferHelper A of your single DynamicBuffer. Then your application starts updating the fragment uniforms, and it rolls into buffer B. The application still uses vertex uniforms (from A) and fragment uniforms (from B). Calling releaseInFlightBuffers will release A and trigger the bug on the next draw.",
+      "parentUuid": "ccda9525_bb4565a8",
+      "range": {
+        "startLine": 760,
+        "startChar": 29,
+        "endLine": 760,
+        "endChar": 57
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
