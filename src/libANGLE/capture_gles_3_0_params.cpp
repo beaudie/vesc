@@ -13,6 +13,24 @@ using namespace angle;
 
 namespace gl
 {
+
+namespace
+{
+size_t GetClearBufferComponentCount(GLenum buffer)
+{
+    switch (buffer)
+    {
+        case GL_COLOR:
+            return 4;
+        case GL_DEPTH:
+        case GL_STENCIL:
+            return 1;
+        default:
+            return 0;
+    }
+}
+}  // anonymous namespace
+
 void CaptureClearBufferfv_value(const State &glState,
                                 bool isCallValid,
                                 GLenum buffer,
@@ -20,7 +38,7 @@ void CaptureClearBufferfv_value(const State &glState,
                                 const GLfloat *value,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(value, GetClearBufferComponentCount(buffer) * sizeof(GLfloat), paramCapture);
 }
 
 void CaptureClearBufferiv_value(const State &glState,
@@ -30,7 +48,7 @@ void CaptureClearBufferiv_value(const State &glState,
                                 const GLint *value,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(value, GetClearBufferComponentCount(buffer) * sizeof(GLint), paramCapture);
 }
 
 void CaptureClearBufferuiv_value(const State &glState,
@@ -40,7 +58,7 @@ void CaptureClearBufferuiv_value(const State &glState,
                                  const GLuint *value,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(value, GetClearBufferComponentCount(buffer) * sizeof(GLuint), paramCapture);
 }
 
 void CaptureCompressedTexImage3D_data(const State &glState,
@@ -240,7 +258,7 @@ void CaptureGetActiveUniformsiv_uniformIndices(const State &glState,
                                                GLint *params,
                                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(uniformIndices, sizeof(GLuint) * uniformCount, paramCapture);
 }
 
 void CaptureGetActiveUniformsiv_params(const State &glState,
@@ -252,7 +270,7 @@ void CaptureGetActiveUniformsiv_params(const State &glState,
                                        GLint *params,
                                        ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLuint) * uniformCount;
 }
 
 void CaptureGetBufferParameteri64v_params(const State &glState,
