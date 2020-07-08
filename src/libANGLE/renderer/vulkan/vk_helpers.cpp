@@ -901,8 +901,7 @@ DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
       mLastFlushOrInvalidateOffset(other.mLastFlushOrInvalidateOffset),
       mSize(other.mSize),
       mAlignment(other.mAlignment),
-      mMemoryPropertyFlags(other.mMemoryPropertyFlags),
-      mInFlightBuffers(std::move(other.mInFlightBuffers))
+      mMemoryPropertyFlags(other.mMemoryPropertyFlags)
 {
     other.mBuffer = nullptr;
 }
@@ -991,7 +990,8 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
             ANGLE_TRY(flush(contextVk));
             mBuffer->unmap(contextVk->getRenderer());
 
-            mInFlightBuffers.push_back(mBuffer);
+            // ensure we will wait for GPU completion properly
+            mBuffer->retain(&contextVk->getResourceUseList());
             mBuffer = nullptr;
         }
 
@@ -1111,7 +1111,6 @@ void DynamicBuffer::release(RendererVk *renderer)
 {
     reset();
 
-    releaseBufferListToRenderer(renderer, &mInFlightBuffers);
     releaseBufferListToRenderer(renderer, &mBufferFreeList);
 
     if (mBuffer)
@@ -1121,29 +1120,10 @@ void DynamicBuffer::release(RendererVk *renderer)
     }
 }
 
-void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
-{
-    for (BufferHelper *toRelease : mInFlightBuffers)
-    {
-        // If the dynamic buffer was resized we cannot reuse the retained buffer.
-        if (toRelease->getSize() < mSize)
-        {
-            toRelease->release(contextVk->getRenderer());
-        }
-        else
-        {
-            mBufferFreeList.push_back(toRelease);
-        }
-    }
-
-    mInFlightBuffers.clear();
-}
-
 void DynamicBuffer::destroy(RendererVk *renderer)
 {
     reset();
 
-    destroyBufferList(renderer, &mInFlightBuffers);
     destroyBufferList(renderer, &mBufferFreeList);
 
     if (mBuffer)
@@ -1876,7 +1856,6 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(ContextVk *contextVk,
     uint32_t *indices    = nullptr;
     size_t allocateBytes = sizeof(uint32_t) * (static_cast<size_t>(clampedVertexCount) + 1);
 
-    mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
     ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), nullptr,
                                            offsetOut, nullptr));
@@ -1928,7 +1907,6 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     size_t unitSize      = contextVk->getVkIndexTypeSize(glIndexType);
     size_t allocateBytes = unitSize * (indexCount + 1) + 1;
 
-    mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
     ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), nullptr,
                                            bufferOffsetOut, nullptr));
@@ -2030,9 +2008,6 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
         allocateBytes             = static_cast<size_t>(numNewInputIndices * unitSize);
     }
 
-    mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
-    mDynamicIndirectBuffer.releaseInFlightBuffers(contextVk);
-
     ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, nullptr, nullptr,
                                            indexBufferOffsetOut, nullptr));
     *indexBufferOut = mDynamicIndexBuffer.getCurrentBuffer();
@@ -2069,9 +2044,6 @@ angle::Result LineLoopHelper::streamArrayIndirect(ContextVk *contextVk,
 {
     auto unitSize        = sizeof(uint32_t);
     size_t allocateBytes = static_cast<size_t>((vertexCount + 1) * unitSize);
-
-    mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
-    mDynamicIndirectBuffer.releaseInFlightBuffers(contextVk);
 
     ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, nullptr, nullptr,
                                            indexBufferOffsetOut, nullptr));
@@ -4211,11 +4183,6 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     // Only remove the updates that were actually applied to the image.
     mSubresourceUpdates = std::move(updatesToKeep);
-
-    if (mSubresourceUpdates.empty())
-    {
-        mStagingBuffer.releaseInFlightBuffers(contextVk);
-    }
 
     return angle::Result::Continue;
 }

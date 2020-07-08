@@ -3661,9 +3661,6 @@ angle::Result ContextVk::allocateDriverUniforms(size_t driverUniformsSize,
                                                 uint8_t **ptrOut,
                                                 bool *newBufferOut)
 {
-    // Release any previously retained buffers.
-    driverUniforms->dynamicBuffer.releaseInFlightBuffers(this);
-
     // Allocate a new region in the dynamic buffer.
     VkDeviceSize offset;
     ANGLE_TRY(driverUniforms->dynamicBuffer.allocate(this, driverUniformsSize, ptrOut, bufferOut,
@@ -4130,8 +4127,6 @@ void ContextVk::invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask)
 angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 {
     vk::DynamicBuffer &defaultBuffer = mDefaultAttribBuffers[attribIndex];
-
-    defaultBuffer.releaseInFlightBuffers(this);
 
     uint8_t *ptr;
     VkBuffer bufferHandle = VK_NULL_HANDLE;

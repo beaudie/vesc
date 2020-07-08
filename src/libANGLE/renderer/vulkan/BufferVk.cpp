@@ -506,11 +506,6 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
 
     ANGLE_TRY(mStagingBuffer.allocate(contextVk, size, &mapPointer, nullptr, &stagingBufferOffset,
                                       &needToReleasePreviousBuffers));
-    if (needToReleasePreviousBuffers)
-    {
-        // Release previous staging buffers
-        mStagingBuffer.releaseInFlightBuffers(contextVk);
-    }
     ASSERT(mapPointer);
 
     memcpy(mapPointer, data, size);
@@ -659,12 +654,6 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
 
     ANGLE_TRY(mBufferPool.allocate(contextVk, size, nullptr, nullptr, nullptr,
                                    &needToReleasePreviousBuffers));
-
-    if (needToReleasePreviousBuffers)
-    {
-        // Release previous buffers
-        mBufferPool.releaseInFlightBuffers(contextVk);
-    }
 
     ASSERT(bufferHelperOut);
 

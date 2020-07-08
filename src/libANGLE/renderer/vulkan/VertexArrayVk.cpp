@@ -165,8 +165,6 @@ angle::Result VertexArrayVk::convertIndexBufferGPU(ContextVk *contextVk,
     intptr_t offsetIntoSrcData = reinterpret_cast<intptr_t>(indices);
     size_t srcDataSize         = static_cast<size_t>(bufferVk->getSize()) - offsetIntoSrcData;
 
-    mTranslatedByteIndexData.releaseInFlightBuffers(contextVk);
-
     ANGLE_TRY(mTranslatedByteIndexData.allocate(contextVk, sizeof(GLushort) * srcDataSize, nullptr,
                                                 nullptr, &mCurrentElementArrayBufferOffset,
                                                 nullptr));
@@ -194,9 +192,6 @@ angle::Result VertexArrayVk::convertIndexBufferIndirectGPU(ContextVk *contextVk,
     size_t srcDataSize = static_cast<size_t>(mCurrentElementArrayBuffer->getSize());
     ASSERT(mCurrentElementArrayBuffer ==
            &vk::GetImpl(getState().getElementArrayBuffer())->getBuffer());
-
-    mTranslatedByteIndexData.releaseInFlightBuffers(contextVk);
-    mTranslatedByteIndirectData.releaseInFlightBuffers(contextVk);
 
     vk::BufferHelper *srcIndexBuf = mCurrentElementArrayBuffer;
 
@@ -288,8 +283,6 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
 {
     ASSERT(!mState.getElementArrayBuffer() || indexType == gl::DrawElementsType::UnsignedByte);
 
-    mDynamicIndexData.releaseInFlightBuffers(contextVk);
-
     size_t elementSize  = contextVk->getVkIndexTypeSize(indexType);
     const size_t amount = elementSize * indexCount;
     GLubyte *dst        = nullptr;
@@ -368,7 +361,6 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
 
     // Allocate buffer for results
-    conversion->data.releaseInFlightBuffers(contextVk);
     ANGLE_TRY(conversion->data.allocate(contextVk, numVertices * destFormatSize, nullptr, nullptr,
                                         &conversion->lastAllocationOffset, nullptr));
 
@@ -401,8 +393,6 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
 
     unsigned srcFormatSize = vertexFormat.intendedFormat().pixelBytes;
     unsigned dstFormatSize = vertexFormat.actualBufferFormat().pixelBytes;
-
-    conversion->data.releaseInFlightBuffers(contextVk);
 
     size_t numVertices = GetVertexCount(srcBuffer, binding, srcFormatSize);
     if (numVertices == 0)
@@ -714,8 +704,6 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
                                  indices, 0, &startVertex, &vertexCount));
 
     RendererVk *renderer = contextVk->getRenderer();
-    mDynamicVertexData.releaseInFlightBuffers(contextVk);
-
     const auto &attribs  = mState.getVertexAttributes();
     const auto &bindings = mState.getVertexBindings();
 
