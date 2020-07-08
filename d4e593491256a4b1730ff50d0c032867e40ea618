@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2d00f60_10653779",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-08T22:54:00Z",
+      "side": 1,
+      "message": "This is a mix of fixes for Asphalt 8 and Aztec Ruins.  I haven\u0027t been able to get the former to work completely due to other issues, but I\u0027m able to capture and replay frames 0-500 of Aztec Ruins with this change.  The replay works in the perftest harness and sample harness.",
+      "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
