@@ -430,6 +430,8 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
     initSamplerDefaultPrecision(EbtSamplerExternal2DY2YEXT);
     // It isn't specified whether Sampler2DRect has default precision.
     initSamplerDefaultPrecision(EbtSampler2DRect);
+    // EbtSampler2DShadow is specified in the extension to have default precision.
+    initSamplerDefaultPrecision(EbtSampler2DShadow);
 
     setDefaultPrecision(EbtAtomicCounter, EbpHigh);
 
