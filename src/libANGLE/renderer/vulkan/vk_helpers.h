@@ -697,13 +697,18 @@ class BufferHelper final : public Resource
     BufferHelper();
     ~BufferHelper() override;
 
+    angle::Result init(ContextVk *contextVk,
+                       const VkBufferCreateInfo &createInfo,
+                       VkMemoryPropertyFlags memoryPropertyFlags);
     angle::Result init(Context *context,
+                       UniqueObjectID uniqueObjectID,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
     void destroy(RendererVk *renderer);
 
     void release(RendererVk *renderer);
 
+    UniqueObjectID getUniqueObjectID() const { return mUniqueObjectID; }
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
     VkDeviceSize getSize() const { return mSize; }
@@ -825,6 +830,8 @@ class BufferHelper final : public Resource
     VkFlags mCurrentReadAccess;
     VkPipelineStageFlags mCurrentWriteStages;
     VkPipelineStageFlags mCurrentReadStages;
+
+    UniqueObjectID mUniqueObjectID;
 };
 
 // CommandBufferHelper (CBH) class wraps ANGLE's custom command buffer
