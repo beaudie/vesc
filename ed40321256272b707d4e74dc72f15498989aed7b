@@ -51,6 +51,24 @@
       "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d045ca5_a59cdebe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-08T19:32:23Z",
+      "side": 1,
+      "message": "I see. To keep the code consistent we should use the Serial class. Otherwise I recommend you go to everywhere in ANGLE and change all our Serial uses to specialized types. Also using doesn\u0027t actually safeguard the types. You\u0027d need to define a new type like we do for resource IDs (BufferID, TextureID, etc).\n\ntl;dr, Serial for consistency.",
+      "parentUuid": "c94bd7ce_df09fdd3",
+      "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
