@@ -2137,18 +2137,21 @@ BufferHelper::BufferHelper()
       mCurrentWriteAccess(0),
       mCurrentReadAccess(0),
       mCurrentWriteStages(0),
-      mCurrentReadStages(0)
+      mCurrentReadStages(0),
+      mUniqueObjectID()
 {}
 
 BufferHelper::~BufferHelper() = default;
 
 angle::Result BufferHelper::init(Context *context,
+                                 UniqueObjectID uniqueObjectID,
                                  const VkBufferCreateInfo &requestedCreateInfo,
                                  VkMemoryPropertyFlags memoryPropertyFlags)
 {
     RendererVk *renderer = context->getRenderer();
 
-    mSize = requestedCreateInfo.size;
+    mUniqueObjectID = uniqueObjectID;
+    mSize           = requestedCreateInfo.size;
 
     VkBufferCreateInfo modifiedCreateInfo;
     const VkBufferCreateInfo *createInfo = &requestedCreateInfo;
@@ -2209,6 +2212,14 @@ angle::Result BufferHelper::init(Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::init(ContextVk *contextVk,
+                                 const VkBufferCreateInfo &createInfo,
+                                 VkMemoryPropertyFlags memoryPropertyFlags)
+{
+    Serial uniqueObjectID = contextVk->generateUniqueObjectID();
+    return init(contextVk, uniqueObjectID, createInfo, memoryPropertyFlags);
 }
 
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSize size)
