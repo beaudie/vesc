@@ -9,6 +9,9 @@
 
 #include <string>
 
+// This is just a warning on CHROME OS http://anglebug.com/4023
+#define PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL1_IS_ERROR 0
+
 namespace angle
 {
 
@@ -64,8 +67,7 @@ class Diagnostics
         PP_INVALID_LINE_NUMBER,
         PP_INVALID_FILE_NUMBER,
         PP_INVALID_LINE_DIRECTIVE,
-    // This is just a warning on CHROME OS http://anglebug.com/4023
-#if !defined(ANGLE_PLATFORM_CHROMEOS)
+#if PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL1_IS_ERROR
         PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL1,
 #endif
         PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL3,
@@ -76,7 +78,7 @@ class Diagnostics
         PP_WARNING_BEGIN,
         PP_EOF_IN_DIRECTIVE,
         PP_UNRECOGNIZED_PRAGMA,
-#if defined(ANGLE_PLATFORM_CHROMEOS)
+#if !PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL1_IS_ERROR
         PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL1,
 #endif
         PP_NON_PP_TOKEN_BEFORE_EXTENSION_WEBGL,
