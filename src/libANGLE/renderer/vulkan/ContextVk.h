@@ -31,6 +31,7 @@ namespace rx
 class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
+class ShareGroupVk;
 
 struct CommandBatch final : angle::NonCopyable
 {
@@ -586,6 +587,8 @@ class ContextVk : public ContextImpl, public vk::Context
         return mWriteInfos[oldSize];
     }
 
+    UniqueObjectID generateUniqueObjectID();
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1061,6 +1064,8 @@ class ContextVk : public ContextImpl, public vk::Context
       private:
         ContextVk *mContextVk;
     };
+
+    ShareGroupVk *mShareGroupVk;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };
