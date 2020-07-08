@@ -1648,7 +1648,9 @@ TextureDescriptorDesc::TextureDescriptorDesc(const TextureDescriptorDesc &other)
 TextureDescriptorDesc &TextureDescriptorDesc::operator=(const TextureDescriptorDesc &other) =
     default;
 
-void TextureDescriptorDesc::update(size_t index, Serial textureSerial, Serial samplerSerial)
+void TextureDescriptorDesc::update(size_t index,
+                                   TextureSerial textureSerial,
+                                   SamplerSerial samplerSerial)
 {
     if (index >= mMaxIndex)
     {
@@ -1696,33 +1698,35 @@ FramebufferDesc::~FramebufferDesc()                            = default;
 FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
 FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
 
-void FramebufferDesc::update(uint32_t index, Serial serial)
+void FramebufferDesc::update(uint32_t index, ImageViewSerial objectID)
 {
     ASSERT(index < kMaxFramebufferAttachments);
-    mSerials[index] = serial;
+    mSerials[index] = objectID;
 }
 
 size_t FramebufferDesc::hash() const
 {
-    return angle::ComputeGenericHash(&mSerials, sizeof(Serial) * kMaxFramebufferAttachments);
+    return angle::ComputeGenericHash(&mSerials,
+                                     sizeof(ImageViewSerial) * kMaxFramebufferAttachments);
 }
 
 void FramebufferDesc::reset()
 {
-    memset(&mSerials, 0, sizeof(Serial) * kMaxFramebufferAttachments);
+    memset(&mSerials, 0, sizeof(ImageViewSerial) * kMaxFramebufferAttachments);
 }
 
 bool FramebufferDesc::operator==(const FramebufferDesc &other) const
 {
-    return memcmp(&mSerials, &other.mSerials, sizeof(Serial) * kMaxFramebufferAttachments) == 0;
+    return memcmp(&mSerials, &other.mSerials,
+                  sizeof(ImageViewSerial) * kMaxFramebufferAttachments) == 0;
 }
 
 uint32_t FramebufferDesc::attachmentCount() const
 {
     uint32_t count = 0;
-    for (const Serial &serial : mSerials)
+    for (const ImageViewSerial &objectID : mSerials)
     {
-        if (serial.valid())
+        if (objectID.valid())
         {
             count++;
         }
