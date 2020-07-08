@@ -126,7 +126,7 @@ deps = {
   },
 
   'third_party/glslang/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/glslang@{glslang_revision}',
+    'url': 'https://github.com/ShabbyX/glslang@8c49d15fbf4f7857c1f32a7b39ded0a99da660d3',
     'condition': 'not build_with_chromium',
   },
 
