@@ -89,6 +89,23 @@
     },
     {
       "key": {
+        "uuid": "c722d099_57acef2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-08T18:49:04Z",
+      "side": 1,
+      "message": "We should enable this, but keep watch for any suggestions that may hurt platforms other than ARM.  If QCOM ever releases the source to theirs, we can add that too.",
+      "revId": "169f1c8565fba8f5ae7401b3ebe2acf718f7b8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3089b55e_0fbefab0",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
