@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a03a158_43819517",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-08T22:27:24Z",
+      "side": 1,
+      "message": "typo: being",
+      "range": {
+        "startLine": 12,
+        "startChar": 42,
+        "endLine": 12,
+        "endChar": 46
+      },
+      "revId": "6e454ed17e515174937c9dac8bb7c71be44733d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e919cacc_9df7a040",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-08T22:27:24Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 12,
+        "startChar": 27,
+        "endLine": 12,
+        "endChar": 34
+      },
+      "revId": "6e454ed17e515174937c9dac8bb7c71be44733d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a3adea6_63914e50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-08T22:27:24Z",
+      "side": 1,
+      "message": "You should be able to remove this call from all the users of DynamicBuffer then",
+      "revId": "6e454ed17e515174937c9dac8bb7c71be44733d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ea03ec4_e0ff6aac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-08T22:27:24Z",
+      "side": 1,
+      "message": "Isn\u0027t this too late? Shouldn\u0027t this be done in `allocate()`? The buffer used in this frame may not be released before vkQueueSubmit, so it won\u0027t be retained.\n\nCould be problematic if some user of the DynamicBuffer wants to know if the buffer is \"in use by GPU\".",
+      "range": {
+        "startLine": 1128,
+        "startChar": 8,
+        "endLine": 1128,
+        "endChar": 60
+      },
+      "revId": "6e454ed17e515174937c9dac8bb7c71be44733d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
