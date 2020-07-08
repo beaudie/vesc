@@ -85,6 +85,30 @@
       "revId": "6e454ed17e515174937c9dac8bb7c71be44733d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "145aa0c7_e134d8a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T22:39:52Z",
+      "side": 1,
+      "message": "Yea, I am wondering why we keep mInFlightBuffers at all. You could do it at allocate time and tag them as you go. Or you put in mInFlightBuffers and call releaseInFlightBuffers before vkQueueSubmit. Right now since we never track GPU completion inside one submisison, it make sense to call releaseInFlightBuffers at submit time. But in future if we want to do finer grain GPU completion track, then probably betetr to do it at alloc time and remove this call completely.\n\nI think do it in allocate time is the right thing and get rid of mInFlightBuffers completely.",
+      "parentUuid": "1ea03ec4_e0ff6aac",
+      "range": {
+        "startLine": 1128,
+        "startChar": 8,
+        "endLine": 1128,
+        "endChar": 60
+      },
+      "revId": "6e454ed17e515174937c9dac8bb7c71be44733d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
