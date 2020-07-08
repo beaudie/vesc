@@ -69,6 +69,24 @@
       "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "941632ed_fc7be998",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T21:15:12Z",
+      "side": 1,
+      "message": "Per discussion, I have made UniqueObjectID into boxed type (it\u0027s own class) that only support \"\u003d\u003d\" or \"!\u003d\" operator. I will make a separate CL to convert others (like texture\u0027s serial) to the UniqueObjectID as well to keep code consistent.",
+      "parentUuid": "0d045ca5_a59cdebe",
+      "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
