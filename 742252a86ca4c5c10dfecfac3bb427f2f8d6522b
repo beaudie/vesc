@@ -134,6 +134,30 @@
     },
     {
       "key": {
+        "uuid": "cc277b37_8fc91068",
+        "filename": "src/libANGLE/renderer/metal/mtl_glslang_utils.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-08T05:07:05Z",
+      "side": 1,
+      "message": "I\u0027m not sure what is the best way to share the \"ANGLECoverageMaskEnabled\" specialization constant name between metal translator and metal back-end?",
+      "parentUuid": "ee1cd3ef_f340c12e",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 48
+      },
+      "revId": "742252a86ca4c5c10dfecfac3bb427f2f8d6522b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c31f5d3_6f458d96",
         "filename": "src/tests/gl_tests/MultisampleTest.cpp",
         "patchSetId": 7
