@@ -16,6 +16,29 @@
       "revId": "b478cf39fb1dcd7deac02f14d2a5129e7e134e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81428496_a18762b9",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-08T05:01:28Z",
+      "side": 1,
+      "message": "nit: You can remove this. It doesn\u0027t really matter that on 32-bit they fail instead of crash.",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 111
+      },
+      "revId": "b478cf39fb1dcd7deac02f14d2a5129e7e134e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
