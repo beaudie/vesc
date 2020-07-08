@@ -1125,6 +1125,8 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
 {
     for (BufferHelper *toRelease : mInFlightBuffers)
     {
+        toRelease->retain(&contextVk->getResourceUseList());
+
         // If the dynamic buffer was resized we cannot reuse the retained buffer.
         if (toRelease->getSize() < mSize)
         {
