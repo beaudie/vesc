@@ -82,6 +82,29 @@ class Serial final
 // Used as default/initial serial
 static constexpr Serial kZeroSerial = Serial();
 
+// Class for identifing two obejcts are different
+class UniqueObjectID
+{
+  public:
+    UniqueObjectID() : mObjectID(0) {}
+    UniqueObjectID(uint64_t objectID) : mObjectID(objectID) {}
+
+    constexpr bool operator==(const UniqueObjectID &other) const
+    {
+        ASSERT(mObjectID != 0);
+        return mObjectID == other.mObjectID;
+    }
+    constexpr bool operator!=(const UniqueObjectID &other) const
+    {
+        ASSERT(mObjectID != 0);
+        return mObjectID != other.mObjectID;
+    }
+    constexpr uint64_t getValue() const { return mObjectID; }
+
+  private:
+    uint64_t mObjectID;
+};
+
 template <typename SerialBaseType>
 class SerialFactoryBase final : angle::NonCopyable
 {
