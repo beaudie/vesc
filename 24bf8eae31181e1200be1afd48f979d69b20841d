@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35e2648c_59a7852f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T18:35:04Z",
+      "side": 1,
+      "message": "This adds descriptor set cache support for transform feedback as well. Initially I was thinking we do not need cache for XFB. But I realized that with XFB not cached, XFB itself could deplete the descriptor set pool which force clear the default uniform caches as well. Adding cache support is not bad, so I also end up added cache for it. We have two caches, one for XFB disabled, and another with it enabled. The reason for the two cache is that the XFB disabled case is the perf critical path, and we are able to optimize it with it just been one key entry. ",
+      "revId": "24bf8eae31181e1200be1afd48f979d69b20841d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
