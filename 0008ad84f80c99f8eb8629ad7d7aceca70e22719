@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a1c035e_26f16a2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-08T23:15:35Z",
+      "side": 1,
+      "message": "This was found by the validation layer, and was an easy fix.  Hope it looks that way to you too:-).",
+      "revId": "0008ad84f80c99f8eb8629ad7d7aceca70e22719",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
