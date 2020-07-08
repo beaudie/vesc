@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f51d813b_dd06ef9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-08T18:28:14Z",
+      "side": 1,
+      "message": "This is the third CL that actually does the descriptor set cache for default uniforms. If transform feedback is enabled, we are still not using cached descriptor set. We also does not use cache for pipeline programs. These will be addressed in future CLs.",
+      "revId": "7d8187c1302f64b7b9568a3ddab0a20e847bb23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
