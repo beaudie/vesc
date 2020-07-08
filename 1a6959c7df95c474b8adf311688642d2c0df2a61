@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bfa5975_2bdb5d4f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-08T18:47:48Z",
+      "side": 1,
+      "message": "you should need to update all blocks now as you are calling releaseInFlightBuffers. It\u0027s a bit tricky to make a test for this - see VulkanUniformUpdatesTest. You should be able to make the an earlier buffer (still in use) get deleted by using it in one shader and only updating the other shader.",
+      "range": {
+        "startLine": 760,
+        "startChar": 29,
+        "endLine": 760,
+        "endChar": 57
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
