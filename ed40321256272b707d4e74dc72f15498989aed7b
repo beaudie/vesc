@@ -16,6 +16,23 @@
       "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce26be58_67c70f7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-08T18:49:35Z",
+      "side": 1,
+      "message": "Can you instead use the Serial class?",
+      "revId": "ed40321256272b707d4e74dc72f15498989aed7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
