@@ -430,6 +430,24 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b7dd782_3a2ba368",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T23:57:44Z",
+      "side": 1,
+      "message": "If a buffer allocation occurs, offset 0 of buffer B will be returned by the first alloc().   This code will see a new buffer was allocated, and then immediately perform another alloc() call, which will return offset oldRequiredSpace into buffer B since that\u0027s how much space the initial alloc() requested.   However, the bytes 0 to oldRequiredSpace will never be used, since it\u0027s too small to hold the uniform data for all of the shaders.\n\nThis will lead to extra GPU allocations, since we are wasting buffer space at the start of each newly allocated buffer and can\u0027t use the (too small) tail end either, so we should at least try and eliminate one of the wasteful pieces.",
+      "parentUuid": "1aa66e94_9e32b247",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
