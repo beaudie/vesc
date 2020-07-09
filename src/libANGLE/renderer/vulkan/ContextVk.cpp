@@ -3661,9 +3661,6 @@ angle::Result ContextVk::allocateDriverUniforms(size_t driverUniformsSize,
                                                 uint8_t **ptrOut,
                                                 bool *newBufferOut)
 {
-    // Release any previously retained buffers.
-    driverUniforms->dynamicBuffer.releaseInFlightBuffers(this);
-
     // Allocate a new region in the dynamic buffer.
     VkDeviceSize offset;
     ANGLE_TRY(driverUniforms->dynamicBuffer.allocate(this, driverUniformsSize, ptrOut, bufferOut,
@@ -3900,6 +3897,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
                                 TRACE_EVENT_PHASE_END, eventName));
     }
     ANGLE_TRY(flushOutsideRenderPassCommands());
+
+    mDriverUniforms[PipelineType::Graphics].dynamicBuffer.retainInFlightBuffers(&mResourceUseList);
+    mDriverUniforms[PipelineType::Graphics].dynamicBuffer.releaseInFlightBuffers(this);
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
