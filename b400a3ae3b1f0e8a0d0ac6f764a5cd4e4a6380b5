@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "d4f8a07c_804ca17a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 58
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-09T17:12:33Z",
+      "side": 1,
+      "message": "Oh good, Geoff mentioned you were working on something.\nI\u0027ve filed https://issuetracker.google.com/issues/160709550 as a follow-up bug to add a test.",
+      "parentUuid": "80872f5e_e9f2b5e6",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "b400a3ae3b1f0e8a0d0ac6f764a5cd4e4a6380b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "712e6810_843f80d5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 58
