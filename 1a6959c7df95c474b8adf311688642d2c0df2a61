@@ -412,6 +412,24 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aa66e94_9e32b247",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T23:47:55Z",
+      "side": 1,
+      "message": "If the current bufferA does not have enough space, we have to move onto next bufferB, regardless how you implement it. Even if do what you suggested above, it will still have to move onto next buffer inside allocate() call. The only difference is my implementation will have bufferA\u0027s remaining space allocated versus your way it will remain free. As long as you are not using it, there is no difference if it is \"allocated\" or not.\n\nIf you want to still able to use the remaining space of current bufferA, then you will implement some mechanism to switch back to bufferA after using bufferB and possibly ping pong between two buffers a few times. I think the logic will be too complicated to worth it. Eventually the dynamic Buffer will move to contextVk, and at that time we will make buffer much bigger. I would expect the remaining wasted space a very minor issue.\n\nThe uniform sizes are aligned to certain size. I forgot exact number, but I remember most of uniform updates are 256 bytes and 64 bytes with trex.",
+      "parentUuid": "e5a3dbf8_8fa03d06",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
