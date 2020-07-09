@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32d01674_5a0efd45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2020-07-09T15:24:12Z",
+      "side": 1,
+      "message": "This is now the last thing keeping the Mac/arm bot from completing compile :)",
+      "revId": "c7d5cdc8095a95be99eee1fe92f560f9ce1493ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
