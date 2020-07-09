@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79fafdeb_71f25e94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T20:46:07Z",
+      "side": 1,
+      "message": "Jamie pointed out one subtle bug that if a submisison never allocate any driver uniform data, we still have to add the current buffer to the mResourceUselist. Any draw command will still reference it. This patchset11 basically get rid of the mDataDirty bit and will always add current buffer to the mResourceUselist.",
+      "revId": "3a9ec208f102c2b057987242b6b6fa955a85b7c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
