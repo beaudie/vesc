@@ -70,6 +70,30 @@
       "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c56d6af4_1ac505a7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4007,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-09T15:53:48Z",
+      "side": 1,
+      "message": "The plan is to serialize everything in the long term. In term of tests, we actually do not miss anything because ANGLETestBase always does a swapBuffer before destroying context. \nI agree that for applications that never calls that last swapBuffers, we will miss something. But I believe this is intended behavior, as I talked to Jamie the other day. Jamie, what do you think?",
+      "parentUuid": "9f0c57bc_8539931e",
+      "range": {
+        "startLine": 4007,
+        "startChar": 8,
+        "endLine": 4007,
+        "endChar": 60
+      },
+      "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
