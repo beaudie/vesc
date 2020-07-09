@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "082279e8_644212f1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T14:46:04Z",
+      "side": 1,
+      "message": "@Ian, does this change obviate the +2 hack for rotation? If not, similar fixes may need to be done in the prerotation path somewhere",
+      "range": {
+        "startLine": 901,
+        "startChar": 0,
+        "endLine": 905,
+        "endChar": 41
+      },
+      "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
