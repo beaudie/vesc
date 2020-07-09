@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ca6661d_96f3fa38",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-09T18:38:29Z",
+      "side": 1,
+      "message": "The test is in Chromium.",
+      "parentUuid": "f50f7a80_554df8e4",
+      "revId": "12babd359010d2e30680b0162e1b5a85325ddee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33aa966e_72891f89",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "bccc6eaa_4ea02833",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-09T18:38:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33aa966e_72891f89",
+      "range": {
+        "startLine": 10,
+        "startChar": 51,
+        "endLine": 10,
+        "endChar": 55
+      },
+      "revId": "12babd359010d2e30680b0162e1b5a85325ddee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd664464_7435402e",
         "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
         "patchSetId": 1
@@ -62,6 +104,30 @@
       "revId": "12babd359010d2e30680b0162e1b5a85325ddee0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5ebc5b4_7289b57f",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-09T18:38:29Z",
+      "side": 1,
+      "message": "Yes I am saying it\u0027s not if and only if, similar to below.\nI believe this was using the fact that it would default to index 0, but since this shader is re-used it never gets reset to 0 from index 1.",
+      "parentUuid": "bd664464_7435402e",
+      "range": {
+        "startLine": 373,
+        "startChar": 85,
+        "endLine": 375,
+        "endChar": 42
+      },
+      "revId": "12babd359010d2e30680b0162e1b5a85325ddee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
