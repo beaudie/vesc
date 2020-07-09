@@ -45,6 +45,23 @@
       "revId": "fae645b5cbf61b38d48365da13fb503027db9859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c579f86d_68898645",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T22:15:36Z",
+      "side": 1,
+      "message": "To cut down on the code duplication, can this be moved into DynamicBuffer::releaseInFlightBuffers() with a new \u0027retain\u0027 boolean parameter?",
+      "revId": "fae645b5cbf61b38d48365da13fb503027db9859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
