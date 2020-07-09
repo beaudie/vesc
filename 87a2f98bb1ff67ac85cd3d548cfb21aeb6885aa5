@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "fc3a5863_0489ac53",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T02:50:04Z",
+      "side": 1,
+      "message": "What if dynamicBuffer itself gets released()? I am not seeing code prevent the current buffer from released. I did this mostly try to keep it consistent with the use pattern in other places. But even with this change, I still not sure we covered every usage case. What if the current buffer been used for multiple submissions and then dynamicBuffer gets destroyed. Will we wait for the last usage of mBuffer properly?\n\nI do think we need to revisit this once I move all dynamicBuffers into ContextVk. Then it should be a lot easier to handle these situations since context knows all the dynamicBuffers, at that time I believe we can delete this retain call and other places as well. Right now there are many per object dynamicBuffers that you don\u0027t have an easy/cheap way to reach into them probably is part of the problem.",
+      "parentUuid": "18fe7528_c1b1b1ad",
+      "range": {
+        "startLine": 3690,
+        "startChar": 0,
+        "endLine": 3691,
+        "endChar": 80
+      },
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1b496b7_60367529",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -71,6 +95,24 @@
       "writtenOn": "2020-07-09T02:01:49Z",
       "side": 1,
       "message": "This doesn\u0027t seem right to me either. Say there is only one allocation from the DynamicBuffer in the frame. This call is never made then.\n\nI think the right place is above (or below) where it says:\n\n    if (bufferOut !\u003d nullptr)\n    {\n        *bufferOut \u003d mBuffer-\u003egetBuffer().getHandle();\n    }\n\nIn other words, every time allocate is called, regardless of whether a new buffer is used or not, the current buffer is retained.",
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2be2b8c_037354a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T02:50:04Z",
+      "side": 1,
+      "message": "I agree. I think right now the correct way really is to call retain every time you allocate. But I believe it was not done this way mainly for performance. allocate() will get called a lot, and my understanding is there is no way to prevent it add to list multiple times. The way it is right now reduces the retain() call only when we switch to new buffer. As I explained above, I still think there is a hole here when dynamicBuffer gets released(). But move to retain for eveyr allocate() likely will introduce perf regressions, and I am try not do that. Once we move all dynamicBuffers to context, it should be handled easily if context at that time.",
+      "parentUuid": "b1b496b7_60367529",
       "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
