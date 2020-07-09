@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "ade96ba8_3b3f1316",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-09T15:06:54Z",
+      "side": 1,
+      "message": "Already have a var named glExecutable above. MSVC doesn\u0027t like the name aliasing.",
+      "revId": "5a2f427ce9d7a6e43347a21acdb4800df5d8d748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "278fd317_d6dcae0d",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 12
