@@ -223,6 +223,24 @@
       "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34dd77dd_06de07fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-09T15:28:01Z",
+      "side": 1,
+      "message": "This is definitely hacky. I\u0027d probably take it out as Shabi suggested.",
+      "parentUuid": "69357187_10ccb1b7",
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
