@@ -3682,6 +3682,8 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
 {
     ANGLE_TRY(driverUniforms->dynamicBuffer.flush(this));
 
+    driverUniforms->dynamicBuffer.getCurrentBuffer()->retain(&mResourceUseList);
+
     if (!newBuffer)
     {
         return angle::Result::Continue;
