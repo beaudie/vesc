@@ -928,6 +928,7 @@ void DynamicBuffer::initWithFlags(RendererVk *renderer,
     mUsage               = usage;
     mHostVisible         = ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0);
     mMemoryPropertyFlags = memoryPropertyFlags;
+    mDataDirty           = false;
 
     // Check that we haven't overriden the initial size of the buffer in setMinimumSizeForTesting.
     if (mInitialSize == 0)
@@ -1036,6 +1037,7 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
     }
 
     ASSERT(mBuffer != nullptr);
+    mDataDirty = true;
 
     if (bufferOut != nullptr)
     {
@@ -1119,6 +1121,36 @@ void DynamicBuffer::release(RendererVk *renderer)
         mBuffer->release(renderer);
         SafeDelete(mBuffer);
     }
+}
+
+void DynamicBuffer::addInFlightBuffersToUseListAndRelease(ContextVk *contextVk)
+{
+    if (!mDataDirty)
+    {
+        ASSERT(mInFlightBuffers.empty());
+        return;
+    }
+
+    ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
+    for (BufferHelper *bufferHelper : mInFlightBuffers)
+    {
+        bufferHelper->retain(resourceUseList);
+
+        // If the dynamic buffer was resized we cannot reuse the retained buffer.
+        if (bufferHelper->getSize() < mSize)
+        {
+            bufferHelper->release(contextVk->getRenderer());
+        }
+        else
+        {
+            mBufferFreeList.push_back(bufferHelper);
+        }
+    }
+    mInFlightBuffers.clear();
+
+    mBuffer->retain(resourceUseList);
+
+    mDataDirty = false;
 }
 
 void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
