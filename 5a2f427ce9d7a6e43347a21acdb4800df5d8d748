@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b3e4e72_6b1485f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T01:34:54Z",
+      "side": 1,
+      "message": "LGTM\n\nCan you see what the cache hit % is for manhattan to give an idea of how much this is helping?",
+      "revId": "5a2f427ce9d7a6e43347a21acdb4800df5d8d748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b545675_5a2b6f11",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T01:34:54Z",
+      "side": 1,
+      "message": "Is this because XFB buffers are never reused across descriptor sets?",
+      "revId": "5a2f427ce9d7a6e43347a21acdb4800df5d8d748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "278fd317_d6dcae0d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T01:34:54Z",
+      "side": 1,
+      "message": "Why not just return the full 64b value?",
+      "revId": "5a2f427ce9d7a6e43347a21acdb4800df5d8d748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
