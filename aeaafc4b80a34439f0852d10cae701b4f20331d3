@@ -88,6 +88,24 @@
       "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3d296b3c_ed127d72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:56:57Z",
+      "side": 1,
+      "message": "A little convoluted, but I think it\u0027s fine now. `addInFlightBuffersToUsListAndRelease` was a bit misleading, since it also retains the current buffer. You could call it `retainAndReleaseBuffers` or something.\n\nSince you are reworking this area, this is all temporary measures, so it\u0027s fine with me either way.",
+      "parentUuid": "2ca3b16f_cb4e30a4",
+      "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
