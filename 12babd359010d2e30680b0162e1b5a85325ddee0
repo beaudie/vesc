@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f50f7a80_554df8e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:14:22Z",
+      "side": 1,
+      "message": "Should this change then enable some test?",
+      "revId": "12babd359010d2e30680b0162e1b5a85325ddee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33aa966e_72891f89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:14:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 10,
+        "startChar": 51,
+        "endLine": 10,
+        "endChar": 55
+      },
+      "revId": "12babd359010d2e30680b0162e1b5a85325ddee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd664464_7435402e",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:14:22Z",
+      "side": 1,
+      "message": "The comment needs updating. Are you saying the opposite of this is not true? As in, if a variable does have its location set in the shader, it may still have its index not set?",
+      "range": {
+        "startLine": 373,
+        "startChar": 85,
+        "endLine": 375,
+        "endChar": 42
+      },
+      "revId": "12babd359010d2e30680b0162e1b5a85325ddee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
