@@ -173,6 +173,30 @@
     },
     {
       "key": {
+        "uuid": "7c97c584_fc482103",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T16:39:50Z",
+      "side": 1,
+      "message": "I just realized this driverUniform is per context already. So I just did it by calling retain and releaseInFLightBuffers at submission time.",
+      "parentUuid": "455ca927_3a33d3b0",
+      "range": {
+        "startLine": 3690,
+        "startChar": 0,
+        "endLine": 3691,
+        "endChar": 80
+      },
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1b496b7_60367529",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
