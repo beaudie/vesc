@@ -62,6 +62,24 @@
       "revId": "fae645b5cbf61b38d48365da13fb503027db9859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ec2ca90_9c7c8b3b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:19:52Z",
+      "side": 1,
+      "message": "I intentionally did it this way so that I leave releaseInFlightBuffers untouched (for risk aversion). Eventually after we move all dynamic buffers to context, we will remove one of the APIs.",
+      "parentUuid": "c579f86d_68898645",
+      "revId": "fae645b5cbf61b38d48365da13fb503027db9859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
