@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4ba6f382_63e0b9e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:47:20Z",
+      "side": 1,
+      "message": "They were all already passing!\n\nOnly the new tests I added reproduce the issue because they resolve between backbuffer and FBO which is the only way we can hit the draw path for color images (and it was completely untested :( )",
+      "parentUuid": "5d4575ef_4e09adfc",
+      "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "082279e8_644212f1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -83,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "2300bb86_847a060e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:47:20Z",
+      "side": 1,
+      "message": "It should. The logic is that blit paths see the offset/extent as a sort of uv, while the resolve paths see them as discrete coordinates.\n\nSo in the example above, for blit you need [0, 64] as the range of X (or Y) for example, while for resolve you need {0, 1, ..., 63}. It shouldn\u0027t matter if stencil is taking a special path.",
+      "parentUuid": "008df702_b92cf88a",
+      "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "664f91f4_29055452",
         "filename": "src/tests/gl_tests/MultisampleTest.cpp",
         "patchSetId": 4
@@ -94,6 +130,24 @@
       "writtenOn": "2020-07-09T16:57:43Z",
       "side": 1,
       "message": "Since the srcX0/srcY0/dstX0/dstY0 parameters are all 0, does this really test your new code paths?",
+      "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebe84a07_7d451236",
+        "filename": "src/tests/gl_tests/MultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:47:20Z",
+      "side": 1,
+      "message": "Yes. The flip turns the src offset to 0,8 instead of 0,7, which was leaving a black line at the top of the image.\n\nGranted, the testing is limited. I\u0027ll circle back to this change and add more tests later.",
+      "parentUuid": "664f91f4_29055452",
       "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -114,6 +168,24 @@
       "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebf0b957_d6e17740",
+        "filename": "src/tests/gl_tests/TextureMultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:47:20Z",
+      "side": 1,
+      "message": "Yeap.",
+      "parentUuid": "435e93bf_54a37547",
+      "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
