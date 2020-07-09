@@ -16,6 +16,69 @@
       "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b750afa2_5cc66e9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-09T15:36:13Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f498de4_3625b7e5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2065,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-09T15:36:13Z",
+      "side": 1,
+      "message": "nit: you should explicitly convert this in to bool for style/consistency. !\u003d 0 or \u003e 0",
+      "range": {
+        "startLine": 2065,
+        "startChar": 44,
+        "endLine": 2065,
+        "endChar": 88
+      },
+      "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "760a4d09_410d95be",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-09T15:36:13Z",
+      "side": 1,
+      "message": "nit: you can make this a helper as you use it in a few places.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 68
+      },
+      "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
