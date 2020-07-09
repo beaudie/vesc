@@ -52,6 +52,24 @@
       "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aadadb05_73e26ed3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T17:11:31Z",
+      "side": 1,
+      "message": "\u003e I think you will be calling retain too often, which is why you see all other places only do it when a new buffer is returned\n\nI understand it\u0027s re-retaining the same buffer, maybe it could be optimized later (we already have this problem with other users of DynamicBuffer). Again, it\u0027s not enough to only retain when a new buffer is returned.",
+      "parentUuid": "4217c8f6_1fd07805",
+      "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
