@@ -34,6 +34,24 @@
       "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4217c8f6_1fd07805",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-09T17:02:25Z",
+      "side": 1,
+      "message": "I think Shabi\u0027s fix is better. You should be calling it in every new command buffer. His fix also doesn\u0027t require new state or methods.",
+      "parentUuid": "f4bfd11c_6c741063",
+      "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
