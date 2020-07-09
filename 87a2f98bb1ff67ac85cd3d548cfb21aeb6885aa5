@@ -102,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "214d9cf6_99228dcf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T05:02:16Z",
+      "side": 1,
+      "message": "That sounds good.\n\nIn that case, I believe this should be moved above the `if`. Even if the buffer is not new, we need to retain it (for example, maybe last allocation was by a previous frame)",
+      "parentUuid": "fc3a5863_0489ac53",
+      "range": {
+        "startLine": 3690,
+        "startChar": 0,
+        "endLine": 3691,
+        "endChar": 80
+      },
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1b496b7_60367529",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -131,6 +155,24 @@
       "side": 1,
       "message": "I agree. I think right now the correct way really is to call retain every time you allocate. But I believe it was not done this way mainly for performance. allocate() will get called a lot, and my understanding is there is no way to prevent it add to list multiple times. The way it is right now reduces the retain() call only when we switch to new buffer. As I explained above, I still think there is a hole here when dynamicBuffer gets released(). But move to retain for eveyr allocate() likely will introduce perf regressions, and I am try not do that. Once we move all dynamicBuffers to context, it should be handled easily if context at that time.",
       "parentUuid": "b1b496b7_60367529",
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69357187_10ccb1b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T05:02:16Z",
+      "side": 1,
+      "message": "Well the user has to call retain after every allocate anyway, but I see in most cases that happens on bufferRead and bufferWrite calls automatically which is hard to de-duplicate.\n\nSince the context is retaining the buffer after calling allocate (for driver uniforms), this is not really necessary here then, don\u0027t you think? (Assuming you add retain on DynamicBuffer::release() to handle that case correctly)",
+      "parentUuid": "a2be2b8c_037354a0",
       "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
