@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baea007f_3e62ec69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-09T18:35:39Z",
+      "side": 1,
+      "message": "It still looks good for Aztec Ruins.  LGTM.\n\nSince both Jamie and Shabi +1\u0027d this (1 + 1 \u003d 2), I\u0027ll +2 it.",
+      "revId": "329f85ec0af2ddebddec974dc2e9781ea05899f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
