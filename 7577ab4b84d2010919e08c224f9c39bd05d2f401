@@ -22,6 +22,30 @@
       "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06deaf06_126cfcd2",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4007,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-09T15:08:22Z",
+      "side": 1,
+      "message": "I think we do not need to worry about that case. Say mFrameStart \u003d mFrameEnd. If we call swapBuffers before onDestroyContext is reached, then onEndFrame is reached before this and will write the cpp replay file and the index files. It then sets mFrameIndex \u003d mFrameIndex+1 \u003e mFrameEnd. Thus this condition fails, and the code inside it will not overwrite the files. If we do not call swapBuffers before onDestroyContext is reached, then mFrameIndex \u003d mFrameStart \u003d mFrameEnd, and this condition also fails so nothing is serialized or written. We actually want that because the default framebuffer is destroyed before FrameCapture::onDestroyContext is reached, so its no use to serialize anyway.",
+      "parentUuid": "493f2cb0_eed3c99e",
+      "range": {
+        "startLine": 4007,
+        "startChar": 8,
+        "endLine": 4007,
+        "endChar": 60
+      },
+      "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
