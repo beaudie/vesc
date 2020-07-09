@@ -149,6 +149,30 @@
     },
     {
       "key": {
+        "uuid": "455ca927_3a33d3b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-09T15:26:40Z",
+      "side": 1,
+      "message": "\u003e What if dynamicBuffer itself gets released()? I am not seeing code prevent the current buffer from released. I did this mostly try to keep it consistent with the use pattern in other places. But even with this change, I still not sure we covered every usage case. What if the current buffer been used for multiple submissions and then dynamicBuffer gets destroyed. Will we wait for the last usage of mBuffer properly?\n\nYou shouldn\u0027t run into this case. DynamicBuffer isn\u0027t meant to have a lifetime that\u0027s shorter than a possible use.\n\nTechnically I think you\u0027d need to retain the driver uniforms every draw call/submission even if no new descriptor set is allocated. If this works to fix the bug then that might be okay for now.",
+      "parentUuid": "214d9cf6_99228dcf",
+      "range": {
+        "startLine": 3690,
+        "startChar": 0,
+        "endLine": 3691,
+        "endChar": 80
+      },
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1b496b7_60367529",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
