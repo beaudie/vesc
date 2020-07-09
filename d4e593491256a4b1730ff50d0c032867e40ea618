@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "078d191a_56650606",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2065,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-09T16:03:17Z",
+      "side": 1,
+      "message": "Ah, yes, sloppy.  Thanks.",
+      "parentUuid": "7f498de4_3625b7e5",
+      "range": {
+        "startLine": 2065,
+        "startChar": 44,
+        "endLine": 2065,
+        "endChar": 88
+      },
+      "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "760a4d09_410d95be",
         "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
         "patchSetId": 4
@@ -79,6 +103,30 @@
       "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4df19b06_619f7f9e",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-09T16:03:17Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "760a4d09_410d95be",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 68
+      },
+      "revId": "d4e593491256a4b1730ff50d0c032867e40ea618",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
