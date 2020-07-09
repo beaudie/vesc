@@ -523,7 +523,6 @@ egl::ConfigSet DisplayWGL::generateConfigs()
     config.conformant        = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
     config.depthSize         = pixelFormatDescriptor.cDepthBits;
     config.level             = 0;
-    config.matchNativePixmap = EGL_NONE;
     config.maxPBufferWidth   = getAttrib(WGL_MAX_PBUFFER_WIDTH_ARB);
     config.maxPBufferHeight  = getAttrib(WGL_MAX_PBUFFER_HEIGHT_ARB);
     config.maxPBufferPixels  = getAttrib(WGL_MAX_PBUFFER_PIXELS_ARB);

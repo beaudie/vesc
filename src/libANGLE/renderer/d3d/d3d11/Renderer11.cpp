@@ -1218,11 +1218,10 @@ egl::ConfigSet Renderer11::generateConfigs()
                     }
                 }
 
-                config.depthSize         = depthStencilBufferFormatInfo.depthBits;
-                config.level             = 0;
-                config.matchNativePixmap = EGL_NONE;
-                config.maxPBufferWidth   = rendererCaps.max2DTextureSize;
-                config.maxPBufferHeight  = rendererCaps.max2DTextureSize;
+                config.depthSize        = depthStencilBufferFormatInfo.depthBits;
+                config.level            = 0;
+                config.maxPBufferWidth  = rendererCaps.max2DTextureSize;
+                config.maxPBufferHeight = rendererCaps.max2DTextureSize;
                 config.maxPBufferPixels =
                     rendererCaps.max2DTextureSize * rendererCaps.max2DTextureSize;
                 config.maxSwapInterval  = 4;

@@ -24,6 +24,8 @@
 namespace egl
 {
 
+class Display;
+
 struct Config
 {
     Config();
@@ -50,7 +52,6 @@ struct Config
     EGLint conformant;             // Whether contexts created with this config are conformant
     EGLint depthSize;              // Bits of Z in the depth buffer
     EGLint level;                  // Frame buffer level
-    EGLBoolean matchNativePixmap;  // Match the native pixmap format
     EGLint maxPBufferWidth;        // Maximum width of pbuffer
     EGLint maxPBufferHeight;       // Maximum height of pbuffer
     EGLint maxPBufferPixels;       // Maximum size of pbuffer
@@ -100,7 +101,8 @@ class ConfigSet
     bool contains(const Config *config) const;
 
     // Filter configurations based on the table in [EGL 1.5] section 3.4.1.2 page 29
-    std::vector<const Config *> filter(const AttributeMap &attributeMap) const;
+    std::vector<const Config *> filter(const Display *display,
+                                       const AttributeMap &attributeMap) const;
 
     ConfigMap::iterator begin();
     ConfigMap::iterator end();

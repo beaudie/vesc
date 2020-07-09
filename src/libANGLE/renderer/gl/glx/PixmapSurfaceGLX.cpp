@@ -94,19 +94,11 @@ egl::Error PixmapSurfaceGLX::initialize(const egl::Display *display)
 {
     DisplayGLX *displayGLX = GetImplAs<DisplayGLX>(display);
 
+    int status = x11::GetPixmapDimensions(mDisplay, mXPixmap, &mWidth, &mHeight, nullptr);
+    if (!status)
     {
-        Window rootWindow;
-        int x                    = 0;
-        int y                    = 0;
-        unsigned int borderWidth = 0;
-        unsigned int depth       = 0;
-        int status = XGetGeometry(mDisplay, mXPixmap, &rootWindow, &x, &y, &mWidth, &mHeight,
-                                  &borderWidth, &depth);
-        if (!status)
-        {
-            return egl::EglBadSurface() << "XGetGeometry query failed on pixmap surface: "
-                                        << x11::XErrorToString(mDisplay, status);
-        }
+        return egl::EglBadSurface() << "XGetGeometry query failed on pixmap surface: "
+                                    << x11::XErrorToString(mDisplay, status);
     }
 
     std::vector<int> pixmapAttribs;

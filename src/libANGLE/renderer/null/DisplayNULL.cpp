@@ -61,7 +61,6 @@ egl::ConfigSet DisplayNULL::generateConfigs()
     config.conformant            = EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT;
     config.depthSize             = 24;
     config.level                 = 0;
-    config.matchNativePixmap     = EGL_NONE;
     config.maxPBufferWidth       = 0;
     config.maxPBufferHeight      = 0;
     config.maxPBufferPixels      = 0;

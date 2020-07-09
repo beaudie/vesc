@@ -10,6 +10,7 @@
 
 #include "libANGLE/Config.h"
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/Display.h"
 
 #include <algorithm>
 #include <vector>
@@ -41,7 +42,6 @@ Config::Config()
       conformant(0),
       depthSize(0),
       level(0),
-      matchNativePixmap(EGL_FALSE),
       maxPBufferWidth(0),
       maxPBufferHeight(0),
       maxPBufferPixels(0),
@@ -226,7 +226,8 @@ class ConfigSorter
     bool mWantLuminance;
 };
 
-std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) const
+std::vector<const Config *> ConfigSet::filter(const Display *display,
+                                              const AttributeMap &attributeMap) const
 {
     std::vector<const Config *> result;
     result.reserve(mConfigs.size());
@@ -342,8 +343,11 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
                     match = (config.renderableType & attributeValue) == attributeValue;
                     break;
                 case EGL_MATCH_NATIVE_PIXMAP:
-                    match = false;
-                    UNIMPLEMENTED();
+                    match = !display
+                                 ->valdiatePixmap(&config,
+                                                  gl::bitCast<EGLNativePixmapType>(attributeValue),
+                                                  egl::AttributeMap())
+                                 .isError();
                     break;
                 case EGL_CONFORMANT:
                     match = (config.conformant & attributeValue) == attributeValue;

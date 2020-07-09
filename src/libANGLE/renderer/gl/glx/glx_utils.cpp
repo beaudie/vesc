@@ -25,6 +25,37 @@ std::string XErrorToString(Display *display, int status)
     return std::string(buffer);
 }
 
+int GetPixmapDimensions(Display *display,
+                        Pixmap pixmap,
+                        unsigned int *outWidth,
+                        unsigned int *outHeight,
+                        unsigned int *outDepth)
+{
+    Window rootWindow;
+    int x                    = 0;
+    int y                    = 0;
+    unsigned int width       = 0;
+    unsigned int height      = 0;
+    unsigned int borderWidth = 0;
+    unsigned int depth       = 0;
+    int status =
+        XGetGeometry(display, pixmap, &rootWindow, &x, &y, &width, &height, &borderWidth, &depth);
+    if (outWidth)
+    {
+        *outWidth = width;
+    }
+    if (outHeight)
+    {
+        *outHeight = height;
+    }
+    if (outDepth)
+    {
+        *outDepth = depth;
+    }
+
+    return status;
+}
+
 }  // namespace x11
 
 }  // namespace rx

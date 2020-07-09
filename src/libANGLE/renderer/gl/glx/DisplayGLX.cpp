@@ -447,23 +447,35 @@ SurfaceImpl *DisplayGLX::createPixmapSurface(const egl::SurfaceState &state,
     return new PixmapSurfaceGLX(state, nativePixmap, mGLX.getDisplay(), mGLX, fbConfig);
 }
 
-egl::Error DisplayGLX::validatePixmap(egl::Config *config,
+egl::Error DisplayGLX::validatePixmap(const egl::Config *config,
                                       EGLNativePixmapType pixmap,
                                       const egl::AttributeMap &attributes) const
 {
-    Window rootWindow;
-    int x                    = 0;
-    int y                    = 0;
-    unsigned int width       = 0;
-    unsigned int height      = 0;
-    unsigned int borderWidth = 0;
-    unsigned int depth       = 0;
-    int status = XGetGeometry(mGLX.getDisplay(), pixmap, &rootWindow, &x, &y, &width, &height,
-                              &borderWidth, &depth);
+    if ((config->surfaceType & EGL_PIXMAP_BIT) == 0)
+    {
+        return egl::EglBadConfig() << "Config does not support pixmaps.";
+    }
+
+    unsigned int depth = 0;
+    int status         = x11::GetPixmapDimensions(mXDisplay, pixmap, nullptr, nullptr, &depth);
     if (!status)
     {
         return egl::EglBadNativePixmap() << "Invalid native pixmap, XGetGeometry failed: "
                                          << x11::XErrorToString(mXDisplay, status);
+    }
+
+    XVisualInfo visualTemplate;
+    visualTemplate.visualid = config->nativeVisualID;
+
+    int numVisuals    = 0;
+    XVisualInfo *info = XGetVisualInfo(mXDisplay, VisualIDMask, &visualTemplate, &numVisuals);
+    int visualDepth   = (numVisuals == 1) ? info->depth : 0;
+    XFree(info);
+    if (depth != static_cast<unsigned int>(visualDepth))
+    {
+        return egl::EglBadNativePixmap()
+               << "Pixmap depth (" << depth << ") does not match config visual depth ("
+               << visualDepth << ")";
     }
 
     return egl::NoError();
@@ -703,9 +715,6 @@ egl::ConfigSet DisplayGLX::generateConfigs()
 
         config.conformant     = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
         config.renderableType = config.conformant;
-
-        // TODO(cwallez) I have no idea what this is
-        config.matchNativePixmap = EGL_NONE;
 
         config.colorComponentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
 

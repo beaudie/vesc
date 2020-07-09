@@ -646,7 +646,6 @@ egl::Config GenerateDefaultConfig(const RendererVk *renderer,
     config.depthSize          = depthStencilFormat.depthBits;
     config.stencilSize        = depthStencilFormat.stencilBits;
     config.level              = 0;
-    config.matchNativePixmap  = EGL_NONE;
     config.maxPBufferWidth    = physicalDeviceProperties.limits.maxImageDimension2D;
     config.maxPBufferHeight   = physicalDeviceProperties.limits.maxImageDimension2D;
     config.maxPBufferPixels   = ComputeMaximumPBufferPixels(physicalDeviceProperties);

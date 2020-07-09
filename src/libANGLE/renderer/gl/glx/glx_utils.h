@@ -22,6 +22,12 @@ namespace x11
 
 std::string XErrorToString(Display *display, int status);
 
+int GetPixmapDimensions(Display *display,
+                        Pixmap pixmap,
+                        unsigned int *outWidth,
+                        unsigned int *outHeight,
+                        unsigned int *outDepth);
+
 }  // namespace x11
 
 }  // namespace rx

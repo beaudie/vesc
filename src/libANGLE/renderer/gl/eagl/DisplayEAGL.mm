@@ -221,8 +221,6 @@ egl::ConfigSet DisplayEAGL::generateConfigs()
     config.conformant     = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
     config.renderableType = config.conformant;
 
-    config.matchNativePixmap = EGL_NONE;
-
     config.colorComponentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
 
     configs.add(config);

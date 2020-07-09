@@ -531,13 +531,12 @@ egl::ConfigSet Renderer9::generateConfigs()
                         (currentDisplayMode.Format == d3d9ColorBufferFormatInfo.renderFormat)
                             ? EGL_NONE
                             : EGL_SLOW_CONFIG;
-                    config.configID          = static_cast<EGLint>(configs.size() + 1);
-                    config.conformant        = EGL_OPENGL_ES2_BIT;
-                    config.depthSize         = depthStencilBufferFormatInfo.depthBits;
-                    config.level             = 0;
-                    config.matchNativePixmap = EGL_NONE;
-                    config.maxPBufferWidth   = rendererCaps.max2DTextureSize;
-                    config.maxPBufferHeight  = rendererCaps.max2DTextureSize;
+                    config.configID         = static_cast<EGLint>(configs.size() + 1);
+                    config.conformant       = EGL_OPENGL_ES2_BIT;
+                    config.depthSize        = depthStencilBufferFormatInfo.depthBits;
+                    config.level            = 0;
+                    config.maxPBufferWidth  = rendererCaps.max2DTextureSize;
+                    config.maxPBufferHeight = rendererCaps.max2DTextureSize;
                     config.maxPBufferPixels =
                         rendererCaps.max2DTextureSize * rendererCaps.max2DTextureSize;
                     config.maxSwapInterval  = maxSwapInterval;

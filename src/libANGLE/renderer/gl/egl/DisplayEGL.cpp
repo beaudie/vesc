@@ -508,7 +508,6 @@ egl::ConfigSet DisplayEGL::generateConfigs()
             UNREACHABLE();
         }
 
-        config.matchNativePixmap  = EGL_NONE;
         config.optimalOrientation = 0;
 
         int internalId         = configSet.add(config);

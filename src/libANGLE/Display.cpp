@@ -925,7 +925,7 @@ Error Display::terminate(const Thread *thread)
 
 std::vector<const Config *> Display::getConfigs(const egl::AttributeMap &attribs) const
 {
-    return mConfigSet.filter(attribs);
+    return mConfigSet.filter(this, attribs);
 }
 
 std::vector<const Config *> Display::chooseConfig(const egl::AttributeMap &attribs) const
@@ -952,7 +952,7 @@ std::vector<const Config *> Display::chooseConfig(const egl::AttributeMap &attri
         attribsWithDefaults.insert(attribIter->first, attribIter->second);
     }
 
-    return mConfigSet.filter(attribsWithDefaults);
+    return mConfigSet.filter(this, attribsWithDefaults);
 }
 
 Error Display::createWindowSurface(const Config *configuration,
@@ -1601,7 +1601,7 @@ Error Display::validateImageClientBuffer(const gl::Context *context,
     return mImplementation->validateImageClientBuffer(context, target, clientBuffer, attribs);
 }
 
-Error Display::valdiatePixmap(Config *config,
+Error Display::valdiatePixmap(const Config *config,
                               EGLNativePixmapType pixmap,
                               const AttributeMap &attributes) const
 {

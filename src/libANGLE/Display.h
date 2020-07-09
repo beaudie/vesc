@@ -178,9 +178,10 @@ class Display final : public LabeledObject,
                                     EGLenum target,
                                     EGLClientBuffer clientBuffer,
                                     const egl::AttributeMap &attribs) const;
-    Error valdiatePixmap(Config *config,
+    Error valdiatePixmap(const Config *config,
                          EGLNativePixmapType pixmap,
                          const AttributeMap &attributes) const;
+    bool configMatchesNativePixmap(const Config *configuration, EGLNativePixmapType pixmap) const;
 
     static bool isValidDisplay(const Display *display);
     static bool isValidNativeDisplay(EGLNativeDisplayType display);
