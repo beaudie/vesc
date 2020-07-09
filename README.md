@@ -12,7 +12,7 @@ Metal and MacOS, Chrome OS, and Fuchsia support.
 |----------------|:-------------:|:----------------:|:--------------:|:-------------:|:-------------:|:-------------:|
 | OpenGL ES 2.0  |    complete   |    complete      |    complete    |    complete   |    complete   |  in progress  |
 | OpenGL ES 3.0  |               |    complete      |    complete    |    complete   |    complete   |               |
-| OpenGL ES 3.1  |               |   in progress    |    complete    |    complete   |  in progress  |               |
+| OpenGL ES 3.1  |               |   in progress    |    complete    |    complete   |    complete   |               |
 | OpenGL ES 3.2  |               |                  |  in progress   |  in progress  |  in progress  |               |
 
 ### Platform support via backing renderers
@@ -30,6 +30,7 @@ Metal and MacOS, Chrome OS, and Fuchsia support.
 ANGLE v1.0.772 was certified compliant by passing the ES 2.0.3 conformance tests in October 2011.
 With the Vulkan backend, ANGLE 2.1.0.d46e2fb1e341 was certified compliant to ES 2.0 in Nov 2019, and
 ANGLE 2.1.0.f18ff947360d to ES 3.0 in Feb 2020.
+ANGLE 2.1.0.f5dace0f1e57 to ES 3.1 in Jul 2020.
 ANGLE also provides an implementation of the EGL 1.4 specification.
 
 ANGLE is used as the default WebGL backend for both Google Chrome and Mozilla Firefox on Windows
