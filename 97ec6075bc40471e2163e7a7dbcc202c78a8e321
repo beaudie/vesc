@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "36f37553_46264b32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-07-09T15:41:17Z",
+      "side": 1,
+      "message": "I\u0027m gonna do the follow up to see why the trace event if not collected on startup.\nSince I need these trace events, I want to ensure this will work.\n\nThanks to put me in the loop Shahbaz.",
+      "revId": "97ec6075bc40471e2163e7a7dbcc202c78a8e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6fbdd66_7018ddb4",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 3
@@ -60,6 +77,47 @@
         "endLine": 106,
         "endChar": 34
       },
+      "revId": "97ec6075bc40471e2163e7a7dbcc202c78a8e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93fc5b51_be53336a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-07-09T15:41:17Z",
+      "side": 1,
+      "message": "That\u0027s fine. The comma means both categories are valid.\nAs soon as one of them is activated, the trace event will be emitted.",
+      "parentUuid": "e7228fd5_d28a0f2e",
+      "range": {
+        "startLine": 106,
+        "startChar": 33,
+        "endLine": 106,
+        "endChar": 34
+      },
+      "revId": "97ec6075bc40471e2163e7a7dbcc202c78a8e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0978df6_73a92a71",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1215674
+      },
+      "writtenOn": "2020-07-09T15:41:17Z",
+      "side": 1,
+      "message": "if the value of shaderString may be useful to debug, you can do this:\n\n ANGLE_TRACE_EVENT1(\"gpu.angle\", \"GlslangGetShaderSpirvCode TShader::parse\",\n      \"script\", TRACE_STR_COPY(shaderString));\n\nThese script won\u0027t be reported in slow-reported since they are not part of the approval list but they will work fine locally.\n\nIt\u0027s an open question if we want to collect them from the field. My recommendation is to\npursue that path only if needed. No need to collect information that we won\u0027t use to debug\nchrome.\n\nThis comment is totally optional, I let your team decide whether or not you want this.",
       "revId": "97ec6075bc40471e2163e7a7dbcc202c78a8e321",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
