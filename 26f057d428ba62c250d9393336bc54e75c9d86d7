@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91c167d2_003b4740",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T02:14:05Z",
+      "side": 1,
+      "message": "Shoul",
+      "revId": "26f057d428ba62c250d9393336bc54e75c9d86d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8398f987_a828085d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T02:14:05Z",
+      "side": 1,
+      "message": "I don\u0027t know why this was done this way, but shouldn\u0027t this instead check for a Vulkan feature? Like `mPhysicalDeviceFeatures.robustBufferAccess`?",
+      "revId": "26f057d428ba62c250d9393336bc54e75c9d86d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
