@@ -184,6 +184,30 @@
     },
     {
       "key": {
+        "uuid": "6763a837_74465c91",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4018,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-09T17:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d46598a_7d420076",
+      "range": {
+        "startLine": 4018,
+        "startChar": 29,
+        "endLine": 4018,
+        "endChar": 41
+      },
+      "revId": "370e0ba57d2b8ff36c3b4055c7549943acf528ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60a4753a_f8995476",
         "filename": "src/tests/capture_replay_tests/BUILD.gn",
         "patchSetId": 6
