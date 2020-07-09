@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7130663_b8750e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T16:26:49Z",
+      "side": 1,
+      "message": "Isn\u0027t this change enough? https://chromium-review.googlesource.com/c/angle/angle/+/2289652",
+      "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
