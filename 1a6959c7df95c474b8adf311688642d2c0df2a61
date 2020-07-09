@@ -394,6 +394,24 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5a3dbf8_8fa03d06",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T23:12:25Z",
+      "side": 1,
+      "message": "Ah, the requiredSpace changing values is the piece I was missing.\n\nIt looks like the problem this is introducing is that we are wasting buffer space from the initial \u0027failed\u0027 allocation that\u0027s never used (since we immediately reallocate()), and which can\u0027t be reused until we come all the way back around the ring buffer (assuming things line up nicely at the end).   If the underlying buffer isn\u0027t a multiple of the uniform buffer size, these failed allocations will just keep occurring.\n\nI wonder if it would be worth updating DynamicBuffer::allocate() to take 2 size values:\n1.) size without a new buffer allocated\n- size of only currently dirty uniforms\n2.) size with a buffer allocated\n- worst case with all dirty uniforms\n\nDynamicBuffer::allocate() could then figure out beforehand if a new buffer is required and do the work in a single call.   That should cut down on the number of GPU buffer allocations by using as much space in each allocated buffer as possible.",
+      "parentUuid": "ea9c2c50_dc80645d",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
