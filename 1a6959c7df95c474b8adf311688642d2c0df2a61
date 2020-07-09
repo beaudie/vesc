@@ -226,6 +226,24 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23377c47_bb3583b2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-09T19:33:10Z",
+      "side": 1,
+      "message": "Yeah, good point. If requiredSpace isn\u0027t changing, the new allocation should have everything you need.\nMaybe some non-obvious side effect?",
+      "parentUuid": "b255955b_72dc8b33",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
