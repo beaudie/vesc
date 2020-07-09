@@ -70,6 +70,24 @@
       "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ca3b16f_cb4e30a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T17:20:34Z",
+      "side": 1,
+      "message": "I think the new way I did is better though. It only retains per submission, versus per alloc. You could have lots of alloc calls per submisisons, and you do not need to keep calling retain on them and release inflight buffers as well. This patchset 10 is more or less what I was thinking eventually how other dynamicBuffers should work once they moved to context. \n\nThe \"addInFlightBuffersToUsListAndRelease\" name is a bit verbose, but I don\u0027t have other better names. Maybe once all dynamicBuffers moved to this new way, we can rename addInFlightBuffersToUsListAndRelease back to releaseInFlightBuffer.\n\nPTAL patchset 10. (Sorry that I send out too fast crerating a storm of patchset this morning).",
+      "parentUuid": "aadadb05_73e26ed3",
+      "revId": "aeaafc4b80a34439f0852d10cae701b4f20331d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
