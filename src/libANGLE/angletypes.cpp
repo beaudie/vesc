@@ -523,12 +523,12 @@ Rectangle Rectangle::flip(bool flipX, bool flipY) const
     Rectangle flipped = *this;
     if (flipX)
     {
-        flipped.x     = flipped.x + flipped.width;
+        flipped.x     = flipped.x + flipped.width + (flipped.width > 0 ? -1 : 1);
         flipped.width = -flipped.width;
     }
     if (flipY)
     {
-        flipped.y      = flipped.y + flipped.height;
+        flipped.y      = flipped.y + flipped.height + (flipped.height > 0 ? -1 : 1);
         flipped.height = -flipped.height;
     }
     return flipped;

@@ -839,12 +839,12 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     // dest area).
     if (srcFramebufferFlippedY)
     {
-        sourceArea.y      = srcFramebufferDimensions.height - sourceArea.y;
+        sourceArea.y      = srcFramebufferDimensions.height - 1 - sourceArea.y;
         sourceArea.height = -sourceArea.height;
     }
     if (destFramebufferFlippedY)
     {
-        destArea.y      = destFramebufferDimensions.height - destArea.y;
+        destArea.y      = destFramebufferDimensions.height - 1 - destArea.y;
         destArea.height = -destArea.height;
 
         srcClippedDestArea.y =
