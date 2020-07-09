@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc8138f7_3d216d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T22:00:23Z",
+      "side": 1,
+      "message": "I see support for wideLines on Android is pretty much non-existent. Does line raster emulation use this feature? Otherwise, if the extension needs this feature and it\u0027s missing on Android, basically we would have to rely on emulation on Android.",
+      "revId": "ea2dc8952fc1c68478322f24e94edf78ca3d749a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
