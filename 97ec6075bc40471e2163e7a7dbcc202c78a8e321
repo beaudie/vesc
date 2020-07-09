@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64dec2d1_668f26f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T15:08:41Z",
+      "side": 1,
+      "message": "Let\u0027s call this a temporary measure. Will be removed when we remove the dependency to glslang.\n\nAt the same time, this PR should dramatically reduce the cost of this warmup: https://github.com/KhronosGroup/glslang/pull/2330",
+      "revId": "97ec6075bc40471e2163e7a7dbcc202c78a8e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
