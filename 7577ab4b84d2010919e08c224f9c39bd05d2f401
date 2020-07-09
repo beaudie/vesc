@@ -46,6 +46,30 @@
       "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f0c57bc_8539931e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4007,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-09T15:30:53Z",
+      "side": 1,
+      "message": "We\u0027re starting with framebuffer serialization, but I don\u0027t believe that\u0027s the only thing we\u0027ll be comparing in the long term (right?).\n\nI\u0027m also thinking ahead to a couple scenarios:\n\n* When we want to capture from contexts that never call swapBuffers (which is soon).  I don\u0027t think we\u0027ll actually need to serialize anything in that case though, since they will be real apps, not tests.  So this shouldn\u0027t come into play.\n\n* When we want to support capture/replay of snippets of code that don\u0027t rely on frame boundaries, or live within a single frame.\n\nSince this is primarily in support of tests, we control the start and end frames, so they shouldn\u0027t ever be equal.  I don\u0027t think we can assert this here.\n\nI think your math is right and we can\u0027t hit this case.  If you could, please add your reasoning as a comment for future readers.  Boundary conditions can be difficult bugs to find later. :)",
+      "parentUuid": "06deaf06_126cfcd2",
+      "range": {
+        "startLine": 4007,
+        "startChar": 8,
+        "endLine": 4007,
+        "endChar": 60
+      },
+      "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
