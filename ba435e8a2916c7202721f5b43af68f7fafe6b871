@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33ebb241_47b5d374",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T01:20:26Z",
+      "side": 1,
+      "message": "I don\u0027t understand what this means.   Can you expand or reword it a bit maybe?",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "ba435e8a2916c7202721f5b43af68f7fafe6b871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3963ac62_3e081cb3",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T01:20:26Z",
+      "side": 1,
+      "message": "nit:\n    // Used to uniquely identify multiple instances of the same type\n\nOtherwise, there are some typos:\nidentifing -\u003e identifying\nobejcts -\u003e objects",
+      "revId": "ba435e8a2916c7202721f5b43af68f7fafe6b871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d39b669_14d84df1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2223,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-09T01:20:26Z",
+      "side": 1,
+      "message": "Is this function necessary, or can the update to mUniqueObjectID be moved inside of the original  init()?   \n\nIt looks like RendererVk::initialize() is the only one that wants to give a specific UniqueObjectID value (for mTheNullBuffer), but it seems like it would be safe for that to be a generated value since it should never be init()\u0027ed more than once.",
+      "range": {
+        "startLine": 2217,
+        "startChar": 0,
+        "endLine": 2223,
+        "endChar": 1
+      },
+      "revId": "ba435e8a2916c7202721f5b43af68f7fafe6b871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
