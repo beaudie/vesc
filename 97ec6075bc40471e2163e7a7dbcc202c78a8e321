@@ -121,6 +121,24 @@
       "revId": "97ec6075bc40471e2163e7a7dbcc202c78a8e321",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f93406f2_a9d682ae",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T15:54:23Z",
+      "side": 1,
+      "message": "Let\u0027s skip that. We recently decided it would be better to ditch glslang and finish the compilation in ANGLE itself, so this would be short-lived anyway.",
+      "parentUuid": "f0978df6_73a92a71",
+      "revId": "97ec6075bc40471e2163e7a7dbcc202c78a8e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
