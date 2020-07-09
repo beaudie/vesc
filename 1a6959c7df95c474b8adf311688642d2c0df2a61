@@ -159,6 +159,23 @@
     },
     {
       "key": {
+        "uuid": "1600feb9_fbc42b6c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-09T16:01:34Z",
+      "side": 1,
+      "message": "This seems dangerous. This is releasing all existing allocations. Are we certain there aren\u0027t previous uniforms in here that need to be preserved?",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e683fcef_1692745d",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -170,6 +187,24 @@
       "writtenOn": "2020-07-09T01:03:27Z",
       "side": 1,
       "message": "Why do you need to retry the allocate() if it modified the buffer?",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a227a92a_181d1eb0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-09T16:01:34Z",
+      "side": 1,
+      "message": "IIUC, bufferModified is true if allocate had to use a new DynamicBuffer in which case we need to make sure all the uniforms get added to this new buffer.",
+      "parentUuid": "e683fcef_1692745d",
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
