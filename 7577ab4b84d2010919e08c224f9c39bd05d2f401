@@ -94,6 +94,30 @@
       "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "383ec9c5_353d6a98",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4007,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-09T16:00:31Z",
+      "side": 1,
+      "message": "How about we change this to a bool like you did for the first frame? If the frame index file are not saved, then save them here.\n\nAlso I\u0027d like to see you change your code so that you only open and write out the index file in one step - either on the last frame or destroy.",
+      "parentUuid": "c56d6af4_1ac505a7",
+      "range": {
+        "startLine": 4007,
+        "startChar": 8,
+        "endLine": 4007,
+        "endChar": 60
+      },
+      "revId": "7577ab4b84d2010919e08c224f9c39bd05d2f401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
