@@ -991,6 +991,12 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
             ANGLE_TRY(flush(contextVk));
             mBuffer->unmap(contextVk->getRenderer());
 
+            // Even though caller should have added current buffer to mResourceUseList, it only does
+            // so when we first switch to the new buffer. If that buffer gets used for multiple
+            // submissions, it may not have correct serial attach to it. This will ensure it gets
+            // tagged with most recent serial.
+            mBuffer->retain(&contextVk->getResourceUseList());
+
             mInFlightBuffers.push_back(mBuffer);
             mBuffer = nullptr;
         }

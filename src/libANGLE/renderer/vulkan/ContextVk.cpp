@@ -3687,6 +3687,9 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
         return angle::Result::Continue;
     }
 
+    // Let mResourceUseList hold ont it so that we won't release it before GPU completes
+    driverUniforms->dynamicBuffer.getCurrentBuffer()->retain(&mResourceUseList);
+
     // Allocate a new descriptor set.
     ANGLE_TRY(mDriverUniformsDescriptorPool.allocateSets(
         this, driverUniforms->descriptorSetLayout.get().ptr(), 1,
