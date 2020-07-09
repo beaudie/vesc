@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "d93bc668_82a72971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-09T17:54:03Z",
+      "side": 1,
+      "message": "LGTM once the test failures are addressed.",
+      "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "082279e8_644212f1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -151,6 +168,24 @@
       "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec5d3329_8d201ec4",
+        "filename": "src/tests/gl_tests/MultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-09T17:54:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ebe84a07_7d451236",
+      "revId": "bddc8be552dcd86bef24cc2b598cf95184ad6659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
