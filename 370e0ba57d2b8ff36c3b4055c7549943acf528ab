@@ -160,6 +160,30 @@
     },
     {
       "key": {
+        "uuid": "3d46598a_7d420076",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4018,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-09T14:45:28Z",
+      "side": 1,
+      "message": "The comment you added is fine, and we can revisit this if cases pop up.",
+      "parentUuid": "ef83c201_ece2a7f6",
+      "range": {
+        "startLine": 4018,
+        "startChar": 29,
+        "endLine": 4018,
+        "endChar": 41
+      },
+      "revId": "370e0ba57d2b8ff36c3b4055c7549943acf528ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60a4753a_f8995476",
         "filename": "src/tests/capture_replay_tests/BUILD.gn",
         "patchSetId": 6
