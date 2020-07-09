@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "82292684_dd4d9685",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:31:28Z",
+      "side": 1,
+      "message": "Because VS/FS share one buffer, the VS/FS data is interleaved. So it is still using the whole buffer size. I think this is still correct. \n\nPerformance wise, I think also shouldn\u0027t affected. There should be no data movement involved, since vkUpdateDescriptorSet call is called even before data is written. In driver this likely involves mapping the memory into GPU address range that reserved for descriptors. And I would expect driver will consolidate all bufferInfos so that one buffer will not mapped twice. But in eitehr way, the whole buffer is been referenced and should be mapped, so I think should be fine.",
+      "parentUuid": "c209d6d9_97a6c9cb",
+      "range": {
+        "startLine": 844,
+        "startChar": 0,
+        "endLine": 845,
+        "endChar": 38
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e57fea9_26478b51",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3154b6_58e526bf",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:31:28Z",
+      "side": 1,
+      "message": "Good catch. I actually fixed in followup CL but forgot to fix it here. Will do.",
+      "parentUuid": "0e57fea9_26478b51",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 429,
+        "endChar": 71
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "2c6a0328_4253c2a0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:31:28Z",
+      "side": 1,
+      "message": "Yea, I think the whole releaseInFlightBuffer thing is a bit risky. For now I am going to move it to after mDescriptorBuffersCache gets added to the mResourceUseList. In the future CLs that this gets moved to context, it will be handled similar to driverUniforms that releaseInFlightBuffers will only called right before submission.",
+      "parentUuid": "e15c73f0_2adf61af",
+      "range": {
+        "startLine": 760,
+        "startChar": 29,
+        "endLine": 760,
+        "endChar": 57
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31dd7032_0832f419",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "4a70a8c4_f834a516",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:31:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31dd7032_0832f419",
+      "range": {
+        "startLine": 780,
+        "startChar": 89,
+        "endLine": 780,
+        "endChar": 95
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a58e8f2_7cde8201",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -159,6 +255,24 @@
     },
     {
       "key": {
+        "uuid": "d5a19efa_c62222fd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:31:28Z",
+      "side": 1,
+      "message": "Yes. But would this be a possibility since we have an assertion above in line 768? We reach here that uniform dirty bit is set.\n\nBut, anyway, I think since I am checking it, probably better just take early return.",
+      "parentUuid": "4a58e8f2_7cde8201",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1600feb9_fbc42b6c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -170,6 +284,24 @@
       "writtenOn": "2020-07-09T16:01:34Z",
       "side": 1,
       "message": "This seems dangerous. This is releasing all existing allocations. Are we certain there aren\u0027t previous uniforms in here that need to be preserved?",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a1acfb2_b98720c9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:31:28Z",
+      "side": 1,
+      "message": "See above line 7860 comment. For now, I am going to move releaseInFlightBuffers call to after we retained mDescriptorBuffersCache. In the future CL when I move the dynamic buffer to ContextVk, it will be handled similar to driverUniforms and only released once per submission, and mDescriptorBuffersCache will be removed.",
+      "parentUuid": "1600feb9_fbc42b6c",
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -241,6 +373,24 @@
       "side": 1,
       "message": "Yeah, good point. If requiredSpace isn\u0027t changing, the new allocation should have everything you need.\nMaybe some non-obvious side effect?",
       "parentUuid": "b255955b_72dc8b33",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea9c2c50_dc80645d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-09T22:31:28Z",
+      "side": 1,
+      "message": "Maybe I am not fully understand the discussion here. But as Courtney pointed out, I need to make sure both VS/FS are in the same buffer. If we moved to new buffer, we mark the VS dirty as well, so requiredSpace is expected to change. (see bellow line 799 to 803)",
+      "parentUuid": "23377c47_bb3583b2",
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
