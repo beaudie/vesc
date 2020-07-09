@@ -16,6 +16,24 @@
       "revId": "f3f49819cae6e64bb3d3b43d27b9cd7c91c8f016",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2353bea6_60bf246f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T14:59:34Z",
+      "side": 1,
+      "message": "FYI, I tried \"gpu.angle,startup\" and \"startup\", and neither result in a trace event in chrome. I\u0027m running chrome with (among other flags):\n\n--trace-startup --trace-startup-file\u003drun.json --trace-startup-duration\u003d3",
+      "parentUuid": "9da17fd2_d5dd67dc",
+      "revId": "f3f49819cae6e64bb3d3b43d27b9cd7c91c8f016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
