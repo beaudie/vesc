@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f429094_fc029394",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T02:01:49Z",
+      "side": 1,
+      "message": "It would be great if you could write a regression test for this. The test should frequently change the driver uniforms, and make many draw calls, but it should only verify the results at the end (as flushes in between may accidentally fix the issue)",
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18fe7528_c1b1b1ad",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T02:01:49Z",
+      "side": 1,
+      "message": "You wouldn\u0027t need this if `allocate` retains unconditionally.\n\nThere are also a number of other places that call `retain` right after `allocate`, and those can also all be removed.",
+      "range": {
+        "startLine": 3690,
+        "startChar": 0,
+        "endLine": 3691,
+        "endChar": 80
+      },
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1b496b7_60367529",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-09T02:01:49Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem right to me either. Say there is only one allocation from the DynamicBuffer in the frame. This call is never made then.\n\nI think the right place is above (or below) where it says:\n\n    if (bufferOut !\u003d nullptr)\n    {\n        *bufferOut \u003d mBuffer-\u003egetBuffer().getHandle();\n    }\n\nIn other words, every time allocate is called, regardless of whether a new buffer is used or not, the current buffer is retained.",
+      "revId": "87a2f98bb1ff67ac85cd3d548cfb21aeb6885aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
