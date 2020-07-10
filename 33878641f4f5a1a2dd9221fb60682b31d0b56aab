@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69faad20_82c0fb3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T21:47:24Z",
+      "side": 1,
+      "message": "Change \"ObjectID\" back to \"Serial\" per Jamie\u0027s request. But still kept these different serials with its own type instead of everything using Serial type. Now you have BufferSerial, TextureSerial, ImageViewSerial, ImageViewSerial and QueueSerial so that allows compiler to catch use of wrong serial type.",
+      "revId": "33878641f4f5a1a2dd9221fb60682b31d0b56aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
