@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aad0e2ff_19c1ec04",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-10T14:16:17Z",
+      "side": 1,
+      "message": "Why is this masked? Isn\u0027t that limiting the uniqueness of the value?",
+      "revId": "a6db8c7e0bd3ed4cd2721587c4cbac702493f613",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
