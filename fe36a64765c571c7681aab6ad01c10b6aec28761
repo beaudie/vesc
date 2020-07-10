@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40ffd0ca_d996cab5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3936,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T16:28:42Z",
+      "side": 1,
+      "message": "There is a finishImpl() on ContextVk::onDestropy, right before driverUniform gets destroyed. I think this code is not needed. These only needed for the per object dynamicBuffers, like staging buffer for texture/buffer etc. For per context dynamic buffer, life is much simpler here.",
+      "range": {
+        "startLine": 3925,
+        "startChar": 7,
+        "endLine": 3936,
+        "endChar": 9
+      },
+      "revId": "fe36a64765c571c7681aab6ad01c10b6aec28761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
