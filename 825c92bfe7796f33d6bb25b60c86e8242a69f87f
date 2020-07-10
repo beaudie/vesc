@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8567dba_84f23b0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T19:23:30Z",
+      "side": 1,
+      "message": "Per discussion with Jamie, I made a sweep change to change Texture and Sampler and ImageView\u0027s usage of serial to ObjectID as well. And they all have their own type to allow compiler type checking on the usage. ",
+      "revId": "825c92bfe7796f33d6bb25b60c86e8242a69f87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
