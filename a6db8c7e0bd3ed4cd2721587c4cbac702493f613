@@ -16,6 +16,24 @@
       "revId": "a6db8c7e0bd3ed4cd2721587c4cbac702493f613",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb3671bc_bed6d466",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-10T16:09:16Z",
+      "side": 1,
+      "message": "Yeah, I had the same question.   Seems like it would be easier to just return the full value, especially since it\u0027s being cast back to the larger value at the end.",
+      "parentUuid": "aad0e2ff_19c1ec04",
+      "revId": "a6db8c7e0bd3ed4cd2721587c4cbac702493f613",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
