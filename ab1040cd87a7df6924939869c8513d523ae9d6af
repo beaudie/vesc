@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13367123_9242db3e",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-10T14:35:44Z",
+      "side": 1,
+      "message": "The previous paragraph was a long sentence, and this sentence on its own is not grammatically sound.\n\nIt would be a nice cleanup to turn this into a list, like:\n\n\u003e ANGLE v1.0.772 was certified compliant by passing the ES 2.0.3 conformance tests in October 2011.\n\u003e With the Vulkan backend, ANGLE was certified to:\n\u003e \n\u003e - ES 2.0 in Nov 2019: ANGLE 2.1.0.d46e2fb1e341\n\u003e - ES 3.0 in Feb 2020: ANGLE 2.1.0.f18ff947360d\n\u003e - ES 3.1 in Jul 2020: ANGLE 2.1.0.f5dace0f1e57\n\u003e \n\u003e ANGLE also provides an implementation of the EGL 1.4 specification.\n\nOr however else you think would make it easier to read.",
+      "revId": "ab1040cd87a7df6924939869c8513d523ae9d6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
