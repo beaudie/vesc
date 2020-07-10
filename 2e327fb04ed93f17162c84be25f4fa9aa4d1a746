@@ -69,6 +69,23 @@
       "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "574a15b9_fac8bdd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2020-07-10T06:05:36Z",
+      "side": 1,
+      "message": "I have checked on our NV machine, and these KHR31 cts tests are passed. Our NV is on 440.100.\nMay I add the suppressions and open a ticket for it?",
+      "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
