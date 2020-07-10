@@ -74,6 +74,37 @@ void CommandBatch::destroy(VkDevice device)
     commandPool.destroy(device);
     fence.reset(device);
 }
+
+CommandProcessorTask::CommandProcessorTask()
+    : contextVk(nullptr), commandBuffer(nullptr), workerCommand(CustomTask::Invalid)
+{}
+
+CommandProcessorTask::CommandProcessorTask(CommandProcessorTask &&srcTask)
+{
+    contextVk               = srcTask.contextVk;
+    commandBuffer           = srcTask.commandBuffer;
+    workerCommand           = srcTask.workerCommand;
+    waitSemaphores          = srcTask.waitSemaphores;
+    waitSemaphoreStageMasks = srcTask.waitSemaphoreStageMasks;
+    semaphore               = srcTask.semaphore;
+    contextPriority         = srcTask.contextPriority;
+    submitFence             = std::move(srcTask.submitFence);
+    currentGarbage          = std::move(srcTask.currentGarbage);
+    serial                  = srcTask.serial;
+    presentInfo             = srcTask.presentInfo;
+    // Clear source data
+    srcTask.contextVk               = nullptr;
+    srcTask.commandBuffer           = nullptr;
+    srcTask.workerCommand           = CustomTask::Invalid;
+    srcTask.waitSemaphores          = {};
+    srcTask.waitSemaphoreStageMasks = {};
+    srcTask.semaphore               = nullptr;
+    srcTask.contextPriority         = egl::ContextPriority::Low;
+    submitFence                     = std::move(srcTask.submitFence);
+    currentGarbage                  = std::move(srcTask.currentGarbage);
+    srcTask.serial                  = kZeroSerial;
+    srcTask.presentInfo             = {};
+}
 }  // namespace vk
 
 // CommandWorkQueue implementation.
@@ -391,7 +422,7 @@ void CommandProcessor::queueCommands(const vk::CommandProcessorTask &commands)
            commands.workerCommand == vk::CustomTask::DeviceWaitIdle ||
            commands.workerCommand == vk::CustomTask::Present || commands.commandBuffer == nullptr ||
            !commands.commandBuffer->empty());
-    mCommandsQueue.push(commands);
+    mCommandsQueue.push(std::move(commands));
     mWorkAvailableCondition.notify_one();
 }
 
@@ -416,15 +447,15 @@ angle::Result CommandProcessor::processCommandProcessorTasks()
         // Only wake if notified and command queue is not empty
         mWorkAvailableCondition.wait(lock, [this] { return !mCommandsQueue.empty(); });
         mWorkerThreadIdle             = false;
-        vk::CommandProcessorTask task = mCommandsQueue.front();
+        vk::CommandProcessorTask task = std::move(mCommandsQueue.front());
         mCommandsQueue.pop();
         lock.unlock();
         // A work block with a null context is a special case
         if (task.contextVk == nullptr)
         {
-            if (task.commandBuffer == nullptr)
+            if (task.commandBuffer == nullptr && task.workerCommand == vk::CustomTask::Exit)
             {
-                // All nullptrs in the command block signals worker thread to exit
+                // Exit task signals worker thread to exit
                 break;
             }
             else
@@ -437,43 +468,34 @@ angle::Result CommandProcessor::processCommandProcessorTasks()
                         // End command buffer
                         ANGLE_VK_TRY(mCommandWorkQueue.getPointer(), mPrimaryCommandBuffer.end());
                         // 1. Create submitInfo
-                        vk::FlushData *flushData = static_cast<vk::FlushData *>(task.commandData);
-                        VkSubmitInfo submitInfo  = {};
-                        InitializeSubmitInfo(
-                            &submitInfo, mPrimaryCommandBuffer, flushData->waitSemaphores,
-                            &flushData->waitSemaphoreStageMasks, flushData->semaphore);
+                        VkSubmitInfo submitInfo = {};
+                        InitializeSubmitInfo(&submitInfo, mPrimaryCommandBuffer,
+                                             task.waitSemaphores, &task.waitSemaphoreStageMasks,
+                                             task.semaphore);
                         // 2. Call submitFrame()
                         ANGLE_TRY(mCommandWorkQueue.submitFrame(
-                            mRenderer, flushData->contextPriority, submitInfo,
-                            flushData->submitFence, &flushData->currentGarbage, &mCommandPool,
-                            std::move(mPrimaryCommandBuffer)));
+                            mRenderer, task.contextPriority, submitInfo, task.submitFence,
+                            &task.currentGarbage, &mCommandPool, std::move(mPrimaryCommandBuffer)));
                         // 3. Allocate & begin new primary command buffer
                         ANGLE_TRY(
                             mCommandWorkQueue.allocatePrimaryCommandBuffer(&mPrimaryCommandBuffer));
                         ANGLE_VK_TRY(mCommandWorkQueue.getPointer(),
                                      mPrimaryCommandBuffer.begin(beginInfo));
-                        mRenderer->resetSharedFence(&flushData->submitFence);
-                        delete flushData;
+                        mRenderer->resetSharedFence(&task.submitFence);
                         break;
                     }
                     case vk::CustomTask::FinishToSerial:
                     {
-                        vk::FinishToSerialData *serialData =
-                            static_cast<vk::FinishToSerialData *>(task.commandData);
                         // printf("Worker thread finishing to Serial %llu\n",
                         // serialData->serial.getValue());
-                        ANGLE_TRY(mCommandWorkQueue.finishToSerial(mRenderer, serialData->serial));
-                        delete serialData;
+                        ANGLE_TRY(mCommandWorkQueue.finishToSerial(mRenderer, task.serial));
                         break;
                     }
                     case vk::CustomTask::Present:
                     {
-                        vk::PresentData *presentData =
-                            static_cast<vk::PresentData *>(task.commandData);
-                        ANGLE_VK_TRY(mCommandWorkQueue.getPointer(),
-                                     mCommandWorkQueue.present(presentData->priority,
-                                                               presentData->presentInfo));
-                        delete presentData;
+                        ANGLE_VK_TRY(
+                            mCommandWorkQueue.getPointer(),
+                            mCommandWorkQueue.present(task.contextPriority, task.presentInfo));
                         break;
                     }
                     case vk::CustomTask::DeviceWaitIdle:
@@ -483,10 +505,7 @@ angle::Result CommandProcessor::processCommandProcessorTasks()
                     }
                     case vk::CustomTask::QueueWaitIdle:
                     {
-                        vk::QueueWaitIdleData *queueWaitIdleData =
-                            static_cast<vk::QueueWaitIdleData *>(task.commandData);
-                        ANGLE_TRY(mCommandWorkQueue.queueWaitIdle(queueWaitIdleData->priority));
-                        delete queueWaitIdleData;
+                        ANGLE_TRY(mCommandWorkQueue.queueWaitIdle(task.contextPriority));
                         break;
                     }
                     default:
@@ -525,7 +544,9 @@ void CommandProcessor::waitForWorkComplete()
 void CommandProcessor::shutdown(std::thread *commandProcessorThread)
 {
     waitForWorkComplete();
-    const vk::CommandProcessorTask endTask = vk::kEndCommandProcessorThread;
+    vk::CommandProcessorTask endTask;
+    endTask.commandBuffer = nullptr;
+    endTask.workerCommand = vk::CustomTask::Exit;
     queueCommands(endTask);
     if (commandProcessorThread->joinable())
     {

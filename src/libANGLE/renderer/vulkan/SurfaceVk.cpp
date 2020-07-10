@@ -496,7 +496,6 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         vk::CommandProcessorTask task;
         task.contextVk     = nullptr;
         task.workerCommand = vk::CustomTask::DeviceWaitIdle;
-        task.commandData   = nullptr;
         renderer->queueCommands(task);
         renderer->waitForCommandProcessorIdle();
     }
@@ -746,13 +745,10 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
         {
             if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
             {
-                vk::QueueWaitIdleData *waitData = new vk::QueueWaitIdleData();
-                waitData->priority              = contextVk->getPriority();
-
                 vk::CommandProcessorTask task;
-                task.contextVk     = nullptr;
-                task.workerCommand = vk::CustomTask::QueueWaitIdle;
-                task.commandData   = static_cast<void *>(waitData);
+                task.contextVk       = nullptr;
+                task.workerCommand   = vk::CustomTask::QueueWaitIdle;
+                task.contextPriority = contextVk->getPriority();
                 contextVk->getRenderer()->queueCommands(task);
                 // Stall here for command thread to complete
                 contextVk->getRenderer()->waitForCommandProcessorIdle();
@@ -1292,18 +1288,16 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     VkResult result;
     if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
     {
-        vk::PresentData *presentData = new vk::PresentData();
-        presentData->priority        = contextVk->getPriority();
-        presentData->presentInfo     = presentInfo;
-
         vk::CommandProcessorTask task;
-        task.contextVk     = nullptr;
-        task.workerCommand = vk::CustomTask::Present;
-        task.commandData   = static_cast<void *>(presentData);
+        task.contextVk       = nullptr;
+        task.workerCommand   = vk::CustomTask::Present;
+        task.contextPriority = contextVk->getPriority();
+        task.presentInfo     = presentInfo;
         contextVk->getRenderer()->queueCommands(task);
         // TODO: Just stalling here for now, but really want to lead main thread continue
         //   need to figure out how to handle work below off-thread and sync to main
-        //   Also, need to fix lifetime of presentInfo data when main thread continues.
+        //   Also, need to fix lifetime of presentInfo data when main thread continues
+        //    as there are some local data structs in it that will go out of scope.
         result = VK_SUCCESS;
         contextVk->getRenderer()->waitForCommandProcessorIdle();
     }

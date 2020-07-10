@@ -38,7 +38,8 @@ namespace vk
 // Custom tasks are:
 //  Flush:End the current command buffer and submit commands to the queue
 //  FinishToSerial:Finish queue commands up to given serial value
-//  .... More here
+//  Present:
+//  QueueWaitIdle:
 enum CustomTask
 {
     Invalid = 0,
@@ -47,44 +48,59 @@ enum CustomTask
     Present,
     QueueWaitIdle,
     DeviceWaitIdle,
+    Exit,
 };
 
-struct FlushData
+// struct FlushData
+//{
+//    std::vector<VkSemaphore> waitSemaphores;
+//    std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+//    const vk::Semaphore *semaphore;
+//    egl::ContextPriority contextPriority;
+//    vk::Shared<vk::Fence> submitFence;
+//    vk::GarbageList currentGarbage;
+//};
+//
+// struct FinishToSerialData
+//{
+//    Serial serial;
+//};
+//
+// struct PresentData
+//{
+//    egl::ContextPriority priority;
+//    VkPresentInfoKHR presentInfo;
+//};
+//
+// struct QueueWaitIdleData
+//{
+//    egl::ContextPriority priority;
+//};
+
+struct CommandProcessorTask
 {
+    ContextVk *contextVk;
+    // If the command buffer helper pointer is set, then the associated SecondaryCommandBuffer (SCB)
+    //  will be processed into a primary command buffer.
+    CommandBufferHelper *commandBuffer;
+    // The remainder of the data is for custom commands that don't involve processing SCBs
+    CustomTask workerCommand;
+    // Just storing the data in-line in the struct for now.
+    // Flush data
     std::vector<VkSemaphore> waitSemaphores;
     std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
     const vk::Semaphore *semaphore;
     egl::ContextPriority contextPriority;
     vk::Shared<vk::Fence> submitFence;
     vk::GarbageList currentGarbage;
-};
-
-struct FinishToSerialData
-{
+    // FinishToSerial data
     Serial serial;
-};
-
-struct PresentData
-{
-    egl::ContextPriority priority;
+    // Present data
     VkPresentInfoKHR presentInfo;
-};
-
-struct QueueWaitIdleData
-{
-    egl::ContextPriority priority;
-};
-
-struct CommandProcessorTask
-{
-    ContextVk *contextVk;
-    // TODO: b/153666475 Removed primaryCB in threading phase2.
-    union
-    {
-        CommandBufferHelper *commandBuffer;
-        CustomTask workerCommand;
-    };
-    void *commandData;
+    // QueueWaitIdle & Present can piggy-back by using contextPriority above
+    // Need custom constructors
+    CommandProcessorTask();
+    CommandProcessorTask(CommandProcessorTask &&srcTask);
 };
 
 struct CommandBatch final : angle::NonCopyable
@@ -102,8 +118,6 @@ struct CommandBatch final : angle::NonCopyable
     vk::Shared<vk::Fence> fence;
     Serial serial;
 };
-
-static const CommandProcessorTask kEndCommandProcessorThread = {nullptr, {nullptr}, nullptr};
 }  // namespace vk
 
 class CommandWorkQueue : public vk::Context
