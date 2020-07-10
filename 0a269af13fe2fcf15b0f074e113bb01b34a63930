@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07f11a3b_9cac49b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-10T18:17:19Z",
+      "side": 1,
+      "message": "This is working well locally.  Key to this working is grab the thread once early, and release it once at the end of the run.\n\nI\u0027ll do a full run when the bots clear up over the weekend.",
+      "revId": "0a269af13fe2fcf15b0f074e113bb01b34a63930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
