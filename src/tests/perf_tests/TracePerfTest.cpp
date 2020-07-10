@@ -145,6 +145,9 @@ void TracePerfTest::initializeBenchmark()
     std::string testDataDir = testDataDirStr.str();
     SetBinaryDataDir(params.testID, testDataDir.c_str());
 
+    // Each test has its own resolution
+    getWindow()->resize(mTestParams.windowWidth, mTestParams.windowHeight);
+
     // Potentially slow. Can load a lot of resources.
     SetupReplay(params.testID);
     glFinish();
