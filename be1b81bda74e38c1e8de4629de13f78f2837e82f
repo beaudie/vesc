@@ -285,6 +285,30 @@
       "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8941e42_921f299f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-10T19:15:34Z",
+      "side": 1,
+      "message": "https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkClearAttachment.html:\n\n\u003e aspectMask is a mask selecting the color, depth and/or stencil aspects of the attachment to be cleared.\n\nNotice the \"and\".\n\n\u003e https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkCmdClearAttachments.html\n\nThe command has no language to forbid the combination of the two.",
+      "parentUuid": "c2e354f5_4f613bf3",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1804,
+        "endChar": 5
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
