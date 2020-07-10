@@ -59,6 +59,53 @@
     },
     {
       "key": {
+        "uuid": "fd76223d_9086d290",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T16:17:37Z",
+      "side": 1,
+      "message": "Absolutely. I was doing this try to avoid duplicate code of calcUniformUpdateRequiredSpace and allocate. But since now the two allocate are different, so make more sense to just unroll it. Some time even though code gets duplicate, it makes easier to read.",
+      "parentUuid": "380499a3_8e0f48f2",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 820,
+        "endChar": 20
+      },
+      "revId": "1aa3dad91cabbc6b7c20e1b5f08266fe3a4394d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c65ef1c0_20f41b11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T16:17:37Z",
+      "side": 1,
+      "message": "change to allocateFromCurrentBuffer(). I don\u0027t think try is needed.",
+      "range": {
+        "startLine": 975,
+        "startChar": 20,
+        "endLine": 975,
+        "endChar": 48
+      },
+      "revId": "1aa3dad91cabbc6b7c20e1b5f08266fe3a4394d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bad74cd8_9556e911",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
