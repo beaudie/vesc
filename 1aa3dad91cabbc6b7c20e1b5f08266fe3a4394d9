@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af6ec3c9_f7a748db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-10T05:39:05Z",
+      "side": 1,
+      "message": "Looks good.",
+      "revId": "1aa3dad91cabbc6b7c20e1b5f08266fe3a4394d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cedfec91_922c528c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-10T05:39:05Z",
+      "side": 1,
+      "message": "Does this need to happen every time or can it be moved to before the loop executes?",
+      "revId": "1aa3dad91cabbc6b7c20e1b5f08266fe3a4394d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "380499a3_8e0f48f2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-10T05:39:05Z",
+      "side": 1,
+      "message": "I think this block should be converted from a while loop to just a normal if-else to simplify things and prevent any possibilities of an infinite loop.   I think this should be equivalent:\n\n    // Need to do this before returning?\n    mDefaultUniformStorage.releaseInFlightBuffersToResourceUseList(contextVk);\n\n    requiredSpace \u003d calcUniformUpdateRequiredSpace(contextVk, glExecutable, offsets);\n    if (!requiredSpace)\n    {\n        return angle::Result::Continue;\n    }\n\n    // Allocate space from dynamicBuffer. Always try to allocate from the current buffer first.\n    // If that failed, we deal with fall out and try again.\n    bool allocatedFromCurrentBuffer \u003d mDefaultUniformStorage.tryAllocateFromCurrentBuffer(\n        requiredSpace, \u0026bufferData, \u0026bufferOffset);\n\n    if (!allocatedFromCurrentBuffer)\n    {\n        for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())\n        {\n            if (!mDefaultUniformBlocksDirty[shaderType] \u0026\u0026\n                !mDefaultUniformBlocks[shaderType].uniformData.empty())\n            {\n                mDefaultUniformBlocksDirty.set(shaderType);\n            }\n        }\n\n        requiredSpace \u003d calcUniformUpdateRequiredSpace(contextVk, glExecutable, offsets);\n        ANGLE_TRY(mDefaultUniformStorage.allocate(contextVk, requiredSpace, \u0026bufferData,\n                                                  nullptr, \u0026bufferOffset,\n                                                  \u0026anyNewBufferAllocated));\n        ASSERT(anyNewBufferAllocated);\n    }",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 820,
+        "endChar": 20
+      },
+      "revId": "1aa3dad91cabbc6b7c20e1b5f08266fe3a4394d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bad74cd8_9556e911",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-10T05:39:05Z",
+      "side": 1,
+      "message": "Please add:\n    ASSERT(ptrOut);\n    ASSERT(offsetOut);",
+      "revId": "1aa3dad91cabbc6b7c20e1b5f08266fe3a4394d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffa35170_2763ffb0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-10T05:39:05Z",
+      "side": 1,
+      "message": "Looks like we get to skip a redundant map() call that was occurring before too, which is nice.",
+      "revId": "1aa3dad91cabbc6b7c20e1b5f08266fe3a4394d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
