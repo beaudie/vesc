@@ -33,6 +33,138 @@
       "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1801c9b1_c923e012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T17:11:42Z",
+      "side": 1,
+      "message": "Looks like this is failing tests.",
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5347fea_130f9be8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T17:11:42Z",
+      "side": 1,
+      "message": "pass this down instead of calling getDimensions. you\u0027re currently ignoring the scissor.",
+      "range": {
+        "startLine": 280,
+        "startChar": 24,
+        "endLine": 280,
+        "endChar": 44
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81a7ec4a_cdb69e25",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T17:11:42Z",
+      "side": 1,
+      "message": "nit: flip the order of the conditions to make this a positive check for readability:\n\nif (hasStarted \u0026\u0026 isCurrent)\n...",
+      "range": {
+        "startLine": 383,
+        "startChar": 7,
+        "endLine": 383,
+        "endChar": 72
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dba3ff9d_372993e7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T17:11:42Z",
+      "side": 1,
+      "message": "usual nit about non-const refs.",
+      "range": {
+        "startLine": 1774,
+        "startChar": 49,
+        "endLine": 1774,
+        "endChar": 63
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4bd8e17_2baca3e3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T17:11:42Z",
+      "side": 1,
+      "message": "avoid using vector (it allocates from the heap).\n\nYou can use DrawBuffersVector here.",
+      "range": {
+        "startLine": 1781,
+        "startChar": 4,
+        "endLine": 1781,
+        "endChar": 47
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bac54a4a_ee9817e4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T17:11:42Z",
+      "side": 1,
+      "message": "don\u0027t think depth/stencil have to be packed if they\u0027re both set? not sure.",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1804,
+        "endChar": 5
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
