@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "515dd92b_88ab3fa4",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-10T14:22:39Z",
+      "side": 1,
+      "message": "Can you append _autogen to this?",
+      "range": {
+        "startLine": 139,
+        "startChar": 29,
+        "endLine": 139,
+        "endChar": 48
+      },
+      "revId": "dbb7ebc57227761938b2ed7e847f5ea003b2444d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46655440_a93ad220",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-10T14:22:39Z",
+      "side": 1,
+      "message": "boilerplate*",
+      "range": {
+        "startLine": 156,
+        "startChar": 6,
+        "endLine": 156,
+        "endChar": 14
+      },
+      "revId": "dbb7ebc57227761938b2ed7e847f5ea003b2444d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
