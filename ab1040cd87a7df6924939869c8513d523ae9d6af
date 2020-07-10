@@ -34,6 +34,24 @@
       "revId": "ab1040cd87a7df6924939869c8513d523ae9d6af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cc895c7_b0bb8885",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T17:06:18Z",
+      "side": 1,
+      "message": "That was for the D3D9 back-end. The testing situation was very different back then.",
+      "parentUuid": "40b5bc99_ef030caa",
+      "revId": "ab1040cd87a7df6924939869c8513d523ae9d6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
