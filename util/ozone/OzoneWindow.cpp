@@ -45,6 +45,12 @@ void OzoneWindow::messageLoop() {}
 
 void OzoneWindow::setMousePosition(int x, int y) {}
 
+bool OzoneWindow::setOrientation(int width, int height)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 bool OzoneWindow::setPosition(int x, int y)
 {
     mNative.x = mX = x;
