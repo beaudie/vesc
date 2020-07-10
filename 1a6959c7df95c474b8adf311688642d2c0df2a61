@@ -448,6 +448,24 @@
       "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17437b7e_5b5d430c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T00:14:03Z",
+      "side": 1,
+      "message": "I see your point. You are right, the wasted space is on the bufferB. I was thinking to add a tryAlloc function, but decided to defer it. I will add something tomorrow",
+      "parentUuid": "7b7dd782_3a2ba368",
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
