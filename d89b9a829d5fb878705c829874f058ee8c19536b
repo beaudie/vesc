@@ -63,6 +63,30 @@
       "revId": "d89b9a829d5fb878705c829874f058ee8c19536b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "702329f3_be46d247",
+        "filename": "util/windows/win32/Win32Window.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T16:29:56Z",
+      "side": 1,
+      "message": "You could make a function in OSWindow that by default does nothing. I just think we shouldn\u0027t modify this in other tests.",
+      "parentUuid": "e548b4d2_7723a163",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 557,
+        "endChar": 54
+      },
+      "revId": "d89b9a829d5fb878705c829874f058ee8c19536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
