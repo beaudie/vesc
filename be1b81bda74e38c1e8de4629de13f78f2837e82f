@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a4c993f_052c6e45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-10T16:46:23Z",
+      "side": 1,
+      "message": "This cuts render time by 20-25% for Angry Birds 2 and Temple Run. At least according to AGI.\nPTAL.",
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
