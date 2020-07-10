@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ba364669_1dce7625",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T23:16:04Z",
+      "side": 1,
+      "message": "The XFB cached are implemented in next CL.",
+      "parentUuid": "8b545675_5a2b6f11",
+      "revId": "5a2f427ce9d7a6e43347a21acdb4800df5d8d748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ade96ba8_3b3f1316",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 12
@@ -50,6 +68,24 @@
       "revId": "5a2f427ce9d7a6e43347a21acdb4800df5d8d748",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5823d655_0290cd94",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T23:16:04Z",
+      "side": 1,
+      "message": "Thanks, this probably is result from bad merge.",
+      "parentUuid": "ade96ba8_3b3f1316",
+      "revId": "5a2f427ce9d7a6e43347a21acdb4800df5d8d748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

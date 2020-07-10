@@ -34,6 +34,24 @@
       "revId": "a6db8c7e0bd3ed4cd2721587c4cbac702493f613",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebb738db_857885ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-10T23:16:04Z",
+      "side": 1,
+      "message": "This was initially because I ran into build failure and was wondering the requirement of hash. Fixed now.",
+      "parentUuid": "fb3671bc_bed6d466",
+      "revId": "a6db8c7e0bd3ed4cd2721587c4cbac702493f613",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
