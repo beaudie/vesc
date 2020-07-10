@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "611ce9fe_2bae4ab4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-10T19:10:21Z",
+      "side": 1,
+      "message": "Done - though it shouldn\u0027t matter, only non-scissored attachments will go through the new path.",
+      "parentUuid": "a5347fea_130f9be8",
+      "range": {
+        "startLine": 280,
+        "startChar": 24,
+        "endLine": 280,
+        "endChar": 44
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81a7ec4a_cdb69e25",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -96,6 +120,30 @@
       "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a75a8af_b4a7f9ef",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-10T19:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81a7ec4a_cdb69e25",
+      "range": {
+        "startLine": 383,
+        "startChar": 7,
+        "endLine": 383,
+        "endChar": 72
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +170,30 @@
     },
     {
       "key": {
+        "uuid": "280bec15_e88a2837",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-10T19:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dba3ff9d_372993e7",
+      "range": {
+        "startLine": 1774,
+        "startChar": 49,
+        "endLine": 1774,
+        "endChar": 63
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4bd8e17_2baca3e3",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -145,6 +217,30 @@
     },
     {
       "key": {
+        "uuid": "00ddb02d_45feab5f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-10T19:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4bd8e17_2baca3e3",
+      "range": {
+        "startLine": 1781,
+        "startChar": 4,
+        "endLine": 1781,
+        "endChar": 47
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bac54a4a_ee9817e4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -165,6 +261,30 @@
       "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2e354f5_4f613bf3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-10T19:10:21Z",
+      "side": 1,
+      "message": "They have to be individual attachment records as aspect is required to be one value, not combination of depth \u0026 stencil. But values themselves can be part of a backed depth\u0026stencil buffer.",
+      "parentUuid": "bac54a4a_ee9817e4",
+      "range": {
+        "startLine": 1792,
+        "startChar": 0,
+        "endLine": 1804,
+        "endChar": 5
+      },
+      "revId": "be1b81bda74e38c1e8de4629de13f78f2837e82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
