@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "18910afc_20f6d3fb",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-10T20:34:19Z",
+      "side": 1,
+      "message": "The fundamental issue is that an earlier buffer for a different shader is still in use when it gets released. It\u0027s tricky enough I\u0027ve lost track of what this CL is doing vs what Vulkan requires.",
+      "parentUuid": "2f378cb2_3c2c2125",
+      "range": {
+        "startLine": 760,
+        "startChar": 29,
+        "endLine": 760,
+        "endChar": 57
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31dd7032_0832f419",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
