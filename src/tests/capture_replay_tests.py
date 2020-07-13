@@ -19,36 +19,40 @@ Script testing capture_replay with angle_end2end_tests
 # Run this script with Python to test capture replay on angle_end2end tests
 # python path/to/capture_replay_tests.py
 # Command line arguments:
-# --build_dir: specifies build directory relative to angle folder.
-# Default is out/CaptureReplayTestsDebug
-# --verbose: off by default
+# --capture_build_dir: specifies capture build directory relative to angle folder.
+# Default is out/CaptureDebug
+# --replay_build_dir: specifies replay build directory relative to angle folder.
+# Default is out/ReplayDebug
 # --use_goma: uses goma for compiling and linking test. Off by default
 # --gtest_filter: same as gtest_filter of Google's test framework. Default is */ES2_Vulkan
 # --test_suite: test suite to execute on. Default is angle_end2end_tests
 
 import argparse
-import distutils.util
+import multiprocessing
 import os
 import shutil
 import subprocess
+import time
 
 from sys import platform
 
-DEFAULT_BUILD_DIR = "out/CaptureReplayTestsDebug"  # relative to angle folder
+DEFAULT_CAPTURE_BUILD_DIR = "out/CaptureDebug"  # relative to angle folder
+DEFAULT_REPLAY_BUILD_DIR = "out/ReplayDebug"  # relative to angle folder
 DEFAULT_FILTER = "*/ES2_Vulkan"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
+REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
+TEST_TIMEOUT = 60
 
 
-class Logger():
-    verbose = False
+def CreateSubprocess(command, to_main_stdout):
+    if not to_main_stdout:
+        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+    else:
+        p = subprocess.Popen(command, shell=True)
+    return p
 
-    @staticmethod
-    def log(msg):
-        if Logger.verbose:
-            print(msg)
 
-
-def RunGnGen(build_dir, arguments, is_log_showed=False):
+def RunGnGen(build_dir, arguments, to_main_stdout=False):
     command = 'gn gen --args="'
     is_first_argument = True
     for argument in arguments:
@@ -61,48 +65,60 @@ def RunGnGen(build_dir, arguments, is_log_showed=False):
         command += argument[1]
     command += '" '
     command += build_dir
-    if is_log_showed:
-        subprocess.call(command, shell=True)
-    else:
-        subprocess.check_output(command, shell=True)
+    p = CreateSubprocess(command, to_main_stdout)
+    try:
+        output = p.communicate()[0]
+        return p.returncode, output
+    except Error as e:
+        p.kill()
+        return e.returnCode, e.output
 
 
-def RunAutoninja(build_dir, target, is_log_showed=False):
+def RunAutoninja(build_dir, target, to_main_stdout=False):
     command = "autoninja "
     command += target
     command += " -C "
     command += build_dir
-    if is_log_showed:
-        subprocess.call(command, shell=True)
-    else:
-        subprocess.check_output(command, shell=True)
-
+    p = CreateSubprocess(command, to_main_stdout)
+    try:
+        output = p.communicate()[0]
+        return p.returncode, output
+    except Error as e:
+        p.kill()
+        return e.returnCode, e.output
 
 # return a list of tests and their params in the form
 # [(test1, params1), (test2, params2),...]
 def GetTestNamesAndParams(test_exec_path, filter="*"):
-    output = subprocess.check_output(
-        '"' + test_exec_path + '" --gtest_list_tests --gtest_filter=' + filter,
-        shell=True,
-        stderr=subprocess.PIPE).splitlines()
-
-    tests = []
-    last_testcase_name = ""
-    test_name_splitter = "# GetParam() ="
-    for line in output:
-        if test_name_splitter in line:
-            # must be a test name line
-            test_name_and_params = line.split(test_name_splitter)
-            tests.append((last_testcase_name + test_name_and_params[0].strip(), \
-                test_name_and_params[1].strip()))
-        else:
-            # gtest_list_tests returns the test in this format
-            # test case
-            #    test name1
-            #    test name2
-            # Need to remember the last test case name to append to the test name
-            last_testcase_name = line
-    return tests
+    command = '"' + test_exec_path + '" --gtest_list_tests --gtest_filter=' + filter
+    p = CreateSubprocess(command, False)
+    try:
+        output = p.communicate()[0]
+        if p.returncode != 0:
+            print(output)
+            return []
+        output = output.splitlines()
+        tests = []
+        last_testcase_name = ""
+        test_name_splitter = "# GetParam() ="
+        for line in output:
+            if test_name_splitter in line:
+                # must be a test name line
+                test_name_and_params = line.split(test_name_splitter)
+                tests.append((last_testcase_name + test_name_and_params[0].strip(), \
+                    test_name_and_params[1].strip()))
+            else:
+                # gtest_list_tests returns the test in this format
+                # test case
+                #    test name1
+                #    test name2
+                # Need to remember the last test case name to append to the test name
+                last_testcase_name = line
+        return tests
+    except Error as e:
+        p.kill()
+        print(e.output)
+        return []
 
 
 class Test():
@@ -116,38 +132,39 @@ class Test():
         return self.full_test_name + " Params: " + self.params
 
     def Run(self, test_exe_path):
+        command = '"' + test_exe_path + '" --gtest_filter=' + self.full_test_name
+        p = CreateSubprocess(command, False)
         try:
-            output = subprocess.check_output(
-                '"' + test_exe_path + '" --gtest_filter=' + self.full_test_name + \
-                ' --use-angle=vulkan',
-                shell=True,
-                stderr=subprocess.PIPE)
-            Logger.log("Ran " + self.full_test_name + " with capture")
-            return (0, output)
-        except subprocess.CalledProcessError as e:
-            return (e.returncode, e.output)
+            output = p.communicate()[0]
+            return p.returncode, output
+        except Error as e:
+            p.kill()
+            return e.returncode, e.output
 
-    def BuildReplay(self, build_dir, replay_exec):
-        try:
-            RunGnGen(build_dir, [("use_goma", self.use_goma),
-                                 ("angle_with_capture_by_default", "true"),
-                                 ("angle_build_capture_replay_tests", "true")])
-            RunAutoninja(build_dir, replay_exec)
-            Logger.log("Built replay of " + self.full_test_name)
-            return (0, "Built replay of " + self.full_test_name)
-        except subprocess.CalledProcessError as e:
-            return (e.returncode, e.output)
+    def BuildReplay(self, build_dir, trace_dir, replay_exec, gn_completed_list,
+                    gn_completed_list_index):
+        if not gn_completed_list[gn_completed_list_index]:
+            returnCode, output = RunGnGen(
+                build_dir, [("use_goma", self.use_goma),
+                            ("angle_build_capture_replay_tests", "true"),
+                            ("angle_capture_replay_test_trace_dir", '\\"' + trace_dir + '\\"')])
+            if returnCode != 0:
+                return returnCode, output
+            gn_completed_list[gn_completed_list_index] = True
+        returnCode, output = RunAutoninja(build_dir, replay_exec)
+        if returnCode != 0:
+            return returnCode, output
+        return 0, "Built replay of " + self.full_test_name
 
-    def RunReplay(self, build_dir, replay_exec):
+    def RunReplay(self, replay_exe_path):
+        command = '"' + replay_exe_path + '" --use-angle=vulkan'
+        p = CreateSubprocess(command, False)
         try:
-            output = subprocess.check_output(
-                '"' + build_dir + '/' + replay_exec + '" --use-angle=vulkan',
-                shell=True,
-                stderr=subprocess.PIPE)
-            Logger.log("Ran replay of " + self.full_test_name)
-            return (0, output)
-        except subprocess.CalledProcessError as e:
-            return (e.returncode, e.output)
+            output = p.communicate()[0]
+            return p.returncode, output
+        except Error as e:
+            p.kill()
+            return e.returncode, e.output
 
 
 def ClearFolderContent(path):
@@ -186,29 +203,100 @@ def SetCWDToAngleFolder():
     return cwd
 
 
-def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
-    Logger.verbose = verbose
+def RunTest(test, capture_build_dir, replay_build_dir, test_exec, replay_exec, trace_dir,
+            gn_completed_list, gn_completed_list_index, result_queue):
+    trace_folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, trace_dir)
+    ClearFolderContent(trace_folder_path)
+    os.environ["ANGLE_CAPTURE_ENABLED"] = "1"
+    os.environ["ANGLE_CAPTURE_OUT_DIR"] = trace_folder_path
+    returnCode, output = test.Run(os.path.join(capture_build_dir, test_exec))
+    if returnCode != 0 or not CanRunReplay(trace_folder_path):
+        result_queue.put ((test.full_test_name, "Skipped",
+        "Skipping replay since capture didn't produce appropriate files or has crashed. " + \
+            "Error message: " + output))
+        return
+    os.environ["ANGLE_CAPTURE_ENABLED"] = "0"
+    returnCode, output = test.BuildReplay(replay_build_dir, trace_dir, replay_exec,
+                                          gn_completed_list, gn_completed_list_index)
+    if returnCode != 0:
+        result_queue.put(
+            (test.full_test_name, "Skipped",
+             "Skipping replay since failing to build replay. Error message: " + output))
+        return
+    returnCode, output = test.RunReplay(os.path.join(replay_build_dir, replay_exec))
+    if returnCode != 0:
+        result_queue.put((test.full_test_name, "Failed", output))
+    else:
+        result_queue.put((test.full_test_name, "Passed", ""))
+
+
+def GetFirstAvailableWorkers(workers):
+    for i in range(len(workers)):
+        if not workers[i] or not workers[i].is_alive():
+            if workers[i]:
+                workers[i].join(TEST_TIMEOUT)
+            return i
+    return -1
+
+
+def CreateReplayBuildFolders(folder_num, replay_build_dir):
+    for i in range(folder_num):
+        replay_build_dir_name = replay_build_dir + str(i)
+        if os.path.isdir(replay_build_dir_name):
+            shutil.rmtree(replay_build_dir_name)
+        os.makedirs(replay_build_dir_name)
+
+
+def DeleteReplayBuildFolders(folder_num, replay_build_dir, trace_folder):
+    for i in range(folder_num):
+        folder_name = replay_build_dir + str(i)
+        if os.path.isdir(folder_name):
+            shutil.rmtree(folder_name)
+
+
+def CreateTraceFolders(folder_num, trace_folder):
+    for i in range(folder_num):
+        folder_name = trace_folder + str(i)
+        folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, folder_name)
+        if os.path.isdir(folder_path):
+            shutil.rmtree(folder_path)
+        os.makedirs(folder_path)
+
+
+def DeleteTraceFolders(folder_num, trace_folder):
+    for i in range(folder_num):
+        folder_name = trace_folder + str(i)
+        folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, folder_name)
+        if os.path.isdir(folder_path):
+            shutil.rmtree(folder_path)
+
+
+def main(capture_build_dir, replay_build_dir, use_goma, gtest_filter, test_exec):
+    start_time = time.time()
+    worker_count = multiprocessing.cpu_count() - 1
     cwd = SetCWDToAngleFolder()
-    capture_out_dir = "src/tests/capture_replay_tests/traces"  # relative to ANGLE folder
-    if not os.path.isdir(capture_out_dir):
-        os.mkdir(capture_out_dir)
-    environment_vars = [("ANGLE_CAPTURE_FRAME_END", "100"),
-                        ("ANGLE_CAPTURE_OUT_DIR", capture_out_dir),
-                        ("ANGLE_CAPTURE_SERIALIZE_STATE", "1")]
+    trace_folder = "traces"
+    if not os.path.isdir(capture_build_dir):
+        os.makedirs(capture_build_dir)
+    CreateReplayBuildFolders(worker_count, replay_build_dir)
+    CreateTraceFolders(worker_count, trace_folder)
+
     replay_exec = "capture_replay_tests"
     if platform == "win32":
         test_exec += ".exe"
         replay_exec += ".exe"
     # generate gn files
-    RunGnGen(build_dir, [("use_goma", use_goma), ("angle_with_capture_by_default", "true")], True)
-    # build angle_end2end
-    RunAutoninja(build_dir, test_exec, True)
+    RunGnGen(capture_build_dir, [("use_goma", use_goma),
+                                 ("angle_with_capture_by_default", "true")], True)
+    RunAutoninja(capture_build_dir, test_exec, True)
     # get a list of tests
-    test_names_and_params = GetTestNamesAndParams(build_dir + '/' + test_exec, gtest_filter)
-    all_tests = []
+    test_names_and_params = GetTestNamesAndParams(
+        os.path.join(capture_build_dir, test_exec), gtest_filter)
+    all_tests = multiprocessing.Queue()
     for test_name_and_params in test_names_and_params:
-        all_tests.append(Test(test_name_and_params[0], test_name_and_params[1], use_goma))
+        all_tests.put(Test(test_name_and_params[0], test_name_and_params[1], use_goma))
 
+    environment_vars = [("ANGLE_CAPTURE_FRAME_END", "100"), ("ANGLE_CAPTURE_SERIALIZE_STATE", "1")]
     for environment_var in environment_vars:
         os.environ[environment_var[0]] = environment_var[1]
 
@@ -216,54 +304,74 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     failed_count = 0
     skipped_count = 0
     failed_tests = []
-    for test in all_tests:
-        if verbose:
-            print("*" * 30)
-        ClearFolderContent(capture_out_dir)
-        os.environ["ANGLE_CAPTURE_ENABLED"] = "1"
-        run_output = test.Run(build_dir + "/" + test_exec)
-        if run_output[0] != 0 or not CanRunReplay(capture_out_dir):
-            print("Skipped: " + test.full_test_name + ". Skipping replay since capture" + \
-                " didn't produce appropriate files or has crashed")
-            skipped_count += 1
-            continue
-        os.environ["ANGLE_CAPTURE_ENABLED"] = "0"
-        build_output = test.BuildReplay(build_dir, replay_exec)
-        if build_output[0] != 0:
-            print("Skipped: " + test.full_test_name + ". Skipping replay since failing to" + \
-                " build replay")
-            skipped_count += 1
-            continue
-        replay_output = test.RunReplay(build_dir, replay_exec)
-        if replay_output[0] != 0:
-            print("Failed: " + test.full_test_name)
-            print(replay_output[1])
-            failed_count += 1
-            failed_tests.append(test.full_test_name)
-        else:
-            print("Passed: " + test.full_test_name)
-            passed_count += 1
+
+    manager = multiprocessing.Manager()
+    gn_completed_list = manager.list()
+    result_queue = manager.Queue()
+    [gn_completed_list.append(False) for i in range(worker_count)]
+
+    workers = [None for i in range(worker_count)]
+    while not all_tests.empty():
+        test = all_tests.get()
+        first_available_worker = GetFirstAvailableWorkers(workers)
+        while first_available_worker == -1:
+            time.sleep(0.01)
+            first_available_worker = GetFirstAvailableWorkers(workers)
+        print("Running " + test.full_test_name)
+        proc = multiprocessing.Process(
+            target=RunTest,
+            args=(test, capture_build_dir, replay_build_dir + str(first_available_worker),
+                  test_exec, replay_exec, trace_folder + str(first_available_worker),
+                  gn_completed_list, first_available_worker, result_queue))
+        workers[first_available_worker] = proc
+        proc.start()
+
+    for worker in workers:
+        if worker:
+            worker.join(TEST_TIMEOUT)
+            if worker.is_alive():
+                worker.terminate()
 
     for environment_var in environment_vars:
         del os.environ[environment_var[0]]
+    end_time = time.time()
 
-    if os.path.isdir(capture_out_dir):
-        shutil.rmtree(capture_out_dir)
     print("\n\n\n")
+    print("Results:")
+    while not result_queue.empty():
+        result = result_queue.get()
+        output_string = result[1] + ": " + result[0] + ". "
+        if result[1] == "Skipped":
+            output_string += result[2]
+            skipped_count += 1
+        elif result[1] == "Failed":
+            output_string += result[2]
+            failed_tests.append(result[0])
+            failed_count += 1
+        else:
+            passed_count += 1
+        print(output_string)
+
+    print("\n\n")
+    print("Elapsed time: " + str(end_time - start_time) + " seconds")
     print("Passed: "+ str(passed_count) + " Failed: " + str(failed_count) + \
     " Skipped: " + str(skipped_count))
     print("Failed tests:")
     for failed_test in failed_tests:
         print("\t" + failed_test)
+    DeleteTraceFolders(worker_count, trace_folder)
+    DeleteReplayBuildFolders(worker_count, replay_build_dir, trace_folder)
+    if os.path.isdir(capture_build_dir):
+        shutil.rmtree(capture_build_dir)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--build_dir', default=DEFAULT_BUILD_DIR)
-    parser.add_argument('--verbose', default="False")
+    parser.add_argument('--capture_build_dir', default=DEFAULT_CAPTURE_BUILD_DIR)
+    parser.add_argument('--replay_build_dir', default=DEFAULT_REPLAY_BUILD_DIR)
     parser.add_argument('--use_goma', default="false")
     parser.add_argument('--gtest_filter', default=DEFAULT_FILTER)
     parser.add_argument('--test_suite', default=DEFAULT_TEST_SUITE)
     args = parser.parse_args()
-    main(args.build_dir, distutils.util.strtobool(args.verbose), args.use_goma, args.gtest_filter,
+    main(args.capture_build_dir, args.replay_build_dir, args.use_goma, args.gtest_filter,
          args.test_suite)
