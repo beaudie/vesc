@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "051cb70a_5a089b11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-13T16:05:45Z",
+      "side": 1,
+      "message": "Nice stuff! ",
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b7e7bd3_b3780e3d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-13T16:05:45Z",
+      "side": 1,
+      "message": "I think this can be fixed by generating in ANGLE instead of Chrome.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7d19852_56db6778",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-13T16:05:45Z",
+      "side": 1,
+      "message": "nit: can this be refactored to a new function?",
+      "range": {
+        "startLine": 307,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 55
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2d6bc84_604b39b8",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-13T16:05:45Z",
+      "side": 1,
+      "message": "I think using the gn args from roll_aosp.sh [0] should make this uncessary but this is a better solution, IMO.  You can remove the angle_enable_commit_id line from that script.\n\n[0] https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/scripts/roll_aosp.sh;l\u003d39?q\u003droll_aosp.sh\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2Fsearch%2F",
+      "range": {
+        "startLine": 374,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 1
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "000fc89a_84c08d3d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-13T16:05:45Z",
+      "side": 1,
+      "message": "nit: Would love to refactor this into loops. Maybe something like (didn\u0027t compile this):\n\n    abis \u003d [ \u0027arm\u0027, \u0027arm64\u0027, \u0027x86\u0027, \u0027x86_64\u0027 ]\n    for abi in abis:\n        parser.add_argument(\n            \u0027gn_json_\u0027 + abi,\n            help\u003dabi + \u0027 gn desc in json format. Generated with \\\u0027gn desc \u003cout_dir\u003e --format\u003djson \"*\"\\\u0027.\u0027\n        )\n\n\n    args \u003d vars(parser.parse_args())\n\n    build_info \u003d {}\n        for abi in abis:\n            with open(args[\u0027gn_json_\u0027 + abi], \u0027r\u0027) as f:\n                build_info[abi] \u003d json.load(f)",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 42
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
