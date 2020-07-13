@@ -86,6 +86,24 @@
       "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b598c10_9429b519",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T18:24:42Z",
+      "side": 1,
+      "message": "Ok that\u0027s fine by me to unblock this change and get it submitted.",
+      "parentUuid": "574a15b9_fac8bdd0",
+      "revId": "2e327fb04ed93f17162c84be25f4fa9aa4d1a746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
