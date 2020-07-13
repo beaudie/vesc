@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "3804b965_a4b3a896",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-13T23:04:33Z",
+      "side": 1,
+      "message": "FYI, the CL that will move PPO to use cached descripto set is https://chromium-review.googlesource.com/c/angle/angle/+/2274870 Obviously it has not been updated to catch up with the dependent CLs. As soon as I land these four Cls, that will be the next.",
+      "parentUuid": "cb8b524e_eb35563c",
+      "range": {
+        "startLine": 728,
+        "startChar": 25,
+        "endLine": 728,
+        "endChar": 45
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7744ed4_fd74356b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
