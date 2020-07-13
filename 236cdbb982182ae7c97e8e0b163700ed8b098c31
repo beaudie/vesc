@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0b92dc5_5c70cedb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2020-07-13T03:20:22Z",
+      "side": 1,
+      "message": "Hi, I have modified the commit msg. Could you help submit it?\n\nThank you",
+      "revId": "236cdbb982182ae7c97e8e0b163700ed8b098c31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
