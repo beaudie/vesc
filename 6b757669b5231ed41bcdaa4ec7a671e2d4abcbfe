@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "cb8b524e_eb35563c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-13T21:36:48Z",
+      "side": 1,
+      "message": "I intentionally not touch PPOs here. The PPOs is expected to still work as before. The PPOs will be changed in future CLs when I move the uniform buffers to context. (I already coded that and passes all tests but had to reorder the CLs to make the  cache CL land first) The PPO will be much easier to handle once the dynamic buffers are in context.\n\nI also aware of the eisting bug with PPO as well and that will also fixed in the future CLs. So if possible, we can just live with whatever we have for now so that we can move to that actual fix in really short time.",
+      "parentUuid": "46a40d70_3fd40522",
+      "range": {
+        "startLine": 728,
+        "startChar": 25,
+        "endLine": 728,
+        "endChar": 45
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7744ed4_fd74356b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
@@ -70,6 +94,30 @@
       "writtenOn": "2020-07-13T21:15:34Z",
       "side": 1,
       "message": "Sorry about the nits, but nit: It\u0027s probably easier to read if this did `mDefaultUniformBlocksDirty.set()`, the test in line 810 did `if (!mDefaultUniformBlocks[shaderType].uniformData.empty())` and line 816 moved out of the loop and turned into `mDefaultUniformBlocksdirty.reset()`.",
+      "range": {
+        "startLine": 792,
+        "startChar": 0,
+        "endLine": 798,
+        "endChar": 9
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc825ab0_86d455bb",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-13T21:36:48Z",
+      "side": 1,
+      "message": "There are other places (I think calcUniformUpdateRequiredSpace as well) also will need to change. I actually tried this before and ran into test failure. Before my change, it appears always true that empty uniform will not have dirty bit. And I don\u0027t want to change that fact, that is how I end up this. I think it also make sense from performance point of view that line 794 occur much less frequently than line 810, so you want to do if test here.",
+      "parentUuid": "a7744ed4_fd74356b",
       "range": {
         "startLine": 792,
         "startChar": 0,
