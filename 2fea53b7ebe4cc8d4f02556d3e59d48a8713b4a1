@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d50ed3bf_dd42c760",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T18:15:40Z",
+      "side": 1,
+      "message": "Could you please add a regression test? How about something like this?\n\n- Have a single program with uniform data in both VS and FS:\n\n    VS: out \u003d uniform1;\n    FS: out \u003d vsout \u003e uniform2 \u0026\u0026 vsout \u003c uniform2 + 1 ? Green : Red;\n\n- Use additive blending\n- Draw 1000 times (or more), every time either change uniforms of VS, or uniforms of FS or both (preferably in a random-ish way, like VS, FS, VS, VS, FS, VS+FS, FS, VS, FS, FS, FS, VS+FS, VS, VS+FS, ... (could devise a formula based on \"draw call index\" to generate this)).\n- When setting uniforms, set them such that the conditions in the shaders are satisfied. Note:\n  * VS uniform is compared against FS uniform, so that if one stage is using uniforms from the wrong buffer, there would be a mismatch and hopefully a failure.\n  * \u003c and \u003e are used so that each stage can be modified to change the uniform, without necessarily needing to update the other stage to exactly match it.\n- At the end, make sure the framebuffer is Green.\n\nThe test could make sure the uniform values are monotonically increasing so that DynamicBuffer\u0027s buffer recycling wouldn\u0027t accidentally cause the old uniform values from one stage to satisfy the condition.",
+      "revId": "2fea53b7ebe4cc8d4f02556d3e59d48a8713b4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c93f2aae_670be53b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T18:15:40Z",
+      "side": 1,
+      "message": "Redundant. Removing it also makes it clearer that *every* uniform data is being placed in the new buffer.",
+      "range": {
+        "startLine": 794,
+        "startChar": 16,
+        "endLine": 794,
+        "endChar": 58
+      },
+      "revId": "2fea53b7ebe4cc8d4f02556d3e59d48a8713b4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

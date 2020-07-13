@@ -263,6 +263,30 @@
     },
     {
       "key": {
+        "uuid": "c91f17d0_3aec7a01",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T18:15:40Z",
+      "side": 1,
+      "message": "@Jamie, I didn\u0027t spot any issues, though it _is_ tricky. What the change does is, on new DynamicBuffer buffer allocations, it pretends all shader stages to be dirty so they all get placed in the new buffer. On later updates, if it can fit the uniform data from only the dirty stages into the same buffer, it will do so. In either case, uniform data for all stages must necessarily be in the same buffer.",
+      "parentUuid": "29726647_6f2ca8af",
+      "range": {
+        "startLine": 760,
+        "startChar": 29,
+        "endLine": 760,
+        "endChar": 57
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31dd7032_0832f419",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
