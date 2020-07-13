@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "57ce7930_23f4c855",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-13T12:39:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "515dd92b_88ab3fa4",
+      "range": {
+        "startLine": 139,
+        "startChar": 29,
+        "endLine": 139,
+        "endChar": 48
+      },
+      "revId": "dbb7ebc57227761938b2ed7e847f5ea003b2444d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46655440_a93ad220",
         "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "dbb7ebc57227761938b2ed7e847f5ea003b2444d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01c44070_3c2784c3",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-13T12:39:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46655440_a93ad220",
+      "range": {
+        "startLine": 156,
+        "startChar": 6,
+        "endLine": 156,
+        "endChar": 14
+      },
+      "revId": "dbb7ebc57227761938b2ed7e847f5ea003b2444d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
