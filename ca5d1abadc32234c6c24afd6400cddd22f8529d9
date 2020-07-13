@@ -16,6 +16,109 @@
       "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10bf00f8_8d04ed58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:41:53Z",
+      "side": 1,
+      "message": "Thank you for this change",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e58d905_b1133204",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:41:53Z",
+      "side": 1,
+      "message": "nit: `!\u003d 0` for consistency",
+      "range": {
+        "startLine": 1070,
+        "startChar": 50,
+        "endLine": 1070,
+        "endChar": 51
+      },
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e34e3d8_e0743c66",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:41:53Z",
+      "side": 1,
+      "message": "Please initialize these to 0 in the constructor.",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4d92afe_debbc150",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:41:53Z",
+      "side": 1,
+      "message": "nit: shouldn\u0027t need this ::.",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 6
+      },
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dbdee4d_81397d0c",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:41:53Z",
+      "side": 1,
+      "message": "Can use `testing::Bool()` instead.",
+      "range": {
+        "startLine": 1624,
+        "startChar": 33,
+        "endLine": 1624,
+        "endChar": 61
+      },
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
