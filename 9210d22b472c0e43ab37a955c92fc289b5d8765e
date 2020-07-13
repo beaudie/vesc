@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b25b488f_48bbfc7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-13T20:35:50Z",
+      "side": 1,
+      "message": "There\u0027s some inconsistencies with the design and how the rest of ANGLE is styled. Want to unblock this so you can move on with your patch series. You have a bunch of reviewers added to your list so +1ing so they can take a look.",
+      "revId": "9210d22b472c0e43ab37a955c92fc289b5d8765e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
