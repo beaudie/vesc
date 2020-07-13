@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcd164f9_c2c04ccf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T15:03:04Z",
+      "side": 1,
+      "message": "Leaving +2 to Jamie",
+      "revId": "02761eb9fc298e26ec706b9117f709715be49ef9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd1e5e29_60329b03",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T15:03:04Z",
+      "side": 1,
+      "message": "This pattern is starting to repeat, please take a look and see if you can refactor something.",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 35
+      },
+      "revId": "02761eb9fc298e26ec706b9117f709715be49ef9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2435f55d_74ad54b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T15:03:04Z",
+      "side": 1,
+      "message": "Can you inherit from angle::NonCopyable instead and remove these?",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 803,
+        "endChar": 73
+      },
+      "revId": "02761eb9fc298e26ec706b9117f709715be49ef9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
