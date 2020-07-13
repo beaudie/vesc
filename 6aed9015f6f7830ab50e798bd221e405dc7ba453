@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "457e4e95_936bfa4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T17:42:20Z",
+      "side": 1,
+      "message": "Switch to current wrangler, failing roll happened over the weekend.",
+      "revId": "6aed9015f6f7830ab50e798bd221e405dc7ba453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
