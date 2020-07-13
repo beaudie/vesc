@@ -16,6 +16,23 @@
       "revId": "9d3683d39ed7ceeaf26ed4eec31ca47c11635cfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e064562_8a3a4859",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T15:24:31Z",
+      "side": 1,
+      "message": "Can we ASSERT that `requiredSpace \u003e 0`? We technically shouldn\u0027t be calling updateUniforms if there is nothing dirty.",
+      "revId": "9d3683d39ed7ceeaf26ed4eec31ca47c11635cfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
