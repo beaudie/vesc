@@ -16,6 +16,69 @@
       "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5210014a_4d367c40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T21:15:34Z",
+      "side": 1,
+      "message": "Missed a PPO bug earlier.",
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "46a40d70_3fd40522",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T21:15:34Z",
+      "side": 1,
+      "message": "I just noticed a bug with PPOs:\n\nYou should get rid of this function as any caller will be unaware of the \"uniforms of every stage must be in the same buffer\" requirement and will violate it. This can only happen if a PPO uses multiple stages from the same program.\n\nI don\u0027t recall exactly if that was a desktop GL only feature or not, Tim should be able to clarify it. Even without that feature, there is still a bug here if an application updates the uniforms through this call (due to PPO use), then switches to monolothic program without making the program\u0027s uniforms dirty and try to draw, at which point some stages may have their uniforms in an older recycled buffer.\n\nYou should be able to write a test for this by:\n\n- Create a program with both VS and FS (and a dummy one with only VS)\n- Create PPO with FS from program and VS from dummy\n- Update program\u0027s VS uniforms\n- Loop 1000 times, update program\u0027s FS uniforms only, draw with PPO\n- Unbind PPO and bind program\n- Draw with program\n\nAt the fourth step, mDefaultUniformStorage should allocate new buffers, leaving the VS uniforms on an old buffer. At the last step, the code here doesn\u0027t rewrite the VS uniforms in the current buffer.\n\n---\n\nA potential solution is to refactor the functionality of `updateUniforms` into this function (and call this from that), and make the PPO call this once per unique program.",
+      "range": {
+        "startLine": 728,
+        "startChar": 25,
+        "endLine": 728,
+        "endChar": 45
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7744ed4_fd74356b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T21:15:34Z",
+      "side": 1,
+      "message": "Sorry about the nits, but nit: It\u0027s probably easier to read if this did `mDefaultUniformBlocksDirty.set()`, the test in line 810 did `if (!mDefaultUniformBlocks[shaderType].uniformData.empty())` and line 816 moved out of the loop and turned into `mDefaultUniformBlocksdirty.reset()`.",
+      "range": {
+        "startLine": 792,
+        "startChar": 0,
+        "endLine": 798,
+        "endChar": 9
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
