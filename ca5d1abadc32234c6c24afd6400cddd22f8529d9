@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "abf72d77_a554ada1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-13T18:37:16Z",
+      "side": 1,
+      "message": "Hmm.  I am suddenly unable to run the EGLPreRotation* end2end tests on Android (I ran them a week or two ago).  If I wild-card the test filter (i.e. \"--gtest_filter\u003dEGLPr*Vulkan\"), none of them are run.\n\nThe main code changes LGTM, but I don\u0027t know about the test changes.  I think the change looks good, but I can\u0027t verify at the moment.  I\u0027ll try to figure that out soon.",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e58d905_b1133204",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 2
@@ -92,6 +109,29 @@
         "startChar": 4,
         "endLine": 31,
         "endChar": 6
+      },
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a106894_637d0288",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-13T18:37:16Z",
+      "side": 1,
+      "message": "I am unfamiliar with this class, and how you are using it, but it looks like Shabi is.",
+      "range": {
+        "startLine": 54,
+        "startChar": 41,
+        "endLine": 54,
+        "endChar": 92
       },
       "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
