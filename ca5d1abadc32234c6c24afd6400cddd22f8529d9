@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06a8cfda_f6427024",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-13T14:33:16Z",
+      "side": 1,
+      "message": "I saw that recent CLs added some pre-rotation code to shader via TranslatorVulkan, though they are unused by Metal side.\nThis CL attempts to disable those code if they are not required.\nPTAL.",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
