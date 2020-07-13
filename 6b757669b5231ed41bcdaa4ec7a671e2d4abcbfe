@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99846548_09ef0fb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-13T20:30:28Z",
+      "side": 1,
+      "message": "LGTM, will let Shabi sign off.",
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

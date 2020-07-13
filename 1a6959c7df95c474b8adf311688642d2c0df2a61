@@ -287,6 +287,30 @@
     },
     {
       "key": {
+        "uuid": "b6b4f64d_1c00fc64",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-13T20:30:28Z",
+      "side": 1,
+      "message": "OK, I get it. It\u0027s tricky and any improvements you could do to clean up the code and make it easier to maintain would be worthwhile. Also if you\u0027re okay Charlie with changing this completely in the future.\n\nThe design we should evaluate as our \"end goal\" is splitting up uniforms into a static/dynamic set and using separate buffers for those. This would involve some heavy stuff like different VkPipelines.",
+      "parentUuid": "c91f17d0_3aec7a01",
+      "range": {
+        "startLine": 760,
+        "startChar": 29,
+        "endLine": 760,
+        "endChar": 57
+      },
+      "revId": "1a6959c7df95c474b8adf311688642d2c0df2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31dd7032_0832f419",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
