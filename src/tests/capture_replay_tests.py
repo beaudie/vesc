@@ -19,8 +19,10 @@ Script testing capture_replay with angle_end2end_tests
 # Run this script with Python to test capture replay on angle_end2end tests
 # python path/to/capture_replay_tests.py
 # Command line arguments:
-# --build_dir: specifies build directory relative to angle folder.
-# Default is out/CaptureReplayTestsDebug
+# --capture_build_dir: specifies capture build directory relative to angle folder.
+# Default is out/CaptureDebug
+# --replay_build_dir: specifies replay build directory relative to angle folder.
+# Default is out/ReplayDebug
 # --verbose: off by default
 # --use_goma: uses goma for compiling and linking test. Off by default
 # --gtest_filter: same as gtest_filter of Google's test framework. Default is */ES2_Vulkan
@@ -28,15 +30,19 @@ Script testing capture_replay with angle_end2end_tests
 
 import argparse
 import distutils.util
+import multiprocessing
 import os
 import shutil
 import subprocess
+import time
 
 from sys import platform
 
-DEFAULT_BUILD_DIR = "out/CaptureReplayTestsDebug"  # relative to angle folder
+DEFAULT_CAPTURE_BUILD_DIR = "out/CaptureDebug"  # relative to angle folder
+DEFAULT_REPLAY_BUILD_DIR = "out/ReplayDebug"  # relative to angle folder
 DEFAULT_FILTER = "*/ES2_Vulkan"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
+REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
 
 
 class Logger():
@@ -127,23 +133,25 @@ class Test():
         except subprocess.CalledProcessError as e:
             return (e.returncode, e.output)
 
-    def BuildReplay(self, build_dir, replay_exec):
+    def BuildReplay(self, build_dir, trace_dir, replay_exec, gn_completed_list,
+                    gn_completed_list_index):
         try:
-            RunGnGen(build_dir, [("use_goma", self.use_goma),
-                                 ("angle_with_capture_by_default", "true"),
-                                 ("angle_build_capture_replay_tests", "true")])
+            if not gn_completed_list[gn_completed_list_index]:
+                RunGnGen(build_dir, [("use_goma", self.use_goma),
+                                     ("angle_with_capture_by_default", "true"),
+                                     ("angle_build_capture_replay_tests", "true"),
+                                     ("angle_trace_directory_name", '\\"' + trace_dir + '\\"')])
+                gn_completed_list[gn_completed_list_index] = True
             RunAutoninja(build_dir, replay_exec)
             Logger.log("Built replay of " + self.full_test_name)
             return (0, "Built replay of " + self.full_test_name)
         except subprocess.CalledProcessError as e:
             return (e.returncode, e.output)
 
-    def RunReplay(self, build_dir, replay_exec):
+    def RunReplay(self, replay_exe_path):
         try:
             output = subprocess.check_output(
-                '"' + build_dir + '/' + replay_exec + '" --use-angle=vulkan',
-                shell=True,
-                stderr=subprocess.PIPE)
+                '"' + replay_exe_path + '" --use-angle=vulkan', shell=True, stderr=subprocess.PIPE)
             Logger.log("Ran replay of " + self.full_test_name)
             return (0, output)
         except subprocess.CalledProcessError as e:
@@ -186,29 +194,99 @@ def SetCWDToAngleFolder():
     return cwd
 
 
-def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
+def RunTest(test, capture_build_dir, replay_build_dir, test_exec, replay_exec, trace_dir,
+            gn_completed_list, gn_completed_list_index, result_queue):
+    trace_folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, trace_dir)
+    ClearFolderContent(trace_folder_path)
+    os.environ["ANGLE_CAPTURE_ENABLED"] = "1"
+    os.environ["ANGLE_CAPTURE_OUT_DIR"] = trace_folder_path
+    run_output = test.Run(os.path.join(capture_build_dir, test_exec))
+    if run_output[0] != 0 or not CanRunReplay(trace_folder_path):
+        result_queue.put ((test.full_test_name, "Skipped",
+        "Skipped: " + test.full_test_name + ". Skipping replay since capture" + \
+            " didn't produce appropriate files or has crashed"))
+        return
+    os.environ["ANGLE_CAPTURE_ENABLED"] = "0"
+    build_output = test.BuildReplay(replay_build_dir, trace_dir, replay_exec, gn_completed_list,
+                                    gn_completed_list_index)
+    if build_output[0] != 0:
+        result_queue.put((test.full_test_name, "Skipped", "Skipped: " + test.full_test_name +
+                          ". Skipping replay since failing to build replay"))
+        return
+    replay_output = test.RunReplay(os.path.join(replay_build_dir, replay_exec))
+    if replay_output[0] != 0:
+        result_queue.put((test.full_test_name, "Failed", replay_output[1]))
+    else:
+        result_queue.put((test.full_test_name, "Passed", ""))
+
+
+def GetFirstAvailableCPU(cpus):
+    for i in range(len(cpus)):
+        if not cpus[i] or not cpus[i].is_alive():
+            return i
+    return -1
+
+
+def CreateReplayBuildFolders(folder_num, replay_build_dir):
+    for i in range(folder_num):
+        replay_build_dir_name = replay_build_dir + str(i)
+        if os.path.isdir(replay_build_dir_name):
+            shutil.rmtree(replay_build_dir_name)
+        os.makedirs(replay_build_dir_name)
+
+
+def DeleteReplayBuildFolders(folder_num, replay_build_dir, trace_folder):
+    for i in range(folder_num):
+        folder_name = replay_build_dir + str(i)
+        if os.path.isdir(folder_name):
+            shutil.rmtree(folder_name)
+
+
+def CreateTraceFolders(folder_num, trace_folder):
+    for i in range(folder_num):
+        folder_name = trace_folder + str(i)
+        folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, folder_name)
+        if os.path.isdir(folder_path):
+            shutil.rmtree(folder_path)
+        os.makedirs(folder_path)
+
+
+def DeleteTraceFolders(folder_num, trace_folder):
+    for i in range(folder_num):
+        folder_name = trace_folder + str(i)
+        folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, folder_name)
+        if os.path.isdir(folder_path):
+            shutil.rmtree(folder_path)
+
+
+def main(capture_build_dir, replay_build_dir, verbose, use_goma, gtest_filter, test_exec):
+    start_time = time.time()
+    cpu_count = multiprocessing.cpu_count() - 1
     Logger.verbose = verbose
     cwd = SetCWDToAngleFolder()
-    capture_out_dir = "src/tests/capture_replay_tests/traces"  # relative to ANGLE folder
-    if not os.path.isdir(capture_out_dir):
-        os.mkdir(capture_out_dir)
-    environment_vars = [("ANGLE_CAPTURE_FRAME_END", "100"),
-                        ("ANGLE_CAPTURE_OUT_DIR", capture_out_dir),
-                        ("ANGLE_CAPTURE_SERIALIZE_STATE", "1")]
+    trace_folder = "traces"
+    if not os.path.isdir(capture_build_dir):
+        os.makedirs(capture_build_dir)
+    CreateReplayBuildFolders(cpu_count, replay_build_dir)
+    CreateTraceFolders(cpu_count, trace_folder)
+
     replay_exec = "capture_replay_tests"
     if platform == "win32":
         test_exec += ".exe"
         replay_exec += ".exe"
     # generate gn files
-    RunGnGen(build_dir, [("use_goma", use_goma), ("angle_with_capture_by_default", "true")], True)
+    RunGnGen(capture_build_dir, [("use_goma", use_goma),
+                                 ("angle_with_capture_by_default", "true")], True)
     # build angle_end2end
-    RunAutoninja(build_dir, test_exec, True)
+    RunAutoninja(capture_build_dir, test_exec, True)
     # get a list of tests
-    test_names_and_params = GetTestNamesAndParams(build_dir + '/' + test_exec, gtest_filter)
-    all_tests = []
+    test_names_and_params = GetTestNamesAndParams(
+        os.path.join(capture_build_dir, test_exec), gtest_filter)
+    all_tests = multiprocessing.Queue()
     for test_name_and_params in test_names_and_params:
-        all_tests.append(Test(test_name_and_params[0], test_name_and_params[1], use_goma))
+        all_tests.put(Test(test_name_and_params[0], test_name_and_params[1], use_goma))
 
+    environment_vars = [("ANGLE_CAPTURE_FRAME_END", "100"), ("ANGLE_CAPTURE_SERIALIZE_STATE", "1")]
     for environment_var in environment_vars:
         os.environ[environment_var[0]] = environment_var[1]
 
@@ -216,54 +294,71 @@ def main(build_dir, verbose, use_goma, gtest_filter, test_exec):
     failed_count = 0
     skipped_count = 0
     failed_tests = []
-    for test in all_tests:
-        if verbose:
-            print("*" * 30)
-        ClearFolderContent(capture_out_dir)
-        os.environ["ANGLE_CAPTURE_ENABLED"] = "1"
-        run_output = test.Run(build_dir + "/" + test_exec)
-        if run_output[0] != 0 or not CanRunReplay(capture_out_dir):
-            print("Skipped: " + test.full_test_name + ". Skipping replay since capture" + \
-                " didn't produce appropriate files or has crashed")
-            skipped_count += 1
-            continue
-        os.environ["ANGLE_CAPTURE_ENABLED"] = "0"
-        build_output = test.BuildReplay(build_dir, replay_exec)
-        if build_output[0] != 0:
-            print("Skipped: " + test.full_test_name + ". Skipping replay since failing to" + \
-                " build replay")
-            skipped_count += 1
-            continue
-        replay_output = test.RunReplay(build_dir, replay_exec)
-        if replay_output[0] != 0:
-            print("Failed: " + test.full_test_name)
-            print(replay_output[1])
-            failed_count += 1
-            failed_tests.append(test.full_test_name)
-        else:
-            print("Passed: " + test.full_test_name)
-            passed_count += 1
 
+    manager = multiprocessing.Manager()
+    gn_completed_list = manager.list()
+    result_queue = manager.Queue()
+    [gn_completed_list.append(False) for i in range(cpu_count)]
+
+    cpus = [None for i in range(cpu_count)]
+    while not all_tests.empty():
+        test = all_tests.get()
+        first_available_cpu = GetFirstAvailableCPU(cpus)
+        while first_available_cpu == -1:
+            time.sleep(0.01)
+            first_available_cpu = GetFirstAvailableCPU(cpus)
+        print("Running " + test.full_test_name)
+        proc = multiprocessing.Process(
+            target=RunTest,
+            args=(test, capture_build_dir, replay_build_dir + str(first_available_cpu), test_exec,
+                  replay_exec, trace_folder + str(first_available_cpu), gn_completed_list,
+                  first_available_cpu, result_queue))
+        if cpus[first_available_cpu]:
+            cpus[first_available_cpu].join()
+        cpus[first_available_cpu] = proc
+        proc.start()
+    [cpu.join() for cpu in cpus if cpu]
     for environment_var in environment_vars:
         del os.environ[environment_var[0]]
+    end_time = time.time()
 
-    if os.path.isdir(capture_out_dir):
-        shutil.rmtree(capture_out_dir)
     print("\n\n\n")
+    print("Results:")
+    while not result_queue.empty():
+        result = result_queue.get()
+        output_string = result[1] + ": " + result[0] + ". "
+        if result[1] == "Skipped":
+            output_string += result[2]
+            skipped_count += 1
+        elif result[1] == "Failed":
+            output_string += result[2]
+            failed_tests.append(result[0])
+            failed_count += 1
+        else:
+            passed_count += 1
+        print(output_string)
+
+    print("\n\n")
+    print("Elapsed time: " + str(end_time - start_time) + " seconds")
     print("Passed: "+ str(passed_count) + " Failed: " + str(failed_count) + \
     " Skipped: " + str(skipped_count))
     print("Failed tests:")
     for failed_test in failed_tests:
         print("\t" + failed_test)
+    DeleteTraceFolders(cpu_count, trace_folder)
+    DeleteReplayBuildFolders(cpu_count, replay_build_dir, trace_folder)
+    if os.path.isdir(capture_build_dir):
+        shutil.rmtree(capture_build_dir)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--build_dir', default=DEFAULT_BUILD_DIR)
+    parser.add_argument('--capture_build_dir', default=DEFAULT_CAPTURE_BUILD_DIR)
+    parser.add_argument('--replay_build_dir', default=DEFAULT_REPLAY_BUILD_DIR)
     parser.add_argument('--verbose', default="False")
     parser.add_argument('--use_goma', default="false")
     parser.add_argument('--gtest_filter', default=DEFAULT_FILTER)
     parser.add_argument('--test_suite', default=DEFAULT_TEST_SUITE)
     args = parser.parse_args()
-    main(args.build_dir, distutils.util.strtobool(args.verbose), args.use_goma, args.gtest_filter,
-         args.test_suite)
+    main(args.capture_build_dir, args.replay_build_dir, distutils.util.strtobool(args.verbose),
+         args.use_goma, args.gtest_filter, args.test_suite)
