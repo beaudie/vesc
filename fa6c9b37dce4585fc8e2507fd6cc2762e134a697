@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "328df904_42f5401d",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:31:18Z",
+      "side": 1,
+      "message": "You can avoid some code duplication. Unfortunately, `using Serial::operator\u003d\u003d` doesn\u0027t work, otherwise it would have become much simpler (also there\u0027s ASSERT here, so maybe it\u0027s good that it\u0027s overloaded):\n\n    class Type##Serial final : protected Serial\n    {\n    public:\n        Type##Serial() {}\n        Type##Serial(uint64_t serial) : Serial(serial) {}\n\n        using Serial::getValue;\n        using Serial::valid;\n\n        constexpr bool operator\u003d\u003d(const Type##Serial \u0026other) const\n        {\n            ASSERT(mValue !\u003d kInvalid);\n            return mValue \u003d\u003d other.mValue;\n        }\n        constexpr bool operator!\u003d(const Type##Serial \u0026other) const\n        {\n            return !(*this \u003d\u003d other);\n        }\n    };\n\nRequires that `Serial` is not `final` and private stuff are `protected` instead. Also:\n\n- Used kInvalid instead of 0 in the ASSERT.\n- Kept serial 64-bit.\n- Could we ASSERT that other.mValue is also valid?",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 9
+      },
+      "revId": "fa6c9b37dce4585fc8e2507fd6cc2762e134a697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20cac4bf_dcb3f5c1",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:31:18Z",
+      "side": 1,
+      "message": "uint64_t in accordance to inheriting Type##Serial from Serial",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 12
+      },
+      "revId": "fa6c9b37dce4585fc8e2507fd6cc2762e134a697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8164cb05_788a320a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-13T14:31:18Z",
+      "side": 1,
+      "message": "Looks like this is for a future CL. It could be moved to that CL for the context to be apparent.",
+      "revId": "fa6c9b37dce4585fc8e2507fd6cc2762e134a697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
