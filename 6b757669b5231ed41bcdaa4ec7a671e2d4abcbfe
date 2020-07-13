@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "b21d427f_51a6d55f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-13T23:04:15Z",
+      "side": 1,
+      "message": "Shabi,\n\nThis part is impossible:\n- Create PPO with FS from program and VS from dummy\n\nPer the spec, if a PPO uses a stage from a program, it must use all of the stages from that program.   We have some validation code that enforces this.",
+      "parentUuid": "cb8b524e_eb35563c",
+      "range": {
+        "startLine": 728,
+        "startChar": 25,
+        "endLine": 728,
+        "endChar": 45
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7744ed4_fd74356b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
