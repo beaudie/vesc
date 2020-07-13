@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "51fabdf1_95444c04",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-13T16:27:10Z",
+      "side": 1,
+      "message": "I changed to 32 uint32_t because the texture descriptor cache is forcing to 32 bit for performance reasons anyway. This has nothing to do with QueueSerial which is 64 bit and could exceed UINT32_MAX. I would not expect the number of objects exceed UINT32_MAX. Since we are actually relying on it been 32 bit so no point to make it 64 bit in the first place.\n\nMy intention is to make it not tie to QueueSerial as much as possible to reduce confusion. Given these two version does not have much line copunt differences, I incline to keep what I have.\n\nI will fix the ASSERT part.",
+      "parentUuid": "328df904_42f5401d",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 9
+      },
+      "revId": "fa6c9b37dce4585fc8e2507fd6cc2762e134a697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "20cac4bf_dcb3f5c1",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 10
