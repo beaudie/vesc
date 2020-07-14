@@ -70,6 +70,24 @@
       "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26107a7a_3bebca30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T19:09:07Z",
+      "side": 1,
+      "message": "@Charlie, it would be great to back this up with numbers. A new perftest that imitates T-Rex in this aspect would be useful (for future optimizations too), and then you can demonstrate how much this improves things (and give us a tool to compare different ideas).",
+      "parentUuid": "3dd2a84d_e5f15f80",
+      "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
