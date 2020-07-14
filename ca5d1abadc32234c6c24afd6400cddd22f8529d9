@@ -201,6 +201,30 @@
       "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a7bffec_0d625c72",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T14:55:04Z",
+      "side": 1,
+      "message": "See here: https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/tests/gl_tests/CopyTextureTest.cpp;l\u003d2347",
+      "parentUuid": "874314de_4798b04d",
+      "range": {
+        "startLine": 1624,
+        "startChar": 33,
+        "endLine": 1624,
+        "endChar": 61
+      },
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
