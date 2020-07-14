@@ -106,10 +106,18 @@ or D3D9 otherwise.  On other desktop platforms, it defaults to GL.  On mobile, i
 
 ANGLE provides an EGL extension called `EGL_ANGLE_platform_angle` which allows uers to select which renderer to use at EGL initialization time by calling eglGetPlatformDisplayEXT with special enums. Details of the extension can be found in it's specification in `extensions/ANGLE_platform_angle.txt` and `extensions/ANGLE_platform_angle_*.txt` and examples of it's use can be seen in the ANGLE samples and tests, particularly `util/EGLWindow.cpp`.
 
-To change the default D3D backend:
+To remove any backend entirely:
 
- 1. Open `src/libANGLE/renderer/d3d/DisplayD3D.cpp`
- 2. Locate the definition of `ANGLE_DEFAULT_D3D11` near the head of the file, and set it to your preference.
+ 1. Run `gn args <path/to/build/dir>`
+ 2. Set the appropriate variable to `false`. Options are:
+   - `angle_enable_d3d9`
+   - `angle_enable_d3d11`
+   - `angle_enable_gl`
+   - `angle_enable_metal`
+   - `angle_enable_null`
+   - `angle_enable_vulkan`
+   - `angle_enable_essl`
+   - `angle_enable_glsl`
 
 ### To Use ANGLE in Your Application
 On Windows:
