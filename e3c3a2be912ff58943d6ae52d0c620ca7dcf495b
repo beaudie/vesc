@@ -16,6 +16,24 @@
       "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0c476bf_26f1f483",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-14T17:40:40Z",
+      "side": 1,
+      "message": "Mainly for optimization to reduce the overhead of hash look up. The transform feedback hash key has multiple entries and is much more expensive to calculate. transform feedback is not been used frequently. The default uniform update is on the performance critical path that gets updated frequently and is only having one key. The default uniform can be optimized to a FixedVector and has a 1:1 mapping to the dynamic buffer and use index to access it without hash key at all.",
+      "parentUuid": "ab4fc417_398f889b",
+      "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
