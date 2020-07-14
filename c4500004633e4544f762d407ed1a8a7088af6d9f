@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b63d70b8_91640d0e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T17:17:10Z",
+      "side": 1,
+      "message": "Nah, it\u0027s fine the way it is.",
+      "parentUuid": "1e173ee9_621cabe5",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 77
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "436379a0_01fcf0c9",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateMipmap.comp.json",
         "patchSetId": 15
