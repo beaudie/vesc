@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "fbf7953f_4f379b65",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-14T16:14:10Z",
+      "side": 1,
+      "message": "I am a little confused. Isn\u0027t the GLES the front-end? The backend, which is Vulkan, always supports this right? Why should we care about what the front-end uses when we know the backend supports it?",
+      "parentUuid": "0ddc886b_097dfe1d",
+      "range": {
+        "startLine": 215,
+        "startChar": 26,
+        "endLine": 215,
+        "endChar": 43
+      },
+      "revId": "176dbc15d7e6a74510dd46b7c664ea36967a286f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a9df157_1f7c138a",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 1
