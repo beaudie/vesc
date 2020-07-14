@@ -45,6 +45,7 @@ class BufferState final : angle::NonCopyable
     GLint64 getMapLength() const { return mMapLength; }
     GLint64 getSize() const { return mSize; }
     bool isBoundForTransformFeedback() const { return mTransformFeedbackIndexedBindingCount != 0; }
+    std::string getLabel() const { return mLabel; }
 
   private:
     friend class Buffer;
@@ -108,7 +109,7 @@ class Buffer final : public RefCountObject<BufferID>,
                                 size_t count,
                                 bool primitiveRestartEnabled,
                                 IndexRange *outRange) const;
-
+    const BufferState &getState() const { return mState; }
     BufferUsage getUsage() const { return mState.mUsage; }
     GLbitfield getAccessFlags() const { return mState.mAccessFlags; }
     GLenum getAccess() const { return mState.mAccess; }

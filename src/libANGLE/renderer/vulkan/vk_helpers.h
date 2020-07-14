@@ -702,6 +702,7 @@ class BufferHelper final : public Resource
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
     VkDeviceSize getSize() const { return mSize; }
+    uint8_t *getMappedMemory() const { return mMappedMemory; }
     bool isHostVisible() const
     {
         return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0;

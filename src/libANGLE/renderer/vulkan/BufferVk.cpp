@@ -433,6 +433,31 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
+angle::Result BufferVk::getContent(const gl::Context *context, size_t size, uint8_t *outData)
+{
+    if (!mShadowBuffer.valid())
+    {
+        ASSERT(mBuffer && mBuffer->valid());
+        ContextVk *contextVk = vk::GetImpl(context);
+        ANGLE_TRY(mBuffer->waitForIdle(contextVk));
+        bool needReset     = (mBuffer->getMappedMemory() == nullptr);
+        uint8_t *mappedPtr = nullptr;
+        ANGLE_TRY(mBuffer->map(contextVk, &mappedPtr));
+        memcpy(outData, mappedPtr, size);
+        if (needReset)
+        {
+            mBuffer->unmap(contextVk->getRenderer());
+        }
+    }
+    else
+    {
+        void *mappedPtr = nullptr;
+        mShadowBuffer.map(0, &mappedPtr);
+        memcpy(outData, reinterpret_cast<uint8_t *>(mappedPtr), size);
+    }
+    return angle::Result::Continue;
+}
+
 angle::Result BufferVk::getIndexRange(const gl::Context *context,
                                       gl::DrawElementsType type,
                                       size_t offset,
