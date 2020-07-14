@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "59b476d5_93bbacda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-14T10:16:09Z",
+      "side": 1,
+      "message": "I\u0027m not sure, but probably you should add asterisk to after Vulkan, something like \"--gtest_filter\u003dEGLPr*Vulkan*\". Since in this CL I added \"__PreRotationDisabled\"/\"__PreRotationEnabled\" suffix to the test variant\u0027s names.\n\nThis is one of them reported in the linux-angle-rel bot:\n\"EGLPreRotationLargeSurfaceTest.OrientedWindowWithFragCoordDraw/ES3_Vulkan_NoFixture__PreRotationEnabled\"",
+      "parentUuid": "abf72d77_a554ada1",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e58d905_b1133204",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 2
@@ -150,6 +168,30 @@
       "writtenOn": "2020-07-13T14:41:53Z",
       "side": 1,
       "message": "Can use `testing::Bool()` instead.",
+      "range": {
+        "startLine": 1624,
+        "startChar": 33,
+        "endLine": 1624,
+        "endChar": 61
+      },
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "874314de_4798b04d",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-14T10:16:09Z",
+      "side": 1,
+      "message": "For some reasons, I used testing::Bool() in patchset 1 and got this compilation errors in linux-clang-rel bot:\nhttps://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket.appspot.com/8874888149127123904/+/steps/compile_with_ninja/0/stdout\n\nLooks like Bool is a macro in linux bot:\n\"#define Bool int\"",
+      "parentUuid": "1dbdee4d_81397d0c",
       "range": {
         "startLine": 1624,
         "startChar": 33,
