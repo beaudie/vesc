@@ -291,6 +291,11 @@ void Buffer::onTFBindingChanged(const Context *context, bool bound, bool indexed
     }
 }
 
+angle::Result Buffer::getContent(const gl::Context *context, GLint64 size, uint8_t *outData)
+{
+    return mImpl->getContent(context, size, outData);
+}
+
 void Buffer::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
 {
     // Pass it along!
