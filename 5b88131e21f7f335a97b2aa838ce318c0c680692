@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "0f302f07_ba84ac6a",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T00:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b7e7bd3_b3780e3d",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7d19852_56db6778",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 3
@@ -62,6 +86,30 @@
       "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef20d16c_b6395232",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T00:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7d19852_56db6778",
+      "range": {
+        "startLine": 307,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 55
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "731cb248_956181a4",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T00:20:25Z",
+      "side": 1,
+      "message": "Done.\n\nOops, ieah, I missed setting those args to match.   I\u0027ll manually give those a shot and make sure everything still builds.   I\u0027ll need to update that script to generate each of the 4 .json files too, once we figure out how to get the Android generation working in a standalone checkout.",
+      "parentUuid": "d2d6bc84_604b39b8",
+      "range": {
+        "startLine": 374,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 1
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "000fc89a_84c08d3d",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 3
@@ -108,6 +180,30 @@
       "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50170e7e_6884d8a2",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T00:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "000fc89a_84c08d3d",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 42
+      },
+      "revId": "5b88131e21f7f335a97b2aa838ce318c0c680692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
