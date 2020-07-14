@@ -16,6 +16,24 @@
       "revId": "a7609387c6bc419704e6252596bb265842932c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2351149b_af4efc75",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-14T16:06:09Z",
+      "side": 1,
+      "message": "I already did. Its in go/angle_capture_replay_testing_design_doc under paralellization section",
+      "parentUuid": "ac6a57e4_0425f55b",
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
