@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "34560b6a_bfc0e870",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-14T16:42:40Z",
+      "side": 1,
+      "message": "Actually I override the feature \"enable_pre_rotation_surfaces\" when calling eglGetPlatformDisplay() based on second boolean parameter of the tests.\n- So when the boolean value is true, \"enable_pre_rotation_surfaces\" feature will be enabled (regardless of the platform is android or not).\n- Similarly, when the boolean parameter is false, \"enable_pre_rotation_surfaces\" will be disabled. Leading to shader\u0027s pre-rotation code being disabled.\nI wanted to test that the translated shaders can be executed correctly in both cases when pre-rotation is enabled and is disabled. Doesn\u0027t matter the tests run on android or other platforms.\nIs it good to do that? Or is it better to let the tests behave depending on platforms?",
+      "parentUuid": "9918bff0_22874256",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e58d905_b1133204",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 2
