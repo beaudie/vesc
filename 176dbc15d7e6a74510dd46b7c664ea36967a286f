@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27654b5c_36dad325",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:01:00Z",
+      "side": 1,
+      "message": "you don\u0027t need to serialize this stuff. it\u0027s all duplicated with other states.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "176dbc15d7e6a74510dd46b7c664ea36967a286f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ef9eee7_2ffab8ec",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:01:00Z",
+      "side": 1,
+      "message": "this is a hack - if you need to do a const cast we should change the code elsewhere.",
+      "range": {
+        "startLine": 91,
+        "startChar": 3,
+        "endLine": 92,
+        "endChar": 90
+      },
+      "revId": "176dbc15d7e6a74510dd46b7c664ea36967a286f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ddc886b_097dfe1d",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:01:00Z",
+      "side": 1,
+      "message": "this is only available in ES 3.0+. \"map\" is at least something that an ES 2.0 extension can support. You should at least add an ASSERT that the Context is ES 3.0.",
+      "range": {
+        "startLine": 215,
+        "startChar": 26,
+        "endLine": 215,
+        "endChar": 43
+      },
+      "revId": "176dbc15d7e6a74510dd46b7c664ea36967a286f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a9df157_1f7c138a",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:01:00Z",
+      "side": 1,
+      "message": "you can omit these if you want. It\u0027s also fine to include them.",
+      "range": {
+        "startLine": 233,
+        "startChar": 46,
+        "endLine": 236,
+        "endChar": 73
+      },
+      "revId": "176dbc15d7e6a74510dd46b7c664ea36967a286f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
