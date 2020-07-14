@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab4fc417_398f889b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:28:50Z",
+      "side": 1,
+      "message": "Why not just have one consistent descriptor description that includes transform feedback? Are you concerned with the overhead you\u0027d get from extra null descriptors? I handled that in the Textures descriptor by having an upper bound on the non-null entries. See the existing textures descriptor set.\n\nI suggest you squash this with the next CL and we fix the design before submitting.",
+      "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
