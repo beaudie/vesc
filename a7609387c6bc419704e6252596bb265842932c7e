@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac6a57e4_0425f55b",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T15:56:09Z",
+      "side": 1,
+      "message": "hey manh, can you put a high level summary of your design in the ddoc and we can review that before looking at the CL?",
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
