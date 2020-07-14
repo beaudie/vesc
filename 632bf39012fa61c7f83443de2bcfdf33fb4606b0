@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e21628d_c12fd0c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T15:00:40Z",
+      "side": 1,
+      "message": "You can abandon this. I already enabled these tests in a change that went through last night: https://chromium-review.googlesource.com/c/angle/angle/+/2288224\n\nYou can verify by rebasing to origin/master.",
+      "revId": "632bf39012fa61c7f83443de2bcfdf33fb4606b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
