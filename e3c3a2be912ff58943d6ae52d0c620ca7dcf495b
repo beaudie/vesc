@@ -34,6 +34,24 @@
       "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b88de1a_159ac68e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T18:05:49Z",
+      "side": 1,
+      "message": "\u003e I handled that in the Textures descriptor by having an upper bound on the non-null entries. See the existing textures descriptor set.\n\nNo reason to fear performance for combining them.",
+      "parentUuid": "e0c476bf_26f1f483",
+      "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
