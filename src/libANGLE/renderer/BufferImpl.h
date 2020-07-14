@@ -65,6 +65,11 @@ class BufferImpl : public angle::Subject
                                         bool primitiveRestartEnabled,
                                         gl::IndexRange *outRange) = 0;
 
+    virtual angle::Result getSubData(const gl::Context *context,
+                                     GLint64 offset,
+                                     GLint64 size,
+                                     uint8_t *outData);
+
     // Override if accurate native memory size information is available
     virtual GLint64 getMemorySize() const;
 

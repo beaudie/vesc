@@ -70,6 +70,10 @@ class BufferVk : public BufferImpl
                            GLbitfield access,
                            void **mapPtr) override;
     angle::Result unmap(const gl::Context *context, GLboolean *result) override;
+    angle::Result getSubData(const gl::Context *context,
+                             GLint64 offset,
+                             GLint64 size,
+                             uint8_t *outData) override;
 
     angle::Result getIndexRange(const gl::Context *context,
                                 gl::DrawElementsType type,
