@@ -16,6 +16,92 @@
       "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0645538_d8840bce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-14T14:06:17Z",
+      "side": 1,
+      "message": "LGTM! Thanks for taking this, good to have you be familiar with this process too.",
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec49be09_5ce9ec23",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-14T14:06:17Z",
+      "side": 1,
+      "message": "Any reason we can\u0027t have this as an input?",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 46
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e98a5070_89516d58",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-14T14:06:17Z",
+      "side": 1,
+      "message": "Looks like this will be fixed upstream soon.  Up to you if you want to land first with the workaround.",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 31
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b00a5c73_917fc1d5",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-14T14:06:17Z",
+      "side": 1,
+      "message": "Probably not necessary anymore.",
+      "range": {
+        "startLine": 564,
+        "startChar": 0,
+        "endLine": 565,
+        "endChar": 80
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
