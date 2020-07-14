@@ -16,6 +16,24 @@
       "revId": "c29dbd761eb5f01f9900e0581adafe54207f8dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "868338e7_4575b1f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T02:30:37Z",
+      "side": 1,
+      "message": "I\u0027d gladly help you through it. It\u0027s always easiest to pick another test (TEST_P, inside another test suite/file), copy it and start modifying it.\n\nSince you are generally producing intricate changes, a good rule of thumb is that if you thought about a corner case when developing the change, add an end2end test for it. More often than not, dEQP doesn\u0027t test these corner cases.",
+      "parentUuid": "5b4564f9_7a7583b2",
+      "revId": "c29dbd761eb5f01f9900e0581adafe54207f8dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61f6ff5d_9efedd82",
+        "filename": "scripts/code_generation_hashes/GL_CTS_(dEQP)_build_files.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T02:30:37Z",
+      "side": 1,
+      "message": "Did you forget `gclient sync`?",
+      "revId": "3b7369acf43d33e098b5d0a34d1cfea121cdf799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2df7d435_1138c49f",
+        "filename": "src/tests/gl_tests/DefaultUniformTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T02:30:37Z",
+      "side": 1,
+      "message": "UniformTest.cpp contains default uniform tests, you can place this test there which should simplify your life!",
+      "revId": "3b7369acf43d33e098b5d0a34d1cfea121cdf799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
