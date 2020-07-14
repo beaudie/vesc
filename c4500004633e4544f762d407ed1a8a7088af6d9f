@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "00eabba0_3dbcdc4c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T17:14:19Z",
+      "side": 1,
+      "message": "Done. After all the testing, there are fewer platforms where this is beneficial vs not, so easier to enumerate those too.",
+      "parentUuid": "2a47c885_50c5c57a",
+      "range": {
+        "startLine": 135,
+        "startChar": 32,
+        "endLine": 135,
+        "endChar": 65
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19d14b54_1ad10291",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 15
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-14T16:06:12Z",
       "side": 1,
       "message": "nit: I\u0027d extract this from the class so we don\u0027t need to make the scoped name extra long.",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 77
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e173ee9_621cabe5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T17:14:19Z",
+      "side": 1,
+      "message": "It uses kGenerateMipmapMaxLevels which is also in the class. I could move them both out, but the names are a bit too generic for the global (rather, rx) namespace IMO. There\u0027s only one instance of UtilsVk::GenerateMipmapDestLevelViews (with UtilsVk::) and it doesn\u0027t look too bad.\n\nRemoved a few unnecessary UtilsVk:: prefixes (from kGenerateMipmapMaxLevels actually).\n\nLet me know if you still want this.",
+      "parentUuid": "19d14b54_1ad10291",
       "range": {
         "startLine": 230,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4fd65e45_1045180f",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateMipmap.comp.json",
+        "patchSetId": 15
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T17:14:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "436379a0_01fcf0c9",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb2d94b2_13fa8887",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/ffx_spd/ffx_a.h",
         "patchSetId": 15
@@ -85,6 +157,24 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed86dd28_4b4cb4fc",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/ffx_spd/ffx_a.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T17:14:19Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "cb2d94b2_13fa8887",
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -108,6 +198,30 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "277c30d3_efbfa00e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T17:14:19Z",
+      "side": 1,
+      "message": "There were no scoped helpers that used images before. I did this exactly because I used a scoped helper and noticed this bug.\n\nThat said, I later removed the path that used the scoped helper, so I don\u0027t need this change.\n\nReverted.",
+      "parentUuid": "b6e65e2d_e5510cec",
+      "range": {
+        "startLine": 1124,
+        "startChar": 4,
+        "endLine": 1124,
+        "endChar": 66
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
