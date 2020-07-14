@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2f62fae_c8081119",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T02:57:54Z",
+      "side": 1,
+      "message": "So far it looks like it only helps with AMD (most) and Nvidia. I have yet to try it on Intel, and ask for feedback from imagination. I suspect Imaginations results would be similar to ARM and Qualcomm where this is actually slower than blit after blit.\n\nPerhaps some drivers detect this pattern and use hw mip-generation instead? Anyway, this helps Samsung, so would like to get it in.\n\nThere is some failure with Intel/Windows I have to look into. If I can\u0027t reproduce on Intel/Linux, I\u0027d just disable the path on that configuration.",
+      "revId": "3ba22c7aeb25bf06a1e9d7bcfcfe04cc0bc4666d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
