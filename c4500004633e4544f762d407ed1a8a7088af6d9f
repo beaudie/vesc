@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a47c885_50c5c57a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:06:12Z",
+      "side": 1,
+      "message": "suggest we make this feature a positive feature, to make it simpler to understand.",
+      "range": {
+        "startLine": 135,
+        "startChar": 32,
+        "endLine": 135,
+        "endChar": 65
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19d14b54_1ad10291",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:06:12Z",
+      "side": 1,
+      "message": "nit: I\u0027d extract this from the class so we don\u0027t need to make the scoped name extra long.",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 77
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "436379a0_01fcf0c9",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateMipmap.comp.json",
+        "patchSetId": 15
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:06:12Z",
+      "side": 1,
+      "message": "tabs",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb2d94b2_13fa8887",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/ffx_spd/ffx_a.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:06:12Z",
+      "side": 1,
+      "message": "can you include a README.chromium and point to it from additional_readme_paths.json?",
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6e65e2d_e5510cec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:06:12Z",
+      "side": 1,
+      "message": "this looks a bit fishy. I worry this affects things like the scoped helpers.",
+      "range": {
+        "startLine": 1124,
+        "startChar": 4,
+        "endLine": 1124,
+        "endChar": 66
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
