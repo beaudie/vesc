@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "a19eaae6_77c30709",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "It\u0027s easier to read positive logic, rather than: \"disabling this feature is enabled, so the feature is disabled\".",
+      "range": {
+        "startLine": 358,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 45
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ede9d2dd_6611f13b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "typo: requirement",
+      "range": {
+        "startLine": 1793,
+        "startChar": 44,
+        "endLine": 1793,
+        "endChar": 56
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a47c885_50c5c57a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 15
@@ -46,6 +92,207 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3356ab58_caf29e91",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "Rather than duplicating the logic from CanGenerateMipmapWithCompute(), this should just assert that\u0027s true.",
+      "range": {
+        "startLine": 1444,
+        "startChar": 0,
+        "endLine": 1449,
+        "endChar": 66
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04a99dcb_c23feeea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "This matches ImageHelper::generateMipmapsWithBlit():\n\n    const bool hintFastest \u003d contextVk-\u003egetState().getGenerateMipmapHint() \u003d\u003d GL_FASTEST;\n    const VkFilter filter \u003d\n        formatSupportsLinearFiltering \u0026\u0026 !hintFastest ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;\n\nMight be time for a helper function.",
+      "range": {
+        "startLine": 1454,
+        "startChar": 0,
+        "endLine": 1455,
+        "endChar": 100
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f219e80c_1992409b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "Why do we need to do this rather than just processing as many valid views as there are?",
+      "range": {
+        "startLine": 1504,
+        "startChar": 0,
+        "endLine": 1510,
+        "endChar": 13
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a75f1da9_c3bd0c31",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "This comment doesn\u0027t match the assert. It\u0027s probably better to move this to before the conditional.",
+      "range": {
+        "startLine": 1581,
+        "startChar": 0,
+        "endLine": 1582,
+        "endChar": 23
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4cea910_b0d3a781",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "Can this be moved to the start of the function so we can assume the image is valid from then on?   Or do the function calls before here (flushImageStagedUpdates or setBaseAndMaxLevels) change the value?",
+      "range": {
+        "startLine": 1712,
+        "startChar": 0,
+        "endLine": 1716,
+        "endChar": 5
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b0224a9_0cc7569f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1916,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "This block feels large enough to refactor into a helper function.",
+      "range": {
+        "startLine": 1915,
+        "startChar": 1,
+        "endLine": 1916,
+        "endChar": 5
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b22b1f_f7175ed0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "Is there a concern about doing this twice on the same image, since it\u0027s done below also on line 1997?",
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebcede43_e3a10599",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "Where does this value come from?",
+      "range": {
+        "startLine": 326,
+        "startChar": 52,
+        "endLine": 326,
+        "endChar": 53
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38dafe34_94bc378c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "height?",
+      "range": {
+        "startLine": 1883,
+        "startChar": 44,
+        "endLine": 1883,
+        "endChar": 49
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -199,6 +446,23 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "09b09cb5_83a4021a",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/ffx_spd/ffx_a.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T17:21:12Z",
+      "side": 1,
+      "message": "Why aren\u0027t these files added to DEPS and angle/third_party/?",
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
