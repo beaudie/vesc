@@ -52,6 +52,24 @@
       "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dd2a84d_e5f15f80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-14T18:48:03Z",
+      "side": 1,
+      "message": "For example, if you look at the trex API trace, almost every draw call they update uniform. There could be multiple uniforms to be updated. We have spent time to avoid another indirection etc, this hash look up is quite expensive and can be easily avoided by maintain transform feedback cache separately. I think it is hard to argue against it though, IMHO.",
+      "parentUuid": "5b88de1a_159ac68e",
+      "revId": "e3c3a2be912ff58943d6ae52d0c620ca7dcf495b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
