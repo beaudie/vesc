@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "159bde0a_171456f7",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-14T16:19:11Z",
+      "side": 1,
+      "message": "You\u0027re probably right that it should always work in Vulkan. We don\u0027t have a prior use case in ANGLE of calling unsupported APIs. I\u0027d still add that ASSERT.",
+      "parentUuid": "fbf7953f_4f379b65",
+      "range": {
+        "startLine": 215,
+        "startChar": 26,
+        "endLine": 215,
+        "endChar": 43
+      },
+      "revId": "176dbc15d7e6a74510dd46b7c664ea36967a286f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a9df157_1f7c138a",
         "filename": "src/libANGLE/frame_capture_utils.cpp",
         "patchSetId": 1
