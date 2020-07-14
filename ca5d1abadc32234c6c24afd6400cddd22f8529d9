@@ -107,6 +107,41 @@
     },
     {
       "key": {
+        "uuid": "f3df9c73_9d92d769",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-14T18:48:27Z",
+      "side": 1,
+      "message": "I like it.  As I explained early on, I didn\u0027t know about the test infrastructure that you were using.  However, I can see that pre-rotation is being enabled or disabled, based on the test.",
+      "parentUuid": "34560b6a_bfc0e870",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfa3a64f_a7980113",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-14T18:48:27Z",
+      "side": 1,
+      "message": "LGTM.  Please address Shabi\u0027s feedback.  Thanks for your change!",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e58d905_b1133204",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 2
