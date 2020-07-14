@@ -12,7 +12,9 @@
 #include "common/MemoryBuffer.h"
 #include "common/angleutils.h"
 #include "libANGLE/BinaryStream.h"
+#include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Context.inl.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
 
@@ -48,6 +50,35 @@ Result ReadPixelsFromAttachment(const gl::Context *context,
     return Result::Continue;
 }
 
+gl::Buffer *CreateTempBuffer(const gl::Context *context, gl::BufferManager &bufferManager)
+{
+    gl::BufferID tempBufferID = bufferManager.createBuffer();
+    gl::Buffer *tempBuffer =
+        bufferManager.checkBufferAllocation(context->getImplementation(), tempBufferID);
+    if (tempBuffer == nullptr)
+    {
+        return nullptr;
+    }
+    GLint64 tempBufferSize = 0;
+    for (const auto &buffer : bufferManager)
+    {
+        gl::Buffer *bufferPtr = buffer.second;
+        if (bufferPtr == tempBuffer)
+        {
+            continue;
+        }
+        tempBufferSize = std::max(tempBufferSize, bufferPtr->getSize());
+    }
+    Result result =
+        tempBuffer->bufferData(const_cast<gl::Context *>(context), gl::BufferBinding::CopyWrite,
+                               nullptr, tempBufferSize, gl::BufferUsage::DynamicRead);
+    if (result != Result::Continue)
+    {
+        return nullptr;
+    }
+    return tempBuffer;
+}
+
 Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
 {
     const gl::FramebufferManager &framebufferManager =
@@ -57,6 +88,23 @@ Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
         gl::Framebuffer *framebufferPtr = framebuffer.second;
         ANGLE_TRY(SerializeFramebuffer(context, bos, framebufferPtr));
     }
+    gl::BufferManager &bufferManager =
+        const_cast<gl::BufferManager &>(context->getState().getBufferManagerForCapture());
+    gl::Buffer *tempBuffer = CreateTempBuffer(context, bufferManager);
+    if (tempBuffer == nullptr)
+    {
+        return Result::Stop;
+    }
+    for (const auto &buffer : bufferManager)
+    {
+        gl::Buffer *bufferPtr = buffer.second;
+        if (bufferPtr == tempBuffer)
+        {
+            continue;
+        }
+        ANGLE_TRY(SerializeBuffer(context, bos, tempBuffer, bufferPtr));
+    }
+    bufferManager.deleteObject(context, tempBuffer->id());
     return Result::Continue;
 }
 
@@ -156,6 +204,36 @@ void SerializeImageIndex(gl::BinaryOutputStream *bos, const gl::ImageIndex &imag
     bos->writeInt(imageIndex.getLevelIndex());
     bos->writeInt(imageIndex.getLayerIndex());
     bos->writeInt(imageIndex.getLayerCount());
+}
+
+Result SerializeBuffer(const gl::Context *context,
+                       gl::BinaryOutputStream *bos,
+                       gl::Buffer *tempBuffer,
+                       gl::Buffer *buffer)
+{
+    SerializeBufferState(bos, buffer->getState());
+    ANGLE_TRY(tempBuffer->copyBufferSubData(context, buffer, 0, 0, buffer->getSize()));
+    ANGLE_TRY(tempBuffer->mapRange(context, 0, buffer->getSize(), GL_MAP_READ_BIT));
+    GLboolean dontCare;
+    bos->writeBytes(reinterpret_cast<const uint8_t *>(tempBuffer->getMapPointer()),
+                    tempBuffer->getMapLength());
+    ANGLE_TRY(tempBuffer->unmap(context, &dontCare));
+    return Result::Continue;
+}
+
+void SerializeBufferState(gl::BinaryOutputStream *bos, const gl::BufferState &bufferState)
+{
+    bos->writeString(bufferState.getLabel());
+    bos->writeEnum(bufferState.getUsage());
+    bos->writeInt(bufferState.getSize());
+    bos->writeInt(bufferState.getAccessFlags());
+    bos->writeInt(bufferState.getAccess());
+    bos->writeInt(bufferState.isMapped());
+    bos->writeInt(bufferState.getMapOffset());
+    bos->writeInt(bufferState.getMapLength());
+    bos->writeInt(bufferState.getBindingCount());
+    bos->writeInt(bufferState.getTransformFeedbackIndexedBindingCount());
+    bos->writeInt(bufferState.getTransformFeedbackGenericBindingCount());
 }
 
 }  // namespace angle
