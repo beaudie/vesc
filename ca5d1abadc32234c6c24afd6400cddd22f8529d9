@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "9918bff0_22874256",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-14T15:10:09Z",
+      "side": 1,
+      "message": "Thanks, the \"*\" at the end was good.\n\nHowever, the number of tests being run doubled on Android ... I\u0027m seeing both \"__PreRotationEnabled\" and \"__PreRotationDisabled\" tests run.  That doesn\u0027t seem right, as ANGLE has pre-rotation enabled.  I thought your CL would run \"__PreRotationEnabled\" tests on Android and \"__PreRotationDisabled\" tests elsewhere.",
+      "parentUuid": "59b476d5_93bbacda",
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e58d905_b1133204",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 2
@@ -154,6 +172,30 @@
       "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73fb379f_5b30dac5",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-14T15:10:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a106894_637d0288",
+      "range": {
+        "startLine": 54,
+        "startChar": 41,
+        "endLine": 54,
+        "endChar": 92
+      },
+      "revId": "ca5d1abadc32234c6c24afd6400cddd22f8529d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
