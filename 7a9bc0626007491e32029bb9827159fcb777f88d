@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "bed7a193_f58649fa",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T16:09:05Z",
+      "side": 1,
+      "message": "Without blacklisting, we get this build rule:\n\n\tcc_genrule {\n\t    name: \"third_party_glslang_src_glslang_build_info\",\n\t    tool_files: [\n\t        \"third_party/glslang/src/build_info.py\",\n\t    ],\n\t    cmd: \"python $(location) external/angle/third_party/glslang/src -i external/angle/third_party/glslang/src/build_info.h.tmpl -o $(location glslang/build_info.h)\",\n\t    srcs: [\n\t        \"third_party/glslang/src/CHANGES.md\",\n\t        \"third_party/glslang/src/build_info.h.tmpl\",\n\t        \"third_party/glslang/src/build_info.py\",  \u003c\u003c--- no good\n\t    ],\n\t    sdk_version: \"28\",\n\t    out: [\n\t        \"glslang/build_info.h\",\n\t    ],\n\t}\n\nThat build rule generates this error:\n\n    out/soong/.bootstrap/bin/soong_build -t -l out/.module_paths/Android.bp.list -b out/soong -n out -d out/soong/build.ninja.d -globFile out/soong/.bootstrap/build-globs.ninja -o out/soong/build.ninja Android.bp\n    error: external/angle/Android.bp:1253:1: module \"third_party_glslang_src_glslang_build_info\" variant \"android_arm_armv7-a-neon\": multiple labels for \"third_party/glslang/src/build_info.py\", \"external/angle/third\n    _party/glslang/src/build_info.py\" and \"external/angle/third_party/glslang/src/build_info.py\"\n    09:42:23 soong bootstrap failed with: exit status 1\n\nIt doesn\u0027t seem to like having the tool and the source contain the same file.   No idea why, but we can work around it.\n\nIs there a better/earlier place to filter out matching filenames for cases like this from build_info[target]?",
+      "parentUuid": "ec49be09_5ce9ec23",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 46
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e98a5070_89516d58",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 6
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "49f0cc68_b42af9c9",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T16:09:05Z",
+      "side": 1,
+      "message": "I\u0027ll back this out.   It doesn\u0027t look like Ben\u0027s fix made the roll into ANGLE last night, so we\u0027ll just have to wait a day or two before trying to roll into AOSP, which is fine.",
+      "parentUuid": "e98a5070_89516d58",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 31
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b00a5c73_917fc1d5",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 6
@@ -102,6 +150,30 @@
       "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c4d4198_27ee926d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-14T16:09:05Z",
+      "side": 1,
+      "message": "Good catch. Done.",
+      "parentUuid": "b00a5c73_917fc1d5",
+      "range": {
+        "startLine": 564,
+        "startChar": 0,
+        "endLine": 565,
+        "endChar": 80
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
