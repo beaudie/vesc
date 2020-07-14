@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "4c906d13_c911782b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-14T02:24:11Z",
+      "side": 1,
+      "message": "@Tim, thanks for the clarification. Can the PPO use only one program? Then the test I proposed can also work with a PPO that just binds to both stages of the same program, and have the uniform updates go through the PPO code (which calls this function).\n\n@Charlie, that sounds reasonable, though I would really like to see a regression test where you can reproduce this bug, skip it on Vulkan with a bug tag, then remove the suppression on the CL that fixes it. That would be a valuable test to make sure future refactoring doesn\u0027t break this.",
+      "parentUuid": "3804b965_a4b3a896",
+      "range": {
+        "startLine": 728,
+        "startChar": 25,
+        "endLine": 728,
+        "endChar": 45
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7744ed4_fd74356b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
