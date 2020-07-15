@@ -30,11 +30,11 @@ namespace gl
 class Context;
 class ProgramPipeline;
 
-class ProgramPipelineState final : angle::NonCopyable
+class ProgramPipelineState final : angle::NonCopyable, public angle::ObserverInterface
 {
   public:
     ProgramPipelineState();
-    ~ProgramPipelineState();
+    ~ProgramPipelineState() override;
 
     const std::string &getLabel() const;
 
@@ -60,6 +60,11 @@ class ProgramPipelineState final : angle::NonCopyable
 
     bool usesShaderProgram(ShaderProgramID program) const;
 
+    void updateExecutableTextures();
+
+    // ObserverInterface implementation.
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+
   private:
     void useProgramStage(const Context *context, ShaderType shaderType, Program *shaderProgram);
 
@@ -71,6 +76,8 @@ class ProgramPipelineState final : angle::NonCopyable
     Program *mActiveShaderProgram;
     // The shader programs for each stage.
     ShaderMap<Program *> mPrograms;
+    std::vector<angle::ObserverBinding> mProgramObserverBindings;
+    angle::ObserverBinding mExecutableObserverBinding;
 
     GLboolean mValid;
 
@@ -79,7 +86,9 @@ class ProgramPipelineState final : angle::NonCopyable
     ProgramExecutable *mExecutable;
 };
 
-class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public LabeledObject
+class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
+                              public LabeledObject,
+                              public angle::ObserverInterface
 {
   public:
     ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID handle);
@@ -146,7 +155,8 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public L
     angle::Result syncState(const Context *context);
     void setDirtyBit(DirtyBitType dirtyBitType) { mDirtyBits.set(dirtyBitType); }
 
-    void updateExecutableTextures();
+    // ObserverInterface implementation.
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
     void fillProgramStateMap(gl::ShaderMap<const gl::ProgramState *> *programStatesOut);
 

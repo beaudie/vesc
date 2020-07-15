@@ -22,9 +22,15 @@
 namespace gl
 {
 
+enum SubjectIndexes : angle::SubjectIndex
+{
+    kExecutableSubjectIndex = 0
+};
+
 ProgramPipelineState::ProgramPipelineState()
     : mLabel(),
       mActiveShaderProgram(nullptr),
+      mExecutableObserverBinding(this, kExecutableSubjectIndex),  // ProgramPipeline is the observer
       mValid(false),
       mHasBeenBound(false),
       mExecutable(new ProgramExecutable())
@@ -33,6 +39,8 @@ ProgramPipelineState::ProgramPipelineState()
     {
         mPrograms[shaderType] = nullptr;
     }
+
+    mExecutableObserverBinding.bind(mExecutable);
 }
 
 ProgramPipelineState::~ProgramPipelineState()
@@ -76,6 +84,11 @@ void ProgramPipelineState::useProgramStage(const Context *context,
         // indicated shader stage.
         mPrograms[shaderType] = nullptr;
     }
+
+    Program *program = mPrograms[shaderType];
+    size_t index     = static_cast<size_t>(shaderType);
+    ASSERT(index < mProgramObserverBindings.size());
+    mProgramObserverBindings[index].bind(program);
 }
 
 void ProgramPipelineState::useProgramStages(const Context *context,
@@ -121,11 +134,44 @@ bool ProgramPipelineState::usesShaderProgram(ShaderProgramID programId) const
     return false;
 }
 
+void ProgramPipelineState::updateExecutableTextures()
+{
+    for (const ShaderType shaderType : mExecutable->getLinkedShaderStages())
+    {
+        const Program *program = getShaderProgram(shaderType);
+        ASSERT(program);
+        mExecutable->setActiveTextureMask(program->getExecutable().getActiveSamplersMask());
+        mExecutable->setActiveImagesMask(program->getExecutable().getActiveImagesMask());
+        // Updates mActiveSamplerRefCounts, mActiveSamplerTypes, and mActiveSamplerFormats
+        mExecutable->updateActiveSamplers(program->getState());
+    }
+}
+
+void ProgramPipelineState::onSubjectStateChange(angle::SubjectIndex index,
+                                                angle::SubjectMessage message)
+{
+    switch (message)
+    {
+        case angle::SubjectMessage::SubjectChanged:
+            updateExecutableTextures();
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
 ProgramPipeline::ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID handle)
     : RefCountObject(factory->generateSerial(), handle),
       mProgramPipelineImpl(factory->createProgramPipeline(mState))
 {
     ASSERT(mProgramPipelineImpl);
+
+    for (const ShaderType shaderType : gl::AllShaderTypes())
+    {
+        mState.mProgramObserverBindings.emplace_back(this,
+                                                     static_cast<angle::SubjectIndex>(shaderType));
+    }
 }
 
 ProgramPipeline::~ProgramPipeline()
@@ -225,22 +271,6 @@ void ProgramPipeline::updateTransformFeedbackMembers()
         vertexExecutable.mLinkedTransformFeedbackVaryings;
 }
 
-void ProgramPipeline::updateExecutableTextures()
-{
-    for (const ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
-    {
-        const Program *program = getShaderProgram(shaderType);
-        if (program)
-        {
-            mState.mExecutable->mActiveSamplersMask |=
-                program->getExecutable().getActiveSamplersMask();
-            mState.mExecutable->mActiveImagesMask |= program->getExecutable().getActiveImagesMask();
-            // Updates mActiveSamplerRefCounts, mActiveSamplerTypes, and mActiveSamplerFormats
-            mState.mExecutable->updateActiveSamplers(program->getState());
-        }
-    }
-}
-
 void ProgramPipeline::updateHasBooleans()
 {
     // Need to check all of the shader stages, not just linked, so we handle Compute correctly.
@@ -319,7 +349,7 @@ void ProgramPipeline::updateExecutable()
     updateTransformFeedbackMembers();
 
     // All Shader ProgramExecutable properties
-    updateExecutableTextures();
+    mState.updateExecutableTextures();
     updateHasBooleans();
 }
 
@@ -618,6 +648,19 @@ angle::Result ProgramPipeline::syncState(const Context *context)
     }
 
     return angle::Result::Continue;
+}
+
+void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
+{
+    switch (message)
+    {
+        case angle::SubjectMessage::SubjectChanged:
+            setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_PROGRAM_STAGE);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
 }
 
 void ProgramPipeline::fillProgramStateMap(ShaderMap<const ProgramState *> *programStatesOut)
