@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "b5474fbd_81d9979d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-15T05:21:01Z",
+      "side": 1,
+      "message": "\u003e So this is creating a resolve image for every MSAA framebuffer, right?\n\nYup.   As you\u0027ve pointed out, this is fine for proving a subpass can resolve into the attachment if one is present, but it doesn\u0027t work for ANGLE, since we can\u0027t ever present that attachment.   So, we need to use the draw FBO\u0027s attachment as the resolve attachment to avoid the blit (which is the whole goal of all of this).\n\nAs for the rest of it, I agree that all makes sense (with a few caveats).\n\nThe implementation gets a bit complicated for a few reasons though.   First, the MSAA FBO and the compatible render pass are created during the glDrawArrays():\n\n    rx::vk::(anonymous namespace)::InitializeRenderPassFromDesc vk_cache_utils.cpp:216\n    rx::RenderPassCache::getRenderPassWithOps vk_cache_utils.cpp:2009\n    rx::RenderPassCache::addRenderPass vk_cache_utils.cpp:1978\n    rx::RenderPassCache::getCompatibleRenderPass vk_cache_utils.h:934\n    rx::ContextVk::getCompatibleRenderPass ContextVk.cpp:4036\n    rx::FramebufferVk::getFramebuffer FramebufferVk.cpp:1568\n    rx::FramebufferVk::startNewRenderPass FramebufferVk.cpp:1856\n    rx::ContextVk::startRenderPass ContextVk.cpp:4331\n    rx::ContextVk::setupDraw ContextVk.cpp:946\n    rx::ContextVk::drawArrays ContextVk.cpp:1942\n    gl::Context::drawArrays Context.inl.h:120\n    gl::DrawArrays entry_points_gles_2_0_autogen.cpp:926\n\nSo we\u0027ll have to recreate the framebuffer to add the new resolve attachment.   As you pointed out, the render pass should still be compatible, so we shouldn\u0027t need to recreate that.   However, recreating the framebuffer also means updating the CommandBufferHelper with the new framebuffer\u0027s handle.\n\nThe biggest thing I don\u0027t know is what it means to recreate a framebuffer to add the new attachment.   We\u0027d want all of the same images and imageViews, so it really should just be the new framebuffer that changes, but I haven\u0027t looked around to what all cares about that framebuffer\u0027s handle yet.\n\n\u003e Requirement (1) is the reason I mentioned you probably need to do whatever you need to do at the syncState just before the blit.\n\n\u003e Requirement (2) means it\u0027s the syncState of the READ framebuffer where this should happen.\n\n\u003e Requirement (3) means that in the syncState of the READ framebuffer, the DRAW framebuffer should already be synced and ready for the image to be picked up.  So, if the syncState of the READ framebuffer is done before the DRAW framebuffer, you may need to reorder those.\n\nThe read FBO isn\u0027t dirty when the blit is performed.   It is initially marked dirty as part of handling the glDrawArrays(), but that\u0027s it.   Instead, there\u0027s only a syncState for the draw FBO that\u0027s performed during the blit:\n\n    rx::FramebufferVk::syncState FramebufferVk.cpp:1404\n    gl::Framebuffer::syncState Framebuffer.cpp:1998\n    gl::State::syncDrawFramebuffer State.cpp:3127\n    gl::State::syncDirtyObjects State.h:1036\n    gl::Context::syncDirtyObjects Context.inl.h:95\n    gl::Context::syncState Context.cpp:3623\n    gl::Context::syncStateForBlit Context.cpp:4624\n    gl::Context::blitFramebuffer Context.cpp:3657\n    gl::BlitFramebuffer entry_points_gles_3_0_autogen.cpp:200\n\nThis should be fine though, since we can still access the read FBO during the draw\u0027s syncState:\n\n    const gl::State \u0026glState              \u003d contextVk-\u003egetState();\n    const gl::Framebuffer *srcFramebuffer \u003d glState.getReadFramebuffer();\n    FramebufferVk *srcFramebufferVk       \u003d vk::GetImpl(srcFramebuffer);\n\nThat code actually comes straight from FramebufferVk::blit().   I think either syncState or FramebufferVk::blit() should work, with the benefit of doing it inside blit() is that we know that we\u0027re handling a blit.\n\nAll that to say, you\u0027re probably right that it\u0027s better to work on recreating the read FBO with the draw FBO\u0027s image as the resolve attachment, rather than always creating a resolve attachment and giving that to the draw FBO.",
+      "parentUuid": "0647ed20_c76e8127",
+      "range": {
+        "startLine": 1598,
+        "startChar": 0,
+        "endLine": 1628,
+        "endChar": 9
+      },
+      "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a112faa_4f59b65c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 1
@@ -71,6 +95,30 @@
       "writtenOn": "2020-07-15T02:39:59Z",
       "side": 1,
       "message": "Not sure why you need this. The resolve attachment is not the same image as any of the color attachments (because the color attachments are MSAA and the resolve is not, they can\u0027t alias).",
+      "range": {
+        "startLine": 286,
+        "startChar": 40,
+        "endLine": 286,
+        "endChar": 79
+      },
+      "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87b4b8a6_657882cc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-15T05:21:01Z",
+      "side": 1,
+      "message": "This whole block is just copy/pasted from UnpackAttachmentDesc(), with the samples and loadOp/storeOp stuff updated to make sense.   You\u0027re probably right that this isn\u0027t necessary though.",
+      "parentUuid": "3a112faa_4f59b65c",
       "range": {
         "startLine": 286,
         "startChar": 40,
