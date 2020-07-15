@@ -396,7 +396,7 @@ angle::Result Framebuffer11::syncState(const gl::Context *context,
                                        gl::Command command)
 {
     ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
-    ANGLE_TRY(FramebufferD3D::syncState(context, binding, dirtyBits));
+    ANGLE_TRY(FramebufferD3D::syncState(context, binding, dirtyBits, command));
 
     // Call this last to allow the state manager to take advantage of the cached render targets.
     mRenderer->getStateManager()->invalidateRenderTarget();
