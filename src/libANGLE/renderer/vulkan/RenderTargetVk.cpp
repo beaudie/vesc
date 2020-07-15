@@ -145,7 +145,8 @@ const vk::Format &RenderTargetVk::getImageFormat() const
 gl::Extents RenderTargetVk::getExtents() const
 {
     ASSERT(mImage && mImage->valid());
-    return mImage->getLevelExtents2D(static_cast<uint32_t>(mLevelIndex));
+    uint32_t levelVK = mLevelIndex - mImage->getBaseLevel();
+    return mImage->getLevelExtents2D(levelVK);
 }
 
 void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageViewHelper *imageViews)
