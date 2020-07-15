@@ -627,6 +627,7 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::DynamicBuffer *getStagingBufferStorage() { return &mStagingBufferStorage; }
 
     const vk::PerfCounters &getPerfCounters() const { return mPerfCounters; }
+    vk::PerfCounters *getPerfCounters() { return &mPerfCounters; }
 
   private:
     // Dirty bits.

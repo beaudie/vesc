@@ -997,7 +997,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // with a switch with inlined handler functions.
     // TODO(jmadill): Use dirty bit. http://anglebug.com/3014
     vk::Framebuffer *srcVkFramebuffer = nullptr;
-    ANGLE_TRY(mDrawFramebuffer->getFramebuffer(this, &srcVkFramebuffer));
+    ANGLE_TRY(mDrawFramebuffer->getFramebuffer(this, &srcVkFramebuffer, nullptr));
     if (!hasStartedRenderPassWithFramebuffer(srcVkFramebuffer))
     {
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
@@ -4024,6 +4024,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     mPerfCounters.renderPasses                           = 0;
     mPerfCounters.writeDescriptorSets                    = 0;
     mPerfCounters.flushedOutsideRenderPassCommandBuffers = 0;
+    mPerfCounters.vkCmdResolveImageCount                 = 0;
 
     mWaitSemaphores.clear();
     mWaitSemaphoreStageMasks.clear();
