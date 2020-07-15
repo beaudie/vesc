@@ -16,6 +16,24 @@
       "revId": "73470393b156e617f858c61fe82ab9f42f8dd195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8e6348a_acab0064",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424723
+      },
+      "writtenOn": "2020-07-15T03:28:30Z",
+      "side": 1,
+      "message": "Considering performance, we usually recommend to use highp inside VS, but clamp to mediump when writing out. What\u0027s the choice in ANGLE?",
+      "parentUuid": "1eae324c_35508355",
+      "revId": "73470393b156e617f858c61fe82ab9f42f8dd195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
