@@ -972,6 +972,15 @@ class CommandBufferHelper : angle::NonCopyable
         ASSERT(mIsRenderPassCommandBuffer);
         return mFramebuffer.getHandle();
     }
+    void updateFramebuffer(vk::Framebuffer *newFramebuffer)
+    {
+        mFramebuffer.setHandle(newFramebuffer->getHandle());
+    }
+
+    void updateRenderPassDesc(vk::RenderPassDesc renderPassDesc)
+    {
+        mRenderPassDesc = renderPassDesc;
+    }
 
     bool usesBuffer(const BufferHelper &buffer) const;
     bool usesBufferForWrite(const BufferHelper &buffer) const;

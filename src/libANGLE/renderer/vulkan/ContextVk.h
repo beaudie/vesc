@@ -550,6 +550,9 @@ class ContextVk : public ContextImpl, public vk::Context
                                      const vk::ClearValuesArray &clearValues,
                                      vk::CommandBuffer **commandBufferOut);
 
+    // TODO(https://anglebug.com/4968): Support multiple open render passes.
+    bool hasRenderPassCommandBuffer() const { return mRenderPassCommandBuffer != nullptr; }
+
     // Only returns true if we have a started RP and we've run setupDraw.
     bool hasStartedRenderPass() const
     {
@@ -572,6 +575,16 @@ class ContextVk : public ContextImpl, public vk::Context
     {
         ASSERT(hasStartedRenderPass());
         return *mRenderPassCommands;
+    }
+
+    // TODO(https://anglebug.com/4968): Support multiple open render passes.
+    vk::CommandBufferHelper *getRenderPassCommands() { return mRenderPassCommands; }
+
+    // TODO(https://anglebug.com/4968): Support multiple open render passes.
+    void restoreRenderPassCommandBuffer()
+    {
+        mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
+        ASSERT(hasStartedRenderPass());
     }
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
@@ -627,6 +640,7 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::DynamicBuffer *getStagingBufferStorage() { return &mStagingBufferStorage; }
 
     const vk::PerfCounters &getPerfCounters() const { return mPerfCounters; }
+    vk::PerfCounters *getPerfCounters() { return &mPerfCounters; }
 
   private:
     // Dirty bits.

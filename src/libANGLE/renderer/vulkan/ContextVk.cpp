@@ -4029,6 +4029,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     mPerfCounters.renderPasses                           = 0;
     mPerfCounters.writeDescriptorSets                    = 0;
     mPerfCounters.flushedOutsideRenderPassCommandBuffers = 0;
+    mPerfCounters.vkCmdResolveImageCount                 = 0;
 
     mWaitSemaphores.clear();
     mWaitSemaphoreStageMasks.clear();
