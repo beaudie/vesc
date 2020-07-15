@@ -983,6 +983,9 @@ class CommandBufferHelper : angle::NonCopyable
     void setDepthTestEnabled() { mDepthTestEverEnabled = true; }
     void setStencilTestEnabled() { mStencilTestEverEnabled = true; }
 
+    void updateFramebufferAndRenderPassDesc(vk::Framebuffer *newFramebuffer,
+                                            const vk::RenderPassDesc &renderPassDesc);
+
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
