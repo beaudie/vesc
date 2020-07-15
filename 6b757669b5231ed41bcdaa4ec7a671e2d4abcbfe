@@ -203,6 +203,30 @@
     },
     {
       "key": {
+        "uuid": "08caa57a_19ebc175",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-15T16:53:06Z",
+      "side": 1,
+      "message": "I ran into a few issues with PPO stuff. Once I move uniform buffer to context, PPO and Program has no difference with regard to uniform data update. The specific test coverage you want to cover becomes irrelevant if the buffer are come from context, so I am not really convinced the time I keep spending on this worth it though.",
+      "parentUuid": "98bb6894_d5166629",
+      "range": {
+        "startLine": 728,
+        "startChar": 25,
+        "endLine": 728,
+        "endChar": 45
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7744ed4_fd74356b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
