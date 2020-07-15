@@ -11,6 +11,7 @@
 #include "common/PackedEnums.h"
 #include "common/system_utils.h"
 #include "tests/perf_tests/ANGLEPerfTest.h"
+#include "tests/perf_tests/ANGLEPerfTestArgs.h"
 #include "tests/perf_tests/DrawCallPerfParams.h"
 #include "util/egl_loader_autogen.h"
 #include "util/frame_capture_test_utils.h"
@@ -97,6 +98,9 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
     std::vector<TimeSample> mTimeline;
 
     std::string mStartingDirectory;
+    GLuint mOffscreenFramebuffer  = 0;
+    GLuint mOffscreenTexture      = 0;
+    GLuint mOffscreenDepthStencil = 0;
 };
 
 TracePerfTest::TracePerfTest()
@@ -145,6 +149,35 @@ void TracePerfTest::initializeBenchmark()
     std::string testDataDir = testDataDirStr.str();
     SetBinaryDataDir(params.testID, testDataDir.c_str());
 
+    // If we're rendering offscreen we set up a default backbuffer.
+    if (params.surfaceType == SurfaceType::Offscreen)
+    {
+        glGenFramebuffers(1, &mOffscreenFramebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, mOffscreenFramebuffer);
+
+        // Hard-code RGBA8/D24S8. This should be specified in the trace info.
+        glGenTextures(1, &mOffscreenTexture);
+        glBindTexture(GL_TEXTURE_2D, mOffscreenTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, traceInfo.drawSurfaceWidth,
+                     traceInfo.drawSurfaceHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+        glGenRenderbuffers(1, &mOffscreenDepthStencil);
+        glBindRenderbuffer(GL_RENDERBUFFER, mOffscreenDepthStencil);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, traceInfo.drawSurfaceWidth,
+                              traceInfo.drawSurfaceHeight);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                               mOffscreenTexture, 0);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                                  mOffscreenDepthStencil);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                  mOffscreenDepthStencil);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    }
+
+    SetFramebufferChangeCallback(params.testID, this, FramebufferChangeCallback);
+
     // Potentially slow. Can load a lot of resources.
     SetupReplay(params.testID);
     glFinish();
@@ -158,6 +191,24 @@ void TracePerfTest::initializeBenchmark()
 
 void TracePerfTest::destroyBenchmark()
 {
+    if (mOffscreenTexture != 0)
+    {
+        glDeleteTextures(1, &mOffscreenTexture);
+        mOffscreenTexture = 0;
+    }
+
+    if (mOffscreenDepthStencil != 0)
+    {
+        glDeleteRenderbuffers(1, &mOffscreenDepthStencil);
+        mOffscreenDepthStencil = 0;
+    }
+
+    if (mOffscreenFramebuffer != 0)
+    {
+        glDeleteFramebuffers(1, &mOffscreenFramebuffer);
+        mOffscreenFramebuffer = 0;
+    }
+
     // In order for the next test to load, restore the working directory
     angle::SetCWD(mStartingDirectory.c_str());
 }
@@ -183,6 +234,19 @@ void TracePerfTest::sampleTime()
 
 void TracePerfTest::drawBenchmark()
 {
+    constexpr uint32_t kFramesPerX  = 2;
+    constexpr uint32_t kFramesPerY  = 2;
+    constexpr uint32_t kFramesPerXY = kFramesPerY * kFramesPerX;
+
+    const TracePerfParams &params = GetParam();
+    const TraceInfo &traceInfo    = kTraceInfos[params.testID];
+
+    const uint32_t kFramesPerStep = (mEndFrame - mStartFrame) + 1;
+    const uint32_t kFrameWidth    = static_cast<uint32_t>(
+        static_cast<double>(traceInfo.drawSurfaceWidth / static_cast<double>(kFramesPerX)));
+    const uint32_t kFrameHeight = static_cast<uint32_t>(
+        static_cast<double>(traceInfo.drawSurfaceHeight / static_cast<double>(kFramesPerY)));
+
     // Add a time sample from GL and the host.
     sampleTime();
 
@@ -194,13 +258,50 @@ void TracePerfTest::drawBenchmark()
         sprintf(frameName, "Frame %u", frame);
         beginInternalTraceEvent(frameName);
 
-        ReplayFrame(GetParam().testID, frame);
-        getGLWindow()->swap();
+        ReplayFrame(params.testID, frame);
+
+        if (params.surfaceType == SurfaceType::Window)
+        {
+            getGLWindow()->swap();
+        }
+        else
+        {
+            GLint currentDrawFBO, currentReadFBO;
+            glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
+            glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
+
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, mOffscreenFramebuffer);
+
+            uint32_t frames  = getNumStepsPerformed() * kFramesPerStep + (frame - mStartFrame);
+            uint32_t frameX  = (frames % kFramesPerXY) % kFramesPerX;
+            uint32_t frameY  = (frames % kFramesPerXY) / kFramesPerX;
+            uint32_t windowX = frameX * kFrameWidth;
+            uint32_t windowY = frameY * kFrameHeight;
+
+            if (angle::gVerboseLogging)
+            {
+                printf("Frame %d: x %d y %d (screen x %d, screen y %d)\n", frames, frameX, frameY,
+                       windowX, windowY);
+            }
+
+            glBlitFramebuffer(0, 0, traceInfo.drawSurfaceWidth, traceInfo.drawSurfaceHeight,
+                              windowX, windowY, windowX + kFrameWidth, windowY + kFrameHeight,
+                              GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
+
+            if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
+            {
+                getGLWindow()->swap();
+            }
+        }
 
         endInternalTraceEvent(frameName);
     }
 
-    ResetReplay(GetParam().testID);
+    ResetReplay(params.testID);
 
     // Process any running queries once per iteration.
     for (size_t queryIndex = 0; queryIndex < mRunningQueries.size();)
@@ -283,6 +384,11 @@ double TracePerfTest::getHostTimeFromGLTime(GLint64 glTime)
 // Callback from the perf tests.
 void TracePerfTest::onFramebufferChange(GLenum target, GLuint framebuffer)
 {
+    if (framebuffer == 0 && GetParam().surfaceType == SurfaceType::Offscreen)
+    {
+        glBindFramebuffer(target, mOffscreenFramebuffer);
+    }
+
     if (!mIsTimestampQueryAvailable)
         return;
 
@@ -364,12 +470,23 @@ TracePerfParams CombineTestID(const TracePerfParams &in, RestrictedTraceID id)
     return out;
 }
 
+TracePerfParams CombineWithSurfaceType(const TracePerfParams &in, SurfaceType surfaceType)
+{
+    TracePerfParams out = in;
+    out.surfaceType     = surfaceType;
+    return out;
+}
+
 using namespace params;
 using P = TracePerfParams;
 
 std::vector<P> gTestsWithID =
     CombineWithValues({P()}, AllEnums<RestrictedTraceID>(), CombineTestID);
-std::vector<P> gTestsWithRenderer = CombineWithFuncs(gTestsWithID, {Vulkan<P>, Native<P>});
+std::vector<P> gTestsWithSurfaceType =
+    CombineWithValues(gTestsWithID,
+                      {SurfaceType::Offscreen, SurfaceType::Window},
+                      CombineWithSurfaceType);
+std::vector<P> gTestsWithRenderer = CombineWithFuncs(gTestsWithSurfaceType, {Vulkan<P>, Native<P>});
 ANGLE_INSTANTIATE_TEST_ARRAY(TracePerfTest, gTestsWithRenderer);
 
 }  // anonymous namespace
