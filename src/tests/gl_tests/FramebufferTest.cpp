@@ -1129,6 +1129,49 @@ TEST_P(FramebufferTest_ES31, IncompleteMultisampleFixedSampleLocationsTex)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test resolving a multisampled texture with blit
+TEST_P(FramebufferTest_ES31, MultisampleResolveWithBlit)
+{
+    constexpr int kSize = 16;
+    glViewport(0, 0, kSize, kSize);
+
+    GLFramebuffer msaaFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO.get());
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture.get());
+    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA8, kSize, kSize, false);
+    ASSERT_GL_NO_ERROR();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE,
+                           texture.get(), 0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    ANGLE_GL_PROGRAM(texSizeProgram, essl31_shaders::vs::Simple(), essl31_shaders::fs::Red());
+    drawQuad(texSizeProgram, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    // Create another FBO to resolve the multisample buffer into.
+    GLTexture resolveTexture;
+    GLFramebuffer resolveFBO;
+    glBindTexture(GL_TEXTURE_2D, resolveTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glBindFramebuffer(GL_FRAMEBUFFER, resolveFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, resolveTexture, 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolveFBO);
+    glBlitFramebuffer(0, 0, kSize, kSize, 0, 0, kSize, kSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, resolveFBO);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
 // If there are no attachments, rendering will be limited to a rectangle having a lower left of
 // (0, 0) and an upper right of(width, height), where width and height are the framebuffer
 // object's default width and height.

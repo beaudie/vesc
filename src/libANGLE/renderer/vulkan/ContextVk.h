@@ -544,6 +544,11 @@ class ContextVk : public ContextImpl, public vk::Context
         return *mRenderPassCommands;
     }
 
+    void setRenderPassFramebuffer(vk::Framebuffer &framebuffer)
+    {
+        mRenderPassFramebuffer = framebuffer.getHandle();
+    }
+
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
     angle::Result startRenderPass(gl::Rectangle renderArea, vk::CommandBuffer **commandBufferOut);
     angle::Result endRenderPass();

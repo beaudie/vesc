@@ -959,6 +959,15 @@ struct CommandBufferHelper : angle::NonCopyable
         ASSERT(mIsRenderPassCommandBuffer);
         return mFramebuffer.getHandle();
     }
+    void updateFramebuffer(vk::Framebuffer *newFramebuffer)
+    {
+        mFramebuffer.setHandle(newFramebuffer->getHandle());
+    }
+
+    void updateRenderPassDesc(vk::RenderPassDesc renderPassDesc)
+    {
+        mRenderPassDesc = renderPassDesc;
+    }
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
