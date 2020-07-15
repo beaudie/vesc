@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "a196b87c_fa885932",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-15T15:14:56Z",
+      "side": 1,
+      "message": "I guess it\u0027s an artifact of the script being an input of the action in gn [0].\n\nHow about an explicit step to remove the script from the inputs?\n\n[0] https://source.chromium.org/chromium/chromium/src/+/master:third_party/glslang/src/BUILD.gn;l\u003d59?q\u003dbuild_info.py\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "parentUuid": "bed7a193_f58649fa",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 46
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e98a5070_89516d58",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 6
