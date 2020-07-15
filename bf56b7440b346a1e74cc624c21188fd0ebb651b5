@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73a442b3_a706cd6b",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T18:25:10Z",
+      "side": 1,
+      "message": "nit: technically these can be:\n\nGLintptr offset, GLsizeiptr size, void *data\n\nto mirror\n\nhttps://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGetBufferSubData.xhtml\n\nNot a big deal though.",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 144,
+        "endChar": 45
+      },
+      "revId": "bf56b7440b346a1e74cc624c21188fd0ebb651b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
