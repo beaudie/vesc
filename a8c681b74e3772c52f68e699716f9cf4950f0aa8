@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0368fc1_0b3de92d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-15T19:25:09Z",
+      "side": 1,
+      "message": "Initial check of other tests (besides NBA 2K20)",
+      "revId": "a8c681b74e3772c52f68e699716f9cf4950f0aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
