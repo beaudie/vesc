@@ -1633,7 +1633,7 @@ class ImageViewHelper : angle::NonCopyable
     angle::Result getLevelDrawImageView(ContextVk *contextVk,
                                         gl::TextureType viewType,
                                         const ImageHelper &image,
-                                        uint32_t level,
+                                        uint32_t levelVK,
                                         uint32_t layer,
                                         VkImageUsageFlags imageUsageFlags,
                                         VkFormat vkImageFormat,
@@ -1642,7 +1642,7 @@ class ImageViewHelper : angle::NonCopyable
     // Creates a view with a single layer of the level.
     angle::Result getLevelLayerDrawImageView(ContextVk *contextVk,
                                              const ImageHelper &image,
-                                             uint32_t level,
+                                             uint32_t levelVK,
                                              uint32_t layer,
                                              const ImageView **imageViewOut);
 
