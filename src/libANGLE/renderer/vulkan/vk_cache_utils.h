@@ -95,10 +95,17 @@ class alignas(4) RenderPassDesc final
         return static_cast<angle::FormatID>(mAttachmentFormats[index]);
     }
 
+    bool hasResolveAttachment() const { return mHasResolveAttachment; }
+    void setHasResolveAttachment(bool hasResolveAttachment)
+    {
+        mHasResolveAttachment = hasResolveAttachment;
+    }
+
   private:
     uint8_t mSamples;
-    uint8_t mColorAttachmentRange : 7;
+    uint8_t mColorAttachmentRange : 6;
     uint8_t mHasDepthStencilAttachment : 1;
+    uint8_t mHasResolveAttachment : 1;
     // Color attachment formats are stored with their GL attachment indices.  The depth/stencil
     // attachment formats follow the last enabled color attachment.  When creating a render pass,
     // the disabled attachments are removed and the resulting attachments are packed.
@@ -816,8 +823,11 @@ class FramebufferDesc
 
     uint32_t attachmentCount() const;
 
+    void setIsMsaa(bool isMsaa) { mIsMsaa = isMsaa; }
+
   private:
     gl::AttachmentArray<Serial> mSerials;
+    bool mIsMsaa;
 };
 
 // Layer/level pair type used to index into Serial Cache in ImageViewHelper

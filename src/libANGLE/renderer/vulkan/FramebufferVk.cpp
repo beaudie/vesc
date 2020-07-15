@@ -47,6 +47,7 @@ constexpr VkClearValue kUninitializedClearValue = {{{0.95, 0.05, 0.95, 0.95}}};
 // automatically convert to the actual data type.
 constexpr unsigned int kEmulatedAlphaValue = 1;
 
+#if 0  // TIMTIM
 bool HasSrcBlitFeature(RendererVk *renderer, RenderTargetVk *srcRenderTarget)
 {
     const VkFormat srcFormat = srcRenderTarget->getImageFormat().vkImageFormat;
@@ -164,6 +165,7 @@ void AdjustFramebufferDimensionsForPreRotation(SurfaceRotation framebufferAngle,
             break;
     }
 }
+#endif
 }  // anonymous namespace
 
 // static
@@ -188,7 +190,8 @@ FramebufferVk::FramebufferVk(RendererVk *renderer,
       mFramebuffer(nullptr),
       mActiveColorComponents(0),
       mSupportDepthStencilFeedbackLoops(
-          renderer->getFeatures().supportDepthStencilRenderingFeedbackLoops.enabled)
+          renderer->getFeatures().supportDepthStencilRenderingFeedbackLoops.enabled),
+      mResolveImage(nullptr)
 {
     mReadPixelBuffer.init(renderer, VK_BUFFER_USAGE_TRANSFER_DST_BIT, kReadPixelsBufferAlignment,
                           kMinReadPixelsBufferSize, true);
@@ -212,6 +215,16 @@ void FramebufferVk::destroy(const gl::Context *context)
 
     mReadPixelBuffer.release(contextVk->getRenderer());
     clearCache(contextVk);
+
+    if (mResolveImage)
+    {
+        ASSERT(mResolveImage->valid());
+        mResolveImage->destroy(contextVk->getRenderer());
+        mResolveImage = nullptr;
+
+        ASSERT(mResolveImageView.valid());
+        mResolveImageView.destroy(contextVk->getDevice());
+    }
 }
 
 angle::Result FramebufferVk::discard(const gl::Context *context,
@@ -710,6 +723,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                                   GLbitfield mask,
                                   GLenum filter)
 {
+#if 0      // TIMTIM
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
@@ -1030,7 +1044,30 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         else if (isResolve && !flipX && !flipY && areChannelsBlitCompatible &&
                  (rotation == SurfaceRotation::Identity))
         {
+//            WARN() << "TIMTIM";
+//            const vk::RenderPassDesc &renderPassDesc = srcFramebufferVk->getRenderPassDesc();
+//            RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[0];
+//            const vk::ImageView *resolveImageView = nullptr;
+//            ANGLE_TRY(drawRenderTarget->getImageView(contextVk, &resolveImageView));
+//
+//            vk::Framebuffer *newSrcFramebuffer = nullptr;
+//            ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &newSrcFramebuffer, resolveImageView));
+//            WARN() << "TIMTIM";
+//            vk::CommandBufferHelper &commandBufferHelper = contextVk->getStartedRenderPassCommands();
+//            commandBufferHelper.updateFramebuffer(newSrcFramebuffer);
+//            commandBufferHelper.updateRenderPassDesc(renderPassDesc);
+//            contextVk->setRenderPassFramebuffer(*newSrcFramebuffer);
+//            ANGLE_TRY(contextVk->endRenderPass());
+//
+//            WARN() << "TIMTIM";
+//            ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &newSrcFramebuffer, nullptr));
+//            commandBufferHelper.updateFramebuffer(newSrcFramebuffer);
+//            commandBufferHelper.updateRenderPassDesc(renderPassDesc);
+//            contextVk->setRenderPassFramebuffer(*newSrcFramebuffer);
+//            WARN() << "TIMTIM";
+#    if 0  // TIMTIM
             ANGLE_TRY(resolveColorWithCommand(contextVk, params, &readRenderTarget->getImage()));
+#    endif
         }
         // Otherwise use a shader to do blit or resolve.
         else
@@ -1045,6 +1082,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
     if (blitDepthBuffer || blitStencilBuffer)
     {
+        WARN() << "TIMTIM";
         RenderTargetVk *readRenderTarget = srcFramebufferVk->getDepthStencilRenderTarget();
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getDepthStencil(true);
         params.srcLayer                  = readRenderTarget->getLayerIndex();
@@ -1122,6 +1160,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             contextVk->addGarbage(&stencilViewObject);
         }
     }
+#endif
 
     return angle::Result::Continue;
 }  // namespace rx
@@ -1225,7 +1264,7 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     //- Bind FBO 1, invalidate D/S
     // to invalidate the D/S of FBO 2 since it would be the currently active renderpass.
     vk::Framebuffer *currentFramebuffer = nullptr;
-    ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer));
+    ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr));
 
     if (contextVk->hasStartedRenderPass() &&
         contextVk->isCurrentRenderPassOfFramebuffer(currentFramebuffer))
@@ -1449,6 +1488,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 }
 
                 ANGLE_TRY(updateColorAttachment(context, deferClears, colorIndexGL));
+
+                if ((colorIndexGL == 0) && getSamples() > 1)
+                {
+                }
                 break;
             }
         }
@@ -1463,7 +1506,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     }
 
     // No-op redundant changes to prevent closing the RenderPass.
-    if (mCurrentFramebufferDesc == priorFramebufferDesc)
+    if ((mCurrentFramebufferDesc == priorFramebufferDesc) && !context->getIsBlit())
     {
         return angle::Result::Continue;
     }
@@ -1476,7 +1519,34 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         mActiveColorComponentMasksForClear[0].any(), mActiveColorComponentMasksForClear[1].any(),
         mActiveColorComponentMasksForClear[2].any(), mActiveColorComponentMasksForClear[3].any());
 
+#if 1  // TIMTIM
+    if (context->getIsBlit())
+    {
+        const gl::Framebuffer *srcFramebuffer = glState.getReadFramebuffer();
+        FramebufferVk *srcFramebufferVk       = vk::GetImpl(srcFramebuffer);
+
+        RenderTargetVk *drawRenderTarget      = mRenderTargetCache.getColors()[0];
+        const vk::ImageView *resolveImageView = nullptr;
+        ANGLE_TRY(drawRenderTarget->getImageView(contextVk, &resolveImageView));
+
+        vk::Framebuffer *newSrcFramebuffer = nullptr;
+        ANGLE_TRY(
+            srcFramebufferVk->getFramebuffer(contextVk, &newSrcFramebuffer, resolveImageView));
+        vk::CommandBufferHelper &commandBufferHelper = contextVk->getStartedRenderPassCommands();
+        commandBufferHelper.updateFramebuffer(newSrcFramebuffer);
+        commandBufferHelper.updateRenderPassDesc(srcFramebufferVk->getRenderPassDesc());
+        contextVk->setRenderPassFramebuffer(*newSrcFramebuffer);
+
+        ANGLE_TRY(contextVk->endRenderPass());
+
+        ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &newSrcFramebuffer, nullptr));
+        commandBufferHelper.updateFramebuffer(newSrcFramebuffer);
+        commandBufferHelper.updateRenderPassDesc(srcFramebufferVk->getRenderPassDesc());
+        contextVk->setRenderPassFramebuffer(*newSrcFramebuffer);
+    }
+#else
     ANGLE_TRY(contextVk->endRenderPass());
+#endif
 
     // Notify the ContextVk to update the pipeline desc.
     updateRenderPassDesc();
@@ -1522,29 +1592,45 @@ void FramebufferVk::updateRenderPassDesc()
     }
 }
 
-angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut)
+angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
+                                            vk::Framebuffer **framebufferOut,
+                                            const vk::ImageView *resolveImageView = nullptr)
 {
     // First return a presently valid Framebuffer
-    if (mFramebuffer != nullptr)
-    {
-        *framebufferOut = &mFramebuffer->getFramebuffer();
-        return angle::Result::Continue;
-    }
+    //    if (mFramebuffer != nullptr)
+    //    {
+    //        *framebufferOut = &mFramebuffer->getFramebuffer();
+    //        return angle::Result::Continue;
+    //    }
     // No current FB, so now check for previously cached Framebuffer
     auto iter = mFramebufferCache.find(mCurrentFramebufferDesc);
     if (iter != mFramebufferCache.end())
     {
-        if (contextVk->getRenderer()->getFeatures().enableFramebufferVkCache.enabled)
-        {
-            *framebufferOut = &iter->second.getFramebuffer();
-            return angle::Result::Continue;
-        }
-        else
+        //        if (contextVk->getRenderer()->getFeatures().enableFramebufferVkCache.enabled)
+        //        {
+        //            *framebufferOut = &iter->second.getFramebuffer();
+        //            return angle::Result::Continue;
+        //        }
+        //        else
         {
             // When cache is off just release previous entry, it will be recreated below
             iter->second.release(contextVk);
         }
     }
+
+    if (resolveImageView)
+    {
+        //        WARN() << "TIMTIM";
+        mRenderPassDesc.setHasResolveAttachment(true);
+        mCurrentFramebufferDesc.setIsMsaa(true);
+    }
+    else
+    {
+        //        WARN() << "TIMTIM";
+        mRenderPassDesc.setHasResolveAttachment(false);
+        mCurrentFramebufferDesc.setIsMsaa(false);
+    }
+
     vk::RenderPass *compatibleRenderPass = nullptr;
     ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
 
@@ -1586,6 +1672,13 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
         attachmentsSize = depthStencilRenderTarget->getExtents();
     }
 
+    if (resolveImageView)
+    {
+        //        WARN() << "TIMTIM";
+        attachments.push_back(resolveImageView->getHandle());
+    }
+
+    //    WARN() << "TIMTIM >> attachments.size() = " << attachments.size();
     if (attachmentsSize.empty())
     {
         // No attachments, so use the default values.

@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/RenderTargetCache.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
@@ -151,7 +152,9 @@ class FramebufferVk : public FramebufferImpl
                                           const UtilsVk::BlitResolveParameters &params,
                                           vk::ImageHelper *srcImage);
 
-    angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
+    angle::Result getFramebuffer(ContextVk *contextVk,
+                                 vk::Framebuffer **framebufferOut,
+                                 const vk::ImageView *imageView);
 
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,
@@ -224,6 +227,9 @@ class FramebufferVk : public FramebufferImpl
     bool mSupportDepthStencilFeedbackLoops;
 
     vk::ClearValuesArray mDeferredClears;
+
+    vk::ImageHelper *mResolveImage;
+    vk::ImageView mResolveImageView;
 };
 }  // namespace rx
 

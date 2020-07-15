@@ -616,6 +616,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool noopDraw(PrimitiveMode mode, GLsizei count) const;
     bool noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei instanceCount) const;
 
+    bool getIsBlit() const { return mIsBlit; }
+
   private:
     void initialize();
 
@@ -767,6 +769,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     std::unique_ptr<angle::FrameCapture> mFrameCapture;
 
     OverlayType mOverlay;
+
+    bool mIsBlit = false;
 };
 }  // namespace gl
 

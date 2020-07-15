@@ -4350,6 +4350,7 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
 angle::Result ContextVk::endRenderPass()
 {
+    //    WARN() << "TIMTIM";
     if (mRenderPassCommands->empty())
     {
         onRenderPassFinished();
