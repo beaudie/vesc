@@ -78,6 +78,7 @@ vk::ImageViewSerial RenderTargetVk::getAssignViewSerialImpl(ContextVk *contextVk
 
     vk::ImageViewSerial imageViewSerial =
         imageViews->getAssignSerial(contextVk, mLevelIndexGL, mLayerIndex);
+    ASSERT(imageViewSerial.valid());
     ASSERT(imageViewSerial.getValue() < std::numeric_limits<uint32_t>::max());
     return imageViewSerial;
 }
