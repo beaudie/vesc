@@ -532,8 +532,13 @@ class ContextVk : public ContextImpl, public vk::Context
 
     vk::CommandBufferHelper &getStartedRenderPassCommands()
     {
-        ASSERT(hasStartedRenderPass());
+        //        ASSERT(hasStartedRenderPass());
         return *mRenderPassCommands;
+    }
+
+    void setRenderPassFramebuffer(vk::Framebuffer &framebuffer)
+    {
+        mRenderPassFramebuffer = framebuffer.getHandle();
     }
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }

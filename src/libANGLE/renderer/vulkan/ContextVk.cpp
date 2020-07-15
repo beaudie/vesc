@@ -2642,7 +2642,13 @@ angle::Result ContextVk::updateScissor(const gl::State &glState)
     gl::Rectangle scissoredRenderArea = framebufferVk->getScissoredRenderArea(this);
     if (!mRenderPassCommands->empty())
     {
-        if (!mRenderPassCommands->getRenderArea().encloses(scissoredRenderArea))
+        gl::Rectangle renderPassRenderArea = mRenderPassCommands->getRenderArea();
+        if (isRotatedAspectRatioForDrawFBO())
+        {
+            // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
+            std::swap(renderPassRenderArea.width, renderPassRenderArea.height);
+        }
+        if (!renderPassRenderArea.encloses(scissoredRenderArea))
         {
             ANGLE_TRY(endRenderPass());
         }
@@ -2886,7 +2892,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // has no dirty bits. Thus we need to explicitly clear the current command
                 // buffer to ensure we start a new one. Note that we always start a new command
                 // buffer because we currently can only support one open RenderPass at a time.
+#if 0  // TIMTIM
                 onRenderPassFinished();
+#endif
 
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
@@ -4358,6 +4366,7 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
 angle::Result ContextVk::endRenderPass()
 {
+    //    WARN() << "TIMTIM";
     if (mRenderPassCommands->empty())
     {
         onRenderPassFinished();
