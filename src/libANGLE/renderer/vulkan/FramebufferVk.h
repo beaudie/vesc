@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/RenderTargetCache.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
@@ -123,6 +124,7 @@ class FramebufferVk : public FramebufferImpl
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
     const vk::FramebufferDesc &getFramebufferDesc() const { return mCurrentFramebufferDesc; }
+    vk::FramebufferDesc *getFramebufferDesc() { return &mCurrentFramebufferDesc; }
     // We only support depth/stencil packed format and depthstencil attachment always follow all
     // color attachments
     size_t getDepthStencilAttachmentIndexVk() const
@@ -148,6 +150,10 @@ class FramebufferVk : public FramebufferImpl
                                   bool flipX,
                                   bool flipY);
 
+    // Resolve color with subpass attachment
+    angle::Result resolveColorWithSubpass(ContextVk *contextVk,
+                                          const UtilsVk::BlitResolveParameters &params);
+
     // Resolve color with vkCmdResolveImage
     angle::Result resolveColorWithCommand(ContextVk *contextVk,
                                           const UtilsVk::BlitResolveParameters &params,
@@ -158,7 +164,9 @@ class FramebufferVk : public FramebufferImpl
     angle::Result copyResolveToMultisampedAttachment(ContextVk *contextVk,
                                                      RenderTargetVk *colorRenderTarget);
 
-    angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
+    angle::Result getFramebuffer(ContextVk *contextVk,
+                                 vk::Framebuffer **framebufferOut,
+                                 const vk::ImageView *resolveImageViewIn);
 
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,
