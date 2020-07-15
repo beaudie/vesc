@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6189c2e_a6a60d0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T20:55:02Z",
+      "side": 1,
+      "message": "Le Hoang: Could you rebase the remaining patch stack? Looks like it has a conflict.",
+      "revId": "7b1d56127247700e652e59c3cadc56c98f7e5ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
