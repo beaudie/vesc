@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "60dc503c_967e540a",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40435b1b_43eaab24",
+      "range": {
+        "startLine": 128,
+        "startChar": 18,
+        "endLine": 128,
+        "endChar": 36
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69c12f0e_acd5180b",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -106,6 +130,30 @@
       "writtenOn": "2020-07-15T17:42:48Z",
       "side": 1,
       "message": "What about removing the \"gn completed list\" and just creating all the args.gn files for each \"cpu\" on initialization?",
+      "range": {
+        "startLine": 137,
+        "startChar": 20,
+        "endLine": 137,
+        "endChar": 43
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c168dcbe_945018ad",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "I dont think that\u0027s possible. Because calling gn gen with angle_build_capture_replay_test will try to read the list of trace files from the .txt file,which doesn\u0027t exist until after the first capture. Unless you are talking about creating args.gn files not through gn gen?",
+      "parentUuid": "69c12f0e_acd5180b",
       "range": {
         "startLine": 137,
         "startChar": 20,
@@ -141,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "30a11681_68233534",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "Yes. This is an old version, I\u0027m testing the new version that incorporate all the points our discussions. One caveat I have realized however is that we still need to set environment variable ANGLE_CAPTURE_ENABLED, since FrameCapture.cpp decides whether capture is enabled through that environment variable.",
+      "parentUuid": "2abd12ef_f6f79786",
+      "range": {
+        "startLine": 141,
+        "startChar": 39,
+        "endLine": 141,
+        "endChar": 68
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f1fcaaf9_fc1ea939",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -161,6 +233,47 @@
       "revId": "a7609387c6bc419704e6252596bb265842932c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2de92ddb_c644dd0a",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "Really? For the tests, I thought since they are ES2_Vulkan, they will automatically run Vulkan. I\u0027m not sure if the replays can afford to not have this flag",
+      "parentUuid": "f1fcaaf9_fc1ea939",
+      "range": {
+        "startLine": 154,
+        "startChar": 42,
+        "endLine": 154,
+        "endChar": 61
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdbf2ab4_6a675508",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "ref",
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +300,30 @@
     },
     {
       "key": {
+        "uuid": "7e174b85_e6981fad",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e2129bd_27cb0088",
+      "range": {
+        "startLine": 306,
+        "startChar": 30,
+        "endLine": 306,
+        "endChar": 50
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b800e1f_2da4dee9",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -210,6 +347,30 @@
     },
     {
       "key": {
+        "uuid": "7cf3fc73_17204d41",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b800e1f_2da4dee9",
+      "range": {
+        "startLine": 308,
+        "startChar": 12,
+        "endLine": 308,
+        "endChar": 28
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d683f957_53e18d6e",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -221,6 +382,30 @@
       "writtenOn": "2020-07-15T17:42:48Z",
       "side": 1,
       "message": "Reading the docs I\u0027m not sure we have the syntax right.\n\njoin()\nWait for the worker processes to exit. One must call close() or terminate() before using join().\n\nI don\u0027t see a call to close() or terminate(). Also for is_alive:\n\nAlso calling a finished process’s Process.is_alive will join the process. Even so it is probably good practice to explicitly join all the processes that you start.\n\nI suggest that you close the processes right after you spawn them. Also that you mark them None and join them when you detect they are not alive in GetFirstAvailableCPU  (/Task/Worker/etc)",
+      "range": {
+        "startLine": 316,
+        "startChar": 6,
+        "endLine": 317,
+        "endChar": 44
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8e87091_be44ae2d",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "I think you have misread the section for ProcessPool. For Process.join(), I think there\u0027s no need to call close or terminate.",
+      "parentUuid": "d683f957_53e18d6e",
       "range": {
         "startLine": 316,
         "startChar": 6,
@@ -256,6 +441,30 @@
     },
     {
       "key": {
+        "uuid": "4af512f3_a7ab2bfc",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "I think this queue doesn\u0027t, because its created by manager. See ref above. That\u0027s why I use it. The other queue would block unless I call cancel_join_thread() for each process.",
+      "parentUuid": "b1198dc0_4e5231fa",
+      "range": {
+        "startLine": 327,
+        "startChar": 14,
+        "endLine": 327,
+        "endChar": 26
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd9f791e_6fcf399d",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -267,6 +476,30 @@
       "writtenOn": "2020-07-15T17:42:48Z",
       "side": 1,
       "message": "you could pass the args around instead of unpacking them if you want to pass around fewer parameters.",
+      "range": {
+        "startLine": 363,
+        "startChar": 9,
+        "endLine": 364,
+        "endChar": 58
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4079a78_b72feb0a",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "For me at least, this is clearer. But if you think the other way is better, I will change it.",
+      "parentUuid": "fd9f791e_6fcf399d",
       "range": {
         "startLine": 363,
         "startChar": 9,
@@ -299,6 +532,30 @@
       "revId": "a7609387c6bc419704e6252596bb265842932c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c07b6a87_28a0cf14",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T21:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "303b8d0a_efa7b42c",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 29
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
