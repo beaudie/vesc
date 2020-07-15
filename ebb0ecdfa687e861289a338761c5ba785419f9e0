@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5ec67df_26c052a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T20:25:23Z",
+      "side": 1,
+      "message": "LGTM, sorry, didn\u0027t notice you uploaded a net patch set.",
+      "revId": "ebb0ecdfa687e861289a338761c5ba785419f9e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
