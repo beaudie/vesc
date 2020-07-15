@@ -215,9 +215,11 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     constexpr VkAttachmentReference kUnusedAttachment = {VK_ATTACHMENT_UNUSED,
                                                          VK_IMAGE_LAYOUT_UNDEFINED};
 
+    //    WARN() << "TIMTIM";
     // Unpack the packed and split representation into the format required by Vulkan.
     gl::DrawBuffersVector<VkAttachmentReference> colorAttachmentRefs;
     VkAttachmentReference depthStencilAttachmentRef = kUnusedAttachment;
+    VkAttachmentReference resolveAttachmentRef      = kUnusedAttachment;
     gl::AttachmentArray<VkAttachmentDescription> attachmentDescs;
 
     uint32_t colorAttachmentCount = 0;
@@ -259,7 +261,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     if (desc.hasDepthStencilAttachment())
     {
         uint32_t depthStencilIndex   = static_cast<uint32_t>(desc.depthStencilAttachmentIndex());
-        uint32_t depthStencilIndexVk = colorAttachmentCount;
+        uint32_t depthStencilIndexVk = colorAttachmentCount++;
 
         angle::FormatID formatID = desc[depthStencilIndex];
         ASSERT(formatID != angle::FormatID::NONE);
@@ -274,6 +276,38 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         ++attachmentCount;
     }
 
+    if (desc.hasResolveAttachment())
+    {
+        //        WARN() << "TIMTIM";
+        uint32_t resolveIndexVk         = colorAttachmentCount++;
+        resolveAttachmentRef.attachment = resolveIndexVk;
+        resolveAttachmentRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+        angle::FormatID formatID = desc[0];
+        ASSERT(formatID != angle::FormatID::NONE);
+        const vk::Format &format = context->getRenderer()->getFormat(formatID);
+
+        attachmentDescs[0].storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachmentDescs[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+
+        // We would only need this flag for duplicated attachments. Apply it conservatively.
+        VkAttachmentDescription *desc = &attachmentDescs[resolveIndexVk];
+        desc->flags                   = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+        desc->format                  = format.vkImageFormat;
+        desc->samples                 = gl_vk::GetSamples(1);
+        desc->loadOp                  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        desc->storeOp                 = VK_ATTACHMENT_STORE_OP_STORE;
+        desc->stencilLoadOp           = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        desc->stencilStoreOp          = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        desc->initialLayout =
+            ConvertImageLayoutToVkImageLayout(static_cast<ImageLayout>(ImageLayout::Undefined));
+        desc->finalLayout =
+            ConvertImageLayoutToVkImageLayout(static_cast<ImageLayout>(ImageLayout::Present));
+
+        ++attachmentCount;
+    }
+    //    WARN() << "TIMTIM >> attachmentCount = " << attachmentCount << ", ";
+
     VkSubpassDescription subpassDesc = {};
 
     subpassDesc.flags                = 0;
@@ -282,7 +316,8 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     subpassDesc.pInputAttachments    = nullptr;
     subpassDesc.colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     subpassDesc.pColorAttachments    = colorAttachmentRefs.data();
-    subpassDesc.pResolveAttachments  = nullptr;
+    subpassDesc.pResolveAttachments =
+        (resolveAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &resolveAttachmentRef : nullptr);
     subpassDesc.pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
@@ -1724,7 +1759,7 @@ bool UniformsAndXfbDesc::operator==(const UniformsAndXfbDesc &other) const
 
 // FramebufferDesc implementation.
 
-FramebufferDesc::FramebufferDesc()
+FramebufferDesc::FramebufferDesc() : mIsMsaa(false)
 {
     reset();
 }
@@ -1785,6 +1820,12 @@ uint32_t FramebufferDesc::attachmentCount() const
             count++;
         }
     }
+
+    if (mIsMsaa)
+    {
+        count++;
+    }
+
     return count;
 }
 

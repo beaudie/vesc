@@ -3693,9 +3693,13 @@ void Context::blitFramebuffer(GLint srcX0,
         return;
     }
 
+    mIsBlit = true;
+
     ANGLE_CONTEXT_TRY(syncStateForBlit());
 
     ANGLE_CONTEXT_TRY(drawFramebuffer->blit(this, srcArea, dstArea, mask, filter));
+
+    mIsBlit = false;
 }
 
 void Context::clear(GLbitfield mask)

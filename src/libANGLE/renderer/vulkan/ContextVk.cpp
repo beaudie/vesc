@@ -2654,7 +2654,13 @@ angle::Result ContextVk::updateScissor(const gl::State &glState)
     gl::Rectangle scissoredRenderArea = framebufferVk->getRotatedScissoredRenderArea(this);
     if (!mRenderPassCommands->empty())
     {
-        if (!mRenderPassCommands->getRenderArea().encloses(scissoredRenderArea))
+        gl::Rectangle renderPassRenderArea = mRenderPassCommands->getRenderArea();
+        if (isRotatedAspectRatioForDrawFBO())
+        {
+            // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
+            std::swap(renderPassRenderArea.width, renderPassRenderArea.height);
+        }
+        if (!renderPassRenderArea.encloses(scissoredRenderArea))
         {
             ANGLE_TRY(endRenderPass());
         }
@@ -4362,6 +4368,7 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
 angle::Result ContextVk::endRenderPass()
 {
+    //    WARN() << "TIMTIM";
     if (mRenderPassCommands->empty())
     {
         onRenderPassFinished();

@@ -215,6 +215,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return mState.isBoundAsImageTexture(contextID);
     }
 
+    angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
@@ -223,7 +225,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
     void releaseAndDeleteImage(ContextVk *contextVk);
-    angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
     void setImageHelper(ContextVk *contextVk,
                         vk::ImageHelper *imageHelper,
                         gl::TextureType imageType,
