@@ -550,6 +550,11 @@ class ContextVk : public ContextImpl, public vk::Context
         return *mRenderPassCommands;
     }
 
+    void setRenderPassFramebuffer(vk::Framebuffer &framebuffer)
+    {
+        mRenderPassFramebuffer = framebuffer.getHandle();
+    }
+
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
     angle::Result startRenderPass(gl::Rectangle renderArea, vk::CommandBuffer **commandBufferOut);
     angle::Result endRenderPass();
@@ -861,11 +866,7 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result flushOutsideRenderPassCommands();
     void flushDescriptorSetUpdates();
 
-    ANGLE_INLINE void onRenderPassFinished()
-    {
-        mRenderPassCommandBuffer = nullptr;
-        mRenderPassFramebuffer   = VK_NULL_HANDLE;
-    }
+    ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
 
     angle::Result onBufferRead(VkAccessFlags readAccessType,
                                vk::PipelineStage readStage,
