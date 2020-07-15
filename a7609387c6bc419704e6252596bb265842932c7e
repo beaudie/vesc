@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "4dd34f00_dba721e5",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T21:21:59Z",
+      "side": 1,
+      "message": "It looks like you\u0027ll need gn gen to get the first one running as you mentioned. My only other thought is you could skip gen by checking the file system instead of keeping the bools here. Anyway not a big deal either way so you can keep this as is.",
+      "parentUuid": "c168dcbe_945018ad",
+      "range": {
+        "startLine": 137,
+        "startChar": 20,
+        "endLine": 137,
+        "endChar": 43
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2abd12ef_f6f79786",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -213,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "3d8cd730_1aadf08a",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T21:21:59Z",
+      "side": 1,
+      "message": "If angle_capture_with_default is false, you don\u0027t shouldn\u0027t need ANGLE_CAPTURE_ENABLED\u003d1 (0 is default). I\u0027m not sure if having \u003d1 will cause any problems (it shouldn\u0027t as all capture stuff is no-opped).",
+      "parentUuid": "30a11681_68233534",
+      "range": {
+        "startLine": 141,
+        "startChar": 39,
+        "endLine": 141,
+        "endChar": 68
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f1fcaaf9_fc1ea939",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -248,6 +296,30 @@
       "side": 1,
       "message": "Really? For the tests, I thought since they are ES2_Vulkan, they will automatically run Vulkan. I\u0027m not sure if the replays can afford to not have this flag",
       "parentUuid": "f1fcaaf9_fc1ea939",
+      "range": {
+        "startLine": 154,
+        "startChar": 42,
+        "endLine": 154,
+        "endChar": 61
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d52840df_f7219b7a",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T21:21:59Z",
+      "side": 1,
+      "message": "From CaptureReplayTest:\n\n        mPlatformParams.renderer   \u003d EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;\n        mPlatformParams.deviceType \u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE;\n\nThis flag isn\u0027t operational.",
+      "parentUuid": "2de92ddb_c644dd0a",
       "range": {
         "startLine": 154,
         "startChar": 42,
@@ -418,6 +490,30 @@
     },
     {
       "key": {
+        "uuid": "677783d7_3d72e578",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T21:21:59Z",
+      "side": 1,
+      "message": "Ack\n\nI\u0027d still do the cleanup in GetFirst.",
+      "parentUuid": "d8e87091_be44ae2d",
+      "range": {
+        "startLine": 316,
+        "startChar": 6,
+        "endLine": 317,
+        "endChar": 44
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1198dc0_4e5231fa",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -465,6 +561,30 @@
     },
     {
       "key": {
+        "uuid": "3cf197e9_cbb681f7",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T21:21:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4af512f3_a7ab2bfc",
+      "range": {
+        "startLine": 327,
+        "startChar": 14,
+        "endLine": 327,
+        "endChar": 26
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd9f791e_6fcf399d",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -509,6 +629,30 @@
       "revId": "a7609387c6bc419704e6252596bb265842932c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07796323_0a8651cc",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T21:21:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d4079a78_b72feb0a",
+      "range": {
+        "startLine": 363,
+        "startChar": 9,
+        "endLine": 364,
+        "endChar": 58
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
