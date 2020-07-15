@@ -148,9 +148,10 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     //   extension, even though a resolve attachment is not even provided.
     // - Multisampled swapchain: TODO(syoussefi) this is true for the multisampled color attachment.
     //   http://anglebug.com/4836
-    // - glBlitFramebuffer optimization: TODO(timvp) this is **false** in this case, as the
-    //   multisampled attachment and the resolve attachments belong to independent framebuffers.
-    //   http://anglebug.com/4753
+    // - glBlitFramebuffer optimization: This is **false** in this case, as the multisampled
+    //   the resolve attachment belongs to a separate framebuffer. Additionally, we can't know that
+    //   the multisampled attachment won't be accessed after the blit occurs, so the data must be
+    //   retained.
     //
     // Based on the above, we have:
     //
