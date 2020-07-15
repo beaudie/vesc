@@ -76,6 +76,10 @@ void ProgramPipelineState::useProgramStage(const Context *context,
         // indicated shader stage.
         mPrograms[shaderType] = nullptr;
     }
+
+    Program *program                 = mPrograms[shaderType];
+    angle::SubjectIndex subjectIndex = static_cast<angle::SubjectIndex>(shaderType);
+    mProgramObserverBindings[subjectIndex].bind(program);
 }
 
 void ProgramPipelineState::useProgramStages(const Context *context,
@@ -126,6 +130,12 @@ ProgramPipeline::ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID h
       mProgramPipelineImpl(factory->createProgramPipeline(mState))
 {
     ASSERT(mProgramPipelineImpl);
+
+    for (const ShaderType shaderType : gl::AllShaderTypes())
+    {
+        mState.mProgramObserverBindings.emplace_back(this,
+                                                     static_cast<angle::SubjectIndex>(shaderType));
+    }
 }
 
 ProgramPipeline::~ProgramPipeline()
@@ -618,6 +628,19 @@ angle::Result ProgramPipeline::syncState(const Context *context)
     }
 
     return angle::Result::Continue;
+}
+
+void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
+{
+    switch (message)
+    {
+        case angle::SubjectMessage::SubjectChanged:
+            setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_PROGRAM_STAGE);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
 }
 
 void ProgramPipeline::fillProgramStateMap(ShaderMap<const ProgramState *> *programStatesOut)
