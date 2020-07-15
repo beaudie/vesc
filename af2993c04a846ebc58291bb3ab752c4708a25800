@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c9b4fd46_7afaa118",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae0a7e61_4d7ed815",
+      "range": {
+        "startLine": 181,
+        "startChar": 22,
+        "endLine": 181,
+        "endChar": 53
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ade103d4_69c199ea",
         "filename": "src/libANGLE/renderer/BufferImpl.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53ac116c_8f659d52",
+        "filename": "src/libANGLE/renderer/BufferImpl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ade103d4_69c199ea",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "60437722_e1ba6b7c",
+        "filename": "src/libANGLE/renderer/BufferImpl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "977fd5ed_8720822e",
+      "range": {
+        "startLine": 15,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 31
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7927bd_fc108893",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b0f5604_595dca8d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f7927bd_fc108893",
+      "range": {
+        "startLine": 446,
+        "startChar": 35,
+        "endLine": 446,
+        "endChar": 39
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "a522eac5_54ced854",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1dff061_14ad2a7a",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 450,
+        "endChar": 9
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a61645ed_141e80a3",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "8da0a2b5_ec8ec2c6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a61645ed_141e80a3",
+      "range": {
+        "startLine": 455,
+        "startChar": 6,
+        "endLine": 455,
+        "endChar": 41
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a27cbf6_fc5cfe9f",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 2
@@ -151,6 +295,30 @@
       "writtenOn": "2020-07-15T15:15:52Z",
       "side": 1,
       "message": "nit: can we call this getData to mirror setData?",
+      "range": {
+        "startLine": 73,
+        "startChar": 18,
+        "endLine": 73,
+        "endChar": 28
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c29f396a_0072c480",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "There\u0027s this method: https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/d3d/BufferD3D.h;l\u003d47?q\u003dBufferD3D\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\nIf we change the name of the BufferImpl virtual method to getData then the method I link above will be overloaded, and compiler will complain about inheritance can only override and not overload",
+      "parentUuid": "6a27cbf6_fc5cfe9f",
       "range": {
         "startLine": 73,
         "startChar": 18,
@@ -183,6 +351,30 @@
       "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93ca5977_6a8e9a7a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T16:32:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "328ba1dc_c84a7f49",
+      "range": {
+        "startLine": 705,
+        "startChar": 4,
+        "endLine": 705,
+        "endChar": 11
+      },
+      "revId": "af2993c04a846ebc58291bb3ab752c4708a25800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
