@@ -98,12 +98,12 @@ struct TransformFeedbackVarying : public sh::ShaderVariable
 class ProgramState;
 class ProgramPipelineState;
 
-class ProgramExecutable
+class ProgramExecutable : public angle::Subject
 {
   public:
     ProgramExecutable();
     ProgramExecutable(const ProgramExecutable &other);
-    virtual ~ProgramExecutable();
+    ~ProgramExecutable() override;
 
     void reset();
 

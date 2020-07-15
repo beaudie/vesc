@@ -8057,22 +8057,10 @@ angle::Result Context::onProgramLink(Program *programObject)
         mStateCache.onProgramExecutableChange(this);
     }
 
-    // TODO(http://anglebug.com/4559): Use the Subject/Observer pattern for
-    // Programs in PPOs so we can remove this.
-    // Need to mark any PPOs that this Program is bound to as dirty
-    bool foundPipeline = false;
-    for (ResourceMap<ProgramPipeline, ProgramPipelineID>::Iterator ppoIterator =
-             mState.mProgramPipelineManager->begin();
-         ppoIterator != mState.mProgramPipelineManager->end(); ++ppoIterator)
+    // If the Program has observers, that implies it's in a PPO
+    if (programObject->hasObservers())
     {
-        ProgramPipeline *pipeline = ppoIterator->second;
-        pipeline->setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_PROGRAM_STAGE);
-        foundPipeline = true;
-    }
-    // Also need to make sure the PPO dirty bits get handled by marking the PPO
-    // objects dirty.
-    if (foundPipeline)
-    {
+        programObject->onStateChange(angle::SubjectMessage::SubjectChanged);
         mState.mDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     }
 
