@@ -123,6 +123,7 @@ class FramebufferVk : public FramebufferImpl
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
     const vk::FramebufferDesc &getFramebufferDesc() const { return mCurrentFramebufferDesc; }
+    vk::FramebufferDesc *getFramebufferDesc() { return &mCurrentFramebufferDesc; }
     // We only support depth/stencil packed format and depthstencil attachment always follow all
     // color attachments
     size_t getDepthStencilAttachmentIndexVk() const
@@ -130,7 +131,9 @@ class FramebufferVk : public FramebufferImpl
         return getState().getEnabledDrawBuffers().count();
     }
 
-    angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
+    angle::Result getFramebuffer(ContextVk *contextVk,
+                                 vk::Framebuffer **framebufferOut,
+                                 const vk::ImageView *resolveImageViewIn);
 
   private:
     FramebufferVk(RendererVk *renderer,
@@ -149,6 +152,10 @@ class FramebufferVk : public FramebufferImpl
                                   bool stencilBlit,
                                   bool flipX,
                                   bool flipY);
+
+    // Resolve color with subpass attachment
+    angle::Result resolveColorWithSubpass(ContextVk *contextVk,
+                                          const UtilsVk::BlitResolveParameters &params);
 
     // Resolve color with vkCmdResolveImage
     angle::Result resolveColorWithCommand(ContextVk *contextVk,
