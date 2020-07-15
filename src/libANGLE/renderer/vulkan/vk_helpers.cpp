@@ -434,7 +434,7 @@ uint32_t GetImageLayerCountForView(const ImageHelper &image)
     return image.getExtents().depth > 1 ? image.getExtents().depth : image.getLayerCount();
 }
 
-ImageView *GetLevelImageView(ImageViewVector *imageViews, uint32_t level, uint32_t levelCount)
+ImageView *GetLevelImageView(ImageViewVector *imageViews, uint32_t levelVK, uint32_t levelCount)
 {
     // Lazily allocate the storage for image views. We allocate the full level count because we
     // don't want to trigger any std::vector reallocations. Reallocations could invalidate our
@@ -443,9 +443,9 @@ ImageView *GetLevelImageView(ImageViewVector *imageViews, uint32_t level, uint32
     {
         imageViews->resize(levelCount);
     }
-    ASSERT(imageViews->size() > level);
+    ASSERT(imageViews->size() > levelVK);
 
-    return &(*imageViews)[level];
+    return &(*imageViews)[levelVK];
 }
 
 // Special rules apply to VkBufferImageCopy with depth/stencil. The components are tightly packed
@@ -2990,20 +2990,20 @@ VkImageLayout ImageHelper::getCurrentLayout() const
     return kImageMemoryBarrierData[mCurrentLayout].layout;
 }
 
-gl::Extents ImageHelper::getLevelExtents(uint32_t level) const
+gl::Extents ImageHelper::getLevelExtents(uint32_t levelVK) const
 {
     // Level 0 should be the size of the extents, after that every time you increase a level
     // you shrink the extents by half.
-    uint32_t width  = std::max(mExtents.width >> level, 1u);
-    uint32_t height = std::max(mExtents.height >> level, 1u);
-    uint32_t depth  = std::max(mExtents.depth >> level, 1u);
+    uint32_t width  = std::max(mExtents.width >> levelVK, 1u);
+    uint32_t height = std::max(mExtents.height >> levelVK, 1u);
+    uint32_t depth  = std::max(mExtents.depth >> levelVK, 1u);
 
     return gl::Extents(width, height, depth);
 }
 
-gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
+gl::Extents ImageHelper::getLevelExtents2D(uint32_t levelVK) const
 {
-    gl::Extents extents = getLevelExtents(level);
+    gl::Extents extents = getLevelExtents(levelVK);
     extents.depth       = 1;
     return extents;
 }
@@ -5181,7 +5181,7 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
 
 angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                                           const ImageHelper &image,
-                                                          uint32_t level,
+                                                          uint32_t levelGL,
                                                           uint32_t layer,
                                                           const ImageView **imageViewOut)
 {
@@ -5199,8 +5199,9 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     }
     ASSERT(mLayerLevelDrawImageViews.size() > layer);
 
+    uint32_t levelVK = levelGL - image.getBaseLevel();
     ImageView *imageView =
-        GetLevelImageView(&mLayerLevelDrawImageViews[layer], level, image.getLevelCount());
+        GetLevelImageView(&mLayerLevelDrawImageViews[layer], levelVK, image.getLevelCount());
     *imageViewOut = imageView;
 
     if (imageView->valid())
@@ -5213,7 +5214,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     // don't have swizzle.
     gl::TextureType viewType = Get2DTextureType(1, image.getSamples());
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
-                                    imageView, level, 1, layer, 1);
+                                    imageView, levelVK, 1, layer, 1);
 }
 
 Serial ImageViewHelper::getAssignSerial(ContextVk *contextVk, uint32_t level, uint32_t layer)
