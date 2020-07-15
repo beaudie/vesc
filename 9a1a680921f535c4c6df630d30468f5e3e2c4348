@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c099b2d_c1615520",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-15T19:42:58Z",
+      "side": 1,
+      "message": "Tested this on Subway Surfer and on first rough comparison the GPU time per frame drops from \u003e11.5ms to below 9ms and from 4 total RPs per frame to 2 RPs. Awesome!",
+      "revId": "9a1a680921f535c4c6df630d30468f5e3e2c4348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
