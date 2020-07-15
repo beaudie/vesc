@@ -551,11 +551,7 @@ class ContextVk : public ContextImpl, public vk::Context
                                      vk::CommandBuffer **commandBufferOut);
 
     // Only returns true if we have a started RP and we've run setupDraw.
-    bool hasStartedRenderPass() const
-    {
-        // Checking mRenderPassCommandBuffer ensures we've called setupDraw.
-        return mRenderPassCommandBuffer && mRenderPassCommands->started();
-    }
+    bool hasStartedRenderPass() const { return mRenderPassCommands->started(); }
 
     bool hasStartedRenderPassWithFramebuffer(vk::Framebuffer *framebuffer)
     {
