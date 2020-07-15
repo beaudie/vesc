@@ -38,7 +38,7 @@ namespace
 constexpr size_t kInitialTraceEventBufferSize = 50000;
 constexpr double kMicroSecondsPerSecond       = 1e6;
 constexpr double kNanoSecondsPerSecond        = 1e9;
-constexpr double kCalibrationRunTimeSeconds   = 1.0;
+constexpr double kCalibrationRunTimeSeconds   = 5.0;
 constexpr double kMaximumRunTimeSeconds       = 10.0;
 constexpr unsigned int kNumTrials             = 3;
 
