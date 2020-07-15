@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "01664c0e_8ca7abce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "Very nice work. Some comments/concerns below. Cody can also take a look.",
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac6a57e4_0425f55b",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -31,6 +48,254 @@
       "side": 1,
       "message": "I already did. Its in go/angle_capture_replay_testing_design_doc under paralellization section",
       "parentUuid": "ac6a57e4_0425f55b",
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87460b33_5666f614",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2351149b_af4efc75",
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40435b1b_43eaab24",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "didn\u0027t notice this- you can remove it. it doesn\u0027t do anything.",
+      "range": {
+        "startLine": 128,
+        "startChar": 18,
+        "endLine": 128,
+        "endChar": 36
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69c12f0e_acd5180b",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "What about removing the \"gn completed list\" and just creating all the args.gn files for each \"cpu\" on initialization?",
+      "range": {
+        "startLine": 137,
+        "startChar": 20,
+        "endLine": 137,
+        "endChar": 43
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2abd12ef_f6f79786",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "I\u0027m thinking this should be false, as we chatted about in the ddoc.",
+      "range": {
+        "startLine": 141,
+        "startChar": 39,
+        "endLine": 141,
+        "endChar": 68
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1fcaaf9_fc1ea939",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "can remove this, doesn\u0027t do anything.",
+      "range": {
+        "startLine": 154,
+        "startChar": 42,
+        "endLine": 154,
+        "endChar": 61
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e2129bd_27cb0088",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "What do you think about calling these guys Workers/Jobs/Tasks instead of CPUs? You are indexing them by CPU count. They are actually little programs.",
+      "range": {
+        "startLine": 306,
+        "startChar": 30,
+        "endLine": 306,
+        "endChar": 50
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b800e1f_2da4dee9",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "as discussed offline - giving each worker/task/job a timeout should help make the script a bit more robust.",
+      "range": {
+        "startLine": 308,
+        "startChar": 12,
+        "endLine": 308,
+        "endChar": 28
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d683f957_53e18d6e",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "Reading the docs I\u0027m not sure we have the syntax right.\n\njoin()\nWait for the worker processes to exit. One must call close() or terminate() before using join().\n\nI don\u0027t see a call to close() or terminate(). Also for is_alive:\n\nAlso calling a finished process’s Process.is_alive will join the process. Even so it is probably good practice to explicitly join all the processes that you start.\n\nI suggest that you close the processes right after you spawn them. Also that you mark them None and join them when you detect they are not alive in GetFirstAvailableCPU  (/Task/Worker/etc)",
+      "range": {
+        "startLine": 316,
+        "startChar": 6,
+        "endLine": 317,
+        "endChar": 44
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1198dc0_4e5231fa",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "does the queue need any synchronization or joining? didn\u0027t check the docs.",
+      "range": {
+        "startLine": 327,
+        "startChar": 14,
+        "endLine": 327,
+        "endChar": 26
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd9f791e_6fcf399d",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "you could pass the args around instead of unpacking them if you want to pass around fewer parameters.",
+      "range": {
+        "startLine": 363,
+        "startChar": 9,
+        "endLine": 364,
+        "endChar": 58
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "303b8d0a_efa7b42c",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T17:42:48Z",
+      "side": 1,
+      "message": "nit: angle_capture_replay_test_trace_dir ? just following the naming patterns.",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 29
+      },
       "revId": "a7609387c6bc419704e6252596bb265842932c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
