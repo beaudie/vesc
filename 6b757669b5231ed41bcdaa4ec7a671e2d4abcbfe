@@ -179,6 +179,30 @@
     },
     {
       "key": {
+        "uuid": "98bb6894_d5166629",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:58:29Z",
+      "side": 1,
+      "message": "Thank you Charlie for the test. Could you please duplicate it and have a variant that uses a PPO with both stages from the same program? Then perform the exact same test, except at the very end additionally unbind the PPO, rebind the program and perform an additional draw without updating uniforms.\n\nI\u0027m hoping to create a test that indeed triggers this bug with PPOs. Otherwise we won\u0027t be sure future CLs actually fix the bug.",
+      "parentUuid": "55ba7250_4678c80d",
+      "range": {
+        "startLine": 728,
+        "startChar": 25,
+        "endLine": 728,
+        "endChar": 45
+      },
+      "revId": "6b757669b5231ed41bcdaa4ec7a671e2d4abcbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7744ed4_fd74356b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15

@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5585649_f1b17dd2",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:58:29Z",
+      "side": 1,
+      "message": "typo: tries",
+      "range": {
+        "startLine": 478,
+        "startChar": 13,
+        "endLine": 478,
+        "endChar": 16
+      },
+      "revId": "4e79c880cea03e8416052e05bb25a23d04a94191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f09e4011_a6edf677",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:58:29Z",
+      "side": 1,
+      "message": "typos/suggestion: get* placed* in different buffers*",
+      "range": {
+        "startLine": 478,
+        "startChar": 75,
+        "endLine": 479,
+        "endChar": 19
+      },
+      "revId": "4e79c880cea03e8416052e05bb25a23d04a94191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30e34b46_70f7dcef",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:58:29Z",
+      "side": 1,
+      "message": "The test should work regardless of what the driver does, so this could simply say \"VS shouldn\u0027t read stale data\".",
+      "range": {
+        "startLine": 479,
+        "startChar": 21,
+        "endLine": 480,
+        "endChar": 91
+      },
+      "revId": "4e79c880cea03e8416052e05bb25a23d04a94191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31413891_b5da48a0",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:58:29Z",
+      "side": 1,
+      "message": "typo: update",
+      "range": {
+        "startLine": 512,
+        "startChar": 57,
+        "endLine": 512,
+        "endChar": 64
+      },
+      "revId": "4e79c880cea03e8416052e05bb25a23d04a94191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31d5a8bf_be00bb64",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:58:29Z",
+      "side": 1,
+      "message": "Suggest 1.0f + i / 10.0f. Some change in the future may make sure updates-to-same-value don\u0027t dirty the uniform buffer.",
+      "range": {
+        "startLine": 535,
+        "startChar": 39,
+        "endLine": 535,
+        "endChar": 43
+      },
+      "revId": "4e79c880cea03e8416052e05bb25a23d04a94191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a1b122_e9392779",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:58:29Z",
+      "side": 1,
+      "message": "The VS uniform buffer is retained so there probably wouldn\u0027t be any issues even if there was a bug. The following draw could also still work because the VS buffer could be in the recycle list (and still contain good VS data).\n\nYou could change this in a way to make sure the old buffers are all recycled multiple times (and if VS uses stale values from a recycled buffer (which now contains FS uniforms), the test would fail). Something like this:\n\n    // Now only update FS\u0027s uniform\n    for (int i \u003d 0; i \u003c 50; i++)\n    {\n        glUniform1f(uniformFSLocation, 1.0f + i / 10.0f);\n        drawQuad(program, \"position\", 0.5f, 1.0f);\n        ASSERT_GL_NO_ERROR();\n\n        // 10.0f \u003e uniformFS, should see red\n        EXPECT_PIXEL_RECT_EQ(xoffset, yoffset, kHalfX, kHalfY, GLColor::red);\n    }\n\nThe readback on every iteration will make sure the VS buffer is no longer retained if it\u0027s mistakenly not placed in the same buffer as FS. Using 50 iterations will make sure that buffer is recycled.",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 540,
+        "endChar": 73
+      },
+      "revId": "4e79c880cea03e8416052e05bb25a23d04a94191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
