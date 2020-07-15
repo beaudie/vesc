@@ -16,6 +16,70 @@
       "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ea0b4e9_ba361caa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:39:59Z",
+      "side": 1,
+      "message": "Thank you Tim! I guess there is not so much overlap between our works after all, but I\u0027ll keep you in the loop with my WIP changes.",
+      "parentUuid": "ef34988f_4a9bf6ab",
+      "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0647ed20_c76e8127",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:39:59Z",
+      "side": 1,
+      "message": "So this is creating a resolve image for every MSAA framebuffer, right?\n\nLet\u0027s take a step back. The situation is this:\n\n    glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);\n    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolveFBO);\n    glBlitFramebuffer(0, 0, kSize, kSize, 0, 0, kSize, kSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);\n\nYou would want to:\n\n1. Resolve only when glBlitFramebuffer is seen\n2. At glBlitFramebuffer time, resolve attachment should be placed in the renderpass of the READ framebuffer, and\n3. Resolve attachment is the image from the current DRAW framebuffer\n\nRequirement (1) is the reason I mentioned you probably need to do whatever you need to do at the syncState just before the blit.\n\nRequirement (2) means it\u0027s the syncState of the READ framebuffer where this should happen.\n\nRequirement (3) means that in the syncState of the READ framebuffer, the DRAW framebuffer should already be synced and ready for the image to be picked up.  So, if the syncState of the READ framebuffer is done before the DRAW framebuffer, you may need to reorder those.",
+      "range": {
+        "startLine": 1598,
+        "startChar": 0,
+        "endLine": 1628,
+        "endChar": 9
+      },
+      "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a112faa_4f59b65c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T02:39:59Z",
+      "side": 1,
+      "message": "Not sure why you need this. The resolve attachment is not the same image as any of the color attachments (because the color attachments are MSAA and the resolve is not, they can\u0027t alias).",
+      "range": {
+        "startLine": 286,
+        "startChar": 40,
+        "endLine": 286,
+        "endChar": 79
+      },
+      "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
