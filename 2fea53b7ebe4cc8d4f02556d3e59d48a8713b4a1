@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "fc39da4f_d9f32512",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-15T01:50:24Z",
+      "side": 1,
+      "message": "UpdateAfterNewBufferIsAllocated has been added. Verified with gdb that it allocates uniform in a new buffer.",
+      "parentUuid": "779d8c0a_92b03c82",
+      "revId": "2fea53b7ebe4cc8d4f02556d3e59d48a8713b4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c93f2aae_670be53b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 14
