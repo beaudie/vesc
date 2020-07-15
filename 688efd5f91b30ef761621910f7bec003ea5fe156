@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef34988f_4a9bf6ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-15T01:22:55Z",
+      "side": 1,
+      "message": "Shabi,\n\nHere\u0027s a quick hack I threw together this afternoon to resolve at the end of a subpass.   This is a more direct approach than what my other CLs were attempting to do and only focuses on making backend changes, rather than attempting to hack up the frontend stuff too.\n\nAs the CL description states, this makes a lot of assumptions and hard-codes some things to get it to work, but there doesn\u0027t seem to be any complaints from Nvidia or SwS.   Looking at it with Renderdoc, both of the attachments (4x and 1x) are in the framebuffer and the render pass has the color and resolve attachments listed, so I think it\u0027s setup correctly from that perspective.\n\nThe hard part from here is skipping the actual blit to perform the resolve and instead somehow giving the resolved image to the bound draw framebuffer to avoid all of the memory bandwidth.   I\u0027m not sure what\u0027s involved there yet, but looking at RenderTargetVk::updateSwapchainImage() maybe that\u0027s super simple.   I\u0027ll try and play around with that next.\n\nvoid RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageViewHelper *imageViews)\n{\n    ASSERT(image \u0026\u0026 image-\u003evalid() \u0026\u0026 imageViews);\n    mImage      \u003d image;\n    mImageViews \u003d imageViews;\n}\n\nI\u0027m not sure how helpful this is, but let me know if you have any questions/comments/concerns.",
+      "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
