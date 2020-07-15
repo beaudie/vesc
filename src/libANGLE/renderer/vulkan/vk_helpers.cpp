@@ -2493,6 +2493,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mExternalFormat(other.mExternalFormat),
       mBaseLevel(other.mBaseLevel),
       mMaxLevel(other.mMaxLevel),
+      mMaxLevelSeen(other.mMaxLevelSeen),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
@@ -2522,6 +2523,7 @@ void ImageHelper::resetCachedProperties()
     mCurrentShaderReadStageMask  = 0;
     mBaseLevel                   = 0;
     mMaxLevel                    = 0;
+    mMaxLevelSeen                = 0;
     mLayerCount                  = 0;
     mLevelCount                  = 0;
     mCurrentSingleClearValue.reset();
@@ -2569,15 +2571,16 @@ angle::Result ImageHelper::initExternal(Context *context,
 {
     ASSERT(!valid());
 
-    mImageType  = gl_vk::GetImageType(textureType);
-    mExtents    = extents;
-    mFormat     = &format;
-    mSamples    = samples;
-    mBaseLevel  = baseLevel;
-    mMaxLevel   = maxLevel;
-    mLevelCount = mipLevels;
-    mLayerCount = layerCount;
-    mUsage      = usage;
+    mImageType    = gl_vk::GetImageType(textureType);
+    mExtents      = extents;
+    mFormat       = &format;
+    mSamples      = samples;
+    mBaseLevel    = baseLevel;
+    mMaxLevel     = maxLevel;
+    mMaxLevelSeen = maxLevel;
+    mLevelCount   = mipLevels;
+    mLayerCount   = layerCount;
+    mUsage        = usage;
 
     // Validate that mLayerCount is compatible with the texture type
     ASSERT(textureType != gl::TextureType::_3D || mLayerCount == 1);

@@ -1523,9 +1523,12 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
 
     // Track the previous levels for use in update loop below
     uint32_t previousBaseLevel = mImage->getBaseLevel();
+    uint32_t previousMaxLevel  = mImage->getMaxLevel();
+    uint32_t levelCount        = mImage->getLevelCount();
 
     bool baseLevelChanged = baseLevel != previousBaseLevel;
-    bool maxLevelChanged  = (mImage->getLevelCount() + previousBaseLevel) != (maxLevel + 1);
+    bool maxLevelChanged =
+        ((previousMaxLevel != maxLevel) && (previousMaxLevel != gl::kInitialMaxLevel));
 
     if (!(baseLevelChanged || maxLevelChanged))
     {
@@ -1541,6 +1544,25 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
 
         // No further work to do, let staged updates handle the new levels
         return angle::Result::Continue;
+    }
+    // With a valid image, check if only changing the maxLevel to a subset of the texture's actual
+    // number of mip levels
+    if (!baseLevelChanged && maxLevelChanged && (maxLevel <= mImage->getMaxLevelSeen()) &&
+        ((maxLevel + 1) <= levelCount))
+    {
+        // Don't need to respecify the texture; just redo the texture's vkImageViews
+        RendererVk *renderer = contextVk->getRenderer();
+        mImageViews.release(renderer);
+
+        // Track the levels in our ImageHelper
+        mImage->setBaseAndMaxLevels(baseLevel, maxLevel);
+
+        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+        uint32_t layerCount =
+            mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
+
+        return initImageViews(contextVk, mImage->getFormat(), baseLevelDesc.format.info->sized,
+                              maxLevel + 1, layerCount);
     }
 
     return respecifyImageAttributesAndLevels(contextVk, previousBaseLevel, baseLevel, maxLevel);
