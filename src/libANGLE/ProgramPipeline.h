@@ -71,6 +71,8 @@ class ProgramPipelineState final : angle::NonCopyable
     Program *mActiveShaderProgram;
     // The shader programs for each stage.
     ShaderMap<Program *> mPrograms;
+    std::vector<angle::ObserverBinding> mProgramObserverBindings;
+    std::vector<angle::ObserverBinding> mExecutableObserverBindings;
 
     GLboolean mValid;
 
@@ -79,7 +81,9 @@ class ProgramPipelineState final : angle::NonCopyable
     ProgramExecutable *mExecutable;
 };
 
-class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public LabeledObject
+class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
+                              public LabeledObject,
+                              public angle::ObserverInterface
 {
   public:
     ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID handle);
@@ -145,6 +149,9 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public L
 
     angle::Result syncState(const Context *context);
     void setDirtyBit(DirtyBitType dirtyBitType) { mDirtyBits.set(dirtyBitType); }
+
+    // ObserverInterface implementation.
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
     void updateExecutableTextures();
 
