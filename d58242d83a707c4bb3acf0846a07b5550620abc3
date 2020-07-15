@@ -34,6 +34,115 @@
       "revId": "d58242d83a707c4bb3acf0846a07b5550620abc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "866cd73b_c871a4ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T13:55:34Z",
+      "side": 1,
+      "message": "LGTM with test cleanups.",
+      "revId": "d58242d83a707c4bb3acf0846a07b5550620abc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e2e558c_0cee6951",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T13:55:34Z",
+      "side": 1,
+      "message": "nit: please comment before every new test.",
+      "range": {
+        "startLine": 1407,
+        "startChar": 0,
+        "endLine": 1407,
+        "endChar": 6
+      },
+      "revId": "d58242d83a707c4bb3acf0846a07b5550620abc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ca954bc_b8e25fba",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T13:55:34Z",
+      "side": 1,
+      "message": "nit: please use the R\"()\" syntax for consistency (hard to enforce as people have been adding all kinds of tests)",
+      "range": {
+        "startLine": 1409,
+        "startChar": 4,
+        "endLine": 1409,
+        "endChar": 13
+      },
+      "revId": "d58242d83a707c4bb3acf0846a07b5550620abc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6da28c3_89c316bd",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T13:55:34Z",
+      "side": 1,
+      "message": "nit: you can ASSERT_NE these are not -1",
+      "range": {
+        "startLine": 1458,
+        "startChar": 4,
+        "endLine": 1458,
+        "endChar": 10
+      },
+      "revId": "d58242d83a707c4bb3acf0846a07b5550620abc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d041741f_7b93f260",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-15T13:55:34Z",
+      "side": 1,
+      "message": "instead of EXPECT_EQ each element, put both types in a std::array or std::vector and EXPECT the two containers are the same to reduce the number of checks.",
+      "range": {
+        "startLine": 1483,
+        "startChar": 0,
+        "endLine": 1486,
+        "endChar": 5
+      },
+      "revId": "d58242d83a707c4bb3acf0846a07b5550620abc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
