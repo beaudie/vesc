@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "045a8c66_c11e2135",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-15T13:52:01Z",
+      "side": 1,
+      "message": "\u003e So we\u0027ll have to recreate the framebuffer to add the new resolve attachment.   As you pointed out, the render pass should still be compatible, so we shouldn\u0027t need to recreate that.\n\nWe still need to recreate the renderpass. It\u0027s compatible which means the graphics pipelines don\u0027t need to be recreated, but the description of the renderpass itself has changed, so it must be recreated.\n\n\u003e However, recreating the framebuffer also means updating the CommandBufferHelper with the new framebuffer\u0027s handle.\n\nTake a look at CommandBufferHelper::flushToPrimary. Updaring the renderpass and framebuffer needs to be done before this call, at which point all you need to do is update mFramebuffer. The contents of the command buffer shouldn\u0027t reference the framebuffer.\n\n\u003e The biggest thing I don\u0027t know is what it means to recreate a framebuffer to add the new attachment.   We\u0027d want all of the same images and imageViews, so it really should just be the new framebuffer that changes, but I haven\u0027t looked around to what all cares about that framebuffer\u0027s handle yet.\n\nOther than VkRenderPassBeginInfo, I\u0027m 99.99% sure there is anything else that needs changing.\n\n\u003e The read FBO isn\u0027t dirty when the blit is performed. ... I think either syncState or FramebufferVk::blit() should work, with the benefit of doing it inside blit() is that we know that we\u0027re handling a blit.\n\nThat sounds good. You\u0027re right, read FBO isn\u0027t dirty, so that makes things much simpler. You can use the new ContextVk::isCurrentRenderPassOfFramebuffer() inside blit() to determine if the current renderpass is from the read framebuffer, and if so modify that instead.",
+      "parentUuid": "b5474fbd_81d9979d",
+      "range": {
+        "startLine": 1598,
+        "startChar": 0,
+        "endLine": 1628,
+        "endChar": 9
+      },
+      "revId": "688efd5f91b30ef761621910f7bec003ea5fe156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a112faa_4f59b65c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 1
