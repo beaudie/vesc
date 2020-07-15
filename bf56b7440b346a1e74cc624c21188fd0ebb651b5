@@ -22,6 +22,30 @@
       "revId": "bf56b7440b346a1e74cc624c21188fd0ebb651b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43e8cb63_09d335d9",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-15T19:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73a442b3_a706cd6b",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 144,
+        "endChar": 45
+      },
+      "revId": "bf56b7440b346a1e74cc624c21188fd0ebb651b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
