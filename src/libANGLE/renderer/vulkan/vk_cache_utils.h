@@ -816,8 +816,11 @@ class FramebufferDesc
 
     uint32_t attachmentCount() const;
 
+    void setIsMsaa(bool isMsaa) { mIsMsaa = isMsaa; }
+
   private:
     gl::AttachmentArray<Serial> mSerials;
+    bool mIsMsaa;
 };
 
 // Layer/level pair type used to index into Serial Cache in ImageViewHelper

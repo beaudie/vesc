@@ -188,7 +188,8 @@ FramebufferVk::FramebufferVk(RendererVk *renderer,
       mFramebuffer(nullptr),
       mActiveColorComponents(0),
       mSupportDepthStencilFeedbackLoops(
-          renderer->getFeatures().supportDepthStencilRenderingFeedbackLoops.enabled)
+          renderer->getFeatures().supportDepthStencilRenderingFeedbackLoops.enabled),
+      mResolveImage(nullptr)
 {
     mReadPixelBuffer.init(renderer, VK_BUFFER_USAGE_TRANSFER_DST_BIT, kReadPixelsBufferAlignment,
                           kMinReadPixelsBufferSize, true);
@@ -212,6 +213,16 @@ void FramebufferVk::destroy(const gl::Context *context)
 
     mReadPixelBuffer.release(contextVk->getRenderer());
     clearCache(contextVk);
+
+    if (mResolveImage)
+    {
+        ASSERT(mResolveImage->valid());
+        mResolveImage->destroy(contextVk->getRenderer());
+        mResolveImage = nullptr;
+
+        ASSERT(mResolveImageView.valid());
+        mResolveImageView.destroy(contextVk->getDevice());
+    }
 }
 
 angle::Result FramebufferVk::discard(const gl::Context *context,
@@ -1333,6 +1344,10 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
     {
         mCurrentFramebufferDesc.update(colorIndexGL,
                                        renderTarget->getAssignImageViewSerial(contextVk));
+        if ((colorIndexGL == 0) && getSamples() > 1)
+        {
+            mCurrentFramebufferDesc.setIsMsaa(true);
+        }
     }
     else
     {
@@ -1449,6 +1464,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 }
 
                 ANGLE_TRY(updateColorAttachment(context, deferClears, colorIndexGL));
+
+                if ((colorIndexGL == 0) && getSamples() > 1)
+                {
+                }
                 break;
             }
         }
@@ -1525,21 +1544,21 @@ void FramebufferVk::updateRenderPassDesc()
 angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut)
 {
     // First return a presently valid Framebuffer
-    if (mFramebuffer != nullptr)
-    {
-        *framebufferOut = &mFramebuffer->getFramebuffer();
-        return angle::Result::Continue;
-    }
+    //    if (mFramebuffer != nullptr)
+    //    {
+    //        *framebufferOut = &mFramebuffer->getFramebuffer();
+    //        return angle::Result::Continue;
+    //    }
     // No current FB, so now check for previously cached Framebuffer
     auto iter = mFramebufferCache.find(mCurrentFramebufferDesc);
     if (iter != mFramebufferCache.end())
     {
-        if (contextVk->getRenderer()->getFeatures().enableFramebufferVkCache.enabled)
-        {
-            *framebufferOut = &iter->second.getFramebuffer();
-            return angle::Result::Continue;
-        }
-        else
+        //        if (contextVk->getRenderer()->getFeatures().enableFramebufferVkCache.enabled)
+        //        {
+        //            *framebufferOut = &iter->second.getFramebuffer();
+        //            return angle::Result::Continue;
+        //        }
+        //        else
         {
             // When cache is off just release previous entry, it will be recreated below
             iter->second.release(contextVk);
@@ -1571,6 +1590,42 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
 
         ASSERT(attachmentsSize.empty() || attachmentsSize == colorRenderTarget->getExtents());
         attachmentsSize = colorRenderTarget->getExtents();
+    }
+
+    RenderTargetVk *colorRenderTarget = colorRenderTargets[0];
+    if (colorRenderTarget && (colorRenderTarget->getImage().getSamples() > 1))
+    {
+        if (!mResolveImage)
+        {
+            mResolveImage = new vk::ImageHelper();
+
+            mResolveImage->setTilingMode(colorRenderTarget->getImage().getTilingMode());
+
+            const vk::Format &format   = colorRenderTarget->getImageFormat();
+            const VkExtent3D &vkExtent = colorRenderTarget->getImage().getExtents();
+            uint32_t baseLevel         = colorRenderTarget->getImage().getBaseLevel();
+            uint32_t layerCount        = colorRenderTarget->getImage().getLevelCount();
+
+            ANGLE_TRY(mResolveImage->initExternal(
+                contextVk, gl::TextureType::_2D, vkExtent, format, 1,
+                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, vk::kVkImageCreateFlagsNone,
+                vk::ImageLayout::Undefined, nullptr, baseLevel, 0, 1, layerCount));
+
+            const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+            ANGLE_TRY(mResolveImage->initMemory(
+                contextVk, contextVk->getRenderer()->getMemoryProperties(), flags));
+            ASSERT(mResolveImage->valid());
+
+            ASSERT(mResolveImage != nullptr && mResolveImage->valid());
+            ASSERT(!mResolveImageView.valid());
+
+            uint32_t levelIndex = colorRenderTarget->getLevelIndex();
+            uint32_t layerIndex = colorRenderTarget->getLayerIndex();
+            ANGLE_TRY(mResolveImage->initLayerImageView(
+                contextVk, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
+                &mResolveImageView, levelIndex, 1, layerIndex, 1));
+            attachments.push_back(mResolveImageView.getHandle());
+        }
     }
 
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
