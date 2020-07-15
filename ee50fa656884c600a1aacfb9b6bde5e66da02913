@@ -16,6 +16,46 @@
       "revId": "ee50fa656884c600a1aacfb9b6bde5e66da02913",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5bc077f0_9c511fec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-15T15:07:19Z",
+      "side": 1,
+      "message": "LGTM either way!",
+      "revId": "ee50fa656884c600a1aacfb9b6bde5e66da02913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7761286f_ac8eaa17",
+        "filename": "doc/AddingExtensions.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-15T15:07:19Z",
+      "side": 1,
+      "message": "I think you can do relative links to files directly in the repository:\n\n   [scripts/egl_angle_ext.xml](../scripts/egl_angle_ext.xml)\n\nThat should make the docs work nicely in our github and android mirrors.  Only issue is that the DisplayCGL link goes to a specific method/revision in that file.\n\nIf you didn\u0027t know, you can preview a markdown change by going to the revision link in the CL: the \u0027ee50fa6\u0027 beside the \"Base -\u003e Patchset 1\" buttons.",
+      "range": {
+        "startLine": 14,
+        "startChar": 30,
+        "endLine": 14,
+        "endChar": 132
+      },
+      "revId": "ee50fa656884c600a1aacfb9b6bde5e66da02913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
