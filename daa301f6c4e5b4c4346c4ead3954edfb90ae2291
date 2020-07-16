@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "35308de8_6adb7ea0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-16T19:48:11Z",
+      "side": 1,
+      "message": "You can used boxed types:\n\nnamespace gl\n{\nstruct TextureLevel\n{\n    GLuint value;\n};\n}\n\nnamespace vk\n{\nstruct ImageLevel\n{\n   uint32_t value;\n};\n}",
+      "parentUuid": "d9aa5750_580880d6",
+      "revId": "daa301f6c4e5b4c4346c4ead3954edfb90ae2291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e2eb28c_cdd86bf7",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
