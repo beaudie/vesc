@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "2e943f19_3a238f44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-16T23:17:02Z",
+      "side": 1,
+      "message": "When a user calls glUseProgramStages() to bind a Program to a PPO, the PPO increments the ref count for the Program:\n\n    void ProgramPipelineState::useProgramStage(const Context *context,\n                                               const ShaderType shaderType,\n                                               Program *shaderProgram)\n    {\n    ...\n        if (shaderProgram \u0026\u0026 (shaderProgram-\u003eid().value !\u003d 0) \u0026\u0026\n            shaderProgram-\u003egetExecutable().hasLinkedShaderStage(shaderType))\n        {\n            mPrograms[shaderType] \u003d shaderProgram;\n            shaderProgram-\u003eaddRef();           \u003c\u003c--- here\n        }\n\nLater, when the user calls glDeleteProgram(), ANGLE won\u0027t actually delete the program internally since the PPO has a reference too it:\n\n    void ShaderProgramManager::deleteObject(const Context *context,\n                                            ResourceMap\u003cObjectType, IDType\u003e *objectMap,\n                                            IDType id)\n    {\n...\n        if (object-\u003egetRefCount() \u003d\u003d 0)  \u003c\u003c--- this guy is non-zero\n        {\n            mHandleAllocator.release(id.value);\n            object-\u003eonDestroy(context);\n            objectMap-\u003eerase(id, \u0026object);\n        }\n        else\n        {\n            object-\u003eflagForDeletion();  \u003c\u003c--- so it\u0027s just flagged\n        }\n    }\n\nThe Program will be deleted once the ref count goes to zero, either by binding a new Program to the PPO or deleting the PPO(s) itself.",
+      "parentUuid": "659807c5_5e2ea8b2",
+      "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d29009e7_bbaaddd6",
         "filename": "src/libANGLE/ProgramPipeline.h",
         "patchSetId": 4
@@ -47,6 +65,30 @@
       "writtenOn": "2020-07-16T22:02:04Z",
       "side": 1,
       "message": "This can be gl::ShaderMap, right?",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 15
+      },
+      "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d8d124a_be99a346",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-16T23:17:02Z",
+      "side": 1,
+      "message": "Yeah, it should be able to.   All of the uses of lists of ObserverBinding are in vectors though, so I just followed those examples.   I\u0027m fine either, so let me know if you\u0027d like it converted to a ShaderMap.",
+      "parentUuid": "d29009e7_bbaaddd6",
       "range": {
         "startLine": 79,
         "startChar": 4,
