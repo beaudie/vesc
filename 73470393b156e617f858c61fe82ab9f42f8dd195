@@ -34,6 +34,24 @@
       "revId": "73470393b156e617f858c61fe82ab9f42f8dd195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd61cbb5_2bd1ebd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-16T14:47:22Z",
+      "side": 1,
+      "message": "Hi Jun,\nANGLE does not currently override any precision qualifiers from the application. By default ANGLE is currently dropping precision qualifiers from the input app meaning that the driver may be forcing certain precision qualifiers underneath ANGLE. If you turn on the \"enablePrecisionQualifiers\" feature then ANGLE will keep whatever precision qualifiers the app originally specified and explicitly pass them down to the driver.",
+      "parentUuid": "f8e6348a_acab0064",
+      "revId": "73470393b156e617f858c61fe82ab9f42f8dd195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
