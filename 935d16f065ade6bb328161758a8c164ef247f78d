@@ -34,6 +34,29 @@
       "revId": "935d16f065ade6bb328161758a8c164ef247f78d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5a5c38f_1ed34626",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-07-16T16:05:35Z",
+      "side": 1,
+      "message": "This takes precedence.",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 431,
+        "endChar": 76
+      },
+      "revId": "935d16f065ade6bb328161758a8c164ef247f78d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
