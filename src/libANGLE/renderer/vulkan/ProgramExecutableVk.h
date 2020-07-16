@@ -123,6 +123,10 @@ class ProgramExecutableVk
         return mGraphicsProgramInfos[optionBits.to_ulong()];
     }
     ProgramInfo &getComputeProgramInfo() { return mComputeProgramInfo; }
+    BufferSerial getCurrentDefualtUniformBufferSerial() const
+    {
+        return mCurrentDefualtUniformBufferSerial;
+    }
 
     angle::Result getGraphicsPipeline(ContextVk *contextVk,
                                       gl::PrimitiveMode mode,
@@ -215,8 +219,8 @@ class ProgramExecutableVk
     // Descriptor sets for uniform blocks and textures for this program.
     std::vector<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
-    std::vector<vk::BufferHelper *> mDescriptorBuffersCache;
     size_t mNumDefaultUniformDescriptors;
+    BufferSerial mCurrentDefualtUniformBufferSerial;
 
     std::unordered_map<vk::UniformsAndXfbDesc, VkDescriptorSet> mUniformsAndXfbDescriptorSetCache;
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
