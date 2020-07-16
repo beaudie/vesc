@@ -16,6 +16,46 @@
       "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "659807c5_5e2ea8b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-16T22:02:04Z",
+      "side": 1,
+      "message": "Also curious what if program gets deleted, does PPO observer automatically removed?",
+      "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d29009e7_bbaaddd6",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-16T22:02:04Z",
+      "side": 1,
+      "message": "This can be gl::ShaderMap, right?",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 15
+      },
+      "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
