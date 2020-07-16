@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/metal/SurfaceMtl.h"
 
+#include <IOSurface/IOSurface.h>
 #include <TargetConditionals.h>
 
 #include "libANGLE/Display.h"
@@ -31,6 +32,41 @@ namespace rx
 
 namespace
 {
+
+
+struct IOSurfaceFormatInfo
+{
+    GLenum internalFormat;
+    GLenum type;
+
+    size_t componentBytes;
+
+    GLenum nativeSizedInternalFormat;
+};
+
+// clang-format off
+constexpr std::array<IOSurfaceFormatInfo, 6> kIOSurfaceFormats = {{
+    {GL_RED,        GL_UNSIGNED_BYTE,   1,  GL_R8           },
+    {GL_R16UI,      GL_UNSIGNED_SHORT,  2,  GL_R16UI        },
+    {GL_RG,         GL_UNSIGNED_BYTE,   2,  GL_RG8          },
+    {GL_RGB,        GL_UNSIGNED_BYTE,   4,  GL_BGRA8_EXT    },
+    {GL_BGRA_EXT,   GL_UNSIGNED_BYTE,   4,  GL_BGRA8_EXT    },
+    {GL_RGBA,       GL_HALF_FLOAT,      8,  GL_RGBA16F      },
+}};
+// clang-format on
+
+int FindIOSurfaceFormatIndex(GLenum internalFormat, GLenum type)
+{
+    for (int i = 0; i < static_cast<int>(kIOSurfaceFormats.size()); ++i)
+    {
+        const auto &formatInfo = kIOSurfaceFormats[i];
+        if (formatInfo.internalFormat == internalFormat && formatInfo.type == type)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
 
 #define ANGLE_TO_EGL_TRY(EXPR)                                 \
     do                                                         \
@@ -747,4 +783,130 @@ angle::Result WindowSurfaceMtl::swapImpl(const gl::Context *context)
 
     return angle::Result::Continue;
 }
+
+
+// IOSurfaceSurfaceMtl implementation.
+IOSurfaceSurfaceMtl::IOSurfaceSurfaceMtl(DisplayMtl *display,
+                                   const egl::SurfaceState &state,
+                                   EGLClientBuffer buffer,
+                                   const egl::AttributeMap &attribs)
+    : SurfaceMtl(display, state, attribs)
+{
+    // Keep reference to the IOSurface so it doesn't get deleted while the pbuffer exists.
+    mIOSurface = reinterpret_cast<IOSurfaceRef>(buffer);
+    CFRetain(mIOSurface);
+
+    // Extract attribs useful for the call to CGLTexImageIOSurface2D
+    mWidth  = static_cast<int>(attribs.get(EGL_WIDTH));
+    mHeight = static_cast<int>(attribs.get(EGL_HEIGHT));
+    mPlane  = static_cast<int>(attribs.get(EGL_IOSURFACE_PLANE_ANGLE));
+
+    EGLAttrib internalFormat = attribs.get(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE);
+    EGLAttrib type           = attribs.get(EGL_TEXTURE_TYPE_ANGLE);
+    mFormatIndex =
+        FindIOSurfaceFormatIndex(static_cast<GLenum>(internalFormat), static_cast<GLenum>(type));
+    ASSERT(mFormatIndex >= 0);
+}
+
+IOSurfaceSurfaceMtl::~IOSurfaceSurfaceMtl() {}
+
+void IOSurfaceSurfaceMtl::destroy(const egl::Display *display)
+{
+    SurfaceMtl::destroy(display);
+
+    if (mMetalLayer && mMetalLayer.get() != mLayer)
+    {
+        // If we created metal layer in IOSurfaceSurfaceMtl::initialize(),
+        // we need to detach it from super layer now.
+        [mMetalLayer.get() removeFromSuperlayer];
+    }
+    mMetalLayer = nil;
+
+    if (mIOSurface != nullptr)
+    {
+        CFRelease(mIOSurface);
+        mIOSurface = nullptr;
+    }
+}
+
+egl::Error IOSurfaceSurfaceMtl::initialize(const egl::Display *display)
+{
+    egl::Error re = SurfaceMtl::initialize(display);
+    if (re.isError())
+    {
+        return re;
+    }
+
+    DisplayMtl *displayMtl    = mtl::GetImpl(display);
+    id<MTLDevice> metalDevice = displayMtl->getMetalDevice();
+
+    StartFrameCapture(metalDevice, displayMtl->cmdQueue().get());
+
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        if ([mLayer isKindOfClass:CAMetalLayer.class])
+        {
+            mMetalLayer.retainAssign(static_cast<CAMetalLayer *>(mLayer));
+        }
+        else
+        {
+            mMetalLayer             = [[[CAMetalLayer alloc] init] ANGLE_MTL_AUTORELEASE];
+            mMetalLayer.get().frame = mLayer.frame;
+        }
+
+        mMetalLayer.get().device          = metalDevice;
+        mMetalLayer.get().pixelFormat     = mColorFormat.metalFormat;
+        mMetalLayer.get().framebufferOnly = NO;  // Support blitting and glReadPixels
+
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+        // Autoresize with parent layer.
+        mMetalLayer.get().autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+#endif
+
+        // ensure drawableSize is set to correct value:
+        mMetalLayer.get().drawableSize = { mWidth, mHeight };
+
+        if (mMetalLayer.get() != mLayer)
+        {
+            mMetalLayer.get().contentsScale = mLayer.contentsScale;
+
+            [mLayer addSublayer:mMetalLayer.get()];
+            mLayer.contents = (__bridge id)mIOSurface;
+        }
+    }
+
+    return egl::NoError();
+}
+
+egl::Error IOSurfaceSurfaceMtl::unMakeCurrent(const gl::Context *context)
+{
+    return egl::NoError();
+}
+
+egl::Error IOSurfaceSurfaceMtl::bindTexImage(const gl::Context *context,
+                                               gl::Texture *texture,
+                                               EGLint buffer)
+{
+    IOSurfaceLock(mIOSurface, 0, nullptr);
+
+    return egl::NoError();
+}
+
+egl::Error IOSurfaceSurfaceMtl::releaseTexImage(const gl::Context *context, EGLint buffer)
+{
+    IOSurfaceUnlock(mIOSurface, 0, nullptr);
+
+    return egl::NoError();
+}
+
+EGLint IOSurfaceSurfaceMtl::getWidth() const
+{
+    return mWidth;
+}
+
+EGLint IOSurfaceSurfaceMtl::getHeight() const
+{
+    return mHeight;
+}
+
 }

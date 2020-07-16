@@ -19,6 +19,9 @@
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_state_cache.h"
 
+struct __IOSurface;
+typedef __IOSurface *IOSurfaceRef;
+
 namespace rx
 {
 
@@ -147,6 +150,52 @@ class WindowSurfaceMtl : public SurfaceMtl
     CGSize calcExpectedDrawableSize() const;
     // Check if metal layer has been resized.
     bool checkIfLayerResized(const gl::Context *context);
+
+    mtl::AutoObjCObj<CAMetalLayer> mMetalLayer = nil;
+    CALayer *mLayer;
+    mtl::AutoObjCPtr<id<CAMetalDrawable>> mCurrentDrawable = nil;
+
+    // Cache last known drawable size that is used by GL context. Can be used to detect resize
+    // event. We don't use mMetalLayer.drawableSize directly since it might be changed internally by
+    // metal runtime.
+    CGSize mCurrentKnownDrawableSize;
+};
+
+class IOSurfaceSurfaceMtl : public SurfaceMtl
+{
+  public:
+    IOSurfaceSurfaceMtl(DisplayMtl *display,
+                     const egl::SurfaceState &state,
+                     EGLClientBuffer buffer,
+                     const egl::AttributeMap &attribs);
+    ~IOSurfaceSurfaceMtl() override;
+
+    void destroy(const egl::Display *display) override;
+
+    egl::Error initialize(const egl::Display *display) override;
+
+    egl::Error unMakeCurrent(const gl::Context *context) override;
+
+    egl::Error bindTexImage(const gl::Context *context,
+                            gl::Texture *texture,
+                            EGLint buffer) override;
+
+    egl::Error releaseTexImage(const gl::Context *context, EGLint buffer) override;
+
+    // width and height can change with client window resizing
+    EGLint getWidth() const override;
+    EGLint getHeight() const override;
+
+  private:
+    // Check if metal layer has been resized.
+    bool checkIfLayerResized(const gl::Context *context);
+
+    IOSurfaceRef mIOSurface;
+
+    int mWidth;
+    int mHeight;
+    int mPlane;
+    int mFormatIndex;
 
     mtl::AutoObjCObj<CAMetalLayer> mMetalLayer = nil;
     CALayer *mLayer;

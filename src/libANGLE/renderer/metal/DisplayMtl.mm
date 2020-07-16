@@ -175,8 +175,7 @@ SurfaceImpl *DisplayMtl::createPbufferFromClientBuffer(const egl::SurfaceState &
                                                        EGLClientBuffer clientBuffer,
                                                        const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<SurfaceImpl *>(0);
+    return new IOSurfaceSurfaceMtl(this, state, clientBuffer, attribs);
 }
 
 SurfaceImpl *DisplayMtl::createPixmapSurface(const egl::SurfaceState &state,
@@ -249,6 +248,8 @@ egl::Error DisplayMtl::makeCurrent(egl::Surface *drawSurface,
 void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->flexibleSurfaceCompatibility = true;
+    outExtensions->surfacelessContext = true;
+    outExtensions->iosurfaceClientBuffer = true;
 }
 
 void DisplayMtl::generateCaps(egl::Caps *outCaps) const {}
@@ -292,7 +293,7 @@ egl::ConfigSet DisplayMtl::generateConfigs()
     config.bindToTextureRGB  = EGL_FALSE;
     config.bindToTextureRGBA = EGL_FALSE;
 
-    config.surfaceType = EGL_WINDOW_BIT;
+    config.surfaceType = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
 
 #if TARGET_OS_OSX || TARGET_OS_MACCATALYST
     config.minSwapInterval = 0;
