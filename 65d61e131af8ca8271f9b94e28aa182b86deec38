@@ -39,6 +39,30 @@
       "revId": "65d61e131af8ca8271f9b94e28aa182b86deec38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a49cb3f_53267c3e",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-16T18:23:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "316f1538_a3f8be10",
+      "range": {
+        "startLine": 673,
+        "startChar": 13,
+        "endLine": 673,
+        "endChar": 21
+      },
+      "revId": "65d61e131af8ca8271f9b94e28aa182b86deec38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
