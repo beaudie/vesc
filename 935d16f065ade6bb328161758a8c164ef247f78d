@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18bb3591_4e0d7afe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-16T15:59:26Z",
+      "side": 1,
+      "message": "There are something wrong. I skipped all tests on Intel but why the bot still ran dEQP-GLES2.functional.attribute_location.bind_aliasing.* and crashed.\n\nLooks like 4235 METAL INTEL : dEQP-GLES2.* \u003d SKIP doesn\u0027t work for *bind_aliasing*",
+      "revId": "935d16f065ade6bb328161758a8c164ef247f78d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
