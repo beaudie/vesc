@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6a2deece_1ecb08bf",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-16T11:37:17Z",
+      "side": 1,
+      "message": "Done. It was my automated habit.",
+      "parentUuid": "168c3274_f82f30cd",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 79,
+        "endChar": 35
+      },
+      "revId": "0ead5b6f545e61922e565b6225b9fec79b5f86e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fdd8f6f_3b7a49a9",
         "filename": "src/libANGLE/renderer/metal/mtl_utils.h",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "0ead5b6f545e61922e565b6225b9fec79b5f86e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4dbdd1d_49281a16",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-16T11:37:17Z",
+      "side": 1,
+      "message": "Done. Yes, isFormatEmulated is better. Thanks",
+      "parentUuid": "7fdd8f6f_3b7a49a9",
+      "range": {
+        "startLine": 99,
+        "startChar": 50,
+        "endLine": 99,
+        "endChar": 69
+      },
+      "revId": "0ead5b6f545e61922e565b6225b9fec79b5f86e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
