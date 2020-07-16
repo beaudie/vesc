@@ -98,6 +98,30 @@
       "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b546f501_66025b90",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-16T23:58:16Z",
+      "side": 1,
+      "message": "My understanding is that if possible ShaderMap is the preferred choice since it is fixed sized array.",
+      "parentUuid": "1d8d124a_be99a346",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 15
+      },
+      "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
