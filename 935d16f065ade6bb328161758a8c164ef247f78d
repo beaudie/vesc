@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "88f8fd25_38154801",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-16T16:09:32Z",
+      "side": 1,
+      "message": "I think a better solution is to rename all your excetptions to METAL AMD. It\u0027s more precise since we technically don\u0027t know if these tests fail on NVIDIA/Intel or not",
+      "parentUuid": "9b730da7_dfcc15fe",
+      "revId": "935d16f065ade6bb328161758a8c164ef247f78d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5a5c38f_1ed34626",
         "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
         "patchSetId": 15
