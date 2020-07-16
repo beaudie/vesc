@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0f34815e_2dfed539",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-16T21:14:10Z",
+      "side": 1,
+      "message": "There will be one less indirection to access from context versus from renderer. And all buffer creation passs in contextVk except TheNullBuffer, which means I am able to get rid of one version of init function by merging TheNullBuffer to mEmptyBuffer.",
+      "parentUuid": "b8fde090_92611e68",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 24
+      },
+      "revId": "da24a05c0f4a3790cfc8fa42da25359b987de32c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c4d8ed5e_51d29063",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
