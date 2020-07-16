@@ -16,6 +16,24 @@
       "revId": "935d16f065ade6bb328161758a8c164ef247f78d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b730da7_dfcc15fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-16T16:04:06Z",
+      "side": 1,
+      "message": "That\u0027s because of the line that says:\n\n4235 METAL : dEQP-GLES2.functional.attribute_location.bind_aliasing.* \u003d FAIL\n\nWhen multiple lines set expectations for the same test, we take the longer line in the hope that it\u0027s more specific and must override the broader suppression. In the current expectations file, it basically says SKIP all these tests, except for these subset of them which should FAIL.\n\nThis should do the trick:\n\n-4235 METAL : dEQP-GLES2.functional.attribute_location.bind_aliasing.* \u003d FAIL\n+4235 METAL : dEQP-GLES2.functional.attribute_location.bind_aliasing.* \u003d SKIP",
+      "parentUuid": "18bb3591_4e0d7afe",
+      "revId": "935d16f065ade6bb328161758a8c164ef247f78d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
