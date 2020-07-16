@@ -586,6 +586,11 @@ class ContextVk : public ContextImpl, public vk::Context
         return mWriteInfos[oldSize];
     }
 
+    vk::DynamicBuffer *getDefaultUniformStorage() { return &mDefaultUniformStorage; }
+    // For testing only.
+    void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
+    void restoreDefaultUniformBlocksMinSizeForTesting();
+
     vk::BufferHelper &getEmptyBuffer() { return mEmptyBuffer; }
 
   private:
@@ -1061,6 +1066,8 @@ class ContextVk : public ContextImpl, public vk::Context
     };
 
     ShareGroupVk *mShareGroupVk;
+
+    vk::DynamicBuffer mDefaultUniformStorage;
 
     // This is a special "empty" placeholder buffer for when a shader has no uniforms or doesn't
     // use all slots in the atomic counter buffer array. It is necessary because we want to keep a
