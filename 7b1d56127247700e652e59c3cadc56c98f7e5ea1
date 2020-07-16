@@ -16,6 +16,24 @@
       "revId": "7b1d56127247700e652e59c3cadc56c98f7e5ea1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbdcd6a9_b24def68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-16T11:28:14Z",
+      "side": 1,
+      "message": "I checked. It didn\u0027t have any conflict. I just clicked \"Rebase\" button here and it workded.",
+      "parentUuid": "d6189c2e_a6a60d0e",
+      "revId": "7b1d56127247700e652e59c3cadc56c98f7e5ea1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
