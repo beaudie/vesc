@@ -117,10 +117,9 @@ void main()
 
     limitMaxSets(program);
 
-    rx::ProgramVk *programVk = hackProgram(program);
-
     // Set a really small min size so that uniform updates often allocates a new buffer.
-    programVk->setDefaultUniformBlocksMinSizeForTesting(128);
+    rx::ContextVk *contextVk = hackANGLE();
+    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
 
     GLint posUniformLocation = glGetUniformLocation(program, "uniPosModifier");
     ASSERT_NE(posUniformLocation, -1);
@@ -360,12 +359,9 @@ void main()
     limitMaxSets(program1);
     limitMaxSets(program2);
 
-    rx::ProgramVk *program1Vk = hackProgram(program1);
-    rx::ProgramVk *program2Vk = hackProgram(program2);
-
     // Set a really small min size so that uniform updates often allocates a new buffer.
-    program1Vk->setDefaultUniformBlocksMinSizeForTesting(128);
-    program2Vk->setDefaultUniformBlocksMinSizeForTesting(128);
+    rx::ContextVk *contextVk = hackANGLE();
+    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
 
     // Get uniform locations.
     GLint colorMaskLoc1 = glGetUniformLocation(program1, "colorMask");
@@ -506,10 +502,9 @@ void main()
 
     limitMaxSets(program);
 
-    rx::ProgramVk *programVk = hackProgram(program);
-
     // Set a really small min size so that every uniform update actually allocates a new buffer.
-    programVk->setDefaultUniformBlocksMinSizeForTesting(128);
+    rx::ContextVk *contextVk = hackANGLE();
+    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
 
     GLint uniformVSLocation = glGetUniformLocation(program, "uniformVS");
     ASSERT_NE(uniformVSLocation, -1);
@@ -569,7 +564,6 @@ class PipelineProgramUniformUpdatesTest : public VulkanUniformUpdatesTest
 TEST_P(PipelineProgramUniformUpdatesTest, ToggleBetweenPPOAndProgramVKWithUniformUpdate)
 {
     ASSERT_TRUE(IsVulkan());
-    ANGLE_SKIP_TEST_IF(true && "Known bug. Expected to be fixed by http://b/161391337");
 
     const GLchar *kPositionUniformVertexShader = R"(attribute vec2 position;
 uniform float uniformVS;
@@ -608,8 +602,8 @@ void main()
     glUseProgram(program);
     limitMaxSets(program);
     // Set a really small min size so that every uniform update actually allocates a new buffer.
-    rx::ProgramVk *programVk = hackProgram(program);
-    programVk->setDefaultUniformBlocksMinSizeForTesting(128);
+    rx::ContextVk *contextVk = hackANGLE();
+    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
 
     // Setup vertices
     std::array<Vector3, 6> quadVertices = ANGLETestBase::GetQuadVertices();
