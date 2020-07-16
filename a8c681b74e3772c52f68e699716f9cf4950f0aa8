@@ -16,6 +16,46 @@
       "revId": "a8c681b74e3772c52f68e699716f9cf4950f0aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8631fb47_ff059ea6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-16T02:41:41Z",
+      "side": 1,
+      "message": "The end2end test failure looks like a missing retain or something.",
+      "revId": "a8c681b74e3772c52f68e699716f9cf4950f0aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c52754a4_99b945ab",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-16T02:41:41Z",
+      "side": 1,
+      "message": "This should be unnecessary (and mMaxLevelSeen could be removed) I think.\n\nMax level should be able to vary inside the [base, base+levelCount) range freely.",
+      "range": {
+        "startLine": 1550,
+        "startChar": 48,
+        "endLine": 1550,
+        "endChar": 87
+      },
+      "revId": "a8c681b74e3772c52f68e699716f9cf4950f0aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
