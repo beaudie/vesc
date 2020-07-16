@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5758fc4a_9d8106f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-16T14:55:14Z",
+      "side": 1,
+      "message": "I\u0027m beginning to wonder if we should just have two class like LevelGL and LevelVK so they can\u0027t be accidentally interchanged. They could automatically be constructed from integers and cast to them, but direct assignment would be a compile error.\n\nNot a blocker on this change, just a thought.",
+      "revId": "daa301f6c4e5b4c4346c4ead3954edfb90ae2291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e2eb28c_cdd86bf7",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-16T14:55:14Z",
+      "side": 1,
+      "message": "Please rename this to mLevelIndexGL.",
+      "range": {
+        "startLine": 148,
+        "startChar": 23,
+        "endLine": 148,
+        "endChar": 34
+      },
+      "revId": "daa301f6c4e5b4c4346c4ead3954edfb90ae2291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "484e6ec2_51e95859",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-16T14:55:14Z",
+      "side": 1,
+      "message": "Please change the signature in the header files too",
+      "range": {
+        "startLine": 437,
+        "startChar": 67,
+        "endLine": 437,
+        "endChar": 74
+      },
+      "revId": "daa301f6c4e5b4c4346c4ead3954edfb90ae2291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95db10dd_30437f79",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-16T14:55:14Z",
+      "side": 1,
+      "message": "Please add VK to the signature of these functions too",
+      "range": {
+        "startLine": 5216,
+        "startChar": 17,
+        "endLine": 5216,
+        "endChar": 35
+      },
+      "revId": "daa301f6c4e5b4c4346c4ead3954edfb90ae2291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
