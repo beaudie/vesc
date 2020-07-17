@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "53363891_2c370cc7",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-17T17:05:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dd34f00_dba721e5",
+      "range": {
+        "startLine": 137,
+        "startChar": 20,
+        "endLine": 137,
+        "endChar": 43
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2abd12ef_f6f79786",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 4
@@ -249,6 +273,30 @@
       "side": 1,
       "message": "If angle_capture_with_default is false, you don\u0027t shouldn\u0027t need ANGLE_CAPTURE_ENABLED\u003d1 (0 is default). I\u0027m not sure if having \u003d1 will cause any problems (it shouldn\u0027t as all capture stuff is no-opped).",
       "parentUuid": "30a11681_68233534",
+      "range": {
+        "startLine": 141,
+        "startChar": 39,
+        "endLine": 141,
+        "endChar": 68
+      },
+      "revId": "a7609387c6bc419704e6252596bb265842932c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "907c52f0_9b99c576",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-17T17:05:51Z",
+      "side": 1,
+      "message": "I test it. I think without setting ANGLE_CAPTURE_ENABLED\u003d0, frame capture will still try to write trace files. Anyway, I do not think setting an environment will be too wasteful compared to other stuffs that are running.",
+      "parentUuid": "3d8cd730_1aadf08a",
       "range": {
         "startLine": 141,
         "startChar": 39,
