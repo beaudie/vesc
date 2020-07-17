@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d521b497_58c775f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T19:58:55Z",
+      "side": 1,
+      "message": "I\u0027m sure once this is fixed, all the weird restrictions can be lifted :)",
+      "parentUuid": "7e02d00d_b8de0dd6",
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e734186_e0080e23",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
