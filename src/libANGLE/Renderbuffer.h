@@ -57,6 +57,10 @@ class RenderbufferState final : angle::NonCopyable
     Format mFormat;
     GLsizei mSamples;
 
+    // TODO: there should be some state saying whether this is multisampled because of
+    // GL_EXT_multisampled_render_to_texture or just normal ES3 multisampling.  Then when sending
+    // samples to getAttachmentRenderTarget, send 0 if normal ES3 multisampling.
+
     // For robust resource init.
     InitState mInitState;
 };

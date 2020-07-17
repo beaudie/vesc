@@ -124,6 +124,13 @@ class MultisampledRenderToTextureTest : public ANGLETest
 class MultisampledRenderToTextureES3Test : public MultisampledRenderToTextureTest
 {};
 
+// TODO: need a lot more testing. For example, color renderbuffers are not tested at all.  Need
+// to test readback of renderbuffers, which are currently broken as there's no distinction between
+// glRenderbufferStorageMultisampleEXT and glRenderbufferStorageMultisample, the former is really
+// a 1xMSAA image that's multisampled rendered to, while the latter is an actual multisampled
+// image, which for example cannot be read back.  Internally, the former should result in two
+// images allocated, while the latter only one.
+
 // Checking against invalid parameters for RenderbufferStorageMultisampleEXT.
 TEST_P(MultisampledRenderToTextureTest, RenderbufferParameterCheck)
 {
