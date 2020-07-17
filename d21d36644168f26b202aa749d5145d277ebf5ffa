@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13c9adbf_cff85290",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T21:02:03Z",
+      "side": 1,
+      "message": "Found the issue. In ProgramExecutableVk::updateTexturesDescriptorSet, a cache is used whose key is:\n\n    const vk::TextureDescriptorDesc \u0026texturesDesc \u003d contextVk-\u003egetActiveTexturesDesc();\n\nWhen only changing the view, the serial of the texture needs to be updated so that an old descriptor set is not retrieved.\n\nAdd this inside the `if`:\n\n    mSerial \u003d contextVk-\u003egenerateTextureSerial();",
+      "revId": "d21d36644168f26b202aa749d5145d277ebf5ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
