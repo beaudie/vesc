@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "816e5ef9_470ad5d1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T19:48:18Z",
+      "side": 1,
+      "message": "If the current buffer of the default uniform\u0027s dynamic buffer has changed since last bind, we technically don\u0027t need to do this, isn\u0027t that right? A quick survey of apps to see if this is dirtying uniforms unnecessarily (with logs and statistics gathering) could be good to know if this is harmless. Especially the change to increase the dynamic buffer\u0027s allocate size makes it more likely that there wouldn\u0027t be a need to dirty these.\n\nI would suggest to at least specify in the comment that dirtying could be avoided under X and Y condition (instead of \"we have to\")",
+      "range": {
+        "startLine": 816,
+        "startChar": 84,
+        "endLine": 817,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
