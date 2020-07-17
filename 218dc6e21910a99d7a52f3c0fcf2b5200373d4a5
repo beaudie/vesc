@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7e02d00d_b8de0dd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "Valuable insight.  This seems to be the real problem that is causing this \"change the ImageView\" path to not work in all cases.\n\nBTW, this change yields a ~2X performance improvement for NBA 2K20 rendering time (during game play).  That\u0027s why I\u0027m willing to narrow the focus of when to use this path.",
+      "parentUuid": "48602a64_14a732cf",
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e734186_e0080e23",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -56,6 +74,30 @@
       "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63cbbf94_5ee63840",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "I removed the `previousMaxLevel \u003d\u003d gl::kInitialMaxLevel`.  It covered up a problem I fixed below.",
+      "parentUuid": "5e734186_e0080e23",
+      "range": {
+        "startLine": 1531,
+        "startChar": 0,
+        "endLine": 1532,
+        "endChar": 87
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -102,6 +144,54 @@
       "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81b3478e_56a73edb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "If we can get the change-ImageView path to work without this, I\u0027m happy to remove it.",
+      "parentUuid": "0e289a0c_027b43d2",
+      "range": {
+        "startLine": 1552,
+        "startChar": 48,
+        "endLine": 1552,
+        "endChar": 62
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f3bb91f5_ef5f33f9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af855a9c_48e3a20a",
+      "range": {
+        "startLine": 1552,
+        "startChar": 29,
+        "endLine": 1552,
+        "endChar": 44
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -176,6 +266,30 @@
     },
     {
       "key": {
+        "uuid": "10262dad_281e51cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "I missed a case, and will push a new patch set with the fix.\n\nThe point is trying to help NBA 2K20 without breaking anything else.  My initial code didn\u0027t have this, but I narrowed more to what I actually need.  When we get the \"change the ImageView\" path to work, I\u0027ll be happy to remove it.",
+      "parentUuid": "711e1e92_3e456f74",
+      "range": {
+        "startLine": 1553,
+        "startChar": 8,
+        "endLine": 1554,
+        "endChar": 87
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afa63f17_2f08e0a0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -196,6 +310,30 @@
       "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90fd6c82_8039f74f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "More tests fail it I remove it.  So, it stays in for now.",
+      "parentUuid": "afa63f17_2f08e0a0",
+      "range": {
+        "startLine": 1555,
+        "startChar": 8,
+        "endLine": 1555,
+        "endChar": 35
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -222,6 +360,30 @@
     },
     {
       "key": {
+        "uuid": "c9336364_49a249f0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c0a242c_3d453ebc",
+      "range": {
+        "startLine": 1575,
+        "startChar": 30,
+        "endLine": 1575,
+        "endChar": 42
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35007c6f_4cf00859",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 2
@@ -236,6 +398,24 @@
       "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "066ee071_e4492e19",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T19:47:48Z",
+      "side": 1,
+      "message": "When we get this CL to prove the approach, this might be a good follow-on CL if apps benefit from it.",
+      "parentUuid": "35007c6f_4cf00859",
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
