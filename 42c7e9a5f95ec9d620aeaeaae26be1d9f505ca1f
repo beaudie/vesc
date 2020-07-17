@@ -195,6 +195,30 @@
     },
     {
       "key": {
+        "uuid": "49a92d58_fbdf635c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T21:25:18Z",
+      "side": 1,
+      "message": "Just my personal opinion, but:\n\n*x.y is pretty common. I\u0027d suggest keeping it as is. Too many parentheses can also hurt readability.",
+      "parentUuid": "e48c099f_8759585c",
+      "range": {
+        "startLine": 114,
+        "startChar": 48,
+        "endLine": 114,
+        "endChar": 49
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa971206_97d6e435",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 22
