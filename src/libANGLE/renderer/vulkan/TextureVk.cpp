@@ -177,6 +177,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
       mImageLayerOffset(0),
       mImageLevelOffset(0),
       mImage(nullptr),
+      mMultisampledImage(nullptr),
       mStagingBufferInitialSize(vk::kStagingBufferSize),
       mImageUsageFlags(0),
       mImageCreateFlags(0),
@@ -535,7 +536,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
     RenderTargetVk *colorReadRT = framebufferVk->getColorReadRenderTarget();
 
     const vk::Format &srcFormat  = colorReadRT->getImageFormat();
-    VkImageTiling srcTilingMode  = colorReadRT->getImage().getTilingMode();
+    VkImageTiling srcTilingMode  = colorReadRT->getImageForCopy().getTilingMode();
     const vk::Format &destFormat = renderer->getFormat(internalFormat.sizedInternalFormat);
     VkImageTiling destTilingMode = getTilingMode();
 
@@ -551,7 +552,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         return copySubImageImplWithTransfer(contextVk, offsetImageIndex, modifiedDestOffset,
                                             destFormat, colorReadRT->getLevelIndex(),
                                             colorReadRT->getLayerIndex(), clippedSourceBox,
-                                            &colorReadRT->getImage());
+                                            &colorReadRT->getImageForCopy());
     }
 
     bool forceCPUPath = ForceCPUPathForCopy(renderer, *mImage);
@@ -566,10 +567,11 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         const vk::ImageView *copyImageView = nullptr;
         ANGLE_TRY(colorReadRT->getAndRetainCopyImageView(contextVk, &copyImageView));
 
-        return copySubImageImplWithDraw(
-            contextVk, offsetImageIndex, modifiedDestOffset, destFormat,
-            colorReadRT->getLevelIndex(), clippedSourceBox, isViewportFlipY, false, false, false,
-            &colorReadRT->getImage(), copyImageView, contextVk->getRotationReadFramebuffer());
+        return copySubImageImplWithDraw(contextVk, offsetImageIndex, modifiedDestOffset, destFormat,
+                                        colorReadRT->getLevelIndex(), clippedSourceBox,
+                                        isViewportFlipY, false, false, false,
+                                        &colorReadRT->getImageForCopy(), copyImageView,
+                                        contextVk->getRotationReadFramebuffer());
     }
 
     // Do a CPU readback that does the conversion, and then stage the change to the pixel buffer.
@@ -1388,6 +1390,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 
     commandBuffer->copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
                                      mImage->getCurrentLayout(), 1, &region);
+    // TODO: should also set rendertarget mContentDefined
 
     return angle::Result::Continue;
 }
@@ -1432,6 +1435,8 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
+
+    // TODO: should set render targets having defined contents
 
     // The image should already be allocated by a prior syncState.
     ASSERT(mImage->valid());
@@ -1657,6 +1662,44 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                             levelCount));
     }
 
+    // If samples > 1 here, we have a singlesampled texture that's being multisampled rendered to.
+    // In this case, create a multisampled image that is otherwise identical to the single sampled
+    // image.  That multisampled image is used as color or depth/stencil attachment, while the
+    // original image is used as the resolve attachment.
+    if (samples > 1 && mMultisampledImage == nullptr)
+    {
+        ASSERT(mState.getBaseLevelDesc().samples <= 1);
+
+        mMultisampledImage = new vk::ImageHelper();
+
+        // The image is used as either color or depth/stencil attachment.  Additionally, its memory
+        // is lazily allocated as the contents are discarded at the end of the renderpass and with
+        // tiling GPUs no actual backing memory is required.
+        const VkImageUsageFlags kMultisampledUsageFlags =
+            VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT |
+            (mImage->getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT
+                 ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+                 : VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+        constexpr VkImageCreateFlags kMultisampledCreateFlags = 0;
+
+        ANGLE_TRY(mMultisampledImage->initExternal(
+            contextVk, mState.getType(), mImage->getExtents(), mImage->getFormat(), samples,
+            kMultisampledUsageFlags, kMultisampledCreateFlags, rx::vk::ImageLayout::Undefined,
+            nullptr, mImage->getBaseLevel(), mImage->getMaxLevel(), mImage->getLevelCount(),
+            mImage->getLayerCount()));
+
+        constexpr VkMemoryPropertyFlags kMultisampledMemoryFlags =
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
+
+        ANGLE_TRY(mMultisampledImage->initMemory(
+            contextVk, contextVk->getRenderer()->getMemoryProperties(), kMultisampledMemoryFlags));
+
+        // Remove the emulated format clear from the multisampled image.  There is one already
+        // staged on the resolve image.
+        mMultisampledImage->removeStagedUpdates(contextVk, mMultisampledImage->getBaseLevel(),
+                                                mMultisampledImage->getMaxLevel());
+    }
+
     // Don't flush staged updates here. We'll handle that in FramebufferVk so it can defer clears.
 
     GLuint layerIndex = 0, layerCount = 0;
@@ -1723,14 +1766,43 @@ angle::Result TextureVk::initRenderTargets(ContextVk *contextVk,
 
     // Lazy init. Check if already initialized.
     if (!mRenderTargets[levelIndex].empty())
+    {
         return angle::Result::Continue;
+    }
 
     mRenderTargets[levelIndex].resize(layerCount);
 
     for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
     {
+        vk::ImageHelper *drawImage             = mImage;
+        vk::ImageViewHelper *drawImageViews    = &mImageViews;
+        vk::ImageHelper *resolveImage          = nullptr;
+        vk::ImageViewHelper *resolveImageViews = nullptr;
+
+        // If multisampled render to texture, use the multisampled image as draw image instead, and
+        // resolve into the texture's image automatically.
+        if (mMultisampledImage)
+        {
+            drawImage         = mMultisampledImage;
+            drawImageViews    = &mMultisampledImageViews;
+            resolveImage      = mImage;
+            resolveImageViews = &mImageViews;
+
+            // If the texture is depth/stencil, GL_EXT_multisampled_render_to_texture2 explicitly
+            // indicates that there is no need for the image to be resolved.  In that case, don't
+            // specify the resolve image.  Note that the multisampled image's data is discarded
+            // nevertheless per this spec.
+            if (mImage->getAspectFlags() != VK_IMAGE_ASPECT_COLOR_BIT)
+            {
+                resolveImage      = nullptr;
+                resolveImageViews = nullptr;
+            }
+        }
+
         mRenderTargets[levelIndex][layerIndex].init(
-            mImage, &mImageViews, getNativeImageLevel(levelIndex), getNativeImageLayer(layerIndex));
+            drawImage, drawImageViews, resolveImage, resolveImageViews,
+            getNativeImageLevel(levelIndex), getNativeImageLayer(layerIndex),
+            mMultisampledImage != nullptr);
     }
     return angle::Result::Continue;
 }
@@ -2082,8 +2154,14 @@ void TextureVk::releaseImage(ContextVk *contextVk)
             mImage = nullptr;
         }
     }
+    if (mMultisampledImage)
+    {
+        mMultisampledImage->releaseImage(renderer);
+        SafeDelete(mMultisampledImage);
+    }
 
     mImageViews.release(renderer);
+    mMultisampledImageViews.release(renderer);
 
     for (RenderTargetVector &renderTargetLevels : mRenderTargets)
     {
