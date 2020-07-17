@@ -126,6 +126,8 @@ angle::Result SurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLsizei samples,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
+    ASSERT(samples == 0);
+
     if (binding == GL_BACK)
     {
         *rtOut = &mColorRenderTarget;

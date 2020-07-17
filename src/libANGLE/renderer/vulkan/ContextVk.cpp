@@ -2385,8 +2385,12 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
     }
 
     // Use finalLayout instead of extra barrier for layout change to present
-    vk::ImageHelper &image = color0RenderTarget->getImage();
+    vk::ImageHelper &image = color0RenderTarget->getImageForWrite();
     image.setCurrentImageLayout(vk::ImageLayout::Present);
+    // TODO: update this so that it will set this to either on the color attachment, or the resolved
+    // color attachment.  Should be done when swapchain image is optimized to use resolve
+    // attachments. We currently don't store the layout of the resolve attachments, so that needs to
+    // be stored.
     mRenderPassCommands->updateRenderPassAttachmentFinalLayout(0, image.getCurrentImageLayout());
 }
 

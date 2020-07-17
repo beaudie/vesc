@@ -163,6 +163,37 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
         ConvertImageLayoutToVkImageLayout(static_cast<ImageLayout>(ops.finalLayout));
 }
 
+void UnpackResolveAttachmentDesc(VkAttachmentDescription *desc, const vk::Format &format)
+{
+    // We would only need this flag for duplicated attachments. Apply it conservatively.  In
+    // practice it's unlikely any application would use the same image as multiple resolve
+    // attachments simultaneously, so this flag can likely be removed without any issue if it incurs
+    // a performance penalty.
+    desc->flags  = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+    desc->format = format.vkImageFormat;
+
+    const angle::Format angleFormat   = format.actualImageFormat();
+    const bool isDepthOrStencilFormat = angleFormat.depthBits > 0 || angleFormat.stencilBits > 0;
+    const bool hasStencilBits         = angleFormat.stencilBits > 0;
+
+    // Resolve attachments always have a sample count of 1.  For simplicity, unlikely cases where
+    // the resolve framebuffer is immediately invalidated or cleared are ignored.  Therefore, loadOp
+    // and storeOp can be fixed to DONT_CARE and STORE respectively.
+    desc->samples       = VK_SAMPLE_COUNT_1_BIT;
+    desc->loadOp        = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    desc->storeOp       = VK_ATTACHMENT_STORE_OP_STORE;
+    desc->stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    desc->stencilStoreOp =
+        hasStencilBits ? VK_ATTACHMENT_STORE_OP_STORE : VK_ATTACHMENT_STORE_OP_DONT_CARE;
+
+    const VkImageLayout layout = isDepthOrStencilFormat
+                                     ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+                                     : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+    desc->initialLayout = layout;
+    desc->finalLayout   = layout;
+}
+
 void UnpackStencilState(const vk::PackedStencilOpState &packedState,
                         uint8_t stencilReference,
                         VkStencilOpState *stateOut)
@@ -206,15 +237,23 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
                                            const AttachmentOpsArray &ops,
                                            RenderPass *renderPass)
 {
+    constexpr VkAttachmentReference kUnusedAttachment = {VK_ATTACHMENT_UNUSED,
+                                                         VK_IMAGE_LAYOUT_UNDEFINED};
+
     // Unpack the packed and split representation into the format required by Vulkan.
     gl::DrawBuffersVector<VkAttachmentReference> colorAttachmentRefs;
-    VkAttachmentReference depthStencilAttachmentRef = {VK_ATTACHMENT_UNUSED,
-                                                       VK_IMAGE_LAYOUT_UNDEFINED};
-    gl::AttachmentArray<VkAttachmentDescription> attachmentDescs;
+    VkAttachmentReference depthStencilAttachmentRef = kUnusedAttachment;
+    gl::DrawBuffersVector<VkAttachmentReference> colorResolveAttachmentRefs;
 
+    // The list of attachments includes all non-resolve and resolve attachments, so it has double
+    // the store of gl::AttachmentArray.
+    std::array<VkAttachmentDescription, 2 * gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS>
+        attachmentDescs;
+
+    // Pack color attachments
     uint32_t colorAttachmentCount = 0;
     uint32_t attachmentCount      = 0;
-    for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
+    for (uint32_t colorIndexGL = 0; colorIndexGL <= desc.colorAttachmentRange(); ++colorIndexGL)
     {
         // Vulkan says:
         //
@@ -227,11 +266,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
 
         if (!desc.isColorAttachmentEnabled(colorIndexGL))
         {
-            VkAttachmentReference colorRef;
-            colorRef.attachment = VK_ATTACHMENT_UNUSED;
-            colorRef.layout     = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorAttachmentRefs.push_back(colorRef);
-
+            colorAttachmentRefs.push_back(kUnusedAttachment);
             continue;
         }
 
@@ -252,6 +287,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         ++attachmentCount;
     }
 
+    // Pack depth/stencil attachment, if any
     if (desc.hasDepthStencilAttachment())
     {
         uint32_t depthStencilIndex   = static_cast<uint32_t>(desc.depthStencilAttachmentIndex());
@@ -270,6 +306,32 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         ++attachmentCount;
     }
 
+    // Pack color resolve attachments
+    const uint32_t nonResolveAttachmentCount = attachmentCount;
+    for (uint32_t colorIndexGL = 0; colorIndexGL <= desc.colorAttachmentRange(); ++colorIndexGL)
+    {
+        if (!desc.mHasColorResolveAttachment.test(colorIndexGL))
+        {
+            colorResolveAttachmentRefs.push_back(kUnusedAttachment);
+            continue;
+        }
+
+        ASSERT(desc.isColorAttachmentEnabled(colorIndexGL));
+
+        uint32_t colorResolveIndexVk = attachmentCount;
+        const vk::Format &format     = context->getRenderer()->getFormat(desc[colorIndexGL]);
+
+        VkAttachmentReference colorRef;
+        colorRef.attachment = colorResolveIndexVk;
+        colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+        colorResolveAttachmentRefs.push_back(colorRef);
+
+        UnpackResolveAttachmentDesc(&attachmentDescs[colorResolveIndexVk], format);
+
+        ++attachmentCount;
+    }
+
     VkSubpassDescription subpassDesc = {};
 
     subpassDesc.flags                = 0;
@@ -278,7 +340,8 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     subpassDesc.pInputAttachments    = nullptr;
     subpassDesc.colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     subpassDesc.pColorAttachments    = colorAttachmentRefs.data();
-    subpassDesc.pResolveAttachments  = nullptr;
+    subpassDesc.pResolveAttachments =
+        attachmentCount > nonResolveAttachmentCount ? colorResolveAttachmentRefs.data() : nullptr;
     subpassDesc.pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
@@ -400,7 +463,8 @@ RenderPassDesc::RenderPassDesc(const RenderPassDesc &other)
 void RenderPassDesc::setSamples(GLint samples)
 {
     ASSERT(samples < std::numeric_limits<uint8_t>::max());
-    mSamples = static_cast<uint8_t>(samples);
+    ASSERT(gl::isPow2(samples));
+    SetBitField(mLogSamples, gl::ScanForward(static_cast<uint8_t>(samples)));
 }
 
 void RenderPassDesc::packColorAttachment(size_t colorIndexGL, angle::FormatID formatID)
@@ -410,16 +474,15 @@ void RenderPassDesc::packColorAttachment(size_t colorIndexGL, angle::FormatID fo
                   "Too many ANGLE formats to fit in uint8_t");
     // Force the user to pack the depth/stencil attachment last.
     ASSERT(mHasDepthStencilAttachment == false);
-    // This function should only be called for enabled GL color attachments.`
+    // This function should only be called for enabled GL color attachments.
     ASSERT(formatID != angle::FormatID::NONE);
 
     uint8_t &packedFormat = mAttachmentFormats[colorIndexGL];
     SetBitField(packedFormat, formatID);
 
     // Set color attachment range such that it covers the range from index 0 through last
-    // active index.  This is the reason why we need depth/stencil to be packed last.
-    mColorAttachmentRange =
-        std::max<uint8_t>(mColorAttachmentRange, static_cast<uint8_t>(colorIndexGL) + 1);
+    // active index inclusive.  This is the reason why we need depth/stencil to be packed last.
+    SetBitField(mColorAttachmentRange, std::max<size_t>(mColorAttachmentRange, colorIndexGL));
 }
 
 void RenderPassDesc::packColorAttachmentGap(size_t colorIndexGL)
@@ -449,6 +512,13 @@ void RenderPassDesc::packDepthStencilAttachment(angle::FormatID formatID)
     mHasDepthStencilAttachment = true;
 }
 
+void RenderPassDesc::packColorResolveAttachment(size_t colorIndexGL)
+{
+    ASSERT(isColorAttachmentEnabled(colorIndexGL));
+    ASSERT(mLogSamples > 0);
+    mHasColorResolveAttachment.set(colorIndexGL);
+}
+
 RenderPassDesc &RenderPassDesc::operator=(const RenderPassDesc &other)
 {
     memcpy(this, &other, sizeof(RenderPassDesc));
@@ -469,14 +539,14 @@ bool RenderPassDesc::isColorAttachmentEnabled(size_t colorIndexGL) const
 size_t RenderPassDesc::attachmentCount() const
 {
     size_t colorAttachmentCount = 0;
-    for (size_t i = 0; i < mColorAttachmentRange; ++i)
+    for (size_t i = 0; i <= mColorAttachmentRange; ++i)
     {
         colorAttachmentCount += isColorAttachmentEnabled(i);
     }
 
     // Note that there are no gaps in depth/stencil attachments.  In fact there is a maximum of 1 of
     // it.
-    return colorAttachmentCount + mHasDepthStencilAttachment;
+    return colorAttachmentCount + mHasColorResolveAttachment.count() + mHasDepthStencilAttachment;
 }
 
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs)
@@ -892,7 +962,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     blendState.flags           = 0;
     blendState.logicOpEnable   = static_cast<VkBool32>(inputAndBlend.logic.opEnable);
     blendState.logicOp         = static_cast<VkLogicOp>(inputAndBlend.logic.op);
-    blendState.attachmentCount = static_cast<uint32_t>(mRenderPassDesc.colorAttachmentRange());
+    blendState.attachmentCount = static_cast<uint32_t>(mRenderPassDesc.colorAttachmentRange() + 1);
     blendState.pAttachments    = blendAttachmentState.data();
 
     for (int i = 0; i < 4; i++)
@@ -1956,7 +2026,7 @@ angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
     vk::AttachmentOpsArray ops;
 
     uint32_t colorAttachmentCount = 0;
-    for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
+    for (uint32_t colorIndexGL = 0; colorIndexGL <= desc.colorAttachmentRange(); ++colorIndexGL)
     {
         if (!desc.isColorAttachmentEnabled(colorIndexGL))
         {

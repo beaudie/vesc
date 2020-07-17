@@ -632,12 +632,14 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
     mPipelineBarrierMask.reset();
 }
 
-void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
-                                          const gl::Rectangle &renderArea,
-                                          const vk::RenderPassDesc &renderPassDesc,
-                                          const vk::AttachmentOpsArray &renderPassAttachmentOps,
-                                          const vk::ClearValuesArray &clearValues,
-                                          vk::CommandBuffer **commandBufferOut)
+void CommandBufferHelper::beginRenderPass(
+    const vk::Framebuffer &framebuffer,
+    const gl::Rectangle &renderArea,
+    const vk::RenderPassDesc &renderPassDesc,
+    const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const vk::AttachmentOpsArray &renderPassAttachmentResolveOps,
+    const vk::ClearValuesArray &clearValues,
+    vk::CommandBuffer **commandBufferOut)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());

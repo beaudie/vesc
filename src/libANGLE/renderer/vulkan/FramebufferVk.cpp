@@ -328,21 +328,21 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         ANGLE_VK_CHECK(contextVk, !scissoredClear, VK_ERROR_INCOMPATIBLE_DRIVER);
 
         RenderTargetVk *depthStencilRT = mRenderTargetCache.getDepthStencil(true);
-        vk::ImageHelper &image         = depthStencilRT->getImage();
+        vk::ImageHelper *image         = depthStencilRT->getImageForWrite();
 
         vk::CommandBuffer *commandBuffer;
         ANGLE_TRY(
-            contextVk->onImageWrite(image.getAspectFlags(), vk::ImageLayout::TransferDst, &image));
+            contextVk->onImageWrite(image->getAspectFlags(), vk::ImageLayout::TransferDst, image));
         ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
         VkImageSubresourceRange range;
-        range.aspectMask     = image.getAspectFlags();
+        range.aspectMask     = image->getAspectFlags();
         range.baseMipLevel   = depthStencilRT->getLevelIndex();
         range.levelCount     = 1;
         range.baseArrayLayer = depthStencilRT->getLayerIndex();
         range.layerCount     = 1;
 
-        commandBuffer->clearDepthStencilImage(image.getImage(),
+        commandBuffer->clearDepthStencilImage(image->getImage(),
                                               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                               clearDepthStencilValue, 1, &range);
         clearDepth   = false;
@@ -609,14 +609,14 @@ RenderTargetVk *FramebufferVk::getDepthStencilRenderTarget() const
 RenderTargetVk *FramebufferVk::getColorDrawRenderTarget(size_t colorIndex) const
 {
     RenderTargetVk *renderTarget = mRenderTargetCache.getColorDraw(mState, colorIndex);
-    ASSERT(renderTarget && renderTarget->getImage().valid());
+    ASSERT(renderTarget && renderTarget->getImageForRenderPass().valid());
     return renderTarget;
 }
 
 RenderTargetVk *FramebufferVk::getColorReadRenderTarget() const
 {
     RenderTargetVk *renderTarget = mRenderTargetCache.getColorRead(mState);
-    ASSERT(renderTarget && renderTarget->getImage().valid());
+    ASSERT(renderTarget && renderTarget->getImageForRenderPass().valid());
     return renderTarget;
 }
 
@@ -662,8 +662,8 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
     // at the same time.
     ASSERT(colorBlit != (depthBlit || stencilBlit));
 
-    vk::ImageHelper *srcImage = &readRenderTarget->getImage();
-    vk::ImageHelper *dstImage = drawRenderTarget->getImageForWrite(contextVk);
+    vk::ImageHelper *srcImage = &readRenderTarget->getImageForCopy();
+    vk::ImageHelper *dstImage = drawRenderTarget->getImageForWrite();
 
     VkImageAspectFlags imageAspectMask = srcImage->getAspectFlags();
     VkImageAspectFlags blitAspectMask  = imageAspectMask;
@@ -1030,16 +1030,34 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         else if (isResolve && !flipX && !flipY && areChannelsBlitCompatible &&
                  (rotation == SurfaceRotation::Identity))
         {
-            ANGLE_TRY(resolveColorWithCommand(contextVk, params, &readRenderTarget->getImage()));
+            ANGLE_TRY(
+                resolveColorWithCommand(contextVk, params, &readRenderTarget->getImageForCopy()));
         }
         // Otherwise use a shader to do blit or resolve.
         else
         {
-            const vk::ImageView *readImageView = nullptr;
-            ANGLE_TRY(readRenderTarget->getImageView(contextVk, &readImageView));
-            readRenderTarget->retainImageViews(contextVk);
-            ANGLE_TRY(utilsVk.colorBlitResolve(contextVk, this, &readRenderTarget->getImage(),
-                                               readImageView, params));
+            const vk::ImageView *copyImageView = nullptr;
+            // TODO: if has resolve, must get the resolve view. Write a test that does:
+            // - Create multisampled_render_to_texture texture
+            // - Draw into it
+            // - Use it as blit source (it must read from the resolved image)
+            //
+            // TODO: this was using the draw view, but should use the copy view.  Bug here is that
+            // the "formatSwizzle" is not applied to draw views.  With LUMA for example, this
+            // should trigger a bug.  Write a test that does this:
+            // - Create LUMA texture and bind as framebuffer attachment
+            // - Draw
+            // - Blit as source
+            //
+            // TODO: what about the resolve path? texelFetch is used, so no swizzle applies.  Write
+            // a test like the above that uses a LUMA render target, then resolves into RGBA instead
+            // of blit.  May need to use a point sampler for resolve-with-draw in that case.
+            //
+            // TODO: on that subject, should make sure LUMA doesn't take the
+            // blit/resolve-with-command path.
+            ANGLE_TRY(readRenderTarget->getAndRetainCopyImageView(contextVk, &copyImageView));
+            ANGLE_TRY(utilsVk.colorBlitResolve(
+                contextVk, this, &readRenderTarget->getImageForCopy(), copyImageView, params));
         }
     }
 
@@ -1073,7 +1091,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             vk::DeviceScoped<vk::ImageView> depthView(contextVk->getDevice());
             vk::DeviceScoped<vk::ImageView> stencilView(contextVk->getDevice());
 
-            vk::ImageHelper *depthStencilImage = &readRenderTarget->getImage();
+            vk::ImageHelper *depthStencilImage = &readRenderTarget->getImageForCopy();
             uint32_t levelIndex                = readRenderTarget->getLevelIndex();
             uint32_t layerIndex                = readRenderTarget->getLayerIndex();
             gl::TextureType textureType = vk::Get2DTextureType(depthStencilImage->getLayerCount(),
@@ -1155,13 +1173,13 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
     {
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
         ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
-                                          &drawRenderTarget->getImage()));
+                                          &drawRenderTarget->getImageForWrite()));
         ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
         resolveRegion.dstSubresource.mipLevel       = drawRenderTarget->getLevelIndex();
         resolveRegion.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
 
-        srcImage->resolve(&drawRenderTarget->getImage(), resolveRegion, commandBuffer);
+        srcImage->resolve(&drawRenderTarget->getImageForWrite(), resolveRegion, commandBuffer);
     }
 
     return angle::Result::Continue;
@@ -1297,6 +1315,8 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
                                                    bool deferClears,
                                                    uint32_t colorIndexGL)
 {
+    // TODO: something about multisampled_render_to_texture here
+
     ContextVk *contextVk = vk::GetImpl(context);
 
     ANGLE_TRY(mRenderTargetCache.updateColorRenderTarget(context, mState, colorIndexGL));
@@ -1507,7 +1527,8 @@ void FramebufferVk::updateRenderPassDesc()
             RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
             ASSERT(colorRenderTarget);
             mRenderPassDesc.packColorAttachment(
-                colorIndexGL, colorRenderTarget->getImage().getFormat().intendedFormatID);
+                colorIndexGL,
+                colorRenderTarget->getImageForRenderPass().getFormat().intendedFormatID);
         }
         else
         {
@@ -1519,8 +1540,10 @@ void FramebufferVk::updateRenderPassDesc()
     if (depthStencilRenderTarget)
     {
         mRenderPassDesc.packDepthStencilAttachment(
-            depthStencilRenderTarget->getImage().getFormat().intendedFormatID);
+            depthStencilRenderTarget->getImageForRenderPass().getFormat().intendedFormatID);
     }
+
+    // TODO: resolve attachments
 }
 
 angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut)
@@ -1586,6 +1609,9 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
                attachmentsSize == depthStencilRenderTarget->getExtents());
         attachmentsSize = depthStencilRenderTarget->getExtents();
     }
+
+    // TODO: go over attachments again, and if any is multisampled_render_to_texture, add the
+    // non_multisampled view for resolving.
 
     if (attachmentsSize.empty())
     {
@@ -1686,7 +1712,8 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
         const RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
-        params.colorFormat = &colorRenderTarget->getImage().getFormat().actualImageFormat();
+        params.colorFormat =
+            &colorRenderTarget->getImageForRenderPass().getFormat().actualImageFormat();
         params.colorAttachmentIndexGL = static_cast<uint32_t>(colorIndexGL);
         params.colorMaskFlags         = colorMaskFlags;
         if (mEmulatedAlphaAttachmentMask[colorIndexGL])
@@ -1757,6 +1784,12 @@ void FramebufferVk::clearWithRenderPassOp(gl::DrawBufferMask clearColorBuffers,
         RenderTargetVk *renderTarget = getColorDrawRenderTarget(colorIndexGL);
         VkClearValue clearValue      = getCorrectedColorClearValue(colorIndexGL, clearColorValue);
         gl::ImageIndex imageIndex    = renderTarget->getImageIndex();
+        // TODO: why is clearWithRenderPassOp staging clears?! Is this somehow turning into loadOp
+        // later? If that's unconditionally done, it's fine. Otherwise based on that condition it
+        // should either apply to getImage() or getResolvedImage() as any direct writes to the image
+        // should go through the resolved image if any.  getImageForWrite() returns the currect one,
+        // except if this later translates to loadOp, it wouldn't work (because the loadOp is taken
+        // from the multisampled image.
         renderTarget->getImage().stageClear(imageIndex, VK_IMAGE_ASPECT_COLOR_BIT, clearValue);
     }
 
@@ -1805,6 +1838,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     vk::ClearValuesArray packedClearValues;
 
     ANGLE_TRY(contextVk->endRenderPass());
+
+    // TODO: go over the attachments, if multisampled_render_to_texture, and if not the first time
+    // using them, copy from single_sampled backing to multisampled_lazily_allocated_image.
 
     // Initialize RenderPass info.
     const auto &colorRenderTargets  = mRenderTargetCache.getColors();
@@ -1916,6 +1952,10 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         currentAttachmentCount++;
     }
 
+    // TODO: Go over attachments again, and if any is multisampled_render_to_texture, add the
+    // non_multisampled version as resolve attachment.  Make sure onColorDraw is called for those
+    // too.
+
     return contextVk->flushAndBeginRenderPass(*framebuffer, renderArea, mRenderPassDesc,
                                               renderPassAttachmentOps, packedClearValues,
                                               commandBufferOut);
@@ -1944,8 +1984,9 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
     uint32_t levelGL = renderTarget->getLevelIndex();
     uint32_t layer   = renderTarget->getLayerIndex();
-    return renderTarget->getImage().readPixels(contextVk, area, packPixelsParams, copyAspectFlags,
-                                               levelGL, layer, pixels, &mReadPixelBuffer);
+    return renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams,
+                                                      copyAspectFlags, levelGL, layer, pixels,
+                                                      &mReadPixelBuffer);
 }
 
 gl::Extents FramebufferVk::getReadImageExtents() const
@@ -1991,7 +2032,7 @@ RenderTargetVk *FramebufferVk::getFirstRenderTarget() const
 GLint FramebufferVk::getSamples() const
 {
     RenderTargetVk *firstRT = getFirstRenderTarget();
-    return firstRT ? firstRT->getImage().getSamples() : 0;
+    return firstRT ? firstRT->getImageForRenderPass().getSamples() : 0;
 }
 
 angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk,

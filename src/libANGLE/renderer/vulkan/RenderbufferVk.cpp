@@ -157,6 +157,9 @@ angle::Result RenderbufferVk::getAttachmentRenderTarget(const gl::Context *conte
                                                         GLsizei samples,
                                                         FramebufferAttachmentRenderTarget **rtOut)
 {
+    // TODO: if storage samples is 1 and samples is > 1 here, create a lazily_alocated image for
+    // the backing, and store its view in render target.
+
     ASSERT(mImage && mImage->valid());
     *rtOut = &mRenderTarget;
     return angle::Result::Continue;

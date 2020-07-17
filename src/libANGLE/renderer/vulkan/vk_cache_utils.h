@@ -32,9 +32,13 @@ using RefCountedSampler                = RefCounted<Sampler>;
 using RefCountedSamplerYcbcrConversion = RefCounted<SamplerYcbcrConversion>;
 
 // Helper macro that casts to a bitfield type then verifies no bits were dropped.
-#define SetBitField(lhs, rhs)                                         \
-    lhs = static_cast<typename std::decay<decltype(lhs)>::type>(rhs); \
-    ASSERT(static_cast<decltype(rhs)>(lhs) == (rhs))
+#define SetBitField(lhs, rhs)                                                         \
+    do                                                                                \
+    {                                                                                 \
+        auto ANGLE_LOCAL_VAR = rhs;                                                   \
+        lhs = static_cast<typename std::decay<decltype(lhs)>::type>(ANGLE_LOCAL_VAR); \
+        ASSERT(static_cast<decltype(ANGLE_LOCAL_VAR)>(lhs) == ANGLE_LOCAL_VAR);       \
+    } while (0)
 
 // Packed Vk resource descriptions.
 // Most Vk types use many more bits than required to represent the underlying data.
@@ -69,14 +73,16 @@ class alignas(4) RenderPassDesc final
     // Mark a GL color attachment index as disabled.
     void packColorAttachmentGap(size_t colorIndexGL);
     // The caller must pack the depth/stencil attachment last, which is packed right after the color
-    // attachments (including gaps), i.e. with an index starting from |colorAttachmentRange()|.
+    // attachments (including gaps), i.e. with an index starting from |colorAttachmentRange() + 1|.
     void packDepthStencilAttachment(angle::FormatID angleFormatID);
+    // Indicate that a color attachment should have a corresponding resolve attachment.
+    void packColorResolveAttachment(size_t colorIndexGL);
 
     size_t hash() const;
 
-    // Color attachments are in [0, colorAttachmentRange()), with possible gaps.
+    // Color attachments are in [0, colorAttachmentRange()], with possible gaps.
     size_t colorAttachmentRange() const { return mColorAttachmentRange; }
-    size_t depthStencilAttachmentIndex() const { return colorAttachmentRange(); }
+    size_t depthStencilAttachmentIndex() const { return colorAttachmentRange() + 1; }
 
     bool isColorAttachmentEnabled(size_t colorIndexGL) const;
     bool hasDepthStencilAttachment() const { return mHasDepthStencilAttachment; }
@@ -87,7 +93,7 @@ class alignas(4) RenderPassDesc final
 
     void setSamples(GLint samples);
 
-    uint8_t samples() const { return mSamples; }
+    uint8_t samples() const { return 1u << mLogSamples; }
 
     angle::FormatID operator[](size_t index) const
     {
@@ -96,9 +102,20 @@ class alignas(4) RenderPassDesc final
     }
 
   private:
-    uint8_t mSamples;
-    uint8_t mColorAttachmentRange : 7;
+    // Store log(samples), to be able to store it in 3 bits.
+    uint8_t mLogSamples : 3;
+    uint8_t mColorAttachmentRange : 3;
     uint8_t mHasDepthStencilAttachment : 1;
+    ANGLE_MAYBE_UNUSED uint8_t pad : 1;
+    // Whether each color attachment has a corresponding resolve attachment.  Color resolve
+    // attachments can be used to optimize resolve through glBlitFramebuffer() as well as support
+    // GL_EXT_multisampled_render_to_texture and GL_EXT_multisampled_render_to_texture2.
+    //
+    // Note that depth/stencil resolve attachments require VK_KHR_depth_stencil_resolve which are
+    // currently not well supported, so ANGLE always takes a fallback path for them.  When a resolve
+    // path is implemented for depth/stencil attachments, the padding bit above can be used for
+    // this purpose.
+    angle::BitSet8<gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> mHasColorResolveAttachment;
     // Color attachment formats are stored with their GL attachment indices.  The depth/stencil
     // attachment formats follow the last enabled color attachment.  When creating a render pass,
     // the disabled attachments are removed and the resulting attachments are packed.
@@ -119,6 +136,8 @@ class alignas(4) RenderPassDesc final
     //  - Subpass attachment 2 -> VK_ATTACHMENT_UNUSED
     //  - Subpass attachment 3 -> Renderpass attachment 1
     //
+    // The resolve attachments are packed after the non-resolve attachments.  They use the same
+    // formats, so they are not specified in this array.
     gl::AttachmentArray<uint8_t> mAttachmentFormats;
 };
 
@@ -164,6 +183,9 @@ class AttachmentOpsArray final
     size_t hash() const;
 
   private:
+    // TODO: we don't need initial and final layout here. Removing those, can use an extra bit
+    // just to indicate if the final layout should be PRESENT instead of COLOR, and cut the size
+    // of this class by half.
     gl::AttachmentArray<PackedAttachmentOpsDesc> mOps;
 };
 
@@ -850,6 +872,9 @@ class FramebufferDesc
     uint32_t attachmentCount() const;
 
   private:
+    // TODO: should this include resolve attachments? Let's try not to do that. The serials should
+    // come from the single_sampled image.  Need to make sure the multi-sampled temp image is
+    // retained properly.
     gl::AttachmentArray<ImageViewSerial> mSerials;
 };
 
@@ -867,7 +892,7 @@ struct LayerLevel
 }  // namespace vk
 }  // namespace rx
 
-// Introduce a std::hash for a RenderPassDesc
+// Introduce std::hash for the above classes.
 namespace std
 {
 template <>

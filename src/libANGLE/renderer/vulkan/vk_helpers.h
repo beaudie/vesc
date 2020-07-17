@@ -897,6 +897,7 @@ struct CommandBufferHelper : angle::NonCopyable
                          const gl::Rectangle &renderArea,
                          const vk::RenderPassDesc &renderPassDesc,
                          const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                         const vk::AttachmentOpsArray &renderPassAttachmentResolveOps,
                          const vk::ClearValuesArray &clearValues,
                          vk::CommandBuffer **commandBufferOut);
 
