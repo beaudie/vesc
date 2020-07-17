@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a47b025_d4a5d77c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-17T16:57:56Z",
+      "side": 1,
+      "message": "from",
+      "range": {
+        "startLine": 11,
+        "startChar": 67,
+        "endLine": 11,
+        "endChar": 71
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "645e1e68_f8f28a01",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-17T16:57:56Z",
+      "side": 1,
+      "message": "nit, typo: mCurrentDefaultUniformBufferSerial",
+      "range": {
+        "startLine": 128,
+        "startChar": 15,
+        "endLine": 128,
+        "endChar": 49
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adad5903_d0425acf",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-17T16:57:56Z",
+      "side": 1,
+      "message": "nit, typo: mCurrentDefaultUniformBufferSerial",
+      "range": {
+        "startLine": 223,
+        "startChar": 17,
+        "endLine": 223,
+        "endChar": 51
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c293dab0_0e356c0b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-17T16:57:56Z",
+      "side": 1,
+      "message": "Do we need to add in bufferOffset here?",
+      "range": {
+        "startLine": 149,
+        "startChar": 31,
+        "endLine": 149,
+        "endChar": 38
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
