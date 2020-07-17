@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5f32fec_0c496188",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-17T07:57:56Z",
+      "side": 1,
+      "message": "Hi Geoff, I sill can\u0027t successfully setup my linux ozone environment. But my previous change is very simple. I suspect the bot failure is caused by changing surface type from EGL_WINDOW_BIT | EGL_PBUFFER_BIT to EGL_PBUFFER_BIT. Maybe some linux ozone platform only supports EGL_WINDOW_BIT? So I did the current change. Can you help to trigger the Linux FYI Ozone(Intel) to see if it can pass that bot? I don\u0027t know how to do that. It seems that linux-lozone-rel/linux_angle_ozone_rel_ng are not that bot. Thanks. ",
+      "revId": "83099d92b7abb044bea484f65e6a8156541ad77f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
