@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc32ec15_5bd0da18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-17T16:23:16Z",
+      "side": 1,
+      "message": "Cool, didn\u0027t realize offscreen was already used in some tests.",
+      "revId": "851233d2c849c022a0468fec694926706828cb24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
