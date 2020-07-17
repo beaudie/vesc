@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "860c05a3_4388c42d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T21:11:31Z",
+      "side": 1,
+      "message": "I thought google dropped this requirement from the style guide. The code looks uglier with pointer though. But I have changed to pointer anyway.",
+      "parentUuid": "ecc138a3_f7dcfd7b",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 47
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20b9f2a5_7073e440",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 22
@@ -147,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "e48c099f_8759585c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T21:11:31Z",
+      "side": 1,
+      "message": "Its the executable been de-referenced here. I will add a parenthesis here to avoid confusion.",
+      "parentUuid": "2c58f3d7_c1802354",
+      "range": {
+        "startLine": 114,
+        "startChar": 48,
+        "endLine": 114,
+        "endChar": 49
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa971206_97d6e435",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 22
@@ -161,6 +209,24 @@
       "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f6a6f5_4de769a1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T21:11:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa971206_97d6e435",
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -184,6 +250,30 @@
       "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22f57647_95d0648c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T21:11:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7b67ec6_b2f3f775",
+      "range": {
+        "startLine": 227,
+        "startChar": 8,
+        "endLine": 227,
+        "endChar": 20
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -279,6 +369,30 @@
       "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24061e63_27040ef3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T21:11:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d05d8fe0_75485a15",
+      "range": {
+        "startLine": 816,
+        "startChar": 84,
+        "endLine": 817,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
