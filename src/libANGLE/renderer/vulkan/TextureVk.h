@@ -342,6 +342,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     void releaseStagingBuffer(ContextVk *contextVk);
     uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;
     uint32_t getMaxLevelCount() const;
+
     // Used when the image is being redefined (for example to add mips or change base level) to copy
     // each subresource of the image and stage it for another subresource.  When all subresources
     // are taken care of, the image is recreated.
@@ -402,6 +403,11 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // The level offset to apply when converting from a frontend texture level to texture level in
     // mImage.
     uint32_t mImageLevelOffset;
+
+    // An alternate value for the texture's max level that won't require calling
+    // respecifyImageAttributes().  Initially set to the TextureHelper's levelCount-1, it can be
+    // set to one other value that is less than that.
+    uint32_t mAlternateMaxLevel;
 
     // |mImage| wraps a VkImage and VkDeviceMemory that represents the gl::Texture. |mOwnsImage|
     // indicates that |TextureVk| owns the image. Otherwise it is a weak pointer shared with another
