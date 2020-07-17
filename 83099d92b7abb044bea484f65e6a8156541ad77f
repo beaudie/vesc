@@ -16,6 +16,29 @@
       "revId": "83099d92b7abb044bea484f65e6a8156541ad77f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "53b24644_b71fa0f2",
+        "filename": "src/libANGLE/renderer/gl/egl/gbm/DisplayGbm.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-17T18:12:46Z",
+      "side": 1,
+      "message": "I think we can just leave this parameter out and accept whatever the driver gives us.",
+      "range": {
+        "startLine": 958,
+        "startChar": 12,
+        "endLine": 958,
+        "endChar": 42
+      },
+      "revId": "83099d92b7abb044bea484f65e6a8156541ad77f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
