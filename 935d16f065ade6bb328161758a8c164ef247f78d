@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "251d6127_0f19c04a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-17T12:51:37Z",
+      "side": 1,
+      "message": "Done. Changed to SKIP *bind_aliasing* and the rest to AMD. I realized that the *bind_aliasing* tests crashed due to SPIRV validations. Looks like there were some changes recently, they didn\u0027t crash before.",
+      "parentUuid": "88f8fd25_38154801",
+      "revId": "935d16f065ade6bb328161758a8c164ef247f78d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5a5c38f_1ed34626",
         "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
         "patchSetId": 15
