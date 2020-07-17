@@ -28,6 +28,8 @@ RenderTargetVk::~RenderTargetVk() {}
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
       mImageViews(other.mImageViews),
+      mResolveImage(other.mResolveImage),
+      mResolveImageViews(other.mResolveImageViews),
       mLevelIndexGL(other.mLevelIndexGL),
       mLayerIndex(other.mLayerIndex),
       mContentDefined(other.mContentDefined)
@@ -37,25 +39,34 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
 
 void RenderTargetVk::init(vk::ImageHelper *image,
                           vk::ImageViewHelper *imageViews,
+                          vk::ImageHelper *resolveImage,
+                          vk::ImageViewHelper *resolveImageViews,
                           uint32_t levelIndexGL,
-                          uint32_t layerIndex)
+                          uint32_t layerIndex,
+                          bool isImageDataEphemeral)
 {
-    mImage        = image;
-    mImageViews   = imageViews;
-    mLevelIndexGL = levelIndexGL;
-    mLayerIndex   = layerIndex;
-    // We are being conservative here since our targeted optimization is to skip surfaceVK's depth
-    // buffer load after swap call.
+    mImage             = image;
+    mImageViews        = imageViews;
+    mResolveImage      = resolveImage;
+    mResolveImageViews = resolveImageViews;
+    mLevelIndexGL      = levelIndexGL;
+    mLayerIndex        = layerIndex;
+
+    // Conservatively assume the content is defined.
     mContentDefined = true;
+
+    mIsImageDataEphemeral = isImageDataEphemeral;
 }
 
 void RenderTargetVk::reset()
 {
-    mImage          = nullptr;
-    mImageViews     = nullptr;
-    mLevelIndexGL   = 0;
-    mLayerIndex     = 0;
-    mContentDefined = false;
+    mImage             = nullptr;
+    mImageViews        = nullptr;
+    mResolveImage      = nullptr;
+    mResolveImageViews = nullptr;
+    mLevelIndexGL      = 0;
+    mLayerIndex        = 0;
+    mContentDefined    = false;
 }
 
 ImageViewSerial RenderTargetVk::getAssignImageViewSerial(ContextVk *contextVk)
@@ -76,8 +87,14 @@ angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk)
 
     contextVk->onRenderPassImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
                                       mImage);
-    mContentDefined = true;
+    if (mResolveImage)
+    {
+        contextVk->onRenderPassImageWrite(VK_IMAGE_ASPECT_COLOR_BIT,
+                                          vk::ImageLayout::ColorAttachment, mResolveImage);
+    }
     retainImageViews(contextVk);
+
+    mContentDefined = true;
 
     return angle::Result::Continue;
 }
@@ -90,52 +107,96 @@ angle::Result RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk)
     VkImageAspectFlags aspectFlags = vk::GetDepthStencilAspectFlags(format);
 
     contextVk->onRenderPassImageWrite(aspectFlags, vk::ImageLayout::DepthStencilAttachment, mImage);
-    mContentDefined = true;
+    if (mResolveImage)
+    {
+        contextVk->onRenderPassImageWrite(aspectFlags, vk::ImageLayout::DepthStencilAttachment,
+                                          mResolveImage);
+    }
     retainImageViews(contextVk);
+
+    mContentDefined = true;
 
     return angle::Result::Continue;
 }
 
-vk::ImageHelper &RenderTargetVk::getImage()
+vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
 {
     ASSERT(mImage && mImage->valid());
     return *mImage;
 }
 
-const vk::ImageHelper &RenderTargetVk::getImage() const
+const vk::ImageHelper &RenderTargetVk::getImageForRenderPass() const
 {
     ASSERT(mImage && mImage->valid());
     return *mImage;
+}
+
+vk::ImageHelper &RenderTargetVk::getResolveImageForRenderPass()
+{
+    ASSERT(mResolveImage && mResolveImage->valid());
+    return *mResolveImage;
+}
+
+const vk::ImageHelper &RenderTargetVk::getResolveImageForRenderPass() const
+{
+    ASSERT(mResolveImage && mResolveImage->valid());
+    return *mResolveImage;
+}
+
+angle::Result RenderTargetVk::getImageViewImpl(ContextVk *contextVk,
+                                               const vk::ImageHelper &image,
+                                               vk::ImageViewHelper *imageViews,
+                                               const vk::ImageView **imageViewOut) const
+{
+    ASSERT(image.valid() && imageViews);
+    int32_t levelVK = mLevelIndexGL - mImage->getBaseLevel();
+    return imageViews->getLevelLayerDrawImageView(contextVk, image, levelVK, mLayerIndex,
+                                                  imageViewOut);
 }
 
 angle::Result RenderTargetVk::getImageView(ContextVk *contextVk,
                                            const vk::ImageView **imageViewOut) const
 {
-    ASSERT(mImage && mImage->valid() && mImageViews);
-    int32_t levelVK = mLevelIndexGL - mImage->getBaseLevel();
-    return mImageViews->getLevelLayerDrawImageView(contextVk, *mImage, levelVK, mLayerIndex,
-                                                   imageViewOut);
+    // TODO: retain the views here?
+    ASSERT(mImage);
+    return getImageViewImpl(contextVk, *mImage, mImageViews, imageViewOut);
+}
+
+angle::Result RenderTargetVk::getResolveImageView(ContextVk *contextVk,
+                                                  const vk::ImageView **imageViewOut) const
+{
+    // TODO: retain the views here?
+    ASSERT(mResolveImage);
+    return getImageViewImpl(contextVk, *mResolveImage, mResolveImageViews, imageViewOut);
 }
 
 angle::Result RenderTargetVk::getAndRetainCopyImageView(ContextVk *contextVk,
                                                         const vk::ImageView **imageViewOut) const
 {
+    // TODO: write a test that copies out of the multisampled_rendered_to_texture through
+    // glTex[Sub]Image2D.  It should use the single-sampled image.
     retainImageViews(contextVk);
 
-    const vk::ImageViewHelper *imageViews = mImageViews;
+    const vk::ImageViewHelper *imageViews = mResolveImageViews ? mResolveImageViews : mImageViews;
     const vk::ImageView &copyView         = imageViews->getCopyImageView();
 
-    // If the source of render target is the texture, this will always be valid.  This is also where
-    // 3D or 2DArray images could be the source of the render target.
+    // If the source of render target is a texture or renderbuffer, this will always be valid.  This
+    // is also where 3D or 2DArray images could be the source of the render target.
     if (copyView.valid())
     {
         *imageViewOut = &copyView;
         return angle::Result::Continue;
     }
 
+    // TODO: looks like swapchain also gives the view helper, so why did I add the above check?
+    // See what fails:
+    ASSERT(false);
+
     // Otherwise, this must come from the surface, in which case the image is 2D, so the image view
-    // used to draw is just as good for fetching.
-    return getImageView(contextVk, imageViewOut);
+    // used to draw is just as good for fetching.  If resolve attachment is present, fetching is
+    // done from that.
+    return hasResolveAttachment() ? getResolveImageView(contextVk, imageViewOut)
+                                  : getImageView(contextVk, imageViewOut);
 }
 
 const vk::Format &RenderTargetVk::getImageFormat() const
@@ -151,24 +212,48 @@ gl::Extents RenderTargetVk::getExtents() const
     return mImage->getLevelExtents2D(levelVK);
 }
 
-void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageViewHelper *imageViews)
+void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image,
+                                          vk::ImageViewHelper *imageViews,
+                                          vk::ImageHelper *resolveImage,
+                                          vk::ImageViewHelper *resolveImageViews)
 {
     ASSERT(image && image->valid() && imageViews);
-    mImage      = image;
-    mImageViews = imageViews;
+    mImage             = image;
+    mImageViews        = imageViews;
+    mResolveImage      = resolveImage;
+    mResolveImageViews = resolveImageViews;
 }
 
-vk::ImageHelper *RenderTargetVk::getImageForWrite(ContextVk *contextVk) const
+vk::ImageHelper &RenderTargetVk::getImageForCopy() const
 {
     ASSERT(mImage && mImage->valid());
-    retainImageViews(contextVk);
-    return mImage;
+    return mResolveImage ? *mResolveImage : *mImage;
+}
+
+vk::ImageHelper &RenderTargetVk::getImageForWrite()
+{
+    // TODO: write a test that copies into the multisampled_rendered_to_texture through blit.  It
+    // should use the single-sampled image.
+    //
+    // TODO: write a similar test for depth/stencil to make sure depth/stencil resolve back to
+    // multisampled is correct too.
+    ASSERT(mImage && mImage->valid());
+
+    // TODO: there was a bug here with this line missing.  Write a test that does this:
+    // - Invalidate (sets content undefined)
+    // - Blit into this framebuffer
+    // - Draw with blend (should use LOAD, but would have used DONT_CARE without next line)
+    // - Readback, should be correct. With DONT_CARE, it would blend with garbage.
+    mContentDefined = true;
+    return mResolveImage ? *mResolveImage : *mImage;
 }
 
 angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
                                                  vk::ClearValuesArray *deferredClears,
-                                                 uint32_t deferredClearIndex) const
+                                                 uint32_t deferredClearIndex)
 {
+    ASSERT(mImage->valid());
+
     // Note that the layer index for 3D textures is always zero according to Vulkan.
     uint32_t layerIndex = mLayerIndex;
     if (mImage->getType() == VK_IMAGE_TYPE_3D)
@@ -176,19 +261,32 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
         layerIndex = 0;
     }
 
-    ASSERT(mImage->valid());
-    if (!mImage->isUpdateStaged(mLevelIndexGL, layerIndex))
+    vk::ImageHelper *image = mResolveImage ? mResolveImage : mImage;
+
+    // All updates should be staged on the resolved image if present as the source of truth.  Even
+    // clears.  With deferred clears, the |deferredClears| array will be filled going over the
+    // resolved image, but will eventually be applied to the multisampled image when starting the
+    // render pass.
+    ASSERT(mResolveImage == nullptr || !mImage->isUpdateStaged(mLevelIndexGL, layerIndex));
+
+    if (!image->isUpdateStaged(mLevelIndexGL, layerIndex))
+    {
         return angle::Result::Continue;
+    }
+
+    // TODO: this line was missing. See who calls flushStagedUpdates and based on that write a test
+    mContentDefined = true;
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-    return mImage->flushSingleSubresourceStagedUpdates(
+    return image->flushSingleSubresourceStagedUpdates(
         contextVk, mLevelIndexGL, layerIndex, commandBuffer, deferredClears, deferredClearIndex);
 }
 
 void RenderTargetVk::retainImageViews(ContextVk *contextVk) const
 {
     mImageViews->retain(&contextVk->getResourceUseList());
+    mResolveImageViews->retain(&contextVk->getResourceUseList());
 }
 
 gl::ImageIndex RenderTargetVk::getImageIndex() const
