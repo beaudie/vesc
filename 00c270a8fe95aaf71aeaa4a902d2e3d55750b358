@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9183fd80_ab778304",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-07-17T16:00:57Z",
+      "side": 1,
+      "message": "The android_angle_vk64_rel_ng failure of:\nCopyTextureVariationsTest.CopySubTexture/ES2_Vulkan__RGBAToRGBFlipYUnmultiplyAlpha\n\nlooks like a flake.\n\nPlease review. Thanks. This is needed in order to pass several WebGL 2.0 readPixels tests in WebKit.\n",
+      "revId": "00c270a8fe95aaf71aeaa4a902d2e3d55750b358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
