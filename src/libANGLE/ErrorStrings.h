@@ -252,6 +252,7 @@ MSG kInvalidMultisampledFramebufferOperation = "Invalid operation on multisample
 MSG kInvalidMultitextureUnit = "Specified unit must be in [GL_TEXTURE0, GL_TEXTURE0 + GL_MAX_TEXTURE_UNITS)";
 MSG kInvalidName = "Invalid name.";
 MSG kInvalidNameCharacters = "Name contains invalid characters.";
+MSG kInvalidPackParametersForWebGL = "Invalid combination of pack parameters for WebGL.";
 MSG kInvalidPname = "Invalid pname.";
 MSG kInvalidPointerQuery = "Invalid pointer query.";
 MSG kInvalidPointParameter = "Invalid point parameter.";
