@@ -16,6 +16,23 @@
       "revId": "1c9e403cbfd9665dc90122ad8e733895cff4e660",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cd92a8cb_33bc466e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-17T15:32:41Z",
+      "side": 1,
+      "message": "Oh misread, this is for driver unis. Anyway, can you update this CL to leave a comment in the places where before they were retained? So we know why / when we\u0027re tracking this.",
+      "revId": "1c9e403cbfd9665dc90122ad8e733895cff4e660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
