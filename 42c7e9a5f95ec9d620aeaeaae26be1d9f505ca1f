@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "47b5882b_6f8435f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T20:34:53Z",
+      "side": 1,
+      "message": "Right. I have tried on trex and manhattan that app are always updating uniform data after bind. In these cases, there is zero overhead. Feel free to try https://chromium-review.googlesource.com/c/angle/angle/+/2270819 with your app to see how much the overhead it has.\n\nBut even if there is overhead with some app, IMHO this is still the right way to do. With per program buffer this just not scale-able. These are hard wired memory (because GPU uses it), they will affect performance in other ways and affect other apps as well.",
+      "parentUuid": "cdb9db42_5b2eb1ce",
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ad52c58_53863d16",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -30,6 +48,30 @@
       "writtenOn": "2020-07-17T20:17:56Z",
       "side": 1,
       "message": "How expensive is it to have to update uniforms every time we bind a new program/PPO like this?   How are the various benchmarks effected by this CL?",
+      "range": {
+        "startLine": 2698,
+        "startChar": 0,
+        "endLine": 2705,
+        "endChar": 5
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "625efc3a_04fac3a8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T20:34:53Z",
+      "side": 1,
+      "message": "See the other comment.",
+      "parentUuid": "9ad52c58_53863d16",
       "range": {
         "startLine": 2698,
         "startChar": 0,
@@ -216,6 +258,30 @@
     },
     {
       "key": {
+        "uuid": "d05d8fe0_75485a15",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T20:34:53Z",
+      "side": 1,
+      "message": "Yes, all shader stages. https://chromium-review.googlesource.com/c/angle/angle/+/2270819\n\nWill update comment in next update.",
+      "parentUuid": "7a9e4a35_c110fbe2",
+      "range": {
+        "startLine": 816,
+        "startChar": 84,
+        "endLine": 817,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28615bc1_1a295c7b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 22
@@ -227,6 +293,30 @@
       "writtenOn": "2020-07-17T20:17:56Z",
       "side": 1,
       "message": "Why isn\u0027t it possible for the uniform data to still be present in the shared buffer?",
+      "range": {
+        "startLine": 816,
+        "startChar": 0,
+        "endLine": 818,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40bfe096_3151baf1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T20:34:53Z",
+      "side": 1,
+      "message": "It\u0027s still possible to do more tracking, that we have to use another serial number to ensure they did not gets recycled and come back to the same one aghain. IMO, the tracking is not really worth it, given that most app do update uniform data on bind.",
+      "parentUuid": "28615bc1_1a295c7b",
       "range": {
         "startLine": 816,
         "startChar": 0,
