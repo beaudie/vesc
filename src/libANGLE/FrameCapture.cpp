@@ -1818,6 +1818,7 @@ void CaptureVertexArrayData(std::vector<CallCapture> *setupCalls,
     const std::vector<gl::VertexAttribute> &vertexAttribs = vertexArray->getVertexAttributes();
     const std::vector<gl::VertexBinding> &vertexBindings  = vertexArray->getVertexBindings();
 
+    bool buffersBound = false;
     for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
     {
         const gl::VertexAttribute defaultAttrib(attribIndex);
@@ -1836,12 +1837,28 @@ void CaptureVertexArrayData(std::vector<CallCapture> *setupCalls,
             binding.getBuffer().get() != nullptr)
         {
             gl::Buffer *buffer = binding.getBuffer().get();
-
-            if (buffer != replayState->getArrayBuffer())
+            if (buffer)
             {
-                replayState->setBufferBinding(context, gl::BufferBinding::Array, buffer);
-                Capture(setupCalls, CaptureBindBuffer(*replayState, true, gl::BufferBinding::Array,
-                                                      buffer->id()));
+                if (buffer != replayState->getArrayBuffer())
+                {
+                    replayState->setBufferBinding(context, gl::BufferBinding::Array, buffer);
+                }
+
+                if (!buffersBound)
+                {
+                    buffersBound = true;
+
+                    Capture(setupCalls, CaptureBindBuffer(*replayState, true,
+                                                          gl::BufferBinding::Array, buffer->id()));
+
+                    gl::Buffer *elementArrayBuffer = vertexArray->getElementArrayBuffer();
+                    if (elementArrayBuffer)
+                    {
+                        Capture(setupCalls, CaptureBindBuffer(*replayState, true,
+                                                              gl::BufferBinding::ElementArray,
+                                                              elementArrayBuffer->id()));
+                    }
+                }
             }
 
             Capture(setupCalls, CaptureVertexAttribPointer(
@@ -2162,8 +2179,11 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     for (const auto &vertexArrayIter : vertexArrayMap)
     {
         gl::VertexArrayID vertexArrayID = {vertexArrayIter.first};
-        cap(CaptureGenVertexArrays(replayState, true, 1, &vertexArrayID));
-        MaybeCaptureUpdateResourceIDs(setupCalls);
+        if (vertexArrayID.value != 0)
+        {
+            cap(CaptureGenVertexArrays(replayState, true, 1, &vertexArrayID));
+            MaybeCaptureUpdateResourceIDs(setupCalls);
+        }
 
         if (vertexArrayIter.second)
         {
@@ -2633,6 +2653,13 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         for (const sh::ShaderVariable &attrib : program->getState().getProgramInputs())
         {
             ASSERT(attrib.location != -1);
+
+            if (strncmp(attrib.name.c_str(), "gl_", 3) == 0)
+            {
+                // Don't try to bind built-in attributes
+                continue;
+            }
+
             cap(CaptureBindAttribLocation(
                 replayState, true, id, static_cast<GLuint>(attrib.location), attrib.name.c_str()));
         }
