@@ -22,6 +22,30 @@
       "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4727112a_e51c8623",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T20:12:56Z",
+      "side": 1,
+      "message": "I guess you mean \"if the current buffer of the default uniform\u0027s dynamic buffer has *not* changed\". Even if it is the same buffer, it could be that we went through all buffers and come back to the same buffer again. The survey result on manhattan and trex is app always update uniform data on bind anyway.",
+      "parentUuid": "816e5ef9_470ad5d1",
+      "range": {
+        "startLine": 816,
+        "startChar": 84,
+        "endLine": 817,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

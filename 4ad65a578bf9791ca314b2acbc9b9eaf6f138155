@@ -70,6 +70,30 @@
       "revId": "4ad65a578bf9791ca314b2acbc9b9eaf6f138155",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebaad152_1ec8eb70",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T20:12:56Z",
+      "side": 1,
+      "message": "Maybe I can add an assertion that we are not reusing context. The previous implement adds another SPI to restore the size, which is the main reason I disliked.",
+      "parentUuid": "884a692b_af03b49f",
+      "range": {
+        "startLine": 141,
+        "startChar": 4,
+        "endLine": 141,
+        "endChar": 61
+      },
+      "revId": "4ad65a578bf9791ca314b2acbc9b9eaf6f138155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
