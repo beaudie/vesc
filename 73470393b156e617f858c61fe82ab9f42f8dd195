@@ -52,6 +52,24 @@
       "revId": "73470393b156e617f858c61fe82ab9f42f8dd195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce390043_28893e0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424723
+      },
+      "writtenOn": "2020-07-17T03:26:54Z",
+      "side": 1,
+      "message": "Hi Tobin,\nThank you for the reply.\nIf ANGLE keep originally precision qualifiers when converting from glsl to spirv, then we\u0027ll check if any unexpected promotion happened when converting spirv to gpu code.",
+      "parentUuid": "fd61cbb5_2bd1ebd2",
+      "revId": "73470393b156e617f858c61fe82ab9f42f8dd195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
