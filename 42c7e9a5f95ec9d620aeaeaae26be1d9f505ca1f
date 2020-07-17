@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "7a9e4a35_c110fbe2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T20:23:49Z",
+      "side": 1,
+      "message": "Right, missed the \"not\".\n\nI do recall you mentioned the app always updates uniforms. Do you know if they update uniforms from all stages? That is, if VS uniforms are constant, and they only change FS uniforms, you could potentially save on updating VS uniforms if the buffer hasn\u0027t changed (+ whatever is needed to make sure recycled buffers are detected).\n\nI\u0027m fine by this, please just update the comment.",
+      "parentUuid": "4727112a_e51c8623",
+      "range": {
+        "startLine": 816,
+        "startChar": 84,
+        "endLine": 817,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28615bc1_1a295c7b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 22
