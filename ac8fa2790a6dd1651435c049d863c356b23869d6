@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b568620d_2d264ce0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-17T15:57:52Z",
+      "side": 1,
+      "message": "I just removed WIP from the commit message. Previous patchset has passed all tests.",
+      "revId": "ac8fa2790a6dd1651435c049d863c356b23869d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
