@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2686d457_ac92210c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-07-17T20:18:09Z",
+      "side": 1,
+      "message": "Thanks Geoff and Jonah for your reviews!\n\nPossibly after you reviewed, I uploaded one more change adding the needed WebGL 2.0 validation constraints for pixel unpack parameters.\n\nHolding off CQ\u0027ing this until the WebKit patch is up for review.\n",
+      "revId": "bdf737a9304ca18811f87cc92d6b578eb317ddaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
