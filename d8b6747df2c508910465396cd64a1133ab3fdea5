@@ -122,6 +122,30 @@
       "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6ad52f6_1da61ada",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T01:53:39Z",
+      "side": 1,
+      "message": "Turns out this doesn\u0027t work.\n\nUsing a ShaderMap:\n\n    ShaderMap\u003cangle::ObserverBinding\u003e mProgramObserverBindings;\n\nGives the following compile error:\n\n    ../../src/libANGLE/ProgramPipeline.cpp:30:23: error: call to implicitly-deleted default constructor of \u0027ShaderMap\u003cangle::ObserverBinding\u003e\u0027 (aka \u0027PackedEnumMap\u003cgl::ShaderType, angle::ObserverBinding\u003e\u0027)\n    ProgramPipelineState::ProgramPipelineState()\n                          ^\n    ../../src/common/PackedEnums.h:79:15: note: explicitly defaulted function was implicitly deleted here\n        constexpr PackedEnumMap() \u003d default;\n                  ^\n    ../../src/common/PackedEnums.h:160:13: note: default constructor of \u0027PackedEnumMap\u003cgl::ShaderType, angle::ObserverBinding, 4\u003e\u0027 is implicitly deleted because field \u0027mPrivateData\u0027 has a deleted default constructor\n        Storage mPrivateData;\n                ^\n    ../../build/linux/debian_sid_amd64-sysroot/usr/lib/gcc/x86_64-linux-gnu/7/../../../../include/c++/7/debug/array:60:56: note: default constructor of \u0027array\u003cangle::ObserverBinding, 4\u003e\u0027 is implicitly deleted because field \u0027_M_elems\u0027 has no default constructor\n          typename _AT_Type::_Type                         _M_elems;\n                                                           ^\n    1 error generated.\n\nThat explains why everyone is using a vector: so they can emplace_back() using the ObserverBinding(ObserverInterface *observer, SubjectIndex index) constructor.",
+      "parentUuid": "b546f501_66025b90",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 15
+      },
+      "revId": "d8b6747df2c508910465396cd64a1133ab3fdea5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
