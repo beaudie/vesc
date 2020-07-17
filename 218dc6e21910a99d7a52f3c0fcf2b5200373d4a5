@@ -332,6 +332,30 @@
     },
     {
       "key": {
+        "uuid": "dd3024e8_2b8011c7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T21:32:43Z",
+      "side": 1,
+      "message": "Wow!, I was away from my desk for a little bit and you solved it.  Thanks!!!",
+      "parentUuid": "966e8fb2_a052a651",
+      "range": {
+        "startLine": 1553,
+        "startChar": 8,
+        "endLine": 1554,
+        "endChar": 87
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afa63f17_2f08e0a0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
