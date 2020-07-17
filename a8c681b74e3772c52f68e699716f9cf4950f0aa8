@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "e1219184_ab157423",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T02:23:45Z",
+      "side": 1,
+      "message": "It was something else.",
+      "parentUuid": "8631fb47_ff059ea6",
+      "revId": "a8c681b74e3772c52f68e699716f9cf4950f0aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c52754a4_99b945ab",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -56,6 +74,30 @@
       "revId": "a8c681b74e3772c52f68e699716f9cf4950f0aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0faff5c_c77dc752",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-17T02:23:45Z",
+      "side": 1,
+      "message": "Yes, I had been thinking the same thing.  It\u0027s gone.",
+      "parentUuid": "c52754a4_99b945ab",
+      "range": {
+        "startLine": 1550,
+        "startChar": 48,
+        "endLine": 1550,
+        "endChar": 87
+      },
+      "revId": "a8c681b74e3772c52f68e699716f9cf4950f0aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
