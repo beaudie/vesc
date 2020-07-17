@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6925b9c4_31d87ded",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-17T17:36:30Z",
+      "side": 1,
+      "message": "Great work so far.",
+      "revId": "25242b08130a9b666325dd9e0f9fdfb48193a86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "522b5747_9aa996b9",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-17T17:36:30Z",
+      "side": 1,
+      "message": "nit: you can remove the \"Debug\" .. maybe out/CaptureTest and out/ReplayTest ?",
+      "range": {
+        "startLine": 23,
+        "startChar": 17,
+        "endLine": 23,
+        "endChar": 29
+      },
+      "revId": "25242b08130a9b666325dd9e0f9fdfb48193a86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63296359_78ca8d4d",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-17T17:36:30Z",
+      "side": 1,
+      "message": "do you need to run this where command? This is non-standard and might not work cross-platform. They should be in the path.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 77
+      },
+      "revId": "25242b08130a9b666325dd9e0f9fdfb48193a86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16a48b9f_cfd761e3",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-17T17:36:30Z",
+      "side": 1,
+      "message": "nit: might be cleaner to make most of this logic part of the Test class.",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 44
+      },
+      "revId": "25242b08130a9b666325dd9e0f9fdfb48193a86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
