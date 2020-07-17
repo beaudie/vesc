@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cde0a397_a9a134ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T17:06:05Z",
+      "side": 1,
+      "message": "What about the other places I mentioned?   Do we need separate CLs for any of those?",
+      "revId": "bcec11c295c2457e390ea6deccb52eb94a32ae2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
