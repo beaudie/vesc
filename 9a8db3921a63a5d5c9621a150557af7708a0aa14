@@ -16,6 +16,23 @@
       "revId": "9a8db3921a63a5d5c9621a150557af7708a0aa14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f092aec_a936edd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T16:35:47Z",
+      "side": 1,
+      "message": "What about these other calls to getCompleteRenderArea()?   Do they need to be updated to handle rotation?   The syncState() call in particular looks similar to the change that was needed here.\n\nFramebufferVk::blit()\n{\n...\n    // We can sometimes end up in a blit with some clear commands saved. Ensure all clear commands\n    // are issued before we issue the blit command.\n    ANGLE_TRY(flushDeferredClears(contextVk, getCompleteRenderArea()));\n\nFramebufferVk::syncState()\n{\n...\n    // Only defer clears for whole draw framebuffer ops. If the scissor test is on and the scissor\n    // rect doesn\u0027t match the draw rect, forget it.\n    gl::Rectangle renderArea          \u003d getCompleteRenderArea();\n    gl::Rectangle scissoredRenderArea \u003d ClipRectToScissor(context-\u003egetState(), renderArea, false);\n    bool deferClears \u003d binding \u003d\u003d GL_DRAW_FRAMEBUFFER \u0026\u0026 renderArea \u003d\u003d scissoredRenderArea;",
+      "revId": "9a8db3921a63a5d5c9621a150557af7708a0aa14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
