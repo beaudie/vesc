@@ -16,6 +16,24 @@
       "revId": "d21d36644168f26b202aa749d5145d277ebf5ffa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "38ed5ac1_7fdac1fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-17T21:04:18Z",
+      "side": 1,
+      "message": "Makes total sense. Good find. The Serial is meant to indicate the serial for a view, not the texture.",
+      "parentUuid": "13c9adbf_cff85290",
+      "revId": "d21d36644168f26b202aa749d5145d277ebf5ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
