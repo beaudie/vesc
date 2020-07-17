@@ -13,7 +13,17 @@ namespace angle
 class ContextLostTest : public ANGLETest
 {
   protected:
-    ContextLostTest() { setContextResetStrategy(EGL_LOSE_CONTEXT_ON_RESET_EXT); }
+    ContextLostTest()
+    {
+        if (IsEGLClientExtensionEnabled("EGL_EXT_create_context_robustness"))
+        {
+            setContextResetStrategy(EGL_LOSE_CONTEXT_ON_RESET_EXT);
+        }
+        else
+        {
+            setContextResetStrategy(EGL_NO_RESET_NOTIFICATION_EXT);
+        }
+    }
 };
 
 // GL_CHROMIUM_lose_context is implemented in the frontend
@@ -108,8 +118,15 @@ class ContextLostSkipValidationTest : public ANGLETest
   protected:
     ContextLostSkipValidationTest()
     {
-        setContextResetStrategy(EGL_LOSE_CONTEXT_ON_RESET_EXT);
-        setNoErrorEnabled(true);
+        if (IsEGLClientExtensionEnabled("EGL_EXT_create_context_robustness"))
+        {
+            setContextResetStrategy(EGL_LOSE_CONTEXT_ON_RESET_EXT);
+            setNoErrorEnabled(true);
+        }
+        else
+        {
+            setContextResetStrategy(EGL_NO_RESET_NOTIFICATION_EXT);
+        }
     }
 };
 
