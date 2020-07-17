@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "48602a64_14a732cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T19:12:46Z",
+      "side": 1,
+      "message": "I ran one of the tests through renderdoc and it\u0027s apparent that the descriptor set containing the image view is not updated in this path, so the image views retain their old (higher) level count. I added this as a blind fix but that didn\u0027t fix the issue:\n\n    onStateChange(angle::SubjectMessage::SubjectChanged);\n\nThere are so many indirections involved, I don\u0027t immediately understand how DIRTY_BIT_TEXTURES is supposed to be set (I really thought onStateChange would do the trick). +Jamie?",
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e734186_e0080e23",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -135,6 +152,30 @@
     },
     {
       "key": {
+        "uuid": "711e1e92_3e456f74",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T19:12:46Z",
+      "side": 1,
+      "message": "Well adding more restrictions means you are just making the optimization rarer. Here\u0027s some log I produced with: dEQP-GLES3.functional.texture.mipmap.3d.max_level.nearest_linear\n\nChanging [0,0] to [0,2]: max changed? 1\nChanging [0,2] to [0,5]: max changed? 1\nChanging [0,5] to [0,1]: max changed? 1\nRecreating views only\nChanging [0,1] to [0,4]: max changed? 1\nChanging [0,4] to [0,0]: max changed? 1\nChanging [0,0] to [0,3]: max changed? 1\nChanging [0,3] to [0,4]: max changed? 1\nChanging [0,4] to [0,5]: max changed? 1\nChanging [0,5] to [0,1]: max changed? 1\nRecreating views only\nChanging [0,1] to [0,0]: max changed? 1\nChanging [0,0] to [0,5]: max changed? 1\nChanging [0,5] to [0,3]: max changed? 1\nRecreating views only\nChanging [0,3] to [0,0]: max changed? 1\n\nIdeally all of the above should have gone through recreating views.",
+      "parentUuid": "5b9843d7_bb621858",
+      "range": {
+        "startLine": 1553,
+        "startChar": 8,
+        "endLine": 1554,
+        "endChar": 87
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "afa63f17_2f08e0a0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -151,6 +192,29 @@
         "startChar": 8,
         "endLine": 1555,
         "endChar": 35
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c0a242c_3d453ebc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T19:12:46Z",
+      "side": 1,
+      "message": "This should be `maxLevel - baseLevel + 1`",
+      "range": {
+        "startLine": 1575,
+        "startChar": 30,
+        "endLine": 1575,
+        "endChar": 42
       },
       "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
