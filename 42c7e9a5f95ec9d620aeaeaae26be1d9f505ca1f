@@ -2,6 +2,149 @@
   "comments": [
     {
       "key": {
+        "uuid": "cdb9db42_5b2eb1ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "This looks like it\u0027s trading memory for CPU overhead by having to update the uniforms every time we bind a new program/PPO.   What should we be checking to know that this tradeoff is correct?",
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad52c58_53863d16",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "How expensive is it to have to update uniforms every time we bind a new program/PPO like this?   How are the various benchmarks effected by this CL?",
+      "range": {
+        "startLine": 2698,
+        "startChar": 0,
+        "endLine": 2705,
+        "endChar": 5
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecc138a3_f7dcfd7b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "Should be a pointer, since you\u0027re modifying it.",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 47
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20b9f2a5_7073e440",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "Since you\u0027re iterating over linked shader stages, you should be able to assert there\u0027s a program:\n\n        ASSERT(programVk);\n        if (programVk-\u003eisShaderUniformDirty(shaderType))",
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c58f3d7_c1802354",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "I\u0027m surprised compiles since glState is a reference.   What\u0027s being dereferenced here?",
+      "range": {
+        "startLine": 114,
+        "startChar": 48,
+        "endLine": 114,
+        "endChar": 49
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa971206_97d6e435",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "ASSERT(programVk);",
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7b67ec6_b2f3f775",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "ASSERT(program)",
+      "range": {
+        "startLine": 227,
+        "startChar": 8,
+        "endLine": 227,
+        "endChar": 20
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "816e5ef9_470ad5d1",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 22
@@ -41,6 +184,29 @@
         "startLine": 816,
         "startChar": 84,
         "endLine": 817,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28615bc1_1a295c7b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T20:17:56Z",
+      "side": 1,
+      "message": "Why isn\u0027t it possible for the uniform data to still be present in the shared buffer?",
+      "range": {
+        "startLine": 816,
+        "startChar": 0,
+        "endLine": 818,
         "endChar": 33
       },
       "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
