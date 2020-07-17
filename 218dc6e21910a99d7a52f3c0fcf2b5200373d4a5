@@ -16,6 +16,121 @@
       "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e734186_e0080e23",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T02:56:33Z",
+      "side": 1,
+      "message": "This could use some improvement. Say the texture has the following levels:\n\n- Level 0: 4x4\n- Level 1: 2x2\n- Level 2: 1x1\n\nNow if the max level is 1000 or 200 or 400 or 10, it doesn\u0027t make any difference. There may be need to add a helper to determine the maximum possible number of levels (or maybe can use `getMipLevelCount(ImageMipLevels::FullMipChain)`). Then if both current and previous max levels are above that (that + base that is), you could consider it not changed. Otherwise if one is within the max possible range, you could use the `previous !\u003d current` check. Basically the right-hand side of the above \u0026\u0026 just needs changing.\n\nAlso, there\u0027s a bug here as is. If `previousMaxLevel \u003d\u003d gl::kInitialMaxLevel`, then `maxLevelChanged` becomes false, but that\u0027s not correct. In the above example, if maxLevel goes from 1000 to 0, you shouldn\u0027t just ignore that.",
+      "range": {
+        "startLine": 1531,
+        "startChar": 0,
+        "endLine": 1532,
+        "endChar": 87
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e289a0c_027b43d2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T02:56:33Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this (in the least, it should compare with base instead of 0, but even then I don\u0027t see the point).",
+      "range": {
+        "startLine": 1552,
+        "startChar": 48,
+        "endLine": 1552,
+        "endChar": 62
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af855a9c_48e3a20a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T02:56:33Z",
+      "side": 1,
+      "message": "You can ASSERT this. If neither base nor max changed, the if before last would already return.",
+      "range": {
+        "startLine": 1552,
+        "startChar": 29,
+        "endLine": 1552,
+        "endChar": 44
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50a7fa1e_ac33c071",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T02:56:33Z",
+      "side": 1,
+      "message": "I didn\u0027t get this at all. I don\u0027t think you need mAlternateMaxLevel.\n\nIf the max level oscillates between base and base+levelCount(), all you need is to change the views, isn\u0027t that right? So, the whole condition for the if can be (assuming maxLevel \u003e\u003d baseLevel. If that\u0027s not guaranteed per spec or something, can add that condition too):\n\n    if (!baseLevelChanged \u0026\u0026 maxLevel \u003c baseLevel + levelCount)",
+      "range": {
+        "startLine": 1553,
+        "startChar": 8,
+        "endLine": 1554,
+        "endChar": 87
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afa63f17_2f08e0a0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-17T02:56:33Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this. Recreating the views shouldn\u0027t affect the staged updates.",
+      "range": {
+        "startLine": 1555,
+        "startChar": 8,
+        "endLine": 1555,
+        "endChar": 35
+      },
+      "revId": "218dc6e21910a99d7a52f3c0fcf2b5200373d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
