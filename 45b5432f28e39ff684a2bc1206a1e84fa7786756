@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "00421f6b_c4733d01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T17:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a47b025_d4a5d77c",
+      "range": {
+        "startLine": 11,
+        "startChar": 67,
+        "endLine": 11,
+        "endChar": 71
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "645e1e68_f8f28a01",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 19
@@ -45,6 +69,30 @@
       "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2139cc6b_95ca746f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T17:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "645e1e68_f8f28a01",
+      "range": {
+        "startLine": 128,
+        "startChar": 15,
+        "endLine": 128,
+        "endChar": 49
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e367a780_46741317",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T17:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adad5903_d0425acf",
+      "range": {
+        "startLine": 223,
+        "startChar": 17,
+        "endLine": 223,
+        "endChar": 51
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c293dab0_0e356c0b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 19
@@ -91,6 +163,30 @@
       "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1232f555_78dbe024",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T17:25:45Z",
+      "side": 1,
+      "message": "Nop. The offsets are the offsets to the start of this allocation. Because we do one allocation for all shader stages, we need to know where to write the FS uniform data, that is where we need offsets. The bufferData is the pointer of this allocation, which is where the VS\u0027s unifdorm data will write to. I have added comment here as well to make it easier to understand.",
+      "parentUuid": "c293dab0_0e356c0b",
+      "range": {
+        "startLine": 149,
+        "startChar": 31,
+        "endLine": 149,
+        "endChar": 38
+      },
+      "revId": "45b5432f28e39ff684a2bc1206a1e84fa7786756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
