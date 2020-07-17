@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f0cfc82c_5f85f95a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T16:52:42Z",
+      "side": 1,
+      "message": "I have no objection if you have a need. Just that as it stands now makes more sense put it in context.",
+      "parentUuid": "2698dee2_b708f6a3",
+      "revId": "d6970a9f3a7967d328741bb9e809504ba495cf48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4821d18b_4f7efee3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 5
@@ -30,6 +48,30 @@
       "writtenOn": "2020-07-17T15:25:15Z",
       "side": 1,
       "message": "nit: I think technically this has more uses. i.e. its also used in VertexArrayVk. We should probably update the whole comment as a few other sentences are out of date.",
+      "range": {
+        "startLine": 1066,
+        "startChar": 74,
+        "endLine": 1067,
+        "endChar": 57
+      },
+      "revId": "d6970a9f3a7967d328741bb9e809504ba495cf48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dfbb6c3_331ffdc1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T16:52:42Z",
+      "side": 1,
+      "message": "I just reworded it a bit.",
+      "parentUuid": "4821d18b_4f7efee3",
       "range": {
         "startLine": 1066,
         "startChar": 74,
