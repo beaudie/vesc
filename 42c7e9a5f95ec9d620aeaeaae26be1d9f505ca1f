@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "4713fe83_ba4a91c7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T21:33:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "625efc3a_04fac3a8",
+      "range": {
+        "startLine": 2698,
+        "startChar": 0,
+        "endLine": 2705,
+        "endChar": 5
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecc138a3_f7dcfd7b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 22
@@ -207,6 +231,30 @@
       "side": 1,
       "message": "Just my personal opinion, but:\n\n*x.y is pretty common. I\u0027d suggest keeping it as is. Too many parentheses can also hurt readability.",
       "parentUuid": "e48c099f_8759585c",
+      "range": {
+        "startLine": 114,
+        "startChar": 48,
+        "endLine": 114,
+        "endChar": 49
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00f78e48_f095270c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T21:33:05Z",
+      "side": 1,
+      "message": "Oh, I see.   I should have remembered getProgramExecutable() returns a pointer.",
+      "parentUuid": "49a92d58_fbdf635c",
       "range": {
         "startLine": 114,
         "startChar": 48,
@@ -464,6 +512,30 @@
       "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b821466_b680ddc1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-17T21:33:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "40bfe096_3151baf1",
+      "range": {
+        "startLine": 816,
+        "startChar": 0,
+        "endLine": 818,
+        "endChar": 33
+      },
+      "revId": "42c7e9a5f95ec9d620aeaeaae26be1d9f505ca1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
