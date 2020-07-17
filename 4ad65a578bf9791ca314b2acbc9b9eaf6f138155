@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d00503db_f3ea19a2",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-17T17:37:39Z",
+      "side": 1,
+      "message": "I am wondering if this is needed at all. Does every TEST_P() gets a fresh new context? If yes, then I don\u0027t need this restore. If no, the other (cleaner) way is to add another base class here that does the setDefaultUniformBlocksMinSizeForTesting at setup time and group all the tests that needs this hacked size to all based from that.",
+      "range": {
+        "startLine": 141,
+        "startChar": 4,
+        "endLine": 141,
+        "endChar": 61
+      },
+      "revId": "4ad65a578bf9791ca314b2acbc9b9eaf6f138155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
