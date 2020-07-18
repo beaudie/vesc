@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "8972f908_43046484",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-18T04:44:57Z",
+      "side": 1,
+      "message": "Hacking with my MSAA stuff some more, it turns out that this is not rotated, so updating the scissor is breaking the render pass.",
+      "parentUuid": "749ada83_aa5bb7b3",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
