@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
+#include "libANGLE/renderer/metal/DeviceMtl.h"
 #include "libANGLE/renderer/metal/SurfaceMtl.h"
 #include "libANGLE/renderer/metal/SyncMtl.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
@@ -56,6 +57,7 @@ struct DefaultShaderAsyncInfoMtl
     bool compiled = false;
 };
 
+// DisplayMtl implementation
 DisplayMtl::DisplayMtl(const egl::DisplayState &state)
     : DisplayImpl(state), mUtils(this), mGlslangInitialized(false)
 {}
@@ -166,6 +168,11 @@ std::string DisplayMtl::getVersionString()
         NSProcessInfo *procInfo = [NSProcessInfo processInfo];
         return procInfo.operatingSystemVersionString.UTF8String;
     }
+}
+
+DeviceImpl *DisplayMtl::createDevice()
+{
+    return new DeviceMtl();
 }
 
 egl::Error DisplayMtl::waitClient(const gl::Context *context)

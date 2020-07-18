@@ -333,6 +333,11 @@ EGLAPI EGLBoolean EGLAPIENTRY eglSwapBuffersWithFrameTokenANGLE(EGLDisplay dpy, 
 #define EGL_EAGL_CONTEXT_ANGLE 0x348C
 #endif
 
+#ifndef EGL_ANGLE_device_mtl
+#define EGL_ANGLE_device_mtl 1
+#define EGL_MTL_DEVICE_ANGLE 0x33A2
+#endif /* EGL_ANGLE_device_mtl */
+
 #ifndef EGL_ANGLE_display_semaphore_share_group
 #define EGL_ANGLE_display_semaphore_share_group 1
 #define EGL_DISPLAY_SEMAPHORE_SHARE_GROUP_ANGLE 0x348D
