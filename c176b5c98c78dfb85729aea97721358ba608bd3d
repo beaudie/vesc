@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "3920245f_7b418f96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-18T03:40:11Z",
+      "side": 1,
+      "message": "LGTM with Shabi\u0027s comments addressed.   This should help clarify things in the future.",
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "749ada83_aa5bb7b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-18T03:40:11Z",
+      "side": 1,
+      "message": "Is this rotated?",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -58,6 +98,29 @@
         "startChar": 36,
         "endLine": 1405,
         "endChar": 39
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "335139ce_106296f9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-18T03:40:11Z",
+      "side": 1,
+      "message": "Can you expand/clarify this, or just remove it?   It looks like you\u0027re referring to the flushDeferredClears() call below, but that won\u0027t be obvious without a diff like this.",
+      "range": {
+        "startLine": 1405,
+        "startChar": 63,
+        "endLine": 1405,
+        "endChar": 89
       },
       "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
