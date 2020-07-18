@@ -16,6 +16,80 @@
       "revId": "dc479ed51c1d1726532fa1df86b3bea4c8099e31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76720c7a_7f40b49d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-18T03:11:39Z",
+      "side": 1,
+      "message": "Looking good!",
+      "revId": "dc479ed51c1d1726532fa1df86b3bea4c8099e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27e27f1b_a45a79ef",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-18T03:11:39Z",
+      "side": 1,
+      "message": "I think the change to maxLevelChanged will make something like this respecify the image for no reason:\n\n - base level 0\n - max level 1000 (image actually has 5 levels)\n - do something\n - set max level to \u003e\u003d5\n\nIt\u0027s fine leaving it as is though, until we find an application that actually does something like that!",
+      "revId": "dc479ed51c1d1726532fa1df86b3bea4c8099e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10ec643e_ad6fccd1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-18T03:11:39Z",
+      "side": 1,
+      "message": "I think the front-end already ensures this, but you could add an `ASSERT(baseLevel \u003c\u003d maxLevel)` above the if, why not.",
+      "revId": "dc479ed51c1d1726532fa1df86b3bea4c8099e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d586fbbd_386d2dff",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-18T03:11:39Z",
+      "side": 1,
+      "message": "I realize this is copied from TextureVk::syncState. Could you mention EGLImages like mentioned there so future visitors won\u0027t be tempted to just use mImage-\u003egetLayerCount()?",
+      "range": {
+        "startLine": 1569,
+        "startChar": 56,
+        "endLine": 1569,
+        "endChar": 66
+      },
+      "revId": "dc479ed51c1d1726532fa1df86b3bea4c8099e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
