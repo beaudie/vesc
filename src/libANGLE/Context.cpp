@@ -3950,6 +3950,9 @@ void Context::framebufferRenderbuffer(GLenum target,
     {
         Renderbuffer *renderbufferObject = getRenderbuffer(renderbuffer);
         GLsizei rbSamples                = renderbufferObject->getSamples();
+        // TODO: should probably send kDefaultRenderToTextureSamples if multisampled renderbuffer
+        // is from GL_EXT_multisampled_render_to_texture.  The samples param of
+        // setAttachmentMultisample is stored as mRenderToTextureSamples.
 
         framebuffer->setAttachmentMultisample(this, GL_RENDERBUFFER, attachment, gl::ImageIndex(),
                                               renderbufferObject, rbSamples);
