@@ -513,6 +513,11 @@ void WriteCppReplayForCall(const CallCapture &call,
         {
             callOut << "gClientArrays[" << param.arrayClientPointerIndex << "]";
         }
+        else if (param.shouldResizeReadBuffer)
+        {
+            callOut << "static_cast<GLuint>(reinterpret_cast<" << ParamTypeToString(param.type)
+                    << ">(gReadBuffer)[0] + 0.5f)";
+        }
         else if (param.readBufferSizeBytes > 0)
         {
             callOut << "reinterpret_cast<" << ParamTypeToString(param.type) << ">(gReadBuffer)";
@@ -1016,6 +1021,7 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "void UpdateUniformLocation(GLuint program, const char *name, GLint location);\n";
     header << "void DeleteUniformLocations(GLuint program);\n";
     header << "void UpdateCurrentProgram(GLuint program);\n";
+    header << "void UpdateMaxReadBufferSize(GLuint program);\n";
     header << "\n";
     header << "// Maps from captured Resource ID to run-time Resource ID.\n";
     header << "using ResourceMap = std::unordered_map<GLuint, GLuint>;\n";
@@ -1121,13 +1127,23 @@ void WriteCppReplayIndexFiles(bool compression,
     source << "    gCurrentProgram = program;\n";
     source << "}\n";
     source << "\n";
+    source << "void UpdateMaxReadBufferSize(GLuint newSize)\n";
+    source << "{\n";
+    source << "    if(gReadVector.size() < newSize) {\n";
+    source << "        gReadVector.resize(newSize);\n";
+    source << "        gReadBuffer = gReadVector.data();\n";
+    source << "    }\n";
+    source << "}\n";
+    source << "\n";
 
     source << "uint8_t *gBinaryData = nullptr;\n";
 
     if (readBufferSize > 0)
     {
-        header << "extern uint8_t gReadBuffer[" << readBufferSize << "];\n";
-        source << "uint8_t gReadBuffer[" << readBufferSize << "];\n";
+        header << "extern std::vector<uint8_t> gReadVector;\n";
+        header << "extern uint8_t *gReadBuffer;\n";
+        source << "std::vector<uint8_t> gReadVector(" << readBufferSize << ");\n";
+        source << "uint8_t *gReadBuffer = gReadVector.data();\n";
     }
     if (maxClientArraySize > 0)
     {
@@ -1393,30 +1409,43 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
     for (GLint location = 0; location < static_cast<GLint>(locations.size()); ++location)
     {
         const gl::VariableLocation &locationVar = locations[location];
-        const gl::LinkedUniform &uniform        = uniforms[locationVar.index];
 
+        // This handles the case where the application calls glBindUniformLocationCHROMIUM
+        // on an unused uniform. We must still store a -1 into gUniformLocations in case the
+        // application attempts to call a glUniform* call. To do this we'll pass in a blank name to
+        // force glGetUniformLocation to return -1.
+        std::string name;
         ParamBuffer params;
         params.addValueParam("program", ParamType::TShaderProgramID, program->id());
 
-        std::string name = uniform.name;
-
-        if (uniform.isArray())
+        if (locationVar.index >= uniforms.size())
         {
-            if (locationVar.arrayIndex > 0)
-            {
-                // Non-sequential array uniform locations are not currently handled.
-                // In practice array locations shouldn't ever be non-sequential.
-                ASSERT(uniform.location == -1 ||
-                       location == uniform.location + static_cast<int>(locationVar.arrayIndex));
-                continue;
-            }
+            name = "";
+        }
+        else
+        {
+            const gl::LinkedUniform &uniform = uniforms[locationVar.index];
 
-            if (uniform.isArrayOfArrays())
-            {
-                UNIMPLEMENTED();
-            }
+            name = uniform.name;
 
-            name = gl::StripLastArrayIndex(name);
+            if (uniform.isArray())
+            {
+                if (locationVar.arrayIndex > 0)
+                {
+                    // Non-sequential array uniform locations are not currently handled.
+                    // In practice array locations shouldn't ever be non-sequential.
+                    ASSERT(uniform.location == -1 ||
+                           location == uniform.location + static_cast<int>(locationVar.arrayIndex));
+                    continue;
+                }
+
+                if (uniform.isArrayOfArrays())
+                {
+                    UNIMPLEMENTED();
+                }
+
+                name = gl::StripLastArrayIndex(name);
+            }
         }
 
         ParamCapture nameParam("name", ParamType::TGLcharConstPointer);
@@ -1558,6 +1587,26 @@ void CaptureUpdateCurrentProgram(const CallCapture &call, std::vector<CallCaptur
     paramBuffer.addValueParam("program", ParamType::TShaderProgramID, programID);
 
     callsOut->emplace_back("UpdateCurrentProgram", std::move(paramBuffer));
+}
+
+void MaybeCaptureUpdateMaxReadBufferSize(ParamType paramType,
+                                         const CallCapture &call,
+                                         std::vector<CallCapture> *callsOut)
+{
+    const ParamCapture &param = call.params.getParam("pname", ParamType::TGLenum, 0);
+    if (!(param.value.GLenumVal == GL_NUM_COMPRESSED_TEXTURE_FORMATS ||
+          param.value.GLenumVal == GL_NUM_PROGRAM_BINARY_FORMATS ||
+          param.value.GLenumVal == GL_NUM_SHADER_BINARY_FORMATS))
+    {
+        return;
+    }
+
+    ParamCapture paramCapture("newSize", paramType);
+    paramCapture.shouldResizeReadBuffer = true;
+    ParamBuffer paramBuffer;
+    paramBuffer.addParam(std::move(paramCapture));
+
+    callsOut->emplace_back("UpdateMaxReadBufferSize", std::move(paramBuffer));
 }
 
 bool IsDefaultCurrentValue(const gl::VertexAttribCurrentValueData &currentValue)
@@ -3133,6 +3182,7 @@ ParamCapture &ParamCapture::operator=(ParamCapture &&other)
     std::swap(data, other.data);
     std::swap(arrayClientPointerIndex, other.arrayClientPointerIndex);
     std::swap(readBufferSizeBytes, other.readBufferSizeBytes);
+    std::swap(shouldResizeReadBuffer, other.shouldResizeReadBuffer);
     return *this;
 }
 
@@ -3848,6 +3898,21 @@ void FrameCapture::maybeCapturePostCallUpdates(const gl::Context *context)
     const CallCapture &lastCall = mFrameCalls.back();
     switch (lastCall.entryPoint)
     {
+        case gl::EntryPoint::GetIntegerv:
+        {
+            MaybeCaptureUpdateMaxReadBufferSize(ParamType::TGLintPointer, lastCall, &mFrameCalls);
+            break;
+        }
+        case gl::EntryPoint::GetFloatv:
+        {
+            MaybeCaptureUpdateMaxReadBufferSize(ParamType::TGLfloatPointer, lastCall, &mFrameCalls);
+            break;
+        }
+        case gl::EntryPoint::GetInteger64v:
+        {
+            MaybeCaptureUpdateMaxReadBufferSize(ParamType::TGLint64Pointer, lastCall, &mFrameCalls);
+            break;
+        }
         case gl::EntryPoint::LinkProgram:
         {
             const ParamCapture &param =
