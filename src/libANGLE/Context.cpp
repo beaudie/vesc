@@ -258,6 +258,27 @@ enum SubjectIndexes : angle::SubjectIndex
     kReadFramebufferSubjectIndex,
     kDrawFramebufferSubjectIndex
 };
+
+bool IsClearBufferDisabled(const FramebufferState &mState, GLenum buffer, GLint drawbuffer)
+{
+    return buffer == GL_COLOR && !mState.getEnabledDrawBuffers()[drawbuffer];
+}
+
+bool IsColorMaskedOut(const BlendState &blend)
+{
+    return (!blend.colorMaskRed && !blend.colorMaskGreen && !blend.colorMaskBlue &&
+            !blend.colorMaskAlpha);
+}
+
+bool IsDepthMaskedOut(const DepthStencilState &depthStencil)
+{
+    return !depthStencil.depthMask;
+}
+
+bool IsStencilMaskedOut(const DepthStencilState &depthStencil)
+{
+    return ((depthStencil.stencilMask & depthStencil.stencilWritemask) == 0);
+}
 }  // anonymous namespace
 
 Context::Context(egl::Display *display,
@@ -3646,6 +3667,30 @@ void Context::blitFramebuffer(GLint srcX0,
     Framebuffer *drawFramebuffer = mState.getDrawFramebuffer();
     ASSERT(drawFramebuffer);
 
+    // Note that blitting is called against draw framebuffer.
+    // See the code in gl::Context::blitFramebuffer.
+    if ((mask & GL_COLOR_BUFFER_BIT) && !drawFramebuffer->hasEnabledDrawBuffer())
+    {
+        mask &= ~GL_COLOR_BUFFER_BIT;
+    }
+
+    if ((mask & GL_STENCIL_BUFFER_BIT) &&
+        drawFramebuffer->getState().getStencilAttachment() == nullptr)
+    {
+        mask &= ~GL_STENCIL_BUFFER_BIT;
+    }
+
+    if ((mask & GL_DEPTH_BUFFER_BIT) && drawFramebuffer->getState().getDepthAttachment() == nullptr)
+    {
+        mask &= ~GL_DEPTH_BUFFER_BIT;
+    }
+
+    // Early out if none of the specified attachments exist or are enabled.
+    if (mask == 0)
+    {
+        return;
+    }
+
     Rectangle srcArea(srcX0, srcY0, srcX1 - srcX0, srcY1 - srcY0);
     Rectangle dstArea(dstX0, dstY0, dstX1 - dstX0, dstY1 - dstY0);
 
@@ -3661,12 +3706,76 @@ void Context::blitFramebuffer(GLint srcX0,
 
 void Context::clear(GLbitfield mask)
 {
+    if (mState.isRasterizerDiscardEnabled())
+    {
+        return;
+    }
+
+    // Remove clear bits that are ineffective. An effective clear changes at least one fragment. If
+    // color/depth/stencil masks make the clear ineffective we skip it altogether.
+
+    // If all color channels in all draw buffers are masked, don't attempt to clear color.
+    if (mState.allActiveDrawBufferChannelsMasked())
+    {
+        mask &= ~GL_COLOR_BUFFER_BIT;
+    }
+
+    // If depth write is disabled, don't attempt to clear depth.
+    if (!mState.getDepthStencilState().depthMask)
+    {
+        mask &= ~GL_DEPTH_BUFFER_BIT;
+    }
+
+    // If all stencil bits are masked, don't attempt to clear stencil.
+    if (mState.getDepthStencilState().stencilWritemask == 0)
+    {
+        mask &= ~GL_STENCIL_BUFFER_BIT;
+    }
+
+    if (mask == 0)
+    {
+        return;
+    }
+
     ANGLE_CONTEXT_TRY(prepareForClear(mask));
     ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
 }
 
+bool Context::isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const
+{
+    switch (buffer)
+    {
+        case GL_COLOR:
+            ASSERT(static_cast<size_t>(drawbuffer) < mState.getBlendStateArray().size());
+            return IsColorMaskedOut(mState.getBlendStateArray()[drawbuffer]);
+        case GL_DEPTH:
+            return IsDepthMaskedOut(mState.getDepthStencilState());
+        case GL_STENCIL:
+            return IsStencilMaskedOut(mState.getDepthStencilState());
+        case GL_DEPTH_STENCIL:
+            return IsDepthMaskedOut(mState.getDepthStencilState()) &&
+                   IsStencilMaskedOut(mState.getDepthStencilState());
+        default:
+            UNREACHABLE();
+            return true;
+    }
+}
+
+bool Context::noopClearBuffer(GLenum buffer, GLint drawbuffer) const
+{
+    Framebuffer *framebufferObject = mState.getDrawFramebuffer();
+
+    return IsClearBufferDisabled(framebufferObject->getState(), buffer, drawbuffer) ||
+           mState.isRasterizerDiscardEnabled() || isClearBufferMaskedOut(buffer, drawbuffer);
+}
+
 void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values)
 {
+    if (noopClearBuffer(buffer, drawbuffer))
+    {
+        return;
+    }
+
     Framebuffer *framebufferObject          = mState.getDrawFramebuffer();
     const FramebufferAttachment *attachment = nullptr;
     if (buffer == GL_DEPTH)
@@ -3690,6 +3799,11 @@ void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *valu
 
 void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *values)
 {
+    if (noopClearBuffer(buffer, drawbuffer))
+    {
+        return;
+    }
+
     Framebuffer *framebufferObject          = mState.getDrawFramebuffer();
     const FramebufferAttachment *attachment = nullptr;
     if (buffer == GL_COLOR &&
@@ -3709,6 +3823,11 @@ void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *valu
 
 void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values)
 {
+    if (noopClearBuffer(buffer, drawbuffer))
+    {
+        return;
+    }
+
     Framebuffer *framebufferObject          = mState.getDrawFramebuffer();
     const FramebufferAttachment *attachment = nullptr;
     if (buffer == GL_STENCIL)
@@ -3732,6 +3851,11 @@ void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values
 
 void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
 {
+    if (noopClearBuffer(buffer, drawbuffer))
+    {
+        return;
+    }
+
     Framebuffer *framebufferObject = mState.getDrawFramebuffer();
     ASSERT(framebufferObject);
 
