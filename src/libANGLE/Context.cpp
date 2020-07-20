@@ -2255,7 +2255,7 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(
         mImplementation->drawArraysInstanced(this, mode, first, count, instanceCount));
     MarkTransformFeedbackBufferUsage(this, count, instanceCount);
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawElementsInstanced(PrimitiveMode mode,
@@ -2273,7 +2273,7 @@ void Context::drawElementsInstanced(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(
         mImplementation->drawElementsInstanced(this, mode, count, type, indices, instances));
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawElementsBaseVertex(PrimitiveMode mode,
@@ -2291,7 +2291,7 @@ void Context::drawElementsBaseVertex(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(
         mImplementation->drawElementsBaseVertex(this, mode, count, type, indices, basevertex));
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawElementsInstancedBaseVertex(PrimitiveMode mode,
@@ -2310,7 +2310,7 @@ void Context::drawElementsInstancedBaseVertex(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawElementsInstancedBaseVertex(
         this, mode, count, type, indices, instancecount, basevertex));
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawRangeElements(PrimitiveMode mode,
@@ -2329,7 +2329,7 @@ void Context::drawRangeElements(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(
         mImplementation->drawRangeElements(this, mode, start, end, count, type, indices));
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawRangeElementsBaseVertex(PrimitiveMode mode,
@@ -2349,21 +2349,21 @@ void Context::drawRangeElementsBaseVertex(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawRangeElementsBaseVertex(this, mode, start, end, count,
                                                                    type, indices, basevertex));
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawArraysIndirect(PrimitiveMode mode, const void *indirect)
 {
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawArraysIndirect(this, mode, indirect));
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, const void *indirect)
 {
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawElementsIndirect(this, mode, type, indirect));
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::flush()
@@ -5696,7 +5696,7 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
         return;
     }
 
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::convertPpoToComputeOrDraw(bool isCompute)
@@ -5717,7 +5717,7 @@ void Context::dispatchComputeIndirect(GLintptr indirect)
     ANGLE_CONTEXT_TRY(prepareForDispatch());
     ANGLE_CONTEXT_TRY(mImplementation->dispatchComputeIndirect(this, indirect));
 
-    MarkShaderStorageBufferUsage(this);
+    MarkShaderStorageUsage(this);
 }
 
 void Context::texStorage2D(TextureType target,
@@ -8517,6 +8517,7 @@ void StateCache::onProgramExecutableChange(Context *context)
     updateBasicDrawStatesError();
     updateValidDrawModes(context);
     updateActiveShaderStorageBufferIndices(context);
+    updateActiveImageUnitIndices(context);
     updateCanDraw(context);
 }
 
@@ -8772,12 +8773,34 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
 void StateCache::updateActiveShaderStorageBufferIndices(Context *context)
 {
     mCachedActiveShaderStorageBufferIndices.reset();
+    // TODO: What about PPO?
     Program *program = context->getState().getProgram();
     if (program)
     {
         for (const InterfaceBlock &block : program->getState().getShaderStorageBlocks())
         {
             mCachedActiveShaderStorageBufferIndices.set(block.binding);
+        }
+    }
+}
+
+void StateCache::updateActiveImageUnitIndices(Context *context)
+{
+    mCachedActiveImageUnitIndices.reset();
+    // TODO: What about PPO?
+    Program *program = context->getState().getProgram();
+    if (program)
+    {
+        for (const ImageBinding &imageBinding : program->getState().getImageBindings())
+        {
+            if (imageBinding.unreferenced)
+            {
+                continue;
+            }
+            for (GLuint binding : imageBinding.boundImageUnits)
+            {
+                mCachedActiveImageUnitIndices.set(binding);
+            }
         }
     }
 }
