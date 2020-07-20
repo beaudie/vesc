@@ -1263,6 +1263,7 @@ bool ValidateRenderbufferStorageParametersBase(const Context *context,
 
     if (width < 0 || height < 0 || samples < 0)
     {
+        fprintf(stderr, "Invalid value because of negative params\n");
         context->validationError(GL_INVALID_VALUE, kInvalidRenderbufferWidthHeight);
         return false;
     }
@@ -1289,6 +1290,7 @@ bool ValidateRenderbufferStorageParametersBase(const Context *context,
 
     if (std::max(width, height) > context->getCaps().maxRenderbufferSize)
     {
+        fprintf(stderr, "Invalid value because of too large size\n");
         context->validationError(GL_INVALID_VALUE, kResourceMaxRenderbufferSize);
         return false;
     }
