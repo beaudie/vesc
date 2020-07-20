@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5ca55bf_a82a0626",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-20T03:21:46Z",
+      "side": 1,
+      "message": "Context: https://chromium-review.googlesource.com/c/angle/angle/+/2304170/8/src/libANGLE/renderer/vulkan/vk_cache_utils.h#114",
+      "revId": "ab5f537ff733835ef36adac99fc614801ff3ea31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
