@@ -6771,6 +6771,8 @@ bool ValidateRenderbufferStorageMultisampleEXT(const Context *context,
     // otherwise GL_INVALID_VALUE is generated.
     if (samples > context->getCaps().maxSamples)
     {
+        fprintf(stderr, "Invalid value because of samples (%lld) > maxSamples (%lld)\n",
+                (unsigned long long)samples, (unsigned long long)context->getCaps().maxSamples);
         context->validationError(GL_INVALID_VALUE, kSamplesOutOfRange);
         return false;
     }

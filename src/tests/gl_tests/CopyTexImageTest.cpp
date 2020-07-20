@@ -109,6 +109,16 @@ class CopyTexImageTest : public ANGLETest
         EXPECT_PIXEL_NEAR((xs + xe) / 2, (ys + ye) / 2, data[0], data[1], data[2], data[3], 1.0);
     }
 
+    void clearAndDrawQuad(GLuint program, GLsizei viewportWidth, GLsizei viewportHeight)
+    {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glViewport(0, 0, viewportWidth, viewportHeight);
+        ASSERT_GL_NO_ERROR();
+
+        drawQuad(program, "position", 0.0f);
+    }
+
     void runCopyTexImageTest(GLenum format, GLubyte expected[3][4])
     {
         GLTexture tex;
@@ -886,6 +896,148 @@ TEST_P(CopyTexImageTestES3, 3DSubImageDrawMismatchedTextureTypes)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindTexture(GL_TEXTURE_3D, 0);
+}
+
+// TEST FOR ANDROID FAILURE
+TEST_P(CopyTexImageTest, CopyTexSubImageTest)
+{
+    GLsizei size = 16;
+
+    GLTexture texture;
+    // Create texture in copyFBO0 with color (.25, 1, .75, .5)
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLFramebuffer copyFBO0;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    // Set color for
+    glClearColor(0.25f, 1.0f, 0.75f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Create texture in copyFBO[1] with color (1, .75, .5, .25)
+    GLTexture texture1;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLFramebuffer copyFBO1;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture1, 0);
+
+    // Set color for
+    glClearColor(1.0f, 0.75f, 0.5f, 0.25f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    GLTexture copyToTex;
+    glBindTexture(GL_TEXTURE_2D, copyToTex);
+
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // copyFBO0 -> copyToTex
+    // copyToTex should hold what was originally in copyFBO0 : (.25, 1, .75, .5)
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO0);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, size, size, 0);
+    ASSERT_GL_NO_ERROR();
+
+    GLubyte expected0[4] = {64, 255, 191, 255};
+    verifyResults(copyToTex, expected0, size, 0, 0, size, size);
+
+    // copyFBO[1] - copySubImage -> copyToTex
+    // copyToTex should have subportion what was in copyFBO[1] : (1, .75, .5, .25)
+    // The rest should still be untouched: (.25, 1, .75, .5)
+    GLint half = size / 2;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO1);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, half, half, half, half, half, half);
+    ASSERT_GL_NO_ERROR();
+
+    GLubyte expected1[4] = {255, 191, 127, 255};
+    verifyResults(copyToTex, expected1, size, half, half, size, size);
+
+    // Verify rest is untouched
+    verifyResults(copyToTex, expected0, size, 0, 0, half, half);
+    verifyResults(copyToTex, expected0, size, 0, half, half, size);
+    verifyResults(copyToTex, expected0, size, half, 0, size, half);
+}
+
+// TEST FOR ANDROID FAILURE
+TEST_P(CopyTexImageTest, GenerateMipmapTest)
+{
+    GLsizei size = 64;
+    // Vertex Shader source
+    constexpr char kVS[] = R"(attribute vec4 position;
+varying vec2 vTexCoord;
+
+void main()
+{
+    gl_Position = position;
+    vTexCoord   = (position.xy * 0.5) + 0.5;
+})";
+
+    // Fragment Shader source
+    constexpr char kFS[] = R"(precision mediump float;
+uniform sampler2D uTexture;
+varying vec2 vTexCoord;
+
+void main()
+{
+    gl_FragColor = texture2D(uTexture, vTexCoord);
+})";
+
+    GLProgram m2DProgram;
+    m2DProgram.makeRaster(kVS, kFS);
+    ASSERT_GL_TRUE(m2DProgram.valid());
+
+    ASSERT_GL_NO_ERROR();
+
+    // Initialize texture with blue
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size, size, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    GLFramebuffer FBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(0, 0, size, size);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Generate mipmap
+    glGenerateMipmap(GL_TEXTURE_2D);
+    ASSERT_GL_NO_ERROR();
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+
+    // Now draw the texture to various different sized areas.
+    clearAndDrawQuad(m2DProgram, size, size);
+    EXPECT_PIXEL_COLOR_EQ(size / 2, size / 2, GLColor::blue);
+
+    // Use mip level 1
+    clearAndDrawQuad(m2DProgram, size / 2, size / 2);
+    EXPECT_PIXEL_COLOR_EQ(size / 4, size / 4, GLColor::blue);
+
+    // Use mip level 2
+    clearAndDrawQuad(m2DProgram, size / 4, size / 4);
+    EXPECT_PIXEL_COLOR_EQ(size / 8, size / 8, GLColor::blue);
+
+    ASSERT_GL_NO_ERROR();
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
