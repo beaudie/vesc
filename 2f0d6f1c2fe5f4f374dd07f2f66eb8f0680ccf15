@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fed2307_328d7109",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-20T18:16:15Z",
+      "side": 1,
+      "message": "FYI - courtney i checked this in a while back -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/2293633 but it was reverted due to weirdness of nvidia. jamie is aware of the issue, i am not able to repro the failures",
+      "revId": "2f0d6f1c2fe5f4f374dd07f2f66eb8f0680ccf15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
