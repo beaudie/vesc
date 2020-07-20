@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "17c1f015_d4911dd2",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-20T16:29:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f6b354a_6d0ca8ba",
+      "range": {
+        "startLine": 101,
+        "startChar": 23,
+        "endLine": 101,
+        "endChar": 24
+      },
+      "revId": "3cb214caec707fdccdb0d65453136a95d30cf5e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d4b80ba_528e4c01",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 6
@@ -79,6 +103,30 @@
       "revId": "3cb214caec707fdccdb0d65453136a95d30cf5e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b124f50d_30154998",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-20T16:29:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d4b80ba_528e4c01",
+      "range": {
+        "startLine": 57,
+        "startChar": 41,
+        "endLine": 57,
+        "endChar": 64
+      },
+      "revId": "3cb214caec707fdccdb0d65453136a95d30cf5e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
