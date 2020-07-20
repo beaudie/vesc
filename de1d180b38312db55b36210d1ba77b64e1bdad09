@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e38fb16_085f57f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-20T06:15:50Z",
+      "side": 1,
+      "message": "I finally can reproduce those bot failures using my chrome building env for CrOS to build angle_end2end_tests.\nIn previous code, it didn\u0027t use the driver provided surface type and just directly set egl_surface_type to egl_window_bit | egl_pbuffer_bit. However, on some platforms, egl_window_bit is not supported. That\u0027s why when we change it to use the driver provided surface type, some cases will fail.\nPlease take a look. Thanks.",
+      "revId": "de1d180b38312db55b36210d1ba77b64e1bdad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84de2894_0ff509ad",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-20T06:15:50Z",
+      "side": 1,
+      "message": "In some platforms, EGL_WINDOW_BIT is not supported. In this case, mWindowSurface will be nullptr. If we call eglSwapBuffer(mDisplay, mWindowSurface), it will report EGL_BAD_SURFACE error. So we should skip those cases which use mWindowSurface to draw or resize.",
+      "revId": "de1d180b38312db55b36210d1ba77b64e1bdad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

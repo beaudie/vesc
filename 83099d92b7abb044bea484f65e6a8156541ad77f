@@ -39,6 +39,30 @@
       "revId": "83099d92b7abb044bea484f65e6a8156541ad77f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4beac85c_1ba6ebbc",
+        "filename": "src/libANGLE/renderer/gl/egl/gbm/DisplayGbm.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-20T06:15:50Z",
+      "side": 1,
+      "message": "In fact, we can\u0027t leave this parameter out. It\u0027s default value is EGL_WINDOW_BIT. However, the ozone-gbm doesn\u0027t support EGL_WINDOW_BIT which will result no suitable config available. Change it to EGL_DONT_CARE.",
+      "parentUuid": "53b24644_b71fa0f2",
+      "range": {
+        "startLine": 958,
+        "startChar": 12,
+        "endLine": 958,
+        "endChar": 42
+      },
+      "revId": "83099d92b7abb044bea484f65e6a8156541ad77f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
