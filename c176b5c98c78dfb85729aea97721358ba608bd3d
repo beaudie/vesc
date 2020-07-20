@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "a7d20e76_a0698e57",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T19:08:45Z",
+      "side": 1,
+      "message": "From talking about it in the \"stand-up meeting\", it\u0027s not clear that there\u0027s anything wrong happening.  Most of the rendering is happening to a non-rotated offscreen image, and then the final render pass renders to an offscreen image.  There\u0027s a necessary break in the render pass because of a break in the draw framebuffer (with a different orientation).\n\nTim asked about rotating all of the offscreen objects, the same way as the main window.  At this point, we only rotate onscreen objects.  Courtney pointed out that if we ever determine that this is a large performance factor, we can look at doing it then.\n\nI would like to reproduce this with my instrumentation turned on, just to check (e.g. run the game on my phone and look at the logcat output).  In the mean time, I\u0027m going to resolve this.  Tim, please un-resolve if you think there\u0027s more to discuss at this time.",
+      "parentUuid": "9b472d12_7cb2eb54",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -201,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "c083f467_9759b676",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T19:08:45Z",
+      "side": 1,
+      "message": "Unfortunately, no.  The new API rotates based upon the draw framebuffer (contextVk-\u003eisRotatedAspectRatioForDrawFBO()), and this needs to rotate based on the read framebuffer (contextVk-\u003eisRotatedAspectRatioForReadFBO())",
+      "parentUuid": "1d517ffc_582bfd94",
+      "range": {
+        "startLine": 549,
+        "startChar": 4,
+        "endLine": 554,
+        "endChar": 61
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a493eb58_88e08302",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -233,6 +281,24 @@
       "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd77b988_72e6904c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T19:08:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0c1fb6a1_aa69536d",
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
