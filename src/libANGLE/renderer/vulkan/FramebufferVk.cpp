@@ -238,6 +238,12 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+    // If there are deferred clears, flush them.  syncState may have accumulated deffered clears,
+    // but if the framebuffer's attachments are used after this call not through the framebuffer,
+    // those clears wouldn't get flushed otherwise (for example as the destination of
+    // glCopyTex[Sub]Image, shader storage image, etc).
+    ANGLE_TRY(flushDeferredClears(contextVk, getCompleteRenderArea()));
+
     if (area.encloses(contextVk->getStartedRenderPassCommands().getRenderArea()))
     {
         ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
@@ -1222,6 +1228,26 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
         }
     }
 
+    // Remove deferred clears for the invalidated attachments.
+    if (invalidateDepthBuffer)
+    {
+        mDeferredClears.reset(vk::kClearValueDepthIndex);
+    }
+    if (invalidateStencilBuffer)
+    {
+        mDeferredClears.reset(vk::kClearValueStencilIndex);
+    }
+    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    {
+        if (invalidateColorBuffers.test(colorIndexGL))
+        {
+            mDeferredClears.reset(colorIndexGL);
+        }
+    }
+
+    // If there are still deferred clears, flush them.  See relevant comment in invalidateSub.
+    ANGLE_TRY(flushDeferredClears(contextVk, getCompleteRenderArea()));
+
     const auto &colorRenderTargets           = mRenderTargetCache.getColors();
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil(true);
 
@@ -1404,6 +1430,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     gl::Rectangle scissoredRenderArea = ClipRectToScissor(context->getState(), renderArea, false);
     bool deferClears = binding == GL_DRAW_FRAMEBUFFER && renderArea == scissoredRenderArea;
 
+    // If we are notified that any attachment is dirty, but we have deferred clears for them, a
+    // flushDeferredClears() call is missing somewhere.  ASSERT this to catch these bugs.
+    vk::ClearValuesArray previousDeferredClears = mDeferredClears;
+
     // For any updated attachments we'll update their Serials below
     ASSERT(dirtyBits.any());
     for (size_t dirtyBit : dirtyBits)
@@ -1414,6 +1444,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_DEPTH_BUFFER_CONTENTS:
             case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
             case gl::Framebuffer::DIRTY_BIT_STENCIL_BUFFER_CONTENTS:
+                ASSERT(dirtyBit != gl::Framebuffer::DIRTY_BIT_DEPTH_BUFFER_CONTENTS ||
+                       !previousDeferredClears.testDepth());
+                ASSERT(dirtyBit != gl::Framebuffer::DIRTY_BIT_STENCIL_BUFFER_CONTENTS ||
+                       !previousDeferredClears.testStencil());
                 ANGLE_TRY(updateDepthStencilAttachment(context, deferClears));
                 break;
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
@@ -1454,6 +1488,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                            dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_MAX);
                     colorIndexGL = static_cast<uint32_t>(
                         dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
+
+                    ASSERT(!previousDeferredClears.test(colorIndexGL));
                 }
 
                 ANGLE_TRY(updateColorAttachment(context, deferClears, colorIndexGL));
