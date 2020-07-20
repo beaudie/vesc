@@ -178,6 +178,29 @@
     },
     {
       "key": {
+        "uuid": "1d517ffc_582bfd94",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-20T18:52:21Z",
+      "side": 1,
+      "message": "can this also use the newAPI?",
+      "range": {
+        "startLine": 549,
+        "startChar": 4,
+        "endLine": 554,
+        "endChar": 61
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a493eb58_88e08302",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
