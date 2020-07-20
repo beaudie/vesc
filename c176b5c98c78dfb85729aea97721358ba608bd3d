@@ -155,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "76a2bb18_95b4ad02",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T19:50:56Z",
+      "side": 1,
+      "message": "Interesting.\n\nWhat game(s) and/or test(s) have you tried this with?  Is it rendering correctly?\n\nLooks like your CL is addressing a new MSAA path, and so it may be that we need something like what you\u0027re doing (perhaps with an additional check for when doing an MSAA resolve)?  I\u0027ll try to catch up on your CL sometime",
+      "parentUuid": "c47f8c3a_2437d1db",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
