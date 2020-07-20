@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d9387315_b63680ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-20T21:50:21Z",
+      "side": 1,
+      "message": "If `rhs` is an expression with side effects, it was previously called multiple times. (Worse, it would be called multiple times with ASSERTs enabled, and only once with it disabled).\n\nI noticed this when I was setting `rhs` to gl::ScanForward(static_cast\u003cuint8_t\u003e(samples)). That doesn\u0027t have side effects, but nevertheless this is the right way of implementing this macro.",
+      "parentUuid": "2890a6a3_14d48318",
+      "revId": "ab5f537ff733835ef36adac99fc614801ff3ea31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5ca55bf_a82a0626",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 2
@@ -68,6 +86,24 @@
       "revId": "ab5f537ff733835ef36adac99fc614801ff3ea31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f5449c5_76e3e303",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-20T21:50:21Z",
+      "side": 1,
+      "message": "There are a number of places where the front-end provides samples\u003d0 and that\u0027s forwarded to this class. IIRC, setting render buffer storage is one of those places.",
+      "parentUuid": "b5583776_a7fecf03",
+      "revId": "ab5f537ff733835ef36adac99fc614801ff3ea31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
