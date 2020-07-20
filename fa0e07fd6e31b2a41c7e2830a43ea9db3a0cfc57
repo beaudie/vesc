@@ -16,6 +16,23 @@
       "revId": "fa0e07fd6e31b2a41c7e2830a43ea9db3a0cfc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8bf1c8e9_bfb690c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-20T15:54:58Z",
+      "side": 1,
+      "message": "Mohan, instead of making this dynamic, let\u0027s choose the max size from:\n\nhttps://opengles.gpuinfo.org/displaycapability.php?name\u003dGL_NUM_COMPRESSED_TEXTURE_FORMATS\u0026esversion\u003d2\n\nThat way we don\u0027t need a new dynamic resizing API.",
+      "revId": "fa0e07fd6e31b2a41c7e2830a43ea9db3a0cfc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
