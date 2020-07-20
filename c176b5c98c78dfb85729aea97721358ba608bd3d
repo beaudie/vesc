@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "c47f8c3a_2437d1db",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-20T19:13:59Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you\u0027re looking for, but here\u0027s a renderdoc capture:\nhttps://drive.google.com/file/d/1i3L3lKyj_rm3QrCi25OtBghzDEg_1QUJ/view?usp\u003dsharing\n\nThis is what works for me to prevent breaking the RP by making the dimensions match:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2298663/3/src/libANGLE/renderer/vulkan/ContextVk.cpp",
+      "parentUuid": "9b472d12_7cb2eb54",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
