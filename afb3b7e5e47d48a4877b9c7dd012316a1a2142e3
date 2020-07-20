@@ -16,6 +16,75 @@
       "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "242db612_a8de1075",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-20T14:42:21Z",
+      "side": 1,
+      "message": "I don\u0027t follow this buffersBound variable. If you want to filter out redundant calls, you should check if the buffer !\u003d replayState-\u003egetArrayBuffer rather than if this is the first bind call. The code below looks like it\u0027ll only work if the VAO uses a single buffer.",
+      "range": {
+        "startLine": 1847,
+        "startChar": 16,
+        "endLine": 1847,
+        "endChar": 34
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd9509e7_3cd487f9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-20T14:42:21Z",
+      "side": 1,
+      "message": "this should be outside the loop.. the element array buffer is unique to a vao.",
+      "range": {
+        "startLine": 1854,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 21
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e61a8f7d_c0b8937f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2657,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-20T14:42:21Z",
+      "side": 1,
+      "message": "nit: you can use angle::BeginsWith",
+      "range": {
+        "startLine": 2657,
+        "startChar": 16,
+        "endLine": 2657,
+        "endChar": 59
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
