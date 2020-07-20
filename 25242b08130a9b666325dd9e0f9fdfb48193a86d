@@ -181,6 +181,30 @@
       "revId": "25242b08130a9b666325dd9e0f9fdfb48193a86d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db405378_aa4794f2",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-20T15:27:22Z",
+      "side": 1,
+      "message": "I have moved everything  into the Test class, except for adding result to the result list.",
+      "parentUuid": "171f7b75_0543998b",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 44
+      },
+      "revId": "25242b08130a9b666325dd9e0f9fdfb48193a86d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
