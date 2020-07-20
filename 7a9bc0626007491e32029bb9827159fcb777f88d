@@ -155,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "dea5f3a9_2c0b8b4a",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-20T17:26:57Z",
+      "side": 1,
+      "message": "Oh, misunderstood what you were saying.   Done.",
+      "parentUuid": "fbf86d48_805625e7",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 46
+      },
+      "revId": "7a9bc0626007491e32029bb9827159fcb777f88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e98a5070_89516d58",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 6
