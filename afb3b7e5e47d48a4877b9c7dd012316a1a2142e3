@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "f1e2a464_5c06a190",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T15:11:59Z",
+      "side": 1,
+      "message": "We have a case in NBA2K20 where the buffer is the same between VAOs and has to be rebound. Checking for buffer ID or pointer equality is insufficient:\n\n    glGenVertexArrays(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateVertexArrayID(16, 0);\n    glBindVertexArray(gVertexArrayMap[16]);\n    glEnableVertexAttribArray(0);\n    glBindBuffer(GL_ARRAY_BUFFER, gBufferMap[71]);\n    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gBufferMap[72]);\n    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 64, nullptr);\n    glEnableVertexAttribArray(3);\n    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 64, reinterpret_cast\u003cconst void *\u003e(12));\n    glEnableVertexAttribArray(7);\n    glVertexAttribPointer(7, 1, GL_UNSIGNED_BYTE, GL_FALSE, 64, reinterpret_cast\u003cconst void *\u003e(44));\n    glEnableVertexAttribArray(8);\n    glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, 64, reinterpret_cast\u003cconst void *\u003e(28));\n    glGenVertexArrays(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateVertexArrayID(17, 0);\n    glBindVertexArray(gVertexArrayMap[17]);\n    glEnableVertexAttribArray(0);\n    glBindBuffer(GL_ARRAY_BUFFER, gBufferMap[71]);\n    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gBufferMap[72]);\n    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 64, nullptr);\n    glEnableVertexAttribArray(3);\n    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 64, reinterpret_cast\u003cconst void *\u003e(12));\n    glEnableVertexAttribArray(8);\n    glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, 64, reinterpret_cast\u003cconst void *\u003e(28));",
+      "parentUuid": "242db612_a8de1075",
+      "range": {
+        "startLine": 1847,
+        "startChar": 16,
+        "endLine": 1847,
+        "endChar": 34
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd9509e7_3cd487f9",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -53,6 +77,30 @@
       "writtenOn": "2020-07-20T14:42:21Z",
       "side": 1,
       "message": "this should be outside the loop.. the element array buffer is unique to a vao.",
+      "range": {
+        "startLine": 1854,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 21
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1ad3b92_35402f48",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T15:11:59Z",
+      "side": 1,
+      "message": "Yes, I thought so too, but ANGLE starts firing asserts if you ask for the element buffer without binding an array buffer first.",
+      "parentUuid": "dd9509e7_3cd487f9",
       "range": {
         "startLine": 1854,
         "startChar": 0,
