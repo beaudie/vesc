@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "314e4f38_44ec16b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-20T14:41:43Z",
+      "side": 1,
+      "message": "PTAL - trace related changes for slingshot",
+      "revId": "fa0e07fd6e31b2a41c7e2830a43ea9db3a0cfc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
