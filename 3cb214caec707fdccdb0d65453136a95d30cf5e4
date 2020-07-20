@@ -16,6 +16,46 @@
       "revId": "3cb214caec707fdccdb0d65453136a95d30cf5e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d246665e_94311d7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-20T14:47:56Z",
+      "side": 1,
+      "message": "LGTM, change seemed to get a lot simpler.",
+      "revId": "3cb214caec707fdccdb0d65453136a95d30cf5e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6d4b80ba_528e4c01",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-20T14:47:56Z",
+      "side": 1,
+      "message": "nit: you can pass a single observer binding here instead of an array.",
+      "range": {
+        "startLine": 57,
+        "startChar": 41,
+        "endLine": 57,
+        "endChar": 64
+      },
+      "revId": "3cb214caec707fdccdb0d65453136a95d30cf5e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
