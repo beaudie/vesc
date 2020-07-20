@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "fdcd2690_964abe94",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T16:48:12Z",
+      "side": 1,
+      "message": "Per offline chat, glVertexAttribPointer establishes the relationship between currently bound array buffer, and the bound vertex array.  Each vertex attrib can have its own array buffer bound, so we can\u0027t just bind one.\n\nElement array buffer on the other hand is per VAO, not per vertex attrib, and it should be bound after the vertex array.\n\nNone of this is spelled out in the spec very well, IMO.  Thanks Jamie for dropping the knowledge.",
+      "parentUuid": "f1e2a464_5c06a190",
+      "range": {
+        "startLine": 1847,
+        "startChar": 16,
+        "endLine": 1847,
+        "endChar": 34
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd9509e7_3cd487f9",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -113,6 +137,30 @@
     },
     {
       "key": {
+        "uuid": "3e318ced_191eed45",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T16:48:12Z",
+      "side": 1,
+      "message": "I must have had some other cruft, it is working now.",
+      "parentUuid": "a1ad3b92_35402f48",
+      "range": {
+        "startLine": 1854,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 21
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e61a8f7d_c0b8937f",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -133,6 +181,30 @@
       "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bc4913c_9c9e22aa",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2657,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T16:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e61a8f7d_c0b8937f",
+      "range": {
+        "startLine": 2657,
+        "startChar": 16,
+        "endLine": 2657,
+        "endChar": 59
+      },
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
