@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37817c4d_fd5599c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-20T03:24:09Z",
+      "side": 1,
+      "message": "See [1] for some context if the change description is not clear:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2304170/9/src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+      "revId": "32b7325a5e637056382407469e9f29eb91355fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
