@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be14b7b2_3306d3a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T13:27:18Z",
+      "side": 1,
+      "message": "Not quite done with NBA2K20, but these fixes are progressing another app we\u0027re looking at in tandem.  Would like to land these this morning before an afternoon partner meeting.",
+      "revId": "afb3b7e5e47d48a4877b9c7dd012316a1a2142e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
