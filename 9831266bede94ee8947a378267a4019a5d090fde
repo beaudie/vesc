@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "443dece2_ec92e505",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "Added some comments/questions to discuss w/ Jamie",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50293d8a_4d8905d4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "Thinking I can store error in CommandWorkQueue here and then have to sync regularly from main thread to catch any errors in worker. I believe I need to sync on every cmd submission to worker thread to avoid running ahead of any errors.",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14b5cd6e_ac8ac7b2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "resetting shared fence in worker here",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edb2878c_3f2da6d2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "moved all queue cmds into worker thread",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62ddf497_6722a3f4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "I made an attempt to move all of the custom data from structs above inline into this struct. However, currentGarbage \u0026 submitFence were giving difficulty b/c they are not copy-able. Tried various updates to fix the issues but don\u0027t have a great solution so looking for advice. Potentially could put everything inline except those 2 members and use void* data block for them.",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5beee4a_6ce07835",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "Made CommandWorkQueue a vk::Context so that it can catch errors.\nWhen to best sync them?\nInitial thought is to sync in main thread each time that a command is queued for worker thread.",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3146e59_2d8ec3ec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3960,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "Initialize shared fence in main thread.\nOne issue is that this shared fence may still be active in a previous submit. Tried initial change where we *always* create a new fence here anytime that worker is active. Really would only need to make sure that current fence is not active in worker.\nEven with that change still seeing ASSERT fire in shared fence get() function:\nASSERT(mRefCounted \u0026\u0026 mRefCounted-\u003eisReferenced());",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00d565d5_19e8eda5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3972,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "Copying shared fence into data block for worker thread. This adds a reference.",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "521b1710_8f044712",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3994,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-20T16:49:35Z",
+      "side": 1,
+      "message": "Resetting shared fence here.",
+      "revId": "9831266bede94ee8947a378267a4019a5d090fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
