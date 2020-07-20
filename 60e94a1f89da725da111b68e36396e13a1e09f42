@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "023d4203_e23ca038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "LGMT, would just like to see more comments.\n\nManh and I went over the CL over GVC.  He was able to explain everything going on in the CL.  I just needed clarification on the overall design, and some of the python-isms.  Definitely feels complex enough for more elaborate comments to describe the architecture and design, or we port some of the design doc to a README.md here.",
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "94b27a4c_3f71f272",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "It is worth a comment stating why autoninja is not available in your PATH.",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 34
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e69b69cf_02f1bce1",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "It is covered in your design docs what all the processes are and how they intertwine.  I think you should migrate some of that over here, so the overall architecture of what you\u0027re doing is more clear.",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 31
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0becba49_9d5b539f",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "In the next CL, would like to have the option of preserving all the artifacts so we can recreate the failure in place.  Also will be good to allow inspecting the output to ensure the results aren\u0027t bogus.",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 26
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "670324a2_bbd0b9d3",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "Again, this queue system looks good to me, but I have access to your diagrams.  Maybe we should migrate parts of your design doc to a markdown document that lives with the script, and we can link to it.",
+      "range": {
+        "startLine": 238,
+        "startChar": 19,
+        "endLine": 238,
+        "endChar": 28
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba2c45a_54e9828d",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "Another spot for comments or links to the overall design.",
+      "range": {
+        "startLine": 306,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 50
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d354d1ee_7027795b",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "Some comments about the manager allowing communication between the processes would be good.",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 39
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884a63a8_b038b184",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-20T22:22:24Z",
+      "side": 1,
+      "message": "And this guy here needed explaining too.  Can you explain what it is again, and provide example output somewhere.",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 32
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
