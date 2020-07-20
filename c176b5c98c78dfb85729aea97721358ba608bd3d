@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "c8aa91c7_28a4ef76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T16:41:44Z",
+      "side": 1,
+      "message": "Important answer/question to Tim below ... I\u0027ll push a new patch set once I get done with the work on my other CL.",
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "749ada83_aa5bb7b3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -66,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "9b472d12_7cb2eb54",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T16:41:44Z",
+      "side": 1,
+      "message": "\u003e Is this rotated?\n\nIt is based on what render area was previously given.  When rendering to an offscreen FBO, it will not be rotated (and neither will scissoredRenderArea).  When rendering to an onscreen swapchain image, it WILL be rotated (as will scissoredRenderArea).  From what I\u0027ve seen from GFXBench and app testing (so far) is that the render pass (RP) is broken when switching rendering between an onscreen swapchain image and an offscreen FBO.  Everything I\u0027ve seen has made sense.\n\nPlease tell me more about your MSAA case.  Is this a case where the MSAA is for the window (i.e. will eventually be resolved to a swapchain image, but is still an offscreen MSAA image)?  I wonder if we have a case where ANGLE thinks the destination drawable is rotated (because of the window), but really isn\u0027t (because it\u0027s an offscreen MSAA image)?",
+      "parentUuid": "8972f908_43046484",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -89,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "9cfd2c5d_ebf76ced",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T16:41:44Z",
+      "side": 1,
+      "message": "YES!  I had it correct on Android, and mis-did the cleanup step.",
+      "parentUuid": "e7e1c19b_3d85b344",
+      "range": {
+        "startLine": 321,
+        "startChar": 52,
+        "endLine": 321,
+        "endChar": 55
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a493eb58_88e08302",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -100,6 +165,24 @@
       "writtenOn": "2020-07-18T03:18:54Z",
       "side": 1,
       "message": "Is this a bug fix? Would be nice if a test was added for it, though I\u0027m surprised it wasn\u0027t caught with the current tests.",
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c1fb6a1_aa69536d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T16:41:44Z",
+      "side": 1,
+      "message": "It is a bug fix, and I am surprised it hasn\u0027t been seen with the current tests.  I\u0027ll look to see if a test is exercising this.",
+      "parentUuid": "a493eb58_88e08302",
       "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -140,6 +223,30 @@
       "writtenOn": "2020-07-18T03:40:11Z",
       "side": 1,
       "message": "Can you expand/clarify this, or just remove it?   It looks like you\u0027re referring to the flushDeferredClears() call below, but that won\u0027t be obvious without a diff like this.",
+      "range": {
+        "startLine": 1405,
+        "startChar": 63,
+        "endLine": 1405,
+        "endChar": 89
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b46ac8ed_0a05f0e2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-20T16:41:44Z",
+      "side": 1,
+      "message": "Agree, I\u0027ll remove it",
+      "parentUuid": "335139ce_106296f9",
       "range": {
         "startLine": 1405,
         "startChar": 63,
