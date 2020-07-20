@@ -179,6 +179,30 @@
     },
     {
       "key": {
+        "uuid": "621a9eda_627c740a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-20T20:29:35Z",
+      "side": 1,
+      "message": "This is running Asphalt 8.\n\nAs far as that portion of my hack CL is concerned, the app has the multisampled image bound as the read FBO and the draw FBO will be resolved into with the blit() that\u0027s being performed when that ContextVk::updateScissor() call is performed.   I don\u0027t think either image will be presented, so presumably the rotation should match (or be corrected to match) when comparing the extents.",
+      "parentUuid": "76a2bb18_95b4ad02",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
