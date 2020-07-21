@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "5e1c17a2_3e7e5540",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8776,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-21T20:11:39Z",
+      "side": 1,
+      "message": "That does look like a bug.\n\nFor updateActiveShaderStorageBufferIndices() it looks like we need some kind of SSBO test, but I don\u0027t know what would trigger the new updateActiveImageUnitIndices().   Can you open the bug and describe what you think the tests should be doing?",
+      "parentUuid": "29648f37_80636b21",
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46f2be36_2c8f42e6",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 6
