@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c03229b_455b4a29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-21T23:49:00Z",
+      "side": 1,
+      "message": "PTAL\n\nAndroid builds are failing since I forgot to clean this up.",
+      "revId": "f5db31091bc20cea9a92c21014b6aa200b0d8c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
