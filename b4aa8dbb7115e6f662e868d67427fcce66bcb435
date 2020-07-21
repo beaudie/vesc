@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7068d6fa_17d91ae7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-21T17:57:33Z",
+      "side": 1,
+      "message": "Could markShaderStorageUsage() call made behind some dirty bits so that if nothing has changed? Right now it walks over these storage objects and mark them dirty for every draw call. What if you do that on bind time? I thought it is undefined behavior to read a current bind object that you are writing to? ",
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "46f2be36_2c8f42e6",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-21T17:57:33Z",
+      "side": 1,
+      "message": "should this move to line 191 so that you do not set to true if no update is staged?",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 179,
+        "endChar": 27
+      },
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
