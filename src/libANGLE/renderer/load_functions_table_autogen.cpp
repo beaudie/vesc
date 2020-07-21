@@ -30,6 +30,7 @@ namespace
 //    device's capabilities)
 // This map type determines which loading function to use, based on these three parameters.
 // Source formats and types are taken from Tables 3.2 and 3.3 of the ES 3 spec.
+ANGLE_MAYBE_UNUSED
 void UnimplementedLoadFunction(size_t width,
                                size_t height,
                                size_t depth,
@@ -3126,12 +3127,12 @@ LoadImageFunctionInfo SRGB8_ALPHA8_to_R8G8B8A8_UNORM_SRGB(GLenum type)
     }
 }
 
-LoadImageFunctionInfo STENCIL_INDEX8_to_default(GLenum type)
+LoadImageFunctionInfo STENCIL_INDEX8_to_S8_UINT(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
-            return LoadImageFunctionInfo(UnimplementedLoadFunction, true);
+            return LoadImageFunctionInfo(LoadToNative<GLubyte, 1>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -4508,7 +4509,16 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             break;
         }
         case GL_STENCIL_INDEX8:
-            return STENCIL_INDEX8_to_default;
+        {
+            switch (angleFormat)
+            {
+                case FormatID::S8_UINT:
+                    return STENCIL_INDEX8_to_S8_UINT;
+                default:
+                    break;
+            }
+            break;
+        }
 
         default:
             break;
