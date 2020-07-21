@@ -22,6 +22,30 @@
       "revId": "1d08ccf9d020effe3f3f439d3a4f5ca7aaa29e6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b530cf20_fe2eae43",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-21T13:38:57Z",
+      "side": 1,
+      "message": "Because with shell\u003dTrue, it actually creates 2 subprocesses. First the shell process, then the shell process creates another process to run the command.",
+      "parentUuid": "681084ce_ef9193b1",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 51
+      },
+      "revId": "1d08ccf9d020effe3f3f439d3a4f5ca7aaa29e6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
