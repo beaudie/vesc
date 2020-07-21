@@ -33,6 +33,46 @@
       "revId": "308365448fad633100fcba657640f8637ae7ef83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c29c0f7_ad55d71c",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T14:39:37Z",
+      "side": 1,
+      "message": "Drive by: Could be good to add a comment about where these came from",
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4431067f_95bf6fbf",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T14:39:37Z",
+      "side": 1,
+      "message": "Will the ordering of B and R taken into account elsewhere? Otherwise it may be preferable to make one of them UNIMPLEMENTED() so we know there is work that needs to be done about it.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 35
+      },
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
