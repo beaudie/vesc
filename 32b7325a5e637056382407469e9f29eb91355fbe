@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ecd21471_880dd6be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-21T03:04:14Z",
+      "side": 1,
+      "message": "Copying requires a source and a destination, and this name doesn\u0027t indicate which side the image will be on.   Based on your description, the image will always be the source; can we call it getImageForRead(), so it can be the corollary to getImageForWrite()?",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "32b7325a5e637056382407469e9f29eb91355fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37817c4d_fd5599c7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -16,6 +39,52 @@
       "revId": "32b7325a5e637056382407469e9f29eb91355fbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ee57f312_a0e5663d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-21T03:04:14Z",
+      "side": 1,
+      "message": "I like \u0027readImageView\u0027 more since it indicates this is the source image.",
+      "range": {
+        "startLine": 1046,
+        "startChar": 33,
+        "endLine": 1046,
+        "endChar": 46
+      },
+      "revId": "32b7325a5e637056382407469e9f29eb91355fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afa0a9da_50a06204",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-21T03:04:14Z",
+      "side": 1,
+      "message": "Why not getImageForRenderPass() for these since this is inside clearWithRenderPassOp()?",
+      "range": {
+        "startLine": 1768,
+        "startChar": 22,
+        "endLine": 1768,
+        "endChar": 38
+      },
+      "revId": "32b7325a5e637056382407469e9f29eb91355fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
