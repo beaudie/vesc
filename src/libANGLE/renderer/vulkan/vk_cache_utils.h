@@ -91,7 +91,7 @@ class alignas(4) RenderPassDesc final
 
     void setSamples(GLint samples);
 
-    uint8_t samples() const { return 1u << mLogSamples; }
+    uint8_t samples() const { return mSamples; }
 
     angle::FormatID operator[](size_t index) const
     {
@@ -100,13 +100,11 @@ class alignas(4) RenderPassDesc final
     }
 
   private:
-    // Store log(samples), to be able to store it in 3 bits.
-    uint8_t mLogSamples : 3;
+    uint8_t mSamples;
     uint8_t mColorAttachmentRange : 3;
     uint8_t mHasDepthStencilAttachment : 1;
     // Temporary padding for upcoming support for resolve attachments.
-    ANGLE_MAYBE_UNUSED uint8_t pad : 1;
-    ANGLE_MAYBE_UNUSED uint8_t pad2;
+    ANGLE_MAYBE_UNUSED uint8_t pad : 4;
     // Color attachment formats are stored with their GL attachment indices.  The depth/stencil
     // attachment formats follow the last enabled color attachment.  When creating a render pass,
     // the disabled attachments are removed and the resulting attachments are packed.

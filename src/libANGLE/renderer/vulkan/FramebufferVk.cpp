@@ -2037,7 +2037,7 @@ RenderTargetVk *FramebufferVk::getFirstRenderTarget() const
 GLint FramebufferVk::getSamples() const
 {
     RenderTargetVk *firstRT = getFirstRenderTarget();
-    return firstRT ? firstRT->getImageForRenderPass().getSamples() : 1;
+    return firstRT ? firstRT->getImageForRenderPass().getSamples() : 0;
 }
 
 angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk,

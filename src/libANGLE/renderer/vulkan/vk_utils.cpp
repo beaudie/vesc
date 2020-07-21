@@ -1030,8 +1030,6 @@ VkSampleCountFlagBits GetSamples(GLint sampleCount)
     switch (sampleCount)
     {
         case 0:
-            UNREACHABLE();
-            return VK_SAMPLE_COUNT_1_BIT;
         case 1:
             return VK_SAMPLE_COUNT_1_BIT;
         case 2:
