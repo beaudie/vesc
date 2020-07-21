@@ -344,6 +344,15 @@ struct FeaturesVk : FeatureSetBase
         "enable_command_processing_thread", FeatureCategory::VulkanFeatures,
         "Enable parallel processing and submission of Vulkan commands in worker thread", &members,
         "http://anglebug.com/4324"};
+
+    // Force maxUniformBufferSize to 16K on Qualcomm's Adreno 540. Pixel2's Adreno540 reports
+    // maxUniformBufferSize 64k but various tests failed with that size. For that specific
+    // device, we set to 16k for now which is known to pass all tests.
+    // https://issuetracker.google.com/161903006
+    Feature forceMaxUniformBufferSize16K = {
+        "force_max_uniform_buffer_size_16K", FeatureCategory::VulkanWorkarounds,
+        "Force max uniform buffer size to 16K on Qualcomm's Adreno 540", &members,
+        "https://issuetracker.google.com/161903006"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
