@@ -118,6 +118,30 @@
       "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b56ea331_fb7ae7be",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T19:53:33Z",
+      "side": 1,
+      "message": "I don\u0027t see VK_WHOLE_SIZE changed in this CL: https://chromium-review.googlesource.com/c/angle/angle/+/2309349/1\n\nJust to be clear, it\u0027s not like changing VK_WHOLE_SIZE to 65536 would change anything. You would need to specify an at-most-16KB subrange of the buffer to qualify for respecting the limit.",
+      "parentUuid": "6d633106_e3c35379",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 893,
+        "endChar": 47
+      },
+      "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
