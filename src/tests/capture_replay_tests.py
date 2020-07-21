@@ -230,6 +230,8 @@ def SetCWDToAngleFolder():
     return cwd
 
 
+# RunTest gets run on each spawned subprocess.
+# See http://shortn/_Gzxfxdc7sn for architecture
 def RunTest(job_queue, gn_path, autoninja_path, capture_build_dir, replay_build_dir, test_exec,
             replay_exec, trace_dir, result_list):
     trace_folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, trace_dir)
