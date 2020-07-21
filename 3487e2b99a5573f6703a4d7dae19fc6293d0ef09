@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2da009fd_304082c7",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-21T18:27:45Z",
+      "side": 1,
+      "message": "nit: please wrap to 100 chars",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 431
+      },
+      "revId": "3487e2b99a5573f6703a4d7dae19fc6293d0ef09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "313dece6_365a8e63",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-21T18:27:45Z",
+      "side": 1,
+      "message": "nit: you can hard link this to master instead of a particular rev. section links should remain stable through rev changes. the specific hash is for linking to specific lines of code.",
+      "range": {
+        "startLine": 234,
+        "startChar": 6,
+        "endLine": 234,
+        "endChar": 127
+      },
+      "revId": "3487e2b99a5573f6703a4d7dae19fc6293d0ef09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
