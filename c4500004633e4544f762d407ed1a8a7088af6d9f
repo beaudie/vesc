@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8f02a0f9_e149a882",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "Jamie had the same suggestion. It\u0027s already done.",
+      "parentUuid": "a19eaae6_77c30709",
+      "range": {
+        "startLine": 358,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 45
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ede9d2dd_6611f13b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00511829_13f6f079",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "Also already done.",
+      "parentUuid": "ede9d2dd_6611f13b",
+      "range": {
+        "startLine": 1793,
+        "startChar": 44,
+        "endLine": 1793,
+        "endChar": 56
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e4924a2d_5d57f984",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "This is intentional. The function assumes these, and is verifying that whatever check was performed to select the path is consistent with the assumptions specified in the comment.",
+      "parentUuid": "3356ab58_caf29e91",
+      "range": {
+        "startLine": 1444,
+        "startChar": 0,
+        "endLine": 1449,
+        "endChar": 66
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04a99dcb_c23feeea",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 15
@@ -138,6 +210,30 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5765ee42_8c9900ea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04a99dcb_c23feeea",
+      "range": {
+        "startLine": 1454,
+        "startChar": 0,
+        "endLine": 1455,
+        "endChar": 100
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -164,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "5bfbbd98_02f16b28",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "The shader takes a fixed number of views. Even if it doesn\u0027t use all of them, VVL will complain about the views not being set.\n\nThe alternative would be to rebuild the shader for every possible number of views (up to 6). I didn\u0027t do that to save on binary size.",
+      "parentUuid": "f219e80c_1992409b",
+      "range": {
+        "startLine": 1504,
+        "startChar": 0,
+        "endLine": 1510,
+        "endChar": 13
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a75f1da9_c3bd0c31",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 15
@@ -184,6 +304,30 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea6ec190_a2c42b06",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a75f1da9_c3bd0c31",
+      "range": {
+        "startLine": 1581,
+        "startChar": 0,
+        "endLine": 1582,
+        "endChar": 23
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -210,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "7ceabd6b_52a72923",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "It\u0027s setBaseAndMaxLevels() that we need unconditionally done regardless of whether the image is valid.",
+      "parentUuid": "d4cea910_b0d3a781",
+      "range": {
+        "startLine": 1712,
+        "startChar": 0,
+        "endLine": 1716,
+        "endChar": 5
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b0224a9_0cc7569f",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 15
@@ -233,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "6e10748d_5e0cdbe5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1916,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b0224a9_0cc7569f",
+      "range": {
+        "startLine": 1915,
+        "startChar": 1,
+        "endLine": 1916,
+        "endChar": 5
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4b22b1f_f7175ed0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 15
@@ -247,6 +439,24 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0327fd2_8cdbfd45",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "The second one would be a noop. This is handling some corner case where there\u0027s a generate mipmap happening at the same time as the base level being redefined. If performance is your concern, I don\u0027t think this would end up getting called twice in release ever.",
+      "parentUuid": "f4b22b1f_f7175ed0",
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -273,6 +483,30 @@
     },
     {
       "key": {
+        "uuid": "138a344a_9fb9223e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "The Vulkan spec. Added a comment.",
+      "parentUuid": "ebcede43_e3a10599",
+      "range": {
+        "startLine": 326,
+        "startChar": 52,
+        "endLine": 326,
+        "endChar": 53
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38dafe34_94bc378c",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 15
@@ -293,6 +527,30 @@
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6c879ec_b9c6cceb",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": ":O this affects perf comparison!\n\nI see now that with Nvidia the perf gain is about 25% instead of 10%. On Intel, I see parity in performance now whereas before there was a perf loss (IIRC).\n\nARM is most likely still going to see a regression though, they were bound by memory write bandwidth.",
+      "parentUuid": "38dafe34_94bc378c",
+      "range": {
+        "startLine": 1883,
+        "startChar": 44,
+        "endLine": 1883,
+        "endChar": 49
+      },
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -460,6 +718,24 @@
       "writtenOn": "2020-07-14T17:21:12Z",
       "side": 1,
       "message": "Why aren\u0027t these files added to DEPS and angle/third_party/?",
+      "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cc48d1a_605c2470",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/ffx_spd/ffx_a.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:19:17Z",
+      "side": 1,
+      "message": "Shrug. It felt static enough not to be put in DEPS, and easier to work with when put under shaders/src. Admittedly I started it here while it was WIP and it just stayed here.\n\nDo you mind leaving it as-is and think about moving it if it ever needed updating?",
+      "parentUuid": "09b09cb5_83a4021a",
       "revId": "c4500004633e4544f762d407ed1a8a7088af6d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
