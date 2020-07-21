@@ -51,8 +51,17 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
 {
     // TODO (Issue 4062): Add conditional support for GL_RGB10_A2 and GL_RGBA16F when the
     // Android Vulkan loader adds conditional support for them.
-    constexpr GLenum kColorFormats[] = {GL_RGBA8, GL_RGB8, GL_RGB565};
-    return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, this);
+    std::vector<GLenum> kColorFormats = {GL_RGBA8, GL_RGB8, GL_RGB565};
+
+    std::vector<GLenum> kDepthStencilFormats = {GL_NONE, GL_DEPTH24_STENCIL8, GL_DEPTH_COMPONENT24,
+                                                GL_DEPTH_COMPONENT16};
+
+    if (getCaps().stencil8)
+    {
+        kDepthStencilFormats.push_back(GL_STENCIL_INDEX8);
+    }
+    return egl_vk::GenerateConfigs(kColorFormats.data(), kColorFormats.size(),
+                                   kDepthStencilFormats.data(), kDepthStencilFormats.size(), this);
 }
 
 void DisplayVkAndroid::checkConfigSupport(egl::Config *config)

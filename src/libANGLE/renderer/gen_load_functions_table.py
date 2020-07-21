@@ -48,6 +48,7 @@ namespace
 //    device's capabilities)
 // This map type determines which loading function to use, based on these three parameters.
 // Source formats and types are taken from Tables 3.2 and 3.3 of the ES 3 spec.
+ANGLE_MAYBE_UNUSED
 void UnimplementedLoadFunction(size_t width,
                                size_t height,
                                size_t depth,
