@@ -92,6 +92,13 @@ config("angle_util_loader_headers_config") {
   include_dirs = [ ".." ]
 }
 
+if (is_android) {
+  java_library("angle_util_java_support") {
+    sources = [ "$angle_root/android/java/src/org/angle/util/CalledByNative.java",
+    "$angle_root/android/java/src/org/angle/util/Utils.java" ]
+  }
+}
+
 angle_source_set("angle_util_loader_headers") {
   testonly = true
   sources = [
@@ -185,6 +192,10 @@ foreach(is_shared_library,
       libs += [
         "android",
         "log",
+      ]
+
+      deps += [
+       ":angle_util_java_support"
       ]
     }
 
