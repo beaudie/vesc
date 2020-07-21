@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edeef9a1_fb72d15d",
+        "filename": "src/tests/perf_tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T17:08:20Z",
+      "side": 1,
+      "message": "I think I understand the intent here, but could you add a comment for future readers?",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 60
+      },
+      "revId": "42ede3c981034790084100ef3117a6e13e2a78f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
