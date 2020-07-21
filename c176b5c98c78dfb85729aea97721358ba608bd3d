@@ -203,6 +203,30 @@
     },
     {
       "key": {
+        "uuid": "0ca01acc_e86d631c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-21T00:10:05Z",
+      "side": 1,
+      "message": "I\u0027m going to land this CL, and look more at this later (potential follow-on CL, or in your CL).\n\nAfter doing the analysis that Prahlad wanted (and experimenting with various options/CLs), I\u0027ve run out of day.",
+      "parentUuid": "621a9eda_627c740a",
+      "range": {
+        "startLine": 2645,
+        "startChar": 34,
+        "endLine": 2645,
+        "endChar": 47
+      },
+      "revId": "c176b5c98c78dfb85729aea97721358ba608bd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7e1c19b_3d85b344",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
