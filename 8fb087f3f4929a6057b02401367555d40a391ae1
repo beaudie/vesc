@@ -22,6 +22,30 @@
       "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "635eb394_ee100fa6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-21T02:00:10Z",
+      "side": 1,
+      "message": "This may be an interaction with limits.minUniformBufferOffsetAlignment and limits.maxUniformBufferRange where you\u0027re requesting the maximum buffer size but the alignment is modifying the size of the allocation to correct the offset.   I don\u0027t actually know the details of how that all works and interacts, but I\u0027ve seen allocators do weird things before.   Once thing to try is \u0027maxUniformBufferRange - someWiggleRoom\u0027 to handle alignment requirements.\n\nCould always be a QC driver bug too though, which I wouldn\u0027t expect a fix for on Pixel 2 (let alone on our bots), so either way it likely requires a Pixel 2 workaround.",
+      "parentUuid": "04677657_69ae5a5c",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 893,
+        "endChar": 47
+      },
+      "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
