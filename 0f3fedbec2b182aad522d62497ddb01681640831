@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91187bd7_99a4891f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T18:46:19Z",
+      "side": 1,
+      "message": "Direction looks good (moving to a layer to intercept calls instead of callbacks from ANGLE).  I don\u0027t think this CL is complete though.",
+      "revId": "0f3fedbec2b182aad522d62497ddb01681640831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0160869_3c23fa9b",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T18:46:19Z",
+      "side": 1,
+      "message": "I presume this comes from layer.",
+      "range": {
+        "startLine": 68,
+        "startChar": 9,
+        "endLine": 68,
+        "endChar": 34
+      },
+      "revId": "0f3fedbec2b182aad522d62497ddb01681640831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd97246a_9b638a4e",
+        "filename": "src/tests/perf_tests/restricted_traces/angle_trace_gl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T18:46:19Z",
+      "side": 1,
+      "message": "I\u0027m not finding this file anywhere. To be generated?",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 32
+      },
+      "revId": "0f3fedbec2b182aad522d62497ddb01681640831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
