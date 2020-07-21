@@ -887,7 +887,7 @@ angle::Result ContextVk::initialize()
         mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
     // This size is picked based on experience, may needs more tuning.
     size_t uniformBufferSize =
-        std::min(16 * 1024u, mRenderer->getPhysicalDeviceProperties().limits.maxUniformBufferRange);
+        std::min(64 * 1024u, mRenderer->getPhysicalDeviceProperties().limits.maxUniformBufferRange);
     mDefaultUniformStorage.init(mRenderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, minAlignment,
                                 uniformBufferSize, true);
 
