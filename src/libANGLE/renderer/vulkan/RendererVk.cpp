@@ -47,6 +47,10 @@ namespace rx
 
 namespace
 {
+// Default uniform size based on device
+constexpr uint32_t kMinDefaultUniformBufferSize       = 16 * 1024u;
+constexpr uint32_t kPreferredDefaultUniformBufferSize = 64 * 1024u;
+
 // Update the pipeline cache every this many swaps.
 constexpr uint32_t kPipelineCacheVkUpdatePeriod = 60;
 // Per the Vulkan specification, as long as Vulkan 1.1+ is returned by vkEnumerateInstanceVersion,
@@ -431,6 +435,7 @@ RendererVk::RendererVk()
       mMaxVertexAttribDivisor(1),
       mMaxVertexAttribStride(0),
       mMinImportedHostPointerAlignment(1),
+      mDefaultUniformBufferSize(kMinDefaultUniformBufferSize),
       mDevice(VK_NULL_HANDLE),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
@@ -1345,6 +1350,26 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         InitSamplerYcbcrKHRFunctions(mDevice);
     }
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
+
+    bool isQualcomm = IsQualcomm(mPhysicalDeviceProperties.vendorID);
+    if (isQualcomm && mPhysicalDeviceProperties.deviceID == angle::kDeviceID_Adreno540)
+    {
+        // Pixel2's Adreno540 reports maxUniformBufferSize 64k but various tests failed with that
+        // size. For that specific device, we set to 16k for now which is known to pass all tests.
+        mDefaultUniformBufferSize = kMinDefaultUniformBufferSize;
+    }
+    else
+    {
+        // This size is picked based on experience. Majority of devices support 64K
+        // maxUniformBufferSize. Since this is per context buffer, a bigger buffer size reduces the
+        // number of descriptor set allocations, so we picked the maxUniformBufferSize that most
+        // devices supports. It may needs further tuning based on specific device needs and balance
+        // between performance and memory usage.
+        mDefaultUniformBufferSize = kPreferredDefaultUniformBufferSize;
+    }
+    // Cap it with the driver limit
+    mDefaultUniformBufferSize = std::min(
+        mDefaultUniformBufferSize, getPhysicalDeviceProperties().limits.maxUniformBufferRange);
 
     // Initialize the vulkan pipeline cache.
     bool success = false;
