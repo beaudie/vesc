@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "a13044b1_68b1d070",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-21T12:57:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94b27a4c_3f71f272",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 34
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e69b69cf_02f1bce1",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 11
@@ -88,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "e2edd15b_8b51b55d",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-21T12:57:04Z",
+      "side": 1,
+      "message": "What do you mean by inspecting the output? Right now, I have the stdout printed when there is an error.",
+      "parentUuid": "0becba49_9d5b539f",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 26
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "670324a2_bbd0b9d3",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 11
@@ -99,6 +147,30 @@
       "writtenOn": "2020-07-20T22:22:24Z",
       "side": 1,
       "message": "Again, this queue system looks good to me, but I have access to your diagrams.  Maybe we should migrate parts of your design doc to a markdown document that lives with the script, and we can link to it.",
+      "range": {
+        "startLine": 238,
+        "startChar": 19,
+        "endLine": 238,
+        "endChar": 28
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed79b93c_b0e5aec8",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-21T12:57:04Z",
+      "side": 1,
+      "message": "Do you mean I make a md file on this folder?",
+      "parentUuid": "670324a2_bbd0b9d3",
       "range": {
         "startLine": 238,
         "startChar": 19,
@@ -134,6 +206,30 @@
     },
     {
       "key": {
+        "uuid": "8d811acf_7c958587",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-21T12:57:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ba2c45a_54e9828d",
+      "range": {
+        "startLine": 306,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 50
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d354d1ee_7027795b",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 11
@@ -157,6 +253,30 @@
     },
     {
       "key": {
+        "uuid": "b29010cf_66375997",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-21T12:57:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d354d1ee_7027795b",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 39
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "884a63a8_b038b184",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 11
@@ -177,6 +297,30 @@
       "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d622cd70_c43b67bb",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-21T12:57:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "884a63a8_b038b184",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 32
+      },
+      "revId": "60e94a1f89da725da111b68e36396e13a1e09f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
