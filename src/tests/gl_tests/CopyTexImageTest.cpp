@@ -526,6 +526,80 @@ TEST_P(CopyTexImageTest, DeleteAfterCopyingToTextures)
     texture2.reset();
 }
 
+// TEST FOR ANDROID FAILURE
+TEST_P(CopyTexImageTest, CopyTexSubImageTest)
+{
+    GLsizei size = 16;
+
+    GLTexture texture;
+    // Create texture in copyFBO0 with color (.25, 1, .75, .5)
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLFramebuffer copyFBO0;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    // Set color for
+    glClearColor(0.25f, 1.0f, 0.75f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Create texture in copyFBO[1] with color (1, .75, .5, .25)
+    GLTexture texture1;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLFramebuffer copyFBO1;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture1, 0);
+
+    // Set color for
+    glClearColor(1.0f, 0.75f, 0.5f, 0.25f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    GLTexture copyToTex;
+    glBindTexture(GL_TEXTURE_2D, copyToTex);
+
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // copyFBO0 -> copyToTex
+    // copyToTex should hold what was originally in copyFBO0 : (.25, 1, .75, .5)
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO0);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, size, size, 0);
+    ASSERT_GL_NO_ERROR();
+
+    GLubyte expected0[4] = {64, 255, 191, 255};
+    verifyResults(copyToTex, expected0, size, 0, 0, size, size);
+
+    // copyFBO[1] - copySubImage -> copyToTex
+    // copyToTex should have subportion what was in copyFBO[1] : (1, .75, .5, .25)
+    // The rest should still be untouched: (.25, 1, .75, .5)
+    GLint half = size / 2;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO1);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, half, half, half, half, half, half);
+    ASSERT_GL_NO_ERROR();
+
+    GLubyte expected1[4] = {255, 191, 127, 255};
+    verifyResults(copyToTex, expected1, size, half, half, size, size);
+
+    // Verify rest is untouched
+    verifyResults(copyToTex, expected0, size, 0, 0, half, half);
+    verifyResults(copyToTex, expected0, size, 0, half, half, size);
+    verifyResults(copyToTex, expected0, size, half, 0, size, half);
+}
+
 // specialization of CopyTexImageTest is added so that some tests can be explicitly run with an ES3
 // context
 class CopyTexImageTestES3 : public CopyTexImageTest
