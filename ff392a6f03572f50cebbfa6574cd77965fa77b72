@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7790619f_76a12c8a",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T19:03:50Z",
+      "side": 1,
+      "message": "Are these available externally?  Can you just upload the images to ANGLE\u0027s repo, next to the markdown file.",
+      "range": {
+        "startLine": 179,
+        "startChar": 43,
+        "endLine": 179,
+        "endChar": 92
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5082bad7_64c0c533",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T19:03:50Z",
+      "side": 1,
+      "message": "I think you should standardize on four stages, since that is how many subprocesses you spawn in the script, per CPU.",
+      "range": {
+        "startLine": 182,
+        "startChar": 48,
+        "endLine": 183,
+        "endChar": 10
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b817fa35_a70e7eb4",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T19:03:50Z",
+      "side": 1,
+      "message": "This one can also point to master.",
+      "range": {
+        "startLine": 188,
+        "startChar": 72,
+        "endLine": 188,
+        "endChar": 112
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12b5c826_b3c8d1e2",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-21T19:03:50Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right.",
+      "range": {
+        "startLine": 234,
+        "startChar": 96,
+        "endLine": 234,
+        "endChar": 120
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
