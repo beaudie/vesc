@@ -94,6 +94,30 @@
       "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d633106_e3c35379",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-21T19:42:22Z",
+      "side": 1,
+      "message": "yes, we are using VK_WHOLE_SIZE. But change it to actual buffer size does not help. https://chromium-review.googlesource.com/c/angle/angle/+/2309349",
+      "parentUuid": "b41583c7_43c33dca",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 893,
+        "endChar": 47
+      },
+      "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
