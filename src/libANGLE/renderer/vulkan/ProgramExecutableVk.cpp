@@ -893,7 +893,7 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
     }
 
     bufferInfo.offset = 0;
-    bufferInfo.range  = VK_WHOLE_SIZE;
+    bufferInfo.range  = defaultUniformBuffer->getSize();
 
     writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeInfo.pNext            = nullptr;
