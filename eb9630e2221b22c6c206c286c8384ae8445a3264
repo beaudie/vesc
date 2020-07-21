@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1315ffd_3662f215",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-21T03:36:33Z",
+      "side": 1,
+      "message": "Ah, ok, looking at glInvalidateFramebuffer:\n\n    attachments\n    A list of numAttachments attachments to invalidate.\n\nSo the caller can invalidate only some of the attachments bound to the FBO, but the rest may still need to have the clears performed.",
+      "range": {
+        "startLine": 1248,
+        "startChar": 0,
+        "endLine": 1249,
+        "endChar": 87
+      },
+      "revId": "eb9630e2221b22c6c206c286c8384ae8445a3264",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
