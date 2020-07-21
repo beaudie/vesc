@@ -73,6 +73,76 @@
       "revId": "308365448fad633100fcba657640f8637ae7ef83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f10863d5_4f4c3a23",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-21T16:00:44Z",
+      "side": 1,
+      "message": "There is no BGR10A2 GL format so I suspect the drivers treat it as RGBA once it\u0027s in GL.  I can\u0027t confirm though.",
+      "parentUuid": "4431067f_95bf6fbf",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 35
+      },
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a4b3a9_ee6d57f1",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-21T16:00:44Z",
+      "side": 1,
+      "message": "It\u0027s likely these formats will be used frequently for video decoding.  You can treat them as RGB8 or RGBA8 because that is how they will be sampled.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 27
+      },
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f73d0c6_856596b3",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-21T16:00:44Z",
+      "side": 1,
+      "message": "Let\u0027s add a WARN() \u003c\u003c \"Unknown dma_buf format \" \u003c\u003c format \u003c\u003c \" used to initialize an EGL image.\";",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 28
+      },
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
