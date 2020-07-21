@@ -34,7 +34,7 @@ JNIEnv *GetJniEnv()
 
     sApp->activity->vm->AttachCurrentThread(&gJni, NULL);
     return gJni;
-}
+}androi
 
 int SetScreenOrientation(struct android_app *app, int orientation)
 {
