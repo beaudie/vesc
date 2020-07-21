@@ -46,6 +46,30 @@
       "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb49c60a_ed2bbe17",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-21T18:05:56Z",
+      "side": 1,
+      "message": "The 64K buffer size should be able to accommodate any alignment requirement, so I am not sure if alignment is an issue. I just think not much value to debug a pixel2 specific failure given that pixel4 passes the test on my local run. I will try to adjust the size in separate CL so that it is easier to track in case of regression.",
+      "parentUuid": "635eb394_ee100fa6",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 893,
+        "endChar": 47
+      },
+      "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
