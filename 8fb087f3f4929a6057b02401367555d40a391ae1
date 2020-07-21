@@ -166,6 +166,30 @@
       "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b873d0fe_ff61654e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T20:23:08Z",
+      "side": 1,
+      "message": "My previous comment explains why that is still not correct :)",
+      "parentUuid": "8ce93dd3_b5b8055b",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 893,
+        "endChar": 47
+      },
+      "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
