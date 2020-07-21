@@ -2893,13 +2893,6 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
-                // FramebufferVk::syncState signals that we should start a new command buffer.
-                // But changing the binding can skip FramebufferVk::syncState if the Framebuffer
-                // has no dirty bits. Thus we need to explicitly clear the current command
-                // buffer to ensure we start a new one. Note that we always start a new command
-                // buffer because we currently can only support one open RenderPass at a time.
-                onRenderPassFinished();
-
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
                 updateFlipViewportDrawFramebuffer(glState);
