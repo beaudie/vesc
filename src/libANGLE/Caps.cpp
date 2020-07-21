@@ -791,6 +791,16 @@ bool DetermineCompressedTextureETCSupport(const TextureCapsMap &textureCaps)
     return GetFormatSupport(textureCaps, requiredFormats, true, true, false, false, false);
 }
 
+// Checks for GL_OES_texture_stencil8 support
+static bool DetermineStencilIndex8Support(const TextureCapsMap &textureCaps)
+{
+    constexpr GLenum requiredFormats[] = {
+        GL_STENCIL_INDEX8,
+    };
+
+    return GetFormatSupport(textureCaps, requiredFormats, false, false, true, false, false);
+}
+
 void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
 {
     // TODO(ynovikov): rgb8rgba8OES, colorBufferHalfFloat, textureHalfFloat, textureHalfFloatLinear,
@@ -844,6 +854,7 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     textureCompressionBPTC              = DetermineBPTCTextureSupport(textureCaps);
     compressedTexturePVRTC              = DeterminePVRTCTextureSupport(textureCaps);
     compressedTexturePVRTCsRGB          = DeterminePVRTCsRGBTextureSupport(textureCaps);
+    stencilIndex8                       = DetermineStencilIndex8Support(textureCaps);
 }
 
 const ExtensionInfoMap &GetExtensionInfoMap()
@@ -1019,6 +1030,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_EXT_gpu_shader5"] = enableableExtension(&Extensions::gpuShader5EXT);
         map["GL_APPLE_clip_distance"] = enableableExtension(&Extensions::clipDistanceAPPLE);
         map["GL_EXT_EGL_image_array"] = enableableExtension(&Extensions::eglImageArray);
+        map["GL_OES_texture_stencil8"] = enableableExtension(&Extensions::stencilIndex8);
         // GLES1 extensions
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArrayOES);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMapOES);
