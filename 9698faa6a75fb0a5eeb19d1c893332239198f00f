@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c70ce06_24135dec",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-21T16:45:17Z",
+      "side": 1,
+      "message": "instead of using shortn, use a named link with a full URL.",
+      "range": {
+        "startLine": 173,
+        "startChar": 20,
+        "endLine": 173,
+        "endChar": 45
+      },
+      "revId": "9698faa6a75fb0a5eeb19d1c893332239198f00f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69b6b8d8_0523974b",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-21T16:45:17Z",
+      "side": 1,
+      "message": "Suggestion: When there are no more jobs in the queue, the worker processes terminate and the main process reports results.",
+      "range": {
+        "startLine": 173,
+        "startChar": 329,
+        "endLine": 173,
+        "endChar": 401
+      },
+      "revId": "9698faa6a75fb0a5eeb19d1c893332239198f00f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "685049c8_a1b626b7",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-21T16:45:17Z",
+      "side": 1,
+      "message": "nit: suggest you omit this, redundant.",
+      "range": {
+        "startLine": 173,
+        "startChar": 293,
+        "endLine": 173,
+        "endChar": 327
+      },
+      "revId": "9698faa6a75fb0a5eeb19d1c893332239198f00f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a81e8c8_ad5cdc3f",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-21T16:45:17Z",
+      "side": 1,
+      "message": "wording suggestion: We spawn n-1 independent worker processes, where n is the value returned by multiprocessing.cpu_count().",
+      "range": {
+        "startLine": 173,
+        "startChar": 137,
+        "endLine": 173,
+        "endChar": 159
+      },
+      "revId": "9698faa6a75fb0a5eeb19d1c893332239198f00f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
