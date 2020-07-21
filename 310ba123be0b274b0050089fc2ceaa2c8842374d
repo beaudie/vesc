@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "793a04d8_e72c25b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-21T02:05:05Z",
+      "side": 1,
+      "message": "I did more changes since Geoff gave +2. So I prefer you give another round review. Thanks.",
+      "revId": "310ba123be0b274b0050089fc2ceaa2c8842374d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
