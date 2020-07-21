@@ -19,6 +19,41 @@
     },
     {
       "key": {
+        "uuid": "663d02a8_41dfc3e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T18:23:56Z",
+      "side": 1,
+      "message": "\u003e I thought it is undefined behavior to read a current bind object that you are writing to?\n\nIt\u0027s true if that happens in the same draw call. Not true if in in different calls.\n\nIf you look at the tests, they have a texture that\u0027s bound to the framebuffer (which is then invalidated), then the texture is updated without the framebuffer\u0027s knowledge. There is no binding change at this point.\n\n\u003e Right now it walks over these storage objects and mark them dirty for every draw call.\n\nYes, as every draw call could be changing them. This exact same logic is there for storage buffers, but it was missing for storage images.\n\nNote that we don\u0027t walk all storage images, only those that the current program uses. The list is updated on program change.",
+      "parentUuid": "7068d6fa_17d91ae7",
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "29648f37_80636b21",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8776,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T18:23:56Z",
+      "side": 1,
+      "message": "@Tim: Almost forgot to mention this. I think there\u0027s a bug here. I think this should take the program executable instead of the program.\n\nIf you agree, do you mind me creating and assigning a bug to you for fixing this? The change to fix it is probably trivial, writing a regression test is the main part of that task.\n\n---\n\nSame for updateActiveImageUnitIndices.",
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46f2be36_2c8f42e6",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 6
@@ -39,6 +74,30 @@
       "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d293b183_f26bd9ba",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T18:23:56Z",
+      "side": 1,
+      "message": "No, the image could be updated directly (for example a direct copy, a storage image write etc), in which case there are no staged updates.",
+      "parentUuid": "46f2be36_2c8f42e6",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 179,
+        "endChar": 27
+      },
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
