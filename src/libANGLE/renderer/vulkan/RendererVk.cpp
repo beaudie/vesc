@@ -431,6 +431,7 @@ RendererVk::RendererVk()
       mMaxVertexAttribDivisor(1),
       mMaxVertexAttribStride(0),
       mMinImportedHostPointerAlignment(1),
+      mDefaultUniformBufferSize(16384u),
       mDevice(VK_NULL_HANDLE),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
@@ -1345,6 +1346,20 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         InitSamplerYcbcrKHRFunctions(mDevice);
     }
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
+
+    // This size is picked based on experience, may needs further tuning.
+    bool isQualcomm = IsQualcomm(mPhysicalDeviceProperties.vendorID);
+    if (isQualcomm && mPhysicalDeviceProperties.deviceID == 0x5040001)
+    {
+        mDefaultUniformBufferSize = 16 * 1024u;
+    }
+    else
+    {
+        mDefaultUniformBufferSize = 64 * 1024u;
+    }
+    // Cap it with the driver limit
+    mDefaultUniformBufferSize = std::min(
+        mDefaultUniformBufferSize, getPhysicalDeviceProperties().limits.maxUniformBufferRange);
 
     // Initialize the vulkan pipeline cache.
     bool success = false;
