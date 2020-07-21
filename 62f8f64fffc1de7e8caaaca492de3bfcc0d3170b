@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce903df3_101be46c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-21T00:16:43Z",
+      "side": 1,
+      "message": "PTAL. \n\nRight now I kept uniform buffer at 16K. I would like to increase to 64K, but pixel2 fails test. There are two options: \nA) I keep it at 16K for all. Or \nB) I change it to 64K except pixel2 (more accurately, I can look at Qualcomm\u0027s VK driver version and change to 64K if driver version is 1.1.124 or higher, and mean time file a bug for QC).\n\nIf anyone has any suggestion please let me know.",
+      "revId": "62f8f64fffc1de7e8caaaca492de3bfcc0d3170b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
