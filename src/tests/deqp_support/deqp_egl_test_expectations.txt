@@ -108,6 +108,9 @@
 // Linux failures
 2546 LINUX : dEQP-EGL.functional.negative_api.copy_buffers = SKIP
 2546 LINUX : dEQP-EGL.functional.render.multi_context.* = SKIP
+//Jeff2546 LINUX : dEQP-EGL.functional.render.multi_context.gles2.other = SKIP
+//Jeff2546 LINUX : dEQP-EGL.functional.render.multi_context.gles3.other = SKIP
+//Jeff2546 LINUX : dEQP-EGL.functional.render.multi_context.gles2_gles3.other = SKIP
 2546 LINUX : dEQP-EGL.functional.thread_cleanup.* = SKIP
 2546 LINUX : dEQP-EGL.functional.native_color_mapping.native_window.* = FAIL
 2546 LINUX : dEQP-EGL.functional.native_coord_mapping.native_window.* = FAIL
