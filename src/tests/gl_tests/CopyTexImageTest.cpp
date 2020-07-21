@@ -25,34 +25,15 @@ class CopyTexImageTest : public ANGLETest
 
     void testSetUp() override
     {
-        constexpr char kVS[] =
-            "precision highp float;\n"
-            "attribute vec4 position;\n"
-            "varying vec2 texcoord;\n"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "    gl_Position = position;\n"
-            "    texcoord = (position.xy * 0.5) + 0.5;\n"
-            "}\n";
-
-        constexpr char kFS[] =
-            "precision highp float;\n"
-            "uniform sampler2D tex;\n"
-            "varying vec2 texcoord;\n"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "    gl_FragColor = texture2D(tex, texcoord);\n"
-            "}\n";
-
-        mTextureProgram = CompileProgram(kVS, kFS);
+        mTextureProgram =
+            CompileProgram(essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
         if (mTextureProgram == 0)
         {
             FAIL() << "shader compilation failed.";
         }
 
-        mTextureUniformLocation = glGetUniformLocation(mTextureProgram, "tex");
+        mTextureUniformLocation =
+            glGetUniformLocation(mTextureProgram, essl1_shaders::Texture2DUniform());
 
         ASSERT_GL_NO_ERROR();
     }
@@ -99,7 +80,7 @@ class CopyTexImageTest : public ANGLETest
         glBindTexture(GL_TEXTURE_2D, texture);
         glUniform1i(mTextureUniformLocation, 0);
 
-        drawQuad(mTextureProgram, "position", 0.5f);
+        drawQuad(mTextureProgram, essl1_shaders::PositionAttrib(), 0.5f);
 
         // Expect that the rendered quad has the same color as the source texture
         EXPECT_PIXEL_NEAR(xs, ys, data[0], data[1], data[2], data[3], 1.0);
@@ -526,6 +507,73 @@ TEST_P(CopyTexImageTest, DeleteAfterCopyingToTextures)
     texture2.reset();
 }
 
+TEST_P(CopyTexImageTest, SubCopyAfterCopy)
+{
+    constexpr GLsizei kSize = 16;
+
+    // Create texture in copyFBO0 with color (.25, 1, .75, .5)
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLFramebuffer copyFBO0;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    // Clear copyFBO0
+    glClearColor(0.25f, 1.0f, 0.75f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Create texture in copyFBO[1] with color (1, .75, .5, .25)
+    GLTexture texture1;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLFramebuffer copyFBO1;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture1, 0);
+
+    // Clear copyFBO1
+    glClearColor(1.0f, 0.75f, 0.5f, 0.25f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Create copy destination
+    GLTexture copyToTex;
+    glBindTexture(GL_TEXTURE_2D, copyToTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Copy from copyFBO0 to copyToTex.  Should become (.25, 1, .75, .5).
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO0);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, kSize, kSize, 0);
+    ASSERT_GL_NO_ERROR();
+
+    GLubyte expected0[4] = {64, 255, 191, 255};
+    verifyResults(copyToTex, expected0, kSize, 0, 0, kSize, kSize);
+
+    // copyFBO[1] - copySubImage -> copyToTex
+    // copyToTex should have subportion what was in copyFBO[1] : (1, .75, .5, .25)
+    // The rest should still be untouched: (.25, 1, .75, .5)
+    GLint half = kSize / 2;
+    glBindFramebuffer(GL_FRAMEBUFFER, copyFBO1);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, half, half, half, half, half, half);
+    ASSERT_GL_NO_ERROR();
+
+    GLubyte expected1[4] = {255, 191, 127, 255};
+    verifyResults(copyToTex, expected1, kSize, half, half, kSize, kSize);
+
+    // Verify rest is untouched
+    verifyResults(copyToTex, expected0, kSize, 0, 0, half, half);
+    verifyResults(copyToTex, expected0, kSize, 0, half, half, kSize);
+    verifyResults(copyToTex, expected0, kSize, half, 0, kSize, half);
+}
+
 // specialization of CopyTexImageTest is added so that some tests can be explicitly run with an ES3
 // context
 class CopyTexImageTestES3 : public CopyTexImageTest
@@ -899,6 +947,8 @@ ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
                        ES2_OPENGLES(),
                        ES2_VULKAN(),
                        ES3_VULKAN(),
+                       ES2_VULKAN_SWIFTSHADER(),
+                       ES3_VULKAN_SWIFTSHADER(),
                        WithEmulateCopyTexImage2DFromRenderbuffers(ES2_OPENGL()),
                        WithEmulateCopyTexImage2DFromRenderbuffers(ES2_OPENGLES()));
 
