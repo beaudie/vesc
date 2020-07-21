@@ -1654,10 +1654,20 @@ void State::detachRenderbuffer(const Context *context, RenderbufferID renderbuff
     }
 }
 
-void State::setReadFramebufferBinding(Framebuffer *framebuffer)
+void State::setReadFramebufferBinding(const Context *context, Framebuffer *framebuffer)
 {
     if (mReadFramebuffer == framebuffer)
+    {
         return;
+    }
+
+    if (mReadFramebuffer)
+    {
+        if (mReadFramebuffer->hasAnyDirtyBit())
+        {
+            (void)mReadFramebuffer->syncState(context, GL_READ_FRAMEBUFFER);
+        }
+    }
 
     mReadFramebuffer = framebuffer;
     mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
@@ -1668,10 +1678,20 @@ void State::setReadFramebufferBinding(Framebuffer *framebuffer)
     }
 }
 
-void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
+void State::setDrawFramebufferBinding(const Context *context, Framebuffer *framebuffer)
 {
     if (mDrawFramebuffer == framebuffer)
+    {
         return;
+    }
+
+    if (mDrawFramebuffer)
+    {
+        if (mDrawFramebuffer->hasAnyDirtyBit())
+        {
+            (void)mDrawFramebuffer->syncState(context, GL_DRAW_FRAMEBUFFER);
+        }
+    }
 
     mDrawFramebuffer = framebuffer;
     mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
@@ -1705,22 +1725,22 @@ Framebuffer *State::getTargetFramebuffer(GLenum target) const
     }
 }
 
-bool State::removeReadFramebufferBinding(FramebufferID framebuffer)
+bool State::removeReadFramebufferBinding(const Context *context, FramebufferID framebuffer)
 {
     if (mReadFramebuffer != nullptr && mReadFramebuffer->id() == framebuffer)
     {
-        setReadFramebufferBinding(nullptr);
+        setReadFramebufferBinding(context, nullptr);
         return true;
     }
 
     return false;
 }
 
-bool State::removeDrawFramebufferBinding(FramebufferID framebuffer)
+bool State::removeDrawFramebufferBinding(const Context *context, FramebufferID framebuffer)
 {
     if (mReadFramebuffer != nullptr && mDrawFramebuffer->id() == framebuffer)
     {
-        setDrawFramebufferBinding(nullptr);
+        setDrawFramebufferBinding(context, nullptr);
         return true;
     }
 

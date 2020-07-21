@@ -317,14 +317,14 @@ class State : angle::NonCopyable
     void detachRenderbuffer(const Context *context, RenderbufferID renderbuffer);
 
     // Framebuffer binding manipulation
-    void setReadFramebufferBinding(Framebuffer *framebuffer);
-    void setDrawFramebufferBinding(Framebuffer *framebuffer);
+    void setReadFramebufferBinding(const Context *context, Framebuffer *framebuffer);
+    void setDrawFramebufferBinding(const Context *context, Framebuffer *framebuffer);
     Framebuffer *getTargetFramebuffer(GLenum target) const;
     Framebuffer *getReadFramebuffer() const { return mReadFramebuffer; }
     Framebuffer *getDrawFramebuffer() const { return mDrawFramebuffer; }
 
-    bool removeReadFramebufferBinding(FramebufferID framebuffer);
-    bool removeDrawFramebufferBinding(FramebufferID framebuffer);
+    bool removeReadFramebufferBinding(const Context *context, FramebufferID framebuffer);
+    bool removeDrawFramebufferBinding(const Context *context, FramebufferID framebuffer);
 
     // Vertex array object binding manipulation
     void setVertexArrayBinding(const Context *context, VertexArray *vertexArray);

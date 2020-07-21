@@ -1066,7 +1066,7 @@ void Context::bindReadFramebuffer(FramebufferID framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
         mImplementation.get(), mState.mCaps, framebufferHandle, mState.getContextID());
-    mState.setReadFramebufferBinding(framebuffer);
+    mState.setReadFramebufferBinding(this, framebuffer);
     mReadFramebufferObserverBinding.bind(framebuffer);
 }
 
@@ -1074,7 +1074,7 @@ void Context::bindDrawFramebuffer(FramebufferID framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
         mImplementation.get(), mState.mCaps, framebufferHandle, mState.getContextID());
-    mState.setDrawFramebufferBinding(framebuffer);
+    mState.setDrawFramebufferBinding(this, framebuffer);
     mDrawFramebufferObserverBinding.bind(framebuffer);
     mStateCache.onDrawFramebufferChange(this);
 }
@@ -2665,12 +2665,12 @@ void Context::detachFramebuffer(FramebufferID framebuffer)
     // though BindFramebuffer had been executed with the target of FRAMEBUFFER and framebuffer of
     // zero.
 
-    if (mState.removeReadFramebufferBinding(framebuffer) && framebuffer.value != 0)
+    if (mState.removeReadFramebufferBinding(this, framebuffer) && framebuffer.value != 0)
     {
         bindReadFramebuffer({0});
     }
 
-    if (mState.removeDrawFramebufferBinding(framebuffer) && framebuffer.value != 0)
+    if (mState.removeDrawFramebufferBinding(this, framebuffer) && framebuffer.value != 0)
     {
         bindDrawFramebuffer({0});
     }
@@ -8118,13 +8118,13 @@ egl::Error Context::unsetDefaultFramebuffer()
     // Remove the default framebuffer
     if (mState.getReadFramebuffer() == defaultFramebuffer)
     {
-        mState.setReadFramebufferBinding(nullptr);
+        mState.setReadFramebufferBinding(this, nullptr);
         mReadFramebufferObserverBinding.bind(nullptr);
     }
 
     if (mState.getDrawFramebuffer() == defaultFramebuffer)
     {
-        mState.setDrawFramebufferBinding(nullptr);
+        mState.setDrawFramebufferBinding(this, nullptr);
         mDrawFramebufferObserverBinding.bind(nullptr);
     }
 
