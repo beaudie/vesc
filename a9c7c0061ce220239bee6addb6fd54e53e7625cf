@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "71662a14_de0ac51d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f930cf74_0e3c984f",
+      "range": {
+        "startLine": 263,
+        "startChar": 5,
+        "endLine": 263,
+        "endChar": 26
+      },
+      "revId": "a9c7c0061ce220239bee6addb6fd54e53e7625cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b4abb6a_e8e0b7d3",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 1
@@ -96,6 +120,30 @@
       "revId": "a9c7c0061ce220239bee6addb6fd54e53e7625cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "565f6c77_528c37f7",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:39:57Z",
+      "side": 1,
+      "message": "They are independently used in this file elsewhere too.\n\nI turned them into members of the DepthStencilState class, so they get reused by both files.",
+      "parentUuid": "5b4abb6a_e8e0b7d3",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 1
+      },
+      "revId": "a9c7c0061ce220239bee6addb6fd54e53e7625cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +170,30 @@
     },
     {
       "key": {
+        "uuid": "132f0a36_204825c3",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bee2421_26275d2a",
+      "range": {
+        "startLine": 2809,
+        "startChar": 22,
+        "endLine": 2809,
+        "endChar": 30
+      },
+      "revId": "a9c7c0061ce220239bee6addb6fd54e53e7625cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab264c03_1bb17755",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 1
@@ -142,6 +214,30 @@
       "revId": "a9c7c0061ce220239bee6addb6fd54e53e7625cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "801bcd63_5058f662",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2872,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab264c03_1bb17755",
+      "range": {
+        "startLine": 2872,
+        "startChar": 22,
+        "endLine": 2872,
+        "endChar": 30
+      },
+      "revId": "a9c7c0061ce220239bee6addb6fd54e53e7625cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
