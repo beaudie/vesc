@@ -241,6 +241,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
 {
     outCaps->textureNPOT = true;
+    outCaps->stencil8    = false;  // getRenderer()->getNativeExtensions().stencilIndex8;
+
+    // gl::Extensions extensions = getRenderer()->getNativeExtensions();
+    // extensions.stencilIndex8  = false;
 }
 
 const char *DisplayVk::getWSILayer() const
