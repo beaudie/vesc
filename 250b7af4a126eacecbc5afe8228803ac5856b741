@@ -22,6 +22,30 @@
       "revId": "250b7af4a126eacecbc5afe8228803ac5856b741",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a132378e_8ba36f35",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-21T17:00:28Z",
+      "side": 1,
+      "message": "FramebufferVk::invalidateSub ensures that the area being invalidated encompasses the render pass area, so we can safely set storeOp\u003dDONT_CARE.",
+      "parentUuid": "a2145c8a_ada16260",
+      "range": {
+        "startLine": 1267,
+        "startChar": 0,
+        "endLine": 1268,
+        "endChar": 72
+      },
+      "revId": "250b7af4a126eacecbc5afe8228803ac5856b741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
