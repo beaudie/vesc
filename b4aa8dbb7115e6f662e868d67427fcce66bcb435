@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "21d4fdb7_73eddcea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-21T19:01:27Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29648f37_80636b21",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
