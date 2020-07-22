@@ -587,6 +587,7 @@ class ContextVk : public ContextImpl, public vk::Context
     }
 
     vk::BufferHelper &getEmptyBuffer() { return mEmptyBuffer; }
+    vk::DynamicBuffer *getStagingBufferStorage() { return &mStagingBufferStorage; }
 
   private:
     // Dirty bits.
@@ -1067,6 +1068,9 @@ class ContextVk : public ContextImpl, public vk::Context
     // counter buffer array, or places where there is no vertex buffer since Vulkan does not allow
     // binding a null vertex buffer.
     vk::BufferHelper mEmptyBuffer;
+
+    // All staging buffer support is provided by a DynamicBuffer.
+    vk::DynamicBuffer mStagingBufferStorage;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };
