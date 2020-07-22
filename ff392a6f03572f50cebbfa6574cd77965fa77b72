@@ -113,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "28a5944b_873556a7",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-22T21:58:02Z",
+      "side": 1,
+      "message": "Having conceptual clarity is probably a better goal.  If you could, just comment the script to label which subprocess belongs to which stage.",
+      "parentUuid": "56bf4241_1be9ce13",
+      "range": {
+        "startLine": 182,
+        "startChar": 48,
+        "endLine": 183,
+        "endChar": 10
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b817fa35_a70e7eb4",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 3
