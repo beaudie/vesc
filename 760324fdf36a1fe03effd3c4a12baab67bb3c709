@@ -39,6 +39,24 @@
       "revId": "760324fdf36a1fe03effd3c4a12baab67bb3c709",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8d43e9d_575794aa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-22T15:05:53Z",
+      "side": 1,
+      "message": "You should encode this device ID somewhere as e.g. IsPixel2 (I don\u0027t know what this device ID is). Also it would be helpful to know why you\u0027re doing this - is it for performance or to work around a driver bug? In either case it may help to featurize this.",
+      "parentUuid": "c57ebe16_3fa679ad",
+      "revId": "760324fdf36a1fe03effd3c4a12baab67bb3c709",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
