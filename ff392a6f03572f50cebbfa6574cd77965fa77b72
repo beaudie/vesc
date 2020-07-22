@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "56bf4241_1be9ce13",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-22T20:33:25Z",
+      "side": 1,
+      "message": "I feel like 3 stages make more sense because there are clear purpose for each stage. Run capture, build replay, run replay. But if you think it\u0027s better, I will standardize it to 4 stages.",
+      "parentUuid": "5082bad7_64c0c533",
+      "range": {
+        "startLine": 182,
+        "startChar": 48,
+        "endLine": 183,
+        "endChar": 10
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b817fa35_a70e7eb4",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 3
@@ -85,6 +109,30 @@
       "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6883cf70_eef44f15",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-22T20:33:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b817fa35_a70e7eb4",
+      "range": {
+        "startLine": 188,
+        "startChar": 72,
+        "endLine": 188,
+        "endChar": 112
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
