@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f6bf087c_5ae840bd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-22T16:46:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ea9542e_f69520a9",
+      "range": {
+        "startLine": 434,
+        "startChar": 32,
+        "endLine": 434,
+        "endChar": 38
+      },
+      "revId": "760324fdf36a1fe03effd3c4a12baab67bb3c709",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c57ebe16_3fa679ad",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -57,6 +81,24 @@
       "revId": "760324fdf36a1fe03effd3c4a12baab67bb3c709",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b93eca20_6fa0186c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-22T16:46:30Z",
+      "side": 1,
+      "message": "\"Based on experience\" actually is referring to 64k. But I will add more detailed comment here.",
+      "parentUuid": "b8d43e9d_575794aa",
+      "revId": "760324fdf36a1fe03effd3c4a12baab67bb3c709",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
