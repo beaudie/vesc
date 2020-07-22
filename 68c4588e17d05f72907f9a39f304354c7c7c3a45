@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cd4ff0b_bbf645de",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-22T17:05:42Z",
+      "side": 1,
+      "message": "nit: can you make this a feature in FeaturesVk?",
+      "range": {
+        "startLine": 1355,
+        "startChar": 0,
+        "endLine": 1359,
+        "endChar": 65
+      },
+      "revId": "68c4588e17d05f72907f9a39f304354c7c7c3a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
