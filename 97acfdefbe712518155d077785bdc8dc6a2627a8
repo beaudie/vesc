@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0be1c670_6764116a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-22T17:10:34Z",
+      "side": 1,
+      "message": "The benefit is mainly memory savings. For example if app calls glBufferSubData on a few buffers, before this change, each buffer object may end up having multiple staging buffers and most of these staging buffers are sit there idle not been reused. If we move to context, now we will able to use the staging buffer for buffer1 and later on for buffer2 etc. And in future it will expand to use for other objects staging buffer needs as well. Basically anyone you need a one time usage buffer, this is something you should use. Note that these are all wire memory which are not able to compress/swap by OS. I will try to test with gfxbench later as well.\n\nWill update commit message with more detail.",
+      "parentUuid": "3cafad99_083ae470",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f202f60_6c38cf32",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "7ccbc86e_fd4d233f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-22T17:10:34Z",
+      "side": 1,
+      "message": "That is part of benefit of moving it to context, code becomes simpler a bit. WHen this is per bufferVk object, the dynamicBuffer could be destroyed while still in use by GPU. We never wait for DMA to finish before destrpy bufferVk. So you need to add current buffer to mResourceUseList here to prevent it from gets destroyed. With this CL, the buffer is now per context, it only gets destroyed after finishImpl call, so no need to retain the current buffer any more.",
+      "parentUuid": "97594d23_11827be3",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "777e2cb4_a0080280",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "8ec9e21f_c809f08a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-22T17:10:34Z",
+      "side": 1,
+      "message": "Right. This is one case that will save memory. But also if you call glBufferSubData frequently, you will have muiltiple these buffers sit inside bufferVk object. Now if you stop calling glBufferSubData on this buffer, they will never gets used. With this CL, they gets used by other bufferVk object as well.\n\nI don\u0027t think they affects cache. But usually reduce memory usage does have positive performance  impact, not just to this app but to other app as well.",
+      "parentUuid": "777e2cb4_a0080280",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "47d6602f_affb802d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
@@ -81,6 +135,30 @@
       "writtenOn": "2020-07-22T15:37:58Z",
       "side": 1,
       "message": "nit: mStagingBuffer or mBufferStagingBuffer - it\u0027s still a staging buffer in the same way it was before ( a single dynamic buffer ).",
+      "range": {
+        "startLine": 1073,
+        "startChar": 22,
+        "endLine": 1073,
+        "endChar": 43
+      },
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d7fdef0_f17a15c4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-22T17:10:34Z",
+      "side": 1,
+      "message": "Right. The only reason I changed to \"storage\" is to keep it consistent with the mDefaultUniformStorage (which is in the other CL). Also we are calling mStagingBuffer.getCurrentBuffer \"staging buffer\" as well, so this helps distinguish them a bit. But anyway, this is minor terminology thing, I am fine with either one if people have strong preference.",
+      "parentUuid": "47d6602f_affb802d",
       "range": {
         "startLine": 1073,
         "startChar": 22,
