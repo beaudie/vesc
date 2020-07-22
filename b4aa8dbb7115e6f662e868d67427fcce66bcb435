@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "060fed8a_32706e5b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8776,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-22T19:14:21Z",
+      "side": 1,
+      "message": "Done. anglebug.com/4869",
+      "parentUuid": "5e1c17a2_3e7e5540",
+      "revId": "b4aa8dbb7115e6f662e868d67427fcce66bcb435",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46f2be36_2c8f42e6",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 6
