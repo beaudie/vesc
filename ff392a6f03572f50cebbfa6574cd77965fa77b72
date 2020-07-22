@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f5b06578_0c6452aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-22T15:21:33Z",
+      "side": 1,
+      "message": "With that fixed, LGTM",
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7790619f_76a12c8a",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 3
@@ -106,6 +123,30 @@
       "side": 1,
       "message": "Is it the new diagram? I think the new diagram reflects the architecture more clearly.",
       "parentUuid": "12b5c826_b3c8d1e2",
+      "range": {
+        "startLine": 234,
+        "startChar": 96,
+        "endLine": 234,
+        "endChar": 120
+      },
+      "revId": "ff392a6f03572f50cebbfa6574cd77965fa77b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0249aa11_b2a993a7",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-22T15:21:33Z",
+      "side": 1,
+      "message": "I tested it out, the link works, but \"for architecture\" is extraneous.\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/doc/CaptureAndReplay.md#testing",
+      "parentUuid": "da42dff3_d8c9f6ed",
       "range": {
         "startLine": 234,
         "startChar": 96,
