@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3cafad99_083ae470",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-22T14:10:19Z",
+      "side": 1,
+      "message": "Can you talk more about the benefits of this move?\nAre there any benchmarks / tests that demonstrate these benefits?",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97594d23_11827be3",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
