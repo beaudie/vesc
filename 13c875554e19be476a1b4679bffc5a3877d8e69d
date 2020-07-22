@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "751133af_6a950a9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-22T01:39:29Z",
+      "side": 1,
+      "message": "TBR. Going to land this to turn the bot green. It\u0027s a partial revert.",
+      "revId": "13c875554e19be476a1b4679bffc5a3877d8e69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
