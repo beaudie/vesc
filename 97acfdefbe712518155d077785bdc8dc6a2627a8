@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "0f202f60_6c38cf32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-22T15:31:06Z",
+      "side": 1,
+      "message": "LGTM, but I\u0027ll let somebody else +2 it.  Couple of questions though.",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97594d23_11827be3",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -30,6 +47,23 @@
       "writtenOn": "2020-07-22T14:08:53Z",
       "side": 1,
       "message": "Why is mStagingBuffer.getCurrentBuffer()-\u003eretain no longer needed?",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "777e2cb4_a0080280",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-22T15:31:06Z",
+      "side": 1,
+      "message": "It looks like here is where your overall memory savings comes from.  Rather than each pixel unpack buffer allocating 1M of staging buffer size (and potentially using less), the ContextVk is always allocating 1M, but then sharing it among all users.  True?\n\nCould this CL also provide any performance (e.g. cache, fewer allocations, less fragmentation) benefits?",
       "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
