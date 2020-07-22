@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "f5abde6c_ecb7b6b3",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-22T02:38:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c29c0f7_ad55d71c",
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4431067f_95bf6fbf",
         "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
         "patchSetId": 1
@@ -134,6 +152,30 @@
     },
     {
       "key": {
+        "uuid": "9a8039cf_80e4b3a3",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-22T02:38:16Z",
+      "side": 1,
+      "message": "I refer to https://source.chromium.org/chromium/chromium/src/+/master:ui/gl/buffer_format_utils.cc;l\u003d30;drc\u003d918c868f6c9f8c79b68f77cf82400c21a0e741c6?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F, which treats both of them as GL_RGB10_A2_EXT",
+      "parentUuid": "f10863d5_4f4c3a23",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 35
+      },
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d7a4b3a9_ee6d57f1",
         "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
         "patchSetId": 1
@@ -157,6 +199,30 @@
     },
     {
       "key": {
+        "uuid": "9bd8f303_e5fd77ef",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-22T02:38:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7a4b3a9_ee6d57f1",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 27
+      },
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f73d0c6_856596b3",
         "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
         "patchSetId": 1
@@ -177,6 +243,30 @@
       "revId": "308365448fad633100fcba657640f8637ae7ef83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e2efb94_fa857a6e",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-07-22T02:38:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f73d0c6_856596b3",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 28
+      },
+      "revId": "308365448fad633100fcba657640f8637ae7ef83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
