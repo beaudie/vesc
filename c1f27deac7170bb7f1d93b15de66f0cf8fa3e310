@@ -33,6 +33,24 @@
       "revId": "c1f27deac7170bb7f1d93b15de66f0cf8fa3e310",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9db7c182_ee977b4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-22T18:22:42Z",
+      "side": 1,
+      "message": "Charlie: if you want two people to review your CL, please add two reviewers. If you want all the people you added to review your CL, you should wait until they all approve.",
+      "parentUuid": "e0d16c44_c42dc5c3",
+      "revId": "c1f27deac7170bb7f1d93b15de66f0cf8fa3e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
