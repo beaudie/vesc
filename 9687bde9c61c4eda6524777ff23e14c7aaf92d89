@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84604af4_d1482cf6",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-22T20:07:57Z",
+      "side": 1,
+      "message": "nit: KB",
+      "range": {
+        "startLine": 352,
+        "startChar": 39,
+        "endLine": 352,
+        "endChar": 40
+      },
+      "revId": "9687bde9c61c4eda6524777ff23e14c7aaf92d89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7aca0104_8c4408f1",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-22T20:07:57Z",
+      "side": 1,
+      "message": "Suggest: \"on some devices due to ...\"\n\nThese strings are user facing, so it would be nicer if we didn\u0027t call out the company by name. Also, the conditions where this is enabled can change and it\u0027s easy to miss these strings (so they can easily get outdated).",
+      "range": {
+        "startLine": 354,
+        "startChar": 49,
+        "endLine": 354,
+        "endChar": 70
+      },
+      "revId": "9687bde9c61c4eda6524777ff23e14c7aaf92d89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97a46c5f_b5530017",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-22T20:07:57Z",
+      "side": 1,
+      "message": "Either way works, but I think it reads easier if this defaulted to kPreferred, then revert to kMin on the work around feature.",
+      "range": {
+        "startLine": 438,
+        "startChar": 32,
+        "endLine": 438,
+        "endChar": 60
+      },
+      "revId": "9687bde9c61c4eda6524777ff23e14c7aaf92d89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
