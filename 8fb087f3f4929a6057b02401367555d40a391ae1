@@ -190,6 +190,30 @@
       "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf446f2c_0d924392",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-22T00:55:48Z",
+      "side": 1,
+      "message": "Hi Shabi, as I explained to you offline, I capped it with driver limit here. Anyway, I have created separate CL to change the buffer size to 64K.",
+      "parentUuid": "b873d0fe_ff61654e",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 893,
+        "endChar": 47
+      },
+      "revId": "8fb087f3f4929a6057b02401367555d40a391ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
