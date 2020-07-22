@@ -67,6 +67,29 @@
       "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d6602f_affb802d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-22T15:37:58Z",
+      "side": 1,
+      "message": "nit: mStagingBuffer or mBufferStagingBuffer - it\u0027s still a staging buffer in the same way it was before ( a single dynamic buffer ).",
+      "range": {
+        "startLine": 1073,
+        "startChar": 22,
+        "endLine": 1073,
+        "endChar": 43
+      },
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
