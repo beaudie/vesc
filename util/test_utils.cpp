@@ -8,6 +8,8 @@
 
 #include "util/test_utils.h"
 
+#include "common/system_utils.h"
+
 #include <cstring>
 #include <fstream>
 
