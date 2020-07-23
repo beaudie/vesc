@@ -186,9 +186,14 @@ class CommandProcessor : angle::NonCopyable
     CommandProcessor(RendererVk *renderer);
     ~CommandProcessor() = default;
 
+    // Entry point for command processor thread, calls processCommandProcessorTasksImpl to do the
+    // work.
+    void processCommandProcessorTasks();
+
     // Main worker loop that should be launched in its own thread. The
     //  loop waits for work to be submitted from a separate thread.
-    angle::Result processCommandProcessorTasks();
+    angle::Result processCommandProcessorTasksImpl();
+
     // Called asynchronously from workLoop() thread to queue work that is
     //  then processed by the workLoop() thread
     void queueCommand(const vk::CommandProcessorTask &command);
