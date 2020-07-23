@@ -272,6 +272,11 @@ deps = {
     'url': '{chromium_git}/chromium/src/tools/memory@89552acb6e60f528fe3c98eac7b445d4c34183ee',
     'condition': 'not build_with_chromium',
   },
+
+  'third_party/abseil-cpp': {
+    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@4a8c7e1e458fcb034192dede2991af9285a13b4f',
+    'condition': 'not build_with_chromium',
+  },
 }
 
 hooks = [
