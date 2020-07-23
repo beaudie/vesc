@@ -23,6 +23,7 @@
 namespace rx
 {
 class RendererVk;
+class CommandProcessor;
 
 namespace vk
 {
@@ -45,6 +46,7 @@ namespace vk
 enum CustomTask
 {
     Invalid = 0,
+    FlushToPrimary,
     Flush,
     FinishToSerial,
     Present,
@@ -62,41 +64,99 @@ struct ErrorDetails
     unsigned int line;
 };
 
-struct FlushData
+class CommandProcessorTask
 {
-    std::vector<VkSemaphore> waitSemaphores;
-    std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
-    const vk::Semaphore *semaphore;
-    egl::ContextPriority contextPriority;
-    vk::GarbageList currentGarbage;
-};
+    friend class rx::CommandProcessor;
 
-struct FinishToSerialData
-{
-    Serial serial;
-};
+  public:
+    CommandProcessorTask(CustomTask command)
+        : mContextVk(nullptr), mCommandBuffer(nullptr), mWorkerCommand(command), mSemaphore(nullptr)
+    {}
+    CommandProcessorTask(ContextVk *contextVk, CommandBufferHelper *commandBuffer)
+        : mContextVk(contextVk),
+          mCommandBuffer(commandBuffer),
+          mWorkerCommand(vk::CustomTask::FlushToPrimary),
+          mSemaphore(nullptr)
+    {}
+    CommandProcessorTask(egl::ContextPriority priority, VkPresentInfoKHR presentInfo)
+        : mContextVk(nullptr),
+          mCommandBuffer(nullptr),
+          mWorkerCommand(vk::CustomTask::Present),
+          mSemaphore(nullptr),
+          mPresentInfo(presentInfo),
+          mPriority(priority)
+    {}
+    CommandProcessorTask(egl::ContextPriority priority)
+        : mContextVk(nullptr),
+          mCommandBuffer(nullptr),
+          mWorkerCommand(vk::CustomTask::QueueWaitIdle),
+          mSemaphore(nullptr),
+          mPriority(priority)
+    {}
+    CommandProcessorTask(Serial serial)
+        : mContextVk(nullptr),
+          mCommandBuffer(nullptr),
+          mWorkerCommand(vk::CustomTask::FinishToSerial),
+          mSerial(serial)
+    {}
+    CommandProcessorTask(std::vector<VkSemaphore> waitSemaphores,
+                         std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks,
+                         const vk::Semaphore *semaphore,
+                         egl::ContextPriority priority,
+                         vk::GarbageList &currentGarbage)
+        : mContextVk(nullptr),
+          mCommandBuffer(nullptr),
+          mWorkerCommand(vk::CustomTask::Flush),
+          mWaitSemaphores(waitSemaphores),
+          mWaitSemaphoreStageMasks(waitSemaphoreStageMasks),
+          mSemaphore(semaphore),
+          mCurrentGarbage(std::move(currentGarbage)),
+          mPriority(priority)
+    {}
 
-struct PresentData
-{
-    egl::ContextPriority priority;
-    VkPresentInfoKHR presentInfo;
-};
-
-struct QueueWaitIdleData
-{
-    egl::ContextPriority priority;
-};
-
-struct CommandProcessorTask
-{
-    ContextVk *contextVk;
-    // TODO: b/153666475 Removed primaryCB in threading phase2.
-    union
+    CommandProcessorTask &operator=(CommandProcessorTask &&rhs)
     {
-        CommandBufferHelper *commandBuffer;
-        CustomTask workerCommand;
-    };
-    void *commandData;
+        if (this != &rhs)
+        {
+            mContextVk     = rhs.mContextVk;
+            mCommandBuffer = rhs.mCommandBuffer;
+            std::swap(mWorkerCommand, rhs.mWorkerCommand);
+            std::swap(mWaitSemaphores, rhs.mWaitSemaphores);
+            std::swap(mWaitSemaphoreStageMasks, mWaitSemaphoreStageMasks);
+            mSemaphore = rhs.mSemaphore;
+            std::swap(mCurrentGarbage, rhs.mCurrentGarbage);
+            std::swap(mSerial, rhs.mSerial);
+            std::swap(mPresentInfo, rhs.mPresentInfo);
+            std::swap(mPriority, rhs.mPriority);
+
+            // clear rhs now that everything has moved.
+            rhs.mCommandBuffer = nullptr;
+            rhs.mSemaphore     = nullptr;
+        }
+        return *this;
+    }
+
+    CommandProcessorTask(CommandProcessorTask &&other) { *this = std::move(other); }
+
+  private:
+    ContextVk *mContextVk;
+    CommandBufferHelper *mCommandBuffer;
+    CustomTask mWorkerCommand;
+
+    // Flush data
+    std::vector<VkSemaphore> mWaitSemaphores;
+    std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
+    const vk::Semaphore *mSemaphore;
+    vk::GarbageList mCurrentGarbage;
+
+    // FinishToSerial command data
+    Serial mSerial;
+
+    // Present command data
+    VkPresentInfoKHR mPresentInfo;
+
+    // Flush, Present & QueueWaitIdle data
+    egl::ContextPriority mPriority;
 };
 
 struct CommandBatch final : angle::NonCopyable
@@ -192,11 +252,11 @@ class CommandProcessor : angle::NonCopyable
 
     // Main worker loop that should be launched in its own thread. The
     //  loop waits for work to be submitted from a separate thread.
-    angle::Result processCommandProcessorTasksImpl();
+    angle::Result processCommandProcessorTasksImpl(bool *exitThread);
 
     // Called asynchronously from workLoop() thread to queue work that is
     //  then processed by the workLoop() thread
-    void queueCommand(const vk::CommandProcessorTask &command);
+    void queueCommand(vk::CommandProcessorTask *command);
     // Used by separate thread to wait for worker thread to complete all
     //  outstanding work.
     void waitForWorkComplete();

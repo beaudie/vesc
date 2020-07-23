@@ -282,7 +282,7 @@ class RendererVk : angle::NonCopyable
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
     // Queue commands to worker thread for processing
-    void queueCommand(const vk::CommandProcessorTask &command)
+    void queueCommand(vk::CommandProcessorTask *command)
     {
         mCommandProcessor.queueCommand(command);
     }
