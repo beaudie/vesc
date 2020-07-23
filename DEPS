@@ -106,6 +106,11 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'third_party/abseil-cpp': {
+    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@21f87606a40718963ce2cdf7945883f3ad2ecb3d',
+    'condition': 'not build_with_chromium',
+  },
+
   'third_party/android_ndk': {
     'url': '{chromium_git}/android_ndk.git@27c0a8d090c666a50e40fceb4ee5b40b1a2d3f87',
     'condition': 'checkout_android and not build_with_chromium',
@@ -127,15 +132,6 @@ deps = {
   'third_party/dummy_chromium': {
     'url': '{chromium_git}/chromium/src.git@{chromium_revision}',
     'condition': 'dummy_checkout_chromium',
-  },
-
-  'third_party/vulkan_memory_allocator': {
-    'url': '{chromium_git}/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator@431d6e57284aeb08118ff428dfbd51c94342faa1',
-    'condition': 'not build_with_chromium',
-  },
-
-  'third_party/VK-GL-CTS/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{vk_gl_cts_revision}',
   },
 
   'third_party/fuchsia-sdk': {
@@ -236,12 +232,21 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'third_party/VK-GL-CTS/src': {
+    'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{vk_gl_cts_revision}',
+  },
+
   'third_party/vulkan-headers/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Headers@{vulkan_headers_revision}',
   },
 
   'third_party/vulkan-loader/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@{vulkan_loader_revision}',
+  },
+
+  'third_party/vulkan_memory_allocator': {
+    'url': '{chromium_git}/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator@431d6e57284aeb08118ff428dfbd51c94342faa1',
+    'condition': 'not build_with_chromium',
   },
 
   'third_party/vulkan-tools/src': {
