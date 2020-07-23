@@ -101,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "0630ae15_bd0a144a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-23T17:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46ffed20_6d5d4b2e",
+      "range": {
+        "startLine": 342,
+        "startChar": 4,
+        "endLine": 342,
+        "endChar": 39
+      },
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a79991ea_f46724e5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 31
@@ -172,6 +196,30 @@
     },
     {
       "key": {
+        "uuid": "b24c46b6_43a56ed4",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-23T17:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea1685fc_bfe33652",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 48
+      },
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e438ba3_f71bc7fa",
         "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
         "patchSetId": 31
@@ -240,6 +288,24 @@
       "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5f0daaa_582948d1",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-23T17:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a64c47b3_9fe4ecd6",
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
