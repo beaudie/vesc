@@ -98,6 +98,8 @@ class TransformFeedback final : public RefCountObject<TransformFeedbackID>, publ
 
     GLsizeiptr getVerticesDrawn() const { return mState.getVerticesDrawn(); }
     GLsizeiptr getPrimitivesDrawn() const { return mState.getPrimitivesDrawn(); }
+    GLsizeiptr getVertexCapacity() const { return mState.mVertexCapacity; }
+    const Program *getBoundProgram() const { return mState.mProgram; }
 
     // Returns true if any buffer bound to this object is also bound to another target.
     bool buffersBoundForOtherUse() const;

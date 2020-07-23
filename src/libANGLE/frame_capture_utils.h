@@ -11,18 +11,35 @@
 
 #include <vector>
 
+#include "common/Color.h"
+#include "libANGLE/BinaryStream.h"
 #include "libANGLE/Error.h"
 
 namespace gl
 {
-class BinaryOutputStream;
+template <class ObjectType>
+class BindingPointer;
+struct BlendState;
+class BlendStateExt;
 class Buffer;
 class BufferState;
 class Context;
+struct DepthStencilState;
 class Framebuffer;
 class FramebufferAttachment;
 class FramebufferState;
 class ImageIndex;
+struct ImageUnit;
+template <class ObjectType>
+class OffsetBindingPointer;
+struct PixelPackState;
+struct PixelUnpackState;
+struct RasterizerState;
+struct Rectangle;
+class State;
+class TransformFeedback;
+struct Version;
+struct VertexAttribCurrentValueData;
 }  // namespace gl
 
 typedef unsigned int GLenum;
@@ -30,6 +47,8 @@ typedef unsigned int GLenum;
 namespace angle
 {
 class MemoryBuffer;
+template <typename E, typename T, size_t MaxSize>
+class PackedEnumMap;
 class ScratchBuffer;
 
 Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context);
@@ -60,5 +79,63 @@ Result SerializeBuffer(const gl::Context *context,
 
 void SerializeBufferState(gl::BinaryOutputStream *bos, const gl::BufferState &bufferState);
 
+template <typename T>
+void SerializeColor(gl::BinaryOutputStream *bos, const Color<T> &color)
+{
+    bos->writeInt(color.red);
+    bos->writeInt(color.green);
+    bos->writeInt(color.blue);
+    bos->writeInt(color.alpha);
+}
+
+void SerializeGLGlobalStates(gl::BinaryOutputStream *bos, const gl::State &state);
+
+void SerializeRasterizerState(gl::BinaryOutputStream *bos,
+                              const gl::RasterizerState &rasterizerState);
+
+void SerializeRectangle(gl::BinaryOutputStream *bos, const gl::Rectangle &rectangle);
+
+void SerializeBlendState(gl::BinaryOutputStream *bos, const gl::BlendState &blendState);
+
+void SerializeDepthStencilState(gl::BinaryOutputStream *bos,
+                                const gl::DepthStencilState &depthStencilState);
+
+void SerializeVertexAttribCurrentValueData(
+    gl::BinaryOutputStream *bos,
+    const gl::VertexAttribCurrentValueData &vertexAttribCurrentValueData);
+
+template <class ObjectType>
+void SerializeOffsetBindingPointerVector(
+    gl::BinaryOutputStream *bos,
+    const std::vector<gl::OffsetBindingPointer<ObjectType>> &offsetBindingPointerVector)
+{
+    for (size_t i = 0; i < offsetBindingPointerVector.size(); i++)
+    {
+        bos->writeInt(offsetBindingPointerVector[i].id().value);
+        bos->writeInt(offsetBindingPointerVector[i].getOffset());
+        bos->writeInt(offsetBindingPointerVector[i].getSize());
+    }
+}
+
+template <class ObjectType>
+void SerializeBindingPointerVector(
+    gl::BinaryOutputStream *bos,
+    const std::vector<gl::BindingPointer<ObjectType>> &bindingPointerVector)
+{
+    for (size_t i = 0; i < bindingPointerVector.size(); i++)
+    {
+        bos->writeInt(bindingPointerVector[i].id().value);
+    }
+}
+
+void SerializePixelPackState(gl::BinaryOutputStream *bos, const gl::PixelPackState &pixelPackState);
+
+void SerializePixelUnpackState(gl::BinaryOutputStream *bos,
+                               const gl::PixelUnpackState &pixelUnpackState);
+
+void SerializeTransformFeedback(gl::BinaryOutputStream *bos,
+                                const gl::TransformFeedback *transformFeedback);
+
+void SerializeImageUnit(gl::BinaryOutputStream *bos, const gl::ImageUnit &imageUnit);
 }  // namespace angle
 #endif  // FRAME_CAPTURE_UTILS_H_
