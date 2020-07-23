@@ -427,6 +427,11 @@ bool OSWindow::didTestEventFire()
     return false;
 }
 
+std::string OSWindow::getExternalStorageDirectory() const
+{
+    return ".";
+}
+
 // static
 void OSWindow::Delete(OSWindow **window)
 {

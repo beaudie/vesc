@@ -53,7 +53,6 @@ int SetScreenOrientation(struct android_app *app, int orientation)
 
     return 0;
 }
-
 }  // namespace
 
 AndroidWindow::AndroidWindow() {}
@@ -188,6 +187,73 @@ void android_main(struct android_app *app)
             source->process(app, source);
         }
     }
+}
+
+// static
+std::string AndroidWindow::GetExternalStorageDirectory()
+{
+    // Use reverse JNI.
+    JNIEnv *jni = GetJniEnv();
+    if (!jni)
+    {
+        WARN() << "GetExternalStorageDirectory:: Failed to get JNI env";
+        return "";
+    }
+
+    jclass environment = jni->FindClass("android/os/Environment");
+    if (environment == 0)
+    {
+        WARN() << "GetExternalStorageDirectory: Failed to find Environment";
+        return "";
+    }
+
+    jmethodID getDir =
+        jni->GetStaticMethodID(environment, "getExternalStorageDirectory", "()Ljava/io/File;");
+    if (getDir == 0)
+    {
+        WARN() << "GetExternalStorageDirectory: Failed to get static method";
+        return "";
+    }
+
+    jobject objectFile = jni->CallStaticObjectMethod(environment, getDir);
+
+    jthrowable exception = jni->ExceptionOccurred();
+    if (exception != 0)
+    {
+        jni->ExceptionDescribe();
+        jni->ExceptionClear();
+    }
+
+    jclass classFile = jni->GetObjectClass(objectFile);
+    if (classFile == 0)
+    {
+        WARN() << "GetExternalStorageDirectory: Failed to find class File";
+        return "";
+    }
+
+    jmethodID getAbsolutePath =
+        jni->GetMethodID(classFile, "getAbsolutePath", "()Ljava/lang/String;");
+    if (getAbsolutePath == 0)
+    {
+        WARN() << "GetExternalStorageDirectory: Failed to find getAbsolutePath";
+        return "";
+    }
+
+    jstring stringPath = static_cast<jstring>(jni->CallObjectMethod(objectFile, getAbsolutePath));
+    exception          = jni->ExceptionOccurred();
+    if (exception)
+    {
+        jni->ExceptionDescribe();
+        jni->ExceptionClear();
+    }
+
+    const char *path = jni->GetStringUTFChars(stringPath, nullptr);
+    return std::string(path);
+}
+
+std::string AndroidWindow::getExternalStorageDirectory() const
+{
+    return GetExternalStorageDirectory();
 }
 
 // static

@@ -139,7 +139,8 @@ void TracePerfTest::initializeBenchmark()
     SetBinaryDataDecompressCallback(params.testID, DecompressBinaryData);
 
     std::stringstream testDataDirStr;
-    testDataDirStr << ANGLE_TRACE_DATA_DIR << "/" << traceInfo.name;
+    testDataDirStr << getWindow()->getExternalStorageDirectory() << "/" << ANGLE_TRACE_DATA_DIR
+                   << "/" << traceInfo.name;
     std::string testDataDir = testDataDirStr.str();
     SetBinaryDataDir(params.testID, testDataDir.c_str());
 
