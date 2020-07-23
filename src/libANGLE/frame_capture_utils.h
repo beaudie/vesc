@@ -23,12 +23,15 @@ class Framebuffer;
 class FramebufferAttachment;
 class FramebufferState;
 class ImageIndex;
+class Sampler;
+class SamplerState;
 }  // namespace gl
 
 typedef unsigned int GLenum;
 
 namespace angle
 {
+struct ColorGeneric;
 class MemoryBuffer;
 class ScratchBuffer;
 
@@ -59,6 +62,12 @@ Result SerializeBuffer(const gl::Context *context,
                        gl::Buffer *buffer);
 
 void SerializeBufferState(gl::BinaryOutputStream *bos, const gl::BufferState &bufferState);
+
+void SerializeSampler(gl::BinaryOutputStream *bos, gl::Sampler *sampler);
+
+void SerializeSamplerState(gl::BinaryOutputStream *bos, const gl::SamplerState &samplerState);
+
+void SerializeColorGeneric(gl::BinaryOutputStream *bos, const ColorGeneric &colorGeneric);
 
 }  // namespace angle
 #endif  // FRAME_CAPTURE_UTILS_H_

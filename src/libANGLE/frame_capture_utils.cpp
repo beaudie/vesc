@@ -15,6 +15,7 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/Sampler.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
 
 namespace angle
@@ -64,6 +65,12 @@ Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
     {
         gl::Buffer *bufferPtr = buffer.second;
         ANGLE_TRY(SerializeBuffer(context, bos, &scratchBuffer, bufferPtr));
+    }
+    const gl::SamplerManager &samplerManager = context->getState().getSamplerManagerForCapture();
+    for (const auto &sampler : samplerManager)
+    {
+        gl::Sampler *samplerPtr = sampler.second;
+        SerializeSampler(bos, samplerPtr);
     }
     scratchBuffer.clear();
     return Result::Continue;
@@ -193,6 +200,54 @@ void SerializeBufferState(gl::BinaryOutputStream *bos, const gl::BufferState &bu
     bos->writeInt(bufferState.isMapped());
     bos->writeInt(bufferState.getMapOffset());
     bos->writeInt(bufferState.getMapLength());
+}
+
+void SerializeSampler(gl::BinaryOutputStream *bos, gl::Sampler *sampler)
+{
+    bos->writeString(sampler->getLabel());
+    SerializeSamplerState(bos, sampler->getSamplerState());
+}
+
+void SerializeColorGeneric(gl::BinaryOutputStream *bos, const ColorGeneric &colorGeneric)
+{
+    bos->writeEnum(colorGeneric.type);
+    if (colorGeneric.type == ColorGeneric::Type::Float)
+    {
+        bos->writeInt(colorGeneric.colorF.red);
+        bos->writeInt(colorGeneric.colorF.green);
+        bos->writeInt(colorGeneric.colorF.blue);
+        bos->writeInt(colorGeneric.colorF.alpha);
+    }
+    else if (colorGeneric.type == ColorGeneric::Type::Int)
+    {
+        bos->writeInt(colorGeneric.colorI.red);
+        bos->writeInt(colorGeneric.colorI.green);
+        bos->writeInt(colorGeneric.colorI.blue);
+        bos->writeInt(colorGeneric.colorI.alpha);
+    }
+    else
+    {
+        bos->writeInt(colorGeneric.colorUI.red);
+        bos->writeInt(colorGeneric.colorUI.green);
+        bos->writeInt(colorGeneric.colorUI.blue);
+        bos->writeInt(colorGeneric.colorUI.alpha);
+    }
+}
+
+void SerializeSamplerState(gl::BinaryOutputStream *bos, const gl::SamplerState &samplerState)
+{
+    bos->writeInt(samplerState.getMinFilter());
+    bos->writeInt(samplerState.getMagFilter());
+    bos->writeInt(samplerState.getWrapS());
+    bos->writeInt(samplerState.getWrapT());
+    bos->writeInt(samplerState.getWrapR());
+    bos->writeInt(samplerState.getMaxAnisotropy());
+    bos->writeInt(samplerState.getMinLod());
+    bos->writeInt(samplerState.getMaxLod());
+    bos->writeInt(samplerState.getCompareMode());
+    bos->writeInt(samplerState.getCompareFunc());
+    bos->writeInt(samplerState.getSRGBDecode());
+    SerializeColorGeneric(bos, samplerState.getBorderColor());
 }
 
 }  // namespace angle
