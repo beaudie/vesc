@@ -11,18 +11,17 @@
 
 #include <vector>
 
+#include "common/Color.h"
+#include "libANGLE/BinaryStream.h"
 #include "libANGLE/Error.h"
 
 namespace gl
 {
-class BinaryOutputStream;
-class Buffer;
-class BufferState;
+template <class ObjectType>
+class BindingPointer;
 class Context;
-class Framebuffer;
-class FramebufferAttachment;
-class FramebufferState;
-class ImageIndex;
+template <class ObjectType>
+class OffsetBindingPointer;
 }  // namespace gl
 
 typedef unsigned int GLenum;
@@ -34,31 +33,38 @@ class ScratchBuffer;
 
 Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context);
 
-Result SerializeFramebuffer(const gl::Context *context,
-                            gl::BinaryOutputStream *bos,
-                            ScratchBuffer *scratchBuffer,
-                            gl::Framebuffer *framebuffer);
+template <typename T>
+void SerializeColor(gl::BinaryOutputStream *bos, const Color<T> &color)
+{
+    bos->writeInt(color.red);
+    bos->writeInt(color.green);
+    bos->writeInt(color.blue);
+    bos->writeInt(color.alpha);
+}
 
-Result SerializeFramebufferState(const gl::Context *context,
-                                 gl::BinaryOutputStream *bos,
-                                 ScratchBuffer *scratchBuffer,
-                                 gl::Framebuffer *framebuffer,
-                                 const gl::FramebufferState &framebufferState);
+template <class ObjectType>
+void SerializeOffsetBindingPointerVector(
+    gl::BinaryOutputStream *bos,
+    const std::vector<gl::OffsetBindingPointer<ObjectType>> &offsetBindingPointerVector)
+{
+    for (size_t i = 0; i < offsetBindingPointerVector.size(); i++)
+    {
+        bos->writeInt(offsetBindingPointerVector[i].id().value);
+        bos->writeInt(offsetBindingPointerVector[i].getOffset());
+        bos->writeInt(offsetBindingPointerVector[i].getSize());
+    }
+}
 
-Result SerializeFramebufferAttachment(const gl::Context *context,
-                                      gl::BinaryOutputStream *bos,
-                                      ScratchBuffer *scratchBuffer,
-                                      gl::Framebuffer *framebuffer,
-                                      const gl::FramebufferAttachment &framebufferAttachment);
-
-void SerializeImageIndex(gl::BinaryOutputStream *bos, const gl::ImageIndex &imageIndex);
-
-Result SerializeBuffer(const gl::Context *context,
-                       gl::BinaryOutputStream *bos,
-                       ScratchBuffer *scratchBuffer,
-                       gl::Buffer *buffer);
-
-void SerializeBufferState(gl::BinaryOutputStream *bos, const gl::BufferState &bufferState);
+template <class ObjectType>
+void SerializeBindingPointerVector(
+    gl::BinaryOutputStream *bos,
+    const std::vector<gl::BindingPointer<ObjectType>> &bindingPointerVector)
+{
+    for (size_t i = 0; i < bindingPointerVector.size(); i++)
+    {
+        bos->writeInt(bindingPointerVector[i].id().value);
+    }
+}
 
 }  // namespace angle
 #endif  // FRAME_CAPTURE_UTILS_H_
