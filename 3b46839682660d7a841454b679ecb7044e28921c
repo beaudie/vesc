@@ -70,6 +70,30 @@
       "revId": "3b46839682660d7a841454b679ecb7044e28921c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ce9192_4d857076",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-07-23T15:47:28Z",
+      "side": 1,
+      "message": "Will do that once my batching cl lands.",
+      "parentUuid": "e05f162a_5e5104f3",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 56
+      },
+      "revId": "3b46839682660d7a841454b679ecb7044e28921c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
