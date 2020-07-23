@@ -37,20 +37,19 @@ tcu::RandomOrderExecutor *g_executor = nullptr;
 
 const char *kDataPaths[] = {
     ".",
-    "../../sdcard/chromium_tests_root",
-    "../../sdcard/chromium_tests_root/third_party/angle/third_party/VK-GL-CTS/src",
     "../../third_party/angle/third_party/VK-GL-CTS/src",
     "../../third_party/VK-GL-CTS/src",
     "third_party/VK-GL-CTS/src",
 };
 
-bool FindDataDir(std::string *dataDirOut)
+bool FindDataDir(const char *rootDir, std::string *dataDirOut)
 {
+    std::string rootOrCWD = rootDir ? rootDir : angle::GetExecutableDirectory();
+
     for (const char *dataPath : kDataPaths)
     {
         std::stringstream dirStream;
-        dirStream << angle::GetExecutableDirectory() << "/" << dataPath << "/"
-                  << ANGLE_DEQP_DATA_DIR;
+        dirStream << rootOrCWD << "/" << dataPath << "/" << ANGLE_DEQP_DATA_DIR;
         std::string candidateDataDir = dirStream.str();
 
         if (angle::IsDirectory(candidateDataDir.c_str()))
@@ -77,7 +76,8 @@ std::string GetLogFileName(std::string deqpDataDir)
 
 ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
                                                          const char *argv[],
-                                                         void *logErrorFunc)
+                                                         void *logErrorFunc,
+                                                         const char *rootDir)
 {
     try
     {
@@ -94,7 +94,7 @@ ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
         }
 
         std::string deqpDataDir;
-        if (!FindDataDir(&deqpDataDir))
+        if (!FindDataDir(rootDir, &deqpDataDir))
         {
             std::cout << "Failed to find dEQP data directory." << std::endl;
             return false;
@@ -119,7 +119,7 @@ ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
 // Exported to the tester app.
 ANGLE_LIBTESTER_EXPORT int deqp_libtester_main(int argc, const char *argv[])
 {
-    if (!deqp_libtester_init_platform(argc, argv, nullptr))
+    if (!deqp_libtester_init_platform(argc, argv, nullptr, nullptr))
     {
         tcu::die("Could not initialize the dEQP platform");
     }
@@ -166,7 +166,7 @@ ANGLE_LIBTESTER_EXPORT void deqp_libtester_shutdown_platform()
 ANGLE_LIBTESTER_EXPORT TestResult deqp_libtester_run(const char *caseName)
 {
     const char *emptyString = "";
-    if (g_platform == nullptr && !deqp_libtester_init_platform(1, &emptyString, nullptr))
+    if (g_platform == nullptr)
     {
         tcu::die("Failed to initialize platform.");
     }
