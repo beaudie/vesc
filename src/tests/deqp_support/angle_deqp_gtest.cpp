@@ -32,6 +32,7 @@ namespace
 bool gGlobalError = false;
 bool gExpectError = false;
 uint32_t gBatchId = 0;
+bool gVerbose     = false;
 
 constexpr char kInfoTag[] = "*RESULT";
 
@@ -54,20 +55,11 @@ std::string DrawElementsToGoogleTestName(const std::string &dEQPName)
     return gTestName;
 }
 
-const char *gCaseListSearchPaths[] = {
-    "/../../sdcard/chromium_tests_root/third_party/angle/third_party/VK-GL-CTS/src",
-    "/../../third_party/VK-GL-CTS/src",
-    "/../../third_party/angle/third_party/VK-GL-CTS/src",
-};
+// Relative to the ANGLE root folder.
+constexpr char kCTSRootPath[] = "third_party/VK-GL-CTS/src/";
+constexpr char kSupportPath[] = "src/tests/deqp_support/";
 
-const char *gTestExpectationsSearchPaths[] = {
-    "/../../src/tests/deqp_support/",
-    "/../../third_party/angle/src/tests/deqp_support/",
-    "/deqp_support/",
-    "/../../sdcard/chromium_tests_root/third_party/angle/src/tests/deqp_support/",
-};
-
-#define OPENGL_CTS_DIR(PATH) "/external/openglcts/data/mustpass/gles/" PATH
+#define OPENGL_CTS_DIR(PATH) "external/openglcts/data/mustpass/gles/" PATH
 
 const char *gCaseListFiles[] = {
     OPENGL_CTS_DIR("aosp_mustpass/master/gles2-master.txt"),
@@ -116,6 +108,7 @@ constexpr char kANGLEEGLString[]   = "--use-angle=";
 constexpr char kANGLEPreRotation[] = "--emulated-pre-rotation=";
 constexpr char kdEQPCaseString[]   = "--deqp-case=";
 constexpr char kBatchIdString[]    = "--batch-id=";
+constexpr char kVerboseString[]    = "--verbose";
 
 std::array<char, 500> gCaseStringBuffer;
 
@@ -182,39 +175,29 @@ void Die()
     exit(EXIT_FAILURE);
 }
 
-Optional<std::string> FindFileFromPaths(const char *paths[],
-                                        size_t numPaths,
-                                        const std::string &exeDir,
-                                        const std::string &searchFile)
+Optional<std::string> FindFileFromPath(const char *dirPath, const char *filePath)
 {
-    for (size_t pathIndex = 0; pathIndex < numPaths; ++pathIndex)
-    {
-        const char *testPath = paths[pathIndex];
-        std::stringstream pathStringStream;
-        pathStringStream << exeDir << testPath << searchFile;
+    std::stringstream strstr;
+    strstr << dirPath << filePath;
+    std::string path = strstr.str();
 
-        std::string path = pathStringStream.str();
-        std::ifstream inFile(path.c_str());
-        if (!inFile.fail())
-        {
-            inFile.close();
-            return Optional<std::string>(path);
-        }
+    std::string foundPath;
+    if (angle::FindTestDataPath(path.c_str(), &foundPath))
+    {
+        return foundPath;
     }
 
     return Optional<std::string>::Invalid();
 }
 
-Optional<std::string> FindCaseListPath(const std::string &exeDir, size_t testModuleIndex)
+Optional<std::string> FindCaseListPath(size_t testModuleIndex)
 {
-    return FindFileFromPaths(gCaseListSearchPaths, ArraySize(gCaseListSearchPaths), exeDir,
-                             gCaseListFiles[testModuleIndex]);
+    return FindFileFromPath(kCTSRootPath, gCaseListFiles[testModuleIndex]);
 }
 
-Optional<std::string> FindTestExpectationsPath(const std::string &exeDir, size_t testModuleIndex)
+Optional<std::string> FindTestExpectationsPath(size_t testModuleIndex)
 {
-    return FindFileFromPaths(gTestExpectationsSearchPaths, ArraySize(gTestExpectationsSearchPaths),
-                             exeDir, gTestExpectationsFiles[testModuleIndex]);
+    return FindFileFromPath(kSupportPath, gTestExpectationsFiles[testModuleIndex]);
 }
 
 class dEQPCaseList
@@ -266,16 +249,14 @@ void dEQPCaseList::initialize()
 
     mInitialized = true;
 
-    std::string exeDir = GetExecutableDirectory();
-
-    Optional<std::string> caseListPath = FindCaseListPath(exeDir, mTestModuleIndex);
+    Optional<std::string> caseListPath = FindCaseListPath(mTestModuleIndex);
     if (!caseListPath.valid())
     {
         std::cerr << "Failed to find case list file." << std::endl;
         Die();
     }
 
-    Optional<std::string> testExpectationsPath = FindTestExpectationsPath(exeDir, mTestModuleIndex);
+    Optional<std::string> testExpectationsPath = FindTestExpectationsPath(mTestModuleIndex);
     if (!testExpectationsPath.valid())
     {
         std::cerr << "Failed to find test expectations file." << std::endl;
@@ -751,6 +732,11 @@ void InitTestHarness(int *argc, char **argv)
         else if (strncmp(argv[argIndex], kBatchIdString, strlen(kBatchIdString)) == 0)
         {
             HandleBatchId(argv[argIndex] + strlen(kBatchIdString));
+        }
+        else if (strncmp(argv[argIndex], kVerboseString, strlen(kVerboseString)) == 0 ||
+                 strcmp(argv[argIndex], "-v") == 0)
+        {
+            gVerbose = true;
         }
         argIndex++;
     }

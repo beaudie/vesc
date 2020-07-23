@@ -309,9 +309,13 @@ void TracePerfTest::initializeBenchmark()
     mEndFrame                  = traceInfo.endFrame;
     SetBinaryDataDecompressCallback(params.testID, DecompressBinaryData);
 
-    std::stringstream testDataDirStr;
-    testDataDirStr << ANGLE_TRACE_DATA_DIR << "/" << traceInfo.name;
-    std::string testDataDir = testDataDirStr.str();
+    std::string testDataDir;
+    if (!angle::FindTestDataPath("src/tests/restricted_traces", &testDataDir))
+    {
+        ERR() << "Could not find test data folder.";
+        mSkipTest = true;
+    }
+
     SetBinaryDataDir(params.testID, testDataDir.c_str());
 
     mWindowWidth  = mTestParams.windowWidth;

@@ -8,8 +8,14 @@
 
 #include "util/test_utils.h"
 
+#include "common/system_utils.h"
+
 #include <cstring>
 #include <fstream>
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include "util/android/AndroidWindow.h"
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 
 namespace angle
 {
@@ -55,6 +61,41 @@ bool ReadEntireFileToString(const char *filePath, char *contentsOut, uint32_t ma
 
     strncpy(contentsOut, contents.c_str(), maxLen);
     return true;
+}
+
+bool FindTestDataPath(const char *searchPath, std::string *dataPathOut)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    const std::string searchPaths[] = {
+        AndroidWindow::GetExternalStorageDirectory() + "/chromium_tests_root",
+        AndroidWindow::GetExternalStorageDirectory() + "/chromium_tests_root/third_party/angle"};
+#else
+    const std::string searchPaths[] = {
+        GetExecutableDirectory(), GetExecutableDirectory() + "/../..", ".",
+        GetExecutableDirectory() + "/../../third_party/angle", "third_party/angle"};
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
+    for (const std::string &path : searchPaths)
+    {
+        std::stringstream pathStream;
+        pathStream << path << "/" << searchPath;
+        std::string candidatePath = pathStream.str();
+
+        if (angle::IsDirectory(candidatePath.c_str()))
+        {
+            *dataPathOut = candidatePath;
+            return true;
+        }
+
+        std::ifstream inFile(candidatePath.c_str());
+        if (!inFile.fail())
+        {
+            *dataPathOut = candidatePath;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // static

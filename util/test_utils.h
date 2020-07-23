@@ -61,6 +61,9 @@ bool ReadEntireFileToString(const char *filePath, char *contentsOut, uint32_t ma
 // Compute a file's size.
 bool GetFileSize(const char *filePath, uint32_t *sizeOut);
 
+// Find a test data file or directory.
+bool FindTestDataPath(const char *searchPath, std::string *dataPathOut);
+
 class ProcessHandle;
 
 class Process : angle::NonCopyable
