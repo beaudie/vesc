@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18aea8e2_025d098b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 8788,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T17:15:17Z",
+      "side": 1,
+      "message": "just to confirm: this can\u0027t change via the GL API? it\u0027s set in stone on a link?",
+      "range": {
+        "startLine": 8788,
+        "startChar": 47,
+        "endLine": 8788,
+        "endChar": 62
+      },
+      "revId": "941d07d479d26d318636716006a27fa76ae59de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
