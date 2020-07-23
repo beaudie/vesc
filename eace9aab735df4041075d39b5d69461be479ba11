@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e17b27f_513e8f63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-23T17:51:46Z",
+      "side": 1,
+      "message": "LGTM\nI approve the merge of these changes into main tp2 CL if you\u0027d like.",
+      "revId": "eace9aab735df4041075d39b5d69461be479ba11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e600438b_91b37328",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-23T17:51:46Z",
+      "side": 1,
+      "message": "I agree with your comment here and I *think* it makes sense to serialize all error reporting for worker thread errors through the contextVk. However, if we could report it here that would save having to sync errors w/ contextVk every time a task is submitted. I\u0027ll check with Jamie at next 1:1.",
+      "revId": "eace9aab735df4041075d39b5d69461be479ba11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "399aa7d3_bc4f4ba4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-23T17:51:46Z",
+      "side": 1,
+      "message": "I looked at this for a bit and wasn\u0027t sure about locking, but then I verified that the thread is only shutdown through a shutdown() call from main thread which joins this thread so we should be fine in the shutdown case as that serializes on this thread completing.",
+      "revId": "eace9aab735df4041075d39b5d69461be479ba11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bb8231f_3798f3b0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-23T17:51:46Z",
+      "side": 1,
+      "message": "ASSERT(UNREACHABLE) before this?\nWe shouldn\u0027t get here, right?",
+      "revId": "eace9aab735df4041075d39b5d69461be479ba11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
