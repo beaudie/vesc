@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ed4d41bc_38fa5913",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-23T01:09:41Z",
+      "side": 1,
+      "message": "What about when the dynamic buffer is filled and a new one needs to be allocated (stagingBuffer-\u003eallocate() sets newBufferAllocatedOut \u003d true)?   Isn\u0027t the retain() still required to handle that case so that the old buffer isn\u0027t freed before the DMA completes?",
+      "parentUuid": "7ccbc86e_fd4d233f",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "777e2cb4_a0080280",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
