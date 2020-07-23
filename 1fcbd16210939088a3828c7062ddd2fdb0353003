@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48788af7_c4f3a32e",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T15:58:04Z",
+      "side": 1,
+      "message": "nit: can you phrase this as \"keep\" rather than \"delete\".. e.g. keep_temp_files, that\u0027s what other tools use.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 20
+      },
+      "revId": "1fcbd16210939088a3828c7062ddd2fdb0353003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7de9d33e_a6d76c67",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T15:58:04Z",
+      "side": 1,
+      "message": "nit: use python multiline strings:\n\ntemplate_name \u003d \"\"\"   switch (test)\n{{\n  ...   {variable} ...\n}}\n\"\"\"\n\nthen you do template_name.format(...)\n\nsee examples in other python generator scripts in angle.",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 0
+      },
+      "revId": "1fcbd16210939088a3828c7062ddd2fdb0353003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee72c782_53fb69f6",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T15:58:04Z",
+      "side": 1,
+      "message": "nit again use multiline strings.",
+      "range": {
+        "startLine": 352,
+        "startChar": 9,
+        "endLine": 369,
+        "endChar": 75
+      },
+      "revId": "1fcbd16210939088a3828c7062ddd2fdb0353003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
