@@ -37,6 +37,69 @@
     },
     {
       "key": {
+        "uuid": "f6e568bd_2c547740",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T15:19:45Z",
+      "side": 1,
+      "message": "Filed http://anglebug.com/4871 - the split between ProgramPipelineVk/ProgramExecutableVk/ProgramVk makes this overly complex.",
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52cdc7be_4a25439b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T15:19:45Z",
+      "side": 1,
+      "message": "instead of storing this, can you query it where it\u0027s necessary?",
+      "range": {
+        "startLine": 342,
+        "startChar": 4,
+        "endLine": 342,
+        "endChar": 39
+      },
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a79991ea_f46724e5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T15:19:45Z",
+      "side": 1,
+      "message": "I can\u0027t fathom what this comparison is for. For one thing you can invert the if to early-exit:\n\nif (\u003d\u003d)\n{\n   return Continue;\n}\n\n...\n\nFor another you should comment here as to what the Serial check is determining. It\u0027s not common practice that you\u0027re explicitly storing a Serial outside of an object.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 48
+      },
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e438ba3_f71bc7fa",
         "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
         "patchSetId": 31
@@ -48,6 +111,24 @@
       "writtenOn": "2020-07-23T02:22:43Z",
       "side": 1,
       "message": "Not sure how valid this is. I don\u0027t think there\u0027s any language that forbids the context id from being reused",
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2b1c115_204ec0db",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T15:19:45Z",
+      "side": 1,
+      "message": "Yes, this is overkill. If we reuse contexts it is the job of the reset function to reset state in white box tests. You can remove all this and leave a comment.",
+      "parentUuid": "4e438ba3_f71bc7fa",
       "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
