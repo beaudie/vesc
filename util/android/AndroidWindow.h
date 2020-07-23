@@ -34,6 +34,9 @@ class AndroidWindow : public OSWindow
 
     void signalTestEvent() override;
 
+    ANGLE_UTIL_EXPORT static std::string GetExternalStorageDirectory();
+    std::string getExternalStorageDirectory() const override;
+
   private:
     bool initializeImpl(const std::string &name, int width, int height) override;
 };

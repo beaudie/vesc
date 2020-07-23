@@ -302,7 +302,8 @@ if (build_angle_perftests) {
       sources = [ "perf_tests/TracePerfTest.cpp" ]
 
       if (is_android) {
-        _trace_data_path = "/sdcard/chromium_tests_root/third_party/angle/src/tests/restricted_traces"
+        _trace_data_path =
+            "chromium_tests_root/third_party/angle/src/tests/restricted_traces"
       } else {
         _trace_data_path = rebase_path("restricted_traces", root_out_dir)
       }

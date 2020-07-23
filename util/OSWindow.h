@@ -62,6 +62,9 @@ class ANGLE_UTIL_EXPORT OSWindow
 
     virtual void signalTestEvent() = 0;
 
+    // Only overriden in AndroidWindow.
+    virtual std::string getExternalStorageDirectory() const;
+
     // Pops events look for the test event
     bool didTestEventFire();
 

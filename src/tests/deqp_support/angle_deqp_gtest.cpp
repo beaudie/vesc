@@ -25,6 +25,10 @@
 #include "tests/test_expectations/GPUTestExpectationsParser.h"
 #include "util/test_utils.h"
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include "util/android/AndroidWindow.h"
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
 namespace angle
 {
 namespace
@@ -55,16 +59,16 @@ std::string DrawElementsToGoogleTestName(const std::string &dEQPName)
 }
 
 const char *gCaseListSearchPaths[] = {
-    "/../../sdcard/chromium_tests_root/third_party/angle/third_party/VK-GL-CTS/src",
     "/../../third_party/VK-GL-CTS/src",
     "/../../third_party/angle/third_party/VK-GL-CTS/src",
+    "/third_party/angle/third_party/VK-GL-CTS/src",
 };
 
 const char *gTestExpectationsSearchPaths[] = {
     "/../../src/tests/deqp_support/",
     "/../../third_party/angle/src/tests/deqp_support/",
     "/deqp_support/",
-    "/../../sdcard/chromium_tests_root/third_party/angle/src/tests/deqp_support/",
+    "/third_party/angle/src/tests/deqp_support/",
 };
 
 #define OPENGL_CTS_DIR(PATH) "/external/openglcts/data/mustpass/gles/" PATH
@@ -184,14 +188,14 @@ void Die()
 
 Optional<std::string> FindFileFromPaths(const char *paths[],
                                         size_t numPaths,
-                                        const std::string &exeDir,
+                                        const std::string &rootDirOrCWD,
                                         const std::string &searchFile)
 {
     for (size_t pathIndex = 0; pathIndex < numPaths; ++pathIndex)
     {
         const char *testPath = paths[pathIndex];
         std::stringstream pathStringStream;
-        pathStringStream << exeDir << testPath << searchFile;
+        pathStringStream << rootDirOrCWD << testPath << searchFile;
 
         std::string path = pathStringStream.str();
         std::ifstream inFile(path.c_str());
@@ -205,16 +209,17 @@ Optional<std::string> FindFileFromPaths(const char *paths[],
     return Optional<std::string>::Invalid();
 }
 
-Optional<std::string> FindCaseListPath(const std::string &exeDir, size_t testModuleIndex)
+Optional<std::string> FindCaseListPath(const std::string &rootDirOrCWD, size_t testModuleIndex)
 {
-    return FindFileFromPaths(gCaseListSearchPaths, ArraySize(gCaseListSearchPaths), exeDir,
+    return FindFileFromPaths(gCaseListSearchPaths, ArraySize(gCaseListSearchPaths), rootDirOrCWD,
                              gCaseListFiles[testModuleIndex]);
 }
 
-Optional<std::string> FindTestExpectationsPath(const std::string &exeDir, size_t testModuleIndex)
+Optional<std::string> FindTestExpectationsPath(const std::string &rootDirOrCWD,
+                                               size_t testModuleIndex)
 {
     return FindFileFromPaths(gTestExpectationsSearchPaths, ArraySize(gTestExpectationsSearchPaths),
-                             exeDir, gTestExpectationsFiles[testModuleIndex]);
+                             rootDirOrCWD, gTestExpectationsFiles[testModuleIndex]);
 }
 
 class dEQPCaseList
@@ -266,16 +271,22 @@ void dEQPCaseList::initialize()
 
     mInitialized = true;
 
-    std::string exeDir = GetExecutableDirectory();
+#if defined(ANGLE_PLATFORM_ANDROID)
+    std::string rootDirOrCWD =
+        AndroidWindow::GetExternalStorageDirectory() + "/chromium_tests_root";
+#else
+    std::string rootDirOrCWD = angle::GetExecutableDirectory();
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 
-    Optional<std::string> caseListPath = FindCaseListPath(exeDir, mTestModuleIndex);
+    Optional<std::string> caseListPath = FindCaseListPath(rootDirOrCWD, mTestModuleIndex);
     if (!caseListPath.valid())
     {
         std::cerr << "Failed to find case list file." << std::endl;
         Die();
     }
 
-    Optional<std::string> testExpectationsPath = FindTestExpectationsPath(exeDir, mTestModuleIndex);
+    Optional<std::string> testExpectationsPath =
+        FindTestExpectationsPath(rootDirOrCWD, mTestModuleIndex);
     if (!testExpectationsPath.valid())
     {
         std::cerr << "Failed to find test expectations file." << std::endl;
@@ -563,9 +574,17 @@ void dEQPTest<TestModuleIndex>::SetUpTestCase()
         argv.push_back("--deqp-log-flush=disable");
     }
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+    std::string rootDirStr = AndroidWindow::GetExternalStorageDirectory() + "/chromium_tests_root";
+    const char *rootDir    = rootDirStr.c_str();
+#else
+    const char *rootDir      = nullptr;
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
     // Init the platform.
     if (!deqp_libtester_init_platform(static_cast<int>(argv.size()), argv.data(),
-                                      reinterpret_cast<void *>(&HandlePlatformError), gPreRotation))
+                                      reinterpret_cast<void *>(&HandlePlatformError), gPreRotation,
+                                      rootDir))
     {
         std::cout << "Aborting test due to dEQP initialization error." << std::endl;
         exit(1);
