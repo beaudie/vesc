@@ -97,6 +97,24 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
     std::string mStartingDirectory;
 };
 
+class TracePerfTest;
+TracePerfTest *gCurrentTracePerfTest = nullptr;
+
+void BindFramebufferProc(GLenum target, GLuint framebuffer)
+{
+    glBindFramebuffer(target, framebuffer);
+    gCurrentTracePerfTest->onReplayFramebufferChange(target, framebuffer);
+}
+
+angle::GenericProc TraceLoadProc(const char *procName)
+{
+    if (strcmp(procName, "glBindFramebuffer") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(BindFramebufferProc);
+    }
+    return gCurrentTracePerfTest->getGLWindow()->getProcAddress(procName);
+}
+
 TracePerfTest::TracePerfTest()
     : ANGLERenderTest("TracePerf", GetParam()), mStartFrame(0), mEndFrame(0)
 {
@@ -118,6 +136,8 @@ TracePerfTest::TracePerfTest()
 
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
+
+    gCurrentTracePerfTest = this;
 }
 
 void TracePerfTest::initializeBenchmark()
@@ -132,6 +152,8 @@ void TracePerfTest::initializeBenchmark()
         std::string exeDir = angle::GetExecutableDirectory();
         angle::SetCWD(exeDir.c_str());
     }
+
+    trace_angle::LoadGLES(TraceLoadProc);
 
     const TraceInfo &traceInfo = GetTraceInfo(params.testID);
     mStartFrame                = traceInfo.startFrame;
