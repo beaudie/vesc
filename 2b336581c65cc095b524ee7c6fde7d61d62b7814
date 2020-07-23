@@ -16,6 +16,23 @@
       "revId": "2b336581c65cc095b524ee7c6fde7d61d62b7814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41571785_ec1955f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-07-23T20:30:14Z",
+      "side": 1,
+      "message": "LGTM.  Our CQ is down for the day so this may need to wait until it can land.",
+      "revId": "2b336581c65cc095b524ee7c6fde7d61d62b7814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
