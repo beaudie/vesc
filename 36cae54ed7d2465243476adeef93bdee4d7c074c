@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "730e870a_72db9f86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T17:17:11Z",
+      "side": 1,
+      "message": "LGTM - it\u0027s a bit tricky to understand, but invalidating contents forces a dont_care. Maybe we should explicitly call that something like \"setContentsAsDontCare\"",
+      "revId": "36cae54ed7d2465243476adeef93bdee4d7c074c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "47ee94b0_785741c4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T17:17:11Z",
+      "side": 1,
+      "message": "maybe we should rename this to invalidateFullContents or something?",
+      "range": {
+        "startLine": 1344,
+        "startChar": 35,
+        "endLine": 1344,
+        "endChar": 52
+      },
+      "revId": "36cae54ed7d2465243476adeef93bdee4d7c074c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
