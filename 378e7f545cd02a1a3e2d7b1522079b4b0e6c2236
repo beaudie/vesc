@@ -77,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "46ffed20_6d5d4b2e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-23T16:35:02Z",
+      "side": 1,
+      "message": "If you don\u0027t store serial number, you will have to either A) store the descriptor and then retrieve from descriptor, or B) search the cache to find the descriptor matches the descriptor set and then retrieve serial from descriptor. All these are a lot more expensive than simply remembering the default uniform buffer serial associated with current descriptor set.",
+      "parentUuid": "52cdc7be_4a25439b",
+      "range": {
+        "startLine": 342,
+        "startChar": 4,
+        "endLine": 342,
+        "endChar": 39
+      },
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a79991ea_f46724e5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 31
@@ -88,6 +112,30 @@
       "writtenOn": "2020-07-23T15:19:45Z",
       "side": 1,
       "message": "I can\u0027t fathom what this comparison is for. For one thing you can invert the if to early-exit:\n\nif (\u003d\u003d)\n{\n   return Continue;\n}\n\n...\n\nFor another you should comment here as to what the Serial check is determining. It\u0027s not common practice that you\u0027re explicitly storing a Serial outside of an object.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 48
+      },
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea1685fc_bfe33652",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-23T16:35:02Z",
+      "side": 1,
+      "message": "This is to detect that the buffer we will be using is different from the buffer associated with our descriptor set. This can happen because the buffer is shared. From last time we use it to now, others might used the buffer and even if dynamicBuffer-\u003eallocate() says there is no buffer change, it might be different buffer from the buffer last time this program used.\n\nI will add comment here.",
+      "parentUuid": "a79991ea_f46724e5",
       "range": {
         "startLine": 161,
         "startChar": 0,
@@ -129,6 +177,24 @@
       "side": 1,
       "message": "Yes, this is overkill. If we reuse contexts it is the job of the reset function to reset state in white box tests. You can remove all this and leave a comment.",
       "parentUuid": "4e438ba3_f71bc7fa",
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a64c47b3_9fe4ecd6",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-23T16:35:02Z",
+      "side": 1,
+      "message": "This was added to address Shabi\u0027s concern that what if someday someone changed the implementation so that TEST_P() will actually reuse the previous context. I am okay with either way. Unless @Shabi has strong opinion on this, I am going to remove it.",
+      "parentUuid": "e2b1c115_204ec0db",
       "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
