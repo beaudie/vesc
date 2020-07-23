@@ -4117,7 +4117,7 @@ angle::Result ContextVk::finishToSerial(Serial serial)
         // Send finish w/ serial to worker thread then wait on it to complete
         // TODO: Need better way to pass this data to worker
         vk::FinishToSerialData *serialData = new vk::FinishToSerialData();
-        serialData->serial                 = getLastSubmittedQueueSerial();
+        serialData->serial                 = serial;
         vk::CommandProcessorTask task;
         task.contextVk     = nullptr;
         task.workerCommand = vk::CustomTask::FinishToSerial;
