@@ -11,18 +11,26 @@
 
 #include <vector>
 
+#include "common/Color.h"
+#include "libANGLE/BinaryStream.h"
 #include "libANGLE/Error.h"
 
 namespace gl
 {
-class BinaryOutputStream;
+struct BlendState;
 class Buffer;
 class BufferState;
 class Context;
+struct Extensions;
 class Framebuffer;
 class FramebufferAttachment;
 class FramebufferState;
 class ImageIndex;
+struct Limitations;
+struct RasterizerState;
+struct Rectangle;
+class State;
+struct Version;
 }  // namespace gl
 
 typedef unsigned int GLenum;
@@ -59,6 +67,28 @@ Result SerializeBuffer(const gl::Context *context,
                        gl::Buffer *buffer);
 
 void SerializeBufferState(gl::BinaryOutputStream *bos, const gl::BufferState &bufferState);
+
+template <typename T>
+void SerializeColor(gl::BinaryOutputStream *bos, const Color<T> &color)
+{
+    bos->writeInt(color.red);
+    bos->writeInt(color.green);
+    bos->writeInt(color.blue);
+    bos->writeInt(color.alpha);
+}
+
+void SerializeGLGlobalStates(gl::BinaryOutputStream *bos, const gl::State &state);
+
+void SerializeExtensions(gl::BinaryOutputStream *bos, const gl::Extensions &extensions);
+
+void SerializeLimitations(gl::BinaryOutputStream *bos, const gl::Limitations &limitations);
+
+void SerializeRasterizerState(gl::BinaryOutputStream *bos,
+                              const gl::RasterizerState &rasterizerState);
+
+void SerializeRectangle(gl::BinaryOutputStream *bos, const gl::Rectangle &rectangle);
+
+void SerializeBlendState(gl::BinaryOutputStream *bos, const gl::BlendState &blendState);
 
 }  // namespace angle
 #endif  // FRAME_CAPTURE_UTILS_H_
