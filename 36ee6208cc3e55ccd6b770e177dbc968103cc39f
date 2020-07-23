@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e29f7675_058d3bee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-23T17:05:20Z",
+      "side": 1,
+      "message": "The performance is not there yet, because RenderTargetVk::mContentsDefined is too conservative and is making the multisampled intermediate image initialized and loaded for no reason. I\u0027ll address that in another CL that would need to land before this. That said, this is ready for review.\n\nThe Android failures are unrelated to the change. I duplicated the tests to use the non-multisampled version of the functions and they still fail. There\u0027s something strange going on though, moving those tests verbatim to the CopyTexImageTests test suite makes them pass. I need to investigate that, but again, the failures are unrelated to the change. See here: https://chromium-review.googlesource.com/c/angle/angle/+/2307170",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
