@@ -6,10 +6,16 @@
 
 #include "OSWindow.h"
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
 
 #include "common/debug.h"
+#include "common/system_utils.h"
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include "util/android/AndroidWindow.h"
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 
 #ifndef DEBUG_EVENTS
 #    define DEBUG_EVENTS 0
@@ -440,3 +446,41 @@ void OSWindow::Delete(OSWindow **window)
     delete *window;
     *window = nullptr;
 }
+
+namespace angle
+{
+bool FindTestDataPath(const char *searchPath, std::string *dataPathOut)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    const std::string searchPaths[] = {
+        AndroidWindow::GetExternalStorageDirectory() + "/chromium_tests_root",
+        AndroidWindow::GetExternalStorageDirectory() + "/chromium_tests_root/third_party/angle"};
+#else
+    const std::string searchPaths[] = {
+        GetExecutableDirectory(), GetExecutableDirectory() + "/../..", ".",
+        GetExecutableDirectory() + "/../../third_party/angle", "third_party/angle"};
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
+    for (const std::string &path : searchPaths)
+    {
+        std::stringstream pathStream;
+        pathStream << path << "/" << searchPath;
+        std::string candidatePath = pathStream.str();
+
+        if (angle::IsDirectory(candidatePath.c_str()))
+        {
+            *dataPathOut = candidatePath;
+            return true;
+        }
+
+        std::ifstream inFile(candidatePath.c_str());
+        if (!inFile.fail())
+        {
+            *dataPathOut = candidatePath;
+            return true;
+        }
+    }
+
+    return false;
+}
+}  // namespace angle
