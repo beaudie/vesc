@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e875af4_c96a09e6",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-23T14:36:20Z",
+      "side": 1,
+      "message": "I ran into this last night as well.  Jamie, is this how you want it fixed, or should we move  angle_trace_gl.h located somewhere else?",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 56
+      },
+      "revId": "3b46839682660d7a841454b679ecb7044e28921c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
