@@ -421,7 +421,27 @@ void CommandProcessor::queueCommand(const vk::CommandProcessorTask &command)
     mWorkAvailableCondition.notify_one();
 }
 
-angle::Result CommandProcessor::processCommandProcessorTasks()
+void CommandProcessor::processCommandProcessorTasks()
+{
+
+    while (true)
+    {
+        angle::Result result = processCommandProcessorTasksImpl();
+        if (mWorkerThreadIdle)
+        {
+            // We are doing a controlled exit of the thread, break out of the while loop.
+            break;
+        }
+        // TODO?: Do something here if we get an error?
+    }
+
+    // Shutting down so cleanup
+    mCommandWorkQueue.destroy(mRenderer->getDevice());
+    mCommandPool.destroy(mRenderer->getDevice());
+    mPrimaryCommandBuffer.destroy(mRenderer->getDevice());
+}
+
+angle::Result CommandProcessor::processCommandProcessorTasksImpl()
 {
     // Initialization prior to work thread loop
     ANGLE_TRY(mCommandWorkQueue.init());
@@ -451,7 +471,11 @@ angle::Result CommandProcessor::processCommandProcessorTasks()
             if (task.workerCommand == vk::CustomTask::Exit)
             {
                 // Exit command signals worker thread to exit
-                break;
+                // Set to idle so that processCommandProcessorTasks knows we are exiting due to exit
+                // command. Note: We do not lock here because thread is about to exit and no other
+                // thread should be looking at this now.
+                mWorkerThreadIdle = true;
+                return angle::Result::Continue;
             }
             else
             {
@@ -536,12 +560,8 @@ angle::Result CommandProcessor::processCommandProcessorTasks()
             task.commandBuffer->releaseToContextQueue(task.contextVk);
         }
     }
-    // Shutting down so cleanup
-    mCommandWorkQueue.destroy(mRenderer->getDevice());
-    mCommandPool.destroy(mRenderer->getDevice());
-    mPrimaryCommandBuffer.destroy(mRenderer->getDevice());
 
-    return angle::Result::Continue;
+    return angle::Result::Stop;
 }
 
 void CommandProcessor::waitForWorkComplete()
