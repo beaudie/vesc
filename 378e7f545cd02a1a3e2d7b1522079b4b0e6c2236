@@ -148,6 +148,30 @@
     },
     {
       "key": {
+        "uuid": "720ffa65_bc707fb5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T16:55:26Z",
+      "side": 1,
+      "message": "OK, I think I get it. Comment would help. And a cleanup to move all this code into ProgramExecutableVk in some way or the other.",
+      "parentUuid": "ea1685fc_bfe33652",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 48
+      },
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e438ba3_f71bc7fa",
         "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
         "patchSetId": 31
@@ -195,6 +219,24 @@
       "side": 1,
       "message": "This was added to address Shabi\u0027s concern that what if someday someone changed the implementation so that TEST_P() will actually reuse the previous context. I am okay with either way. Unless @Shabi has strong opinion on this, I am going to remove it.",
       "parentUuid": "e2b1c115_204ec0db",
+      "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79cafeb4_76727db0",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T16:55:26Z",
+      "side": 1,
+      "message": "What about putting it in the test case setup?",
+      "parentUuid": "a64c47b3_9fe4ecd6",
       "revId": "378e7f545cd02a1a3e2d7b1522079b4b0e6c2236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
