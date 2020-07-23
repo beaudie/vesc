@@ -86,6 +86,30 @@
       "revId": "8adff1af245d6238328cd18e61b5922bb796e1da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a6110d8_5953ecf2",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-23T16:01:22Z",
+      "side": 1,
+      "message": "What\u0027s the downside of setting the precision here? Does it show up in the shader or something? You could inject the default precision statements in a post-process, I\u0027m not sure if initSamplerDefaultPrecision does other things though.",
+      "parentUuid": "f1c67597_b6522e8e",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 0
+      },
+      "revId": "8adff1af245d6238328cd18e61b5922bb796e1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
