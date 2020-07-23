@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "b7622c21_d2cac5b6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-23T16:18:46Z",
+      "side": 1,
+      "message": "When new buffer is allocated, the previous one are put aside in the mInFlightBuffers. mInflightBuffers will not get freed. During submission (see ContextVk.cpp line 3958), we call releaseImFlightBuffersToResourceUseList() to add it to the mResourceUseList (which will then stamp it with QueueSerial) and move to the mFreeBuffers. After that, the buffers are able to reuse as soon as GPU is finished.",
+      "parentUuid": "ed4d41bc_38fa5913",
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "777e2cb4_a0080280",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
