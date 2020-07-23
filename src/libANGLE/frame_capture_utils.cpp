@@ -21,6 +21,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/Sampler.h"
 #include "libANGLE/State.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexAttribute.h"
@@ -471,6 +472,44 @@ Result SerializeBuffer(const gl::Context *context,
     ANGLE_TRY(buffer->getSubData(context, 0, dataPtr->size(), dataPtr->data()));
     bos->writeBytes(dataPtr->data(), dataPtr->size());
     return Result::Continue;
+}
+void SerializeSampler(gl::BinaryOutputStream *bos, gl::Sampler *sampler)
+{
+    bos->writeString(sampler->getLabel());
+    SerializeSamplerState(bos, sampler->getSamplerState());
+}
+
+void SerializeColorGeneric(gl::BinaryOutputStream *bos, const ColorGeneric &colorGeneric)
+{
+    bos->writeEnum(colorGeneric.type);
+    if (colorGeneric.type == ColorGeneric::Type::Float)
+    {
+        SerializeColor(bos, colorGeneric.colorF);
+    }
+    else if (colorGeneric.type == ColorGeneric::Type::Int)
+    {
+        SerializeColor(bos, colorGeneric.colorI);
+    }
+    else
+    {
+        SerializeColor(bos, colorGeneric.colorUI);
+    }
+}
+
+void SerializeSamplerState(gl::BinaryOutputStream *bos, const gl::SamplerState &samplerState)
+{
+    bos->writeInt(samplerState.getMinFilter());
+    bos->writeInt(samplerState.getMagFilter());
+    bos->writeInt(samplerState.getWrapS());
+    bos->writeInt(samplerState.getWrapT());
+    bos->writeInt(samplerState.getWrapR());
+    bos->writeInt(samplerState.getMaxAnisotropy());
+    bos->writeInt(samplerState.getMinLod());
+    bos->writeInt(samplerState.getMaxLod());
+    bos->writeInt(samplerState.getCompareMode());
+    bos->writeInt(samplerState.getCompareFunc());
+    bos->writeInt(samplerState.getSRGBDecode());
+    SerializeColorGeneric(bos, samplerState.getBorderColor());
 }
 
 }  // namespace
