@@ -1934,50 +1934,53 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::ClearValuesArray packedClearValues;
+    uint32_t depthStencilAttachmentIndex = vk::kInvalidAttachmentIndex;
 
     ANGLE_TRY(contextVk->endRenderPass());
 
     // Initialize RenderPass info.
-    const auto &colorRenderTargets  = mRenderTargetCache.getColors();
-    uint32_t currentAttachmentCount = 0;
+    const auto &colorRenderTargets = mRenderTargetCache.getColors();
+    uint32_t colorAttachmentCount  = 0;
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
-        renderPassAttachmentOps.setLayouts(currentAttachmentCount, vk::ImageLayout::ColorAttachment,
+        renderPassAttachmentOps.setLayouts(colorAttachmentCount, vk::ImageLayout::ColorAttachment,
                                            vk::ImageLayout::ColorAttachment);
 
         if (mDeferredClears.test(colorIndexGL))
         {
-            renderPassAttachmentOps.setOps(currentAttachmentCount, VK_ATTACHMENT_LOAD_OP_CLEAR,
+            renderPassAttachmentOps.setOps(colorAttachmentCount, VK_ATTACHMENT_LOAD_OP_CLEAR,
                                            VK_ATTACHMENT_STORE_OP_STORE);
-            packedClearValues.store(currentAttachmentCount, VK_IMAGE_ASPECT_COLOR_BIT,
+            packedClearValues.store(colorAttachmentCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     mDeferredClears[colorIndexGL]);
             mDeferredClears.reset(colorIndexGL);
         }
         else
         {
-            renderPassAttachmentOps.setOps(currentAttachmentCount,
+            renderPassAttachmentOps.setOps(colorAttachmentCount,
                                            colorRenderTarget->hasDefinedContent()
                                                ? VK_ATTACHMENT_LOAD_OP_LOAD
                                                : VK_ATTACHMENT_LOAD_OP_DONT_CARE,
                                            VK_ATTACHMENT_STORE_OP_STORE);
-            packedClearValues.store(currentAttachmentCount, VK_IMAGE_ASPECT_COLOR_BIT,
+            packedClearValues.store(colorAttachmentCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     kUninitializedClearValue);
         }
-        renderPassAttachmentOps.setStencilOps(currentAttachmentCount,
-                                              VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+        renderPassAttachmentOps.setStencilOps(colorAttachmentCount, VK_ATTACHMENT_LOAD_OP_DONT_CARE,
                                               VK_ATTACHMENT_STORE_OP_DONT_CARE);
 
         ANGLE_TRY(colorRenderTarget->onColorDraw(contextVk));
 
-        currentAttachmentCount++;
+        colorAttachmentCount++;
     }
 
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        // depth stencil attachment always immediately follow color attachment
+        depthStencilAttachmentIndex = colorAttachmentCount;
+
         VkAttachmentLoadOp depthLoadOp     = VK_ATTACHMENT_LOAD_OP_LOAD;
         VkAttachmentLoadOp stencilLoadOp   = VK_ATTACHMENT_LOAD_OP_LOAD;
         VkAttachmentStoreOp depthStoreOp   = VK_ATTACHMENT_STORE_OP_STORE;
@@ -1989,7 +1992,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         }
 
-        renderPassAttachmentOps.setLayouts(currentAttachmentCount,
+        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex,
                                            vk::ImageLayout::DepthStencilAttachment,
                                            vk::ImageLayout::DepthStencilAttachment);
 
@@ -2012,12 +2015,13 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             }
 
             // Note the aspect is only depth here. That's intentional.
-            packedClearValues.store(currentAttachmentCount, VK_IMAGE_ASPECT_DEPTH_BIT, clearValue);
+            packedClearValues.store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
+                                    clearValue);
         }
         else
         {
             // Note the aspect is only depth here. That's intentional.
-            packedClearValues.store(currentAttachmentCount, VK_IMAGE_ASPECT_DEPTH_BIT,
+            packedClearValues.store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
                                     kUninitializedClearValue);
         }
 
@@ -2034,8 +2038,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             depthLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             depthStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         }
-        renderPassAttachmentOps.setOps(currentAttachmentCount, depthLoadOp, depthStoreOp);
-        renderPassAttachmentOps.setStencilOps(currentAttachmentCount, stencilLoadOp,
+        renderPassAttachmentOps.setOps(depthStencilAttachmentIndex, depthLoadOp, depthStoreOp);
+        renderPassAttachmentOps.setStencilOps(depthStencilAttachmentIndex, stencilLoadOp,
                                               stencilStoreOp);
 
         // This must be called after hasDefinedContent() since it will set content to valid. We are
@@ -2043,13 +2047,11 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
         ANGLE_TRY(depthStencilRenderTarget->onDepthStencilDraw(contextVk));
-
-        currentAttachmentCount++;
     }
 
     return contextVk->flushAndBeginRenderPass(*framebuffer, renderArea, mRenderPassDesc,
-                                              renderPassAttachmentOps, packedClearValues,
-                                              commandBufferOut);
+                                              renderPassAttachmentOps, depthStencilAttachmentIndex,
+                                              packedClearValues, commandBufferOut);
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)
