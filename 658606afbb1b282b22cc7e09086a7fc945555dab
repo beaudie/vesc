@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7c0e411_0fac86ff",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T19:37:24Z",
+      "side": 1,
+      "message": "nit: maybe make this GGP (Stadia) so people who aren\u0027t familiar with the term can know what it means",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 14
+      },
+      "revId": "658606afbb1b282b22cc7e09086a7fc945555dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
