@@ -1925,6 +1925,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::ClearValuesArray packedClearValues;
+    size_t depthStencilAttachmentIndex;
 
     ANGLE_TRY(contextVk->endRenderPass());
 
@@ -1969,6 +1970,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        depthStencilAttachmentIndex = currentAttachmentCount;
+
         VkAttachmentLoadOp depthLoadOp     = VK_ATTACHMENT_LOAD_OP_LOAD;
         VkAttachmentLoadOp stencilLoadOp   = VK_ATTACHMENT_LOAD_OP_LOAD;
         VkAttachmentStoreOp depthStoreOp   = VK_ATTACHMENT_STORE_OP_STORE;
@@ -2037,10 +2040,14 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
         currentAttachmentCount++;
     }
+    else
+    {
+        depthStencilAttachmentIndex = vk::kInvalidAttachmentIndex;
+    }
 
     return contextVk->flushAndBeginRenderPass(*framebuffer, renderArea, mRenderPassDesc,
-                                              renderPassAttachmentOps, packedClearValues,
-                                              commandBufferOut);
+                                              renderPassAttachmentOps, depthStencilAttachmentIndex,
+                                              packedClearValues, commandBufferOut);
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)

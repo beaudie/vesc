@@ -893,8 +893,11 @@ struct CommandBufferHelper : angle::NonCopyable
                          const gl::Rectangle &renderArea,
                          const vk::RenderPassDesc &renderPassDesc,
                          const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                         size_t depthStencilAttachmentIndex,
                          const vk::ClearValuesArray &clearValues,
                          vk::CommandBuffer **commandBufferOut);
+
+    void endRenderPass();
 
     void beginTransformFeedback(size_t validBufferCount,
                                 const VkBuffer *counterBuffers,
@@ -953,6 +956,9 @@ struct CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
+    void setDepthBufferEnabled() { mDepthBufferEverEnabled = true; }
+    void setStencilBufferEnabled() { mStencilBufferEverEnabled = true; }
+
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
@@ -980,7 +986,12 @@ struct CommandBufferHelper : angle::NonCopyable
 
     bool mIsRenderPassCommandBuffer;
     bool mMergeBarriers;
+
+    bool mDepthBufferEverEnabled;
+    bool mStencilBufferEverEnabled;
+    size_t mDepthStencilAttachmentIndex;
 };
+static constexpr size_t kInvalidAttachmentIndex = -1;
 
 // Imagine an image going through a few layout transitions:
 //

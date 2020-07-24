@@ -964,6 +964,11 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
     }
 
+    if (mState.isDepthTestEnabled())
+        mRenderPassCommands->setDepthBufferEnabled();
+    if (mState.isStencilTestEnabled())
+        mRenderPassCommands->setStencilBufferEnabled();
+
     // We keep a local copy of the command buffer. It's possible that some state changes could
     // trigger a command buffer invalidation. The local copy ensures we retain the reference.
     // Command buffers are pool allocated and only deleted after submit. Thus we know the
@@ -4321,6 +4326,7 @@ angle::Result ContextVk::flushAndBeginRenderPass(
     const gl::Rectangle &renderArea,
     const vk::RenderPassDesc &renderPassDesc,
     const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const size_t depthStencilAttachmentIndex,
     const vk::ClearValuesArray &clearValues,
     vk::CommandBuffer **commandBufferOut)
 {
@@ -4331,7 +4337,8 @@ angle::Result ContextVk::flushAndBeginRenderPass(
     ANGLE_TRY(endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
 
     mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
-                                         renderPassAttachmentOps, clearValues, commandBufferOut);
+                                         renderPassAttachmentOps, depthStencilAttachmentIndex,
+                                         clearValues, commandBufferOut);
     mRenderPassFramebuffer = framebuffer.getHandle();
     return angle::Result::Continue;
 }
@@ -4409,7 +4416,7 @@ angle::Result ContextVk::endRenderPass()
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
 
-    mRenderPassCommands->pauseTransformFeedbackIfStarted();
+    mRenderPassCommands->endRenderPass();
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
