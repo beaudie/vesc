@@ -19,6 +19,256 @@
     },
     {
       "key": {
+        "uuid": "62cfeb27_1b30e16e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "Initial review. Looks pretty good. I\u0027m mulling over the varied custom CommandProcessorTask constructors as the way to differentiate tasks. It feels a bit dirty in the class implementation, but the usages all look nice and clean. One alternative that comes to mind would be specialized classes for each command type deriving from a common class but that feels like a potential loss in terms of code complexity and maintainability. Potentially another fancy solution would be templating the class based on CustomTask type. That makes task type of instantiations clear, but still requires custom data per task so not sure if that would be net benefit either.\n\nSo, I\u0027m happy with the class setup for now. We can potentially refine with further though/review.",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01942599_66edd6d4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "ptr",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6a7f5fa_0cac5b0b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "You can just kill this assert now.\nOriginally it was smaller and was making sure that task either contained a SCB or a custom command.\nNow that everything has a custom command, we can get rid of this.",
+      "range": {
+        "startLine": 413,
+        "startChar": 4,
+        "endLine": 419,
+        "endChar": 45
+      },
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f97c9e3_ac1fdc32",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "good!",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f8e764a_ddde57de",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "good!",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca5b9b3e_b9a9c156",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "We should kill this top-level \"if\" now and handle \"else\" case in the switch block as FlushToPrimary command.",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43392d6d_32685ade",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "Kill this TODO.",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6f1efe1_c89f36dd",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "Yep, good, all work blocks should have specific enum now, no need to special case this anymore.",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc37cfe6_fe6886cb",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "Should prevent move to self and clear rhs data members after assigning. See https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view\u003dvs-2019#to-create-a-move-assignment-operator-for-a-c-class",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae343d2b_aa10c211",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "Hmmm, is this invoking the move assignment operator above?",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53c04985_7f275d27",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "You can kill this TODO, it\u0027s TODONE.",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43e89f23_b5f91bec",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "ptr",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad086bde_ab978a19",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "ptr",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "978306df_9132ee64",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3985,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "kill",
+      "range": {
+        "startLine": 3984,
+        "startChar": 8,
+        "endLine": 3985,
+        "endChar": 76
+      },
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2cdff39_9b7d678f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
@@ -58,6 +308,29 @@
         "startChar": 47,
         "endLine": 284,
         "endChar": 48
+      },
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c297d867_947d6139",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-07-24T21:25:10Z",
+      "side": 1,
+      "message": "Yes, we could certainly do it that way. This is an architectural decision verses functional. DeviceWaitIdle is a Queue command that uses the queue mutex and I\u0027ve intentionally serialized all queue commands through the worker thread for consistency.",
+      "range": {
+        "startLine": 496,
+        "startChar": 8,
+        "endLine": 498,
+        "endChar": 84
       },
       "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
