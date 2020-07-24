@@ -16,6 +16,23 @@
       "revId": "57277296394f1823db78244754a36653dd03d2af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a8d3547c_4ecf5b37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-07-24T22:54:40Z",
+      "side": 1,
+      "message": "mind if i land this shabi?",
+      "revId": "57277296394f1823db78244754a36653dd03d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
