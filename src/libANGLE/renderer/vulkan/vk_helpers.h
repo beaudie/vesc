@@ -953,6 +953,10 @@ struct CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
+    void setDepthBufferEnabled() { mDepthBufferEverEnabled = true; }
+    void setStencilBufferEnabled() { mStencilBufferEverEnabled = true; }
+    void optimizeDepthStencilAttachment(size_t depthAttachmentIndex, size_t stencilAttachmentIndex);
+
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
@@ -980,6 +984,9 @@ struct CommandBufferHelper : angle::NonCopyable
 
     bool mIsRenderPassCommandBuffer;
     bool mMergeBarriers;
+
+    bool mDepthBufferEverEnabled;
+    bool mStencilBufferEverEnabled;
 };
 
 // Imagine an image going through a few layout transitions:

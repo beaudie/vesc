@@ -523,7 +523,9 @@ CommandBufferHelper::CommandBufferHelper()
       mValidTransformFeedbackBufferCount(0),
       mRebindTransformFeedbackBuffers(false),
       mIsRenderPassCommandBuffer(false),
-      mMergeBarriers(false)
+      mMergeBarriers(false),
+      mDepthBufferEverEnabled(false),
+      mStencilBufferEverEnabled(false)
 {}
 
 CommandBufferHelper::~CommandBufferHelper()
@@ -652,6 +654,23 @@ void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
 
     mRenderPassStarted = true;
     mCounter++;
+}
+
+void CommandBufferHelper::optimizeDepthStencilAttachment(size_t depthAttachmentIndex,
+                                                         size_t stencilAttachmentIndex)
+{
+    if (!mDepthBufferEverEnabled &&
+        mAttachmentOps[depthAttachmentIndex].storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
+    {
+        // WARN() << "forcing depth loadOp to DontCare" << std::endl;
+        mAttachmentOps[depthAttachmentIndex].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    }
+    if (!mStencilBufferEverEnabled &&
+        mAttachmentOps[stencilAttachmentIndex].stencilStoreOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
+    {
+        // WARN() << "forcing stencil loadOp to DontCare" << std::endl;
+        mAttachmentOps[stencilAttachmentIndex].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    }
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
@@ -838,6 +857,8 @@ void CommandBufferHelper::reset()
         mRenderPassStarted                 = false;
         mValidTransformFeedbackBufferCount = 0;
         mRebindTransformFeedbackBuffers    = false;
+        mDepthBufferEverEnabled            = false;
+        mStencilBufferEverEnabled          = false;
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
