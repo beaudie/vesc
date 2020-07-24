@@ -18,6 +18,10 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/RefCountObject.h"
 
+#if defined(ANGLE_USE_ABSEIL)
+#    include "absl/container/flat_hash_map.h"
+#endif  // ANGLE_USE_ABSEIL
+
 #include <inttypes.h>
 #include <stdint.h>
 
@@ -1046,6 +1050,14 @@ class UniqueObjectPointerBase : angle::NonCopyable
 
 template <typename ObjT, typename ContextT>
 using UniqueObjectPointer = UniqueObjectPointerBase<ObjT, DestroyThenDelete<ObjT, ContextT>>;
+
+#if defined(ANGLE_USE_ABSEIL)
+template <typename Key, typename T>
+using HashMap = absl::flat_hash_map<Key, T>;
+#else
+template <typename Key, typename T>
+using HashMap = std::unordered_map<Key, T>;
+#endif  // ANGLE_USE_ABSEIL
 
 }  // namespace angle
 

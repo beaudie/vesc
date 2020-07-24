@@ -8,6 +8,8 @@
 
 #include "compiler/translator/tree_ops/RewriteRowMajorMatrices.h"
 
+#include "libANGLE/angletypes.h"
+
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/StaticType.h"
@@ -185,7 +187,7 @@ TOperator GetIndexOp(TIntermNode *node)
 }
 
 bool IsConvertedField(TIntermTyped *indexNode,
-                      const std::unordered_map<const TField *, bool> &convertedFields)
+                      const angle::HashMap<const TField *, bool> &convertedFields)
 {
     TIntermBinary *asBinary = indexNode->getAsBinaryNode();
     if (asBinary == nullptr)
@@ -532,9 +534,9 @@ class RewriteRowMajorMatricesTraverser : public TIntermTraverser
     TIntermSequence *getStructCopyFunctions() { return &mOuterPass.copyFunctionDefinitions; }
 
   private:
-    typedef std::unordered_map<const TStructure *, StructConversionData> StructMap;
-    typedef std::unordered_map<const TVariable *, TVariable *> InterfaceBlockMap;
-    typedef std::unordered_map<const TField *, bool> InterfaceBlockFieldConverted;
+    using StructMap                    = angle::HashMap<const TStructure *, StructConversionData>;
+    using InterfaceBlockMap            = angle::HashMap<const TVariable *, TVariable *>;
+    using InterfaceBlockFieldConverted = angle::HashMap<const TField *, bool>;
 
     RewriteRowMajorMatricesTraverser(
         TSymbolTable *symbolTable,
