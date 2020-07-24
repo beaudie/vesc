@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "943a41f4_700f519c",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T19:07:40Z",
+      "side": 1,
+      "message": "nit: these states aren\u0027t global, they\u0027re for the Context: SerializeContextState.",
+      "range": {
+        "startLine": 212,
+        "startChar": 5,
+        "endLine": 212,
+        "endChar": 28
+      },
+      "revId": "110c26484adc3aada555a41bafe2d1665b03a3fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65eb7078_7b08dda9",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T19:07:40Z",
+      "side": 1,
+      "message": "just serialize the ID here. We\u0027ll serialize the objects in another CL.",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 5
+      },
+      "revId": "110c26484adc3aada555a41bafe2d1665b03a3fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bc466a9_2bcc06d1",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T19:07:40Z",
+      "side": 1,
+      "message": "you should probably defer this for a future CL where we serialize the transform feedback map.",
+      "range": {
+        "startLine": 438,
+        "startChar": 5,
+        "endLine": 438,
+        "endChar": 31
+      },
+      "revId": "110c26484adc3aada555a41bafe2d1665b03a3fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3cd5101_e418866b",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T19:07:40Z",
+      "side": 1,
+      "message": "you should be able to hide most of these functions (or all of them) in frame_capture_utils.cpp. You might only need to expose SerializeContext.",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 85
+      },
+      "revId": "110c26484adc3aada555a41bafe2d1665b03a3fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e23f0149_2ab42e7c",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T19:07:40Z",
+      "side": 1,
+      "message": "need to fix this properly in a prior cl.",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 56
+      },
+      "revId": "110c26484adc3aada555a41bafe2d1665b03a3fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
