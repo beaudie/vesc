@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6c66e3_17884024",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T14:36:33Z",
+      "side": 1,
+      "message": "LGTM - I didn\u0027t look to closely at the script logic. Will try it out locally.",
+      "revId": "33deafeaaf040e09c911a6fe9f41acafe4b92c0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
