@@ -1039,6 +1039,21 @@ GLint Texture::getLevelMemorySize(TextureTarget target, GLint level) const
     return mState.getImageDesc(target, level).getMemorySize();
 }
 
+GLint getBufferDataStoreBinding(TextureTarget target, GLint level) const
+{
+    return mTexture->getBufferDataStoreBinding(target, level);
+}
+
+GLint getBufferOffset(TextureTarget target, GLint level) const
+{
+    return mTexture->getBufferOffset(target, level);
+}
+
+GLint getBufferSize(TextureTarget target, GLint level) const
+{
+    return mTexture->getBufferSize(target, level);
+}
+
 void Texture::signalDirtyStorage(InitState initState)
 {
     mState.mInitState = initState;

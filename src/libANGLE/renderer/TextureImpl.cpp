@@ -102,6 +102,24 @@ GLint TextureImpl::getLevelMemorySize(gl::TextureTarget target, GLint level)
     return 0;
 }
 
+GLint getBufferDataStoreBinding(gl::TextureTarget target, GLint level)
+{
+    UNREACHABLE();
+    return 0;
+}
+
+GLint getBufferOffset(gl::TextureTarget target, GLint level)
+{
+    UNREACHABLE();
+    return 0;
+}
+
+GLint getBufferSize(gl::TextureTarget target, GLint level)
+{
+    UNREACHABLE();
+    return 0;
+}
+
 GLint TextureImpl::getNativeID() const
 {
     UNREACHABLE();

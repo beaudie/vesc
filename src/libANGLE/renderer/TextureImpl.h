@@ -184,6 +184,10 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
     virtual GLint getMemorySize() const;
     virtual GLint getLevelMemorySize(gl::TextureTarget target, GLint level);
 
+    virtual GLint getBufferDataStoreBinding(gl::TextureTarget target, GLint level);
+    virtual GLint getBufferOffset(gl::TextureTarget target, GLint level);
+    virtual GLint getBufferSize(gl::TextureTarget target, GLint level);
+
     virtual GLint getNativeID() const;
 
     virtual angle::Result syncState(const gl::Context *context,

@@ -503,6 +503,10 @@ class Texture final : public RefCountObject<TextureID>,
     GLint getMemorySize() const;
     GLint getLevelMemorySize(TextureTarget target, GLint level) const;
 
+    GLint getBufferDataStoreBinding(TextureTarget target, GLint level) const;
+    GLint getBufferOffset(TextureTarget target, GLint level) const;
+    GLint getBufferSize(TextureTarget target, GLint level) const;
+
     void signalDirtyStorage(InitState initState);
 
     bool isSamplerComplete(const Context *context, const Sampler *optionalSampler);
