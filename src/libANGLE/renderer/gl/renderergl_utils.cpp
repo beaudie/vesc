@@ -1914,6 +1914,8 @@ GLenum GetTextureBindingQuery(gl::TextureType textureType)
             return GL_TEXTURE_BINDING_CUBE_MAP;
         case gl::TextureType::CubeMapArray:
             return GL_TEXTURE_BINDING_CUBE_MAP_ARRAY_OES;
+        case gl::TextureType::Buffer:
+            return GL_TEXTURE_BINDING_BUFFER;
         default:
             UNREACHABLE();
             return 0;

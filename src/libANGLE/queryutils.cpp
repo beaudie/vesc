@@ -212,6 +212,10 @@ void QueryTexLevelParameterBase(const Texture *texture,
             *params =
                 CastFromStateValue<ParamType>(pname, texture->getLevelMemorySize(target, level));
             break;
+        case GL_TEXTURE_BUFFER_DATA_STORE_BINDING:
+        case GL_TEXTURE_BUFFER_OFFSET:
+        case GL_TEXTURE_BUFFER_SIZE:
+            break;
         default:
             UNREACHABLE();
             break;
@@ -3607,6 +3611,20 @@ bool GetQueryParameterInfo(const State &glState,
         switch (pname)
         {
             case GL_TEXTURE_BINDING_CUBE_MAP_ARRAY:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+        }
+    }
+
+    if (extensions.textureBufferAny())
+    {
+        switch (pname)
+        {
+            case GL_TEXTURE_BUFFER_BINDING:
+            case GL_TEXTURE_BINDING_BUFFER:
+            case GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT:
+            case GL_MAX_TEXTURE_BUFFER_SIZE:
                 *type      = GL_INT;
                 *numParams = 1;
                 return true;
