@@ -36,6 +36,10 @@ declare_args() {
 
   # Enable generating current commit information using git
   angle_enable_commit_id = true
+
+  # Abseil has trouble supporting MSVC, particularly regarding component builds.
+  # http://crbug.com/1126524
+  angle_enable_abseil = angle_has_build && is_clang
 }
 
 if (angle_build_all) {
@@ -217,7 +221,10 @@ config("includes_config") {
 
 angle_source_set("includes") {
   sources = libangle_includes
-  public_configs = [ ":includes_config" ]
+  public_configs = [
+    ":angle_abseil_config",
+    ":includes_config",
+  ]
 }
 
 angle_static_library("preprocessor") {
@@ -298,6 +305,7 @@ angle_static_library("angle_common") {
   deps = [ ":xxhash" ]
 
   public_deps = [
+    ":angle_abseil",
     ":angle_system_utils",
     ":angle_version",
     ":includes",
@@ -457,6 +465,7 @@ angle_static_library("translator") {
   public_configs += [ ":external_config" ]
 
   deps = [
+    ":angle_abseil",
     ":includes",
     ":preprocessor",
   ]
@@ -586,6 +595,7 @@ config("libANGLE_config") {
 
 angle_source_set("libANGLE_headers") {
   sources = libangle_headers
+  deps = [ ":angle_abseil" ]
   public_deps = [
     ":angle_common",
     ":angle_translator_headers",
@@ -601,6 +611,7 @@ if (angle_enable_vulkan || angle_enable_metal) {
       "src/libANGLE/renderer/glslang_wrapper_utils.h",
     ]
     deps = [
+      ":angle_abseil",
       ":libANGLE_headers",
       "${angle_glslang_dir}:glslang_default_resource_limits_sources",
       "${angle_glslang_dir}:glslang_lib_sources",
@@ -725,9 +736,8 @@ angle_source_set("libANGLE") {
   sources = [ "src/libANGLE/FrameCapture_mock.cpp" ]
 
   # gl_enum_utils defaults included in with_capture build
-  deps = []
   if (angle_enable_trace || is_debug) {
-    deps += [ ":angle_gl_enum_utils" ]
+    deps = [ ":angle_gl_enum_utils" ]
   }
 }
 
@@ -737,6 +747,27 @@ angle_source_set("angle_gl_enum_utils") {
     "src/libANGLE/gl_enum_utils.cpp",
     "src/libANGLE/gl_enum_utils_autogen.cpp",
   ]
+}
+
+config("angle_abseil_config") {
+  defines = [ "ANGLE_USE_ABSEIL" ]
+
+  configs = [
+    "//third_party/abseil-cpp:absl_define_config",
+    "//third_party/abseil-cpp:absl_include_config",
+  ]
+}
+
+group("angle_abseil") {
+  # When build_with_chromium=true we need to include "//third_party/abseil-cpp:absl" while
+  # we can be more specific when building standalone ANGLE.
+  if (build_with_chromium) {
+    public_deps = [ "${angle_abseil_cpp_dir}:absl" ]
+  } else {
+    public_deps = [ "${angle_abseil_cpp_dir}/absl/container:flat_hash_map" ]
+  }
+
+  public_configs = [ ":angle_abseil_config" ]
 }
 
 config("angle_compression_config") {
