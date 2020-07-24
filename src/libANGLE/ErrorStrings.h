@@ -439,6 +439,7 @@ MSG kStrideExceedsWebGLLimit = "Stride is over the maximum stride allowed by Web
 MSG kStrideMustBeMultipleOfType = "Stride must be a multiple of the passed in datatype.";
 MSG kSyncMissing = "Sync object does not exist.";
 MSG kTargetMustBeTexture2DMultisampleArrayOES = "Target must be TEXTURE_2D_MULTISAMPLE_ARRAY_OES.";
+MSG kTextureBufferExtensionNotAvailable = "Texture buffer extension not available.";
 MSG kTextureFormatMismatch = "Passed in texture target and format must match the one originally used to define the texture.";
 MSG kTextureIsImmutable = "Texture is immutable.";
 MSG kTextureIsNotImmutable = "Texture is not immutable.";

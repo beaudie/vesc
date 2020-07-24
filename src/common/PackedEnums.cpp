@@ -42,6 +42,8 @@ TextureType TextureTargetToType(TextureTarget target)
             return TextureType::_3D;
         case TextureTarget::VideoImage:
             return TextureType::VideoImage;
+        case TextureTarget::Buffer:
+            return TextureType::Buffer;
         case TextureTarget::InvalidEnum:
             return TextureType::InvalidEnum;
         default:

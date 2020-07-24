@@ -673,6 +673,8 @@ void Texture::onDestroy(const Context *context)
 
     (void)(orphanImages(context));
 
+    mState.mBuffer.set(context, nullptr, 0, 0);
+
     if (mTexture)
     {
         mTexture->onDestroy(context);
@@ -1770,6 +1772,23 @@ void Texture::setGenerateMipmapHint(GLenum hint)
 GLenum Texture::getGenerateMipmapHint() const
 {
     return mState.getGenerateMipmapHint();
+}
+
+angle::Result Texture::setBuffer(const gl::Context *context,
+                                 gl::Buffer *buffer,
+                                 GLenum internalFormat,
+                                 GLintptr offset,
+                                 GLsizeiptr size)
+{
+    mState.mBuffer.set(context, buffer, offset, size);
+    ANGLE_TRY(mTexture->setBuffer(context, internalFormat));
+
+    return angle::Result::Continue;
+}
+
+const OffsetBindingPointer<Buffer> &Texture::getBuffer() const
+{
+    return mState.mBuffer;
 }
 
 void Texture::onAttach(const Context *context)
