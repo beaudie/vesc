@@ -416,6 +416,12 @@ void Context::initialize()
         mZeroTextures[TextureType::CubeMapArray].set(this, zeroTextureCubeMapArray);
     }
 
+    if (getClientVersion() >= Version(3, 2) || mSupportedExtensions.textureBufferAny())
+    {
+        Texture *zeroTextureBuffer = new Texture(mImplementation.get(), {0}, TextureType::Buffer);
+        mZeroTextures[TextureType::Buffer].set(this, zeroTextureBuffer);
+    }
+
     if (mSupportedExtensions.textureRectangle)
     {
         Texture *zeroTextureRectangle =
@@ -2055,7 +2061,7 @@ void Context::getRenderbufferParameterivRobust(GLenum target,
 
 void Context::texBuffer(GLenum target, GLenum internalformat, BufferID buffer)
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 void Context::texBufferRange(GLenum target,
@@ -2064,7 +2070,7 @@ void Context::texBufferRange(GLenum target,
                              GLintptr offset,
                              GLsizeiptr size)
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 void Context::getTexParameterfv(TextureType target, GLenum pname, GLfloat *params)
@@ -3555,6 +3561,11 @@ void Context::updateCaps()
         mValidBufferBindings.set(BufferBinding::ShaderStorage);
         mValidBufferBindings.set(BufferBinding::DrawIndirect);
         mValidBufferBindings.set(BufferBinding::DispatchIndirect);
+    }
+
+    if (getClientVersion() >= ES_3_1 || mState.mExtensions.textureBufferAny())
+    {
+        mValidBufferBindings.set(BufferBinding::Texture);
     }
 
     mThreadPool = angle::WorkerThreadPool::Create(mState.mExtensions.parallelShaderCompile);
@@ -8686,6 +8697,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::CubeMap, true},
         {TextureType::CubeMapArray, exts.textureCubeMapArrayAny()},
         {TextureType::VideoImage, exts.webglVideoTexture},
+        {TextureType::Buffer, exts.textureBufferAny()},
     }};
 }
 
