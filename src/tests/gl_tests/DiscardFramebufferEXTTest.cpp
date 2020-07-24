@@ -5,6 +5,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
 
 using namespace angle;
 
@@ -111,6 +112,110 @@ TEST_P(DiscardFramebufferEXTTest, NonDefaultFramebuffer)
     const GLenum discards7[] = {GL_STENCIL_ATTACHMENT};
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards7);
     EXPECT_GL_NO_ERROR();
+}
+
+// ANGLE implements an optimization that if depth stencil buffer is not been used and not stored in
+// the renderpass, the depth buffer clear will be dropped. This test is try to ensure that if depth
+// test is been used, depth clear does not get optimized out. It also test with the depth buffer not
+// been used, the rendering is still correct.
+TEST_P(DiscardFramebufferEXTTest, DepthClearDropoffOptimization)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_discard_framebuffer"));
+    // TODO: fix crash issue. http://anglebug.com/4141
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    GLuint texture, renderbuffer, framebuffer;
+    GLint colorUniformLocation;
+    GLsizei texWidth  = 256;
+    GLsizei texHeight = 256;
+    GLenum discards;
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                 nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    ASSERT_GL_NO_ERROR();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glGenRenderbuffers(1, &renderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, texWidth, texWidth);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Create two framebuffers that share the same depth buffer
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::UniformColor());
+    glUseProgram(program);
+    colorUniformLocation = glGetUniformLocation(program, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(-1, colorUniformLocation);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw into FBO0
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);  // clear to green
+    GLfloat depthClearValue = 0.5f;
+    // This depth value equals to depthClearValue after viewport transform
+    GLfloat depthDrawValue = depthClearValue * 2.0f - 1.0f;
+    glClearDepthf(depthClearValue);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Draw bottom left with depth test disabled.
+    glDepthFunc(GL_LESS);
+    glDisable(GL_DEPTH_TEST);
+    glViewport(0, 0, texWidth / 2, texHeight / 2);
+    glUniform4fv(colorUniformLocation, 1, GLColor::blue.toNormalizedVector().data());
+    drawQuad(program, essl1_shaders::PositionAttrib(), depthDrawValue - 0.1f);
+    // Draw bottom right with depth test enabled.
+    glEnable(GL_DEPTH_TEST);
+    glViewport(texWidth / 2, 0, texWidth / 2, texHeight / 2);
+    drawQuad(program, essl1_shaders::PositionAttrib(), depthDrawValue - 0.1f);
+    // Draw to top left with depth test disabled.
+    glDisable(GL_DEPTH_TEST);
+    glViewport(0, texHeight / 2, texWidth / 2, texHeight / 2);
+    drawQuad(program, essl1_shaders::PositionAttrib(), depthDrawValue + 0.1f);
+    // Draw to top right with depth test enabled.
+    glEnable(GL_DEPTH_TEST);
+    glViewport(texWidth / 2, texHeight / 2, texWidth / 2, texHeight / 2);
+    drawQuad(program, essl1_shaders::PositionAttrib(), depthDrawValue + 0.1f);
+
+    // Now draw the full quad witn depth test enabled to verify the depth value is expected
+    glEnable(GL_DEPTH_TEST);
+    glUniform4fv(colorUniformLocation, 1, GLColor::red.toNormalizedVector().data());
+    glViewport(0, 0, texWidth, texHeight);
+    drawQuad(program, essl1_shaders::PositionAttrib(), depthDrawValue - 0.05f);
+
+    // Invalidate depth buffer. This will trigger depth value not been written to buffer but the
+    // depth load/clear should not optimize out
+    discards = GL_DEPTH_ATTACHMENT;
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, &discards);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_RECT_EQ(1, 1, 1, 1, GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(texWidth / 2 + 1, 1, 1, 1, GLColor::blue);
+    EXPECT_PIXEL_RECT_EQ(1, texHeight / 2 + 1, 1, 1, GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(texWidth / 2 + 1, texHeight / 2 + 1, 1, 1, GLColor::red);
+
+    // This depth clear should be optimized out. We do not have a good way to verify that it
+    // actually gets dropped, but at least we will ensure rendering is still correct.
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearDepthf(depthClearValue);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
+    glUniform4fv(colorUniformLocation, 1, GLColor::cyan.toNormalizedVector().data());
+    glViewport(0, 0, texWidth, texHeight);
+    drawQuad(program, essl1_shaders::PositionAttrib(), depthDrawValue + 0.05f);
+    discards = GL_DEPTH_EXT;
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, &discards);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(1, 1, 1, 1, GLColor::cyan);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
