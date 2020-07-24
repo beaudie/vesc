@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "820c1744_5a8ec78f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-24T18:09:16Z",
+      "side": 1,
+      "message": "Okay, I think I have the refactor of the CommandProcessorTask struct sorted out.\nPTAL",
+      "revId": "a5dc5ec29c6f66c9561c47b6d3eb24b5452d7fc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
