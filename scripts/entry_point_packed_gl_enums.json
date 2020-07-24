@@ -1460,10 +1460,12 @@
         "fence": "FenceNVID"
     },
     "glTexBuffer": {
-        "buffer": "BufferID"
+        "buffer": "BufferID",
+        "target": "TextureType"
     },
     "glTexBufferRange": {
-        "buffer": "BufferID"
+        "buffer": "BufferID",
+        "target": "TextureType"
     },
     "glTexCoordPointer": {
         "type": "VertexAttribType"
