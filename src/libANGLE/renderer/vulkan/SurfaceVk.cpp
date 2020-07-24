@@ -493,10 +493,10 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     // flush the pipe.
     if (renderer->getFeatures().enableCommandProcessingThread.enabled)
     {
-        vk::CommandProcessorTask task;
-        task.contextVk     = nullptr;
-        task.workerCommand = vk::CustomTask::DeviceWaitIdle;
-        task.commandData   = nullptr;
+        // Seems unnecessary to send a command to DeviceWaitIdle
+        // Why not just waitForCOmmandProcessorIdle and then wait for DeviceWaitIdle?
+        // dispatching the DeviceWaitIdle to a thread doesn't get you anything here.
+        vk::CommandProcessorTask task(vk::CustomTask::DeviceWaitIdle);
         // Sync any outstanding worker thread error before submitting task
         if (renderer->hasPendingError())
         {
@@ -752,13 +752,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
         {
             if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
             {
-                vk::QueueWaitIdleData *waitData = new vk::QueueWaitIdleData();
-                waitData->priority              = contextVk->getPriority();
-
-                vk::CommandProcessorTask task;
-                task.contextVk     = nullptr;
-                task.workerCommand = vk::CustomTask::QueueWaitIdle;
-                task.commandData   = static_cast<void *>(waitData);
+                vk::CommandProcessorTask task(contextVk->getPriority());
                 contextVk->syncAnyErrorAndQueueCommandToProcessorThread(task);
                 // Stall here for command thread to complete
                 contextVk->getRenderer()->waitForCommandProcessorIdle();
@@ -1307,14 +1301,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     VkResult result;
     if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
     {
-        vk::PresentData *presentData = new vk::PresentData();
-        presentData->priority        = contextVk->getPriority();
-        presentData->presentInfo     = presentInfo;
+        vk::CommandProcessorTask task(contextVk->getPriority(), presentInfo);
 
-        vk::CommandProcessorTask task;
-        task.contextVk     = nullptr;
-        task.workerCommand = vk::CustomTask::Present;
-        task.commandData   = static_cast<void *>(presentData);
         contextVk->syncAnyErrorAndQueueCommandToProcessorThread(task);
         // TODO: Just stalling here for now, but really want to let main thread continue
         //   need to figure out how to handle work below off-thread and sync to main

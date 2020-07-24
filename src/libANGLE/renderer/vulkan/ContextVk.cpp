@@ -1560,8 +1560,7 @@ void ContextVk::updateOverlayOnPresent()
     renderPassCount->next();
 }
 
-void ContextVk::syncAnyErrorAndQueueCommandToProcessorThread(
-    const vk::CommandProcessorTask &command)
+void ContextVk::syncAnyErrorAndQueueCommandToProcessorThread(vk::CommandProcessorTask &command)
 {
     if (mRenderer->hasPendingError())
     {
@@ -3978,24 +3977,15 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         // 1. Create submitInfo
         // 2. Call submitFrame()
         // 3. Allocate new primary command buffer
-        vk::FlushData *flushData           = new vk::FlushData();
-        flushData->waitSemaphores          = mWaitSemaphores;
-        flushData->waitSemaphoreStageMasks = mWaitSemaphoreStageMasks;
-        flushData->semaphore               = signalSemaphore;
-        flushData->contextPriority         = mContextPriority;
+        vk::CommandProcessorTask flushData(mWaitSemaphores, mWaitSemaphoreStageMasks,
+                                           signalSemaphore, mContextPriority, mCurrentGarbage);
         // printf("Copying mSubmitFence %p into flush data\n", mSubmitFence.get().getHandle());
-        // flushData->submitFence.copy(mRenderer->getDevice(), mSubmitFence);
         // printf("\tSubmitFence in flush data is %p\n", flushData->submitFence.get().getHandle());
-        flushData->currentGarbage = std::move(mCurrentGarbage);
         // TODO: How to manage lifetime of flushData? Just doing "new" here and "delete" in worker
         //  for now. Could stash all of this data in CBH as "sideband" info.
         // TODO: How to set up semaphores for submit. Should Context send them to worker?
         //  Should worker thread have those on its end? Need to explore.
-        vk::CommandProcessorTask task;
-        task.contextVk     = nullptr;
-        task.workerCommand = vk::CustomTask::Flush;
-        task.commandData   = static_cast<void *>(flushData);
-        syncAnyErrorAndQueueCommandToProcessorThread(task);
+        syncAnyErrorAndQueueCommandToProcessorThread(flushData);
 
         // Some tasks from ContextVk::submitFrame() that run after CommandQueue::submitFrame()
         onRenderPassFinished();
@@ -4116,12 +4106,8 @@ angle::Result ContextVk::finishToSerial(Serial serial)
     {
         // Send finish w/ serial to worker thread then wait on it to complete
         // TODO: Need better way to pass this data to worker
-        vk::FinishToSerialData *serialData = new vk::FinishToSerialData();
-        serialData->serial                 = getLastSubmittedQueueSerial();
-        vk::CommandProcessorTask task;
-        task.contextVk     = nullptr;
-        task.workerCommand = vk::CustomTask::FinishToSerial;
-        task.commandData   = static_cast<void *>(serialData);
+        vk::CommandProcessorTask task(getLastSubmittedQueueSerial());
+
         syncAnyErrorAndQueueCommandToProcessorThread(task);
         mRenderer->waitForCommandProcessorIdle();
         // TODO: Need to sync any errors here
@@ -4508,9 +4494,7 @@ angle::Result ContextVk::endRenderPass()
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
-        vk::CommandProcessorTask task;
-        task.contextVk     = this;
-        task.commandBuffer = mRenderPassCommands;
+        vk::CommandProcessorTask task(this, mRenderPassCommands);
         syncAnyErrorAndQueueCommandToProcessorThread(task);
         getNextAvailableCommandBuffer(&mRenderPassCommands, true);
     }
@@ -4647,9 +4631,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     {
         if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
         {
-            vk::CommandProcessorTask task;
-            task.contextVk     = this;
-            task.commandBuffer = mOutsideRenderPassCommands;
+            vk::CommandProcessorTask task(this, mOutsideRenderPassCommands);
             syncAnyErrorAndQueueCommandToProcessorThread(task);
             getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
         }
