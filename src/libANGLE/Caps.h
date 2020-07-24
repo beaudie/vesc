@@ -665,6 +665,13 @@ struct Extensions
 
     // GL_ANGLE_get_tex_level_parameter
     bool getTexLevelParameterANGLE = false;
+
+    // GL_OES_texture_buffer
+    bool textureBufferOES = false;
+    // GL_EXT_texture_buffer
+    bool textureBufferEXT = false;
+    // Any version of the texture buffer extension
+    bool textureBufferAny() const { return (textureBufferOES || textureBufferEXT); }
 };
 
 // Pointer to a boolean memeber of the Extensions struct
@@ -907,6 +914,10 @@ struct Caps
     GLfloat maxSmoothPointSize                  = 0.0f;
     GLfloat minSmoothLineWidth                  = 0.0f;
     GLfloat maxSmoothLineWidth                  = 0.0f;
+
+    // ES 3.2 Table 20.41: Implementation Dependent Values (cont.)
+    GLint maxTextureBufferSize         = 0;
+    GLint textureBufferOffsetAlignment = 0;
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions);
