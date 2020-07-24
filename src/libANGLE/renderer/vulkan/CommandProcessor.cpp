@@ -406,18 +406,18 @@ CommandProcessor::CommandProcessor(RendererVk *renderer)
     : mWorkerThreadIdle(true), mRenderer(renderer), mCommandWorkQueue(renderer)
 {}
 
-void CommandProcessor::queueCommand(const vk::CommandProcessorTask &command)
+void CommandProcessor::queueCommand(vk::CommandProcessorTask &command)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::queueCommand");
     std::lock_guard<std::mutex> queueLock(mWorkerMutex);
-    ASSERT(command.workerCommand == vk::CustomTask::Flush ||
-           command.workerCommand == vk::CustomTask::FinishToSerial ||
-           command.workerCommand == vk::CustomTask::QueueWaitIdle ||
-           command.workerCommand == vk::CustomTask::DeviceWaitIdle ||
-           command.workerCommand == vk::CustomTask::Present ||
-           command.workerCommand == vk::CustomTask::Exit || command.commandBuffer == nullptr ||
-           !command.commandBuffer->empty());
-    mCommandsQueue.push(command);
+    ASSERT(command.mWorkerCommand == vk::CustomTask::Flush ||
+           command.mWorkerCommand == vk::CustomTask::FinishToSerial ||
+           command.mWorkerCommand == vk::CustomTask::QueueWaitIdle ||
+           command.mWorkerCommand == vk::CustomTask::DeviceWaitIdle ||
+           command.mWorkerCommand == vk::CustomTask::Present ||
+           command.mWorkerCommand == vk::CustomTask::Exit || command.mCommandBuffer == nullptr ||
+           !command.mCommandBuffer->empty());
+    mCommandsQueue.emplace(std::move(command));
     mWorkAvailableCondition.notify_one();
 }
 
@@ -467,14 +467,14 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl()
         mWorkerThreadIdle = true;
         // Only wake if notified and command queue is not empty
         mWorkAvailableCondition.wait(lock, [this] { return !mCommandsQueue.empty(); });
-        mWorkerThreadIdle             = false;
-        vk::CommandProcessorTask task = mCommandsQueue.front();
+        mWorkerThreadIdle = false;
+        vk::CommandProcessorTask task(std::move(mCommandsQueue.front()));
         mCommandsQueue.pop();
         lock.unlock();
         // A work block with a null context is a special case
-        if (task.contextVk == nullptr)
+        if (task.mContextVk == nullptr)
         {
-            if (task.workerCommand == vk::CustomTask::Exit)
+            if (task.mWorkerCommand == vk::CustomTask::Exit)
             {
                 // Exit command signals worker thread to exit
                 // Set to idle so that processCommandProcessorTasks knows we are exiting due to exit
@@ -486,26 +486,24 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl()
             else
             {
                 // This is a custom command, handle appropriately
-                switch (task.workerCommand)
+                switch (task.mWorkerCommand)
                 {
                     case vk::CustomTask::Flush:
                     {
                         // End command buffer
                         ANGLE_VK_TRY(mCommandWorkQueue.getPointer(), mPrimaryCommandBuffer.end());
                         // 1. Create submitInfo
-                        vk::FlushData *flushData = static_cast<vk::FlushData *>(task.commandData);
-                        VkSubmitInfo submitInfo  = {};
-                        InitializeSubmitInfo(
-                            &submitInfo, mPrimaryCommandBuffer, flushData->waitSemaphores,
-                            &flushData->waitSemaphoreStageMasks, flushData->semaphore);
+                        VkSubmitInfo submitInfo = {};
+                        InitializeSubmitInfo(&submitInfo, mPrimaryCommandBuffer,
+                                             task.mWaitSemaphores, &task.mWaitSemaphoreStageMasks,
+                                             task.mSemaphore);
                         // 2. Call submitFrame()
                         // printf("Flushing in worker thread w/ submitfence %p\n",
                         //       flushData->submitFence.get().getHandle());
                         ANGLE_TRY(mRenderer->getNextSubmitFence(&mFence));
                         ANGLE_TRY(mCommandWorkQueue.submitFrame(
-                            mRenderer, flushData->contextPriority, submitInfo, mFence,
-                            &flushData->currentGarbage, &mCommandPool,
-                            std::move(mPrimaryCommandBuffer)));
+                            mRenderer, task.mPriority, submitInfo, mFence, &task.mCurrentGarbage,
+                            &mCommandPool, std::move(mPrimaryCommandBuffer)));
                         // 3. Allocate & begin new primary command buffer
                         ANGLE_TRY(
                             mCommandWorkQueue.allocatePrimaryCommandBuffer(&mPrimaryCommandBuffer));
@@ -515,27 +513,20 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl()
                         //  Also not sure I'm getting fence reuse doing this.
                         mRenderer->resetSharedFence(&mFence);
                         mRenderer->resetNextSharedFence();
-                        delete flushData;
+                        ASSERT(task.mCurrentGarbage.empty());
                         break;
                     }
                     case vk::CustomTask::FinishToSerial:
                     {
-                        vk::FinishToSerialData *serialData =
-                            static_cast<vk::FinishToSerialData *>(task.commandData);
                         // printf("Worker thread finishing to Serial %llu\n",
                         // serialData->serial.getValue());
-                        ANGLE_TRY(mCommandWorkQueue.finishToSerial(mRenderer, serialData->serial));
-                        delete serialData;
+                        ANGLE_TRY(mCommandWorkQueue.finishToSerial(mRenderer, task.mSerial));
                         break;
                     }
                     case vk::CustomTask::Present:
                     {
-                        vk::PresentData *presentData =
-                            static_cast<vk::PresentData *>(task.commandData);
                         ANGLE_VK_TRY(mCommandWorkQueue.getPointer(),
-                                     mCommandWorkQueue.present(presentData->priority,
-                                                               presentData->presentInfo));
-                        delete presentData;
+                                     mCommandWorkQueue.present(task.mPriority, task.mPresentInfo));
                         break;
                     }
                     case vk::CustomTask::DeviceWaitIdle:
@@ -545,10 +536,7 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl()
                     }
                     case vk::CustomTask::QueueWaitIdle:
                     {
-                        vk::QueueWaitIdleData *queueWaitIdleData =
-                            static_cast<vk::QueueWaitIdleData *>(task.commandData);
-                        ANGLE_TRY(mCommandWorkQueue.queueWaitIdle(queueWaitIdleData->priority));
-                        delete queueWaitIdleData;
+                        ANGLE_TRY(mCommandWorkQueue.queueWaitIdle(task.mPriority));
                         break;
                     }
                     default:
@@ -559,14 +547,15 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl()
         }
         else
         {
-            ASSERT(!task.commandBuffer->empty());
+            ASSERT(!task.mCommandBuffer->empty());
             // TODO: Will need some way to synchronize error reporting between threads
-            ANGLE_TRY(task.commandBuffer->flushToPrimary(task.contextVk, &mPrimaryCommandBuffer));
-            ASSERT(task.commandBuffer->empty());
-            task.commandBuffer->releaseToContextQueue(task.contextVk);
+            ANGLE_TRY(task.mCommandBuffer->flushToPrimary(task.mContextVk, &mPrimaryCommandBuffer));
+            ASSERT(task.mCommandBuffer->empty());
+            task.mCommandBuffer->releaseToContextQueue(task.mContextVk);
         }
     }
 
+    UNREACHABLE();
     return angle::Result::Stop;
 }
 
@@ -583,9 +572,7 @@ void CommandProcessor::waitForWorkComplete()
 void CommandProcessor::shutdown(std::thread *commandProcessorThread)
 {
     waitForWorkComplete();
-    vk::CommandProcessorTask endTask;
-    endTask.contextVk     = nullptr;
-    endTask.workerCommand = vk::CustomTask::Exit;
+    vk::CommandProcessorTask endTask(vk::CustomTask::Exit);
     queueCommand(endTask);
     if (commandProcessorThread->joinable())
     {
