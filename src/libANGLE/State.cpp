@@ -249,6 +249,7 @@ const angle::PackedEnumMap<BufferBinding, State::BufferBindingSetter> State::kBu
     GetBufferBindingSetter<BufferBinding::PixelPack>(),
     GetBufferBindingSetter<BufferBinding::PixelUnpack>(),
     GetBufferBindingSetter<BufferBinding::ShaderStorage>(),
+    GetBufferBindingSetter<BufferBinding::Texture>(),
     GetBufferBindingSetter<BufferBinding::TransformFeedback>(),
     GetBufferBindingSetter<BufferBinding::Uniform>(),
 }};
@@ -448,6 +449,10 @@ void State::initialize(Context *context)
 
     mSamplerTextures[TextureType::_2D].resize(caps.maxCombinedTextureImageUnits);
     mSamplerTextures[TextureType::CubeMap].resize(caps.maxCombinedTextureImageUnits);
+    if (extensions.textureBufferAny())
+    {
+        mSamplerTextures[TextureType::Buffer].resize(caps.maxCombinedTextureImageUnits);
+    }
     if (clientVersion >= Version(3, 0) || nativeExtensions.texture3DOES)
     {
         mSamplerTextures[TextureType::_3D].resize(caps.maxCombinedTextureImageUnits);
@@ -1995,6 +2000,10 @@ angle::Result State::setIndexedBufferBinding(const Context *context,
             UpdateIndexedBufferBinding(context, &mShaderStorageBuffers[index], buffer, target,
                                        offset, size);
             break;
+        case BufferBinding::Texture:
+            // UpdateIndexedBufferBinding(context, &mShaderStorageBuffers[index], buffer, target,
+            //                           offset, size);
+            break;
         default:
             UNREACHABLE();
             break;
@@ -2750,6 +2759,12 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
                                           TextureType::External)
                           .value;
+            break;
+        case GL_TEXTURE_BINDING_BUFFER:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params =
+                getSamplerTextureId(static_cast<unsigned int>(mActiveSampler), TextureType::Buffer)
+                    .value;
             break;
         case GL_UNIFORM_BUFFER_BINDING:
             *params = mBoundBuffers[BufferBinding::Uniform].id().value;
