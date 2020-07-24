@@ -576,6 +576,10 @@ bool ValidTextureTarget(const Context *context, TextureType type)
         case TextureType::VideoImage:
             return context->getExtensions().webglVideoTexture;
 
+        case TextureType::Buffer:
+            return (context->getClientVersion() >= Version(3, 2) ||
+                    context->getExtensions().textureBufferAny());
+
         default:
             return false;
     }
@@ -814,6 +818,9 @@ bool ValidTexLevelDestinationTarget(const Context *context, TextureType type)
             return context->getExtensions().textureRectangle;
         case TextureType::_2DMultisampleArray:
             return context->getExtensions().textureStorageMultisample2DArrayOES;
+        case TextureType::Buffer:
+            return (context->getClientVersion() >= Version(3, 2) ||
+                    context->getExtensions().textureBufferAny());
         default:
             return false;
     }
@@ -863,6 +870,7 @@ bool ValidMipLevel(const Context *context, TextureType type, GLint level)
         case TextureType::External:
         case TextureType::Rectangle:
         case TextureType::VideoImage:
+        case TextureType::Buffer:
             return level == 0;
 
         case TextureType::_3D:
@@ -2393,6 +2401,17 @@ bool ValidateStateQuery(const Context *context,
                 !context->getExtensions().eglImageExternalOES)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                return false;
+            }
+            break;
+        case GL_TEXTURE_BUFFER_BINDING:
+        case GL_TEXTURE_BINDING_BUFFER:
+        case GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT:
+        case GL_MAX_TEXTURE_BUFFER_SIZE:
+            if (context->getClientVersion() < Version(3, 2) &&
+                !context->getExtensions().textureBufferAny())
+            {
+                context->validationError(GL_INVALID_ENUM, kTextureBufferExtensionNotAvailable);
                 return false;
             }
             break;
@@ -6791,6 +6810,16 @@ bool ValidateGetTexLevelParameterBase(const Context *context,
         case GL_TEXTURE_FIXED_SAMPLE_LOCATIONS:
             break;
         case GL_TEXTURE_COMPRESSED:
+            break;
+        case GL_TEXTURE_BUFFER_DATA_STORE_BINDING:
+        case GL_TEXTURE_BUFFER_OFFSET:
+        case GL_TEXTURE_BUFFER_SIZE:
+            if (context->getClientVersion() < Version(3, 2) &&
+                !context->getExtensions().textureBufferAny())
+            {
+                context->validationError(GL_INVALID_ENUM, kTextureBufferExtensionNotAvailable);
+                return false;
+            }
             break;
         default:
             context->validationError(GL_INVALID_ENUM, kInvalidPname);
