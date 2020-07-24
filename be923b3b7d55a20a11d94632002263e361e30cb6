@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e29e801c_5475aa0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-24T18:24:15Z",
+      "side": 1,
+      "message": "Drive by nits",
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2cdff39_9b7d678f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-24T18:24:15Z",
+      "side": 1,
+      "message": "`*` per ANGLE style",
+      "range": {
+        "startLine": 551,
+        "startChar": 79,
+        "endLine": 551,
+        "endChar": 80
+      },
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682e8949_621abc7d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-24T18:24:15Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 284,
+        "startChar": 47,
+        "endLine": 284,
+        "endChar": 48
+      },
+      "revId": "be923b3b7d55a20a11d94632002263e361e30cb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
