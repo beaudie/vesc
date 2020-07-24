@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba9a768b_499f5200",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-24T19:42:38Z",
+      "side": 1,
+      "message": "Thanks, LGTM. And congrats on the announcement and shipping!",
+      "revId": "c76230528ff680d76a3c644b16a60c54de853c04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
