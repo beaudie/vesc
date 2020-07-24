@@ -4816,6 +4816,59 @@ void GL_APIENTRY ImportSemaphoreFdEXT(GLuint semaphore, GLenum handleType, GLint
     }
 }
 
+// GL_EXT_texture_buffer
+void GL_APIENTRY TexBufferEXT(GLenum target, GLenum internalformat, GLuint buffer)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glTexBufferEXT",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer);
+
+    if (context)
+    {
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                                      = (context->skipValidation() ||
+                            ValidateTexBufferEXT(context, target, internalformat, bufferPacked));
+        if (isCallValid)
+        {
+            context->texBuffer(target, internalformat, bufferPacked);
+        }
+        ANGLE_CAPTURE(TexBufferEXT, isCallValid, context, target, internalformat, bufferPacked);
+    }
+}
+
+void GL_APIENTRY TexBufferRangeEXT(GLenum target,
+                                   GLenum internalformat,
+                                   GLuint buffer,
+                                   GLintptr offset,
+                                   GLsizeiptr size)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glTexBufferRangeEXT",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u, "
+          "GLintptr offset = %llu, GLsizeiptr size = %llu",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer,
+          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size));
+
+    if (context)
+    {
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() || ValidateTexBufferRangeEXT(context, target, internalformat,
+                                                                    bufferPacked, offset, size));
+        if (isCallValid)
+        {
+            context->texBufferRange(target, internalformat, bufferPacked, offset, size);
+        }
+        ANGLE_CAPTURE(TexBufferRangeEXT, isCallValid, context, target, internalformat, bufferPacked,
+                      offset, size);
+    }
+}
+
 // GL_EXT_texture_compression_bptc
 
 // GL_EXT_texture_compression_dxt1
@@ -6916,6 +6969,59 @@ void GL_APIENTRY TexParameterIuivOES(GLenum target, GLenum pname, const GLuint *
             context->texParameterIuiv(targetPacked, pname, params);
         }
         ANGLE_CAPTURE(TexParameterIuivOES, isCallValid, context, targetPacked, pname, params);
+    }
+}
+
+// GL_OES_texture_buffer
+void GL_APIENTRY TexBufferOES(GLenum target, GLenum internalformat, GLuint buffer)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glTexBufferOES",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer);
+
+    if (context)
+    {
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                                      = (context->skipValidation() ||
+                            ValidateTexBufferOES(context, target, internalformat, bufferPacked));
+        if (isCallValid)
+        {
+            context->texBuffer(target, internalformat, bufferPacked);
+        }
+        ANGLE_CAPTURE(TexBufferOES, isCallValid, context, target, internalformat, bufferPacked);
+    }
+}
+
+void GL_APIENTRY TexBufferRangeOES(GLenum target,
+                                   GLenum internalformat,
+                                   GLuint buffer,
+                                   GLintptr offset,
+                                   GLsizeiptr size)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glTexBufferRangeOES",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u, "
+          "GLintptr offset = %llu, GLsizeiptr size = %llu",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer,
+          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size));
+
+    if (context)
+    {
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() || ValidateTexBufferRangeOES(context, target, internalformat,
+                                                                    bufferPacked, offset, size));
+        if (isCallValid)
+        {
+            context->texBufferRange(target, internalformat, bufferPacked, offset, size);
+        }
+        ANGLE_CAPTURE(TexBufferRangeOES, isCallValid, context, target, internalformat, bufferPacked,
+                      offset, size);
     }
 }
 
@@ -20455,6 +20561,58 @@ void GL_APIENTRY TexBufferContextANGLE(GLeglContext ctx,
     }
 }
 
+void GL_APIENTRY TexBufferEXTContextANGLE(GLeglContext ctx,
+                                          GLenum target,
+                                          GLenum internalformat,
+                                          GLuint buffer)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glTexBufferEXT",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                                      = (context->skipValidation() ||
+                            ValidateTexBufferEXT(context, target, internalformat, bufferPacked));
+        if (isCallValid)
+        {
+            context->texBuffer(target, internalformat, bufferPacked);
+        }
+        ANGLE_CAPTURE(TexBufferEXT, isCallValid, context, target, internalformat, bufferPacked);
+    }
+}
+
+void GL_APIENTRY TexBufferOESContextANGLE(GLeglContext ctx,
+                                          GLenum target,
+                                          GLenum internalformat,
+                                          GLuint buffer)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glTexBufferOES",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                                      = (context->skipValidation() ||
+                            ValidateTexBufferOES(context, target, internalformat, bufferPacked));
+        if (isCallValid)
+        {
+            context->texBuffer(target, internalformat, bufferPacked);
+        }
+        ANGLE_CAPTURE(TexBufferOES, isCallValid, context, target, internalformat, bufferPacked);
+    }
+}
+
 void GL_APIENTRY TexBufferRangeContextANGLE(GLeglContext ctx,
                                             GLenum target,
                                             GLenum internalformat,
@@ -20483,6 +20641,70 @@ void GL_APIENTRY TexBufferRangeContextANGLE(GLeglContext ctx,
             context->texBufferRange(target, internalformat, bufferPacked, offset, size);
         }
         ANGLE_CAPTURE(TexBufferRange, isCallValid, context, target, internalformat, bufferPacked,
+                      offset, size);
+    }
+}
+
+void GL_APIENTRY TexBufferRangeEXTContextANGLE(GLeglContext ctx,
+                                               GLenum target,
+                                               GLenum internalformat,
+                                               GLuint buffer,
+                                               GLintptr offset,
+                                               GLsizeiptr size)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glTexBufferRangeEXT",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u, "
+          "GLintptr offset = %llu, GLsizeiptr size = %llu",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer,
+          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size));
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() || ValidateTexBufferRangeEXT(context, target, internalformat,
+                                                                    bufferPacked, offset, size));
+        if (isCallValid)
+        {
+            context->texBufferRange(target, internalformat, bufferPacked, offset, size);
+        }
+        ANGLE_CAPTURE(TexBufferRangeEXT, isCallValid, context, target, internalformat, bufferPacked,
+                      offset, size);
+    }
+}
+
+void GL_APIENTRY TexBufferRangeOESContextANGLE(GLeglContext ctx,
+                                               GLenum target,
+                                               GLenum internalformat,
+                                               GLuint buffer,
+                                               GLintptr offset,
+                                               GLsizeiptr size)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glTexBufferRangeOES",
+          "context = %d, GLenum target = %s, GLenum internalformat = %s, GLuint buffer = %u, "
+          "GLintptr offset = %llu, GLsizeiptr size = %llu",
+          CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer,
+          static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size));
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() || ValidateTexBufferRangeOES(context, target, internalformat,
+                                                                    bufferPacked, offset, size));
+        if (isCallValid)
+        {
+            context->texBufferRange(target, internalformat, bufferPacked, offset, size);
+        }
+        ANGLE_CAPTURE(TexBufferRangeOES, isCallValid, context, target, internalformat, bufferPacked,
                       offset, size);
     }
 }
