@@ -525,6 +525,7 @@ class ContextVk : public ContextImpl, public vk::Context
                                           const gl::Rectangle &renderArea,
                                           const vk::RenderPassDesc &renderPassDesc,
                                           const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                          const size_t depthStencilAttachmentIndex,
                                           const vk::ClearValuesArray &clearValues,
                                           vk::CommandBuffer **commandBufferOut);
 
