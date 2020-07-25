@@ -16,6 +16,469 @@
       "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "305c1cd8_d85fef30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Lots of good stuff here.   It should be straightforward to build on this for the blit stuff once this lands.",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb028fa6_9c812e5a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "This pattern seems to emerge a few times:\n\n    TextureVk::copySubImageImplWithTransfer()\n        srcSubresource.mipLevel       \u003d static_cast\u003cuint32_t\u003e(sourceLevelGL) - srcImage-\u003egetBaseLevel();\n\n    TextureVk::copySubImageImplWithDraw()\n        params.srcMip              \u003d static_cast\u003cuint32_t\u003e(sourceLevelGL) - srcImage-\u003egetBaseLevel();\n\nBut not always:\n\n    FramebufferVk::blit()\n                uint32_t levelIndex                \u003d readRenderTarget-\u003egetLevelIndex();\n                    ANGLE_TRY(depthStencilImage-\u003einitLayerImageView(\n                        contextVk, textureType, VK_IMAGE_ASPECT_DEPTH_BIT, gl::SwizzleState(),\n                        \u0026depthView.get(), levelIndex, 1, layerIndex, 1));\n\n    FramebufferVk::blitWithCommand()\n        blit.srcSubresource.mipLevel       \u003d readRenderTarget-\u003egetLevelIndex();\n        blit.dstSubresource.mipLevel       \u003d drawRenderTarget-\u003egetLevelIndex();\n\n    FramebufferVk::clearImpl()\n            range.baseMipLevel   \u003d depthStencilRT-\u003egetLevelIndex();\n\n\n    FramebufferVk::resolveColorWithCommand()\n            resolveRegion.dstSubresource.mipLevel       \u003d drawRenderTarget-\u003egetLevelIndex();\n\n    UtilsVk::stencilBlitResolveNoShaderExport()\n        region.imageSubresource.mipLevel       \u003d depthStencilRenderTarget-\u003egetLevelIndex();\n\n\nPresumably there\u0027s some consistency that I\u0027m missing, but it feels less structured than that.   How do we know when to use which value?",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40322fa1_177979fb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2068,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 2068,
+        "startChar": 42,
+        "endLine": 2068,
+        "endChar": 46
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a9b40b7_2de22adc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Can you open a bug for this optimization and make it a TODO?",
+      "range": {
+        "startLine": 2074,
+        "startChar": 0,
+        "endLine": 2075,
+        "endChar": 91
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b591747b_c7c8f8bc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2080,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "You added a call to endRenderPass() in UtilsVk::copyImage().   Since the previous render pass was ended at the start of this function and we\u0027re starting a new one here, presumably that implies there aren\u0027t any dependencies between the render targets in this loop(?).   \n\nDo we need to end the render pass each time in this loop or can we batch all of these up into a single render pass that\u0027s ended at the end of the loop?   Or would there not be any benefit anyway to combining all of these draws?",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53255366_9d497cec",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2086,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Can you update this comment to explain why it must be done after copyResolveToMultisampedAttachment() (rather than what this code is doing)?",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba24afc8_fd4df4b6",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "This assert should be updated to handle the resolve case also.",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35fa67f0_86bb82f3",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Why not isResolveImageOwnerOfData() here?",
+      "range": {
+        "startLine": 242,
+        "startChar": 11,
+        "endLine": 242,
+        "endChar": 24
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44938f63_f7c3a140",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Same two comments as in getImageForCopy().",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 52
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa640c6c_34c6574d",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "ASSERT((isResolveImageOwnerOfData() \u0026\u0026 mResolveImage) || (!isResolveImageOwnerOfData() \u0026\u0026 mImage));",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aadfcd0d_297c7c66",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Is this saying that the clears are applied to both the resolve and multisampled images?",
+      "range": {
+        "startLine": 270,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 19
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e0c1d16_c0e46389",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "nit: Since this block comment is pretty large and what \u0027this\u0027 is referring to is still 30 lines away, can you replace \u0027this\u0027 with \u0027mIsImageDataEphemeral\u0027 to make it extra clear what\u0027s being referred to here?",
+      "range": {
+        "startLine": 143,
+        "startChar": 37,
+        "endLine": 143,
+        "endChar": 41
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21b38b1e_27f922b1",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Very nice diagram and documentation here.",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9be3fbe0_cb626433",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Why 0 instead of 1 (or allowing either)?",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "828e8e34_66198c4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "The comment above for mHasColorResolveAttachment states that we don\u0027t currently support D/S resolve attachments.   Based on that, I would have expected to see something like:\n\n    ASSERT(angleFormat.depthBits \u003d\u003d 0 \u0026\u0026 angleFormat.stencilBits \u003d\u003d 0);\n\nOr is the intent here to try and future-proof things and simplify supporting D/S someday?",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80f77e2b_47992edf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "The old size was:\n    IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS \u003d\n        IMPLEMENTATION_MAX_DRAW_BUFFERS + 2,  // 2 extra for depth and/or stencil buffers\n\nThis new size is 1 short if all color, DS, and resolve attachments are used.   It looks like using kMaxFramebufferAttachments here would be better.",
+      "range": {
+        "startLine": 259,
+        "startChar": 40,
+        "endLine": 259,
+        "endChar": 90
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05dbe425_4eb8f454",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "nit: is",
+      "range": {
+        "startLine": 117,
+        "startChar": 94,
+        "endLine": 117,
+        "endChar": 97
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68f369c3_f929d2ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Just out of curiosity: since this block exists, does this mean you hit cases where we couldn\u0027t allocate LAZILY_ALLOCATED memory?   Is it non-tiler GPUs that may not care about that flag?",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "454688cd_e33107a8",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Nice cleanup on these tests.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 91
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f31bb8b4_04bc6c0c",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Looks like this should be removed since these are all ES2 otherwise.",
+      "range": {
+        "startLine": 884,
+        "startChar": 22,
+        "endLine": 884,
+        "endChar": 48
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52ec7ab9_5ffa58a7",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Does this work?\n\n    ANGLE_INSTANTIATE_TEST(CopyTexImageTest,\n                           ANGLE_ALL_TEST_PLATFORMS_ES2,\n                           WithEmulateCopyTexImage2DFromRenderbuffers(ES2_OPENGL()),\n                           WithEmulateCopyTexImage2DFromRenderbuffers(ES2_OPENGLES()));",
+      "range": {
+        "startLine": 874,
+        "startChar": 0,
+        "endLine": 886,
+        "endChar": 83
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "177f790c_3ea471e9",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "I think Ian mentioned that this may end the renderpass before the draw, so the deferred clears aren\u0027t actually held on to as part of the draw render pass.   I haven\u0027t dug into if that\u0027s the case, but it may be worth doing this before the clear to try and exercise the multisampled deferred clears path more.",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73ffa25e_c5382dda",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-25T00:47:25Z",
+      "side": 1,
+      "message": "Rather than skipping the test, can you just use maxSamples here?",
+      "range": {
+        "startLine": 262,
+        "startChar": 57,
+        "endLine": 262,
+        "endChar": 58
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
