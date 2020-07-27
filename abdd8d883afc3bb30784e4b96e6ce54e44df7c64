@@ -42,6 +42,70 @@
     },
     {
       "key": {
+        "uuid": "97ce2d2d_690422b9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-27T19:33:56Z",
+      "side": 1,
+      "message": "This is the part Shabi recommends should move to state setup rather than in setupDraw.",
+      "parentUuid": "15d59f22_9985b678",
+      "range": {
+        "startLine": 966,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 55
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a71705a_c5647626",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-27T19:33:56Z",
+      "side": 1,
+      "message": "Nit: Use depthStencilAttachmentIndex now that we\u0027ve created it for clarity?\nMore uses below.",
+      "range": {
+        "startLine": 1986,
+        "startChar": 43,
+        "endLine": 1986,
+        "endChar": 65
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5917f4bd_52523ccc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-27T19:33:56Z",
+      "side": 1,
+      "message": "Initialize to vk::kInvalidAttachmentIndex and should be able to drop this else.",
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86fc37fd_f33d918f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
