@@ -16,6 +16,40 @@
       "revId": "3b41424b8a7194f1293c856429f09e382c64c093",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6d6cabc4_35afef67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-27T20:39:15Z",
+      "side": 1,
+      "message": "LGTM.  Some day hopefully we can find a way to verify all the state is being captured.",
+      "revId": "3b41424b8a7194f1293c856429f09e382c64c093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "000e14a0_f33790bd",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-27T20:39:15Z",
+      "side": 1,
+      "message": "Can you assert that Type is equal to one of the three that you check for below?",
+      "revId": "3b41424b8a7194f1293c856429f09e382c64c093",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
