@@ -22,6 +22,30 @@
       "revId": "df5ed61ddbcab119b059e6e5bd28a049b726766a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27b9cad2_0b67baa2",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-27T17:26:08Z",
+      "side": 0,
+      "message": "There are no vulkan drivers on Mac, we only use it for SwANGLE.",
+      "parentUuid": "3b4cf2ee_0be9f286",
+      "range": {
+        "startLine": 24,
+        "startChar": 82,
+        "endLine": 24,
+        "endChar": 90
+      },
+      "revId": "df5ed61ddbcab119b059e6e5bd28a049b726766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
