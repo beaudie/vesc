@@ -33,6 +33,23 @@
       "revId": "1add4f6ddc3aeb5024376bce1ba0b2bb531c5f6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9541ab2_a053d02f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T17:58:15Z",
+      "side": 1,
+      "message": "Shouldn\u0027t there be a `extensions/EGL_ANGLE_display_semaphore_share_group.txt` added?\n\nAlso, could support be added in `src/libANGLE/renderer/vulkan/DisplayVk.cpp` too?",
+      "revId": "1add4f6ddc3aeb5024376bce1ba0b2bb531c5f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
