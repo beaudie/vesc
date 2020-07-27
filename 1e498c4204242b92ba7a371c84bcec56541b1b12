@@ -16,6 +16,23 @@
       "revId": "1e498c4204242b92ba7a371c84bcec56541b1b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a64d21e1_56adf813",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T17:52:01Z",
+      "side": 1,
+      "message": "Sure, just watch out for regressions after it lands like last time. Since we don\u0027t have a good way of verifying that right now.",
+      "revId": "1e498c4204242b92ba7a371c84bcec56541b1b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
