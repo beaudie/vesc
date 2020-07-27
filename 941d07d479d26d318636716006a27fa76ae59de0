@@ -22,6 +22,30 @@
       "revId": "941d07d479d26d318636716006a27fa76ae59de0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b733b408_9faadbe7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 8788,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T18:06:20Z",
+      "side": 1,
+      "message": "You had me worried there for a second! I checked and it\u0027s set in stone. Calculated in `Program::linkSamplerAndImageBindings` and is stored in the program cache. The actual binding to textures is in State::mImageUnits.",
+      "parentUuid": "18aea8e2_025d098b",
+      "range": {
+        "startLine": 8788,
+        "startChar": 47,
+        "endLine": 8788,
+        "endChar": 62
+      },
+      "revId": "941d07d479d26d318636716006a27fa76ae59de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
