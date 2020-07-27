@@ -53,6 +53,29 @@
     },
     {
       "key": {
+        "uuid": "fff3ef90_29faaf5a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1553,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T18:34:11Z",
+      "side": 1,
+      "message": "what about attachments that go from enabled -\u003e disabled?",
+      "range": {
+        "startLine": 1545,
+        "startChar": 0,
+        "endLine": 1553,
+        "endChar": 21
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40322fa1_177979fb",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 13
@@ -236,6 +259,29 @@
     },
     {
       "key": {
+        "uuid": "106fac77_98c8d776",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T18:34:11Z",
+      "side": 1,
+      "message": "can we use a word from the spec for images that don\u0027t get allocated?\n\nhttps://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_multisampled_render_to_texture.txt \n\nEphemeral is not something I\u0027ve seen in a GL context before.",
+      "range": {
+        "startLine": 51,
+        "startChar": 19,
+        "endLine": 51,
+        "endChar": 39
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e0c1d16_c0e46389",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 13
@@ -287,6 +333,52 @@
       "writtenOn": "2020-07-25T00:47:25Z",
       "side": 1,
       "message": "Why 0 instead of 1 (or allowing either)?",
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00613463_ead62674",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T18:34:11Z",
+      "side": 1,
+      "message": "nit: make these unique_ptr or some other smart pointer type. From looking at the code I don\u0027t see why you need a pointer. Can you use a value type?",
+      "range": {
+        "startLine": 418,
+        "startChar": 21,
+        "endLine": 418,
+        "endChar": 39
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c8d0cf3_22320a95",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T18:34:11Z",
+      "side": 1,
+      "message": "why isn\u0027t this state change detected by the command buffer apis?",
+      "range": {
+        "startLine": 1780,
+        "startChar": 0,
+        "endLine": 1781,
+        "endChar": 42
+      },
       "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -349,6 +441,29 @@
         "startChar": 94,
         "endLine": 117,
         "endChar": 97
+      },
+      "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2ae2ff8_8eb725b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T18:34:11Z",
+      "side": 1,
+      "message": "nit: mResolveAttachmentsMask to match naming in ANGLE.",
+      "range": {
+        "startLine": 121,
+        "startChar": 56,
+        "endLine": 121,
+        "endChar": 82
       },
       "revId": "36ee6208cc3e55ccd6b770e177dbc968103cc39f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
