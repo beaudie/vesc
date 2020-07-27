@@ -204,6 +204,30 @@
       "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb4ae4f9_8f656241",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-27T22:35:20Z",
+      "side": 1,
+      "message": "Now the other CLs has been merged in, you can see that ContextVk.h line 1076, which itself was moved from ProgramVk.h file. I am trying to keep it consistent here.",
+      "parentUuid": "3d7fdef0_f17a15c4",
+      "range": {
+        "startLine": 1073,
+        "startChar": 22,
+        "endLine": 1073,
+        "endChar": 43
+      },
+      "revId": "97acfdefbe712518155d077785bdc8dc6a2627a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
