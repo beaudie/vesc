@@ -345,6 +345,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
             const egl::Config *config,
             const Context *shareContext,
             TextureManager *shareTextures,
+            SemaphoreManager *shareSemaphores,
             MemoryProgramCache *memoryProgramCache,
             const EGLenum clientType,
             const egl::AttributeMap &attribs,
@@ -569,6 +570,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool isQueryGenerated(QueryID query) const;
 
     bool usingDisplayTextureShareGroup() const;
+    bool usingDisplaySemaphoreShareGroup() const;
 
     // Hack for the special WebGL 1 "DEPTH_STENCIL" internal format.
     GLenum getConvertedRenderbufferFormat(GLenum internalformat) const;
@@ -673,6 +675,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool mShared;
     bool mSkipValidation;
     bool mDisplayTextureShareGroup;
+    bool mDisplaySemaphoreShareGroup;
 
     // Recorded errors
     ErrorSet mErrors;
