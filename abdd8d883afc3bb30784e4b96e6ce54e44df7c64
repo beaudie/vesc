@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "434cf050_6c1c6dbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T18:36:20Z",
+      "side": 1,
+      "message": "The setDepthBufferEnabled()/setStencilBufferEnabled() calls can definitely be moved outside of the setupDraw() hot path. They should be called when the relevant state change dirty bit is handled and right after the startRenderPass call in setupDraw().\n\nAlso, can you please add the following two tests? They can go in StateChangeTests.cpp:\n\n1. A test that performs a few draws, only one of which enables depth test. The test then invalidates the depth buffer. It should not set loadOp to DONT_CARE otherwise it would fail on Android. This could actually be two similar tests, one where the draw with depth test is the first draw, one where it\u0027s not the first draw.\n2. A test that performs a few draws with depth test disabled followed by an invalidate. It won\u0027t catch a regression if loadOp is not changed, but hopefully would catch bugs on future iterations of this optimization.",
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "15d59f22_9985b678",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T18:36:20Z",
+      "side": 1,
+      "message": "nit: we use {} around single-line blocks too per style guide.\n\nIf an application is found to set for example glDepthFunc(GL_ALWAYS), that could also count as not having depth test enabled. Not sure if it\u0027s worth considering, so maybe keep such things in mind if such an application is discovered.",
+      "range": {
+        "startLine": 966,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 55
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86fc37fd_f33d918f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T18:36:20Z",
+      "side": 1,
+      "message": "typo: has",
+      "range": {
+        "startLine": 668,
+        "startChar": 18,
+        "endLine": 668,
+        "endChar": 20
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5894e16_3a232028",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T18:36:20Z",
+      "side": 1,
+      "message": "typo: has",
+      "range": {
+        "startLine": 668,
+        "startChar": 49,
+        "endLine": 668,
+        "endChar": 51
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
