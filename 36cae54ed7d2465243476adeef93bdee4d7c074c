@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6f860904_08f9b733",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T18:21:04Z",
+      "side": 1,
+      "message": "See other comment.\n\nFor what it\u0027s worth, I think it\u0027s best to move this eventually to ImageHelper (and track it per level or something). Then we don\u0027t need to conservatively set contents to defined on framebuffer binding change (which is what we currently do, as we don\u0027t know if the contents got defined before the texture was attached to framebuffer).",
+      "parentUuid": "730e870a_72db9f86",
+      "revId": "36cae54ed7d2465243476adeef93bdee4d7c074c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47ee94b0_785741c4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -39,6 +57,30 @@
       "revId": "36cae54ed7d2465243476adeef93bdee4d7c074c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682ea40f_42331180",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-27T18:21:04Z",
+      "side": 1,
+      "message": "Went with `invalidateEntireContents`. Sounds good?",
+      "parentUuid": "47ee94b0_785741c4",
+      "range": {
+        "startLine": 1344,
+        "startChar": 35,
+        "endLine": 1344,
+        "endChar": 52
+      },
+      "revId": "36cae54ed7d2465243476adeef93bdee4d7c074c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
