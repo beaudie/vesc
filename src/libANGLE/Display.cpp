@@ -1143,6 +1143,24 @@ Error Display::createContext(const Config *configuration,
         shareTextures = mTextureManager;
     }
 
+    // This display semaphore sharing will allow the first context to create the semaphore share
+    // group.
+    bool usingDisplaySemaphoreShareGroup =
+        attribs.get(EGL_DISPLAY_SEMAPHORE_SHARE_GROUP_ANGLE, EGL_FALSE) == EGL_TRUE;
+    gl::SemaphoreManager *shareSemaphores = nullptr;
+
+    if (usingDisplaySemaphoreShareGroup)
+    {
+        ASSERT((mSemaphoreManager == nullptr) == (mGlobalSemaphoreShareGroupUsers == 0));
+        if (mSemaphoreManager == nullptr)
+        {
+            mSemaphoreManager = new gl::SemaphoreManager();
+        }
+
+        mGlobalSemaphoreShareGroupUsers++;
+        shareSemaphores = mSemaphoreManager;
+    }
+
     gl::MemoryProgramCache *cachePointer = &mMemoryProgramCache;
 
     // Check context creation attributes to see if we are using EGL_ANGLE_program_cache_control.
@@ -1162,9 +1180,9 @@ Error Display::createContext(const Config *configuration,
         }
     }
 
-    gl::Context *context =
-        new gl::Context(this, configuration, shareContext, shareTextures, cachePointer, clientType,
-                        attribs, mDisplayExtensions, GetClientExtensions());
+    gl::Context *context = new gl::Context(this, configuration, shareContext, shareTextures,
+                                           shareSemaphores, cachePointer, clientType, attribs,
+                                           mDisplayExtensions, GetClientExtensions());
     if (shareContext != nullptr)
     {
         shareContext->setShared();
