@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "997b52fb_b7d40d85",
+        "filename": "src/libANGLE/frame_capture_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T17:50:48Z",
+      "side": 1,
+      "message": "I suggest you rebase your changes in a stack intead of uploading them one-by-one. It makes it a bit easier to know certain changes are applied. i.e. here I have the same comments about moving the functions to the cpp - maybe rebase this one on top of the Context patch and land the Context patch first.",
+      "revId": "a2fe143e05e13325b3c21a93633f52868e64297f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
