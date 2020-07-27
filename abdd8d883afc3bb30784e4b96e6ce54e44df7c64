@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "ab92f556_2ea97548",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-27T21:12:55Z",
+      "side": 1,
+      "message": "Yes, this was mean to be my quick hack. I was thinking to do under dirty bit but forgot it afterwards.",
+      "parentUuid": "97ce2d2d_690422b9",
+      "range": {
+        "startLine": 966,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 55
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a71705a_c5647626",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -89,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "d6c11a4c_b3cb35cd",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-27T21:12:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a71705a_c5647626",
+      "range": {
+        "startLine": 1986,
+        "startChar": 43,
+        "endLine": 1986,
+        "endChar": 65
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5917f4bd_52523ccc",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -103,6 +151,24 @@
       "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8edbbea2_a6879de0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-27T21:12:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5917f4bd_52523ccc",
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -149,6 +215,54 @@
       "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f1ff108_c3283947",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-27T21:12:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86fc37fd_f33d918f",
+      "range": {
+        "startLine": 668,
+        "startChar": 18,
+        "endLine": 668,
+        "endChar": 20
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e6ca3aa_82c633e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-27T21:12:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5894e16_3a232028",
+      "range": {
+        "startLine": 668,
+        "startChar": 49,
+        "endLine": 668,
+        "endChar": 51
+      },
+      "revId": "abdd8d883afc3bb30784e4b96e6ce54e44df7c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
