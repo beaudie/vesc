@@ -51,6 +51,24 @@
       "revId": "2b336581c65cc095b524ee7c6fde7d61d62b7814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9cb1ce3_92edabff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-07-27T11:19:11Z",
+      "side": 1,
+      "message": "Wouldn\u0027t you mind to try to submit that again? Thanks",
+      "parentUuid": "38e1b587_b31711b4",
+      "revId": "2b336581c65cc095b524ee7c6fde7d61d62b7814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
