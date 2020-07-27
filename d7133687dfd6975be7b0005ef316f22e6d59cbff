@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d6b9de8_25843125",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T21:42:33Z",
+      "side": 1,
+      "message": "LGTM, defer to the other reviewers.",
+      "revId": "d7133687dfd6975be7b0005ef316f22e6d59cbff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02b48c57_6b60f9e4",
+        "filename": "extensions/EGL_ANGLE_display_semaphore_share_group.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-27T21:42:33Z",
+      "side": 1,
+      "message": "peng, you should use your own name here as you\u0027re the author (AFAICS)",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "d7133687dfd6975be7b0005ef316f22e6d59cbff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
