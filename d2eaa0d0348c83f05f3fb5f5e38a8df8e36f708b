@@ -63,6 +63,23 @@
       "revId": "d2eaa0d0348c83f05f3fb5f5e38a8df8e36f708b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8de3c521_68cdfde7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-28T21:27:25Z",
+      "side": 1,
+      "message": "Confirmed this is getting better results (especially on native) and doesn\u0027t impact perf outside of noise (see below for results from one run).\n\nQuestion: We aren\u0027t using GL_QUERY_RESULT_AVAILABLE. Is that due to when we get the results, we are assured the rendering is complete?\n\nCould also be worth checking for GL_GPU_DISJOINT_EXT, although I haven\u0027t seen that fire in my testing.\n\nBefore:\n\n[ RUN      ] TracePerfTest.Run/vulkan_nba2k20_800\n*RESULT TracePerf_vulkan.wall_time: nba2k20_800\u003d 174590215.2004418671 ns\n*RESULT TracePerf_vulkan.wall_time: nba2k20_800\u003d 170245048.2000131309 ns\n*RESULT TracePerf_vulkan.wall_time: nba2k20_800\u003d 169309850.2000793815 ns\n[       OK ] TracePerfTest.Run/vulkan_nba2k20_800 (20704 ms)\n[ RUN      ] TracePerfTest.Run/native_nba2k20_800\n*RESULT TracePerf_native.wall_time: nba2k20_800\u003d 126952676.2854573876 ns\n*RESULT TracePerf_native.wall_time: nba2k20_800\u003d 129269008.4290890396 ns\n*RESULT TracePerf_native.wall_time: nba2k20_800\u003d 125325875.5729932934 ns\n[       OK ] TracePerfTest.Run/native_nba2k20_800 (17363 ms)\n\n\nAfter:\n\n[ RUN      ] TracePerfTest.Run/vulkan_nba2k20_800\n*RESULT TracePerf_vulkan.wall_time: nba2k20_800\u003d 174242444.4004427493 ns\n*RESULT TracePerf_vulkan.gpu_time:  nba2k20_800\u003d 171453548.3999999762 ns\n*RESULT TracePerf_vulkan.wall_time: nba2k20_800\u003d 170134985.6011802256 ns\n*RESULT TracePerf_vulkan.gpu_time:  nba2k20_800\u003d 167538568.8000000119 ns\n*RESULT TracePerf_vulkan.wall_time: nba2k20_800\u003d 168836548.1997607350 ns\n*RESULT TracePerf_vulkan.gpu_time:  nba2k20_800\u003d 165814766.8000000119 ns\n[       OK ] TracePerfTest.Run/vulkan_nba2k20_800 (20595 ms)\n[ RUN      ] TracePerfTest.Run/native_nba2k20_800\n*RESULT TracePerf_native.wall_time: nba2k20_800\u003d 128699782.1423158646 ns\n*RESULT TracePerf_native.gpu_time:  nba2k20_800\u003d 126647529.5714285821 ns\n*RESULT TracePerf_native.wall_time: nba2k20_800\u003d 127675950.1426048279 ns\n*RESULT TracePerf_native.gpu_time:  nba2k20_800\u003d 125740141.4285714328 ns\n*RESULT TracePerf_native.wall_time: nba2k20_800\u003d 128453085.7124731839 ns\n*RESULT TracePerf_native.gpu_time:  nba2k20_800\u003d 126846220.2857142985 ns\n[       OK ] TracePerfTest.Run/native_nba2k20_800 (17090 ms)\n",
+      "revId": "d2eaa0d0348c83f05f3fb5f5e38a8df8e36f708b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
