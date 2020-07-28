@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8f4c35c2_1ab6b499",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T18:08:55Z",
+      "side": 1,
+      "message": "From what I could see, yes. Time elapsed was causing overhead even when I wasn\u0027t calling \"get\" at all. I would need to double check that to confirm. All I am sure of right now is that this method wasn\u0027t causing overhead.",
+      "parentUuid": "c3fecae2_c64e18c8",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 60
+      },
+      "revId": "d2eaa0d0348c83f05f3fb5f5e38a8df8e36f708b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0da9d546_148f2386",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
