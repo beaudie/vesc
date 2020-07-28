@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "57f23b6d_d9c2f7e2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-28T18:03:46Z",
+      "side": 1,
+      "message": "True. But even if it is invalid or not started, there is no harm to make this call. I think just make the call is cheaper than check if started and valid.",
+      "parentUuid": "f2d6a5a0_3fb87c92",
+      "range": {
+        "startLine": 2806,
+        "startChar": 0,
+        "endLine": 2809,
+        "endChar": 17
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "185c1e74_23ce8c3a",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "9360b818_68f9fee9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-28T18:03:46Z",
+      "side": 1,
+      "message": "Two reasons I did it here: 1) it\u0027s easier to access context state here. and 2) startNewRenderPass also get called from UtilsVk.",
+      "parentUuid": "56445343_984f1ac8",
+      "range": {
+        "startLine": 4390,
+        "startChar": 0,
+        "endLine": 4398,
+        "endChar": 0
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0acdc79d_a4df26fc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -91,6 +139,30 @@
       "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97e6875f_53c96eec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-28T18:03:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0acdc79d_a4df26fc",
+      "range": {
+        "startLine": 665,
+        "startChar": 0,
+        "endLine": 683,
+        "endChar": 5
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "36a3338b_c3960d54",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-28T18:03:46Z",
+      "side": 1,
+      "message": "I believe so. Or, you can clear a buffer while depth enabled, but then call glDiscardFramebuffer to discard the cleared value. That clear will be skipped with this change. That is exactly what T-Rex is doing.",
+      "parentUuid": "d77dd7b2_093df607",
+      "range": {
+        "startLine": 9,
+        "startChar": 66,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec95c469_7330dd87",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -242,6 +266,24 @@
       "side": 1,
       "message": "What about something like is done in ContextVk::optimizeRenderPassForPresent():\n\n        size_t depthStencilAttachmentIndexVk \u003d mDrawFramebuffer-\u003egetDepthStencilAttachmentIndexVk();\n        // Change depthstencil attachment storeOp to DONT_CARE\n        mRenderPassCommands-\u003einvalidateRenderPassStencilAttachment(depthStencilAttachmentIndexVk);\n        mRenderPassCommands-\u003einvalidateRenderPassDepthAttachment(depthStencilAttachmentIndexVk);",
       "parentUuid": "8df91731_549878b4",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4fb456a_f30e3e56",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-28T18:03:46Z",
+      "side": 1,
+      "message": "That was my patchset1 was doing and some tests crash. I think what happens is if you start RP, and then glBindFramebuffer to different FBO, mDrawFramebuffer will switch to new FBO but it will not immediately close the RP. Now you have a RP and mDrawFBO in inconsistent state. later on when you try to access mDrawFramebuffer to get the depth index for the RP, you are looking at wrong mDrawFramebuffer and crash.",
+      "parentUuid": "229be346_4e10084e",
       "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
