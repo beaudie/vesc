@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95f6777f_2c9281fe",
+        "filename": "build_overrides/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2020-07-28T02:48:06Z",
+      "side": 1,
+      "message": "Nit: angle_abseil_dir?\n\nAlphabetical order?",
+      "revId": "0e69e110230aa7aebd9bff22dbe7960e7da910ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
