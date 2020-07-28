@@ -16,6 +16,29 @@
       "revId": "4fb10d8c919765bbc7213179044684e94ebc5c39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce329774_29740ab0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T19:51:14Z",
+      "side": 1,
+      "message": "We can\u0027t assume these formats are valid for the back-end except when the implementation format is a specific way. You should at least conditionalize the getters based on the implementation format. e.g. the formats returned by getColorReadFormat/getColorReadType",
+      "range": {
+        "startLine": 4572,
+        "startChar": 0,
+        "endLine": 4598,
+        "endChar": 1
+      },
+      "revId": "4fb10d8c919765bbc7213179044684e94ebc5c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
