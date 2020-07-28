@@ -32,6 +32,10 @@ SyncHelper::~SyncHelper() {}
 void SyncHelper::releaseToRenderer(RendererVk *renderer)
 {
     renderer->collectGarbageAndReinit(&mUse, &mEvent);
+    // printf("SyncHelper fence %p in releaseToRenderer\n", mFence.get().getHandle());
+    // TODO: Currently just stalling on worker thread here to try and avoid race
+    //  condition. If this works, need some alternate solution
+    renderer->waitForCommandProcessorIdle();
     mFence.reset(renderer->getDevice());
 }
 
@@ -53,6 +57,7 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
     {
         contextVk->getRenderer()->waitForCommandProcessorIdle();
         ANGLE_TRY(contextVk->getRenderer()->getNextSubmitFence(&mFence));
+        // printf("SyncHelper created fence %p\n", mFence.get().getHandle());
     }
     else
     {

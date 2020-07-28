@@ -2203,6 +2203,7 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
         fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceCreateInfo.flags             = 0;
         ANGLE_VK_TRY(context, fence.init(mDevice, fenceCreateInfo));
+        // printf("Created new fence %p\n", fence.getHandle());
     }
     else
     {
@@ -2215,6 +2216,7 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
 
 angle::Result RendererVk::ensureSubmitFenceInitialized()
 {
+    std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
     if (mNextSubmitFence.isReferenced())
     {
         // printf("In ContextVk::ensureSubmitFenceInitialized(), using existing mSubmitFence\n");
@@ -2227,7 +2229,7 @@ angle::Result RendererVk::ensureSubmitFenceInitialized()
 angle::Result RendererVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut)
 {
     ANGLE_TRY(ensureSubmitFenceInitialized());
-
+    std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
     ASSERT(!sharedFenceOut->isReferenced());
     /*printf("In ContextVk::getNextSubmitFence(), copying mSubmitFence to sharedFence out %p\n",
                sharedFenceOut);*/

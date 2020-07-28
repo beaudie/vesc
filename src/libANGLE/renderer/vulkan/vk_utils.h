@@ -616,7 +616,11 @@ class Recycler final : angle::NonCopyable
   public:
     Recycler() = default;
 
-    void recycle(T &&garbageObject) { mObjectFreeList.emplace_back(std::move(garbageObject)); }
+    void recycle(T &&garbageObject)
+    {
+        // printf("Recycling garbageObject w/ handle %p\n", garbageObject.getHandle());
+        mObjectFreeList.emplace_back(std::move(garbageObject));
+    }
 
     void fetch(T *outObject)
     {
@@ -629,6 +633,7 @@ class Recycler final : angle::NonCopyable
     {
         for (T &object : mObjectFreeList)
         {
+            // printf("Destroying recycled object w/ handle %p\n", object.getHandle());
             object.destroy(device);
         }
     }

@@ -417,6 +417,7 @@ class RendererVk : angle::NonCopyable
     // mNextSubmitFence is the fence that's going to be signaled at the next submission.  This is
     // used to support SyncVk objects, which may outlive the context (as EGLSync objects).
     vk::Shared<vk::Fence> mNextSubmitFence;
+    std::mutex mNextSubmitFenceMutex;
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
