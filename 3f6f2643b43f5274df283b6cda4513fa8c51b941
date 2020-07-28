@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fb62fd3_5a6c7770",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T00:12:49Z",
+      "side": 1,
+      "message": "Why does storing the data determine if we should load it, versus just checking if the buffer is disabled?",
+      "range": {
+        "startLine": 9,
+        "startChar": 66,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec95c469_7330dd87",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2808,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T00:12:49Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990b25f2_f5eee658",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2815,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T00:12:49Z",
+      "side": 1,
+      "message": "What about calling setDepthBufferEnabled() inside or down in updateDepthWriteEnabled() or setDepthWriteEnabled()?",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9fc2c1f_426e4698",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T00:12:49Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0d1b9ec_4b2651a7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4347,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T00:12:49Z",
+      "side": 1,
+      "message": "Similar to \u0027mDepthStencilAttachmentIndex\u0027, you should be able to remove this and get the index from renderPassDesc.depthStencilAttachmentIndex().",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8f5df33_d5551002",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T00:12:49Z",
+      "side": 1,
+      "message": "I think this should be unnecessary, since \u0027mRenderPassDesc\u0027 has the same information:\n\n    RenderPassDesc::depthStencilAttachmentIndex()\n    RenderPassDesc::hasDepthStencilAttachment()",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
