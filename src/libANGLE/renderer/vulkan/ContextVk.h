@@ -473,7 +473,7 @@ class ContextVk : public ContextImpl, public vk::Context
     TextureSerial generateTextureSerial();
     SamplerSerial generateSamplerSerial();
 
-    angle::Result updateScissor(const gl::State &glState);
+    angle::Result updateScissor(const gl::State &glState, bool shouldEndRenderPass);
 
     bool emulateSeamfulCubeMapSampling() const { return mEmulateSeamfulCubeMapSampling; }
 
