@@ -1553,7 +1553,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 
     // The FBO's new attachment may have changed the renderable area
     const gl::State &glState = context->getState();
-    ANGLE_TRY(contextVk->updateScissor(glState));
+    // Don't end the render pass yet, since we will unconditionally end it below.
+    ANGLE_TRY(contextVk->updateScissor(glState, false));
 
     mActiveColorComponents = gl_vk::GetColorComponentFlags(
         mActiveColorComponentMasksForClear[0].any(), mActiveColorComponentMasksForClear[1].any(),
