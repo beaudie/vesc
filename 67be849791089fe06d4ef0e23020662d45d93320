@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf8029ce_56ffa428",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-28T15:34:39Z",
+      "side": 1,
+      "message": "Courtney and Charlie, please test if the two changes in this chain remove those excessive render pass breaks you saw in the first (and 500?) frame.",
+      "revId": "67be849791089fe06d4ef0e23020662d45d93320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
