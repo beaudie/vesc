@@ -16,6 +16,63 @@
       "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "acc7c933_9ce87e69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-28T20:38:57Z",
+      "side": 1,
+      "message": "Some cleanup comments. Otherwise the change LGTM.",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a272e31e_eaf30715",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-28T20:38:57Z",
+      "side": 1,
+      "message": "It would be ideal if you could refactor things so that this could call TextureVk::initImageViews() and avoid the duplication (both duplication of swizzle calculation here, and the duplication of init[SRGB]ReadViews inside switchMaxLevel).\n\nFor example, initReadViews could call (the now private) initSRGBReadViews automatically based on a flag that\u0027s passed. Also, it could early out if views are already initialized. Then TextureVk::initImageViews() could just call initReadViews. Then we could also just call TextureVk::initImageViews() from here. TextureVk::initImageViews() could potentially update mCurrentMaxLevel itself.",
+      "range": {
+        "startLine": 1707,
+        "startChar": 0,
+        "endLine": 1716,
+        "endChar": 60
+      },
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7db423e1_99504a56",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-28T20:38:57Z",
+      "side": 1,
+      "message": "Isn\u0027t `initReadViews` only called once? Maybe something like this would work:\n\n- In the constructor, don\u0027t do anything\n- Here, initialize all the vectors to size levelCount. You can ASSERT(vectors_have_zero_size);\n- Remove mHighestSeenLevelCount.\n\nOr am I missing something?\n\n---\n\nEdit: I just noticed switchMaxLevel calls this function. Probably can split this and initSRGBReadViews to an Impl version of them. Then this function does the above initialization, and the Impl (also called from switchMaxLevel) ASSERTs that the vectors have the correct size.",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
