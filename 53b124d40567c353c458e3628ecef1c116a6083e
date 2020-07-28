@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c4848f4_4080972d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2020-07-28T22:40:49Z",
+      "side": 1,
+      "message": "ptal -- this gets hardware acceleration working on the DTK.\n\nAs noted in the patch, it is unknown if this is appropriate in the long term.",
+      "revId": "53b124d40567c353c458e3628ecef1c116a6083e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
