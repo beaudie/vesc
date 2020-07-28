@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ef6ae04_4b30e3ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-28T15:05:26Z",
+      "side": 1,
+      "message": "This is the follow-up CL that Shabi and I discussed, and Tim encouraged in a previous CL.",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
