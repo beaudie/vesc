@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e16bb11_f73af254",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-28T03:59:44Z",
+      "side": 1,
+      "message": "This avoids the stack overflow seen when setting up state for NBA2K20 replay.  Probably should apply to frame replay functions as well.  That could clear up the gfxbench offscreen compile.",
+      "revId": "c2d87f18d604a8a10558fffb6da5272f5b2ace3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
