@@ -80,6 +80,41 @@
       "revId": "d2eaa0d0348c83f05f3fb5f5e38a8df8e36f708b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf07581f_2ba6467d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T21:32:26Z",
+      "side": 1,
+      "message": "\u003e Question: We aren\u0027t using GL_QUERY_RESULT_AVAILABLE. Is that due to when we get the results, we are assured the rendering is complete?\n\nglGetQueryObjectui64vEXT will block until the result is available. in any case this is called after a glFinish so all queries should be done.\n\n\u003e Could also be worth checking for GL_GPU_DISJOINT_EXT, although I haven\u0027t seen that fire in my testing.\n\nWould prefer to defer this. How to handle disjoint events isn\u0027t something I\u0027m experienced with and apparently even checking for them can cause overhead.",
+      "parentUuid": "8de3c521_68cdfde7",
+      "revId": "d2eaa0d0348c83f05f3fb5f5e38a8df8e36f708b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8d0ecdf_f2ceb7b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T21:32:26Z",
+      "side": 1,
+      "message": "Landing, modulo responses.",
+      "revId": "d2eaa0d0348c83f05f3fb5f5e38a8df8e36f708b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
