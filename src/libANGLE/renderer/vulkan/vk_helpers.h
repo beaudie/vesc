@@ -1411,6 +1411,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void onWrite() { mCurrentSingleClearValue.reset(); }
     bool hasImmutableSampler() { return mExternalFormat != 0; }
     uint64_t getExternalFormat() const { return mExternalFormat; }
+    GLenum isLuminance(GLenum format);
 
   private:
     enum class UpdateSource
