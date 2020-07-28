@@ -91,6 +91,41 @@
       "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc61dbc6_3480edfc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-28T20:59:03Z",
+      "side": 1,
+      "message": "I remember having noticed this (initReadViews is not called for the swapchain images). The crash in RenderTargetVk::getAndRetainCopyImageView() can be better fixed by adding a `vk::ImageHelper::hasReadView(level)` function to be checked before the getCopyImageView() call (instead of calling that and then checking if the view is valid()).\n\nThe upside of doing that is that future calls to `get*ImageView()` where `initReadViews()` has not been called can ASSERT() instead of returning an invalid view.",
+      "parentUuid": "fc788b67_e6194221",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ed36e4d_94e5dbbf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-28T20:59:03Z",
+      "side": 1,
+      "message": "Speaking of ASSERTs, with the suggested fix to RenderTargetVk::getAndRetainCopyImageView, all these functions should be able to `ASSERT(mCurrentMaxLevel \u003c ...ImageViews.size() \u0026\u0026 ...ImageViews[mCurrentMaxLevel].valid());`",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
