@@ -256,7 +256,8 @@ bool CMDeviceIDToDeviceAndVendorID(const std::string &id, uint32_t *vendorId, ui
 
 void GetDualGPUInfo(SystemInfo *info)
 {
-    ASSERT(!info->gpus.empty());
+    // info->gpus might be empty, in particular on Macs that don't
+    // have a PCI bus (Apple Silicon?).
 
     // On dual-GPU systems we assume the non-Intel GPU is the graphics one.
     int active    = 0;
