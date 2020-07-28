@@ -4320,7 +4320,19 @@ angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
     if (image->isLayoutChangeNecessary(imageLayout))
     {
         vk::CommandBuffer *commandBuffer;
-        ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
+        // If the image was never used by the render pass, record the layout change before the
+        // render pass.
+        vk::ImageLayout layout = image->getCurrentImageLayout();
+        if (layout == vk::ImageLayout::Undefined ||
+            layout == vk::ImageLayout::ExternalPreInitialized)
+        {
+            commandBuffer = &mOutsideRenderPassCommands->getCommandBuffer();
+        }
+        else
+        {
+            ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
+        }
+
         image->changeLayout(aspectFlags, imageLayout, commandBuffer);
     }
     image->retain(&mResourceUseList);
