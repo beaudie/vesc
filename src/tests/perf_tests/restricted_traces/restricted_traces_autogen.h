@@ -39,6 +39,7 @@ enum class RestrictedTraceID
     subway_surfer_500,
     temple_run_300,
     trex_200,
+    nba2k20_800,
     InvalidEnum,
     EnumCount = InvalidEnum
 };

@@ -15,6 +15,7 @@
 #include "candy_crush_500/candy_crush_500_capture_context2.h"
 #include "egypt_1500/egypt_1500_capture_context6.h"
 #include "manhattan_10/manhattan_10_capture_context6.h"
+#include "nba2k20_800/nba2k20_800_capture_context1.h"
 #include "subway_surfer_500/subway_surfer_500_capture_context4.h"
 #include "temple_run_300/temple_run_300_capture_context3.h"
 #include "trex_200/trex_200_capture_context6.h"
@@ -49,7 +50,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
       "temple_run_300"}},
     {RestrictedTraceID::trex_200,
      {trex_200::kReplayFrameStart, trex_200::kReplayFrameEnd, trex_200::kReplayDrawSurfaceWidth,
-      trex_200::kReplayDrawSurfaceHeight, "trex_200"}}};
+      trex_200::kReplayDrawSurfaceHeight, "trex_200"}},
+    {RestrictedTraceID::nba2k20_800,
+     {nba2k20_800::kReplayFrameStart, nba2k20_800::kReplayFrameEnd,
+      nba2k20_800::kReplayDrawSurfaceWidth, nba2k20_800::kReplayDrawSurfaceHeight, "nba2k20_800"}}};
 }
 
 const TraceInfo &GetTraceInfo(RestrictedTraceID traceID)
@@ -81,6 +85,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
             break;
         case RestrictedTraceID::trex_200:
             trex_200::ReplayContext6Frame(frameIndex);
+            break;
+        case RestrictedTraceID::nba2k20_800:
+            nba2k20_800::ReplayContext1Frame(frameIndex);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -114,6 +121,9 @@ void ResetReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::trex_200:
             trex_200::ResetContext6Replay();
             break;
+        case RestrictedTraceID::nba2k20_800:
+            nba2k20_800::ResetContext1Replay();
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -145,6 +155,9 @@ void SetupReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::trex_200:
             trex_200::SetupContext6Replay();
+            break;
+        case RestrictedTraceID::nba2k20_800:
+            nba2k20_800::SetupContext1Replay();
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -178,6 +191,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::trex_200:
             trex_200::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::nba2k20_800:
+            nba2k20_800::SetBinaryDataDir(dataDir);
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -209,6 +225,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::trex_200:
             trex_200::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::nba2k20_800:
+            nba2k20_800::SetBinaryDataDecompressCallback(callback);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
