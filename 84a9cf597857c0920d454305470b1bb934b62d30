@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "227eb3d3_3108c2f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-28T00:11:27Z",
+      "side": 1,
+      "message": "+10% T-Rex off scvreen score improvement with this, see bug for detailed numbers. ",
+      "revId": "84a9cf597857c0920d454305470b1bb934b62d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
