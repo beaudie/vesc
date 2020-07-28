@@ -147,6 +147,8 @@ constexpr const char *kSkippedMessages[] = {
     "UNASSIGNED-BestPractices-vkCreateRenderPass-image-requires-memory",
     "UNASSIGNED-BestPractices-vkCreateGraphicsPipelines-too-many-instanced-vertex-buffers",
     "UNASSIGNED-BestPractices-DrawState-ClearCmdBeforeDraw",
+    "UNASSIGNED-BestPractices-vkCmdClearAttachments-clear-after-load",
+    "UNASSIGNED-CoreValidation-Shader-InputNotProduced",
 };
 
 // Suppress validation errors that are known
