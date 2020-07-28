@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d77dd7b2_093df607",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T17:13:39Z",
+      "side": 1,
+      "message": "Oh, t\u003dit\u0027s possible to clear to a disabled buffer?   \n\nIs that the only case, and if so, can we check for that instead to be more explicit about the conditions?",
+      "parentUuid": "7abdb75d_4e42474d",
+      "range": {
+        "startLine": 9,
+        "startChar": 66,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec95c469_7330dd87",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -200,6 +224,24 @@
       "side": 1,
       "message": "My reading is that mRenderPassDesc packs color buffers that are disabled (see FramebufferVk::updateRenderPassDesc) as well as enabled. The attachmentOps only includes color buffers are enabled. If I use  renderPassDesc.depthStencilAttachmentIndex to index into renderPassAttachmentOps[], it will be wrong if there is a gap within the color buffers.",
       "parentUuid": "d8f5df33_d5551002",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "229be346_4e10084e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-28T17:13:39Z",
+      "side": 1,
+      "message": "What about something like is done in ContextVk::optimizeRenderPassForPresent():\n\n        size_t depthStencilAttachmentIndexVk \u003d mDrawFramebuffer-\u003egetDepthStencilAttachmentIndexVk();\n        // Change depthstencil attachment storeOp to DONT_CARE\n        mRenderPassCommands-\u003einvalidateRenderPassStencilAttachment(depthStencilAttachmentIndexVk);\n        mRenderPassCommands-\u003einvalidateRenderPassDepthAttachment(depthStencilAttachmentIndexVk);",
+      "parentUuid": "8df91731_549878b4",
       "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
