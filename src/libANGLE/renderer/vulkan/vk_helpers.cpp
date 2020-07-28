@@ -4565,6 +4565,33 @@ angle::Result ImageHelper::GetReadPixelsParams(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+GLenum GetOverrideFormatForGetTexImage(GLenum format)
+{
+    switch (format)
+    {
+        case GL_ALPHA:
+        case GL_LUMINANCE:
+            return GL_RED;
+
+        case GL_LUMINANCE_ALPHA:
+            return GL_RG;
+
+        case GL_ALPHA16F_EXT:
+        case GL_ALPHA32F_EXT:
+        case GL_ALPHA8_EXT:
+        case GL_LUMINANCE32F_EXT:
+        case GL_LUMINANCE4_ALPHA4_OES:
+        case GL_LUMINANCE8_ALPHA8_EXT:
+        case GL_LUMINANCE8_EXT:
+        case GL_LUMINANCE_ALPHA16F_EXT:
+        case GL_LUMINANCE_ALPHA32F_EXT:
+        case GL_LUMINANCE16F_EXT:
+            UNIMPLEMENTED();
+    }
+
+    return format;
+}
+
 angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
                                                  const gl::PixelPackState &packState,
                                                  gl::Buffer *packBuffer,
@@ -4574,11 +4601,12 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
                                                  GLenum type,
                                                  void *pixels)
 {
-    const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
+    GLenum sourceGLFormat            = GetOverrideFormatForGetTexImage(format);
+    const angle::Format &angleFormat = GetFormatFromFormatType(sourceGLFormat, type);
 
     VkImageAspectFlagBits aspectFlags = {};
     if (angleFormat.redBits > 0 || angleFormat.blueBits > 0 || angleFormat.greenBits > 0 ||
-        angleFormat.alphaBits > 0)
+        angleFormat.alphaBits > 0 || angleFormat.luminanceBits > 0)
     {
         aspectFlags = VK_IMAGE_ASPECT_COLOR_BIT;
     }
@@ -4611,8 +4639,8 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     const uint32_t depth   = std::max(1u, mExtents.depth >> levelVK);
     gl::Rectangle area(0, 0, width, height);
 
-    ANGLE_TRY(GetReadPixelsParams(contextVk, packState, packBuffer, format, type, area, area,
-                                  &params, &outputSkipBytes));
+    ANGLE_TRY(GetReadPixelsParams(contextVk, packState, packBuffer, sourceGLFormat, type, area,
+                                  area, &params, &outputSkipBytes));
 
     // Use a temporary staging buffer. Could be optimized.
     vk::RendererScoped<vk::DynamicBuffer> stagingBuffer(contextVk->getRenderer());
@@ -4628,7 +4656,8 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
                                  static_cast<uint8_t *>(pixels) + outputSkipBytes,
                                  &stagingBuffer.get()));
 
-            outputSkipBytes += width * height * gl::GetInternalFormatInfo(format, type).pixelBytes;
+            outputSkipBytes +=
+                width * height * gl::GetInternalFormatInfo(sourceGLFormat, type).pixelBytes;
         }
     }
     else
