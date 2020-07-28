@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2d6a5a0_3fb87c92",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T16:57:56Z",
+      "side": 1,
+      "message": "you should check here that mRenderPassCommands is started and valid.",
+      "range": {
+        "startLine": 2806,
+        "startChar": 0,
+        "endLine": 2809,
+        "endChar": 17
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "185c1e74_23ce8c3a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T16:57:56Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 2824,
+        "startChar": 27,
+        "endLine": 2824,
+        "endChar": 47
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56445343_984f1ac8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T16:57:56Z",
+      "side": 1,
+      "message": "you can do this inside startNewRenderPass.",
+      "range": {
+        "startLine": 4390,
+        "startChar": 0,
+        "endLine": 4398,
+        "endChar": 0
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0acdc79d_a4df26fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-28T16:57:56Z",
+      "side": 1,
+      "message": "nit: \n\nif ( \u003d\u003d invalid)\n      return;\n\n...",
+      "range": {
+        "startLine": 665,
+        "startChar": 0,
+        "endLine": 683,
+        "endChar": 5
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
