@@ -16,6 +16,23 @@
       "revId": "f69ce25d60f234eb532f1092cd24b68093294806",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b29d2956_393a10ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-28T21:26:34Z",
+      "side": 1,
+      "message": "This assert will fail now: https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/gpu_info_util/SystemInfo.cpp;l\u003d259?q\u003dGetDualGPUInfo\u0026ss\u003dchromium%2Fchromium%2Fsrc\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F",
+      "revId": "f69ce25d60f234eb532f1092cd24b68093294806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
