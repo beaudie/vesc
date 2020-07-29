@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd09c482_3a6891bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T12:27:10Z",
+      "side": 1,
+      "message": "Fix a compilation issue I don\u0027t see with Visual Studio",
+      "revId": "e22c9ebb018dc8df14cc9539d2d19dab748bdc1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
