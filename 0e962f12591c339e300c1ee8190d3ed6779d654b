@@ -42,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "950fea9e_f68be31c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "Some comments on the test, otherwise the change LGTM with Jamie\u0027s nits addressed.",
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2077ac9_1fe7c886",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8
@@ -81,6 +98,264 @@
         "startChar": 9,
         "endLine": 990,
         "endChar": 32
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e253e5db_35398784",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "typo: has",
+      "range": {
+        "startLine": 117,
+        "startChar": 65,
+        "endLine": 117,
+        "endChar": 67
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "425cec0b_e8d3bd4e",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "typo: has",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 10
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d076106a_3fb23f24",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "typos: tests that if the depth buffer has not",
+      "range": {
+        "startLine": 119,
+        "startChar": 70,
+        "endLine": 119,
+        "endChar": 100
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57faf9ef_3f3b2168",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "Please use GLtexture, GLframebuffer etc from gl_raii.h to avoid the gen/delete calls.",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 10
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "736d080b_e7c154e0",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "nit: constexpr ... kTex...",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 28
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99b5ac35_3d5a230d",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "Comment doesn\u0027t match?",
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc78285c_9d2599bc",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "nit: constexpr",
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f8b6b21_82f17ef5",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "nit: constexpr",
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b47a6bf_efd5da1c",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "Please add the expectation to these comments. Like:\n\n   // Draw X with Y: should become blue\n\nOr:\n\n   // Draw X with Y: remain green as depth test fails",
+      "range": {
+        "startLine": 170,
+        "startChar": 48,
+        "endLine": 170,
+        "endChar": 49
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4daf3fb6_005a7642",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "typo: with",
+      "range": {
+        "startLine": 189,
+        "startChar": 30,
+        "endLine": 189,
+        "endChar": 34
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f07402cd_8836320e",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "nit: Use EXPECT_PIXEL_COLOR_EQ since the rect is 1x1 anyway.",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 24
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b893b82_a3144142",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:35:19Z",
+      "side": 1,
+      "message": "I suggest splitting this to another test. It\u0027s easier to debug when the test fails.",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 218,
+        "endChar": 52
       },
       "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
