@@ -8763,10 +8763,10 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
 void StateCache::updateActiveShaderStorageBufferIndices(Context *context)
 {
     mCachedActiveShaderStorageBufferIndices.reset();
-    Program *program = context->getState().getProgram();
-    if (program)
+    const ProgramExecutable *executable = context->getState().getProgramExecutable();
+    if (executable)
     {
-        for (const InterfaceBlock &block : program->getState().getShaderStorageBlocks())
+        for (const InterfaceBlock &block : executable->getShaderStorageBlocks())
         {
             mCachedActiveShaderStorageBufferIndices.set(block.binding);
         }
@@ -8776,10 +8776,10 @@ void StateCache::updateActiveShaderStorageBufferIndices(Context *context)
 void StateCache::updateActiveImageUnitIndices(Context *context)
 {
     mCachedActiveImageUnitIndices.reset();
-    Program *program = context->getState().getProgram();
-    if (program)
+    const ProgramExecutable *executable = context->getState().getProgramExecutable();
+    if (executable)
     {
-        for (const ImageBinding &imageBinding : program->getState().getImageBindings())
+        for (const ImageBinding &imageBinding : executable->getImageBindings())
         {
             if (imageBinding.unreferenced)
             {
