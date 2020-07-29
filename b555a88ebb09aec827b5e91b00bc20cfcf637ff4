@@ -241,6 +241,30 @@
     },
     {
       "key": {
+        "uuid": "e5bffadc_31ac6148",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T20:45:11Z",
+      "side": 1,
+      "message": "Actually, yes.  Running on CQ revealed some tests where the assert fired.  I\u0027m going to back that out.",
+      "parentUuid": "e1fae908_50138c00",
+      "range": {
+        "startLine": 1617,
+        "startChar": 35,
+        "endLine": 1617,
+        "endChar": 42
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4a43bc6_c88b3117",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 6
