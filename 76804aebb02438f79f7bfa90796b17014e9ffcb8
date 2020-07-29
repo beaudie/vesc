@@ -33,6 +33,24 @@
       "revId": "76804aebb02438f79f7bfa90796b17014e9ffcb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "208e0280_52652b8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-29T23:03:06Z",
+      "side": 1,
+      "message": "This is due to bots using MSVC.  I was able to repro locally using \"is_clang \u003d false\".  Fix up over here and I\u0027ll re-record the trace:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2327702",
+      "parentUuid": "f57f1427_6448e214",
+      "revId": "76804aebb02438f79f7bfa90796b17014e9ffcb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
