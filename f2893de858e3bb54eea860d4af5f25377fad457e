@@ -186,6 +186,24 @@
       "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7efa1b1f_877d741c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T15:05:07Z",
+      "side": 1,
+      "message": "There are only a few places (just one?) where it\u0027s possible for the view not to be valid, I think it\u0027s worthwhile to ASSERT here and have those few call sites check for existence of the view before retrieving it. We could catch bugs with missing views much more easily this way.",
+      "parentUuid": "1afb302c_6286cf1b",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
