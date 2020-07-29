@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "71a86359_aa8686cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T03:42:23Z",
+      "side": 1,
+      "message": "I\u0027m moving in this direction, but ran out of time tonight.",
+      "parentUuid": "a272e31e_eaf30715",
+      "range": {
+        "startLine": 1707,
+        "startChar": 0,
+        "endLine": 1716,
+        "endChar": 60
+      },
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7db423e1_99504a56",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
@@ -112,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "6a2ee768_d06c1fb7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5161,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T03:42:23Z",
+      "side": 1,
+      "message": "I did the last suggestion, and I\u0027m moving in this direction of the first suggestion.",
+      "parentUuid": "dc61dbc6_3480edfc",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ed36e4d_94e5dbbf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 3
@@ -123,6 +165,24 @@
       "writtenOn": "2020-07-28T20:59:03Z",
       "side": 1,
       "message": "Speaking of ASSERTs, with the suggested fix to RenderTargetVk::getAndRetainCopyImageView, all these functions should be able to `ASSERT(mCurrentMaxLevel \u003c ...ImageViews.size() \u0026\u0026 ...ImageViews[mCurrentMaxLevel].valid());`",
+      "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1afb302c_6286cf1b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T03:42:23Z",
+      "side": 1,
+      "message": "I\u0027m not sure about the \"....valid()\" part of that ASSERT, but I\u0027m trying it.",
+      "parentUuid": "9ed36e4d_94e5dbbf",
       "revId": "f2893de858e3bb54eea860d4af5f25377fad457e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
