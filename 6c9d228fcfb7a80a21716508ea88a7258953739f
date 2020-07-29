@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d26f67c7_9633a941",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T17:34:20Z",
+      "side": 1,
+      "message": "nit: Comment should also be split between the tests",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 60
+      },
+      "revId": "6c9d228fcfb7a80a21716508ea88a7258953739f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "916ffe4c_05d3fcf3",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T17:34:20Z",
+      "side": 1,
+      "message": "Can name it something like \"ClearDepthThenDrawWithoutDepthTestThenDiscard\". The current internals of one of the backends should not be reflected in the test name IMO.\n\nBTW, did you verify with renderdoc that the optimization does actually kick in? Just to make sure the test tests what it intends to.",
+      "range": {
+        "startLine": 121,
+        "startChar": 34,
+        "endLine": 121,
+        "endChar": 68
+      },
+      "revId": "6c9d228fcfb7a80a21716508ea88a7258953739f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f65fc048_8eefc71e",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T17:34:20Z",
+      "side": 1,
+      "message": "Same with this.",
+      "range": {
+        "startLine": 153,
+        "startChar": 34,
+        "endLine": 153,
+        "endChar": 71
+      },
+      "revId": "6c9d228fcfb7a80a21716508ea88a7258953739f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
