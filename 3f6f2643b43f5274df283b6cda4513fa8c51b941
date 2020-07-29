@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "f5054e4f_ddcec490",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-29T04:46:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "36a3338b_c3960d54",
+      "range": {
+        "startLine": 9,
+        "startChar": 66,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec95c469_7330dd87",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -287,6 +311,24 @@
       "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b310fca_2abd1628",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-29T04:46:37Z",
+      "side": 1,
+      "message": "Ah, yeah, that makes sense.",
+      "parentUuid": "e4fb456a_f30e3e56",
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
