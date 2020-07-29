@@ -1705,7 +1705,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
     // Make sure nothing is running
     ASSERT(!hasRecordedCommands());
 
-    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::synchronizeCpuGpuTime");
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::synchronizeCpuGpuTime");
 
     // Create a query used to receive the GPU timestamp
     vk::QueryHelper timestampQuery;
@@ -4448,6 +4448,7 @@ angle::Result ContextVk::endRenderPass()
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
         vk::CommandProcessorTask task = {this, &mPrimaryCommands, mRenderPassCommands};
+        ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushInsideRenderPassCommands");
         queueCommandsToWorker(task);
         getNextAvailableCommandBuffer(&mRenderPassCommands, true);
     }
@@ -4493,7 +4494,7 @@ void ContextVk::getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandB
 
 void ContextVk::recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForWorkerThreadIdle");
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::recycleCommandBuffer");
     std::lock_guard<std::mutex> queueLock(mCommandBufferQueueMutex);
     ASSERT(commandBuffer->empty());
     mAvailableCommandBuffers.push(commandBuffer);
@@ -4585,6 +4586,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
         if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
         {
             vk::CommandProcessorTask task = {this, &mPrimaryCommands, mOutsideRenderPassCommands};
+            ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushOutsideRenderPassCommands");
             queueCommandsToWorker(task);
             getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
         }
