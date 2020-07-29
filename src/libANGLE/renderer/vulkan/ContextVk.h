@@ -473,7 +473,14 @@ class ContextVk : public ContextImpl, public vk::Context
     TextureSerial generateTextureSerial();
     SamplerSerial generateSamplerSerial();
 
-    angle::Result updateScissor(const gl::State &glState);
+    angle::Result updateScissor(const gl::State &glState)
+    {
+        return updateScissorImpl(glState, false);
+    }
+    angle::Result updateScissorAndEndRenderPass(const gl::State &glState)
+    {
+        return updateScissorImpl(glState, true);
+    }
 
     bool emulateSeamfulCubeMapSampling() const { return mEmulateSeamfulCubeMapSampling; }
 
@@ -876,6 +883,8 @@ class ContextVk : public ContextImpl, public vk::Context
     T &allocInfos(std::vector<T> *mInfos, size_t count);
     template <typename T, const T *VkWriteDescriptorSet::*pInfo>
     void growCapacity(std::vector<T> *mInfos, size_t newSize);
+
+    angle::Result updateScissorImpl(const gl::State &glState, bool shouldEndRenderPass);
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
