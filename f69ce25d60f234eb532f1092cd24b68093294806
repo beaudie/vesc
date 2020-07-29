@@ -33,6 +33,23 @@
       "revId": "f69ce25d60f234eb532f1092cd24b68093294806",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3876efb_2ad5a4b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T14:52:34Z",
+      "side": 1,
+      "message": "Ken, what does this fix? The way Corentin coded this function returning false is part of normal operation.",
+      "revId": "f69ce25d60f234eb532f1092cd24b68093294806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
