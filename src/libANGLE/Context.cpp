@@ -5702,6 +5702,15 @@ void Context::convertPpoToComputeOrDraw(bool isCompute)
         pipeline->setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_DRAW_DISPATCH_CHANGE);
         mState.mDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
         mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_EXECUTABLE);
+
+        if (isCompute)
+        {
+            // The PPO's isCompute() has changed, so its ProgramExecutable will produce different
+            // results for things like getShaderStorageBlocks() or getImageBindings().
+            // Only update the StateCache when starting a dispatch, so the values can persist until
+            // they are required.
+            mStateCache.onProgramExecutableChange(this);
+        }
     }
 }
 
@@ -8771,10 +8780,10 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
 void StateCache::updateActiveShaderStorageBufferIndices(Context *context)
 {
     mCachedActiveShaderStorageBufferIndices.reset();
-    Program *program = context->getState().getProgram();
-    if (program)
+    const ProgramExecutable *executable = context->getState().getProgramExecutable();
+    if (executable)
     {
-        for (const InterfaceBlock &block : program->getState().getShaderStorageBlocks())
+        for (const InterfaceBlock &block : executable->getShaderStorageBlocks())
         {
             mCachedActiveShaderStorageBufferIndices.set(block.binding);
         }
@@ -8784,10 +8793,10 @@ void StateCache::updateActiveShaderStorageBufferIndices(Context *context)
 void StateCache::updateActiveImageUnitIndices(Context *context)
 {
     mCachedActiveImageUnitIndices.reset();
-    Program *program = context->getState().getProgram();
-    if (program)
+    const ProgramExecutable *executable = context->getState().getProgramExecutable();
+    if (executable)
     {
-        for (const ImageBinding &imageBinding : program->getState().getImageBindings())
+        for (const ImageBinding &imageBinding : executable->getImageBindings())
         {
             if (imageBinding.unreferenced)
             {
