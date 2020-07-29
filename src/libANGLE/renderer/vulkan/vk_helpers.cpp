@@ -4937,13 +4937,14 @@ void FramebufferHelper::release(ContextVk *contextVk)
 }
 
 // ImageViewHelper implementation.
-ImageViewHelper::ImageViewHelper() : mLinearColorspace(true)
+ImageViewHelper::ImageViewHelper() : mCurrentMaxLevel(0), mLinearColorspace(true)
 {
     mUse.init();
 }
 
 ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
 {
+    std::swap(mCurrentMaxLevel, other.mCurrentMaxLevel);
     std::swap(mLinearReadImageView, other.mLinearReadImageView);
     std::swap(mNonLinearReadImageView, other.mNonLinearReadImageView);
     std::swap(mLinearFetchImageView, other.mLinearFetchImageView);
@@ -4967,34 +4968,70 @@ void ImageViewHelper::release(RendererVk *renderer)
 {
     std::vector<GarbageObject> garbage;
 
-    if (mLinearReadImageView.valid())
+    // Reset to the constructed state: the "read views" with 1 entry and the "draw views" with 0
+    mCurrentMaxLevel = 0;
+    for (ImageView &imageView : mLinearReadImageView)
     {
-        garbage.emplace_back(GetGarbage(&mLinearReadImageView));
+        if (imageView.valid())
+        {
+            garbage.emplace_back(GetGarbage(&imageView));
+        }
     }
-    if (mNonLinearReadImageView.valid())
+    mLinearReadImageView.clear();
+
+    for (ImageView &imageView : mNonLinearReadImageView)
     {
-        garbage.emplace_back(GetGarbage(&mNonLinearReadImageView));
+        if (imageView.valid())
+        {
+            garbage.emplace_back(GetGarbage(&imageView));
+        }
     }
-    if (mLinearFetchImageView.valid())
+    mNonLinearReadImageView.clear();
+
+    for (ImageView &imageView : mLinearFetchImageView)
     {
-        garbage.emplace_back(GetGarbage(&mLinearFetchImageView));
+        if (imageView.valid())
+        {
+            garbage.emplace_back(GetGarbage(&imageView));
+        }
     }
-    if (mNonLinearFetchImageView.valid())
+    mLinearFetchImageView.clear();
+
+    for (ImageView &imageView : mNonLinearFetchImageView)
     {
-        garbage.emplace_back(GetGarbage(&mNonLinearFetchImageView));
+        if (imageView.valid())
+        {
+            garbage.emplace_back(GetGarbage(&imageView));
+        }
     }
-    if (mLinearCopyImageView.valid())
+    mNonLinearFetchImageView.clear();
+
+    for (ImageView &imageView : mLinearCopyImageView)
     {
-        garbage.emplace_back(GetGarbage(&mLinearCopyImageView));
+        if (imageView.valid())
+        {
+            garbage.emplace_back(GetGarbage(&imageView));
+        }
     }
-    if (mNonLinearCopyImageView.valid())
+    mLinearCopyImageView.clear();
+
+    for (ImageView &imageView : mNonLinearCopyImageView)
     {
-        garbage.emplace_back(GetGarbage(&mNonLinearCopyImageView));
+        if (imageView.valid())
+        {
+            garbage.emplace_back(GetGarbage(&imageView));
+        }
     }
-    if (mStencilReadImageView.valid())
+    mNonLinearCopyImageView.clear();
+
+    for (ImageView &imageView : mStencilReadImageView)
     {
-        garbage.emplace_back(GetGarbage(&mStencilReadImageView));
+        if (imageView.valid())
+        {
+            garbage.emplace_back(GetGarbage(&imageView));
+        }
     }
+    mStencilReadImageView.clear();
 
     for (ImageView &imageView : mLevelDrawImageViews)
     {
@@ -5030,13 +5067,49 @@ void ImageViewHelper::release(RendererVk *renderer)
 
 void ImageViewHelper::destroy(VkDevice device)
 {
-    mLinearReadImageView.destroy(device);
-    mNonLinearReadImageView.destroy(device);
-    mLinearFetchImageView.destroy(device);
-    mNonLinearFetchImageView.destroy(device);
-    mLinearCopyImageView.destroy(device);
-    mNonLinearCopyImageView.destroy(device);
-    mStencilReadImageView.destroy(device);
+    mCurrentMaxLevel = 0;
+
+    for (ImageView &imageView : mLinearReadImageView)
+    {
+        imageView.destroy(device);
+    }
+    mLinearReadImageView.clear();
+
+    for (ImageView &imageView : mNonLinearReadImageView)
+    {
+        imageView.destroy(device);
+    }
+    mNonLinearReadImageView.clear();
+
+    for (ImageView &imageView : mLinearFetchImageView)
+    {
+        imageView.destroy(device);
+    }
+    mLinearFetchImageView.clear();
+
+    for (ImageView &imageView : mNonLinearFetchImageView)
+    {
+        imageView.destroy(device);
+    }
+    mNonLinearFetchImageView.clear();
+
+    for (ImageView &imageView : mLinearCopyImageView)
+    {
+        imageView.destroy(device);
+    }
+    mLinearCopyImageView.clear();
+
+    for (ImageView &imageView : mNonLinearCopyImageView)
+    {
+        imageView.destroy(device);
+    }
+    mNonLinearCopyImageView.clear();
+
+    for (ImageView &imageView : mStencilReadImageView)
+    {
+        imageView.destroy(device);
+    }
+    mStencilReadImageView.clear();
 
     for (ImageView &imageView : mLevelDrawImageViews)
     {
@@ -5065,7 +5138,51 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
                                              uint32_t baseLevel,
                                              uint32_t levelCount,
                                              uint32_t baseLayer,
-                                             uint32_t layerCount)
+                                             uint32_t layerCount,
+                                             bool requiresSRGBViews,
+                                             VkImageUsageFlags imageUsageFlags)
+{
+    ASSERT(levelCount > 0);
+    if (levelCount > mLinearReadImageView.size())
+    {
+        mLinearReadImageView.resize(levelCount);
+        mNonLinearReadImageView.resize(levelCount);
+        mLinearFetchImageView.resize(levelCount);
+        mNonLinearFetchImageView.resize(levelCount);
+        mLinearCopyImageView.resize(levelCount);
+        mNonLinearCopyImageView.resize(levelCount);
+        mStencilReadImageView.resize(levelCount);
+    }
+    mCurrentMaxLevel = levelCount - 1;
+
+    // Determine if we already have ImageView's for the new max level
+    if (getReadImageView().getHandle() == VK_NULL_HANDLE)
+    {
+        // Since we don't have a readImageView, we must create ImageView's for the new max level
+        ANGLE_TRY(initReadViewsImpl(contextVk, viewType, image, format, formatSwizzle, readSwizzle,
+                                    baseLevel, levelCount, baseLayer, layerCount));
+
+        if (requiresSRGBViews)
+        {
+            ANGLE_TRY(initSRGBReadViewsImpl(contextVk, viewType, image, format, formatSwizzle,
+                                            readSwizzle, baseLevel, levelCount, baseLayer,
+                                            layerCount, imageUsageFlags));
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
+                                                 gl::TextureType viewType,
+                                                 const ImageHelper &image,
+                                                 const Format &format,
+                                                 const gl::SwizzleState &formatSwizzle,
+                                                 const gl::SwizzleState &readSwizzle,
+                                                 uint32_t baseLevel,
+                                                 uint32_t levelCount,
+                                                 uint32_t baseLayer,
+                                                 uint32_t layerCount)
 {
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(format.intendedFormat());
     mLinearColorspace                    = IsLinearFormat(format.vkImageFormat);
@@ -5076,8 +5193,8 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
                                            readSwizzle, &getReadImageView(), baseLevel, levelCount,
                                            baseLayer, layerCount));
         ANGLE_TRY(image.initLayerImageView(contextVk, viewType, VK_IMAGE_ASPECT_STENCIL_BIT,
-                                           readSwizzle, &mStencilReadImageView, baseLevel,
-                                           levelCount, baseLayer, layerCount));
+                                           readSwizzle, &mStencilReadImageView[mCurrentMaxLevel],
+                                           baseLevel, levelCount, baseLayer, layerCount));
     }
     else
     {
@@ -5105,17 +5222,17 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result ImageViewHelper::initSRGBReadViews(ContextVk *contextVk,
-                                                 gl::TextureType viewType,
-                                                 const ImageHelper &image,
-                                                 const Format &format,
-                                                 const gl::SwizzleState &formatSwizzle,
-                                                 const gl::SwizzleState &readSwizzle,
-                                                 uint32_t baseLevel,
-                                                 uint32_t levelCount,
-                                                 uint32_t baseLayer,
-                                                 uint32_t layerCount,
-                                                 VkImageUsageFlags imageUsageFlags)
+angle::Result ImageViewHelper::initSRGBReadViewsImpl(ContextVk *contextVk,
+                                                     gl::TextureType viewType,
+                                                     const ImageHelper &image,
+                                                     const Format &format,
+                                                     const gl::SwizzleState &formatSwizzle,
+                                                     const gl::SwizzleState &readSwizzle,
+                                                     uint32_t baseLevel,
+                                                     uint32_t levelCount,
+                                                     uint32_t baseLayer,
+                                                     uint32_t layerCount,
+                                                     VkImageUsageFlags imageUsageFlags)
 {
     VkFormat nonLinearOverrideFormat = ConvertToNonLinear(image.getFormat().vkImageFormat);
     VkFormat linearOverrideFormat    = ConvertToLinear(image.getFormat().vkImageFormat);
@@ -5125,17 +5242,19 @@ angle::Result ImageViewHelper::initSRGBReadViews(ContextVk *contextVk,
 
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(format.intendedFormat());
 
-    if (!mLinearReadImageView.valid())
+    if (!mLinearReadImageView[mCurrentMaxLevel].valid())
     {
         ANGLE_TRY(image.initAliasedLayerImageView(
-            contextVk, viewType, aspectFlags, readSwizzle, &mLinearReadImageView, baseLevel,
-            levelCount, baseLayer, layerCount, imageUsageFlags, linearFormat));
+            contextVk, viewType, aspectFlags, readSwizzle, &mLinearReadImageView[mCurrentMaxLevel],
+            baseLevel, levelCount, baseLayer, layerCount, imageUsageFlags, linearFormat));
     }
-    if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED && !mNonLinearReadImageView.valid())
+    if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED &&
+        !mNonLinearReadImageView[mCurrentMaxLevel].valid())
     {
-        ANGLE_TRY(image.initAliasedLayerImageView(
-            contextVk, viewType, aspectFlags, readSwizzle, &mNonLinearReadImageView, baseLevel,
-            levelCount, baseLayer, layerCount, imageUsageFlags, nonLinearOverrideFormat));
+        ANGLE_TRY(image.initAliasedLayerImageView(contextVk, viewType, aspectFlags, readSwizzle,
+                                                  &mNonLinearReadImageView[mCurrentMaxLevel],
+                                                  baseLevel, levelCount, baseLayer, layerCount,
+                                                  imageUsageFlags, nonLinearOverrideFormat));
     }
 
     gl::TextureType fetchType = viewType;
@@ -5145,33 +5264,38 @@ angle::Result ImageViewHelper::initSRGBReadViews(ContextVk *contextVk,
     {
         fetchType = Get2DTextureType(layerCount, image.getSamples());
 
-        if (!mLinearFetchImageView.valid())
+        if (!mLinearFetchImageView[mCurrentMaxLevel].valid())
         {
 
             ANGLE_TRY(image.initAliasedLayerImageView(
-                contextVk, fetchType, aspectFlags, readSwizzle, &mLinearFetchImageView, baseLevel,
-                levelCount, baseLayer, layerCount, imageUsageFlags, linearFormat));
+                contextVk, fetchType, aspectFlags, readSwizzle,
+                &mLinearFetchImageView[mCurrentMaxLevel], baseLevel, levelCount, baseLayer,
+                layerCount, imageUsageFlags, linearFormat));
         }
-        if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED && !mNonLinearFetchImageView.valid())
+        if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED &&
+            !mNonLinearFetchImageView[mCurrentMaxLevel].valid())
         {
-            ANGLE_TRY(image.initAliasedLayerImageView(contextVk, fetchType, aspectFlags,
-                                                      readSwizzle, &mNonLinearFetchImageView,
-                                                      baseLevel, levelCount, baseLayer, layerCount,
-                                                      imageUsageFlags, nonLinearOverrideFormat));
+            ANGLE_TRY(image.initAliasedLayerImageView(
+                contextVk, fetchType, aspectFlags, readSwizzle,
+                &mNonLinearFetchImageView[mCurrentMaxLevel], baseLevel, levelCount, baseLayer,
+                layerCount, imageUsageFlags, nonLinearOverrideFormat));
         }
     }
 
-    if (!mLinearCopyImageView.valid())
+    if (!mLinearCopyImageView[mCurrentMaxLevel].valid())
     {
-        ANGLE_TRY(image.initAliasedLayerImageView(
-            contextVk, fetchType, aspectFlags, formatSwizzle, &mLinearCopyImageView, baseLevel,
-            levelCount, baseLayer, layerCount, imageUsageFlags, linearFormat));
+        ANGLE_TRY(image.initAliasedLayerImageView(contextVk, fetchType, aspectFlags, formatSwizzle,
+                                                  &mLinearCopyImageView[mCurrentMaxLevel],
+                                                  baseLevel, levelCount, baseLayer, layerCount,
+                                                  imageUsageFlags, linearFormat));
     }
-    if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED && !mNonLinearCopyImageView.valid())
+    if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED &&
+        !mNonLinearCopyImageView[mCurrentMaxLevel].valid())
     {
-        ANGLE_TRY(image.initAliasedLayerImageView(
-            contextVk, fetchType, aspectFlags, formatSwizzle, &mNonLinearCopyImageView, baseLevel,
-            levelCount, baseLayer, layerCount, imageUsageFlags, nonLinearOverrideFormat));
+        ANGLE_TRY(image.initAliasedLayerImageView(contextVk, fetchType, aspectFlags, formatSwizzle,
+                                                  &mNonLinearCopyImageView[mCurrentMaxLevel],
+                                                  baseLevel, levelCount, baseLayer, layerCount,
+                                                  imageUsageFlags, nonLinearOverrideFormat));
     }
 
     return angle::Result::Continue;
