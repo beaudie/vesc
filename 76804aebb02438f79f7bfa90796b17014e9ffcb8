@@ -16,6 +16,23 @@
       "revId": "76804aebb02438f79f7bfa90796b17014e9ffcb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f57f1427_6448e214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-29T20:46:27Z",
+      "side": 1,
+      "message": "Well shoot, apparently the bots don\u0027t like long strings:\n\n../../src/tests/perf_tests/restricted_traces/nba2k20_800/nba2k20_800_capture_context1_frame800.cpp(2622): error C2026: string too big, trailing characters truncated\n../../src/tests/perf_tests/restricted_traces/nba2k20_800/nba2k20_800_capture_context1_frame800.cpp(4612): error C2026: string too big, trailing characters truncated\n../../src/tests/perf_tests/restricted_traces/nba2k20_800/nba2k20_800_capture_context1_frame800.cpp(6612): error C2026: string too big, trailing characters truncated\n../../src/tests/perf_tests/restricted_traces/nba2k20_800/nba2k20_800_capture_context1_frame800.cpp(25147): error C2026: string too big, trailing characters truncated\n../../src/tests/perf_tests/restricted_traces/nba2k20_800/nba2k20_800_capture_context1_frame800.cpp(29312): error C2026: string too big, trailing characters truncated\n../../src/tests/perf_tests/restricted_traces/nba2k20_800/nba2k20_800_capture_context1_frame800.cpp(32406): error C2026: string too big, trailing characters truncated\n../../src/tests/perf_tests/restricted_traces/nba2k20_800/nba2k20_800_capture_context1_frame800.cpp(37863): error C2026: string too big, trailing characters truncated\n...\n\nWe\u0027ll need to break them up.",
+      "revId": "76804aebb02438f79f7bfa90796b17014e9ffcb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
