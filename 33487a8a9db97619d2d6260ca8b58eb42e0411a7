@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6fa4f35_29581f90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2020-07-29T21:25:18Z",
+      "side": 1,
+      "message": "Hey, so I\u0027m taking a stab in the dark here, but I\u0027ve seen the same stack trace in Clusterfuzz issues many times where SharedGarbage ends up deleting an object that\u0027s still in use. I\u0027m guessing this might be timeout related, so this is an attempt at fixing that. The solution might be wrong, I\u0027ll let you guys debate that.",
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
