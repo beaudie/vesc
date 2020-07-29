@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12d85ba3_7bc63b48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-29T21:06:35Z",
+      "side": 1,
+      "message": "- Address comments\n- write tests for getIntegerv of the texture and buffer IDs (doesn\u0027t seem to be covered in deqp)\n- write tests for deleting buffer before texture in case we need to handle that case\n",
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2de4493_b250f2d1",
+        "filename": "src/libANGLE/ImageIndex.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-29T21:06:35Z",
+      "side": 1,
+      "message": "merge this too",
+      "range": {
+        "startLine": 46,
+        "startChar": 38,
+        "endLine": 48,
+        "endChar": 39
+      },
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "250fe90a_c4bdd938",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-29T21:06:35Z",
+      "side": 1,
+      "message": "maxTextureBufferSize",
+      "range": {
+        "startLine": 454,
+        "startChar": 58,
+        "endLine": 454,
+        "endChar": 86
+      },
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76e3ea87_6143a587",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-29T21:06:35Z",
+      "side": 1,
+      "message": "unfinished",
+      "range": {
+        "startLine": 2004,
+        "startChar": 12,
+        "endLine": 2005,
+        "endChar": 55
+      },
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ce6c26f_2bbcda9d",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2768,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-29T21:06:35Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 2763,
+        "startChar": 8,
+        "endLine": 2768,
+        "endChar": 18
+      },
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f99e2224_7839eba7",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-29T21:06:35Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 1556,
+        "startChar": 0,
+        "endLine": 1557,
+        "endChar": 44
+      },
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
