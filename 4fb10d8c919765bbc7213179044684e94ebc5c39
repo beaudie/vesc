@@ -39,6 +39,30 @@
       "revId": "4fb10d8c919765bbc7213179044684e94ebc5c39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e658f84c_7d263356",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4598,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-29T16:32:03Z",
+      "side": 1,
+      "message": "Okay, hoisted that check up and now use the underlying format as the override.  LMKWYT.",
+      "parentUuid": "ce329774_29740ab0",
+      "range": {
+        "startLine": 4572,
+        "startChar": 0,
+        "endLine": 4598,
+        "endChar": 1
+      },
+      "revId": "4fb10d8c919765bbc7213179044684e94ebc5c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
