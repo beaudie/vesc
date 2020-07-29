@@ -16,6 +16,24 @@
       "revId": "fa07f26b53dfd0c5ad03f743dc6f260a1764ca5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc32e739_015c00b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-29T17:53:39Z",
+      "side": 1,
+      "message": "Looks like it is fixed now.",
+      "parentUuid": "f0d6b60e_e319450e",
+      "revId": "fa07f26b53dfd0c5ad03f743dc6f260a1764ca5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
