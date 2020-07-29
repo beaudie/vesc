@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "89d5fb52_11782e19",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4980,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T19:23:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d19de13_c3dbc5a2",
+      "range": {
+        "startLine": 4973,
+        "startChar": 0,
+        "endLine": 4980,
+        "endChar": 33
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9310dcc_6f552c06",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -96,6 +120,30 @@
       "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99814076_1f1cdd24",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5076,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T19:23:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9310dcc_6f552c06",
+      "range": {
+        "startLine": 5072,
+        "startChar": 0,
+        "endLine": 5076,
+        "endChar": 33
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +170,30 @@
     },
     {
       "key": {
+        "uuid": "ba792074_c3c14500",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5159,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T19:23:21Z",
+      "side": 1,
+      "message": "We don\u0027t want an ASSERT here.  This is where we want to decide whether to allocate it if it\u0027s not valid:-).",
+      "parentUuid": "9aeb3b5b_6c779cf7",
+      "range": {
+        "startLine": 5159,
+        "startChar": 8,
+        "endLine": 5159,
+        "endChar": 56
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be8a55c4_49c3d1f2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 6
@@ -145,6 +217,30 @@
     },
     {
       "key": {
+        "uuid": "e1fae908_50138c00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T19:23:21Z",
+      "side": 1,
+      "message": "No. Done",
+      "parentUuid": "be8a55c4_49c3d1f2",
+      "range": {
+        "startLine": 1617,
+        "startChar": 35,
+        "endLine": 1617,
+        "endChar": 42
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4a43bc6_c88b3117",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 6
@@ -165,6 +261,30 @@
       "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53c6ac8b_bad67acc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T19:23:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4a43bc6_c88b3117",
+      "range": {
+        "startLine": 1779,
+        "startChar": 0,
+        "endLine": 1785,
+        "endChar": 42
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
