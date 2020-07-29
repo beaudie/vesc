@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2808a30a_8a404dbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T16:35:54Z",
+      "side": 1,
+      "message": "Still has the same weirdness of reading back a different format. Anyway if it works, it works. The tests help.",
+      "revId": "b3705044842453e6e25b8f56394adf4f1695ce88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ca7d6d0_00c95b83",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T16:35:54Z",
+      "side": 1,
+      "message": "this function is not defined.",
+      "revId": "b3705044842453e6e25b8f56394adf4f1695ce88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
