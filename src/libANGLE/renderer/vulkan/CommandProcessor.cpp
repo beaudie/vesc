@@ -408,10 +408,20 @@ CommandProcessor::CommandProcessor(RendererVk *renderer)
 
 void CommandProcessor::queueCommand(vk::CommandProcessorTask *command)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::queueCommand");
-    std::lock_guard<std::mutex> queueLock(mWorkerMutex);
-    mCommandsQueue.emplace(std::move(*command));
-    mWorkAvailableCondition.notify_one();
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::queueCommand");
+        std::lock_guard<std::mutex> queueLock(mWorkerMutex);
+        mCommandsQueue.emplace(std::move(*command));
+        mWorkAvailableCondition.notify_one();
+    }
+
+    if (mRenderer->getFeatures().enableParallelCommandProcessing.enabled)
+    {
+        return;
+    }
+
+    // parallel threads disabled so wait for work to complete before continuing.
+    waitForWorkComplete();
 }
 
 void CommandProcessor::processCommandProcessorTasks()
@@ -469,7 +479,9 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
         {
             case vk::CustomTask::Exit:
             {
-                *exitThread = true;
+                *exitThread       = true;
+                mWorkerThreadIdle = true;
+                mWorkerIdleCondition.notify_one();
                 return angle::Result::Continue;
             }
             case vk::CustomTask::Flush:
