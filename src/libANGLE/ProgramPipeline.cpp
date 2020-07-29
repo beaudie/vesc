@@ -263,6 +263,40 @@ void ProgramPipeline::updateTransformFeedbackMembers()
         vertexExecutable.mLinkedTransformFeedbackVaryings;
 }
 
+void ProgramPipeline::updateShaderStorageBlocks()
+{
+    mState.mExecutable->mShaderStorageBlocks.clear();
+
+    for (const ShaderType shaderType : gl::AllShaderTypes())
+    {
+        Program *program = mState.mPrograms[shaderType];
+        if (program)
+        {
+            for (const InterfaceBlock &block : program->getExecutable().getShaderStorageBlocks())
+            {
+                mState.mExecutable->mShaderStorageBlocks.emplace_back(block);
+            }
+        }
+    }
+}
+
+void ProgramPipeline::updateImageBindings()
+{
+    mState.mExecutable->mImageBindings.clear();
+
+    for (const ShaderType shaderType : gl::AllShaderTypes())
+    {
+        Program *program = mState.mPrograms[shaderType];
+        if (program)
+        {
+            for (const ImageBinding &imageBinding : program->getState().getImageBindings())
+            {
+                mState.mExecutable->mImageBindings.emplace_back(imageBinding);
+            }
+        }
+    }
+}
+
 void ProgramPipeline::updateHasBooleans()
 {
     // Need to check all of the shader stages, not just linked, so we handle Compute correctly.
@@ -339,6 +373,8 @@ void ProgramPipeline::updateExecutable()
     // Vertex Shader ProgramExecutable properties
     updateExecutableAttributes();
     updateTransformFeedbackMembers();
+    updateShaderStorageBlocks();
+    updateImageBindings();
 
     // All Shader ProgramExecutable properties
     mState.updateExecutableTextures();
