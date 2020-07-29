@@ -1691,24 +1691,29 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
         // Don't need to respecify the texture; just redo the texture's vkImageViews
         ASSERT(maxLevelChanged);
 
-        // Release the current vkImageViews
-        RendererVk *renderer = contextVk->getRenderer();
-        mImageViews.release(renderer);
-
         // Track the levels in our ImageHelper
         mImage->setBaseAndMaxLevels(baseLevel, maxLevel);
 
         // Update the texture's serial so that the descriptor set is updated correctly
         mSerial = contextVk->generateTextureSerial();
 
-        // Change the vkImageViews
+        // Update the current max level in ImageViewHelper, with the parameters it may need in
+        // order to create new ImageView's (if not already existing).
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
         // We use a special layer count here to handle EGLImages. They might only be
         // looking at one layer of a cube or 2D array texture.
         uint32_t layerCount =
             mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
-        return initImageViews(contextVk, mImage->getFormat(), baseLevelDesc.format.info->sized,
-                              maxLevel - baseLevel + 1, layerCount);
+        const vk::Format &format = mImage->getFormat();
+        uint32_t baseLayer       = getNativeImageLayer(0);
+        gl::SwizzleState formatSwizzle =
+            GetFormatSwizzle(contextVk, format, baseLevelDesc.format.info->sized);
+        gl::SwizzleState readSwizzle = ApplySwizzle(formatSwizzle, mState.getSwizzleState());
+
+        return mImageViews.switchMaxLevel(
+            contextVk, mState.getType(), *mImage, format, formatSwizzle, readSwizzle, baseLevel,
+            maxLevel - baseLevel + 1, baseLayer, layerCount, mRequiresSRGBViews,
+            mImageUsageFlags & ~VK_IMAGE_USAGE_STORAGE_BIT);
     }
 
     return respecifyImageAttributesAndLevels(contextVk, previousBaseLevel, baseLevel, maxLevel);

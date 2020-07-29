@@ -1583,33 +1583,106 @@ class ImageViewHelper : angle::NonCopyable
     void release(RendererVk *renderer);
     void destroy(VkDevice device);
 
-    const ImageView &getLinearReadImageView() const { return mLinearReadImageView; }
-    const ImageView &getNonLinearReadImageView() const { return mNonLinearReadImageView; }
-    const ImageView &getLinearFetchImageView() const { return mLinearFetchImageView; }
-    const ImageView &getNonLinearFetchImageView() const { return mNonLinearFetchImageView; }
-    const ImageView &getLinearCopyImageView() const { return mLinearCopyImageView; }
-    const ImageView &getNonLinearCopyImageView() const { return mNonLinearCopyImageView; }
-    const ImageView &getStencilReadImageView() const { return mStencilReadImageView; }
+    const ImageView &getLinearReadImageView() const
+    {
+        ASSERT(mCurrentMaxLevel < mLinearReadImageView.size() &&
+               mLinearReadImageView[mCurrentMaxLevel].valid());
+        return mLinearReadImageView[mCurrentMaxLevel];
+    }
+    const ImageView &getNonLinearReadImageView() const
+    {
+        ASSERT(mCurrentMaxLevel < mNonLinearReadImageView.size() &&
+               mNonLinearReadImageView[mCurrentMaxLevel].valid());
+        return mNonLinearReadImageView[mCurrentMaxLevel];
+    }
+    const ImageView &getLinearFetchImageView() const
+    {
+        ASSERT(mCurrentMaxLevel < mLinearFetchImageView.size() &&
+               mLinearFetchImageView[mCurrentMaxLevel].valid());
+        return mLinearFetchImageView[mCurrentMaxLevel];
+    }
+    const ImageView &getNonLinearFetchImageView() const
+    {
+        ASSERT(mCurrentMaxLevel < mNonLinearFetchImageView.size() &&
+               mNonLinearFetchImageView[mCurrentMaxLevel].valid());
+        return mNonLinearFetchImageView[mCurrentMaxLevel];
+    }
+    const ImageView &getLinearCopyImageView() const
+    {
+        ASSERT(mCurrentMaxLevel < mLinearCopyImageView.size() &&
+               mLinearCopyImageView[mCurrentMaxLevel].valid());
+        return mLinearCopyImageView[mCurrentMaxLevel];
+    }
+    const ImageView &getNonLinearCopyImageView() const
+    {
+        ASSERT(mCurrentMaxLevel < mNonLinearCopyImageView.size() &&
+               mNonLinearCopyImageView[mCurrentMaxLevel].valid());
+        return mNonLinearCopyImageView[mCurrentMaxLevel];
+    }
+    const ImageView &getStencilReadImageView() const
+    {
+        ASSERT(mCurrentMaxLevel < mStencilReadImageView.size() &&
+               mStencilReadImageView[mCurrentMaxLevel].valid());
+        return mStencilReadImageView[mCurrentMaxLevel];
+    }
 
     const ImageView &getReadImageView() const
     {
-        return mLinearColorspace ? mLinearReadImageView : mNonLinearReadImageView;
+        ASSERT(mCurrentMaxLevel <
+               (mLinearColorspace ? mLinearReadImageView.size() : mNonLinearReadImageView.size()));
+        return mLinearColorspace ? mLinearReadImageView[mCurrentMaxLevel]
+                                 : mNonLinearReadImageView[mCurrentMaxLevel];
     }
 
     const ImageView &getFetchImageView() const
     {
-        return mLinearColorspace ? mLinearFetchImageView : mNonLinearFetchImageView;
+        ASSERT(mCurrentMaxLevel < (mLinearColorspace ? mLinearFetchImageView.size()
+                                                     : mNonLinearFetchImageView.size()));
+        return mLinearColorspace ? mLinearFetchImageView[mCurrentMaxLevel]
+                                 : mNonLinearFetchImageView[mCurrentMaxLevel];
     }
 
     const ImageView &getCopyImageView() const
     {
-        return mLinearColorspace ? mLinearCopyImageView : mNonLinearCopyImageView;
+        ASSERT(mCurrentMaxLevel <
+               (mLinearColorspace ? mLinearCopyImageView.size() : mNonLinearCopyImageView.size()));
+        return mLinearColorspace ? mLinearCopyImageView[mCurrentMaxLevel]
+                                 : mNonLinearCopyImageView[mCurrentMaxLevel];
     }
 
     // Used when initialized RenderTargets.
-    bool hasStencilReadImageView() const { return mStencilReadImageView.valid(); }
+    bool hasStencilReadImageView() const
+    {
+        return (&mStencilReadImageView[mCurrentMaxLevel] != nullptr)
+                   ? mStencilReadImageView[mCurrentMaxLevel].valid()
+                   : false;
+    }
 
-    bool hasFetchImageView() const { return getFetchImageView().valid(); }
+    bool hasFetchImageView() const
+    {
+        if ((mLinearColorspace && (&mLinearFetchImageView[mCurrentMaxLevel] != nullptr)) ||
+            (!mLinearColorspace && (&mNonLinearFetchImageView[mCurrentMaxLevel] != nullptr)))
+        {
+            return getFetchImageView().valid();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    bool hasCopyImageView() const
+    {
+        if ((mLinearColorspace && (&mLinearCopyImageView[mCurrentMaxLevel] != nullptr)) ||
+            (!mLinearColorspace && (&mNonLinearCopyImageView[mCurrentMaxLevel] != nullptr)))
+        {
+            return getFetchImageView().valid();
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     // Store reference to usage in graph.
     void retain(ResourceUseList *resourceUseList) const { resourceUseList->add(mUse); }
@@ -1656,34 +1729,64 @@ class ImageViewHelper : angle::NonCopyable
                                              uint32_t layer,
                                              const ImageView **imageViewOut);
 
+    // For applications that frequently switch a texture's max level, and make no other changes to
+    // the texture, change the currently-used max level, and potentially create new "read views"
+    // for the new max-level
+    angle::Result switchMaxLevel(ContextVk *contextVk,
+                                 gl::TextureType viewType,
+                                 const ImageHelper &image,
+                                 const Format &format,
+                                 const gl::SwizzleState &formatSwizzle,
+                                 const gl::SwizzleState &readSwizzle,
+                                 uint32_t baseLevel,
+                                 uint32_t levelCount,
+                                 uint32_t baseLayer,
+                                 uint32_t layerCount,
+                                 bool requiresSRGBViews,
+                                 VkImageUsageFlags imageUsageFlags);
+
     // Return unique Serial for this imageView, first assigning it if it hasn't yet been set
     ImageViewSerial getAssignSerial(ContextVk *contextVk, uint32_t levelGL, uint32_t layer);
 
   private:
     ImageView &getReadImageView()
     {
-        return mLinearColorspace ? mLinearReadImageView : mNonLinearReadImageView;
+        ASSERT(mCurrentMaxLevel <
+               (mLinearColorspace ? mLinearReadImageView.size() : mNonLinearReadImageView.size()));
+        return mLinearColorspace ? mLinearReadImageView[mCurrentMaxLevel]
+                                 : mNonLinearReadImageView[mCurrentMaxLevel];
     }
     ImageView &getFetchImageView()
     {
-        return mLinearColorspace ? mLinearFetchImageView : mNonLinearFetchImageView;
+        ASSERT(mCurrentMaxLevel < (mLinearColorspace ? mLinearFetchImageView.size()
+                                                     : mNonLinearFetchImageView.size()));
+        return mLinearColorspace ? mLinearFetchImageView[mCurrentMaxLevel]
+                                 : mNonLinearFetchImageView[mCurrentMaxLevel];
     }
     ImageView &getCopyImageView()
     {
-        return mLinearColorspace ? mLinearCopyImageView : mNonLinearCopyImageView;
+        ASSERT(mCurrentMaxLevel <
+               (mLinearColorspace ? mLinearCopyImageView.size() : mNonLinearCopyImageView.size()));
+        return mLinearColorspace ? mLinearCopyImageView[mCurrentMaxLevel]
+                                 : mNonLinearCopyImageView[mCurrentMaxLevel];
     }
 
     // Lifetime.
     SharedResourceUse mUse;
 
+    // For applications that frequently switch a texture's max level, and make no other changes to
+    // the texture, keep track of the currently-used max level, and keep one "read view" per
+    // max-level
+    uint32_t mCurrentMaxLevel;
+
     // Read views
-    ImageView mLinearReadImageView;
-    ImageView mNonLinearReadImageView;
-    ImageView mLinearFetchImageView;
-    ImageView mNonLinearFetchImageView;
-    ImageView mLinearCopyImageView;
-    ImageView mNonLinearCopyImageView;
-    ImageView mStencilReadImageView;
+    ImageViewVector mLinearReadImageView;
+    ImageViewVector mNonLinearReadImageView;
+    ImageViewVector mLinearFetchImageView;
+    ImageViewVector mNonLinearFetchImageView;
+    ImageViewVector mLinearCopyImageView;
+    ImageViewVector mNonLinearCopyImageView;
+    ImageViewVector mStencilReadImageView;
 
     bool mLinearColorspace;
 
