@@ -36,6 +36,69 @@
     },
     {
       "key": {
+        "uuid": "37f66d18_b851d724",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-29T17:14:55Z",
+      "side": 1,
+      "message": "Nice improvement.",
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9d19de13_c3dbc5a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4980,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-29T17:14:55Z",
+      "side": 1,
+      "message": "To reduce duplication, these can all be refactored into something like:\n\n    void ReleaseImageViews(ImageViewVector *imageViewVector, std::vector\u003cGarbageObject\u003e *garbage)\n    {\n        for (ImageView \u0026imageView : *imageViewVector)\n        {\n            if (imageView.valid())\n            {\n                garbage-\u003eemplace_back(GetGarbage(\u0026imageView));\n            }\n        }\n        mLinearReadImageView-\u003eclear();\n    }\n\n    void ImageViewHelper::release(RendererVk *renderer)\n    {\n        std::vector\u003cGarbageObject\u003e garbage;\n    ...\n        ReleaseImageViews(\u0026mLinearReadImageView, \u0026garbage);",
+      "range": {
+        "startLine": 4973,
+        "startChar": 0,
+        "endLine": 4980,
+        "endChar": 33
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9310dcc_6f552c06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5076,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-29T17:14:55Z",
+      "side": 1,
+      "message": "Same as above: a helper function would reduce duplication.",
+      "range": {
+        "startLine": 5072,
+        "startChar": 0,
+        "endLine": 5076,
+        "endChar": 33
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9aeb3b5b_6c779cf7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -74,6 +137,29 @@
         "startLine": 1617,
         "startChar": 35,
         "endLine": 1617,
+        "endChar": 42
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4a43bc6_c88b3117",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-29T17:14:55Z",
+      "side": 1,
+      "message": "Since these are all vectors now, they should have plural names (e.g, mLinearReadImageViews), like mLevelDrawImageViews below",
+      "range": {
+        "startLine": 1779,
+        "startChar": 0,
+        "endLine": 1785,
         "endChar": 42
       },
       "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
