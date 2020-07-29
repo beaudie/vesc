@@ -1947,6 +1947,11 @@ void ContextVk::clearAllGarbage()
     mCommandQueue.clearAllGarbage(mRenderer);
 }
 
+void ContextVk::timeoutNotification()
+{
+    mRenderer->timeoutNotification();
+}
+
 void ContextVk::handleDeviceLost()
 {
     mOutsideRenderPassCommands->reset();

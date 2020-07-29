@@ -59,7 +59,7 @@ SharedGarbage::SharedGarbage(SharedGarbage &&other)
 }
 
 SharedGarbage::SharedGarbage(SharedResourceUse &&use, std::vector<GarbageObject> &&garbage)
-    : mLifetime(std::move(use)), mGarbage(std::move(garbage))
+    : mLifetime(std::move(use)), mGarbage(std::move(garbage)), mInUseUntilIdle(false)
 {}
 
 SharedGarbage::~SharedGarbage() = default;
@@ -68,6 +68,7 @@ SharedGarbage &SharedGarbage::operator=(SharedGarbage &&rhs)
 {
     std::swap(mLifetime, rhs.mLifetime);
     std::swap(mGarbage, rhs.mGarbage);
+    std::swap(mInUseUntilIdle, rhs.mInUseUntilIdle);
     return *this;
 }
 
@@ -75,6 +76,12 @@ bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSeri
 {
     if (mLifetime.isCurrentlyInUse(completedSerial))
         return false;
+
+    if (mInUseUntilIdle)
+    {
+        renderer->flushAllQueues();
+        mInUseUntilIdle = false;
+    }
 
     mLifetime.release();
 
@@ -84,6 +91,12 @@ bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSeri
     }
 
     return true;
+}
+
+void SharedGarbage::timeoutNotification()
+{
+    // This object might be in use the queues are idle
+    mInUseUntilIdle = true;
 }
 
 // ResourceUseList implementation.

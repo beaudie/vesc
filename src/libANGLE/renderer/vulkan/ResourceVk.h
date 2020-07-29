@@ -123,10 +123,12 @@ class SharedGarbage
     SharedGarbage &operator=(SharedGarbage &&rhs);
 
     bool destroyIfComplete(RendererVk *renderer, Serial completedSerial);
+    void timeoutNotification();
 
   private:
     SharedResourceUse mLifetime;
     std::vector<GarbageObject> mGarbage;
+    bool mInUseUntilIdle;
 };
 
 using SharedGarbageList = std::vector<SharedGarbage>;

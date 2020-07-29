@@ -80,6 +80,8 @@ class RendererVk : angle::NonCopyable
     // Reload volk vk* function ptrs if needed for an already initialized RendererVk
     void reloadVolkIfNeeded() const;
     void onDestroy();
+    void flushAllQueues();
+    void timeoutNotification();
 
     void notifyDeviceLost();
     bool isDeviceLost() const;

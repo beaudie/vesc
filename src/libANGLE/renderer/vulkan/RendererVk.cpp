@@ -479,6 +479,26 @@ RendererVk::~RendererVk()
     ASSERT(mSharedGarbage.empty());
 }
 
+void RendererVk::flushAllQueues()
+{
+    for (VkQueue queue : mQueues)
+    {
+        if (queue != VK_NULL_HANDLE)
+        {
+            vkQueueWaitIdle(queue);
+        }
+    }
+}
+
+void RendererVk::timeoutNotification()
+{
+    // The objects in the shared garbage can't be deleted until the queue is done executing
+    for (auto &garbage : mSharedGarbage)
+    {
+        garbage.timeoutNotification();
+    }
+}
+
 void RendererVk::onDestroy()
 {
     if (getFeatures().enableCommandProcessingThread.enabled)
@@ -488,13 +508,7 @@ void RendererVk::onDestroy()
     }
 
     // Force all commands to finish by flushing all queues.
-    for (VkQueue queue : mQueues)
-    {
-        if (queue != VK_NULL_HANDLE)
-        {
-            vkQueueWaitIdle(queue);
-        }
-    }
+    flushAllQueues();
 
     // Then assign an infinite "last completed" serial to force garbage to delete.
     mLastCompletedQueueSerial = Serial::Infinite();

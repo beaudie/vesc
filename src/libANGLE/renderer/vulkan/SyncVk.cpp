@@ -100,6 +100,10 @@ angle::Result SyncHelper::clientWait(Context *context,
     {
         ANGLE_VK_TRY(context, status);
     }
+    else
+    {
+        contextVk->timeoutNotification();
+    }
 
     *outResult = status;
     return angle::Result::Continue;
@@ -261,6 +265,10 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     if (status != VK_TIMEOUT)
     {
         ANGLE_VK_TRY(context, status);
+    }
+    else
+    {
+        contextVk->timeoutNotification();
     }
 
     *outResult = status;

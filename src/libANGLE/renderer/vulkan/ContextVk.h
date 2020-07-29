@@ -420,6 +420,8 @@ class ContextVk : public ContextImpl, public vk::Context
         }
     }
 
+    void timeoutNotification();
+
     // It would be nice if we didn't have to expose this for QueryVk::getResult.
     angle::Result checkCompletedCommands();
 
