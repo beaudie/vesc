@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87cc6972_bdbcdef3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2020-07-29T15:06:45Z",
+      "side": 1,
+      "message": "Hi Jamie, I updated the CL to fix the compile issue. could you please +2 again? Thanks.",
+      "revId": "db7a21503fcf4dd0fe08aeb0e62b9d874093b0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
