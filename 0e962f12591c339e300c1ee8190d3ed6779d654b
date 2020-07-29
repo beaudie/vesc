@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f622561_207cf59b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T14:41:20Z",
+      "side": 1,
+      "message": "nit: spelling",
+      "range": {
+        "startLine": 11,
+        "startChar": 14,
+        "endLine": 11,
+        "endChar": 23
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ea65268_46119aa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T14:41:20Z",
+      "side": 1,
+      "message": "LGTM with last open nits.",
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2077ac9_1fe7c886",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T14:41:20Z",
+      "side": 1,
+      "message": "same as below",
+      "range": {
+        "startLine": 959,
+        "startChar": 9,
+        "endLine": 959,
+        "endChar": 30
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c78fa872_b131cd55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T14:41:20Z",
+      "side": 1,
+      "message": "nit: should be mDepthTest..., to distinguish it from write",
+      "range": {
+        "startLine": 990,
+        "startChar": 9,
+        "endLine": 990,
+        "endChar": 32
+      },
+      "revId": "0e962f12591c339e300c1ee8190d3ed6779d654b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
