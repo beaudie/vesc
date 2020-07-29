@@ -16,6 +16,69 @@
       "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f3abda54_cd829b1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T16:29:40Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aeb3b5b_6c779cf7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5159,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T16:29:40Z",
+      "side": 1,
+      "message": "Could use a `hasReadImageView()` so that `getReadImageView()` can potentially ASSERT validity.",
+      "range": {
+        "startLine": 5159,
+        "startChar": 8,
+        "endLine": 5159,
+        "endChar": 56
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be8a55c4_49c3d1f2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-29T16:29:40Z",
+      "side": 1,
+      "message": "Does anything fail if these used getValidReadViewImpl?",
+      "range": {
+        "startLine": 1617,
+        "startChar": 35,
+        "endLine": 1617,
+        "endChar": 42
+      },
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
