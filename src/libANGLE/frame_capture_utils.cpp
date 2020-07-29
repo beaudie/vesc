@@ -124,6 +124,7 @@ Result SerializeFramebufferAttachment(const gl::Context *context,
                                       gl::Framebuffer *framebuffer,
                                       const gl::FramebufferAttachment &framebufferAttachment)
 {
+    bos->writeInt(framebufferAttachment.id());
     bos->writeInt(framebufferAttachment.type());
     // serialize target variable
     bos->writeInt(framebufferAttachment.getBinding());
@@ -136,20 +137,25 @@ Result SerializeFramebufferAttachment(const gl::Context *context,
     bos->writeInt(framebufferAttachment.getBaseViewIndex());
     bos->writeInt(framebufferAttachment.getRenderToTextureSamples());
 
-    GLenum prevReadBufferState = framebuffer->getReadBufferState();
-    GLenum binding             = framebufferAttachment.getBinding();
-    if (IsValidColorAttachmentBinding(binding,
-                                      framebuffer->getState().getColorAttachments().size()))
+    if (framebufferAttachment.type() != GL_TEXTURE &&
+        framebufferAttachment.type() != GL_RENDERBUFFER)
     {
-        framebuffer->setReadBuffer(framebufferAttachment.getBinding());
-        ANGLE_TRY(framebuffer->syncState(context, GL_FRAMEBUFFER));
+        GLenum prevReadBufferState = framebuffer->getReadBufferState();
+        GLenum binding             = framebufferAttachment.getBinding();
+        if (IsValidColorAttachmentBinding(binding,
+                                          framebuffer->getState().getColorAttachments().size()))
+        {
+            framebuffer->setReadBuffer(framebufferAttachment.getBinding());
+            ANGLE_TRY(framebuffer->syncState(context, GL_FRAMEBUFFER));
+        }
+        MemoryBuffer *pixelsPtr = nullptr;
+        ANGLE_TRY(ReadPixelsFromAttachment(context, framebuffer, framebufferAttachment,
+                                           scratchBuffer, &pixelsPtr));
+        bos->writeBytes(pixelsPtr->data(), pixelsPtr->size());
+        // Reset framebuffer state
+        framebuffer->setReadBuffer(prevReadBufferState);
     }
-    MemoryBuffer *pixelsPtr = nullptr;
-    ANGLE_TRY(ReadPixelsFromAttachment(context, framebuffer, framebufferAttachment, scratchBuffer,
-                                       &pixelsPtr));
-    bos->writeBytes(pixelsPtr->data(), pixelsPtr->size());
-    // Reset framebuffer state
-    framebuffer->setReadBuffer(prevReadBufferState);
+
     return Result::Continue;
 }
 
@@ -515,6 +521,21 @@ void SerializeSampler(gl::BinaryOutputStream *bos, gl::Sampler *sampler)
     SerializeSamplerState(bos, sampler->getSamplerState());
 }
 
+void SerializeSwizzleState(gl::BinaryOutputStream *bos, const gl::SwizzleState &swizzleState)
+{
+    bos->writeInt(swizzleState.swizzleRed);
+    bos->writeInt(swizzleState.swizzleGreen);
+    bos->writeInt(swizzleState.swizzleBlue);
+    bos->writeInt(swizzleState.swizzleAlpha);
+}
+
+void SerializeExtents(gl::BinaryOutputStream *bos, const gl::Extents &extents)
+{
+    bos->writeInt(extents.width);
+    bos->writeInt(extents.height);
+    bos->writeInt(extents.depth);
+}
+
 void SerializeInternalFormat(gl::BinaryOutputStream *bos, const gl::InternalFormat *internalFormat)
 {
     bos->writeInt(internalFormat->internalFormat);
@@ -554,6 +575,112 @@ Result SerializeRenderbuffer(const gl::Context *context,
     bos->writeBytes(pixelsPtr->data(), pixelsPtr->size());
     return Result::Continue;
 }
+void SerializeImageDesc(gl::BinaryOutputStream *bos, const gl::ImageDesc &imageDesc)
+{
+    SerializeExtents(bos, imageDesc.size);
+    SerializeFormat(bos, imageDesc.format);
+    bos->writeInt(imageDesc.samples);
+    bos->writeInt(imageDesc.fixedSampleLocations);
+    bos->writeEnum(imageDesc.initState);
+}
+
+void SerializeContextBindingCount(gl::BinaryOutputStream *bos,
+                                  const gl::ContextBindingCount &contextBindingCount)
+{
+    bos->writeInt(contextBindingCount.contextID);
+    bos->writeInt(contextBindingCount.imageBindingCount);
+    bos->writeInt(contextBindingCount.samplerBindingCount);
+}
+
+void SerializeTextureState(gl::BinaryOutputStream *bos, const gl::TextureState &textureState)
+{
+    bos->writeEnum(textureState.getType());
+    SerializeSwizzleState(bos, textureState.getSwizzleState());
+    SerializeSamplerState(bos, textureState.getSamplerState());
+    bos->writeEnum(textureState.getSRGBOverride());
+    bos->writeInt(textureState.getBaseLevel());
+    bos->writeInt(textureState.getMaxLevel());
+    bos->writeInt(textureState.getDepthStencilTextureMode());
+    const std::vector<gl::ContextBindingCount> &contextBindingCounts =
+        textureState.getBindingCounts();
+    for (const gl::ContextBindingCount &contextBindingCount : contextBindingCounts)
+    {
+        SerializeContextBindingCount(bos, contextBindingCount);
+    }
+    bos->writeInt(textureState.getImmutableFormat());
+    bos->writeInt(textureState.getImmutableLevels());
+    bos->writeInt(textureState.getUsage());
+    const std::vector<gl::ImageDesc> &imageDescs = textureState.getImageDescs();
+    for (const gl::ImageDesc &imageDesc : imageDescs)
+    {
+        SerializeImageDesc(bos, imageDesc);
+    }
+    SerializeRectangle(bos, textureState.getCrop());
+
+    bos->writeInt(textureState.getGenerateMipmapHint());
+    bos->writeEnum(textureState.getInitState());
+}
+
+Result SerializeTextureData(gl::BinaryOutputStream *bos,
+                            const gl::Context *context,
+                            gl::Texture *texture,
+                            ScratchBuffer *scratchBuffer)
+{
+    gl::ImageIndexIterator imageIter = gl::ImageIndexIterator::MakeGeneric(
+        texture->getType(), 0, texture->getMipmapMaxLevel() + 1, gl::ImageIndex::kEntireLevel,
+        gl::ImageIndex::kEntireLevel);
+    while (imageIter.hasNext())
+    {
+        gl::ImageIndex index = imageIter.next();
+
+        const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
+
+        if (desc.size.empty())
+            continue;
+
+        const gl::InternalFormat &format = *desc.format.info;
+
+        // Check for supported textures
+        ASSERT(index.getType() == gl::TextureType::_2D || index.getType() == gl::TextureType::_3D ||
+               index.getType() == gl::TextureType::_2DArray ||
+               index.getType() == gl::TextureType::CubeMap);
+
+        GLenum getFormat = format.format;
+        GLenum getType   = format.type;
+
+        const gl::Extents size(desc.size.width, desc.size.height, desc.size.depth);
+        const gl::PixelUnpackState &unpack = context->getState().getUnpackState();
+
+        GLuint endByte  = 0;
+        bool unpackSize = format.computePackUnpackEndByte(getType, size, unpack, true, &endByte);
+        ASSERT(unpackSize);
+        MemoryBuffer *texelsPtr = nullptr;
+        ANGLE_CHECK_GL_ALLOC(const_cast<gl::Context *>(context),
+                             scratchBuffer->getInitialized(endByte, &texelsPtr, 0));
+
+        gl::PixelPackState packState;
+        packState.alignment = 1;
+
+        ANGLE_TRY(texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                       index.getLevelIndex(), getFormat, getType,
+                                       texelsPtr->data()));
+        bos->writeBytes(texelsPtr->data(), texelsPtr->size());
+    }
+    return Result::Continue;
+}
+
+Result SerializeTexture(const gl::Context *context,
+                        gl::BinaryOutputStream *bos,
+                        ScratchBuffer *scratchBuffer,
+                        gl::Texture *texture)
+{
+    SerializeTextureState(bos, texture->getState());
+    bos->writeString(texture->getLabel());
+    // FrameCapture can not serialize mBoundSurface and mBoundStream
+    // because they are likely to change with each run
+    ANGLE_TRY(SerializeTextureData(bos, context, texture, scratchBuffer));
+    return Result::Continue;
+}
 
 }  // namespace
 
@@ -586,6 +713,12 @@ Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
     {
         gl::Renderbuffer *renderbufferPtr = renderbuffer.second;
         ANGLE_TRY(SerializeRenderbuffer(context, bos, &scratchBuffer, renderbufferPtr));
+    }
+    const gl::TextureManager &textureManager = context->getState().getTextureManagerForCapture();
+    for (const auto &texture : textureManager)
+    {
+        gl::Texture *texturePtr = texture.second;
+        ANGLE_TRY(SerializeTexture(context, bos, &scratchBuffer, texturePtr));
     }
     scratchBuffer.clear();
     return Result::Continue;
