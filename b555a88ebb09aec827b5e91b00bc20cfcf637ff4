@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18109a38_3347db0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-07-29T16:16:11Z",
+      "side": 1,
+      "message": "Shabi, I did all of the refactoring that you requested.  Tim, PTAL.",
+      "revId": "b555a88ebb09aec827b5e91b00bc20cfcf637ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
