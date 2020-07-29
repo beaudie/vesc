@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4c79fa03_10352179",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T14:35:37Z",
+      "side": 1,
+      "message": "It would be good to add the check here still. If the RenderPass isn\u0027t started you shouldn\u0027t be calling methods on it.",
+      "parentUuid": "57f23b6d_d9c2f7e2",
+      "range": {
+        "startLine": 2806,
+        "startChar": 0,
+        "endLine": 2809,
+        "endChar": 17
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "185c1e74_23ce8c3a",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -107,6 +131,30 @@
       "side": 1,
       "message": "Two reasons I did it here: 1) it\u0027s easier to access context state here. and 2) startNewRenderPass also get called from UtilsVk.",
       "parentUuid": "56445343_984f1ac8",
+      "range": {
+        "startLine": 4390,
+        "startChar": 0,
+        "endLine": 4398,
+        "endChar": 0
+      },
+      "revId": "6bac829604283fb3c14c7f74679d1d1717cf95e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea2eadc9_0e4741b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-29T14:35:37Z",
+      "side": 1,
+      "message": "Should do this inside startNewRenderPass still. Not any easier to access state here. startNewRenderPass also called from UtilsVk.",
+      "parentUuid": "9360b818_68f9fee9",
       "range": {
         "startLine": 4390,
         "startChar": 0,
