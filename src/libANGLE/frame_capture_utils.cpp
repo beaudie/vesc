@@ -514,6 +514,158 @@ void SerializeSampler(gl::BinaryOutputStream *bos, gl::Sampler *sampler)
     SerializeSamplerState(bos, sampler->getSamplerState());
 }
 
+void SerializeSwizzleState(gl::BinaryOutputStream *bos, const gl::SwizzleState &swizzleState)
+{
+    bos->writeInt(swizzleState.swizzleRed);
+    bos->writeInt(swizzleState.swizzleGreen);
+    bos->writeInt(swizzleState.swizzleBlue);
+    bos->writeInt(swizzleState.swizzleAlpha);
+}
+
+void SerializeExtents(gl::BinaryOutputStream *bos, const gl::Extents &extents)
+{
+    bos->writeInt(extents.width);
+    bos->writeInt(extents.height);
+    bos->writeInt(extents.depth);
+}
+
+void SerializeInternalFormat(gl::BinaryOutputStream *bos, const gl::InternalFormat *internalFormat)
+{
+    bos->writeInt(internalFormat->internalFormat);
+    bos->writeInt(internalFormat->sized);
+    bos->writeInt(internalFormat->sizedInternalFormat);
+    bos->writeInt(internalFormat->redBits);
+    bos->writeInt(internalFormat->greenBits);
+    bos->writeInt(internalFormat->blueBits);
+    bos->writeInt(internalFormat->luminanceBits);
+    bos->writeInt(internalFormat->alphaBits);
+    bos->writeInt(internalFormat->sharedBits);
+    bos->writeInt(internalFormat->depthBits);
+    bos->writeInt(internalFormat->stencilBits);
+    bos->writeInt(internalFormat->pixelBytes);
+    bos->writeInt(internalFormat->componentCount);
+    bos->writeInt(internalFormat->compressed);
+    bos->writeInt(internalFormat->compressedBlockWidth);
+    bos->writeInt(internalFormat->compressedBlockHeight);
+    bos->writeInt(internalFormat->compressedBlockDepth);
+    bos->writeInt(internalFormat->format);
+    bos->writeInt(internalFormat->type);
+    bos->writeInt(internalFormat->componentType);
+    bos->writeInt(internalFormat->colorEncoding);
+}
+
+void SerializeFormat(gl::BinaryOutputStream *bos, const gl::Format &format)
+{
+    SerializeInternalFormat(bos, format.info);
+}
+
+void SerializeImageDesc(gl::BinaryOutputStream *bos, const gl::ImageDesc &imageDesc)
+{
+    SerializeExtents(bos, imageDesc.size);
+    SerializeFormat(bos, imageDesc.format);
+    bos->writeInt(imageDesc.samples);
+    bos->writeInt(imageDesc.fixedSampleLocations);
+    bos->writeEnum(imageDesc.initState);
+}
+
+void SerializeContextBindingCount(gl::BinaryOutputStream *bos,
+                                  const gl::ContextBindingCount &contextBindingCount)
+{
+    bos->writeInt(contextBindingCount.contextID);
+    bos->writeInt(contextBindingCount.imageBindingCount);
+    bos->writeInt(contextBindingCount.samplerBindingCount);
+}
+
+void SerializeTextureState(gl::BinaryOutputStream *bos, const gl::TextureState &textureState)
+{
+    bos->writeEnum(textureState.getType());
+    SerializeSwizzleState(bos, textureState.getSwizzleState());
+    SerializeSamplerState(bos, textureState.getSamplerState());
+    bos->writeEnum(textureState.getSRGBOverride());
+    bos->writeInt(textureState.getBaseLevel());
+    bos->writeInt(textureState.getMaxLevel());
+    bos->writeInt(textureState.getDepthStencilTextureMode());
+    const std::vector<gl::ContextBindingCount> &contextBindingCounts =
+        textureState.getBindingCounts();
+    for (size_t i = 0; i < contextBindingCounts.size(); i++)
+    {
+        SerializeContextBindingCount(bos, contextBindingCounts[i]);
+    }
+    bos->writeInt(textureState.getImmutableFormat());
+    bos->writeInt(textureState.getImmutableLevels());
+    bos->writeInt(textureState.getUsage());
+    const std::vector<gl::ImageDesc> &imageDescs = textureState.getImageDescs();
+    for (size_t i = 0; i < imageDescs.size(); i++)
+    {
+        SerializeImageDesc(bos, imageDescs[i]);
+    }
+    SerializeRectangle(bos, textureState.getCrop());
+
+    bos->writeInt(textureState.getGenerateMipmapHint());
+    bos->writeEnum(textureState.getInitState());
+}
+
+Result ReadTexelsFromTexture(gl::BinaryOutputStream *bos,
+                             const gl::Context *context,
+                             gl::Texture *texture,
+                             ScratchBuffer *scratchBuffer)
+{
+    gl::ImageIndexIterator imageIter = gl::ImageIndexIterator::MakeGeneric(
+        texture->getType(), 0, texture->getMipmapMaxLevel() + 1, gl::ImageIndex::kEntireLevel,
+        gl::ImageIndex::kEntireLevel);
+    while (imageIter.hasNext())
+    {
+        gl::ImageIndex index = imageIter.next();
+
+        const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
+
+        if (desc.size.empty())
+            continue;
+
+        const gl::InternalFormat &format = *desc.format.info;
+
+        // Check for supported textures
+        ASSERT(index.getType() == gl::TextureType::_2D || index.getType() == gl::TextureType::_3D ||
+               index.getType() == gl::TextureType::_2DArray ||
+               index.getType() == gl::TextureType::CubeMap);
+
+        GLenum getFormat = format.format;
+        GLenum getType   = format.type;
+
+        const gl::Extents size(desc.size.width, desc.size.height, desc.size.depth);
+        const gl::PixelUnpackState &unpack = context->getState().getUnpackState();
+
+        GLuint endByte  = 0;
+        bool unpackSize = format.computePackUnpackEndByte(getType, size, unpack, true, &endByte);
+        ASSERT(unpackSize);
+        MemoryBuffer *texelsPtr = nullptr;
+        ANGLE_CHECK_GL_ALLOC(const_cast<gl::Context *>(context),
+                             scratchBuffer->getInitialized(endByte, &texelsPtr, 0));
+
+        gl::PixelPackState packState;
+        packState.alignment = 1;
+
+        ANGLE_TRY(texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                       index.getLevelIndex(), getFormat, getType,
+                                       texelsPtr->data()));
+        bos->writeBytes(texelsPtr->data(), texelsPtr->size());
+    }
+    return Result::Continue;
+}
+
+Result SerializeTexture(const gl::Context *context,
+                        gl::BinaryOutputStream *bos,
+                        ScratchBuffer *scratchBuffer,
+                        gl::Texture *texture)
+{
+    SerializeTextureState(bos, texture->getState());
+    bos->writeString(texture->getLabel());
+    // FrameCapture is not serialize mBoundSurface and mBoundStream
+    // because they are likely to change with each run
+    ANGLE_TRY(ReadTexelsFromTexture(bos, context, texture, scratchBuffer));
+    return Result::Continue;
+}
+
 }  // namespace
 
 Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
@@ -538,6 +690,12 @@ Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
     {
         gl::Sampler *samplerPtr = sampler.second;
         SerializeSampler(bos, samplerPtr);
+    }
+    const gl::TextureManager &textureManager = context->getState().getTextureManagerForCapture();
+    for (const auto &texture : textureManager)
+    {
+        gl::Texture *texturePtr = texture.second;
+        ANGLE_TRY(SerializeTexture(context, bos, &scratchBuffer, texturePtr));
     }
     scratchBuffer.clear();
     return Result::Continue;
