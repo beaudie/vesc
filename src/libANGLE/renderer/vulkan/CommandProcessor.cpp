@@ -408,10 +408,20 @@ CommandProcessor::CommandProcessor(RendererVk *renderer)
 
 void CommandProcessor::queueCommand(vk::CommandProcessorTask *command)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::queueCommand");
-    std::lock_guard<std::mutex> queueLock(mWorkerMutex);
-    mCommandsQueue.emplace(std::move(*command));
-    mWorkAvailableCondition.notify_one();
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::queueCommand");
+        std::lock_guard<std::mutex> queueLock(mWorkerMutex);
+        mCommandsQueue.emplace(std::move(*command));
+        mWorkAvailableCondition.notify_one();
+    }
+
+    if (mRenderer->getFeatures().enableParallelCommandProcessing.enabled)
+    {
+        return;
+    }
+
+    // parallel threads disabled so wait for work to complete before continuing.
+    waitForWorkComplete();
 }
 
 void CommandProcessor::processCommandProcessorTasks()
@@ -434,11 +444,6 @@ void CommandProcessor::processCommandProcessorTasks()
             // continue the worker thread until it's been told to exit.
         }
     }
-
-    // Shutting down so cleanup
-    mCommandWorkQueue.destroy(mRenderer->getDevice());
-    mCommandPool.destroy(mRenderer->getDevice());
-    mPrimaryCommandBuffer.destroy(mRenderer->getDevice());
 }
 
 angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThread)
@@ -470,6 +475,12 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
             case vk::CustomTask::Exit:
             {
                 *exitThread = true;
+                // Shutting down so cleanup
+                mCommandWorkQueue.destroy(mRenderer->getDevice());
+                mCommandPool.destroy(mRenderer->getDevice());
+                mPrimaryCommandBuffer.destroy(mRenderer->getDevice());
+                mWorkerThreadIdle = true;
+                mWorkerIdleCondition.notify_one();
                 return angle::Result::Continue;
             }
             case vk::CustomTask::Flush:
@@ -507,8 +518,13 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
             }
             case vk::CustomTask::Present:
             {
-                ANGLE_VK_TRY(mCommandWorkQueue.getPointer(),
-                             mCommandWorkQueue.present(task.mPriority, task.mPresentInfo));
+                VkResult result = mCommandWorkQueue.present(task.mPriority, task.mPresentInfo);
+                if (ANGLE_UNLIKELY(result != VK_SUCCESS))
+                {
+
+                    mCommandWorkQueue.getPointer()->handleError(result, __FILE__, __FUNCTION__,
+                                                                __LINE__);
+                }
                 break;
             }
             case vk::CustomTask::DeviceWaitIdle:

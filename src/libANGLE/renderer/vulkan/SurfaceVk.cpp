@@ -1305,8 +1305,17 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // TODO: Just stalling here for now, but really want to let main thread continue
         //   need to figure out how to handle work below off-thread and sync to main
         //   Also, need to fix lifetime of presentInfo data when main thread continues.
+        //   There is a bunch of work happening after present to deal with swapchain recreation.
+        //   Will that require moving a large chunk of swapImpl to the CommandProcessor?
+        //   That will likely require serializing access to the WindowSurfaceVk object in order
+        //   to have current content.
         result = VK_SUCCESS;
         contextVk->getRenderer()->waitForCommandProcessorIdle();
+        if (contextVk->getRenderer()->hasPendingError())
+        {
+            vk::ErrorDetails error = contextVk->getRenderer()->getAndClearPendingError();
+            result                 = error.errorCode;
+        }
     }
     else
     {
