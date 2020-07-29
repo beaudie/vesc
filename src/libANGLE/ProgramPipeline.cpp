@@ -263,6 +263,61 @@ void ProgramPipeline::updateTransformFeedbackMembers()
         vertexExecutable.mLinkedTransformFeedbackVaryings;
 }
 
+void ProgramPipeline::updateShaderStorageBlocks()
+{
+    mState.mExecutable->mComputeShaderStorageBlocks.clear();
+    mState.mExecutable->mGraphicsShaderStorageBlocks.clear();
+
+    for (const gl::ShaderType shaderType : kAllGraphicsShaderTypes)
+    {
+        const Program *shaderProgram = getShaderProgram(shaderType);
+        if (shaderProgram)
+        {
+            for (const InterfaceBlock &block :
+                 shaderProgram->getExecutable().getShaderStorageBlocks())
+            {
+                mState.mExecutable->mGraphicsShaderStorageBlocks.emplace_back(block);
+            }
+        }
+    }
+
+    const Program *computeProgram = getShaderProgram(ShaderType::Compute);
+    if (computeProgram)
+    {
+        for (const InterfaceBlock &block : computeProgram->getExecutable().getShaderStorageBlocks())
+        {
+            mState.mExecutable->mComputeShaderStorageBlocks.emplace_back(block);
+        }
+    }
+}
+
+void ProgramPipeline::updateImageBindings()
+{
+    mState.mExecutable->mComputeImageBindings.clear();
+    mState.mExecutable->mGraphicsImageBindings.clear();
+
+    for (const gl::ShaderType shaderType : kAllGraphicsShaderTypes)
+    {
+        const Program *shaderProgram = getShaderProgram(shaderType);
+        if (shaderProgram)
+        {
+            for (const ImageBinding &imageBinding : shaderProgram->getState().getImageBindings())
+            {
+                mState.mExecutable->mGraphicsImageBindings.emplace_back(imageBinding);
+            }
+        }
+    }
+
+    const Program *computeProgram = getShaderProgram(ShaderType::Compute);
+    if (computeProgram)
+    {
+        for (const ImageBinding &imageBinding : computeProgram->getState().getImageBindings())
+        {
+            mState.mExecutable->mComputeImageBindings.emplace_back(imageBinding);
+        }
+    }
+}
+
 void ProgramPipeline::updateHasBooleans()
 {
     // Need to check all of the shader stages, not just linked, so we handle Compute correctly.
@@ -339,6 +394,8 @@ void ProgramPipeline::updateExecutable()
     // Vertex Shader ProgramExecutable properties
     updateExecutableAttributes();
     updateTransformFeedbackMembers();
+    updateShaderStorageBlocks();
+    updateImageBindings();
 
     // All Shader ProgramExecutable properties
     mState.updateExecutableTextures();

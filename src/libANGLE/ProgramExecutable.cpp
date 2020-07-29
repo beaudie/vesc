@@ -72,7 +72,8 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mUniformBlocks(other.mUniformBlocks),
       mAtomicCounterBuffers(other.mAtomicCounterBuffers),
       mImageUniformRange(other.mImageUniformRange),
-      mShaderStorageBlocks(other.mShaderStorageBlocks),
+      mComputeShaderStorageBlocks(other.mComputeShaderStorageBlocks),
+      mGraphicsShaderStorageBlocks(other.mGraphicsShaderStorageBlocks),
       mPipelineHasGraphicsUniformBuffers(other.mPipelineHasGraphicsUniformBuffers),
       mPipelineHasComputeUniformBuffers(other.mPipelineHasComputeUniformBuffers),
       mPipelineHasGraphicsStorageBuffers(other.mPipelineHasGraphicsStorageBuffers),
@@ -111,12 +112,14 @@ void ProgramExecutable::reset()
     mLinkedTransformFeedbackVaryings.clear();
     mUniforms.clear();
     mUniformBlocks.clear();
-    mShaderStorageBlocks.clear();
+    mComputeShaderStorageBlocks.clear();
+    mGraphicsShaderStorageBlocks.clear();
     mAtomicCounterBuffers.clear();
     mOutputVariables.clear();
     mOutputLocations.clear();
     mSamplerBindings.clear();
-    mImageBindings.clear();
+    mComputeImageBindings.clear();
+    mGraphicsImageBindings.clear();
 
     mPipelineHasGraphicsUniformBuffers       = false;
     mPipelineHasComputeUniformBuffers        = false;
@@ -295,9 +298,10 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
 
 void ProgramExecutable::updateActiveImages(const ProgramExecutable &executable)
 {
-    for (uint32_t imageIndex = 0; imageIndex < mImageBindings.size(); ++imageIndex)
+    const std::vector<ImageBinding> &imageBindings = getImageBindings();
+    for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
     {
-        const gl::ImageBinding &imageBinding = mImageBindings[imageIndex];
+        const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
         if (imageBinding.unreferenced)
         {
             continue;
