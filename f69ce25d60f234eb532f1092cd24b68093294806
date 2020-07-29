@@ -50,6 +50,42 @@
       "revId": "f69ce25d60f234eb532f1092cd24b68093294806",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "345acba7_8987ab83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-07-29T18:32:37Z",
+      "side": 1,
+      "message": "Thanks. Fixed in the current patch set.",
+      "parentUuid": "b29d2956_393a10ff",
+      "revId": "f69ce25d60f234eb532f1092cd24b68093294806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "279f6e8d_051c76d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-07-29T18:32:37Z",
+      "side": 1,
+      "message": "If GetSystemInfo returns false, EGLDisplay initialization in the CGL backend (for macOS) fails. Please see https://bugs.webkit.org/show_bug.cgi?id\u003d213479 .",
+      "parentUuid": "c3876efb_2ad5a4b0",
+      "revId": "f69ce25d60f234eb532f1092cd24b68093294806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
