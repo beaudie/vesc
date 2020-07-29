@@ -392,7 +392,8 @@ const gl::InternalFormat &Framebuffer11::getImplementationColorReadFormat(
 
 angle::Result Framebuffer11::syncState(const gl::Context *context,
                                        GLenum binding,
-                                       const gl::Framebuffer::DirtyBits &dirtyBits)
+                                       const gl::Framebuffer::DirtyBits &dirtyBits,
+                                       gl::Command command)
 {
     ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
     ANGLE_TRY(FramebufferD3D::syncState(context, binding, dirtyBits));
