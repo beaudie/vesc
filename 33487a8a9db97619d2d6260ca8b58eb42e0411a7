@@ -54,6 +54,23 @@
     },
     {
       "key": {
+        "uuid": "5b5eb447_7e7d471d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-30T14:54:46Z",
+      "side": 1,
+      "message": "Hey Alexis, if you can\u0027t confirm this fixed the crash I might defer working on this. The real solution to timeout is to force an error to the application (Chrome) which would restart the GPU process. We can\u0027t continue execution if we get a timeout.",
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da8a4ee7_e9c8a5ea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
