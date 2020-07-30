@@ -36,6 +36,52 @@
     },
     {
       "key": {
+        "uuid": "da8a4ee7_e9c8a5ea",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-30T01:32:47Z",
+      "side": 1,
+      "message": "`onTimeout()` is how we would normally name something like this.",
+      "range": {
+        "startLine": 423,
+        "startChar": 9,
+        "endLine": 423,
+        "endChar": 28
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "691350c1_b4e21632",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-30T01:32:47Z",
+      "side": 1,
+      "message": "I\u0027d call this `waitAllQueuesIdle`. This is not doing any submission (which is what gl\u0027s flush means).",
+      "range": {
+        "startLine": 83,
+        "startChar": 9,
+        "endLine": 83,
+        "endChar": 23
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce117f5a_bef0cb29",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
         "patchSetId": 1
@@ -76,6 +122,23 @@
         "endLine": 131,
         "endChar": 24
       },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9194fc53_f1b75b4f",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-30T01:32:47Z",
+      "side": 1,
+      "message": "From the description of the commit it was not clear the timeout is referring to a sync object timeout!\n\nI don\u0027t understand how this relates to garbage collection. Did you perhaps intend to call this in CommandQueue::finishToSerial?",
       "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
