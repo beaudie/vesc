@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "7ef5b31c_c6353174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-30T20:57:53Z",
+      "side": 1,
+      "message": "It\u0027s not an error to delete an imageview if it\u0027s in a descriptor set. If you were to bind and draw with that descriptor set, there\u0027d be some kind of error (to the best of my knowledge without diving into the spec).",
+      "parentUuid": "bd659fe6_3752ddfb",
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da8a4ee7_e9c8a5ea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
