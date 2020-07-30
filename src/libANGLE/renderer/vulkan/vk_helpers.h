@@ -877,7 +877,15 @@ struct CommandBufferHelper : angle::NonCopyable
 
     void executeBarriers(vk::PrimaryCommandBuffer *primary);
 
-    bool empty() const { return (!mCommandBuffer.empty() || mRenderPassStarted) ? false : true; }
+    bool empty() const
+    {
+        if (mIsRenderPassCommandBuffer && !mRenderPassStarted)
+        {
+            ASSERT(mCommandBuffer.empty());
+        }
+        return (!mCommandBuffer.empty() || mRenderPassStarted) ? false : true;
+    }
+
     void setHasRenderPass(bool hasRenderPass) { mIsRenderPassCommandBuffer = hasRenderPass; }
     void reset();
     void releaseToContextQueue(ContextVk *contextVk);
