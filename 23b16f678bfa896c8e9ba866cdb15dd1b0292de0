@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "4d714b33_f49126e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-30T01:45:38Z",
+      "side": 1,
+      "message": "I\u0027m glad you are implementing these extensions Jonah, they will be a big time saver when we get around to implementing them over Vulkan",
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2de4493_b250f2d1",
         "filename": "src/libANGLE/ImageIndex.cpp",
         "patchSetId": 6
@@ -121,6 +138,29 @@
         "startChar": 8,
         "endLine": 2768,
         "endChar": 18
+      },
+      "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "420b2c76_f4ec87d6",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-30T01:45:38Z",
+      "side": 1,
+      "message": "nit: you can just `return mTexture-\u003esetBuffer(...)`",
+      "range": {
+        "startLine": 1784,
+        "startChar": 3,
+        "endLine": 1784,
+        "endChar": 14
       },
       "revId": "23b16f678bfa896c8e9ba866cdb15dd1b0292de0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
