@@ -51,6 +51,24 @@
       "revId": "20442694f828def96eebc09372cf239d4ebccbab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "994bd81b_13da47ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-30T21:34:54Z",
+      "side": 1,
+      "message": "I didn\u0027t treat ANGLE as the native driver, I let the tests use ANGLE\u0027s loader, which I believe is what the bots do.",
+      "parentUuid": "48c22366_28f401e3",
+      "revId": "20442694f828def96eebc09372cf239d4ebccbab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
