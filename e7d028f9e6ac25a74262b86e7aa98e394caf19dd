@@ -70,6 +70,30 @@
       "revId": "e7d028f9e6ac25a74262b86e7aa98e394caf19dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5376736f_4610bc78",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-30T17:12:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55ed7aac_a52a7244",
+      "range": {
+        "startLine": 362,
+        "startChar": 7,
+        "endLine": 365,
+        "endChar": 10
+      },
+      "revId": "e7d028f9e6ac25a74262b86e7aa98e394caf19dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
