@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "460fe65c_df1c3336",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-30T17:15:46Z",
+      "side": 1,
+      "message": "Actually to correct myself: I think you have to enable depth test to clear depth buffer. I am not 100% sure of this, correct me if I am wrong. But this optimization is to try to optimize out the clear (while depth test is enabled) that is not been used and stored.",
+      "parentUuid": "f5054e4f_ddcec490",
+      "range": {
+        "startLine": 9,
+        "startChar": 66,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "3f6f2643b43f5274df283b6cda4513fa8c51b941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec95c469_7330dd87",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
