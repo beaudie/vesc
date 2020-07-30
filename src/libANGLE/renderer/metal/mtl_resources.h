@@ -63,6 +63,10 @@ class Resource : angle::NonCopyable
     bool isCPUReadMemNeedSync() const { return mUsageRef->cpuReadMemNeedSync; }
     void resetCPUReadMemNeedSync() { mUsageRef->cpuReadMemNeedSync = false; }
 
+    // These functions are useful for BufferMtl to know whether it should update the shadow copy
+    bool isCPUReadMemDirty() const { return mUsageRef->cpuReadMemDirty; }
+    void resetCPUReadMemDirty() { mUsageRef->cpuReadMemDirty = false; }
+
   protected:
     Resource();
     // Share the GPU usage ref with other resource
@@ -73,12 +77,17 @@ class Resource : angle::NonCopyable
   private:
     struct UsageRef
     {
+        UsageRef();
+
         // The id of the last command buffer that is using this resource.
-        uint64_t cmdBufferQueueSerial = 0;
+        uint64_t cmdBufferQueueSerial;
 
         // This flag means the resource was issued to be modified by GPU, if CPU wants to read
         // its content, explicit synchronization call must be invoked.
-        bool cpuReadMemNeedSync = false;
+        bool cpuReadMemNeedSync : 1;
+
+        // This flag is useful for BufferMtl to know whether it should update the shadow copy
+        bool cpuReadMemDirty : 1;
     };
 
     // One resource object might just be a view of another resource. For example, a texture 2d
@@ -183,7 +192,7 @@ class Texture final : public Resource,
     Texture(Texture *original, MTLPixelFormat format);
     Texture(Texture *original, MTLTextureType type, NSRange mipmapLevelRange, uint32_t slice);
 
-    void syncContent(ContextMtl *context);
+    void syncContentIfNeeded(ContextMtl *context);
 
     // This property is shared between this object and its views:
     std::shared_ptr<MTLColorWriteMask> mColorWritableMask;
@@ -199,6 +208,8 @@ class Buffer final : public Resource, public WrappedObject<id<MTLBuffer>>
 
     angle::Result reset(ContextMtl *context, size_t size, const uint8_t *data);
 
+    const uint8_t *mapReadOnly(ContextMtl *context);
+    uint8_t *map(ContextMtl *context, bool readonly);
     uint8_t *map(ContextMtl *context);
     void unmap(ContextMtl *context);
 
@@ -206,6 +217,8 @@ class Buffer final : public Resource, public WrappedObject<id<MTLBuffer>>
 
   private:
     Buffer(ContextMtl *context, size_t size, const uint8_t *data);
+
+    bool mMapReadOnly = true;
 };
 
 }  // namespace mtl

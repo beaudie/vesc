@@ -797,7 +797,8 @@ angle::Result TextureMtl::bindToShader(const gl::Context *context,
 {
     ASSERT(mNativeTexture);
 
-    float maxLodClamp = FLT_MAX;
+    // NOTE(hqle): Intel GPU seems to have bugs if maxLodClamp is set to FLT_MAX or 16.
+    float maxLodClamp = 1000;
 
     cmdEncoder->setTexture(shaderType, mNativeTexture, textureSlotIndex);
     cmdEncoder->setSamplerState(shaderType, mMetalSamplerState, 0, maxLodClamp, samplerSlotIndex);
