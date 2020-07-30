@@ -86,6 +86,30 @@
       "revId": "9aaf77b07dfdb6d2a2ba7277d0b9900be822ae30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ebc3c39_99ac10c7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-30T22:42:28Z",
+      "side": 1,
+      "message": "I like Jamie\u0027s suggestion here.\nMaybe include ASSERT(hasStartedRenderPass()); as well just to be clear.",
+      "parentUuid": "c831059b_8327592d",
+      "range": {
+        "startLine": 532,
+        "startChar": 9,
+        "endLine": 532,
+        "endChar": 30
+      },
+      "revId": "9aaf77b07dfdb6d2a2ba7277d0b9900be822ae30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
