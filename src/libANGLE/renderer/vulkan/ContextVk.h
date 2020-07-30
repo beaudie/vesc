@@ -529,6 +529,11 @@ class ContextVk : public ContextImpl, public vk::Context
                                           vk::CommandBuffer **commandBufferOut);
 
     bool hasStartedRenderPass() const { return mRenderPassCommands->started(); }
+    bool hasStartedRenderPassWithCommands() const
+    {
+        ASSERT(mRenderPassCommands->started());
+        return !mRenderPassCommands->getCommandBuffer().empty();
+    }
 
     vk::CommandBufferHelper &getStartedRenderPassCommands()
     {
