@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a8df4a1_d1784ceb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-30T18:17:43Z",
+      "side": 1,
+      "message": "This is not really urgent, but I\u0027m worrying this CL would have more conflicts if it is kept here longer. Especially ShaderLang.h where ANGLE_SH_VERSION could be modified by many CLs.",
+      "revId": "37055be489639bf262c904be1291a5b2297c4da8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
