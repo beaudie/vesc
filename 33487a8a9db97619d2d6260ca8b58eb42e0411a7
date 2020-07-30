@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "6401a35a_5232ead2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T20:26:55Z",
+      "side": 1,
+      "message": "Ok, so I managed to reproduce it a few times (once every ~6-7 times). I tried forcing a timeout and I could no longer reproduce the issue, so it\u0027s more likely that the issue is not a timeout. The issue always seems to be a VkImageView object getting deleted while still being referenced by a DescriptorSet. Which brings the following question: does ANGLE delete VkImageView objects after having done the DescriptorSet updates? And is it legal to do that?",
+      "parentUuid": "5b5eb447_7e7d471d",
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da8a4ee7_e9c8a5ea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
