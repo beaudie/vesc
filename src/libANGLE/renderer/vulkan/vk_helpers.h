@@ -877,11 +877,17 @@ struct CommandBufferHelper : angle::NonCopyable
 
     void executeBarriers(vk::PrimaryCommandBuffer *primary);
 
-    bool empty() const { return (!mCommandBuffer.empty() || mRenderPassStarted) ? false : true; }
     void setHasRenderPass(bool hasRenderPass) { mIsRenderPassCommandBuffer = hasRenderPass; }
     void reset();
     void releaseToContextQueue(ContextVk *contextVk);
 
+    // Returns true if we have any work to execute. For renderpass command buffer, even if underline
+    // command buffer is empty, we may still have an renderpass with empty command buffer just to do
+    // clear.
+    bool empty() const
+    {
+        return mIsRenderPassCommandBuffer ? mRenderPassStarted : mCommandBuffer.empty();
+    }
     // RenderPass related functions
     bool started() const
     {
