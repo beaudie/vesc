@@ -1576,21 +1576,27 @@ angle::Result Framebuffer::blit(const Context *context,
 
 int Framebuffer::getSamples(const Context *context) const
 {
-    return (isComplete(context) ? getCachedSamples(context, AttachmentSampleType::Emulated) : 0);
+    return isComplete(context) ? getCachedSamples(context, AttachmentSampleType::Emulated) : 0;
 }
 
-int Framebuffer::getResourceSamples(const Context *context) const
+int Framebuffer::getReadBufferResourceSamples(const Context *context) const
 {
-    return (isComplete(context) ? getCachedSamples(context, AttachmentSampleType::Resource) : 0);
+    if (!isComplete(context))
+    {
+        return 0;
+    }
+
+    ASSERT(mCachedStatus.valid() && mCachedStatus.value() == GL_FRAMEBUFFER_COMPLETE);
+
+    const FramebufferAttachment *readAttachment = mState.getReadAttachment();
+    return readAttachment ? readAttachment->getResourceSamples() : 0;
 }
 
 int Framebuffer::getCachedSamples(const Context *context, AttachmentSampleType sampleType) const
 {
-    ASSERT(mCachedStatus.valid() && mCachedStatus.value() == GL_FRAMEBUFFER_COMPLETE);
-
     // For a complete framebuffer, all attachments must have the same sample count.
     // In this case return the first nonzero sample size.
-    const auto *firstNonNullAttachment = mState.getFirstNonNullAttachment();
+    const FramebufferAttachment *firstNonNullAttachment = mState.getFirstNonNullAttachment();
     if (firstNonNullAttachment)
     {
         ASSERT(firstNonNullAttachment->isAttached());

@@ -278,7 +278,7 @@ class Framebuffer final : public angle::ObserverInterface,
 
     // This method calls checkStatus.
     int getSamples(const Context *context) const;
-    int getResourceSamples(const Context *context) const;
+    int getReadBufferResourceSamples(const Context *context) const;
 
     angle::Result getSamplePosition(const Context *context, size_t index, GLfloat *xy) const;
 
