@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "bd659fe6_3752ddfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T20:33:00Z",
+      "side": 1,
+      "message": "Huh? Using the descriptor set would be an error? What do you mean?",
+      "parentUuid": "848ef97b_e38cc8d7",
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da8a4ee7_e9c8a5ea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
