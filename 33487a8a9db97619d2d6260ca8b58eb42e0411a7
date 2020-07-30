@@ -33,6 +33,52 @@
       "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce117f5a_bef0cb29",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-30T00:44:14Z",
+      "side": 1,
+      "message": "nit:\n    // This object might be in use *until the queues are idle",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b0f8d86_8171ba96",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-30T00:44:14Z",
+      "side": 1,
+      "message": "nit: I think calling this \u0027mTimedOut\u0027 or \u0027mCommandTimedOut\u0027 would be better, since this name contradicts isCurrentlyInUse() - it\u0027s both in use and not in use (which is why it\u0027s being freed).",
+      "range": {
+        "startLine": 131,
+        "startChar": 9,
+        "endLine": 131,
+        "endChar": 24
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
