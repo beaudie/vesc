@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "0e0ce236_56fe58fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T13:31:40Z",
+      "side": 1,
+      "message": "I have not been able to reproduce it at all. I\u0027ll try forcing an early exit with a timeout error code in SwiftShader to see if it triggers anything more easily.",
+      "parentUuid": "a03df4e6_fd827136",
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da8a4ee7_e9c8a5ea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
@@ -56,6 +74,30 @@
       "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f9f1ce_36da680c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T13:31:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "da8a4ee7_e9c8a5ea",
+      "range": {
+        "startLine": 423,
+        "startChar": 9,
+        "endLine": 423,
+        "endChar": 28
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "211d4485_15da9035",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T13:31:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "691350c1_b4e21632",
+      "range": {
+        "startLine": 83,
+        "startChar": 9,
+        "endLine": 83,
+        "endChar": 23
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce117f5a_bef0cb29",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
         "patchSetId": 1
@@ -102,6 +168,30 @@
       "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8fa2896_a6333220",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T13:31:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ce117f5a_bef0cb29",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +218,30 @@
     },
     {
       "key": {
+        "uuid": "94fb3289_daa158c6",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T13:31:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3b0f8d86_8171ba96",
+      "range": {
+        "startLine": 131,
+        "startChar": 9,
+        "endLine": 131,
+        "endChar": 24
+      },
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9194fc53_f1b75b4f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 1
@@ -139,6 +253,24 @@
       "writtenOn": "2020-07-30T01:32:47Z",
       "side": 1,
       "message": "From the description of the commit it was not clear the timeout is referring to a sync object timeout!\n\nI don\u0027t understand how this relates to garbage collection. Did you perhaps intend to call this in CommandQueue::finishToSerial?",
+      "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98926235_494f9be0",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-07-30T13:31:40Z",
+      "side": 1,
+      "message": "I\u0027m poking at the dark here, so it\u0027s entirely possible that I did this wrong.\nWhat I was looking for is areas of the code that essentially ignore fence timeouts, allowing the garbage collection to resume. What I think happens is:\n1) queue submit\n2) wait for fences -\u003e timeout (because SwiftShader is unexpectedly slow for some shader processing or something like that)\n3) garbage collecting objects still used within queue submit\n4) objects are released and queue submit is still running -\u003e use after free\n\nI was under the impression that fences were sync objects in ANGLE, but you\u0027re telling me they\u0027re not? Or that this scenario is not possible?",
+      "parentUuid": "9194fc53_f1b75b4f",
       "revId": "33487a8a9db97619d2d6260ca8b58eb42e0411a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
