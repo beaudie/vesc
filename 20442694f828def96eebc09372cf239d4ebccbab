@@ -16,6 +16,24 @@
       "revId": "20442694f828def96eebc09372cf239d4ebccbab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0105463f_593e531c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-30T20:59:47Z",
+      "side": 1,
+      "message": "I tested locally with an app that triggers errors. I don\u0027t think this is working.  This is in the logcat:\n\nE ANGLE   : ERR: DebugUtilsMessenger(332): [ UNASSIGNED-CoreValidation-DrawState-InvalidRenderArea ] Validation Error: [ UNASSIGNED-CoreValidation-DrawState-InvalidRenderArea ] Object 0: handle \u003d 0x1d550000001d55, type \u003d VK_OBJECT_TYPE_RENDER_PASS; | MessageID \u003d 0x44824371 | Cannot execute a render pass with renderArea not within the bound of the framebuffer. RenderArea: x 0, y 0, width 3040, height 1440. Framebuffer: width 1440, height 3040.\nE ANGLE   :                             Object: 0x1d550000001d55 (type \u003d Render Pass(18))\n\nBut the tests pass:\n\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 2 tests from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 2 tests from TracePerfTest\n[ RUN      ] TracePerfTest.Run/vulkan_angry_birds_2_1500\n*RESULT TracePerf_vulkan.wall_time: angry_birds_2_1500\u003d 88923616.8189778477 ns\n*RESULT TracePerf_vulkan.wall_time: angry_birds_2_1500\u003d 89569232.3630845100 ns\n*RESULT TracePerf_vulkan.wall_time: angry_birds_2_1500\u003d 88488081.7267747521 ns\n[       OK ] TracePerfTest.Run/vulkan_angry_birds_2_1500 (6364 ms)\n[ RUN      ] TracePerfTest.Run/vulkan_candy_crush_500   \n*RESULT TracePerf_vulkan.wall_time: candy_crush_500\u003d 41965436.6965203136 ns\n*RESULT TracePerf_vulkan.wall_time: candy_crush_500\u003d 43852807.7831269130 ns\n*RESULT TracePerf_vulkan.wall_time: candy_crush_500\u003d 41725074.3915286362 ns\n[       OK ] TracePerfTest.Run/vulkan_candy_crush_500 (5714 ms)\n[----------] 2 tests from TracePerfTest (12079 ms total)\n[----------] Global test environment tear-down\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 2 tests from 1 test suite ran. (12080 ms total)\n[  PASSED  ] 2 tests.",
+      "parentUuid": "b9268798_1efb8d6a",
+      "revId": "20442694f828def96eebc09372cf239d4ebccbab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
