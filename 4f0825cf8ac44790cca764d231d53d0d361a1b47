@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4abda0d_03778467",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-30T20:11:26Z",
+      "side": 1,
+      "message": "Let\u0027s land for now and work through Linux specific problems post commit.",
+      "revId": "4f0825cf8ac44790cca764d231d53d0d361a1b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
