@@ -22,6 +22,30 @@
       "revId": "e7d028f9e6ac25a74262b86e7aa98e394caf19dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b435fa_8cf06c5f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-07-30T14:53:24Z",
+      "side": 1,
+      "message": "Yeah, I noticed that too, but thought it might be slightly faster to keep the overall check.  May not be worth the micro-optimization if the code is less readable.",
+      "parentUuid": "3d655b18_31c19513",
+      "range": {
+        "startLine": 362,
+        "startChar": 7,
+        "endLine": 365,
+        "endChar": 10
+      },
+      "revId": "e7d028f9e6ac25a74262b86e7aa98e394caf19dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
