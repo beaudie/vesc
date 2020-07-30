@@ -110,6 +110,7 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
 
     void setWriteDependency(const ResourceRef &resource);
     void setReadDependency(const ResourceRef &resource);
+    void setReadDependency(Resource *resourcePtr);
 
     CommandQueue &cmdQueue() { return mCmdQueue; }
 
@@ -488,6 +489,17 @@ class BlitCommandEncoder final : public CommandEncoder
                                             MTLOrigin dstOrigin,
                                             MTLBlitOption blitOption);
 
+    BlitCommandEncoder &copyTextureToBuffer(const TextureRef &src,
+                                            uint32_t srcSlice,
+                                            uint32_t srcLevel,
+                                            MTLOrigin srcOrigin,
+                                            MTLSize srcSize,
+                                            const BufferRef &dst,
+                                            size_t dstOffset,
+                                            size_t dstBytesPerRow,
+                                            size_t dstBytesPerImage,
+                                            MTLBlitOption blitOption);
+
     BlitCommandEncoder &copyTexture(const TextureRef &src,
                                     uint32_t srcSlice,
                                     uint32_t srcLevel,
@@ -499,7 +511,8 @@ class BlitCommandEncoder final : public CommandEncoder
                                     MTLOrigin dstOrigin);
 
     BlitCommandEncoder &generateMipmapsForTexture(const TextureRef &texture);
-    BlitCommandEncoder &synchronizeResource(const TextureRef &texture);
+    BlitCommandEncoder &synchronizeResource(Buffer *bufferPtr);
+    BlitCommandEncoder &synchronizeResource(Texture *texturePtr);
 
   private:
     id<MTLBlitCommandEncoder> get()
