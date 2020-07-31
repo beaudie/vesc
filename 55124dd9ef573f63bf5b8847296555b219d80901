@@ -33,6 +33,23 @@
       "revId": "55124dd9ef573f63bf5b8847296555b219d80901",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26f8de49_0fffab25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T20:09:54Z",
+      "side": 1,
+      "message": "A bit weird that it\u0027s a Vulkan test added and skipped. Might as well have been introduced with the CL that fixes it.\n\nOk with me either way though.",
+      "revId": "55124dd9ef573f63bf5b8847296555b219d80901",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
