@@ -175,11 +175,13 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %token <lex> SAMPLER3D SAMPLER3DRECT SAMPLER2DSHADOW SAMPLERCUBESHADOW SAMPLER2DARRAYSHADOW SAMPLERVIDEOWEBGL
 %token <lex> SAMPLERCUBEARRAYOES SAMPLERCUBEARRAYSHADOWOES ISAMPLERCUBEARRAYOES USAMPLERCUBEARRAYOES
 %token <lex> SAMPLERCUBEARRAYEXT SAMPLERCUBEARRAYSHADOWEXT ISAMPLERCUBEARRAYEXT USAMPLERCUBEARRAYEXT
+%token <lex> SAMPLERBUFFER ISAMPLERBUFFER USAMPLERBUFFER
 %token <lex> SAMPLEREXTERNAL2DY2YEXT
 %token <lex> IMAGE2D IIMAGE2D UIMAGE2D IMAGE3D IIMAGE3D UIMAGE3D IMAGE2DARRAY IIMAGE2DARRAY UIMAGE2DARRAY
 %token <lex> IMAGECUBE IIMAGECUBE UIMAGECUBE
 %token <lex> IMAGECUBEARRAYOES IIMAGECUBEARRAYOES UIMAGECUBEARRAYOES
 %token <lex> IMAGECUBEARRAYEXT IIMAGECUBEARRAYEXT UIMAGECUBEARRAYEXT
+%token <lex> IMAGEBUFFER IIMAGEBUFFER UIMAGEBUFFER
 %token <lex> ATOMICUINT
 %token <lex> LAYOUT
 %token <lex> YUVCSCSTANDARDEXT YUVCSCSTANDARDEXTCONSTANT
@@ -1122,6 +1124,15 @@ type_specifier_nonarray
         }
         $$.initialize(EbtSamplerCubeArray, @1);
     }
+    | SAMPLERBUFFER {
+        if (context->getShaderVersion() < 320
+        && !context->checkCanUseExtension(@1, TExtension::OES_texture_buffer)
+        && !context->checkCanUseExtension(@1, TExtension::EXT_texture_buffer))
+        {
+            context->error(@1, "unsupported type", "__samplerBuffer");
+        }
+        $$.initialize(EbtSamplerBuffer, @1);
+    }
     | ISAMPLER2D {
         $$.initialize(EbtISampler2D, @1);
     }
@@ -1156,6 +1167,15 @@ type_specifier_nonarray
         }
         $$.initialize(EbtISamplerCubeArray, @1);
     }
+    | ISAMPLERBUFFER {
+        if (context->getShaderVersion() < 320
+        && !context->checkCanUseExtension(@1, TExtension::OES_texture_buffer)
+        && !context->checkCanUseExtension(@1, TExtension::EXT_texture_buffer))
+        {
+            context->error(@1, "unsupported type", "__isamplerBuffer");
+        }
+        $$.initialize(EbtISamplerBuffer, @1);
+    }
     | USAMPLER2D {
         $$.initialize(EbtUSampler2D, @1);
     }
@@ -1189,6 +1209,15 @@ type_specifier_nonarray
             context->error(@1, "unsupported type", "__usamplerCubeArray");
         }
         $$.initialize(EbtUSamplerCubeArray, @1);
+    }
+    | USAMPLERBUFFER {
+        if (context->getShaderVersion() < 320
+        && !context->checkCanUseExtension(@1, TExtension::OES_texture_buffer)
+        && !context->checkCanUseExtension(@1, TExtension::EXT_texture_buffer))
+        {
+            context->error(@1, "unsupported type", "__usamplerBuffer");
+        }
+        $$.initialize(EbtUSamplerBuffer, @1);
     }
     | SAMPLER2DSHADOW {
         $$.initialize(EbtSampler2DShadow, @1);
@@ -1329,6 +1358,33 @@ type_specifier_nonarray
             context->error(@1, "unsupported type", "__uimageCubeArray");
         }
         $$.initialize(EbtUImageCubeArray, @1);
+    }
+    | IMAGEBUFFER {
+        if (context->getShaderVersion() < 320
+        && !context->checkCanUseExtension(@1, TExtension::OES_texture_buffer)
+        && !context->checkCanUseExtension(@1, TExtension::EXT_texture_buffer))
+        {
+            context->error(@1, "unsupported type", "__imageBuffer");
+        }
+        $$.initialize(EbtImageBuffer, @1);
+    }
+    | IIMAGEBUFFER {
+        if (context->getShaderVersion() < 320
+        && !context->checkCanUseExtension(@1, TExtension::OES_texture_buffer)
+        && !context->checkCanUseExtension(@1, TExtension::EXT_texture_buffer))
+        {
+            context->error(@1, "unsupported type", "__iimageBuffer");
+        }
+        $$.initialize(EbtIImageBuffer, @1);
+    }
+    | UIMAGEBUFFER {
+        if (context->getShaderVersion() < 320
+        && !context->checkCanUseExtension(@1, TExtension::OES_texture_buffer)
+        && !context->checkCanUseExtension(@1, TExtension::EXT_texture_buffer))
+        {
+            context->error(@1, "unsupported type", "__uimageBuffer");
+        }
+        $$.initialize(EbtUImageBuffer, @1);
     }
     | ATOMICUINT {
         $$.initialize(EbtAtomicCounter, @1);
