@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c6af8f3c_130f8826",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-07-31T18:08:45Z",
+      "side": 1,
+      "message": "The best way is probably for us to file a bug report via Feedback Assistant on your behalf. But first - Kai, Corentin, Austin - have you run into this bug before and have you already reported it to Apple?\n\nQuyen, if they haven\u0027t run into this and reported it - could you log in to that tool, prepare a draft according to their template, and send us all of the information? Also could you prepare a small standalone test case that can be compiled with Xcode? Thanks much.",
+      "parentUuid": "b767a531_b77b8fe0",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cad31e0_5eaf51a2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
