@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30d8b523_9684c323",
+        "filename": "src/libANGLE/renderer/gl/egl/android/DisplayAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T19:21:21Z",
+      "side": 0,
+      "message": "hm, i didn\u0027t notice this. can we not support surfaceless with virtualized contexts if the driver doesn\u0027t?",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 85
+      },
+      "revId": "be774187b1cefe94f4717cbd747ebdea0b349478",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f71fbb2d_f16d31d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T19:21:21Z",
+      "side": 1,
+      "message": "There\u0027s a few places where you forgot to remove comments (I stopped marking after a bunch).\n\nThe DisplayAndroid is the concerning thing. I\u0027m not sure but maybe it would be better to just expose this extension in Metal instead. ",
+      "revId": "70988754bcc34dd532aaad2b3be3e75757019b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b7e37bbc_c9981f30",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T19:21:21Z",
+      "side": 1,
+      "message": "nit: remove before submitting",
+      "range": {
+        "startLine": 434,
+        "startChar": 4,
+        "endLine": 435,
+        "endChar": 38
+      },
+      "revId": "70988754bcc34dd532aaad2b3be3e75757019b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ccbb038_6c05843d",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T19:21:21Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 652,
+        "startChar": 4,
+        "endLine": 652,
+        "endChar": 48
+      },
+      "revId": "70988754bcc34dd532aaad2b3be3e75757019b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
