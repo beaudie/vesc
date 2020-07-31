@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b767a531_b77b8fe0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T14:47:42Z",
+      "side": 1,
+      "message": "adding Ken to help triage this. Ken, how do we report possible Metal bugs?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cad31e0_5eaf51a2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -42,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "7a5dad6c_21afc30e",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T14:47:42Z",
+      "side": 1,
+      "message": "+1\n\nEven better would to introduce FeaturesMtl that has a workaround encoded for Intel here.",
+      "parentUuid": "3aa0d12b_ec233a2f",
+      "range": {
+        "startLine": 800,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 0
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "21564822_1f745b4f",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
         "patchSetId": 2
@@ -53,6 +100,30 @@
       "writtenOn": "2020-07-31T13:25:10Z",
       "side": 1,
       "message": "What\u0027s the reason you\u0027re using a bitfield here?\nIt\u0027s preferred to just add the bools into the struct",
+      "range": {
+        "startLine": 87,
+        "startChar": 32,
+        "endLine": 87,
+        "endChar": 36
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eabeb293_6d7d3d76",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T14:47:42Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "21564822_1f745b4f",
       "range": {
         "startLine": 87,
         "startChar": 32,
