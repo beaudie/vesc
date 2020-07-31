@@ -374,6 +374,7 @@ class ANGLETestBase
 
     virtual void swapBuffers();
 
+    void setupEnvironmentVarsForCaptureReplay();
     void setupQuadVertexBuffer(GLfloat positionAttribZ, GLfloat positionAttribXYScale);
     void setupIndexedQuadVertexBuffer(GLfloat positionAttribZ, GLfloat positionAttribXYScale);
     void setupIndexedQuadIndexBuffer();
