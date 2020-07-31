@@ -22,6 +22,30 @@
       "revId": "31936036ca093fb11706bd8c2119be7bdb0a1f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0729a2f_796dcf85",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T20:36:03Z",
+      "side": 1,
+      "message": "No unfortunately PPOs can have both compute and graphics programs attached, and it\u0027s indeed possible to use the same PPO to do both graphics and compute work.",
+      "parentUuid": "35ed9f31_fd69b7f6",
+      "range": {
+        "startLine": 376,
+        "startChar": 3,
+        "endLine": 377,
+        "endChar": 52
+      },
+      "revId": "31936036ca093fb11706bd8c2119be7bdb0a1f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
