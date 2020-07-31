@@ -89,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "3fea2609_c6b5c0c5",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-31T15:17:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a4ab62c0_27d8434e",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5c2163e_a0f70972",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 3
@@ -100,6 +124,24 @@
       "writtenOn": "2020-07-31T13:41:50Z",
       "side": 1,
       "message": "Do you need an IOSurfaceLock call after you flush?\n(and IOSurfaceUnlock in releaseTexImage)\nI\u0027m not sure how IOSurfaces interact with metal when used as a MTLTexture, so I\u0027m just asking to be sure",
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa41cddc_5ed09768",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-07-31T15:17:15Z",
+      "side": 1,
+      "message": "No, I don\u0027t think IOSurfaceLock() is needed. IOSurfaceLock() is like glMapBuffer(), it is used to write to/read from the IOSurface on CPU side only.\nIOSurfaceLock() is not synchronized with metal rendering operations on the IOSurface though. Hence in the test code, I have to explicitly call glFinish() to make sure all GPU draws to IOSurface are completed before doing any IOSurface\u0027s CPU read.",
+      "parentUuid": "a5c2163e_a0f70972",
       "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
