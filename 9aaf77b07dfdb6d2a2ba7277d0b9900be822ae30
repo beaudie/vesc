@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0d8c4a7d_28774035",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:26:49Z",
+      "side": 1,
+      "message": "Deal with in the separate CL",
+      "parentUuid": "c184cfa9_fa4bc149",
+      "range": {
+        "startLine": 531,
+        "startChar": 48,
+        "endLine": 531,
+        "endChar": 76
+      },
+      "revId": "9aaf77b07dfdb6d2a2ba7277d0b9900be822ae30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c831059b_8327592d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
@@ -163,6 +187,30 @@
       "revId": "9aaf77b07dfdb6d2a2ba7277d0b9900be822ae30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84b88ace_ad17ab0a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ebc3c39_99ac10c7",
+      "range": {
+        "startLine": 532,
+        "startChar": 9,
+        "endLine": 532,
+        "endChar": 30
+      },
+      "revId": "9aaf77b07dfdb6d2a2ba7277d0b9900be822ae30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
