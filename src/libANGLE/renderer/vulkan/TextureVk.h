@@ -191,8 +191,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Normally, initialize the image with enabled mipmap level counts.
     angle::Result ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels);
 
-    TextureSerial getSerial() const { return mSerial; }
-
     void overrideStagingBufferSizeForTesting(size_t initialSizeForTesting)
     {
         mStagingBufferInitialSize = initialSizeForTesting;
@@ -432,9 +430,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Render targets stored as vector of vectors
     // Level is first dimension, layer is second
     std::vector<RenderTargetVector> mRenderTargets;
-
-    // The unique object id is used for cache indexing.
-    TextureSerial mSerial;
 
     // Overridden in some tests.
     size_t mStagingBufferInitialSize;

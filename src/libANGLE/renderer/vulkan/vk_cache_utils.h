@@ -796,7 +796,7 @@ class TextureDescriptorDesc
     TextureDescriptorDesc(const TextureDescriptorDesc &other);
     TextureDescriptorDesc &operator=(const TextureDescriptorDesc &other);
 
-    void update(size_t index, TextureSerial textureSerial, SamplerSerial samplerSerial);
+    void update(size_t index, ImageSerial imageSerial, SamplerSerial samplerSerial);
     size_t hash() const;
     void reset();
 
@@ -809,7 +809,7 @@ class TextureDescriptorDesc
     uint32_t mMaxIndex;
     struct TexUnitSerials
     {
-        uint32_t texture;
+        uint32_t image;
         uint32_t sampler;
     };
     gl::ActiveTextureArray<TexUnitSerials> mSerials;
@@ -969,11 +969,16 @@ struct hash<rx::vk::LayerLevel>
     }
 };
 
-template <>
-struct hash<rx::BufferSerial>
-{
-    size_t operator()(const rx::BufferSerial &key) const { return key.getValue(); }
-};
+// See Resource Serial types defined in vk_utils.h.
+#define ANGLE_HASH_VK_SERIAL(Type)                                                          \
+    template <>                                                                             \
+    struct hash<rx::vk::Type##Serial>                                                       \
+    {                                                                                       \
+        size_t operator()(const rx::vk::Type##Serial &key) const { return key.getValue(); } \
+    };
+
+ANGLE_VK_SERIAL_OP(ANGLE_HASH_VK_SERIAL)
+
 }  // namespace std
 
 namespace rx

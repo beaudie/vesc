@@ -285,6 +285,33 @@ EventName GetTraceEventName(const char *title, uint32_t counter)
 }
 }  // anonymous namespace
 
+// ContextVk::ScopedDescriptorSetUpdates implementation.
+class ContextVk::ScopedDescriptorSetUpdates final : angle::NonCopyable
+{
+  public:
+    ANGLE_INLINE ScopedDescriptorSetUpdates(ContextVk *contextVk) : mContextVk(contextVk) {}
+
+    ANGLE_INLINE ~ScopedDescriptorSetUpdates()
+    {
+        if (mContextVk->mWriteInfos.empty())
+        {
+            ASSERT(mContextVk->mBufferInfos.empty());
+            ASSERT(mContextVk->mImageInfos.empty());
+            return;
+        }
+
+        vkUpdateDescriptorSets(mContextVk->getDevice(),
+                               static_cast<uint32_t>(mContextVk->mWriteInfos.size()),
+                               mContextVk->mWriteInfos.data(), 0, nullptr);
+        mContextVk->mWriteInfos.clear();
+        mContextVk->mBufferInfos.clear();
+        mContextVk->mImageInfos.clear();
+    }
+
+  private:
+    ContextVk *mContextVk;
+};
+
 ContextVk::DriverUniformsDescriptorSet::DriverUniformsDescriptorSet()
     : descriptorSet(VK_NULL_HANDLE), dynamicOffset(0)
 {}
@@ -1505,7 +1532,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     vk::BufferHelper *uniformBuffer      = mDefaultUniformStorage.getCurrentBuffer();
     vk::UniformsAndXfbDesc xfbBufferDesc = transformFeedbackVk->getTransformFeedbackDesc();
     xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
-                                                           : kInvalidBufferSerial);
+                                                           : vk::kInvalidBufferSerial);
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(), uniformBuffer, this,
         xfbBufferDesc);
@@ -3736,7 +3763,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     }
 
     const vk::BufferHelper *buffer = driverUniforms->dynamicBuffer.getCurrentBuffer();
-    BufferSerial bufferSerial      = buffer->getBufferSerial();
+    vk::BufferSerial bufferSerial  = buffer->getBufferSerial();
     // Look up in the cache first
     auto iter = driverUniforms->descriptorSetCache.find(bufferSerial);
     if (iter != driverUniforms->descriptorSetCache.end())
@@ -3826,16 +3853,16 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         TextureVk *textureVk = vk::GetImpl(texture);
 
         SamplerVk *samplerVk;
-        SamplerSerial samplerSerial;
+        vk::SamplerSerial samplerSerial;
         if (sampler == nullptr)
         {
             samplerVk     = nullptr;
-            samplerSerial = rx::kInvalidSamplerSerial;
+            samplerSerial = vk::kInvalidSamplerSerial;
         }
         else
         {
             samplerVk     = vk::GetImpl(sampler);
-            samplerSerial = samplerVk->getSerial();
+            samplerSerial = samplerVk->getSamplerSerial();
         }
 
         if (textureVk->getImage().hasImmutableSampler())
@@ -3847,7 +3874,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         mActiveTextures[textureUnit].sampler = samplerVk;
         // Cache serials from sampler and texture, but re-use texture if no sampler bound
         ASSERT(textureVk != nullptr);
-        mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
+        mActiveTexturesDesc.update(textureUnit, textureVk->getImage().getImageSerial(),
+                                   samplerSerial);
     }
 
     if (haveImmutableSampler)
@@ -4695,45 +4723,6 @@ void ContextVk::growCapacity(std::vector<T> *mInfos, size_t newSize)
             }
         }
     }
-}
-
-// ScopedDescriptorSetUpdates
-ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::ScopedDescriptorSetUpdates(ContextVk *contextVk)
-    : mContextVk(contextVk)
-{}
-
-ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::~ScopedDescriptorSetUpdates()
-{
-    if (mContextVk->mWriteInfos.empty())
-    {
-        ASSERT(mContextVk->mBufferInfos.empty());
-        ASSERT(mContextVk->mImageInfos.empty());
-        return;
-    }
-
-    vkUpdateDescriptorSets(mContextVk->getDevice(),
-                           static_cast<uint32_t>(mContextVk->mWriteInfos.size()),
-                           mContextVk->mWriteInfos.data(), 0, nullptr);
-    mContextVk->mWriteInfos.clear();
-    mContextVk->mBufferInfos.clear();
-    mContextVk->mImageInfos.clear();
-}
-
-BufferSerial ContextVk::generateBufferSerial()
-{
-    return mShareGroupVk->generateBufferSerial();
-}
-TextureSerial ContextVk::generateTextureSerial()
-{
-    return mShareGroupVk->generateTextureSerial();
-}
-SamplerSerial ContextVk::generateSamplerSerial()
-{
-    return mShareGroupVk->generateSamplerSerial();
-}
-ImageViewSerial ContextVk::generateAttachmentImageViewSerial()
-{
-    return mShareGroupVk->generateImageViewSerial();
 }
 
 void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)

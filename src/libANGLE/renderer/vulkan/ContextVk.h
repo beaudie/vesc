@@ -468,10 +468,6 @@ class ContextVk : public ContextImpl, public vk::Context
     // signature for each descriptor set. This allows us to keep a cache of descriptor sets and
     // avoid calling vkAllocateDesctiporSets each texture update.
     const vk::TextureDescriptorDesc &getActiveTexturesDesc() const { return mActiveTexturesDesc; }
-    ImageViewSerial generateAttachmentImageViewSerial();
-    BufferSerial generateBufferSerial();
-    TextureSerial generateTextureSerial();
-    SamplerSerial generateSamplerSerial();
 
     angle::Result updateScissor(const gl::State &glState);
 
@@ -626,7 +622,7 @@ class ContextVk : public ContextImpl, public vk::Context
         uint32_t dynamicOffset;
         vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
         vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-        std::unordered_map<BufferSerial, VkDescriptorSet> descriptorSetCache;
+        std::unordered_map<vk::BufferSerial, VkDescriptorSet> descriptorSetCache;
 
         DriverUniformsDescriptorSet();
         ~DriverUniformsDescriptorSet();
@@ -676,6 +672,8 @@ class ContextVk : public ContextImpl, public vk::Context
         double gpuTimestampS;
         double cpuTimestampS;
     };
+
+    class ScopedDescriptorSetUpdates;
 
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
@@ -1056,15 +1054,6 @@ class ContextVk : public ContextImpl, public vk::Context
     std::vector<VkDescriptorBufferInfo> mBufferInfos;
     std::vector<VkDescriptorImageInfo> mImageInfos;
     std::vector<VkWriteDescriptorSet> mWriteInfos;
-    class ScopedDescriptorSetUpdates final : angle::NonCopyable
-    {
-      public:
-        ScopedDescriptorSetUpdates(ContextVk *contextVk);
-        ~ScopedDescriptorSetUpdates();
-
-      private:
-        ContextVk *mContextVk;
-    };
 
     ShareGroupVk *mShareGroupVk;
 

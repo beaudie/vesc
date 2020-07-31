@@ -2216,7 +2216,7 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    mSerial = contextVk->generateBufferSerial();
+    mSerial = renderer->getResourceSerialFactory().generateBufferSerial();
     mSize   = requestedCreateInfo.size;
 
     VkBufferCreateInfo modifiedCreateInfo;
@@ -2562,7 +2562,7 @@ void ImageHelper::resetCachedProperties()
     mExtents                     = {};
     mFormat                      = nullptr;
     mSamples                     = 1;
-    mSerial                      = rx::kZeroSerial;
+    mSerial                      = vk::kInvalidImageSerial;
     mTilingMode                  = VK_IMAGE_TILING_OPTIMAL;
     mUsage                       = 0;
     mCurrentLayout               = ImageLayout::Undefined;
@@ -2596,7 +2596,6 @@ angle::Result ImageHelper::init(Context *context,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
-    mSerial = rx::kZeroSerial;
     return initExternal(context, textureType, extents, format, samples, usage,
                         kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
                         maxLevel, mipLevels, layerCount);
@@ -2661,12 +2660,14 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     stageClearIfEmulatedFormat(context);
 
+    mImageSerial = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+
     return angle::Result::Continue;
 }
 
 void ImageHelper::releaseImage(RendererVk *renderer)
 {
-    mSerial = rx::kZeroSerial;
+    mSerial = vk::kInvalidImageSerial;
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
 }
 
@@ -2957,7 +2958,7 @@ void ImageHelper::destroy(RendererVk *renderer)
     mImageType     = VK_IMAGE_TYPE_2D;
     mLayerCount    = 0;
     mLevelCount    = 0;
-    mSerial        = rx::kZeroSerial;
+    mSerial        = vk::kInvalidImageSerial;
 }
 
 void ImageHelper::init2DWeakReference(Context *context,
@@ -5295,7 +5296,8 @@ ImageViewSerial ImageViewHelper::getAssignSerial(ContextVk *contextVk,
     LayerLevel layerLevelPair = {layer, levelGL};
     if (mSerialCache.find(layerLevelPair) == mSerialCache.end())
     {
-        mSerialCache[layerLevelPair] = contextVk->generateAttachmentImageViewSerial();
+        vk::ResourceSerialFactory &factory = contextVk->getRenderer()->getResourceSerialFactory();
+        mSerialCache[layerLevelPair]       = factory.generateImageViewSerial();
     }
     return mSerialCache[layerLevelPair];
 }

@@ -1720,7 +1720,7 @@ TextureDescriptorDesc &TextureDescriptorDesc::operator=(const TextureDescriptorD
     default;
 
 void TextureDescriptorDesc::update(size_t index,
-                                   TextureSerial textureSerial,
+                                   ImageSerial imageSerial,
                                    SamplerSerial samplerSerial)
 {
     if (index >= mMaxIndex)
@@ -1730,9 +1730,9 @@ void TextureDescriptorDesc::update(size_t index,
 
     // If the serial number overflows we should defragment and regenerate all serials.
     // There should never be more than UINT_MAX textures alive at a time.
-    ASSERT(textureSerial.getValue() < std::numeric_limits<uint32_t>::max());
+    ASSERT(imageSerial.getValue() < std::numeric_limits<uint32_t>::max());
     ASSERT(samplerSerial.getValue() < std::numeric_limits<uint32_t>::max());
-    mSerials[index].texture = static_cast<uint32_t>(textureSerial.getValue());
+    mSerials[index].image   = static_cast<uint32_t>(imageSerial.getValue());
     mSerials[index].sampler = static_cast<uint32_t>(samplerSerial.getValue());
 }
 
