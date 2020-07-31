@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4389a52_fc48fdb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T13:41:50Z",
+      "side": 1,
+      "message": "Nice work! I will help with the Chrome integration.\n\nJust a note that Chrome also requires EGL_KHR_surfaceless_context to use IOSurface pbuffers: https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_surfaceless_context.txt\nhttps://cs.chromium.org/chromium/src/ui/gl/init/gl_factory_mac.cc?type\u003dcs\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d147",
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8df8d08_673b933e",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T13:41:50Z",
+      "side": 1,
+      "message": "You can change this to an ASSERT(buftype \u003d\u003d EGL_IOSURFACE_ANGLE) because this should be handled in the validation layer",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 33
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fb7df51_c25258fb",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T13:41:50Z",
+      "side": 1,
+      "message": "nit: could format this better since you\u0027re disabling clang-format",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5c2163e_a0f70972",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T13:41:50Z",
+      "side": 1,
+      "message": "Do you need an IOSurfaceLock call after you flush?\n(and IOSurfaceUnlock in releaseTexImage)\nI\u0027m not sure how IOSurfaces interact with metal when used as a MTLTexture, so I\u0027m just asking to be sure",
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e82491cf_23463d66",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T13:41:50Z",
+      "side": 1,
+      "message": "Could this logic live anywhere else, like where this emulation is handled?",
+      "range": {
+        "startLine": 960,
+        "startChar": 0,
+        "endLine": 980,
+        "endChar": 5
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
