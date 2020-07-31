@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8b9a3918_fc6ec654",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T15:50:23Z",
+      "side": 1,
+      "message": "I\u0027m looking into this, I think it\u0027s handled entirely by the frontend. I\u0027m going to make a CL to enable this on the frontend and check if the metal backend passes these tests: https://cs.chromium.org/chromium/src/third_party/swiftshader/third_party/angle/angle/src/tests/egl_tests/EGLSurfacelessContextTest.cpp?q\u003dsurfaceless\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d7",
+      "parentUuid": "b4389a52_fc48fdb3",
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8df8d08_673b933e",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 3
