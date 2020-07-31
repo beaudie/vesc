@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "84faaf88_42dd57f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T17:35:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9171eedc_eb46b163",
+      "range": {
+        "startLine": 884,
+        "startChar": 0,
+        "endLine": 886,
+        "endChar": 24
+      },
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5da2d7cf_e8541d7d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 6
@@ -77,6 +101,30 @@
       "side": 1,
       "message": "What I told Charlie is if it passes CQ, it\u0027s not a bug.",
       "parentUuid": "5da2d7cf_e8541d7d",
+      "range": {
+        "startLine": 889,
+        "startChar": 45,
+        "endLine": 889,
+        "endChar": 63
+      },
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce7cd66b_bcf5d0d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T17:35:40Z",
+      "side": 1,
+      "message": "A renderpass with empty command buffer is not a NOP. You could do a \nstartRP(loadOP\u003dClear);\nendRP(storeOP\u003dStore);\nTo do the clear. We can not treat it like a NOP. (Refer to the comment above at line 886)",
+      "parentUuid": "d777411c_edfd0ced",
       "range": {
         "startLine": 889,
         "startChar": 45,
