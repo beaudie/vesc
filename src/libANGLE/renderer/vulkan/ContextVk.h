@@ -677,6 +677,8 @@ class ContextVk : public ContextImpl, public vk::Context
         double cpuTimestampS;
     };
 
+    class ScopedDescriptorSetUpdates;
+
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
                             GLint firstVertexOrInvalid,
@@ -1056,15 +1058,6 @@ class ContextVk : public ContextImpl, public vk::Context
     std::vector<VkDescriptorBufferInfo> mBufferInfos;
     std::vector<VkDescriptorImageInfo> mImageInfos;
     std::vector<VkWriteDescriptorSet> mWriteInfos;
-    class ScopedDescriptorSetUpdates final : angle::NonCopyable
-    {
-      public:
-        ScopedDescriptorSetUpdates(ContextVk *contextVk);
-        ~ScopedDescriptorSetUpdates();
-
-      private:
-        ContextVk *mContextVk;
-    };
 
     ShareGroupVk *mShareGroupVk;
 

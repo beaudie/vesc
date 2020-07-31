@@ -285,6 +285,33 @@ EventName GetTraceEventName(const char *title, uint32_t counter)
 }
 }  // anonymous namespace
 
+// ContextVk::ScopedDescriptorSetUpdates implementation.
+class ContextVk::ScopedDescriptorSetUpdates final : angle::NonCopyable
+{
+  public:
+    ANGLE_INLINE ScopedDescriptorSetUpdates(ContextVk *contextVk) : mContextVk(contextVk) {}
+
+    ANGLE_INLINE ~ScopedDescriptorSetUpdates()
+    {
+        if (mContextVk->mWriteInfos.empty())
+        {
+            ASSERT(mContextVk->mBufferInfos.empty());
+            ASSERT(mContextVk->mImageInfos.empty());
+            return;
+        }
+
+        vkUpdateDescriptorSets(mContextVk->getDevice(),
+                               static_cast<uint32_t>(mContextVk->mWriteInfos.size()),
+                               mContextVk->mWriteInfos.data(), 0, nullptr);
+        mContextVk->mWriteInfos.clear();
+        mContextVk->mBufferInfos.clear();
+        mContextVk->mImageInfos.clear();
+    }
+
+  private:
+    ContextVk *mContextVk;
+};
+
 ContextVk::DriverUniformsDescriptorSet::DriverUniformsDescriptorSet()
     : descriptorSet(VK_NULL_HANDLE), dynamicOffset(0)
 {}
@@ -4695,28 +4722,6 @@ void ContextVk::growCapacity(std::vector<T> *mInfos, size_t newSize)
             }
         }
     }
-}
-
-// ScopedDescriptorSetUpdates
-ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::ScopedDescriptorSetUpdates(ContextVk *contextVk)
-    : mContextVk(contextVk)
-{}
-
-ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::~ScopedDescriptorSetUpdates()
-{
-    if (mContextVk->mWriteInfos.empty())
-    {
-        ASSERT(mContextVk->mBufferInfos.empty());
-        ASSERT(mContextVk->mImageInfos.empty());
-        return;
-    }
-
-    vkUpdateDescriptorSets(mContextVk->getDevice(),
-                           static_cast<uint32_t>(mContextVk->mWriteInfos.size()),
-                           mContextVk->mWriteInfos.data(), 0, nullptr);
-    mContextVk->mWriteInfos.clear();
-    mContextVk->mBufferInfos.clear();
-    mContextVk->mImageInfos.clear();
 }
 
 BufferSerial ContextVk::generateBufferSerial()
