@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5c85af65_06c54cf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T17:02:20Z",
+      "side": 1,
+      "message": "lgtm with tim\u0027s nits.",
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9171eedc_eb46b163",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 6
@@ -36,6 +53,30 @@
       "writtenOn": "2020-07-31T16:49:44Z",
       "side": 1,
       "message": "Only related to this CL based on the comment \"Returns true if we have no work to execute.\" above:\n\nWhy do we assume that there\u0027s work to do because it\u0027s a render pass command buffer?   Can a render pass command buffer be empty (so there isn\u0027t actually any work to do)?",
+      "range": {
+        "startLine": 889,
+        "startChar": 45,
+        "endLine": 889,
+        "endChar": 63
+      },
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d777411c_edfd0ced",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T17:02:20Z",
+      "side": 1,
+      "message": "What I told Charlie is if it passes CQ, it\u0027s not a bug.",
+      "parentUuid": "5da2d7cf_e8541d7d",
       "range": {
         "startLine": 889,
         "startChar": 45,
