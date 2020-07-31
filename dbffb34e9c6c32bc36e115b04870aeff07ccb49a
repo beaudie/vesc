@@ -148,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "a5946f9f_b6fe6dec",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T15:34:44Z",
+      "side": 1,
+      "message": "Ah yes you\u0027re right",
+      "parentUuid": "aa41cddc_5ed09768",
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e82491cf_23463d66",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 3
