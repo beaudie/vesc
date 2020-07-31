@@ -134,6 +134,30 @@
       "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41e50a27_1840cc45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T17:44:25Z",
+      "side": 1,
+      "message": "Sounds good, thanks for the clarification.",
+      "parentUuid": "ce7cd66b_bcf5d0d8",
+      "range": {
+        "startLine": 889,
+        "startChar": 45,
+        "endLine": 889,
+        "endChar": 63
+      },
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
