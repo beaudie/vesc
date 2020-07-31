@@ -233,9 +233,12 @@ O           [0-7]
 "isampler2DMSArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_storage_multisample_2d_array, ISAMPLER2DMSARRAY); }
 "usampler2DMSArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_storage_multisample_2d_array, USAMPLER2DMSARRAY); }
 "samplerCubeArray"     { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, SAMPLERCUBEARRAYOES, SAMPLERCUBEARRAYEXT); }
+"samplerBuffer"        { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_buffer, TExtension::EXT_texture_buffer, SAMPLERBUFFER, SAMPLERBUFFER); }
 "samplerCubeArrayShadow"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, SAMPLERCUBEARRAYSHADOWOES, SAMPLERCUBEARRAYSHADOWEXT); }
 "isamplerCubeArray"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, ISAMPLERCUBEARRAYOES, ISAMPLERCUBEARRAYEXT); }
+"isamplerBuffer"       { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_buffer, TExtension::EXT_texture_buffer, ISAMPLERBUFFER, ISAMPLERBUFFER); }
 "usamplerCubeArray"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, USAMPLERCUBEARRAYOES, USAMPLERCUBEARRAYEXT); }
+"usamplerBuffer"       { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_buffer, TExtension::EXT_texture_buffer, USAMPLERBUFFER, USAMPLERBUFFER); }
 "samplerVideoWEBGL"    { return WEBGL_video_texture_extension(context, SAMPLERVIDEOWEBGL); }
 "struct"       { return STRUCT; }
 
@@ -261,6 +264,9 @@ O           [0-7]
 "imageCubeArray"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, IMAGECUBEARRAYOES, IMAGECUBEARRAYEXT); }
 "iimageCubeArray"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, IIMAGECUBEARRAYOES, IIMAGECUBEARRAYEXT); }
 "uimageCubeArray"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, UIMAGECUBEARRAYOES, UIMAGECUBEARRAYEXT); }
+"imageBuffer"     { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_buffer, TExtension::EXT_texture_buffer, IMAGEBUFFER, IMAGEBUFFER); }
+"iimageBuffer"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_buffer, TExtension::EXT_texture_buffer, IIMAGEBUFFER, IIMAGEBUFFER); }
+"uimageBuffer"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_buffer, TExtension::EXT_texture_buffer, UIMAGEBUFFER, UIMAGEBUFFER); }
 "readonly" { return ES3_reserved_ES3_1_keyword(context, READONLY); }
 "writeonly" { return ES3_reserved_ES3_1_keyword(context, WRITEONLY); }
 "coherent" { return ES3_reserved_ES3_1_keyword(context, COHERENT); }
@@ -290,9 +296,6 @@ O           [0-7]
 "image2DShadow"     |
 "image1DArrayShadow" |
 "image2DArrayShadow" |
-"imageBuffer"       |
-"iimageBuffer"      |
-"uimageBuffer"      |
 
 "sampler1DArray"    |
 "sampler1DArrayShadow" |
@@ -301,10 +304,7 @@ O           [0-7]
 "usampler1D"        |
 "usampler1DArray"   |
 "isampler2DRect"    |
-"usampler2DRect"    |
-"samplerBuffer"     |
-"isamplerBuffer"    |
-"usamplerBuffer"    {
+"usampler2DRect"    {
     if (context->getShaderVersion() < 300) {
         yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
         return check_type(yyscanner);
