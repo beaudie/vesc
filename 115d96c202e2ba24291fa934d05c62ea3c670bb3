@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "84f22e07_6ae325ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T16:33:03Z",
+      "side": 1,
+      "message": "Nice",
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bccdeff7_2e3ff552",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -65,6 +82,29 @@
     },
     {
       "key": {
+        "uuid": "fbdf75a1_a108066e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T16:33:03Z",
+      "side": 1,
+      "message": "typo: underlining",
+      "range": {
+        "startLine": 884,
+        "startChar": 91,
+        "endLine": 884,
+        "endChar": 100
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b84fae11_723210a9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -76,6 +116,29 @@
       "writtenOn": "2020-07-31T16:32:07Z",
       "side": 1,
       "message": "nit: typo: a",
+      "range": {
+        "startLine": 885,
+        "startChar": 50,
+        "endLine": 885,
+        "endChar": 52
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "778295cf_22d92085",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T16:33:03Z",
+      "side": 1,
+      "message": "typo: a",
       "range": {
         "startLine": 885,
         "startChar": 50,
