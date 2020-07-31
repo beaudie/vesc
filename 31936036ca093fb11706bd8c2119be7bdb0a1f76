@@ -70,6 +70,30 @@
       "revId": "31936036ca093fb11706bd8c2119be7bdb0a1f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06f223d5_244a85db",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T21:14:27Z",
+      "side": 1,
+      "message": "PPOs are graphics by default (isCompute() \u003d\u003d false), but are converted to compute during dispatch calls by convertPpoToComputeOrDraw() and then back to graphics when that completes:\n\n    ANGLE_INLINE angle::Result Context::prepareForDispatch()\n    {\n        // We always assume PPOs are used for draws, until they aren\u0027t. If we are executing a dispatch\n        // with a PPO, we need to convert it from a \"draw\"-type to \"dispatch\"-type.\n        convertPpoToComputeOrDraw(true);\n        ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects));\n        return syncDirtyBits(mComputeDirtyBits);\n    }\n\n    void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)\n    {\n    ...\n        angle::Result result \u003d\n            mImplementation-\u003edispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ);\n        // We always assume PPOs are used for draws, until they aren\u0027t. If we just executed a dispatch\n        // with a PPO, we need to convert it back to a \"draw\"-type.\n        convertPpoToComputeOrDraw(false);",
+      "parentUuid": "e0b08f9f_1a1af754",
+      "range": {
+        "startLine": 376,
+        "startChar": 3,
+        "endLine": 377,
+        "endChar": 52
+      },
+      "revId": "31936036ca093fb11706bd8c2119be7bdb0a1f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
