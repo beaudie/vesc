@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "50d65438_3080d940",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3937,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:41:25Z",
+      "side": 1,
+      "message": "The outside command buffer does not have a renderpass, you can not call started on it (will hit assertion). That is the side effect of combining outside and RP classes.",
+      "parentUuid": "bccdeff7_2e3ff552",
+      "range": {
+        "startLine": 3937,
+        "startChar": 11,
+        "endLine": 3937,
+        "endChar": 47
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94429c4f_b409124f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -53,6 +77,24 @@
       "writtenOn": "2020-07-31T16:32:07Z",
       "side": 1,
       "message": "I think I\u0027d leave this as empty()",
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32e38cd3_b470dc49",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:41:25Z",
+      "side": 1,
+      "message": "The difference between started and empty for RP is empty() is slightly more expensive since it will check if it is outside command buffer or RP. Otherwise they are the same. Here we know it is RP, so just save one if check. I think literally this alos makes more sense that if you have a \"started\" renderpass, you need to \"end\" it. If you do not have a \"started\" renderpass, nothing to do, just take early exit.",
+      "parentUuid": "94429c4f_b409124f",
       "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -105,6 +147,54 @@
     },
     {
       "key": {
+        "uuid": "087fd6f0_70db40fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:41:25Z",
+      "side": 1,
+      "message": "Sorry, my bad. will fix.",
+      "parentUuid": "13ae668f_f8dde43c",
+      "range": {
+        "startLine": 884,
+        "startChar": 7,
+        "endLine": 884,
+        "endChar": 19
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "471a4716_97a86f79",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbdf75a1_a108066e",
+      "range": {
+        "startLine": 884,
+        "startChar": 91,
+        "endLine": 884,
+        "endChar": 100
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b84fae11_723210a9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -148,6 +238,54 @@
       "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdd45143_4002699a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "778295cf_22d92085",
+      "range": {
+        "startLine": 885,
+        "startChar": 50,
+        "endLine": 885,
+        "endChar": 52
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "feb377c9_22df3b27",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T16:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b84fae11_723210a9",
+      "range": {
+        "startLine": 885,
+        "startChar": 50,
+        "endLine": 885,
+        "endChar": 52
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
