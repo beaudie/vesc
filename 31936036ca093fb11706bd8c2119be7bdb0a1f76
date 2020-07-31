@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35ed9f31_fd69b7f6",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T20:28:33Z",
+      "side": 1,
+      "message": "The program and executable can only be a compute or graphics, it does not support compute as one shader stage of the program, even for pipeline program, is my understanding correct? If yes, then I am thinking wouldn\u0027t it be easier to just have one variable instead of two so that you don\u0027t need to check \"isCompute()? A:B\" in all other places?",
+      "range": {
+        "startLine": 376,
+        "startChar": 3,
+        "endLine": 377,
+        "endChar": 52
+      },
+      "revId": "31936036ca093fb11706bd8c2119be7bdb0a1f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
