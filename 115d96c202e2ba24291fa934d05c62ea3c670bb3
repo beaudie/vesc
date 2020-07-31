@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bccdeff7_2e3ff552",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3937,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-31T16:32:07Z",
+      "side": 1,
+      "message": "mOutsideRenderPassCommands-\u003estarted() ?",
+      "range": {
+        "startLine": 3937,
+        "startChar": 11,
+        "endLine": 3937,
+        "endChar": 47
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94429c4f_b409124f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-31T16:32:07Z",
+      "side": 1,
+      "message": "I think I\u0027d leave this as empty()",
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ae668f_f8dde43c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-31T16:32:07Z",
+      "side": 1,
+      "message": "returns true if there is work? Doesn\u0027t that imply it\u0027s not empty?",
+      "range": {
+        "startLine": 884,
+        "startChar": 7,
+        "endLine": 884,
+        "endChar": 19
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b84fae11_723210a9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-31T16:32:07Z",
+      "side": 1,
+      "message": "nit: typo: a",
+      "range": {
+        "startLine": 885,
+        "startChar": 50,
+        "endLine": 885,
+        "endChar": 52
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
