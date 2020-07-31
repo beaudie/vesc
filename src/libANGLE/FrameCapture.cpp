@@ -1083,12 +1083,18 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "constexpr uint32_t kReplayFrameEnd = " << frameEnd << ";\n";
     header << "constexpr EGLint kReplayDrawSurfaceWidth = " << drawSurfaceWidth << ";\n";
     header << "constexpr EGLint kReplayDrawSurfaceHeight = " << drawSurfaceHeight << ";\n";
-    header << "constexpr EGLint kDefaultFramebufferRedBits = " << config->redSize << ";\n";
-    header << "constexpr EGLint kDefaultFramebufferGreenBits = " << config->greenSize << ";\n";
-    header << "constexpr EGLint kDefaultFramebufferBlueBits = " << config->blueSize << ";\n";
-    header << "constexpr EGLint kDefaultFramebufferAlphaBits = " << config->alphaSize << ";\n";
-    header << "constexpr EGLint kDefaultFramebufferDepthBits = " << config->depthSize << ";\n";
-    header << "constexpr EGLint kDefaultFramebufferStencilBits = " << config->stencilSize << ";\n";
+    header << "constexpr EGLint kDefaultFramebufferRedBits = " << (config ? config->redSize : -1)
+           << ";\n";
+    header << "constexpr EGLint kDefaultFramebufferGreenBits = "
+           << (config ? config->greenSize : -1) << ";\n";
+    header << "constexpr EGLint kDefaultFramebufferBlueBits = " << (config ? config->blueSize : -1)
+           << ";\n";
+    header << "constexpr EGLint kDefaultFramebufferAlphaBits = "
+           << (config ? config->alphaSize : -1) << ";\n";
+    header << "constexpr EGLint kDefaultFramebufferDepthBits = "
+           << (config ? config->depthSize : -1) << ";\n";
+    header << "constexpr EGLint kDefaultFramebufferStencilBits = "
+           << (config ? config->stencilSize : -1) << ";\n";
     header << "\n";
     header << "void SetupContext" << static_cast<int>(contextId) << "Replay();\n";
     header << "void ReplayContext" << static_cast<int>(contextId)
