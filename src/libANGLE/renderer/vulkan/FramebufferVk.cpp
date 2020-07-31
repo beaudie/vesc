@@ -1442,7 +1442,7 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
     }
     else
     {
-        mCurrentFramebufferDesc.updateColor(colorIndexGL, kInvalidImageViewSerial);
+        mCurrentFramebufferDesc.updateColor(colorIndexGL, vk::kInvalidImageViewSerial);
     }
 
     if (enabledResolve)
@@ -1452,7 +1452,7 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
     }
     else
     {
-        mCurrentFramebufferDesc.updateColorResolve(colorIndexGL, kInvalidImageViewSerial);
+        mCurrentFramebufferDesc.updateColorResolve(colorIndexGL, vk::kInvalidImageViewSerial);
     }
 
     return angle::Result::Continue;
@@ -1494,7 +1494,7 @@ void FramebufferVk::updateDepthStencilAttachmentSerial(ContextVk *contextVk)
     }
     else
     {
-        mCurrentFramebufferDesc.updateDepthStencil(kInvalidImageViewSerial);
+        mCurrentFramebufferDesc.updateDepthStencil(vk::kInvalidImageViewSerial);
     }
 }
 

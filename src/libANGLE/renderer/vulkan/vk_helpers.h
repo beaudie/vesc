@@ -1155,6 +1155,7 @@ class ImageHelper final : public Resource, public angle::Subject
     uint32_t getLevelCount() const { return mLevelCount; }
     const Format &getFormat() const { return *mFormat; }
     GLint getSamples() const { return mSamples; }
+    ImageSerial getImageSerial() const { return mImageSerial; }
 
     void setCurrentImageLayout(ImageLayout newLayout) { mCurrentLayout = newLayout; }
     ImageLayout getCurrentImageLayout() const { return mCurrentLayout; }
@@ -1172,8 +1173,6 @@ class ImageHelper final : public Resource, public angle::Subject
                uint32_t baseArrayLayer,
                uint32_t layerCount,
                CommandBuffer *commandBuffer);
-
-    void resetSerial() { mSerial = rx::kZeroSerial; }
 
     static void Copy(ImageHelper *srcImage,
                      ImageHelper *dstImage,
@@ -1538,7 +1537,7 @@ class ImageHelper final : public Resource, public angle::Subject
     VkExtent3D mExtents;
     const Format *mFormat;
     GLint mSamples;
-    Serial mSerial;
+    ImageSerial mSerial;
 
     // Current state.
     ImageLayout mCurrentLayout;
@@ -1565,6 +1564,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // image it has been cleared to the specified clear value. If another clear call is made with
     // the exact same clear value, we will detect and skip the clear call.
     Optional<ClearUpdate> mCurrentSingleClearValue;
+
+    // Unique identifier.
+    ImageSerial mImageSerial;
 };
 
 // A vector of image views, such as one per level or one per layer.
