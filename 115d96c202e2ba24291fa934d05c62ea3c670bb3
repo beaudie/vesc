@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "a249d66a_4c95482a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3937,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-31T17:23:34Z",
+      "side": 1,
+      "message": "Okay, I thought there might be something like that.\nYeah, brain glitch.",
+      "parentUuid": "50d65438_3080d940",
+      "range": {
+        "startLine": 3937,
+        "startChar": 11,
+        "endLine": 3937,
+        "endChar": 47
+      },
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94429c4f_b409124f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -98,6 +122,24 @@
       "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06b31b90_b207940b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-07-31T17:23:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "32e38cd3_b470dc49",
+      "revId": "115d96c202e2ba24291fa934d05c62ea3c670bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
