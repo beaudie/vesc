@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0959a048_8941e9cf",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5706,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T15:26:05Z",
+      "side": 1,
+      "message": "We keep PPOs as draw by default, so we convert them to compute only during the dispatch call:\n\n    ANGLE_INLINE angle::Result Context::prepareForDispatch()\n    {\n        // We always assume PPOs are used for draws, until they aren\u0027t. If we are executing a dispatch\n        // with a PPO, we need to convert it from a \"draw\"-type to \"dispatch\"-type.\n        convertPpoToComputeOrDraw(true);\n\n        ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects));\n        return syncDirtyBits(mComputeDirtyBits);\n    }\n\n\n    void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)\n    {\n    ...\n        angle::Result result \u003d\n            mImplementation-\u003edispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ);\n\n        // We always assume PPOs are used for draws, until they aren\u0027t. If we just executed a dispatch\n        // with a PPO, we need to convert it back to a \"draw\"-type.\n        convertPpoToComputeOrDraw(false);\n\nThis allows us to only have to convert PPOs during dispatches, rather than having to track state and handle it in both draws and dispatches.   However, dispatchCompute() doesn\u0027t actually finish all of the dispatch work, so we need the StateCache to keep the compute PPO\u0027s values.",
+      "parentUuid": "d9b2c3b4_86c77aa5",
+      "range": {
+        "startLine": 5706,
+        "startChar": 12,
+        "endLine": 5706,
+        "endChar": 21
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35b58914_9ccdda20",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "34e1aaeb_55f67304",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5708,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T15:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35b58914_9ccdda20",
+      "range": {
+        "startLine": 5708,
+        "startChar": 53,
+        "endLine": 5708,
+        "endChar": 57
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52631c3a_ef34a5c3",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2020-07-31T14:20:26Z",
       "side": 1,
       "message": "mState.mExecutable-\u003egetImageBindings()",
+      "range": {
+        "startLine": 1652,
+        "startChar": 47,
+        "endLine": 1654,
+        "endChar": 96
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a830c6_06e9a87c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T15:26:05Z",
+      "side": 1,
+      "message": "Done.\n\nI skipped this initially, since it requires a non-const version of getImageBindings().   The new one returns a pointer to help differentiate.",
+      "parentUuid": "52631c3a_ef34a5c3",
       "range": {
         "startLine": 1652,
         "startChar": 47,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "23b2d49a_87ea4cd5",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3708,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T15:26:05Z",
+      "side": 1,
+      "message": "No, since we are still linking at this point so the Program doesn\u0027t have a linked Compute stage yet.",
+      "parentUuid": "ab511a37_8f0718cc",
+      "range": {
+        "startLine": 3706,
+        "startChar": 47,
+        "endLine": 3708,
+        "endChar": 95
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "924ec2e1_29d735a4",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8961fdd9_ef9d1ad3",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T15:26:05Z",
+      "side": 1,
+      "message": "Looks good.",
+      "parentUuid": "924ec2e1_29d735a4",
+      "range": {
+        "startLine": 271,
+        "startChar": 4,
+        "endLine": 271,
+        "endChar": 39
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "43b23ca5_a80bc50b",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T15:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d88e25a7_3504b086",
+      "range": {
+        "startLine": 303,
+        "startChar": 4,
+        "endLine": 303,
+        "endChar": 38
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c624ba77_765dc460",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 4
@@ -151,6 +295,30 @@
       "writtenOn": "2020-07-31T14:20:26Z",
       "side": 1,
       "message": "nit: Eventually would be good to add a GLPipeline in gl_raii.h",
+      "range": {
+        "startLine": 2822,
+        "startChar": 4,
+        "endLine": 2822,
+        "endChar": 10
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0de2f1a2_be09382a",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2822,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T15:26:05Z",
+      "side": 1,
+      "message": "Turns out it\u0027s already there.   Updated.",
+      "parentUuid": "c624ba77_765dc460",
       "range": {
         "startLine": 2822,
         "startChar": 4,
