@@ -1529,7 +1529,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     vk::BufferHelper *uniformBuffer      = mDefaultUniformStorage.getCurrentBuffer();
     vk::UniformsAndXfbDesc xfbBufferDesc = transformFeedbackVk->getTransformFeedbackDesc();
     xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
-                                                           : kInvalidBufferSerial);
+                                                           : vk::kInvalidBufferSerial);
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(), uniformBuffer, this,
         xfbBufferDesc);
@@ -3760,7 +3760,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     }
 
     const vk::BufferHelper *buffer = driverUniforms->dynamicBuffer.getCurrentBuffer();
-    BufferSerial bufferSerial      = buffer->getBufferSerial();
+    vk::BufferSerial bufferSerial  = buffer->getBufferSerial();
     // Look up in the cache first
     auto iter = driverUniforms->descriptorSetCache.find(bufferSerial);
     if (iter != driverUniforms->descriptorSetCache.end())
@@ -3850,16 +3850,16 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         TextureVk *textureVk = vk::GetImpl(texture);
 
         SamplerVk *samplerVk;
-        SamplerSerial samplerSerial;
+        vk::SamplerSerial samplerSerial;
         if (sampler == nullptr)
         {
             samplerVk     = nullptr;
-            samplerSerial = rx::kInvalidSamplerSerial;
+            samplerSerial = vk::kInvalidSamplerSerial;
         }
         else
         {
             samplerVk     = vk::GetImpl(sampler);
-            samplerSerial = samplerVk->getSerial();
+            samplerSerial = samplerVk->getSamplerSerial();
         }
 
         if (textureVk->getImage().hasImmutableSampler())
@@ -4727,23 +4727,6 @@ VkWriteDescriptorSet *ContextVk::allocWriteDescriptorSets(size_t count)
     size_t newSize = oldSize + count;
     mWriteDescriptorSets.resize(newSize);
     return &mWriteDescriptorSets[oldSize];
-}
-
-BufferSerial ContextVk::generateBufferSerial()
-{
-    return mShareGroupVk->generateBufferSerial();
-}
-TextureSerial ContextVk::generateTextureSerial()
-{
-    return mShareGroupVk->generateTextureSerial();
-}
-SamplerSerial ContextVk::generateSamplerSerial()
-{
-    return mShareGroupVk->generateSamplerSerial();
-}
-ImageViewSerial ContextVk::generateAttachmentImageViewSerial()
-{
-    return mShareGroupVk->generateImageViewSerial();
 }
 
 void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
