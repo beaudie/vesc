@@ -4021,7 +4021,7 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
 void ImageHelper::stageClearIfEmulatedFormat(Context *context)
 {
     // Skip staging extra clears if robust resource init is enabled.
-    if (!mFormat->hasEmulatedImageChannels() || context->isRobustResourceInitEnabled())
+    if (!mFormat->hasEmulatedImageChannels() || !context->isRobustResourceInitEnabled())
         return;
 
     VkClearValue clearValue;
