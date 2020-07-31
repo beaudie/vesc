@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d79f04a6_57109e52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-07-31T23:06:07Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "31936036ca093fb11706bd8c2119be7bdb0a1f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35ed9f31_fd69b7f6",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 5
