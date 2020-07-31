@@ -157,6 +157,30 @@
       "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "308d666e_f0c28e27",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T15:31:24Z",
+      "side": 1,
+      "message": "As long as you aren\u0027t hashing or memcmp\u0027ing this struct it should be fine to have some padding. If you are, then make sure to fill in the padding using extra member variables.",
+      "parentUuid": "b44c339f_1707a9b1",
+      "range": {
+        "startLine": 87,
+        "startChar": 32,
+        "endLine": 87,
+        "endChar": 36
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
