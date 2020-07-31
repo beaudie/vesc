@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9b2c3b4_86c77aa5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5706,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T14:20:26Z",
+      "side": 1,
+      "message": "Should this say something like `if (previousIsCompute !\u003d isCompute)`?\n\nIIUC, this is for the case where the same PPO is used to draw then dispatch right? A test could be written that uses SSBO or storage image in a fragment shader then do dispatch followed by draw (by the same PPO).",
+      "range": {
+        "startLine": 5706,
+        "startChar": 12,
+        "endLine": 5706,
+        "endChar": 21
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35b58914_9ccdda20",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5708,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T14:20:26Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 5708,
+        "startChar": 53,
+        "endLine": 5708,
+        "endChar": 57
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52631c3a_ef34a5c3",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T14:20:26Z",
+      "side": 1,
+      "message": "mState.mExecutable-\u003egetImageBindings()",
+      "range": {
+        "startLine": 1652,
+        "startChar": 47,
+        "endLine": 1654,
+        "endChar": 96
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab511a37_8f0718cc",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3708,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T14:20:26Z",
+      "side": 1,
+      "message": "Does mState.mExecutable-\u003egetImageBindings() work?",
+      "range": {
+        "startLine": 3706,
+        "startChar": 47,
+        "endLine": 3708,
+        "endChar": 95
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "924ec2e1_29d735a4",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T14:20:26Z",
+      "side": 1,
+      "message": "You can use a ShaderBitSet. Then this:\n\n    programs.find(shaderProgram) \u003d\u003d programs.end()\n\nbecomes:\n\n    bitset.test(shaderType)\n\nAnd this:\n\n    programs.emplace(shaderProgram);\n\nbecomes:\n\n    bitset |\u003d shaderProgram-\u003egetExecutable().getLinkedShaderStages();",
+      "range": {
+        "startLine": 271,
+        "startChar": 4,
+        "endLine": 271,
+        "endChar": 39
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d88e25a7_3504b086",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T14:20:26Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 303,
+        "startChar": 4,
+        "endLine": 303,
+        "endChar": 38
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c624ba77_765dc460",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2822,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T14:20:26Z",
+      "side": 1,
+      "message": "nit: Eventually would be good to add a GLPipeline in gl_raii.h",
+      "range": {
+        "startLine": 2822,
+        "startChar": 4,
+        "endLine": 2822,
+        "endChar": 10
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
