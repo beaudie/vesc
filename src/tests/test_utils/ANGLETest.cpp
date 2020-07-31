@@ -9,6 +9,9 @@
 
 #include "ANGLETest.h"
 
+#include <algorithm>
+#include <cstdlib>
+
 #include "common/platform.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "util/EGLWindow.h"
@@ -503,6 +506,13 @@ ANGLETestBase::~ANGLETestBase()
 
 void ANGLETestBase::ANGLETestSetUp()
 {
+    const ::testing::TestInfo *const test_info =
+        ::testing::UnitTest::GetInstance()->current_test_info();
+    std::string test_name = std::string{test_info->name()};
+    std::replace(test_name.begin(), test_name.end(), '/', '_');
+    putenv(const_cast<char *>(
+        ("ANGLE_CAPTURE_LABEL=" + std::string{test_info->test_case_name()} + "_" + test_name)
+            .c_str()));
     mSetUpCalled = true;
 
     gDefaultPlatformMethods.overrideWorkaroundsD3D = TestPlatform_overrideWorkaroundsD3D;
