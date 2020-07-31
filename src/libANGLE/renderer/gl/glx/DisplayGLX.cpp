@@ -884,7 +884,7 @@ void DisplayGLX::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup   = true;
     outExtensions->displaySemaphoreShareGroup = true;
 
-    outExtensions->surfacelessContext = true;
+    // outExtensions->surfacelessContext = true;
 
     const bool hasSyncControlOML        = mGLX.hasExtension("GLX_OML_sync_control");
     outExtensions->syncControlCHROMIUM  = hasSyncControlOML;

@@ -979,9 +979,6 @@ void DisplayGbm::setSwapInterval(EGLSurface drawable, SwapControlData *data)
 void DisplayGbm::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     DisplayEGL::generateExtensions(outExtensions);
-
-    // Surfaceless contexts are emulated even if there is no native support.
-    outExtensions->surfacelessContext = true;
 }
 
 class WorkerContextGbm final : public WorkerContext

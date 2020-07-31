@@ -1305,9 +1305,6 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
     // syncControlCHROMIUM requires direct composition.
     outExtensions->syncControlCHROMIUM = outExtensions->directComposition;
 
-    // D3D11 can be used without a swap chain
-    outExtensions->surfacelessContext = true;
-
     // All D3D feature levels support robust resource init
     outExtensions->robustResourceInitialization = true;
 

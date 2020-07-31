@@ -1592,6 +1592,7 @@ void Display::initDisplayExtensions()
     mDisplayExtensions.createContextBindGeneratesResource = true;
     mDisplayExtensions.createContextClientArrays          = true;
     mDisplayExtensions.pixelFormatFloat                   = true;
+    mDisplayExtensions.surfacelessContext                 = true;
 
     // Force EGL_KHR_get_all_proc_addresses on.
     mDisplayExtensions.getAllProcAddresses = true;

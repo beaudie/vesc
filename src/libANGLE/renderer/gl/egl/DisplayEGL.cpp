@@ -665,8 +665,6 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->noConfigContext = mEGL->hasExtension("EGL_KHR_no_config_context");
 
-    outExtensions->surfacelessContext = mEGL->hasExtension("EGL_KHR_surfaceless_context");
-
     outExtensions->framebufferTargetANDROID = mEGL->hasExtension("EGL_ANDROID_framebuffer_target");
 
     outExtensions->imageDmaBufImportEXT = mEGL->hasExtension("EGL_EXT_image_dma_buf_import");

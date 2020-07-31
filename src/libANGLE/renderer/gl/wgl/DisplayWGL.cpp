@@ -649,7 +649,7 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup   = true;
     outExtensions->displaySemaphoreShareGroup = true;
 
-    outExtensions->surfacelessContext = true;
+    // outExtensions->surfacelessContext = true;
 
     DisplayGL::generateExtensions(outExtensions);
 }

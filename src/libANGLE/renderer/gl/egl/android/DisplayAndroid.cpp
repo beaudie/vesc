@@ -335,10 +335,6 @@ void DisplayAndroid::destroyNativeContext(EGLContext context)
 void DisplayAndroid::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     DisplayEGL::generateExtensions(outExtensions);
-
-    // Surfaceless can be support if the native driver supports it or we know that we are running on
-    // a single thread (mVirtualizedContexts == true)
-    outExtensions->surfacelessContext = mSupportsSurfaceless || mVirtualizedContexts;
 }
 
 egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,

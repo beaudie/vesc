@@ -209,12 +209,12 @@ void DisplayNULL::generateExtensions(egl::DisplayExtensions *outExtensions) cons
     outExtensions->createContextBindGeneratesResource = true;
     outExtensions->swapBuffersWithDamage              = true;
     outExtensions->pixelFormatFloat                   = true;
-    outExtensions->surfacelessContext                 = true;
-    outExtensions->displayTextureShareGroup           = true;
-    outExtensions->displaySemaphoreShareGroup         = true;
-    outExtensions->createContextClientArrays          = true;
-    outExtensions->programCacheControl                = true;
-    outExtensions->robustResourceInitialization       = true;
+    // outExtensions->surfacelessContext                 = true;
+    outExtensions->displayTextureShareGroup     = true;
+    outExtensions->displaySemaphoreShareGroup   = true;
+    outExtensions->createContextClientArrays    = true;
+    outExtensions->programCacheControl          = true;
+    outExtensions->robustResourceInitialization = true;
 }
 
 void DisplayNULL::generateCaps(egl::Caps *outCaps) const

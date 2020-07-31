@@ -595,9 +595,6 @@ void Renderer9::generateDisplayExtensions(egl::DisplayExtensions *outExtensions)
     outExtensions->displayTextureShareGroup   = true;
     outExtensions->displaySemaphoreShareGroup = true;
 
-    // D3D9 can be used without an output surface
-    outExtensions->surfacelessContext = true;
-
     outExtensions->robustResourceInitialization = true;
 }
 
