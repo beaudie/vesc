@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c72361e_e900d79c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T15:32:35Z",
+      "side": 1,
+      "message": "High-level comment: generally a good idea is to submit the new ext + autogeneration changes in a separate CL. Even if the implementation of the ext is pretty simple.",
+      "revId": "b83c049d7f8a948458c99eade1efc0060279473e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
