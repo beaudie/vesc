@@ -63,6 +63,29 @@
       "revId": "8bcd936dfe87bb330bd6902c22d9b18eb67ba045",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5fa02a0_bd16ed27",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T18:40:41Z",
+      "side": 1,
+      "message": "I guess this is because of drawing to color attachment 1, can you add a comment on the bug? I thought it looked like the wrong bug at first.",
+      "range": {
+        "startLine": 826,
+        "startChar": 55,
+        "endLine": 826,
+        "endChar": 79
+      },
+      "revId": "8bcd936dfe87bb330bd6902c22d9b18eb67ba045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
