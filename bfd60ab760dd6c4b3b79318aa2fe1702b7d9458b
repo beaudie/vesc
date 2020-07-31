@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "8821a143_5f0f00ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-07-31T19:30:08Z",
+      "side": 1,
+      "message": "Shame at myself for fixing underline with underlining",
+      "parentUuid": "84faaf88_42dd57f7",
+      "range": {
+        "startLine": 884,
+        "startChar": 0,
+        "endLine": 886,
+        "endChar": 24
+      },
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5da2d7cf_e8541d7d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 6
