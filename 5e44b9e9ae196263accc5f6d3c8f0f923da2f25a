@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17aafdf6_34663116",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-07-31T19:01:23Z",
+      "side": 1,
+      "message": "Patchset 4 just updates the type of \"target\" so it\u0027s cleaner",
+      "revId": "5e44b9e9ae196263accc5f6d3c8f0f923da2f25a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
