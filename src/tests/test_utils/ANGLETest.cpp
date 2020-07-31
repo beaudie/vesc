@@ -9,6 +9,9 @@
 
 #include "ANGLETest.h"
 
+#include <algorithm>
+#include <cstdlib>
+
 #include "common/platform.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "util/EGLWindow.h"
@@ -501,6 +504,16 @@ ANGLETestBase::~ANGLETestBase()
     }
 }
 
+void ANGLETestBase::setupEnvironmentVarsForCaptureReplay()
+{
+    const ::testing::TestInfo *const testInfo =
+        ::testing::UnitTest::GetInstance()->current_test_info();
+    std::string testName = std::string{testInfo->name()};
+    std::replace(testName.begin(), testName.end(), '/', '_');
+    SetEnvironmentVar("ANGLE_CAPTURE_LABEL",
+                      (std::string{testInfo->test_case_name()} + "_" + testName).c_str());
+}
+
 void ANGLETestBase::ANGLETestSetUp()
 {
     mSetUpCalled = true;
@@ -553,7 +566,7 @@ void ANGLETestBase::ANGLETestSetUp()
         }
         needSwap = true;
     }
-
+    setupEnvironmentVarsForCaptureReplay();
     // WGL tests are currently disabled.
     if (mFixture->wglWindow)
     {
