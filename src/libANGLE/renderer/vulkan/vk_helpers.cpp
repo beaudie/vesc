@@ -2216,7 +2216,7 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    mSerial = contextVk->generateBufferSerial();
+    mSerial = renderer->getResourceSerialFactory().generateBufferSerial();
     mSize   = requestedCreateInfo.size;
 
     VkBufferCreateInfo modifiedCreateInfo;
@@ -5289,7 +5289,8 @@ ImageViewSerial ImageViewHelper::getAssignSerial(ContextVk *contextVk,
     LayerLevel layerLevelPair = {layer, levelGL};
     if (mSerialCache.find(layerLevelPair) == mSerialCache.end())
     {
-        mSerialCache[layerLevelPair] = contextVk->generateAttachmentImageViewSerial();
+        vk::ResourceSerialFactory &factory = contextVk->getRenderer()->getResourceSerialFactory();
+        mSerialCache[layerLevelPair]       = factory.generateImageViewSerial();
     }
     return mSerialCache[layerLevelPair];
 }
