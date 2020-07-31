@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "a4ab62c0_27d8434e",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T14:50:27Z",
+      "side": 1,
+      "message": "also, why disable clang-format?",
+      "parentUuid": "4fb7df51_c25258fb",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5c2163e_a0f70972",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 3
