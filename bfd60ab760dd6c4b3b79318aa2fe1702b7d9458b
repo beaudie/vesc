@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9171eedc_eb46b163",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T16:49:44Z",
+      "side": 1,
+      "message": "Typos cleaned up:\n\n    // Returns true if we have any work to execute. For renderpass command buffers, even if the\n    // underlying command buffer is empty, we may still have a renderpass with an empty command\n    // buffer just to do the clear.",
+      "range": {
+        "startLine": 884,
+        "startChar": 0,
+        "endLine": 886,
+        "endChar": 24
+      },
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5da2d7cf_e8541d7d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-07-31T16:49:44Z",
+      "side": 1,
+      "message": "Only related to this CL based on the comment \"Returns true if we have no work to execute.\" above:\n\nWhy do we assume that there\u0027s work to do because it\u0027s a render pass command buffer?   Can a render pass command buffer be empty (so there isn\u0027t actually any work to do)?",
+      "range": {
+        "startLine": 889,
+        "startChar": 45,
+        "endLine": 889,
+        "endChar": 63
+      },
+      "revId": "bfd60ab760dd6c4b3b79318aa2fe1702b7d9458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
