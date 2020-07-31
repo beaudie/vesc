@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7e84ba30_3eb560fc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2020-07-31T18:15:48Z",
+      "side": 1,
+      "message": "We haven\u0027t seen this, but we don\u0027t use [MTLTexture getBytes]. In WebGPU you can only map buffers, and reading anything on the CPU must first copy through a buffer. This is good to know though in case we have have a UMA extension that allows directly reading a texture on the CPU.\n\nAlso [MTLTexture getBytes] is only valid for textures using MTLStorageModeManaged which means that the driver probably already has some shadow copy somewhere. Dawn only uses MTLStorageModeManaged for IOSurfaces on Mac OS. iOS uses MTLStorageModePrivate.",
+      "parentUuid": "c6af8f3c_130f8826",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cad31e0_5eaf51a2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
