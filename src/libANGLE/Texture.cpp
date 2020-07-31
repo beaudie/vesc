@@ -309,6 +309,10 @@ SamplerFormat TextureState::computeRequiredSamplerFormat(const SamplerState &sam
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
                                               const State &state) const
 {
+    // Buffer textures cannot be incomplete.
+    if (mType == TextureType::Buffer)
+        return true;
+
     if (mBaseLevel > mMaxLevel)
     {
         return false;
