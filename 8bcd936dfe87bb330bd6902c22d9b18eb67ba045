@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b454af51_deba3f8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T16:00:06Z",
+      "side": 1,
+      "message": "Thanks for all those extra tests.",
+      "revId": "8bcd936dfe87bb330bd6902c22d9b18eb67ba045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a1cf118_5dcc52df",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-07-31T16:00:06Z",
+      "side": 1,
+      "message": "is this cached anymore? Maybe we should rename this.",
+      "range": {
+        "startLine": 1595,
+        "startChar": 17,
+        "endLine": 1595,
+        "endChar": 33
+      },
+      "revId": "8bcd936dfe87bb330bd6902c22d9b18eb67ba045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
