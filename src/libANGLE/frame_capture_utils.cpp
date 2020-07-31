@@ -514,6 +514,76 @@ void SerializeSampler(gl::BinaryOutputStream *bos, gl::Sampler *sampler)
     SerializeSamplerState(bos, sampler->getSamplerState());
 }
 
+void SerializeFormat(gl::BinaryOutputStream *bos, const angle::Format *format)
+{
+    bos->writeInt(format->glInternalFormat);
+    bos->writeInt(format->fboImplementationInternalFormat);
+    bos->writeInt(format->componentType);
+    bos->writeInt(format->redBits);
+    bos->writeInt(format->greenBits);
+    bos->writeInt(format->blueBits);
+    bos->writeInt(format->alphaBits);
+    bos->writeInt(format->luminanceBits);
+    bos->writeInt(format->depthBits);
+    bos->writeInt(format->stencilBits);
+    bos->writeInt(format->pixelBytes);
+    bos->writeInt(format->componentAlignmentMask);
+    bos->writeInt(format->channelCount);
+    bos->writeInt(format->isBlock);
+    bos->writeInt(format->isFixed);
+    bos->writeInt(format->isScaled);
+    bos->writeEnum(format->vertexAttribType);
+}
+
+void SerializeVertexAttributeVector(gl::BinaryOutputStream *bos,
+                                    const std::vector<gl::VertexAttribute> &vertexAttributes)
+{
+    for (const gl::VertexAttribute &vertexAttribute : vertexAttributes)
+    {
+        bos->writeInt(vertexAttribute.enabled);
+        if (vertexAttribute.format)
+        {
+            SerializeFormat(bos, vertexAttribute.format);
+        }
+        bos->writeInt(vertexAttribute.relativeOffset);
+        bos->writeInt(vertexAttribute.vertexAttribArrayStride);
+        bos->writeInt(vertexAttribute.bindingIndex);
+    }
+}
+
+void SerializeVertexBindingsVector(gl::BinaryOutputStream *bos,
+                                   const std::vector<gl::VertexBinding> &vertexBindings)
+{
+    for (const gl::VertexBinding &vertexBinding : vertexBindings)
+    {
+        bos->writeInt(vertexBinding.getStride());
+        bos->writeInt(vertexBinding.getDivisor());
+        bos->writeInt(vertexBinding.getOffset());
+        bos->writeInt(vertexBinding.getBuffer().id().value);
+        bos->writeInt(vertexBinding.getBoundAttributesMask().to_ulong());
+    }
+}
+
+void SerializeVertexArrayState(gl::BinaryOutputStream *bos,
+                               const gl::VertexArrayState &vertexArrayState)
+{
+    bos->writeString(vertexArrayState.getLabel());
+    SerializeVertexAttributeVector(bos, vertexArrayState.getVertexAttributes());
+    // SubjectBindingPointer<Buffer> mElementArrayBuffer;
+    SerializeVertexBindingsVector(bos, vertexArrayState.getVertexBindings());
+    bos->writeInt(vertexArrayState.getEnabledAttributesMask().to_ulong());
+    bos->writeInt(vertexArrayState.getVertexAttributesTypeMask().to_ulong());
+    bos->writeInt(vertexArrayState.getClientMemoryAttribsMask().to_ulong());
+    bos->writeInt(vertexArrayState.getNullPointerClientMemoryAttribsMask().to_ulong());
+}
+
+void SerializeVertexArray(gl::BinaryOutputStream *bos, gl::VertexArray *vertexArray)
+{
+    bos->writeInt(vertexArray->id().value);
+    SerializeVertexArrayState(bos, vertexArray->getState());
+    bos->writeInt(vertexArray->isBufferAccessValidationEnabled());
+}
+
 }  // namespace
 
 Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
@@ -538,6 +608,10 @@ Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
     {
         gl::Sampler *samplerPtr = sampler.second;
         SerializeSampler(bos, samplerPtr);
+    }
+    if (context->getState().getVertexArray())
+    {
+        SerializeVertexArray(bos, context->getState().getVertexArray());
     }
     scratchBuffer.clear();
     return Result::Continue;
