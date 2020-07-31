@@ -47,6 +47,8 @@ enum class TExtension : uint8_t
     APPLE_clip_distance,
     OES_texture_cube_map_array,
     EXT_texture_cube_map_array,
+    OES_texture_buffer,
+    EXT_texture_buffer,
 };
 
 enum TBehavior : uint8_t
