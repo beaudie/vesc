@@ -285,6 +285,33 @@ EventName GetTraceEventName(const char *title, uint32_t counter)
 }
 }  // anonymous namespace
 
+ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
+{
+    if (mWriteDescriptorSets.empty())
+    {
+        ASSERT(mDescriptorBufferInfos.empty());
+        ASSERT(mDescriptorImageInfos.empty());
+        return;
+    }
+
+    vkUpdateDescriptorSets(getDevice(), static_cast<uint32_t>(mWriteDescriptorSets.size()),
+                           mWriteDescriptorSets.data(), 0, nullptr);
+    mWriteDescriptorSets.clear();
+    mDescriptorBufferInfos.clear();
+    mDescriptorImageInfos.clear();
+}
+
+// ContextVk::ScopedDescriptorSetUpdates implementation.
+class ContextVk::ScopedDescriptorSetUpdates final : angle::NonCopyable
+{
+  public:
+    ANGLE_INLINE ScopedDescriptorSetUpdates(ContextVk *contextVk) : mContextVk(contextVk) {}
+    ANGLE_INLINE ~ScopedDescriptorSetUpdates() { mContextVk->flushDescriptorSetUpdates(); }
+
+  private:
+    ContextVk *mContextVk;
+};
+
 ContextVk::DriverUniformsDescriptorSet::DriverUniformsDescriptorSet()
     : descriptorSet(VK_NULL_HANDLE), dynamicOffset(0)
 {}
@@ -632,9 +659,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mRenderPassCounter(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mCurrentIndirectBuffer(nullptr),
-      mBufferInfos(),
-      mImageInfos(),
-      mWriteInfos(),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
@@ -726,9 +750,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
 
     // Reserve reasonable amount of spaces so that for majority of apps we don't need to grow at all
-    mBufferInfos.reserve(kDescriptorBufferInfosInitialSize);
-    mImageInfos.reserve(kDescriptorImageInfosInitialSize);
-    mWriteInfos.reserve(kDescriptorWriteInfosInitialSize);
+    mDescriptorBufferInfos.reserve(kDescriptorBufferInfosInitialSize);
+    mDescriptorImageInfos.reserve(kDescriptorImageInfosInitialSize);
+    mWriteDescriptorSets.reserve(kDescriptorWriteInfosInitialSize);
 }
 
 ContextVk::~ContextVk() = default;
@@ -4651,14 +4675,14 @@ bool ContextVk::isRobustResourceInitEnabled() const
 
 VkDescriptorBufferInfo &ContextVk::allocBufferInfos(size_t count)
 {
-    return allocInfos<VkDescriptorBufferInfo, &VkWriteDescriptorSet::pBufferInfo>(&mBufferInfos,
-                                                                                  count);
+    return allocInfos<VkDescriptorBufferInfo, &VkWriteDescriptorSet::pBufferInfo>(
+        &mDescriptorBufferInfos, count);
 }
 
 VkDescriptorImageInfo &ContextVk::allocImageInfos(size_t count)
 {
-    return allocInfos<VkDescriptorImageInfo, &VkWriteDescriptorSet::pImageInfo>(&mImageInfos,
-                                                                                count);
+    return allocInfos<VkDescriptorImageInfo, &VkWriteDescriptorSet::pImageInfo>(
+        &mDescriptorImageInfos, count);
 }
 
 template <typename T, const T *VkWriteDescriptorSet::*pInfo>
@@ -4686,7 +4710,7 @@ void ContextVk::growCapacity(std::vector<T> *mInfos, size_t newSize)
     if (oldInfoStart)
     {
         // patch mWriteInfo with new BufferInfo/ImageInfo pointers
-        for (VkWriteDescriptorSet &set : mWriteInfos)
+        for (VkWriteDescriptorSet &set : mWriteDescriptorSets)
         {
             if (set.*pInfo)
             {
@@ -4695,28 +4719,6 @@ void ContextVk::growCapacity(std::vector<T> *mInfos, size_t newSize)
             }
         }
     }
-}
-
-// ScopedDescriptorSetUpdates
-ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::ScopedDescriptorSetUpdates(ContextVk *contextVk)
-    : mContextVk(contextVk)
-{}
-
-ANGLE_INLINE ContextVk::ScopedDescriptorSetUpdates::~ScopedDescriptorSetUpdates()
-{
-    if (mContextVk->mWriteInfos.empty())
-    {
-        ASSERT(mContextVk->mBufferInfos.empty());
-        ASSERT(mContextVk->mImageInfos.empty());
-        return;
-    }
-
-    vkUpdateDescriptorSets(mContextVk->getDevice(),
-                           static_cast<uint32_t>(mContextVk->mWriteInfos.size()),
-                           mContextVk->mWriteInfos.data(), 0, nullptr);
-    mContextVk->mWriteInfos.clear();
-    mContextVk->mBufferInfos.clear();
-    mContextVk->mImageInfos.clear();
 }
 
 BufferSerial ContextVk::generateBufferSerial()
