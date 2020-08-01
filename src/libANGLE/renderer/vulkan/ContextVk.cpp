@@ -49,12 +49,6 @@ namespace rx
 
 namespace
 {
-// For DesciptorSetUpdates
-constexpr size_t kDescriptorBufferInfosInitialSize = 8;
-constexpr size_t kDescriptorImageInfosInitialSize  = 4;
-constexpr size_t kDescriptorWriteInfosInitialSize =
-    kDescriptorBufferInfosInitialSize + kDescriptorImageInfosInitialSize;
-
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
 {
@@ -748,11 +742,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mPipelineDirtyBitsMask.set();
     mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
-
-    // Reserve reasonable amount of spaces so that for majority of apps we don't need to grow at all
-    mDescriptorBufferInfos.reserve(kDescriptorBufferInfosInitialSize);
-    mDescriptorImageInfos.reserve(kDescriptorImageInfosInitialSize);
-    mWriteDescriptorSets.reserve(kDescriptorWriteInfosInitialSize);
 }
 
 ContextVk::~ContextVk() = default;
@@ -3775,12 +3764,12 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
         &driverUniforms->descriptorPoolBinding, &driverUniforms->descriptorSet));
 
     // Update the driver uniform descriptor set.
-    VkDescriptorBufferInfo &bufferInfo = allocBufferInfo();
+    VkDescriptorBufferInfo &bufferInfo = allocDescriptorBufferInfo();
     bufferInfo.buffer                  = buffer->getBuffer().getHandle();
     bufferInfo.offset                  = 0;
     bufferInfo.range                   = driverUniformsSize;
 
-    VkWriteDescriptorSet &writeInfo = allocWriteInfo();
+    VkWriteDescriptorSet &writeInfo = allocWriteDescriptorSet();
     writeInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeInfo.dstSet                = driverUniforms->descriptorSet;
     writeInfo.dstBinding            = 0;
@@ -4673,52 +4662,36 @@ bool ContextVk::isRobustResourceInitEnabled() const
     return mState.isRobustResourceInitEnabled();
 }
 
-VkDescriptorBufferInfo &ContextVk::allocBufferInfos(size_t count)
+template <typename T>
+T *ContextVk::allocDescriptorInfos(DescriptorVector<T> *storage, uint32_t count)
 {
-    return allocInfos<VkDescriptorBufferInfo, &VkWriteDescriptorSet::pBufferInfo>(
-        &mDescriptorBufferInfos, count);
-}
+    ASSERT(count <= kMaxDescriptorUpdates);
 
-VkDescriptorImageInfo &ContextVk::allocImageInfos(size_t count)
-{
-    return allocInfos<VkDescriptorImageInfo, &VkWriteDescriptorSet::pImageInfo>(
-        &mDescriptorImageInfos, count);
-}
+    uint32_t oldSize = static_cast<uint32_t>(storage->size());
+    uint32_t newSize = count + oldSize;
 
-template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-T &ContextVk::allocInfos(std::vector<T> *mInfos, size_t count)
-{
-    size_t oldSize = mInfos->size();
-    size_t newSize = oldSize + count;
-    if (newSize > mInfos->capacity())
+    if (newSize > kMaxDescriptorUpdates)
     {
-        // If we have reached capacity, grow the storage and patch the descriptor set with new
-        // buffer info pointer
-        growCapacity<T, pInfo>(mInfos, newSize);
+        flushDescriptorSetUpdates();
     }
-    mInfos->resize(newSize);
-    return (*mInfos)[oldSize];
+
+    storage->resize(newSize);
+    return &(*storage)[oldSize];
 }
 
-template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-void ContextVk::growCapacity(std::vector<T> *mInfos, size_t newSize)
+VkWriteDescriptorSet *ContextVk::allocWriteDescriptorSets(uint32_t count)
 {
-    const T *const oldInfoStart = mInfos->empty() ? nullptr : &(*mInfos)[0];
-    size_t newCapacity          = std::max(mInfos->capacity() << 1, newSize);
-    mInfos->reserve(newCapacity);
+    return allocDescriptorInfos(&mWriteDescriptorSets, count);
+}
 
-    if (oldInfoStart)
-    {
-        // patch mWriteInfo with new BufferInfo/ImageInfo pointers
-        for (VkWriteDescriptorSet &set : mWriteDescriptorSets)
-        {
-            if (set.*pInfo)
-            {
-                size_t index = set.*pInfo - oldInfoStart;
-                set.*pInfo   = &(*mInfos)[index];
-            }
-        }
-    }
+VkDescriptorBufferInfo *ContextVk::allocDescriptorBufferInfos(uint32_t count)
+{
+    return allocDescriptorInfos(&mDescriptorBufferInfos, count);
+}
+
+VkDescriptorImageInfo *ContextVk::allocDescriptorImageInfos(uint32_t count)
+{
+    return allocDescriptorInfos(&mDescriptorImageInfos, count);
 }
 
 BufferSerial ContextVk::generateBufferSerial()

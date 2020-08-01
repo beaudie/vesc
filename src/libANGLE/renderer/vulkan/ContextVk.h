@@ -576,19 +576,14 @@ class ContextVk : public ContextImpl, public vk::Context
     // When worker thread completes, it releases command buffers back to context queue
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
 
-    // DescriptorSet writes
-    VkDescriptorBufferInfo &allocBufferInfo() { return allocBufferInfos(1); }
-    VkDescriptorBufferInfo &allocBufferInfos(size_t count);
-    VkDescriptorImageInfo &allocImageInfo() { return allocImageInfos(1); }
-    VkDescriptorImageInfo &allocImageInfos(size_t count);
-    VkWriteDescriptorSet &allocWriteInfo() { return allocWriteInfos(1); }
-    VkWriteDescriptorSet &allocWriteInfos(size_t count)
-    {
-        size_t oldSize = mWriteDescriptorSets.size();
-        size_t newSize = oldSize + count;
-        mWriteDescriptorSets.resize(newSize);
-        return mWriteDescriptorSets[oldSize];
-    }
+    // DescriptorSet writes. Returns a pointer to a block of multiple elements.
+    VkDescriptorBufferInfo *allocDescriptorBufferInfos(uint32_t count);
+    VkDescriptorImageInfo *allocDescriptorImageInfos(uint32_t count);
+    VkWriteDescriptorSet *allocWriteDescriptorSets(uint32_t count);
+
+    VkDescriptorBufferInfo &allocDescriptorBufferInfo() { return *allocDescriptorBufferInfos(1); }
+    VkDescriptorImageInfo &allocDescriptorImageInfo() { return *allocDescriptorImageInfos(1); }
+    VkWriteDescriptorSet &allocWriteDescriptorSet() { return *allocWriteDescriptorSets(1); }
 
     vk::DynamicBuffer *getDefaultUniformStorage() { return &mDefaultUniformStorage; }
     // For testing only.
@@ -682,6 +677,10 @@ class ContextVk : public ContextImpl, public vk::Context
     };
 
     class ScopedDescriptorSetUpdates;
+
+    static constexpr uint32_t kMaxDescriptorUpdates = 64;
+    template <typename T>
+    using DescriptorVector = angle::FixedVector<T, kMaxDescriptorUpdates>;
 
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
@@ -881,10 +880,8 @@ class ContextVk : public ContextImpl, public vk::Context
         const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
 
     // DescriptorSet writes
-    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-    T &allocInfos(std::vector<T> *mInfos, size_t count);
-    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-    void growCapacity(std::vector<T> *mInfos, size_t newSize);
+    template <typename T>
+    T *allocDescriptorInfos(DescriptorVector<T> *storage, uint32_t count);
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -1060,9 +1057,9 @@ class ContextVk : public ContextImpl, public vk::Context
     const vk::BufferHelper *mCurrentIndirectBuffer;
 
     // Storage for vkUpdateDescriptorSets
-    std::vector<VkDescriptorBufferInfo> mDescriptorBufferInfos;
-    std::vector<VkDescriptorImageInfo> mDescriptorImageInfos;
-    std::vector<VkWriteDescriptorSet> mWriteDescriptorSets;
+    DescriptorVector<VkDescriptorBufferInfo> mDescriptorBufferInfos;
+    DescriptorVector<VkDescriptorImageInfo> mDescriptorImageInfos;
+    DescriptorVector<VkWriteDescriptorSet> mWriteDescriptorSets;
 
     ShareGroupVk *mShareGroupVk;
 
