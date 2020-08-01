@@ -1706,7 +1706,12 @@ class ImageViewHelper : angle::NonCopyable
                                              const ImageView **imageViewOut);
 
     // Return unique Serial for this imageView, first assigning it if it hasn't yet been set
-    ImageViewSubresourceSerial getSubresourceSerial(uint32_t levelGL, uint32_t layer);
+    ImageViewSubresourceSerial getSubresourceSerial(uint32_t levelGL,
+                                                    uint32_t levelCount,
+                                                    uint32_t layer,
+                                                    bool singleLayer) const;
+
+    uint32_t getCurrentMaxLevel() const { return mCurrentMaxLevel; }
 
   private:
     ImageView &getReadImageView()
