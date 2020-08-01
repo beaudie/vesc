@@ -4971,12 +4971,20 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mPerLevelStencilReadImageViews, other.mPerLevelStencilReadImageViews);
     std::swap(mLevelDrawImageViews, other.mLevelDrawImageViews);
     std::swap(mLayerLevelDrawImageViews, other.mLayerLevelDrawImageViews);
-    std::swap(mSerialCache, other.mSerialCache);
+    std::swap(mImageViewSerial, other.mImageViewSerial);
 }
 
 ImageViewHelper::~ImageViewHelper()
 {
     mUse.release();
+}
+
+void ImageViewHelper::init(RendererVk *renderer)
+{
+    if (!mImageViewSerial.valid())
+    {
+        mImageViewSerial = renderer->getResourceSerialFactory().generateImageViewSerial();
+    }
 }
 
 void ImageViewHelper::release(RendererVk *renderer)
@@ -5016,7 +5024,8 @@ void ImageViewHelper::release(RendererVk *renderer)
         mUse.init();
     }
 
-    mSerialCache.clear();
+    // Reset image view serial.
+    mImageViewSerial = renderer->getResourceSerialFactory().generateImageViewSerial();
 }
 
 void ImageViewHelper::destroy(VkDevice device)
@@ -5043,7 +5052,7 @@ void ImageViewHelper::destroy(VkDevice device)
     }
     mLayerLevelDrawImageViews.clear();
 
-    mSerialCache.clear();
+    mImageViewSerial = vk::kInvalidImageViewSerial;
 }
 
 angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
@@ -5072,19 +5081,21 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
     }
     mCurrentMaxLevel = levelCount - 1;
 
-    // Determine if we already have ImageView's for the new max level
-    if (getReadImageView().getHandle() == VK_NULL_HANDLE)
+    // Determine if we already have ImageViews for the new max level
+    if (getReadImageView().valid())
     {
-        // Since we don't have a readImageView, we must create ImageView's for the new max level
-        ANGLE_TRY(initReadViewsImpl(contextVk, viewType, image, format, formatSwizzle, readSwizzle,
-                                    baseLevel, levelCount, baseLayer, layerCount));
+        return angle::Result::Continue;
+    }
 
-        if (requiresSRGBViews)
-        {
-            ANGLE_TRY(initSRGBReadViewsImpl(contextVk, viewType, image, format, formatSwizzle,
-                                            readSwizzle, baseLevel, levelCount, baseLayer,
-                                            layerCount, imageUsageFlags));
-        }
+    // Since we don't have a readImageView, we must create ImageViews for the new max level
+    ANGLE_TRY(initReadViewsImpl(contextVk, viewType, image, format, formatSwizzle, readSwizzle,
+                                baseLevel, levelCount, baseLayer, layerCount));
+
+    if (requiresSRGBViews)
+    {
+        ANGLE_TRY(initSRGBReadViewsImpl(contextVk, viewType, image, format, formatSwizzle,
+                                        readSwizzle, baseLevel, levelCount, baseLayer, layerCount,
+                                        imageUsageFlags));
     }
 
     return angle::Result::Continue;
@@ -5101,6 +5112,8 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
                                                  uint32_t baseLayer,
                                                  uint32_t layerCount)
 {
+    ASSERT(mImageViewSerial.valid());
+
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(format.intendedFormat());
     mLinearColorspace                    = IsLinearFormat(format.vkImageFormat);
 
@@ -5229,6 +5242,8 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
                                                      VkFormat vkImageFormat,
                                                      const ImageView **imageViewOut)
 {
+    ASSERT(mImageViewSerial.valid());
+
     retain(&contextVk->getResourceUseList());
 
     ImageView *imageView = GetLevelImageView(&mLevelDrawImageViews, levelVK, image.getLevelCount());
@@ -5252,6 +5267,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                                           const ImageView **imageViewOut)
 {
     ASSERT(image.valid());
+    ASSERT(mImageViewSerial.valid());
     ASSERT(!image.getFormat().actualImageFormat().isBlock);
 
     retain(&contextVk->getResourceUseList());
@@ -5282,17 +5298,13 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                     imageView, levelVK, 1, layer, 1);
 }
 
-ImageViewSerial ImageViewHelper::getAssignSerial(ContextVk *contextVk,
-                                                 uint32_t levelGL,
-                                                 uint32_t layer)
+ImageViewSubresourceSerial ImageViewHelper::getSubresourceSerial(uint32_t levelGL, uint32_t layer)
 {
-    LayerLevel layerLevelPair = {layer, levelGL};
-    if (mSerialCache.find(layerLevelPair) == mSerialCache.end())
-    {
-        vk::ResourceSerialFactory &factory = contextVk->getRenderer()->getResourceSerialFactory();
-        mSerialCache[layerLevelPair]       = factory.generateImageViewSerial();
-    }
-    return mSerialCache[layerLevelPair];
+    ImageViewSubresourceSerial serial;
+    serial.imageViewSerial = mImageViewSerial;
+    SetBitField(serial.level, levelGL);
+    SetBitField(serial.layer, layer);
+    return serial;
 }
 
 // SamplerHelper implementation.

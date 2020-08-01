@@ -1247,14 +1247,19 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     }
     mRenderTargets.clear();
 
+    RendererVk *renderer = contextVk->getRenderer();
+
     updateSerial(contextVk);
+    mImageViews.init(renderer);
+    mMultisampledImageViews.init(renderer);
 }
 
 void TextureVk::updateImageHelper(ContextVk *contextVk, size_t imageCopyBufferAlignment)
 {
+    RendererVk *renderer = contextVk->getRenderer();
     ASSERT(mImage != nullptr);
-    mImage->initStagingBuffer(contextVk->getRenderer(), imageCopyBufferAlignment,
-                              vk::kStagingBufferFlags, mStagingBufferInitialSize);
+    mImage->initStagingBuffer(renderer, imageCopyBufferAlignment, vk::kStagingBufferFlags,
+                              mStagingBufferInitialSize);
 }
 
 angle::Result TextureVk::redefineLevel(const gl::Context *context,
