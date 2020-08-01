@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "40334318_9152cb4d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-01T07:26:31Z",
+      "side": 1,
+      "message": "It seems my suspect of [MTLTexture getBytes]\u0027s bug was wrong.\nThere are two suspected Intel\u0027s driver bugs in this CL:\n- [MTLTexture getBytes]\n- Setting maxLodClamp\u003dFLT_MAX via setSamplerState API.\nI do isolated tests and found out that the real culprit is setting maxLodClamp\u003dFLT_MAX. It caused mipmap test failures on Intel. According to the collected metal traces, texture sampling always incorrectly picked the first mipmap regardless of rendered triangle\u0027s size.\n\nYes, I will try to report to Metal team. Will need to prepare a small standalone sample code for it though.",
+      "parentUuid": "7e84ba30_3eb560fc",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cad31e0_5eaf51a2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
