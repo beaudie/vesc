@@ -589,6 +589,7 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::DynamicBuffer *getStagingBufferStorage() { return &mStagingBufferStorage; }
 
     uint32_t getRenderPassCounter() const { return mRenderPassCounter; }
+    uint32_t getWriteDescriptorSetCounter() const { return mWriteDescriptorSetCounter; }
 
   private:
     // Dirty bits.
@@ -1042,6 +1043,7 @@ class ContextVk : public ContextImpl, public vk::Context
     // Used to count events for tracing.
     uint32_t mPrimaryBufferCounter;
     uint32_t mRenderPassCounter;
+    uint32_t mWriteDescriptorSetCounter;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
 
