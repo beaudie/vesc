@@ -787,6 +787,18 @@ class PipelineHelper final : angle::NonCopyable
 
 ANGLE_INLINE PipelineHelper::PipelineHelper(Pipeline &&pipeline) : mPipeline(std::move(pipeline)) {}
 
+struct ImageViewSubresourceSerial
+{
+    ImageViewSerial imageViewSerial;
+    uint16_t level;
+    uint16_t layer;
+};
+
+static_assert(sizeof(ImageViewSubresourceSerial) == sizeof(uint64_t), "Size mismatch");
+
+constexpr ImageViewSubresourceSerial kInvalidImageViewSubresourceSerial = {kInvalidImageViewSerial,
+                                                                           0, 0};
+
 class TextureDescriptorDesc
 {
   public:
@@ -867,9 +879,9 @@ class FramebufferDesc
     FramebufferDesc(const FramebufferDesc &other);
     FramebufferDesc &operator=(const FramebufferDesc &other);
 
-    void updateColor(uint32_t index, ImageViewSerial serial);
-    void updateColorResolve(uint32_t index, ImageViewSerial serial);
-    void updateDepthStencil(ImageViewSerial serial);
+    void updateColor(uint32_t index, ImageViewSubresourceSerial serial);
+    void updateColorResolve(uint32_t index, ImageViewSubresourceSerial serial);
+    void updateDepthStencil(ImageViewSubresourceSerial serial);
     size_t hash() const;
     void reset();
 
@@ -878,9 +890,9 @@ class FramebufferDesc
     uint32_t attachmentCount() const;
 
   private:
-    void update(uint32_t index, ImageViewSerial serial);
+    void update(uint32_t index, ImageViewSubresourceSerial serial);
 
-    FramebufferAttachmentArray<ImageViewSerial> mSerials;
+    FramebufferAttachmentArray<ImageViewSubresourceSerial> mSerials;
     uint32_t mMaxValidSerialIndex;
 };
 
