@@ -5298,12 +5298,17 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                     imageView, levelVK, 1, layer, 1);
 }
 
-ImageViewSubresourceSerial ImageViewHelper::getSubresourceSerial(uint32_t levelGL, uint32_t layer)
+ImageViewSubresourceSerial ImageViewHelper::getSubresourceSerial(uint32_t levelGL,
+                                                                 uint32_t levelCount,
+                                                                 uint32_t layer,
+                                                                 uint32_t layerCount) const
 {
     ImageViewSubresourceSerial serial;
     serial.imageViewSerial = mImageViewSerial;
     SetBitField(serial.level, levelGL);
+    SetBitField(serial.levelCount, levelCount);
     SetBitField(serial.layer, layer);
+    SetBitField(serial.layerCount, layerCount);
     return serial;
 }
 
