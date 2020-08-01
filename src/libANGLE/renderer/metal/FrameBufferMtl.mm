@@ -40,8 +40,6 @@ void FramebufferMtl::reset()
         rt = nullptr;
     }
     mDepthRenderTarget = mStencilRenderTarget = nullptr;
-
-    mCachedReadPixelBuffer = nullptr;
 }
 
 void FramebufferMtl::destroy(const gl::Context *context)
@@ -287,9 +285,6 @@ angle::Result FramebufferMtl::syncState(const gl::Context *context,
         {
             contextMtl->onDrawFrameBufferChange(context, this);
         }
-
-        // Invalidate pixel reading buffer. It would be created if needed later.
-        mCachedReadPixelBuffer = nullptr;
     }
 
     return angle::Result::Continue;
@@ -436,9 +431,6 @@ void FramebufferMtl::onStartedDrawingToFrameBuffer(const gl::Context *context)
 
     // Stencil load/store
     setLoadStoreActionOnRenderPassFirstStart(&mRenderPassDesc.stencilAttachment);
-
-    // This pixel read buffer is not needed anymore
-    mCachedReadPixelBuffer = nullptr;
 }
 
 void FramebufferMtl::onFrameEnd(const gl::Context *context)
@@ -823,55 +815,31 @@ angle::Result FramebufferMtl::readPixelsImpl(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    mtl::TextureRef texture;
-    uint32_t level;
+    mtl::Texture *texture;
     if (mBackbuffer)
     {
         // Backbuffer might have MSAA texture as render target, needs to obtain the
         // resolved texture to be able to read pixels.
         ANGLE_TRY(mBackbuffer->ensureColorTextureReadyForReadPixels(context));
-        texture = mBackbuffer->getColorTexture();
-        level   = 0;
+        texture = mBackbuffer->getColorTexture().get();
     }
     else
     {
-        texture = renderTarget->getTexture();
-        level   = renderTarget->getLevelIndex();
-        // NOTE(hqle): layered texture is not supported yet.
-        ASSERT(renderTarget->getLayerIndex() == 0);
+        texture = renderTarget->getTexture().get();
         // For non-default framebuffer, MSAA read pixels is disallowed.
         ANGLE_MTL_CHECK(contextMtl, texture->samples() == 1, GL_INVALID_OPERATION);
     }
 
     const mtl::Format &readFormat        = *renderTarget->getFormat();
     const angle::Format &readAngleFormat = readFormat.actualAngleFormat();
-    uint32_t width                       = texture->width(level);
-    uint32_t height                      = texture->height(level);
-    uint32_t bufferRowPitch              = readAngleFormat.pixelBytes * width;
 
-    // 1. Cache texture's data in a buffer if texture's CPU read flag is dirty.
-    if (!mCachedReadPixelBuffer || texture->isCPUReadMemDirty())
-    {
-        size_t bufferSize = bufferRowPitch * height;
-        if (!mCachedReadPixelBuffer || bufferSize > mCachedReadPixelBuffer->size())
-        {
-            ANGLE_TRY(
-                mtl::Buffer::MakeBuffer(contextMtl, bufferSize, nullptr, &mCachedReadPixelBuffer));
-        }
+    // NOTE(hqle): resolve MSAA texture before readback
+    int srcRowPitch = area.width * readAngleFormat.pixelBytes;
+    angle::MemoryBuffer readPixelRowBuffer;
+    ANGLE_CHECK_GL_ALLOC(contextMtl, readPixelRowBuffer.resize(srcRowPitch));
 
-        mtl::BlitCommandEncoder *blitEncoder = contextMtl->getBlitCommandEncoder();
-        blitEncoder->copyTextureToBuffer(texture, /* srcSlice */ 0, level, MTLOriginMake(0, 0, 0),
-                                         MTLSizeMake(width, height, 1), mCachedReadPixelBuffer, 0,
-                                         bufferRowPitch, 0, MTLBlitOptionNone);
-
-        texture->resetCPUReadMemDirty();
-    }
-
-    // 2. Copy data from buffer to client memory
-    const uint8_t *bufferData = mCachedReadPixelBuffer->mapReadOnly(contextMtl);
-
-    auto packPixelsRowParams = packPixelsParams;
-    gl::Rectangle srcRowRegion(area.x, area.y, area.width, 1);
+    auto packPixelsRowParams  = packPixelsParams;
+    MTLRegion mtlSrcRowRegion = MTLRegionMake2D(area.x, area.y, area.width, 1);
 
     int rowOffset = packPixelsParams.reverseRowOrder ? -1 : 1;
     int startRow  = packPixelsParams.reverseRowOrder ? (area.y1() - 1) : area.y;
@@ -882,17 +850,18 @@ angle::Result FramebufferMtl::readPixelsImpl(const gl::Context *context,
     for (int r = startRow, i = 0; i < area.height;
          ++i, r += rowOffset, pixels += packPixelsRowParams.outputPitch)
     {
-        srcRowRegion.y             = r;
+        mtlSrcRowRegion.origin.y   = r;
         packPixelsRowParams.area.y = packPixelsParams.area.y + i;
 
-        const uint8_t *src = bufferData + srcRowRegion.x * readAngleFormat.pixelBytes +
-                             srcRowRegion.y * bufferRowPitch;
+        // Read the pixels data to the row buffer
+        texture->getBytes(contextMtl, srcRowPitch, mtlSrcRowRegion,
+                          static_cast<uint32_t>(renderTarget->getLevelIndex()),
+                          readPixelRowBuffer.data());
 
         // Convert to destination format
-        PackPixels(packPixelsRowParams, readAngleFormat, bufferRowPitch, src, pixels);
+        PackPixels(packPixelsRowParams, readAngleFormat, srcRowPitch, readPixelRowBuffer.data(),
+                   pixels);
     }
-
-    mCachedReadPixelBuffer->unmap(contextMtl);
 
     return angle::Result::Continue;
 }

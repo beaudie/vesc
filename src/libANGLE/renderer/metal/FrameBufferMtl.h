@@ -169,9 +169,6 @@ class FramebufferMtl : public FramebufferImpl
 
     WindowSurfaceMtl *mBackbuffer = nullptr;
     const bool mFlipY             = false;
-
-    // Buffer to hold framebuffer's (resolved) pixels data.
-    mtl::BufferRef mCachedReadPixelBuffer;
 };
 }  // namespace rx
 
