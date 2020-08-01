@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "bd83125f_d125c648",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-01T07:28:20Z",
+      "side": 1,
+      "message": "Yes, I think it\u0027s better to just enable surfaceless extension in Metal.\nAnw, does Chromium require other extensions beside this one? For example, robust resource init?",
+      "revId": "70988754bcc34dd532aaad2b3be3e75757019b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7e37bbc_c9981f30",
         "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
         "patchSetId": 1
