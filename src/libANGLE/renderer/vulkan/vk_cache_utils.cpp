@@ -1800,27 +1800,27 @@ FramebufferDesc::~FramebufferDesc()                            = default;
 FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
 FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
 
-void FramebufferDesc::update(uint32_t index, ImageViewSerial serial)
+void FramebufferDesc::update(uint32_t index, ImageViewSubresourceSerial serial)
 {
     ASSERT(index < kMaxFramebufferAttachments);
     mSerials[index] = serial;
-    if (serial.valid())
+    if (serial.imageViewSerial.valid())
     {
-        mMaxValidSerialIndex = std::max(mMaxValidSerialIndex, index);
+        mMaxValidSerialIndex = std::max(mMaxValidSerialIndex, index + 1);
     }
 }
 
-void FramebufferDesc::updateColor(uint32_t index, ImageViewSerial serial)
+void FramebufferDesc::updateColor(uint32_t index, ImageViewSubresourceSerial serial)
 {
     update(kFramebufferDescColorIndexOffset + index, serial);
 }
 
-void FramebufferDesc::updateColorResolve(uint32_t index, ImageViewSerial serial)
+void FramebufferDesc::updateColorResolve(uint32_t index, ImageViewSubresourceSerial serial)
 {
     update(kFramebufferDescResolveIndexOffset + index, serial);
 }
 
-void FramebufferDesc::updateDepthStencil(ImageViewSerial serial)
+void FramebufferDesc::updateDepthStencil(ImageViewSubresourceSerial serial)
 {
     update(kFramebufferDescDepthStencilIndex, serial);
 }
@@ -1843,16 +1843,16 @@ bool FramebufferDesc::operator==(const FramebufferDesc &other) const
         return false;
     }
 
-    return memcmp(&mSerials, &other.mSerials, sizeof(mSerials[0]) * (mMaxValidSerialIndex + 1)) ==
-           0;
+    size_t validRegionSize = sizeof(mSerials[0]) * mMaxValidSerialIndex;
+    return memcmp(&mSerials, &other.mSerials, validRegionSize) == 0;
 }
 
 uint32_t FramebufferDesc::attachmentCount() const
 {
     uint32_t count = 0;
-    for (const ImageViewSerial &serial : mSerials)
+    for (const ImageViewSubresourceSerial &serial : mSerials)
     {
-        if (serial.valid())
+        if (serial.imageViewSerial.valid())
         {
             count++;
         }
