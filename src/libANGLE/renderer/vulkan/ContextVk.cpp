@@ -3883,7 +3883,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         mActiveTextures[textureUnit].sampler = samplerVk;
         // Cache serials from sampler and texture, but re-use texture if no sampler bound
         ASSERT(textureVk != nullptr);
-        mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
+        vk::ImageViewSubresourceSerial imageViewSerial = textureVk->getImageViewSubresourceSerial();
+        mActiveTexturesDesc.update(textureUnit, imageViewSerial, samplerSerial);
     }
 
     if (haveImmutableSampler)
