@@ -651,6 +651,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuEventTimestampOrigin(0),
       mPrimaryBufferCounter(0),
       mRenderPassCounter(0),
+      mWriteDescriptorSetCounter(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mCurrentIndirectBuffer(nullptr),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
@@ -3860,7 +3861,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         mActiveTextures[textureUnit].sampler = samplerVk;
         // Cache serials from sampler and texture, but re-use texture if no sampler bound
         ASSERT(textureVk != nullptr);
-        mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
+        vk::ImageViewSubresourceSerial imageViewSerial = textureVk->getImageViewSubresourceSerial();
+        mActiveTexturesDesc.update(textureUnit, imageViewSerial, samplerSerial);
     }
 
     if (haveImmutableSampler)
@@ -4020,7 +4022,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 
     ANGLE_TRY(startPrimaryCommandBuffer());
 
-    mRenderPassCounter = 0;
+    mRenderPassCounter         = 0;
+    mWriteDescriptorSetCounter = 0;
+
     mWaitSemaphores.clear();
     mWaitSemaphoreStageMasks.clear();
 
@@ -4681,6 +4685,7 @@ T *ContextVk::allocDescriptorInfos(DescriptorVector<T> *storage, uint32_t count)
 
 VkWriteDescriptorSet *ContextVk::allocWriteDescriptorSets(uint32_t count)
 {
+    mWriteDescriptorSetCounter += count;
     return allocDescriptorInfos(&mWriteDescriptorSets, count);
 }
 
