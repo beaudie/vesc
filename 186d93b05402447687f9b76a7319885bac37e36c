@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f916a99b_1e99d62e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-01T03:57:13Z",
+      "side": 1,
+      "message": "The win-angle-rel-64 faiure appears to be either AMD bug or subtle ANGLE bug that exposed by this new test. I have filed // http://anglebug.com/4914 to track it and the CL https://chromium-review.googlesource.com/c/angle/angle/+/2328806 to narrow down to the specific code that made it fail. I am skipping the test for AMD with the open bug and will try to land this CL on Monday. ",
+      "revId": "186d93b05402447687f9b76a7319885bac37e36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
