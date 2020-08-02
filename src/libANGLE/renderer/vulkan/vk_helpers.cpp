@@ -562,6 +562,17 @@ void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer, bool mergeB
     mMergeBarriers             = mergeBarriers;
 }
 
+bool CommandBufferHelper::usesBuffer(const BufferHelper &buffer) const
+{
+    return mUsedBuffers.count(buffer.getBufferSerial()) > 0;
+}
+
+bool CommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer) const
+{
+    auto iter = mUsedBuffers.find(buffer.getBufferSerial());
+    return iter != mUsedBuffers.end() && iter->second == BufferAccess::Write;
+}
+
 void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
                                      VkAccessFlags readAccessType,
                                      vk::PipelineStage readStage,
@@ -573,6 +584,9 @@ void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
     {
         mPipelineBarrierMask.set(readStage);
     }
+
+    ASSERT(!usesBufferForWrite(*buffer));
+    mUsedBuffers[buffer->getBufferSerial()] = BufferAccess::Read;
 }
 
 void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
@@ -586,6 +600,9 @@ void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
     {
         mPipelineBarrierMask.set(writeStage);
     }
+
+    ASSERT(!usesBuffer(*buffer));
+    mUsedBuffers[buffer->getBufferSerial()] = BufferAccess::Write;
 }
 
 void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
@@ -854,6 +871,8 @@ void CommandBufferHelper::reset()
     mAllocator.pop();
     mAllocator.push();
     mCommandBuffer.reset();
+    mUsedBuffers.clear();
+
     if (mIsRenderPassCommandBuffer)
     {
         mRenderPassStarted                 = false;
@@ -2455,22 +2474,6 @@ bool BufferHelper::isReleasedToExternal() const
     // TODO(anglebug.com/4635): Implement external memory barriers on Mac/Android.
     return false;
 #endif
-}
-
-bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType)
-{
-    // We only need to start a new command buffer when we need a new barrier.
-    // For simplicity's sake for now we always start a new command buffer.
-    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4429
-    return false;
-}
-
-bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)
-{
-    // We only need to start a new command buffer when we need a new barrier.
-    // For simplicity's sake for now we always start a new command buffer.
-    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4429
-    return false;
 }
 
 bool BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
