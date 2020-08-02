@@ -508,11 +508,8 @@ class ContextVk : public ContextImpl, public vk::Context
                                 vk::ImageLayout imageLayout,
                                 vk::ImageHelper *image);
 
-    angle::Result endRenderPassAndGetCommandBuffer(vk::CommandBuffer **commandBufferOut)
+    angle::Result getOutsideRenderPassCommandBuffer(vk::CommandBuffer **commandBufferOut)
     {
-        // Only one command buffer should be active at a time
-        ASSERT(mOutsideRenderPassCommands->empty() || mRenderPassCommands->empty());
-        ANGLE_TRY(endRenderPass());
         *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
         return angle::Result::Continue;
     }
@@ -865,6 +862,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // Pull an available CBH ptr from the CBH queue and set to specified hasRenderPass state
     void getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer, bool hasRenderPass);
+
+    angle::Result endRenderPassIfImageUsed(const vk::ImageHelper &image);
 
     angle::Result endRenderPassIfTransformFeedbackBuffer(const vk::BufferHelper *buffer);
 
