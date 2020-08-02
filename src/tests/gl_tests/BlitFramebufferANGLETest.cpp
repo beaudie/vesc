@@ -2006,6 +2006,7 @@ ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_VULKAN(),
-                       ES3_VULKAN());
+                       ES3_VULKAN(),
+                       ES2_METAL());
 
 ANGLE_INSTANTIATE_TEST_ES3(BlitFramebufferTest);
