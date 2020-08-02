@@ -13,6 +13,8 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
+#include <unordered_set>
+
 namespace gl
 {
 class ImageIndex;
@@ -961,6 +963,7 @@ struct CommandBufferHelper : angle::NonCopyable
 
     bool usesBuffer(const BufferHelper &buffer) const;
     bool usesBufferForWrite(const BufferHelper &buffer) const;
+    bool usesImage(const ImageHelper &image) const;
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
@@ -995,6 +998,7 @@ struct CommandBufferHelper : angle::NonCopyable
 
     // Tracks resources used in the command buffer.
     std::unordered_map<BufferSerial, BufferAccess> mUsedBuffers;
+    std::unordered_set<vk::ImageSerial> mRenderPassImageSerials;
 };
 
 // Imagine an image going through a few layout transitions:
@@ -1936,6 +1940,12 @@ class ActiveHandleCounter final : angle::NonCopyable
     angle::PackedEnumMap<HandleType, uint32_t> mActiveCounts;
     angle::PackedEnumMap<HandleType, uint32_t> mAllocatedCounts;
 };
+
+ANGLE_INLINE bool CommandBufferHelper::usesImage(const ImageHelper &image) const
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    return mRenderPassImageSerials.count(image.getImageSerial()) > 0;
+}
 }  // namespace vk
 }  // namespace rx
 
