@@ -591,6 +591,7 @@ class ContextVk : public ContextImpl, public vk::Context
 
     uint32_t getRenderPassCounter() const { return mRenderPassCounter; }
     uint32_t getWriteDescriptorSetCounter() const { return mWriteDescriptorSetCounter; }
+    uint32_t getSecondaryCommandBufferCounter() const { return mSecondaryCommandBufferCounter; }
 
   private:
     // Dirty bits.
@@ -1039,10 +1040,11 @@ class ContextVk : public ContextImpl, public vk::Context
     // double.
     uint64_t mGpuEventTimestampOrigin;
 
-    // Used to count events for tracing.
+    // Performance and resource counters.
     uint32_t mPrimaryBufferCounter;
     uint32_t mRenderPassCounter;
     uint32_t mWriteDescriptorSetCounter;
+    uint32_t mSecondaryCommandBufferCounter;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
 
