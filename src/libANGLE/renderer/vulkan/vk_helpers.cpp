@@ -597,7 +597,7 @@ void CommandBufferHelper::bufferRead(ResourceUseList *resourceUseList,
 void CommandBufferHelper::bufferWrite(ResourceUseList *resourceUseList,
                                       VkAccessFlags writeAccessType,
                                       PipelineStage writeStage,
-                                      BufferAliasingMode aliasingMode,
+                                      AliasingMode aliasingMode,
                                       BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
@@ -611,7 +611,7 @@ void CommandBufferHelper::bufferWrite(ResourceUseList *resourceUseList,
     // We support aliasing by not tracking storage buffers. This works well with the GL API
     // because storage buffers are required to be externally synchronized.
     // Compute / XFB emulation buffers are not allowed to alias.
-    if (aliasingMode == BufferAliasingMode::Disallowed)
+    if (aliasingMode == AliasingMode::Disallowed)
     {
         ASSERT(!usesBuffer(*buffer));
         mUsedBuffers[buffer->getBufferSerial()] = BufferAccess::Write;
@@ -634,11 +634,18 @@ void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
             mPipelineBarrierMask.set(barrierIndex);
         }
     }
+
+    if (mIsRenderPassCommandBuffer)
+    {
+        ImageSubresourceRange range = {};
+        mRenderPassUsedImages.emplace(image->getImageSerial(), range);
+    }
 }
 
 void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
                                      VkImageAspectFlags aspectFlags,
                                      ImageLayout imageLayout,
+                                     AliasingMode aliasingMode,
                                      ImageHelper *image)
 {
     image->retain(resourceUseList);
@@ -650,6 +657,14 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
     if (image->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier))
     {
         mPipelineBarrierMask.set(barrierIndex);
+    }
+
+    if (mIsRenderPassCommandBuffer)
+    {
+        ASSERT(!usesImageInRenderPass(*image));
+
+        ImageSubresourceRange subresource;
+        mRenderPassUsedImages.emplace(image->getImageSerial(), subresource);
     }
 }
 
@@ -921,11 +936,13 @@ void CommandBufferHelper::reset()
         mDepthTestEverEnabled              = false;
         mStencilTestEverEnabled            = false;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
+        mRenderPassUsedImages.clear();
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
     ASSERT(mValidTransformFeedbackBufferCount == 0);
     ASSERT(mRebindTransformFeedbackBuffers == false);
+    ASSERT(mRenderPassUsedImages.empty());
 }
 
 void CommandBufferHelper::releaseToContextQueue(ContextVk *contextVk)
@@ -4543,11 +4560,6 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(allocateStagingMemory(contextVk, *bufferSize, outDataPtr, bufferOut, bufferOffsetsOut,
                                     nullptr));
 
-    CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->onImageTransferRead(aspectFlags, this));
-    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-
     uint32_t sourceLevelVk = static_cast<uint32_t>(sourceLevelGL) - mBaseLevel;
 
     VkBufferImageCopy regions[2] = {};
@@ -4596,9 +4608,13 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
         regions[1].imageSubresource.baseArrayLayer = baseLayer;
         regions[1].imageSubresource.layerCount     = layerCount;
         regions[1].imageSubresource.mipLevel       = sourceLevelVk;
-        commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
-                                         (*bufferOut)->getBuffer().getHandle(), 1, &regions[1]);
     }
+
+    CommandBuffer *commandBuffer = nullptr;
+
+    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
+    ANGLE_TRY(contextVk->onImageTransferRead(aspectFlags, this));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
                                      (*bufferOut)->getBuffer().getHandle(), 1, regions);
@@ -5361,10 +5377,10 @@ ImageViewSubresourceSerial ImageViewHelper::getSubresourceSerial(uint32_t levelG
 
     ImageViewSubresourceSerial serial;
     serial.imageViewSerial = mImageViewSerial;
-    SetBitField(serial.level, levelGL);
-    SetBitField(serial.levelCount, levelCount);
-    SetBitField(serial.layer, layer);
-    SetBitField(serial.singleLayer, layerMode == LayerMode::Single ? 1 : 0);
+    SetBitField(serial.subresource.level, levelGL);
+    SetBitField(serial.subresource.levelCount, levelCount);
+    SetBitField(serial.subresource.layer, layer);
+    SetBitField(serial.subresource.singleLayer, layerMode == LayerMode::Single ? 1 : 0);
     return serial;
 }
 
