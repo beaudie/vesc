@@ -184,7 +184,8 @@ class FramebufferVk : public FramebufferImpl
                                 uint8_t stencilMask,
                                 const VkClearColorValue &clearColorValue,
                                 const VkClearDepthStencilValue &clearDepthStencilValue);
-    void clearWithRenderPassOp(gl::DrawBufferMask clearColorBuffers,
+    void clearWithRenderPassOp(ContextVk *contextVk,
+                               gl::DrawBufferMask clearColorBuffers,
                                bool clearDepth,
                                bool clearStencil,
                                const VkClearColorValue &clearColorValue,
