@@ -3385,7 +3385,9 @@ angle::Result ContextVk::onBeginTransformFeedback(
 
     for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
-        if (mCurrentTransformFeedbackBuffers.count(buffers[bufferIndex]) != 0)
+        const vk::BufferHelper *buffer = buffers[bufferIndex];
+        if (mCurrentTransformFeedbackBuffers.count(buffer) != 0 ||
+            mRenderPassCommands->usesBuffer(*buffer))
         {
             ANGLE_TRY(endRenderPass());
             break;
@@ -4322,7 +4324,8 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
 
     ANGLE_TRY(endRenderPass());
 
-    if (!buffer->canAccumulateRead(this, readAccessType))
+    // A current write access means we need to start a new command buffer.
+    if (mOutsideRenderPassCommands->usesBufferForWrite(*buffer))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
@@ -4340,7 +4343,8 @@ angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
 
     ANGLE_TRY(endRenderPass());
 
-    if (!buffer->canAccumulateWrite(this, writeAccessType))
+    // Any current write access means we need to start a new command buffer.
+    if (mOutsideRenderPassCommands->usesBuffer(*buffer))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
