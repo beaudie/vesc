@@ -100,6 +100,7 @@ class FramebufferMtl : public FramebufferImpl
 
     bool renderPassHasStarted(ContextMtl *contextMtl) const;
     mtl::RenderCommandEncoder *ensureRenderPassStarted(const gl::Context *context);
+    mtl::RenderCommandEncoder *ensureDepthStencilOnlyRenderPassStarted(const gl::Context *context);
 
     // Call this to notify FramebufferMtl whenever its render pass has started.
     void onStartedDrawingToFrameBuffer(const gl::Context *context);
@@ -120,6 +121,13 @@ class FramebufferMtl : public FramebufferImpl
   private:
     void reset();
     angle::Result invalidateImpl(ContextMtl *contextMtl, size_t count, const GLenum *attachments);
+    angle::Result blitWithDraw(const gl::Context *context,
+                               FramebufferMtl *srcFrameBuffer,
+                               bool blitColorBuffer,
+                               bool blitDepthBuffer,
+                               bool blitStencilBuffer,
+                               GLenum filter,
+                               const mtl::BlitParams &baseParams);
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,
                             mtl::ClearRectParams *clearOpts);
@@ -128,6 +136,15 @@ class FramebufferMtl : public FramebufferImpl
                                   gl::DrawBufferMask clearColorBuffers,
                                   const mtl::ClearRectParams &clearOpts);
 
+    angle::Result clearWithLoadOpRenderPassNotStarted(const gl::Context *context,
+                                                      gl::DrawBufferMask clearColorBuffers,
+                                                      const mtl::ClearRectParams &clearOpts);
+
+    angle::Result clearWithLoadOpRenderPassStarted(const gl::Context *context,
+                                                   gl::DrawBufferMask clearColorBuffers,
+                                                   const mtl::ClearRectParams &clearOpts,
+                                                   mtl::RenderCommandEncoder *encoder);
+
     angle::Result clearWithDraw(const gl::Context *context,
                                 gl::DrawBufferMask clearColorBuffers,
                                 const mtl::ClearRectParams &clearOpts);
@@ -135,6 +152,7 @@ class FramebufferMtl : public FramebufferImpl
     // Initialize load store options for a render pass's first start (i.e. not render pass resuming
     // from interruptions such as those caused by a conversion compute pass)
     void setLoadStoreActionOnRenderPassFirstStart(mtl::RenderPassAttachmentDesc *attachmentOut);
+    void setDefaultStoreAction(mtl::RenderPassAttachmentDesc *attachmentOut);
 
     // Fill RenderPassDesc with relevant attachment's info from GL front end.
     angle::Result prepareRenderPass(const gl::Context *context, mtl::RenderPassDesc *descOut);

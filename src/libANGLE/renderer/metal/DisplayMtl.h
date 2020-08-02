@@ -111,6 +111,9 @@ class DisplayMtl : public DisplayImpl
     bool supportEitherGPUFamily(uint8_t iOSFamily, uint8_t macFamily) const;
     bool supportiOSGPUFamily(uint8_t iOSFamily) const;
     bool supportMacGPUFamily(uint8_t macFamily) const;
+    bool isAMD() const;
+    bool isIntel() const;
+    bool isNVIDIA() const;
 
     id<MTLDevice> getMetalDevice() const { return mMetalDevice; }
 

@@ -30,6 +30,12 @@ struct FeaturesMtl : FeatureSetBase
     Feature hasNonUniformDispatch = {
         "has_non_uniform_dispatch", FeatureCategory::MetalFeatures,
         "The renderer supports non uniform compute shader dispatch's group size", &members};
+
+    // fragment stencil output support
+    Feature hasStencilOutput = {"has_stencil_output", FeatureCategory::MetalFeatures,
+                                "The renderer supports stencil output from fragment shader",
+                                &members};
+
     // Texture swizzle support:
     Feature hasTextureSwizzle = {"has_texture_swizzle", FeatureCategory::MetalFeatures,
                                  "The renderer supports texture swizzle", &members};
@@ -53,6 +59,15 @@ struct FeaturesMtl : FeatureSetBase
     Feature allowMultisampleStoreAndResolve = {
         "allow_msaa_store_and_resolve", FeatureCategory::MetalFeatures,
         "The renderer supports MSAA store and resolve in the same pass", &members};
+
+    // This is optimization feature. On some platforms, clear depth & stencil with shader
+    // can re-use the same render pass without any problem (the shader doesn't output anything to
+    // color attachment). However on some other platforms, not output anything to color attachment
+    // is illegal hence re-using the same render pass is not possible.
+    Feature reuseRenderPassForDSClearWithDraw = {
+        "reuse_render_pass_for_ds_clear_with_draw", FeatureCategory::MetalFeatures,
+        "The renderer will re-use the FrameBuffer's render pass for depth stencil clear with draw",
+        &members};
 };
 
 }  // namespace angle

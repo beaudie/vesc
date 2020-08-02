@@ -23,6 +23,24 @@
 namespace rx
 {
 
+namespace
+{
+
+bool DeviceNameContains(id<MTLDevice> metalDevice, NSString *txt)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        if (metalDevice)
+        {
+            return [metalDevice.name rangeOfString:txt].location != NSNotFound;
+        }
+
+        return false;
+    }
+}
+
+}
+
 bool IsMetalDisplayAvailable()
 {
     // We only support macos 10.13+ and 11 for now. Since they are requirements for Metal 2.0.
@@ -577,9 +595,9 @@ void DisplayMtl::initializeExtensions() const
     mNativeExtensions.mapBufferOES           = true;
     mNativeExtensions.mapBufferRange         = false;
     mNativeExtensions.textureStorage         = true;
-    mNativeExtensions.drawBuffers            = false;
+    mNativeExtensions.drawBuffers            = mFeatures.hasStencilOutput.enabled;
     mNativeExtensions.fragDepth              = true;
-    mNativeExtensions.framebufferBlit        = false;
+    mNativeExtensions.framebufferBlit        = true;
     mNativeExtensions.framebufferMultisample = false;
     mNativeExtensions.copyTexture            = false;
     mNativeExtensions.copyCompressedTexture  = false;
@@ -654,6 +672,7 @@ void DisplayMtl::initializeFeatures()
     mFeatures.hasBaseVertexInstancedDraw.enabled        = true;
     mFeatures.hasDepthTextureFiltering.enabled          = false;
     mFeatures.hasNonUniformDispatch.enabled             = true;
+    mFeatures.hasStencilOutput.enabled                  = false;
     mFeatures.hasTextureSwizzle.enabled                 = false;
     mFeatures.allowSeparatedDepthStencilBuffers.enabled = false;
 
@@ -661,7 +680,13 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), hasStencilAutoResolve, supportEitherGPUFamily(5, 2));
     ANGLE_FEATURE_CONDITION((&mFeatures), allowMultisampleStoreAndResolve,
                             supportEitherGPUFamily(3, 1));
+    ANGLE_FEATURE_CONDITION((&mFeatures), reuseRenderPassForDSClearWithDraw,
+                            !isIntel() && !isNVIDIA());
 
+    if (ANGLE_APPLE_AVAILABLE_XCI(10.14, 13.0, 12.0))
+    {
+        mFeatures.hasStencilOutput.enabled = true;
+    }
     if (ANGLE_APPLE_AVAILABLE_XCI(10.15, 13.0, 13.0))
     {
         ANGLE_FEATURE_CONDITION((&mFeatures), hasTextureSwizzle, supportEitherGPUFamily(1, 2));
@@ -695,11 +720,27 @@ angle::Result DisplayMtl::initializeShaderLibrary()
     size_t compiled_shader_binary_len;
 
 #if !defined(NDEBUG)
-    compiled_shader_binary     = compiled_default_metallib_debug;
-    compiled_shader_binary_len = compiled_default_metallib_debug_len;
+    if (getFeatures().hasStencilOutput.enabled)
+    {
+        compiled_shader_binary     = compiled_default_metallib_2_1_debug;
+        compiled_shader_binary_len = compiled_default_metallib_2_1_debug_len;
+    }
+    else
+    {
+        compiled_shader_binary     = compiled_default_metallib_debug;
+        compiled_shader_binary_len = compiled_default_metallib_debug_len;
+    }
 #else
-    compiled_shader_binary     = compiled_default_metallib;
-    compiled_shader_binary_len = compiled_default_metallib_len;
+    if (getFeatures().hasStencilOutput.enabled)
+    {
+        compiled_shader_binary     = compiled_default_metallib_2_1;
+        compiled_shader_binary_len = compiled_default_metallib_2_1_len;
+    }
+    else
+    {
+        compiled_shader_binary     = compiled_default_metallib;
+        compiled_shader_binary_len = compiled_default_metallib_len;
+    }
 #endif
 
     mDefaultShaders = CreateShaderLibraryFromBinary(getMetalDevice(), compiled_shader_binary,
@@ -862,6 +903,22 @@ bool DisplayMtl::supportMacGPUFamily(uint8_t macFamily) const
 bool DisplayMtl::supportEitherGPUFamily(uint8_t iOSFamily, uint8_t macFamily) const
 {
     return supportiOSGPUFamily(iOSFamily) || supportMacGPUFamily(macFamily);
+}
+
+bool DisplayMtl::isAMD() const
+{
+    return DeviceNameContains(mMetalDevice.get(), @"AMD");
+}
+
+bool DisplayMtl::isIntel() const
+{
+    return DeviceNameContains(mMetalDevice.get(), @"Intel");
+}
+
+bool DisplayMtl::isNVIDIA() const
+{
+    return DeviceNameContains(mMetalDevice.get(), @"NVIDIA") ||
+           DeviceNameContains(mMetalDevice.get(), @"Geforce");
 }
 
 }  // namespace rx
