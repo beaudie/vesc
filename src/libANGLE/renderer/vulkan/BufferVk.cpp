@@ -277,7 +277,7 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
 
     ANGLE_TRY(contextVk->onBufferTransferRead(sourceOffset, size, &sourceBuffer->getBuffer()));
     ANGLE_TRY(contextVk->onBufferTransferWrite(destOffset, size, mBuffer));
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     // Enqueue a copy command on the GPU.
     const VkBufferCopy copyRegion = {static_cast<VkDeviceSize>(sourceOffset),
@@ -599,7 +599,7 @@ angle::Result BufferVk::copyToBufferImpl(ContextVk *contextVk,
         ANGLE_TRY(contextVk->onBufferTransferRead(region.srcOffset, region.size, mBuffer));
     }
 
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     commandBuffer->copyBuffer(mBuffer->getBuffer(), destBuffer->getBuffer(), copyCount, copies);
 
