@@ -533,26 +533,23 @@ class ContextVk : public ContextImpl, public vk::Context
                                 vk::ImageHelper *image)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->imageWrite(&mResourceUseList, aspectFlags, imageLayout, image);
+        mRenderPassCommands->imageWrite(&mResourceUseList, aspectFlags, imageLayout,
+                                        vk::AliasingMode::Allowed, image);
     }
 
     angle::Result getOutsideRenderPassCommandBuffer(vk::CommandBuffer **commandBufferOut)
     {
-        // Only one command buffer should be active at a time
-        // TODO(jmadill): Do not end RenderPass. http://anglebug.com/4911
-        ASSERT(mOutsideRenderPassCommands->empty() || mRenderPassCommands->empty());
-        ANGLE_TRY(endRenderPass());
         *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
         return angle::Result::Continue;
     }
 
-    angle::Result flushAndBeginRenderPass(const vk::Framebuffer &framebuffer,
-                                          const gl::Rectangle &renderArea,
-                                          const vk::RenderPassDesc &renderPassDesc,
-                                          const vk::AttachmentOpsArray &renderPassAttachmentOps,
-                                          const uint32_t depthStencilAttachmentIndex,
-                                          const vk::ClearValuesArray &clearValues,
-                                          vk::CommandBuffer **commandBufferOut);
+    angle::Result beginNewRenderPass(const vk::Framebuffer &framebuffer,
+                                     const gl::Rectangle &renderArea,
+                                     const vk::RenderPassDesc &renderPassDesc,
+                                     const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                     const uint32_t depthStencilAttachmentIndex,
+                                     const vk::ClearValuesArray &clearValues,
+                                     vk::CommandBuffer **commandBufferOut);
 
     // Only returns true if we have a started RP and we've run setupDraw.
     bool hasStartedRenderPass() const
@@ -909,6 +906,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // Pull an available CBH ptr from the CBH queue and set to specified hasRenderPass state
     void getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer, bool hasRenderPass);
+
+    angle::Result endRenderPassIfImageUsed(const vk::ImageHelper &image);
 
     angle::Result endRenderPassIfTransformFeedbackBuffer(const vk::BufferHelper *buffer);
 
