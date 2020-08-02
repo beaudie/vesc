@@ -2017,6 +2017,29 @@ bool SamplerDesc::operator==(const SamplerDesc &other) const
 {
     return (memcmp(this, &other, sizeof(SamplerDesc)) == 0);
 }
+
+// SamplerHelper implementation.
+SamplerHelper::SamplerHelper() {}
+
+SamplerHelper::~SamplerHelper() {}
+
+SamplerHelper::SamplerHelper(SamplerHelper &&samplerHelper)
+{
+    *this = std::move(samplerHelper);
+}
+
+SamplerHelper &SamplerHelper::operator=(SamplerHelper &&rhs)
+{
+    std::swap(mSampler, rhs.mSampler);
+    std::swap(mSamplerSerial, rhs.mSamplerSerial);
+    return *this;
+}
+
+void SamplerHelper::assignSerial(ContextVk *contextVk)
+{
+    ASSERT(!mSamplerSerial.valid());
+    mSamplerSerial = contextVk->getRenderer()->getResourceSerialFactory().generateSamplerSerial();
+}
 }  // namespace vk
 
 // RenderPassCache implementation.
@@ -2412,7 +2435,7 @@ void SamplerCache::destroy(RendererVk *renderer)
     {
         vk::RefCountedSampler &sampler = iter.second;
         ASSERT(!sampler.isReferenced());
-        sampler.get().destroy(device);
+        sampler.get().get().destroy(device);
 
         renderer->getActiveHandleCounts().onDeallocate(vk::HandleType::Sampler);
     }
@@ -2422,7 +2445,7 @@ void SamplerCache::destroy(RendererVk *renderer)
 
 angle::Result SamplerCache::getSampler(ContextVk *contextVk,
                                        const vk::SamplerDesc &desc,
-                                       vk::BindingPointer<vk::Sampler> *samplerOut)
+                                       vk::SamplerBinding *samplerOut)
 {
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
@@ -2432,10 +2455,12 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    vk::Sampler sampler;
-    ANGLE_TRY(desc.init(contextVk, &sampler));
+    vk::SamplerHelper samplerHelper;
+    ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
+    samplerHelper.assignSerial(contextVk);
 
-    auto insertedItem = mPayload.emplace(desc, vk::RefCountedSampler(std::move(sampler)));
+    vk::RefCountedSampler newSampler(std::move(samplerHelper));
+    auto insertedItem                      = mPayload.emplace(desc, std::move(newSampler));
     vk::RefCountedSampler &insertedSampler = insertedItem.first->second;
     samplerOut->set(&insertedSampler);
 
