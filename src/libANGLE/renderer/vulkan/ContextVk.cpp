@@ -658,6 +658,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mPrimaryBufferCounter(0),
       mRenderPassCounter(0),
       mWriteDescriptorSetCounter(0),
+      mSecondaryCommandBufferCounter(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mCurrentIndirectBuffer(nullptr),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
@@ -4042,8 +4043,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 
     ANGLE_TRY(startPrimaryCommandBuffer());
 
-    mRenderPassCounter         = 0;
-    mWriteDescriptorSetCounter = 0;
+    mRenderPassCounter             = 0;
+    mWriteDescriptorSetCounter     = 0;
+    mSecondaryCommandBufferCounter = 0;
 
     mWaitSemaphores.clear();
     mWaitSemaphoreStageMasks.clear();
@@ -4642,6 +4644,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
             ANGLE_TRY(mOutsideRenderPassCommands->flushToPrimary(this, &mPrimaryCommands));
         }
         mHasPrimaryCommands = true;
+        mSecondaryCommandBufferCounter++;
     }
     return angle::Result::Continue;
 }
