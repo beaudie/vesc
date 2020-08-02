@@ -16,6 +16,23 @@
       "revId": "186d93b05402447687f9b76a7319885bac37e36c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b5d493ea_4dba4e0d",
+        "filename": "src/tests/gl_tests/DiscardFramebufferEXTTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-02T03:26:13Z",
+      "side": 1,
+      "message": "Please add IsWindows() here too. AMD drivers on Linux are an entirely different implementation.",
+      "revId": "186d93b05402447687f9b76a7319885bac37e36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
