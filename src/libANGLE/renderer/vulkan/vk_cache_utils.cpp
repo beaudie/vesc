@@ -2410,9 +2410,9 @@ void SamplerCache::destroy(RendererVk *renderer)
 
     for (auto &iter : mPayload)
     {
-        vk::RefCountedSampler &sampler = iter.second;
+        vk::RefCounted<vk::SamplerHelper> &sampler = iter.second;
         ASSERT(!sampler.isReferenced());
-        sampler.get().destroy(device);
+        sampler.get().get().destroy(device);
 
         renderer->getActiveHandleCounts().onDeallocate(vk::HandleType::Sampler);
     }
@@ -2422,21 +2422,23 @@ void SamplerCache::destroy(RendererVk *renderer)
 
 angle::Result SamplerCache::getSampler(ContextVk *contextVk,
                                        const vk::SamplerDesc &desc,
-                                       vk::BindingPointer<vk::Sampler> *samplerOut)
+                                       vk::BindingPointer<vk::SamplerHelper> *samplerOut)
 {
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
     {
-        vk::RefCountedSampler &sampler = iter->second;
+        vk::RefCounted<vk::SamplerHelper> &sampler = iter->second;
         samplerOut->set(&sampler);
         return angle::Result::Continue;
     }
 
-    vk::Sampler sampler;
-    ANGLE_TRY(desc.init(contextVk, &sampler));
+    vk::SamplerHelper samplerHelper;
+    ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
+    samplerHelper.assignSerial(contextVk);
 
-    auto insertedItem = mPayload.emplace(desc, vk::RefCountedSampler(std::move(sampler)));
-    vk::RefCountedSampler &insertedSampler = insertedItem.first->second;
+    vk::RefCounted<vk::SamplerHelper> newSampler(std::move(samplerHelper));
+    auto insertedItem = mPayload.emplace(desc, std::move(newSampler));
+    vk::RefCounted<vk::SamplerHelper> &insertedSampler = insertedItem.first->second;
     samplerOut->set(&insertedSampler);
 
     contextVk->getRenderer()->getActiveHandleCounts().onAllocate(vk::HandleType::Sampler);

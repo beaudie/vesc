@@ -22,13 +22,13 @@ namespace vk
 {
 class ImageHelper;
 enum class ImageLayout;
+class SamplerHelper;
 
 using RenderPassAndSerial = ObjectAndSerial<RenderPass>;
 using PipelineAndSerial   = ObjectAndSerial<Pipeline>;
 
 using RefCountedDescriptorSetLayout    = RefCounted<DescriptorSetLayout>;
 using RefCountedPipelineLayout         = RefCounted<PipelineLayout>;
-using RefCountedSampler                = RefCounted<Sampler>;
 using RefCountedSamplerYcbcrConversion = RefCounted<SamplerYcbcrConversion>;
 
 // Helper macro that casts to a bitfield type then verifies no bits were dropped.
@@ -1146,10 +1146,10 @@ class SamplerCache final : angle::NonCopyable
 
     angle::Result getSampler(ContextVk *contextVk,
                              const vk::SamplerDesc &desc,
-                             vk::BindingPointer<vk::Sampler> *samplerOut);
+                             vk::BindingPointer<vk::SamplerHelper> *samplerOut);
 
   private:
-    std::unordered_map<vk::SamplerDesc, vk::RefCountedSampler> mPayload;
+    std::unordered_map<vk::SamplerDesc, vk::RefCounted<vk::SamplerHelper>> mPayload;
 };
 
 // YuvConversion Cache
