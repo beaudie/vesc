@@ -4325,7 +4325,8 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
 
     ANGLE_TRY(endRenderPass());
 
-    if (!buffer->canAccumulateRead(this, readAccessType))
+    // A current write access means we need to start a new command buffer.
+    if (mOutsideRenderPassCommands->usesBufferForWrite(*buffer))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
@@ -4343,7 +4344,8 @@ angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
 
     ANGLE_TRY(endRenderPass());
 
-    if (!buffer->canAccumulateWrite(this, writeAccessType))
+    // Any current write access means we need to start a new command buffer.
+    if (mOutsideRenderPassCommands->usesBuffer(*buffer))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
