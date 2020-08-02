@@ -13,6 +13,8 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
+#include <unordered_set>
+
 namespace gl
 {
 class ImageIndex;
@@ -837,7 +839,7 @@ enum class BufferAccess
     Write,
 };
 
-enum class BufferAliasingMode
+enum class AliasingMode
 {
     Allowed,
     Disallowed,
@@ -851,7 +853,7 @@ enum class BufferAliasingMode
 //  into the CBH and then pass the CBH off to a worker thread that will
 //  process the commands into a primary command buffer and then submit
 //  those commands to the queue.
-struct CommandBufferHelper : angle::NonCopyable
+class CommandBufferHelper : angle::NonCopyable
 {
   public:
     CommandBufferHelper();
@@ -867,17 +869,17 @@ struct CommandBufferHelper : angle::NonCopyable
     void bufferWrite(ResourceUseList *resourceUseList,
                      VkAccessFlags writeAccessType,
                      PipelineStage writeStage,
-                     BufferAliasingMode aliasingMode,
+                     AliasingMode aliasingMode,
                      BufferHelper *buffer);
 
     void imageRead(ResourceUseList *resourceUseList,
                    VkImageAspectFlags aspectFlags,
                    ImageLayout imageLayout,
                    ImageHelper *image);
-
     void imageWrite(ResourceUseList *resourceUseList,
                     VkImageAspectFlags aspectFlags,
                     ImageLayout imageLayout,
+                    AliasingMode aliasingMode,
                     ImageHelper *image);
 
     CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
@@ -946,6 +948,10 @@ struct CommandBufferHelper : angle::NonCopyable
         SetBitField(mAttachmentOps[attachmentIndex].finalLayout, finalLayout);
     }
 
+    void updateRenderPassColorClear(size_t colorIndex, const VkClearValue &colorClearValue);
+    void updateRenderPassDepthStencilClear(VkImageAspectFlags aspectFlags,
+                                           const VkClearValue &clearValue);
+
     const gl::Rectangle &getRenderArea() const
     {
         ASSERT(mIsRenderPassCommandBuffer);
@@ -971,6 +977,7 @@ struct CommandBufferHelper : angle::NonCopyable
 
     bool usesBuffer(const BufferHelper &buffer) const;
     bool usesBufferForWrite(const BufferHelper &buffer) const;
+    bool usesImageInRenderPass(const ImageHelper &image) const;
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
@@ -1012,6 +1019,7 @@ struct CommandBufferHelper : angle::NonCopyable
 
     // Tracks resources used in the command buffer.
     std::unordered_map<BufferSerial, BufferAccess> mUsedBuffers;
+    std::unordered_set<ImageSerial> mRenderPassUsedImages;
 };
 
 static constexpr uint32_t kInvalidAttachmentIndex = -1;
@@ -1962,6 +1970,12 @@ class ActiveHandleCounter final : angle::NonCopyable
     angle::PackedEnumMap<HandleType, uint32_t> mActiveCounts;
     angle::PackedEnumMap<HandleType, uint32_t> mAllocatedCounts;
 };
+
+ANGLE_INLINE bool CommandBufferHelper::usesImageInRenderPass(const ImageHelper &image) const
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    return mRenderPassUsedImages.count(image.getImageSerial()) > 0;
+}
 }  // namespace vk
 }  // namespace rx
 
