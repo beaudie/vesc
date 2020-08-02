@@ -1238,7 +1238,6 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context,
     // |setupDispatch| and |setupDraw| are special in that they flush dirty bits. Therefore they
     // don't use the same APIs to record commands as the functions outside ContextVk.
     // The following ensures prior commands are flushed before we start processing dirty bits.
-    ANGLE_TRY(flushOutsideRenderPassCommands());
     ANGLE_TRY(endRenderPass());
     *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
 
@@ -3984,7 +3983,6 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
 
-    ANGLE_TRY(flushOutsideRenderPassCommands());
     ANGLE_TRY(endRenderPass());
 
     if (mIsAnyHostVisibleBufferWritten)
@@ -4323,10 +4321,11 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
 {
     ASSERT(!buffer->isReleasedToExternal());
 
-    ANGLE_TRY(endRenderPass());
-
-    // A current write access means we need to start a new command buffer.
-    if (mOutsideRenderPassCommands->usesBufferForWrite(*buffer))
+    if (mRenderPassCommands->usesBuffer(*buffer))
+    {
+        ANGLE_TRY(endRenderPass());
+    }
+    else if (mOutsideRenderPassCommands->usesBufferForWrite(*buffer))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
@@ -4342,10 +4341,11 @@ angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
 {
     ASSERT(!buffer->isReleasedToExternal());
 
-    ANGLE_TRY(endRenderPass());
-
-    // Any current access means we need to start a new command buffer.
-    if (mOutsideRenderPassCommands->usesBuffer(*buffer))
+    if (mRenderPassCommands->usesBuffer(*buffer))
+    {
+        ANGLE_TRY(endRenderPass());
+    }
+    else if (mOutsideRenderPassCommands->usesBuffer(*buffer))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
@@ -4356,12 +4356,26 @@ angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::endRenderPassIfImageUsed(const vk::ImageHelper &image)
+{
+    if (mRenderPassCommands->started() && mRenderPassCommands->usesImageInRenderPass(image))
+    {
+        return endRenderPass();
+    }
+    else
+    {
+        return angle::Result::Continue;
+    }
+}
+
 angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
                                      vk::ImageLayout imageLayout,
                                      vk::ImageHelper *image)
 {
     ASSERT(!image->isReleasedToExternal());
     ASSERT(image->getImageSerial().valid());
+
+    ANGLE_TRY(endRenderPassIfImageUsed(*image));
 
     if (image->isLayoutChangeNecessary(imageLayout))
     {
@@ -4383,6 +4397,8 @@ angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
     // Barriers are always required for image writes.
     ASSERT(image->isLayoutChangeNecessary(imageLayout));
 
+    ANGLE_TRY(endRenderPassIfImageUsed(*image));
+
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
 
@@ -4402,11 +4418,8 @@ angle::Result ContextVk::flushAndBeginRenderPass(
     const vk::ClearValuesArray &clearValues,
     vk::CommandBuffer **commandBufferOut)
 {
-    // Flush any outside renderPass commands first
-    ANGLE_TRY(flushOutsideRenderPassCommands());
     // Next end any currently outstanding renderPass
-    vk::CommandBuffer *outsideRenderPassCommandBuffer;
-    ANGLE_TRY(getOutsideRenderPassCommandBuffer(&outsideRenderPassCommandBuffer));
+    ANGLE_TRY(endRenderPass());
 
     mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                          renderPassAttachmentOps, depthStencilAttachmentIndex,
@@ -4450,13 +4463,16 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
 angle::Result ContextVk::endRenderPass()
 {
+    // Ensure we flush the RenderPass *after* the prior commands.
+    ANGLE_TRY(flushOutsideRenderPassCommands());
+    ASSERT(mOutsideRenderPassCommands->empty());
+
     if (!mRenderPassCommands->started())
     {
         onRenderPassFinished();
         return angle::Result::Continue;
     }
 
-    ASSERT(mOutsideRenderPassCommands->empty());
     if (mActiveQueryAnySamples)
     {
         mActiveQueryAnySamples->getQueryHelper()->endOcclusionQuery(this, mRenderPassCommandBuffer);
@@ -4635,22 +4651,24 @@ bool ContextVk::shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) 
 
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
-    if (!mOutsideRenderPassCommands->empty())
+    if (mOutsideRenderPassCommands->empty())
     {
-        if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
-        {
-            vk::CommandProcessorTask task = {this, &mPrimaryCommands, mOutsideRenderPassCommands};
-            ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushOutsideRenderPassCommands");
-            queueCommandsToWorker(task);
-            getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
-        }
-        else
-        {
-            ANGLE_TRY(mOutsideRenderPassCommands->flushToPrimary(this, &mPrimaryCommands));
-        }
-        mHasPrimaryCommands = true;
-        mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
+        return angle::Result::Continue;
     }
+
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        vk::CommandProcessorTask task = {this, &mPrimaryCommands, mOutsideRenderPassCommands};
+        ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushOutsideRenderPassCommands");
+        queueCommandsToWorker(task);
+        getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
+    }
+    else
+    {
+        ANGLE_TRY(mOutsideRenderPassCommands->flushToPrimary(this, &mPrimaryCommands));
+    }
+    mHasPrimaryCommands = true;
+    mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
     return angle::Result::Continue;
 }
 
