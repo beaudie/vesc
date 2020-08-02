@@ -90,6 +90,30 @@
     },
     {
       "key": {
+        "uuid": "2019fd0d_7669b886",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-02T03:53:58Z",
+      "side": 1,
+      "message": "Turned out using getReadBufferResourceSamples in FramebufferVk::blit was wrong when blit was done on the depth/buffer only. Looking there, I realized that mixing multisampled and multisampled-render-to-texture attachments then calling blit on both attachments was not at all handled there.\n\nCreate a split CL to fix that which will precede this change.",
+      "parentUuid": "fb50a70b_a04fe6e2",
+      "range": {
+        "startLine": 1595,
+        "startChar": 17,
+        "endLine": 1595,
+        "endChar": 33
+      },
+      "revId": "8bcd936dfe87bb330bd6902c22d9b18eb67ba045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5fa02a0_bd16ed27",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 7
