@@ -634,6 +634,11 @@ void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
             mPipelineBarrierMask.set(barrierIndex);
         }
     }
+
+    if (mIsRenderPassCommandBuffer)
+    {
+        mRenderPassUsedImages.insert(image->getImageSerial());
+    }
 }
 
 void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
@@ -650,6 +655,12 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
     if (image->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier))
     {
         mPipelineBarrierMask.set(barrierIndex);
+    }
+
+    if (mIsRenderPassCommandBuffer)
+    {
+        ASSERT(!usesImageInRenderPass(*image));
+        mRenderPassUsedImages.insert(image->getImageSerial());
     }
 }
 
@@ -921,11 +932,13 @@ void CommandBufferHelper::reset()
         mDepthTestEverEnabled              = false;
         mStencilTestEverEnabled            = false;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
+        mRenderPassUsedImages.clear();
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
     ASSERT(mValidTransformFeedbackBufferCount == 0);
     ASSERT(mRebindTransformFeedbackBuffers == false);
+    ASSERT(mRenderPassUsedImages.empty());
 }
 
 void CommandBufferHelper::releaseToContextQueue(ContextVk *contextVk)
@@ -4544,11 +4557,6 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(allocateStagingMemory(contextVk, *bufferSize, outDataPtr, bufferOut, bufferOffsetsOut,
                                     nullptr));
 
-    CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, this));
-    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-
     uint32_t sourceLevelVk = static_cast<uint32_t>(sourceLevelGL) - mBaseLevel;
 
     VkBufferImageCopy regions[2] = {};
@@ -4597,9 +4605,13 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
         regions[1].imageSubresource.baseArrayLayer = baseLayer;
         regions[1].imageSubresource.layerCount     = layerCount;
         regions[1].imageSubresource.mipLevel       = sourceLevelVk;
-        commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
-                                         (*bufferOut)->getBuffer().getHandle(), 1, &regions[1]);
     }
+
+    CommandBuffer *commandBuffer = nullptr;
+
+    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
+    ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, this));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
                                      (*bufferOut)->getBuffer().getHandle(), 1, regions);
