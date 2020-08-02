@@ -631,6 +631,11 @@ void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
             mPipelineBarrierMask.set(barrierIndex);
         }
     }
+
+    if (mIsRenderPassCommandBuffer)
+    {
+        mRenderPassUsedImages.insert(image->getImageSerial());
+    }
 }
 
 void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
@@ -647,6 +652,12 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
     if (image->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier))
     {
         mPipelineBarrierMask.set(barrierIndex);
+    }
+
+    if (mIsRenderPassCommandBuffer)
+    {
+        ASSERT(!usesImage(*image));
+        mRenderPassUsedImages.insert(image->getImageSerial());
     }
 }
 
@@ -918,11 +929,13 @@ void CommandBufferHelper::reset()
         mDepthTestEverEnabled              = false;
         mStencilTestEverEnabled            = false;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
+        mRenderPassUsedImages.clear();
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
     ASSERT(mValidTransformFeedbackBufferCount == 0);
     ASSERT(mRebindTransformFeedbackBuffers == false);
+    ASSERT(mRenderPassUsedImages.empty());
 }
 
 void CommandBufferHelper::releaseToContextQueue(ContextVk *contextVk)
@@ -1757,7 +1770,7 @@ void QueryHelper::resetQueryPool(ContextVk *contextVk,
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
 {
     CommandBuffer *outsideRenderPassCommandBuffer;
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&outsideRenderPassCommandBuffer));
     const QueryPool &queryPool = getQueryPool();
     outsideRenderPassCommandBuffer->resetQueryPool(queryPool.getHandle(), mQuery, 1);
     outsideRenderPassCommandBuffer->beginQuery(queryPool.getHandle(), mQuery, 0);
@@ -1768,7 +1781,7 @@ angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
 angle::Result QueryHelper::endQuery(ContextVk *contextVk)
 {
     CommandBuffer *outsideRenderPassCommandBuffer;
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&outsideRenderPassCommandBuffer));
     outsideRenderPassCommandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
     return angle::Result::Continue;
@@ -1791,7 +1804,7 @@ void QueryHelper::endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderP
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
 {
     CommandBuffer *outsideRenderPassCommandBuffer;
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&outsideRenderPassCommandBuffer));
     writeTimestamp(contextVk, outsideRenderPassCommandBuffer);
     return angle::Result::Continue;
 }
@@ -2399,7 +2412,7 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
     CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->onBufferTransferRead(srcBuffer));
     ANGLE_TRY(contextVk->onBufferTransferWrite(this));
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     commandBuffer->copyBuffer(srcBuffer->getBuffer(), mBuffer, regionCount, copyRegions);
 
@@ -3395,7 +3408,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
 {
     CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, this));
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     // We are able to use blitImage since the image format we are using supports it.
     int32_t mipWidth  = mExtents.width;
@@ -4361,7 +4374,7 @@ angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
     // Clear the image.
     CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
     return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, {}, commandBuffer);
 }
 
@@ -4536,11 +4549,6 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(allocateStagingMemory(contextVk, *bufferSize, outDataPtr, bufferOut, bufferOffsetsOut,
                                     nullptr));
 
-    CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, this));
-    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-
     uint32_t sourceLevelVk = static_cast<uint32_t>(sourceLevelGL) - mBaseLevel;
 
     VkBufferImageCopy regions[2] = {};
@@ -4589,9 +4597,13 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
         regions[1].imageSubresource.baseArrayLayer = baseLayer;
         regions[1].imageSubresource.layerCount     = layerCount;
         regions[1].imageSubresource.mipLevel       = sourceLevelVk;
-        commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
-                                         (*bufferOut)->getBuffer().getHandle(), 1, &regions[1]);
     }
+
+    CommandBuffer *commandBuffer = nullptr;
+
+    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
+    ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, this));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
                                      (*bufferOut)->getBuffer().getHandle(), 1, regions);
@@ -4745,7 +4757,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                           &resolvedImage.get()));
     }
     ANGLE_TRY(contextVk->onImageRead(layoutChangeAspectFlags, ImageLayout::TransferSrc, this));
-    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     const angle::Format *readFormat = &mFormat->actualImageFormat();
 
