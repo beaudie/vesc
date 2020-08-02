@@ -820,6 +820,11 @@ class TextureDescriptorDesc
     // Note: this is an exclusive index. If there is one index it will return "1".
     uint32_t getMaxIndex() const { return mMaxIndex; }
 
+    ImageViewSerial getImageViewSerialForIndex(size_t index) const
+    {
+        return ImageViewSerial(mSerials[index].imageView.imageViewSerial);
+    }
+
   private:
     uint32_t mMaxIndex;
 
