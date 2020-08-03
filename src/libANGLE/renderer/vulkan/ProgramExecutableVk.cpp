@@ -983,9 +983,10 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
         if (isStorageBuffer)
         {
             // We set the SHADER_READ_BIT to be conservative.
+            // Note that SSBOs can alias! We pass a 0 offset/size to bufferWite to avoid conflicts.
             VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
             commandBufferHelper->bufferWrite(resourceUseList, accessFlags,
-                                             kPipelineStageShaderMap[shaderType], offset, size,
+                                             kPipelineStageShaderMap[shaderType], 0, 0,
                                              &bufferHelper);
         }
         else
