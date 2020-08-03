@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c64dd317_c46fc893",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-03T20:46:43Z",
+      "side": 1,
+      "message": "This implements the workaround described in the comment chain here:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/2324721",
+      "revId": "1e1f3390e53db7a5c97edab1e310781b2b0df33b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
