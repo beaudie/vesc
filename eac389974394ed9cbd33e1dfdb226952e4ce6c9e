@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55cf48cf_9a417dbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-03T22:16:50Z",
+      "side": 1,
+      "message": "I need to reread this tomorrow. Not sure if I understood it.",
+      "revId": "eac389974394ed9cbd33e1dfdb226952e4ce6c9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7573356b_9d6c0fe0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-03T22:16:50Z",
+      "side": 1,
+      "message": "Can defer this to `TextureVk::getAttachmentRenderTarget` inside the if that says:\n\n    if (samples \u003e 1 \u0026\u0026 !mMultisampledImage.valid())",
+      "revId": "eac389974394ed9cbd33e1dfdb226952e4ce6c9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
