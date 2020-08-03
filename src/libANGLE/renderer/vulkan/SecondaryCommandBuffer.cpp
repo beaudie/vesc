@@ -345,6 +345,12 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 }
                 case CommandID::DrawIndexed:
                 {
+                    /*char label[64]                = "This is a multi-\nline cmd buffer label\n";
+                    VkDebugUtilsLabelEXT dbgLabel = {VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+                                                     nullptr,
+                                                     label,
+                                                     {1.0f, 2.0f, 3.0f, 1.0f}};
+                    vkCmdInsertDebugUtilsLabelEXT(cmdBuffer, &dbgLabel);*/
                     const DrawIndexedParams *params =
                         getParamPtr<DrawIndexedParams>(currentCommand);
                     vkCmdDrawIndexed(cmdBuffer, params->indexCount, 1, 0, 0, 0);
