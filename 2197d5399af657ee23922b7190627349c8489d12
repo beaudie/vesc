@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e60ead1a_9a51661b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T14:19:51Z",
+      "side": 1,
+      "message": "PTAL. I could split this CL into two - one of which does the refactor, then one of which moves into the Renderer. I left it like this just to save myself a bit of time as they\u0027re somewhat intertwined.",
+      "revId": "2197d5399af657ee23922b7190627349c8489d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
