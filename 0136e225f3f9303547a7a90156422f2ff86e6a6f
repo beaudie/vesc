@@ -161,6 +161,30 @@
     },
     {
       "key": {
+        "uuid": "10361deb_5e4ab960",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-03T14:56:32Z",
+      "side": 1,
+      "message": "Done. I use mState.getSamplerState().getMaxLod() which will always be 1000 for GLES 2.",
+      "parentUuid": "7a5dad6c_21afc30e",
+      "range": {
+        "startLine": 800,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 0
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "21564822_1f745b4f",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
         "patchSetId": 2
@@ -253,6 +277,30 @@
       "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a55ec8a8_d6dad2d3",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-03T14:56:32Z",
+      "side": 1,
+      "message": "This new flag is not needed in this CL anymore. It will be added in future CL when BufferMtl needs it.",
+      "parentUuid": "308d666e_f0c28e27",
+      "range": {
+        "startLine": 87,
+        "startChar": 32,
+        "endLine": 87,
+        "endChar": 36
+      },
+      "revId": "0136e225f3f9303547a7a90156422f2ff86e6a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
