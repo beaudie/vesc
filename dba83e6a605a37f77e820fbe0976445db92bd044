@@ -16,6 +16,24 @@
       "revId": "dba83e6a605a37f77e820fbe0976445db92bd044",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8f9f5a4_2e6a2e4d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T14:49:57Z",
+      "side": 0,
+      "message": "This is going away in a future patch set where I remove the TextureSerial. Sound ok?",
+      "parentUuid": "c0943ce7_72b2267c",
+      "revId": "dba83e6a605a37f77e820fbe0976445db92bd044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
