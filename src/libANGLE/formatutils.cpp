@@ -2553,4 +2553,35 @@ VertexFormat::VertexFormat(GLenum typeIn,
     ASSERT(!(type == GL_FLOAT || type == GL_HALF_FLOAT || type == GL_FIXED) ||
            normalized == GL_FALSE);
 }
+
+bool CalculatePixelFormatInfo(const Extents &extents,
+                              const InternalFormat &formatInfo,
+                              const PixelUnpackState &unpack,
+                              GLenum type,
+                              bool is3D,
+                              GLuint *inputRowPitch,
+                              GLuint *inputDepthPitch,
+                              GLuint *inputSkipBytes)
+{
+    if (!formatInfo.computeRowPitch(type, extents.width, unpack.alignment, unpack.rowLength,
+                                    inputRowPitch))
+    {
+        return false;
+    }
+
+    if (!formatInfo.computeDepthPitch(extents.height, unpack.imageHeight, *inputRowPitch,
+                                      inputDepthPitch))
+    {
+        return false;
+    }
+
+    if (!formatInfo.computeSkipBytes(type, *inputRowPitch, *inputDepthPitch, unpack, is3D,
+                                     inputSkipBytes))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl
