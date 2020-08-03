@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddd267d3_53d60205",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T14:11:51Z",
+      "side": 1,
+      "message": "nit: you can skip this, it\u0027s redundant with the Context state (although I\u0027d need to double check we serialize this)",
+      "range": {
+        "startLine": 261,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 91
+      },
+      "revId": "5450ee61d8d07f62d9b9d523874427523d880bb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bc66643_63bd8ff1",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T14:11:51Z",
+      "side": 1,
+      "message": "you don\u0027t need to serialize this whole format. It will be consistent between runs. just the GLenum that represents the format is sufficient.",
+      "range": {
+        "startLine": 557,
+        "startChar": 0,
+        "endLine": 577,
+        "endChar": 0
+      },
+      "revId": "5450ee61d8d07f62d9b9d523874427523d880bb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfadb330_f3eb68e6",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T14:11:51Z",
+      "side": 1,
+      "message": "you\u0027ve done most of the work already for ES 3.0 VAOs - probably should just finish it off. Can you serialize getVertexArraysForCapture and then serialize the current VAO ID (from getVertexArrayId)",
+      "range": {
+        "startLine": 662,
+        "startChar": 0,
+        "endLine": 665,
+        "endChar": 5
+      },
+      "revId": "5450ee61d8d07f62d9b9d523874427523d880bb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
