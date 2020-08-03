@@ -16,6 +16,23 @@
       "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa05591e_80ea965b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-08-03T21:42:34Z",
+      "side": 1,
+      "message": "This seems fine but someone experienced with ANGLE\u0027s Vulkan backend should probably review it instead of me. Perhaps Jamie?\n",
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
