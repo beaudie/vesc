@@ -1050,6 +1050,18 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     mGraphicsDirtyBits &= ~dirtyBitMask;
 
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    if (strlen(context->getOglApiString()) > 0)
+    {
+        // Insert OGL commands into debug label
+        VkDebugUtilsLabelEXT label = {VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+                                      nullptr,
+                                      context->getOglApiString(),
+                                      {1.0f, 2.0f, 3.0f, 1.0f}};
+        (*commandBufferOut)->insertDebugUtilsLabelEXT(label);
+    }
+#endif
+
     return angle::Result::Continue;
 }
 

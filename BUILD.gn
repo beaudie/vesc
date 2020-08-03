@@ -108,6 +108,10 @@ config("internal_config") {
     defines += [ "ANGLE_ENABLE_DEBUG_TRACE=1" ]
   }
 
+  if (angle_enable_ogl_vk_api_mapping) {
+    defines += [ "ANGLE_ENABLE_OGL_VK_API_MAPPING=1" ]
+  }
+
   if (is_chromeos) {
     defines += [ "ANGLE_PLATFORM_CHROMEOS" ]
   }
@@ -750,7 +754,7 @@ angle_source_set("libANGLE") {
 
   # gl_enum_utils defaults included in with_capture build
   deps = []
-  if (angle_enable_trace || is_debug) {
+  if (angle_enable_trace || is_debug || angle_enable_ogl_vk_api_mapping) {
     deps += [ ":angle_gl_enum_utils" ]
   }
 }
