@@ -47,7 +47,15 @@ void GL_APIENTRY CopyTexSubImage3D(GLenum target,
 
     if (context)
     {
-        TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glCopyTexSubImage3D(): context = %d, GLenum target = %s, GLint level = %d, GLint "
+            "xoffset = %d, GLint yoffset = %d, GLint zoffset = %d, GLint x = %d, GLint y = %d, "
+            "GLsizei width = %d, GLsizei height = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset,
+            yoffset, zoffset, x, y, width, height);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateCopyTexSubImage3D(context, targetPacked, level, xoffset,
@@ -78,8 +86,15 @@ void GL_APIENTRY DrawRangeElements(GLenum mode,
 
     if (context)
     {
-        PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
-        DrawElementsType typePacked                           = FromGL<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawRangeElements(): context = %d, GLenum mode = %s, GLuint start = %u, GLuint end "
+            "= %u, GLsizei count = %d, GLenum type = %s, const void *indices = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), start, end, count,
+            GLenumToString(GLenumGroup::DrawElementsType, type), (uintptr_t)indices);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDrawRangeElements(context, modePacked, start, end,
@@ -115,7 +130,17 @@ void GL_APIENTRY TexImage3D(GLenum target,
 
     if (context)
     {
-        TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glTexImage3D(): context = %d, GLenum target = %s, GLint level = %d, GLint "
+            "internalformat = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, "
+            "GLint border = %d, GLenum format = %s, GLenum type = %s, const void *pixels = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, internalformat,
+            width, height, depth, border, GLenumToString(GLenumGroup::PixelFormat, format),
+            GLenumToString(GLenumGroup::PixelType, type), (uintptr_t)pixels);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexImage3D(context, targetPacked, level, internalformat, width,
@@ -153,7 +178,18 @@ void GL_APIENTRY TexSubImage3D(GLenum target,
 
     if (context)
     {
-        TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glTexSubImage3D(): context = %d, GLenum target = %s, GLint level = %d, GLint xoffset "
+            "= %d, GLint yoffset = %d, GLint zoffset = %d, GLsizei width = %d, GLsizei height = "
+            "%d, GLsizei depth = %d, GLenum format = %s, GLenum type = %s, const void *pixels = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset,
+            yoffset, zoffset, width, height, depth,
+            GLenumToString(GLenumGroup::PixelFormat, format),
+            GLenumToString(GLenumGroup::PixelType, type), (uintptr_t)pixels);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
