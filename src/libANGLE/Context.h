@@ -345,6 +345,12 @@ using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
 using QueryMap             = ResourceMap<Query, QueryID>;
 using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>;
 
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+constexpr size_t kTempApiMappingStringSize = 1024;
+// Max number of gl calls to store in mapping string vector.
+constexpr size_t kMaxApiMappingStringSize = 1000;
+#endif
+
 class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
 {
   public:
@@ -629,6 +635,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const;
     bool noopClearBuffer(GLenum buffer, GLint drawbuffer) const;
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    void updateOglApiString(const char *format, ...);
+    void resetOglApiString() { mApiMappingStrings.clear(); }
+    const std::vector<std::string> *getOglApiStrings() const { return &mApiMappingStrings; }
+#endif
 
     void addRef() const { mRefCount++; }
     void release() const { mRefCount--; }
@@ -799,6 +810,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     mutable size_t mRefCount;
 
     OverlayType mOverlay;
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    std::vector<std::string> mApiMappingStrings;
+    char mTempApiMappingString[kTempApiMappingStringSize];
+#endif
 };
 
 // Thread-local current valid context bound to the thread.
