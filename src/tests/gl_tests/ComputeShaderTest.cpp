@@ -66,20 +66,17 @@ class ComputeShaderTest : public ANGLETest
 
         glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
 
-        T outputValues[kWidth * kHeight] = {};
+        std::array<T, kWidth *kHeight> actualValues = {};
         glUseProgram(0);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
 
         glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture[1],
                                0);
-        EXPECT_GL_NO_ERROR();
-        glReadPixels(0, 0, kWidth, kHeight, GL_RED_INTEGER, format, outputValues);
-        EXPECT_GL_NO_ERROR();
+        ASSERT_GL_NO_ERROR();
+        glReadPixels(0, 0, kWidth, kHeight, GL_RED_INTEGER, format, actualValues.data());
+        ASSERT_GL_NO_ERROR();
 
-        for (int i = 0; i < kWidth * kHeight; i++)
-        {
-            EXPECT_EQ(expectedValues[i], outputValues[i]);
-        }
+        EXPECT_EQ(expectedValues, actualValues);
     }
 };
 
