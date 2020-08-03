@@ -565,6 +565,49 @@ void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer, bool mergeB
     mMergeBarriers             = mergeBarriers;
 }
 
+bool BufferRangeOverlap(uint64_t offset1, uint64_t size1, uint64_t offset2, uint64_t size2)
+{
+    if (size1 == 0 || size2 == 0)
+        return false;
+
+    uint64_t end1 = offset1 + size1 - 1;
+    uint64_t end2 = offset2 + size2 - 1;
+    return end1 >= offset2 && end2 >= offset1;
+}
+
+bool CommandBufferHelper::usesBuffer(const BufferHelper &buffer,
+                                     uint64_t offset,
+                                     uint64_t size) const
+{
+    const auto &iterPair = mUsedBuffers.equal_range(buffer.getBufferSerial());
+    for (auto iter = iterPair.first; iter != iterPair.second; iter++)
+    {
+        BufferAccess access = iter->second;
+        if (BufferRangeOverlap(offset, size, access.offset, access.size))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer,
+                                             uint64_t offset,
+                                             uint64_t size) const
+{
+    const auto &iterPair = mUsedBuffers.equal_range(buffer.getBufferSerial());
+    for (auto iter = iterPair.first; iter != iterPair.second; iter++)
+    {
+        BufferAccess access = iter->second;
+        if (access.mode == BufferAccessMode::Write &&
+            BufferRangeOverlap(offset, size, access.offset, access.size))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
                                      VkAccessFlags readAccessType,
                                      vk::PipelineStage readStage,
@@ -578,6 +621,10 @@ void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
     {
         mPipelineBarrierMask.set(readStage);
     }
+
+    ASSERT(!usesBufferForWrite(*buffer, readOffset, readSize));
+    BufferAccess access = {BufferAccessMode::Read, readOffset, readSize};
+    mUsedBuffers.emplace(buffer->getBufferSerial(), access);
 }
 
 void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
@@ -592,6 +639,13 @@ void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
     if (buffer->updateWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
         mPipelineBarrierMask.set(writeStage);
+    }
+
+    if (writeSize > 0)
+    {
+        ASSERT(!usesBuffer(*buffer, writeOffset, writeSize));
+        BufferAccess access = {BufferAccessMode::Write, writeOffset, writeSize};
+        mUsedBuffers.emplace(buffer->getBufferSerial(), access);
     }
 }
 
@@ -888,6 +942,8 @@ void CommandBufferHelper::reset()
     mAllocator.pop();
     mAllocator.push();
     mCommandBuffer.reset();
+    mUsedBuffers.clear();
+
     if (mIsRenderPassCommandBuffer)
     {
         mRenderPassStarted                 = false;
@@ -2498,22 +2554,6 @@ bool BufferHelper::isReleasedToExternal() const
     // TODO(anglebug.com/4635): Implement external memory barriers on Mac/Android.
     return false;
 #endif
-}
-
-bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType)
-{
-    // We only need to start a new command buffer when we need a new barrier.
-    // For simplicity's sake for now we always start a new command buffer.
-    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4429
-    return false;
-}
-
-bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)
-{
-    // We only need to start a new command buffer when we need a new barrier.
-    // For simplicity's sake for now we always start a new command buffer.
-    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4429
-    return false;
 }
 
 bool BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
