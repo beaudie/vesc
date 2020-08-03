@@ -294,7 +294,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
             true,
-            vk::PipelineStage::ComputeShader,
+            PipelineStage::ComputeShader,
         },
     },
     {
@@ -503,7 +503,7 @@ const angle::Format &GetDepthStencilImageToBufferFormat(const angle::Format &ima
     }
 }
 
-VkClearValue GetRobustResourceClearValue(const vk::Format &format)
+VkClearValue GetRobustResourceClearValue(const Format &format)
 {
     VkClearValue clearValue;
     if (format.intendedFormat().hasDepthOrStencilBits())
@@ -573,10 +573,10 @@ bool CommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer) const
     return iter != mUsedBuffers.end() && iter->second == BufferAccess::Write;
 }
 
-void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
+void CommandBufferHelper::bufferRead(ResourceUseList *resourceUseList,
                                      VkAccessFlags readAccessType,
-                                     vk::PipelineStage readStage,
-                                     vk::BufferHelper *buffer)
+                                     PipelineStage readStage,
+                                     BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
@@ -589,10 +589,10 @@ void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
     mUsedBuffers[buffer->getBufferSerial()] = BufferAccess::Read;
 }
 
-void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
+void CommandBufferHelper::bufferWrite(ResourceUseList *resourceUseList,
                                       VkAccessFlags writeAccessType,
-                                      vk::PipelineStage writeStage,
-                                      vk::BufferHelper *buffer)
+                                      PipelineStage writeStage,
+                                      BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
@@ -605,10 +605,10 @@ void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
     mUsedBuffers[buffer->getBufferSerial()] = BufferAccess::Write;
 }
 
-void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
+void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
                                     VkImageAspectFlags aspectFlags,
-                                    vk::ImageLayout imageLayout,
-                                    vk::ImageHelper *image)
+                                    ImageLayout imageLayout,
+                                    ImageHelper *image)
 {
     image->retain(resourceUseList);
     if (image->isLayoutChangeNecessary(imageLayout))
@@ -623,10 +623,10 @@ void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
     }
 }
 
-void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
+void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
                                      VkImageAspectFlags aspectFlags,
-                                     vk::ImageLayout imageLayout,
-                                     vk::ImageHelper *image)
+                                     ImageLayout imageLayout,
+                                     ImageHelper *image)
 {
     image->retain(resourceUseList);
     image->onWrite();
@@ -640,7 +640,7 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
     }
 }
 
-void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
+void CommandBufferHelper::executeBarriers(PrimaryCommandBuffer *primary)
 {
     // make a local copy for faster access
     PipelineStagesMask mask = mPipelineBarrierMask;
@@ -670,12 +670,12 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
     mPipelineBarrierMask.reset();
 }
 
-void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
+void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const gl::Rectangle &renderArea,
-                                          const vk::RenderPassDesc &renderPassDesc,
-                                          const vk::AttachmentOpsArray &renderPassAttachmentOps,
-                                          const vk::ClearValuesArray &clearValues,
-                                          vk::CommandBuffer **commandBufferOut)
+                                          const RenderPassDesc &renderPassDesc,
+                                          const AttachmentOpsArray &renderPassAttachmentOps,
+                                          const ClearValuesArray &clearValues,
+                                          CommandBuffer **commandBufferOut)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());
@@ -714,7 +714,7 @@ void CommandBufferHelper::endTransformFeedback()
 }
 
 angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
-                                                  vk::PrimaryCommandBuffer *primary)
+                                                  PrimaryCommandBuffer *primary)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
@@ -732,7 +732,7 @@ angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
         RenderPassCache &renderPassCache = contextVk->getRenderPassCache();
         Serial serial                    = contextVk->getCurrentQueueSerial();
 
-        vk::RenderPass *renderPass = nullptr;
+        RenderPass *renderPass = nullptr;
         ANGLE_TRY(renderPassCache.getRenderPassWithOps(contextVk, serial, mRenderPassDesc,
                                                        mAttachmentOps, &renderPass));
 
@@ -1716,7 +1716,7 @@ void QueryHelper::resetQueryPool(ContextVk *contextVk,
 
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
 {
-    vk::CommandBuffer *outsideRenderPassCommandBuffer;
+    CommandBuffer *outsideRenderPassCommandBuffer;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
     const QueryPool &queryPool = getQueryPool();
     outsideRenderPassCommandBuffer->resetQueryPool(queryPool.getHandle(), mQuery, 1);
@@ -1727,7 +1727,7 @@ angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
 
 angle::Result QueryHelper::endQuery(ContextVk *contextVk)
 {
-    vk::CommandBuffer *outsideRenderPassCommandBuffer;
+    CommandBuffer *outsideRenderPassCommandBuffer;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
     outsideRenderPassCommandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
@@ -1750,7 +1750,7 @@ void QueryHelper::endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderP
 
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
 {
-    vk::CommandBuffer *outsideRenderPassCommandBuffer;
+    CommandBuffer *outsideRenderPassCommandBuffer;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
     writeTimestamp(contextVk, outsideRenderPassCommandBuffer);
     return angle::Result::Continue;
@@ -2255,8 +2255,8 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
     VkMemoryPropertyFlags preferredFlags =
         (memoryPropertyFlags & (~VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
 
-    const vk::Allocator &allocator = renderer->getAllocator();
-    bool persistentlyMapped        = renderer->getFeatures().persistentlyMappedBuffers.enabled;
+    const Allocator &allocator = renderer->getAllocator();
+    bool persistentlyMapped    = renderer->getFeatures().persistentlyMappedBuffers.enabled;
 
     // Check that the allocation is not too large.
     uint32_t memoryTypeIndex = 0;
@@ -2307,7 +2307,7 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSi
 
     RendererVk *renderer = context->getRenderer();
 
-    vk::PrimaryCommandBuffer commandBuffer;
+    PrimaryCommandBuffer commandBuffer;
     ANGLE_TRY(renderer->getCommandBufferOneOff(context, &commandBuffer));
 
     // Queue a DMA copy.
@@ -2698,21 +2698,21 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSiz
 
     RendererVk *renderer = context->getRenderer();
 
-    vk::PrimaryCommandBuffer commandBuffer;
+    PrimaryCommandBuffer commandBuffer;
     ANGLE_TRY(renderer->getCommandBufferOneOff(context, &commandBuffer));
 
     // Queue a DMA copy.
     forceChangeLayoutAndQueue(getAspectFlags(), ImageLayout::TransferDst, mCurrentQueueFamilyIndex,
                               &commandBuffer);
 
-    vk::StagingBuffer stagingBuffer;
+    StagingBuffer stagingBuffer;
 
     if (isCompressedFormat)
     {
         // If format is compressed, set its contents through buffer copies.
 
         // The staging buffer memory is non-zero-initialized in 'init'.
-        ANGLE_TRY(stagingBuffer.init(context, size, vk::StagingUsage::Write));
+        ANGLE_TRY(stagingBuffer.init(context, size, StagingUsage::Write));
 
         for (uint32_t level = 0; level < mLevelCount; ++level)
         {
@@ -2922,7 +2922,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(
         yuvConversionInfo.sType      = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
         yuvConversionInfo.pNext      = nullptr;
         yuvConversionInfo.conversion = mYuvConversionSampler.get().getHandle();
-        vk::AddToPNextChain(&viewInfo, &yuvConversionInfo);
+        AddToPNextChain(&viewInfo, &yuvConversionInfo);
     }
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
     return angle::Result::Continue;
@@ -3974,7 +3974,7 @@ void ImageHelper::stageRobustResourceClear(const gl::ImageIndex &index)
 angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *contextVk,
                                                               const gl::ImageIndex &index,
                                                               const gl::Extents &glExtents,
-                                                              const vk::Format &format)
+                                                              const Format &format)
 {
     const angle::Format &imageFormat     = format.actualImageFormat();
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(imageFormat);
@@ -4052,7 +4052,7 @@ void ImageHelper::stageClearIfEmulatedFormat(Context *context)
 
 void ImageHelper::stageSelfForBaseLevel()
 {
-    std::unique_ptr<vk::ImageHelper> prevImage = std::make_unique<vk::ImageHelper>();
+    std::unique_ptr<ImageHelper> prevImage = std::make_unique<ImageHelper>();
 
     // Move the necessary information for staged update to work, and keep the rest as part of this
     // object.
@@ -4639,7 +4639,7 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
                                   &params, &outputSkipBytes));
 
     // Use a temporary staging buffer. Could be optimized.
-    vk::RendererScoped<vk::DynamicBuffer> stagingBuffer(contextVk->getRenderer());
+    RendererScoped<DynamicBuffer> stagingBuffer(contextVk->getRenderer());
     stagingBuffer.get().init(contextVk->getRenderer(), VK_BUFFER_USAGE_TRANSFER_DST_BIT, 1,
                              kStagingBufferSize, true);
 
@@ -5061,7 +5061,7 @@ void ImageViewHelper::destroy(VkDevice device)
     }
     mLayerLevelDrawImageViews.clear();
 
-    mImageViewSerial = vk::kInvalidImageViewSerial;
+    mImageViewSerial = kInvalidImageViewSerial;
 }
 
 angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
