@@ -40,7 +40,13 @@ void GL_APIENTRY UniformMatrix2x3fv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix2x3fv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLfloat *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -67,7 +73,13 @@ void GL_APIENTRY UniformMatrix2x4fv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix2x4fv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLfloat *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -94,7 +106,13 @@ void GL_APIENTRY UniformMatrix3x2fv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix3x2fv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLfloat *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -121,7 +139,13 @@ void GL_APIENTRY UniformMatrix3x4fv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix3x4fv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLfloat *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -148,7 +172,13 @@ void GL_APIENTRY UniformMatrix4x2fv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix4x2fv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLfloat *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -175,7 +205,13 @@ void GL_APIENTRY UniformMatrix4x3fv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix4x3fv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLfloat *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
