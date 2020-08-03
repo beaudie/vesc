@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "285cec03_e339f5ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-03T20:28:43Z",
+      "side": 1,
+      "message": "I checked the batched output and it looks nice.  Manh got it down to 8 minutes too.  Woot!",
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b244aba1_c7d2da66",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-03T20:28:43Z",
+      "side": 1,
+      "message": "This can probably be moved later in the function, maybe the end?",
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
