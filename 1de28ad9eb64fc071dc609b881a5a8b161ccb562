@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24780fce_321751a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-03T20:47:43Z",
+      "side": 1,
+      "message": "The change to ANGLE itself is rather trivial. Tests are added to test when STORAGE usage is dropped, as well as when STORAGE usage is dropped but MUTABLE flag is added.",
+      "revId": "1de28ad9eb64fc071dc609b881a5a8b161ccb562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
