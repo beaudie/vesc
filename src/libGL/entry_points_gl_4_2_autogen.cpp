@@ -45,7 +45,16 @@ void GL_APIENTRY BindImageTexture(GLuint unit,
 
     if (context)
     {
-        TextureID texturePacked                               = FromGL<TextureID>(texture);
+        TextureID texturePacked = FromGL<TextureID>(texture);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindImageTexture(): context = %d, GLuint unit = %u, GLuint texture = %u, GLint "
+            "level = %d, GLboolean layered = %s, GLint layer = %d, GLenum access = %s, GLenum "
+            "format = %s\n",
+            CID(context), unit, texture, level, GLbooleanToString(layered), layer,
+            GLenumToString(GLenumGroup::BufferAccessARB, access),
+            GLenumToString(GLenumGroup::InternalFormat, format));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBindImageTexture(context, unit, texturePacked, level, layered,
@@ -74,7 +83,14 @@ void GL_APIENTRY DrawArraysInstancedBaseInstance(GLenum mode,
 
     if (context)
     {
-        PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
+        PrimitiveMode modePacked = FromGL<PrimitiveMode>(mode);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawArraysInstancedBaseInstance(): context = %d, GLenum mode = %s, GLint first = "
+            "%d, GLsizei count = %d, GLsizei instancecount = %d, GLuint baseinstance = %u\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), first, count,
+            instancecount, baseinstance);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateDrawArraysInstancedBaseInstance(
@@ -106,6 +122,15 @@ void GL_APIENTRY DrawElementsInstancedBaseInstance(GLenum mode,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawElementsInstancedBaseInstance(): context = %d, GLenum mode = %s, GLsizei count "
+            "= %d, GLenum type = %s, const void *indices = 0x%016" PRIxPTR
+            ", GLsizei instancecount = %d, GLuint baseinstance = %u\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), count,
+            GLenumToString(GLenumGroup::PrimitiveType, type), (uintptr_t)indices, instancecount,
+            baseinstance);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateDrawElementsInstancedBaseInstance(
@@ -139,8 +164,17 @@ void GL_APIENTRY DrawElementsInstancedBaseVertexBaseInstance(GLenum mode,
 
     if (context)
     {
-        PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
-        DrawElementsType typePacked                           = FromGL<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawElementsInstancedBaseVertexBaseInstance(): context = %d, GLenum mode = %s, "
+            "GLsizei count = %d, GLenum type = %s, const void *indices = 0x%016" PRIxPTR
+            ", GLsizei instancecount = %d, GLint basevertex = %d, GLuint baseinstance = %u\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), count,
+            GLenumToString(GLenumGroup::PrimitiveType, type), (uintptr_t)indices, instancecount,
+            basevertex, baseinstance);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDrawElementsInstancedBaseVertexBaseInstance(
@@ -165,7 +199,13 @@ void GL_APIENTRY DrawTransformFeedbackInstanced(GLenum mode, GLuint id, GLsizei 
 
     if (context)
     {
-        TransformFeedbackID idPacked                          = FromGL<TransformFeedbackID>(id);
+        TransformFeedbackID idPacked = FromGL<TransformFeedbackID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawTransformFeedbackInstanced(): context = %d, GLenum mode = %s, GLuint id = %u, "
+            "GLsizei instancecount = %d\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), id, instancecount);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -193,7 +233,14 @@ void GL_APIENTRY DrawTransformFeedbackStreamInstanced(GLenum mode,
 
     if (context)
     {
-        TransformFeedbackID idPacked                          = FromGL<TransformFeedbackID>(id);
+        TransformFeedbackID idPacked = FromGL<TransformFeedbackID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawTransformFeedbackStreamInstanced(): context = %d, GLenum mode = %s, GLuint id = "
+            "%u, GLuint stream = %u, GLsizei instancecount = %d\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), id, stream,
+            instancecount);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDrawTransformFeedbackStreamInstanced(
@@ -221,7 +268,14 @@ void GL_APIENTRY GetActiveAtomicCounterBufferiv(GLuint program,
 
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
+        ShaderProgramID programPacked = FromGL<ShaderProgramID>(program);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetActiveAtomicCounterBufferiv(): context = %d, GLuint program = %u, GLuint "
+            "bufferIndex = %u, GLenum pname = %s, GLint *params = 0x%016" PRIxPTR "\n",
+            CID(context), program, bufferIndex,
+            GLenumToString(GLenumGroup::AtomicCounterBufferPName, pname), (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetActiveAtomicCounterBufferiv(
@@ -251,6 +305,14 @@ void GL_APIENTRY GetInternalformativ(GLenum target,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetInternalformativ(): context = %d, GLenum target = %s, GLenum internalformat = "
+            "%s, GLenum pname = %s, GLsizei bufSize = %d, GLint *params = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
+            GLenumToString(GLenumGroup::InternalFormat, internalformat),
+            GLenumToString(GLenumGroup::InternalFormatPName, pname), bufSize, (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -272,6 +334,11 @@ void GL_APIENTRY MemoryBarrier(GLbitfield barriers)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMemoryBarrier(): context = %d, GLbitfield barriers = %s\n", CID(context),
+            GLbitfieldToString(GLenumGroup::MemoryBarrierMask, barriers).c_str());
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMemoryBarrier(context, barriers));
         if (isCallValid)
@@ -293,6 +360,13 @@ void GL_APIENTRY TexStorage1D(GLenum target, GLsizei levels, GLenum internalform
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glTexStorage1D(): context = %d, GLenum target = %s, GLsizei levels = %d, GLenum "
+            "internalformat = %s, GLsizei width = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), levels,
+            GLenumToString(GLenumGroup::InternalFormat, internalformat), width);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexStorage1D(context, target, levels, internalformat, width));
@@ -316,7 +390,14 @@ TexStorage2D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width
 
     if (context)
     {
-        TextureType targetPacked                              = FromGL<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glTexStorage2D(): context = %d, GLenum target = %s, GLsizei levels = %d, GLenum "
+            "internalformat = %s, GLsizei width = %d, GLsizei height = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), levels,
+            GLenumToString(GLenumGroup::InternalFormat, internalformat), width, height);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -346,7 +427,14 @@ void GL_APIENTRY TexStorage3D(GLenum target,
 
     if (context)
     {
-        TextureType targetPacked                              = FromGL<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glTexStorage3D(): context = %d, GLenum target = %s, GLsizei levels = %d, GLenum "
+            "internalformat = %s, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), levels,
+            GLenumToString(GLenumGroup::InternalFormat, internalformat), width, height, depth);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexStorage3D(context, targetPacked, levels, internalformat,

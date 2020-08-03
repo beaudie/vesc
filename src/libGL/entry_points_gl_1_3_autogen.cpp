@@ -35,6 +35,11 @@ void GL_APIENTRY ActiveTexture(GLenum texture)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glActiveTexture(): context = %d, GLenum texture = %s\n",
+                                    CID(context),
+                                    GLenumToString(GLenumGroup::TextureUnit, texture));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateActiveTexture(context, texture));
         if (isCallValid)
@@ -53,6 +58,11 @@ void GL_APIENTRY ClientActiveTexture(GLenum texture)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glClientActiveTexture(): context = %d, GLenum texture = %s\n",
+                                    CID(context),
+                                    GLenumToString(GLenumGroup::TextureUnit, texture));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateClientActiveTexture(context, texture));
@@ -83,6 +93,15 @@ void GL_APIENTRY CompressedTexImage1D(GLenum target,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glCompressedTexImage1D(): context = %d, GLenum target = %s, GLint level = %d, GLenum "
+            "internalformat = %s, GLsizei width = %d, GLint border = %d, GLsizei imageSize = %d, "
+            "const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level,
+            GLenumToString(GLenumGroup::InternalFormat, internalformat), width, border, imageSize,
+            (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateCompressedTexImage1D(context, target, level, internalformat,
@@ -117,7 +136,16 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target,
 
     if (context)
     {
-        TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glCompressedTexImage2D(): context = %d, GLenum target = %s, GLint level = %d, GLenum "
+            "internalformat = %s, GLsizei width = %d, GLsizei height = %d, GLint border = %d, "
+            "GLsizei imageSize = %d, const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level,
+            GLenumToString(GLenumGroup::InternalFormat, internalformat), width, height, border,
+            imageSize, (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -154,7 +182,16 @@ void GL_APIENTRY CompressedTexImage3D(GLenum target,
 
     if (context)
     {
-        TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glCompressedTexImage3D(): context = %d, GLenum target = %s, GLint level = %d, GLenum "
+            "internalformat = %s, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, "
+            "GLint border = %d, GLsizei imageSize = %d, const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level,
+            GLenumToString(GLenumGroup::InternalFormat, internalformat), width, height, depth,
+            border, imageSize, (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -187,6 +224,14 @@ void GL_APIENTRY CompressedTexSubImage1D(GLenum target,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glCompressedTexSubImage1D(): context = %d, GLenum target = %s, GLint level = %d, "
+            "GLint xoffset = %d, GLsizei width = %d, GLenum format = %s, GLsizei imageSize = %d, "
+            "const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset, width,
+            GLenumToString(GLenumGroup::PixelFormat, format), imageSize, (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateCompressedTexSubImage1D(context, target, level, xoffset, width,
@@ -222,7 +267,16 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target,
 
     if (context)
     {
-        TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glCompressedTexSubImage2D(): context = %d, GLenum target = %s, GLint level = %d, "
+            "GLint xoffset = %d, GLint yoffset = %d, GLsizei width = %d, GLsizei height = %d, "
+            "GLenum format = %s, GLsizei imageSize = %d, const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset,
+            yoffset, width, height, GLenumToString(GLenumGroup::PixelFormat, format), imageSize,
+            (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -261,7 +315,17 @@ void GL_APIENTRY CompressedTexSubImage3D(GLenum target,
 
     if (context)
     {
-        TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glCompressedTexSubImage3D(): context = %d, GLenum target = %s, GLint level = %d, "
+            "GLint xoffset = %d, GLint yoffset = %d, GLint zoffset = %d, GLsizei width = %d, "
+            "GLsizei height = %d, GLsizei depth = %d, GLenum format = %s, GLsizei imageSize = %d, "
+            "const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset,
+            yoffset, zoffset, width, height, depth,
+            GLenumToString(GLenumGroup::PixelFormat, format), imageSize, (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateCompressedTexSubImage3D(context, targetPacked, level, xoffset,
@@ -286,6 +350,13 @@ void GL_APIENTRY GetCompressedTexImage(GLenum target, GLint level, void *img)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetCompressedTexImage(): context = %d, GLenum target = %s, GLint level = %d, void "
+            "*img = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level,
+            (uintptr_t)img);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetCompressedTexImage(context, target, level, img));
@@ -305,6 +376,11 @@ void GL_APIENTRY LoadTransposeMatrixd(const GLdouble *m)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glLoadTransposeMatrixd(): context = %d, const GLdouble *m = 0x%016" PRIxPTR "\n",
+            CID(context), (uintptr_t)m);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLoadTransposeMatrixd(context, m));
         if (isCallValid)
@@ -323,6 +399,11 @@ void GL_APIENTRY LoadTransposeMatrixf(const GLfloat *m)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glLoadTransposeMatrixf(): context = %d, const GLfloat *m = 0x%016" PRIxPTR "\n",
+            CID(context), (uintptr_t)m);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLoadTransposeMatrixf(context, m));
         if (isCallValid)
@@ -341,6 +422,11 @@ void GL_APIENTRY MultTransposeMatrixd(const GLdouble *m)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultTransposeMatrixd(): context = %d, const GLdouble *m = 0x%016" PRIxPTR "\n",
+            CID(context), (uintptr_t)m);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMultTransposeMatrixd(context, m));
         if (isCallValid)
@@ -359,6 +445,11 @@ void GL_APIENTRY MultTransposeMatrixf(const GLfloat *m)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultTransposeMatrixf(): context = %d, const GLfloat *m = 0x%016" PRIxPTR "\n",
+            CID(context), (uintptr_t)m);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMultTransposeMatrixf(context, m));
         if (isCallValid)
@@ -377,6 +468,11 @@ void GL_APIENTRY MultiTexCoord1d(GLenum target, GLdouble s)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1d(): context = %d, GLenum target = %s, GLdouble s = %f\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1d(context, target, s));
@@ -397,6 +493,12 @@ void GL_APIENTRY MultiTexCoord1dv(GLenum target, const GLdouble *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1dv(): context = %d, GLenum target = %s, const GLdouble *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1dv(context, target, v));
@@ -416,6 +518,11 @@ void GL_APIENTRY MultiTexCoord1f(GLenum target, GLfloat s)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1f(): context = %d, GLenum target = %s, GLfloat s = %f\n", CID(context),
+            GLenumToString(GLenumGroup::TextureUnit, target), s);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1f(context, target, s));
@@ -436,6 +543,12 @@ void GL_APIENTRY MultiTexCoord1fv(GLenum target, const GLfloat *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1fv(): context = %d, GLenum target = %s, const GLfloat *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1fv(context, target, v));
@@ -455,6 +568,11 @@ void GL_APIENTRY MultiTexCoord1i(GLenum target, GLint s)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1i(): context = %d, GLenum target = %s, GLint s = %d\n", CID(context),
+            GLenumToString(GLenumGroup::TextureUnit, target), s);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1i(context, target, s));
@@ -475,6 +593,12 @@ void GL_APIENTRY MultiTexCoord1iv(GLenum target, const GLint *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1iv(): context = %d, GLenum target = %s, const GLint *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1iv(context, target, v));
@@ -494,6 +618,11 @@ void GL_APIENTRY MultiTexCoord1s(GLenum target, GLshort s)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1s(): context = %d, GLenum target = %s, GLshort s = %d\n", CID(context),
+            GLenumToString(GLenumGroup::TextureUnit, target), s);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1s(context, target, s));
@@ -514,6 +643,12 @@ void GL_APIENTRY MultiTexCoord1sv(GLenum target, const GLshort *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord1sv(): context = %d, GLenum target = %s, const GLshort *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord1sv(context, target, v));
@@ -533,6 +668,12 @@ void GL_APIENTRY MultiTexCoord2d(GLenum target, GLdouble s, GLdouble t)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2d(): context = %d, GLenum target = %s, GLdouble s = %f, GLdouble t = "
+            "%f\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2d(context, target, s, t));
@@ -553,6 +694,12 @@ void GL_APIENTRY MultiTexCoord2dv(GLenum target, const GLdouble *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2dv(): context = %d, GLenum target = %s, const GLdouble *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2dv(context, target, v));
@@ -572,6 +719,12 @@ void GL_APIENTRY MultiTexCoord2f(GLenum target, GLfloat s, GLfloat t)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2f(): context = %d, GLenum target = %s, GLfloat s = %f, GLfloat t = "
+            "%f\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2f(context, target, s, t));
@@ -592,6 +745,12 @@ void GL_APIENTRY MultiTexCoord2fv(GLenum target, const GLfloat *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2fv(): context = %d, GLenum target = %s, const GLfloat *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2fv(context, target, v));
@@ -611,6 +770,11 @@ void GL_APIENTRY MultiTexCoord2i(GLenum target, GLint s, GLint t)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2i(): context = %d, GLenum target = %s, GLint s = %d, GLint t = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2i(context, target, s, t));
@@ -631,6 +795,12 @@ void GL_APIENTRY MultiTexCoord2iv(GLenum target, const GLint *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2iv(): context = %d, GLenum target = %s, const GLint *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2iv(context, target, v));
@@ -650,6 +820,12 @@ void GL_APIENTRY MultiTexCoord2s(GLenum target, GLshort s, GLshort t)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2s(): context = %d, GLenum target = %s, GLshort s = %d, GLshort t = "
+            "%d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2s(context, target, s, t));
@@ -670,6 +846,12 @@ void GL_APIENTRY MultiTexCoord2sv(GLenum target, const GLshort *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord2sv(): context = %d, GLenum target = %s, const GLshort *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord2sv(context, target, v));
@@ -690,6 +872,12 @@ void GL_APIENTRY MultiTexCoord3d(GLenum target, GLdouble s, GLdouble t, GLdouble
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3d(): context = %d, GLenum target = %s, GLdouble s = %f, GLdouble t = "
+            "%f, GLdouble r = %f\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3d(context, target, s, t, r));
@@ -710,6 +898,12 @@ void GL_APIENTRY MultiTexCoord3dv(GLenum target, const GLdouble *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3dv(): context = %d, GLenum target = %s, const GLdouble *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3dv(context, target, v));
@@ -730,6 +924,12 @@ void GL_APIENTRY MultiTexCoord3f(GLenum target, GLfloat s, GLfloat t, GLfloat r)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3f(): context = %d, GLenum target = %s, GLfloat s = %f, GLfloat t = "
+            "%f, GLfloat r = %f\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3f(context, target, s, t, r));
@@ -750,6 +950,12 @@ void GL_APIENTRY MultiTexCoord3fv(GLenum target, const GLfloat *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3fv(): context = %d, GLenum target = %s, const GLfloat *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3fv(context, target, v));
@@ -770,6 +976,12 @@ void GL_APIENTRY MultiTexCoord3i(GLenum target, GLint s, GLint t, GLint r)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3i(): context = %d, GLenum target = %s, GLint s = %d, GLint t = %d, "
+            "GLint r = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3i(context, target, s, t, r));
@@ -790,6 +1002,12 @@ void GL_APIENTRY MultiTexCoord3iv(GLenum target, const GLint *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3iv(): context = %d, GLenum target = %s, const GLint *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3iv(context, target, v));
@@ -810,6 +1028,12 @@ void GL_APIENTRY MultiTexCoord3s(GLenum target, GLshort s, GLshort t, GLshort r)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3s(): context = %d, GLenum target = %s, GLshort s = %d, GLshort t = "
+            "%d, GLshort r = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3s(context, target, s, t, r));
@@ -830,6 +1054,12 @@ void GL_APIENTRY MultiTexCoord3sv(GLenum target, const GLshort *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord3sv(): context = %d, GLenum target = %s, const GLshort *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord3sv(context, target, v));
@@ -851,6 +1081,12 @@ void GL_APIENTRY MultiTexCoord4d(GLenum target, GLdouble s, GLdouble t, GLdouble
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4d(): context = %d, GLenum target = %s, GLdouble s = %f, GLdouble t = "
+            "%f, GLdouble r = %f, GLdouble q = %f\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4d(context, target, s, t, r, q));
@@ -871,6 +1107,12 @@ void GL_APIENTRY MultiTexCoord4dv(GLenum target, const GLdouble *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4dv(): context = %d, GLenum target = %s, const GLdouble *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4dv(context, target, v));
@@ -892,6 +1134,12 @@ void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4f(): context = %d, GLenum target = %s, GLfloat s = %f, GLfloat t = "
+            "%f, GLfloat r = %f, GLfloat q = %f\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4f(context, target, s, t, r, q));
@@ -912,6 +1160,12 @@ void GL_APIENTRY MultiTexCoord4fv(GLenum target, const GLfloat *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4fv(): context = %d, GLenum target = %s, const GLfloat *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4fv(context, target, v));
@@ -933,6 +1187,12 @@ void GL_APIENTRY MultiTexCoord4i(GLenum target, GLint s, GLint t, GLint r, GLint
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4i(): context = %d, GLenum target = %s, GLint s = %d, GLint t = %d, "
+            "GLint r = %d, GLint q = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4i(context, target, s, t, r, q));
@@ -953,6 +1213,12 @@ void GL_APIENTRY MultiTexCoord4iv(GLenum target, const GLint *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4iv(): context = %d, GLenum target = %s, const GLint *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4iv(context, target, v));
@@ -974,6 +1240,12 @@ void GL_APIENTRY MultiTexCoord4s(GLenum target, GLshort s, GLshort t, GLshort r,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4s(): context = %d, GLenum target = %s, GLshort s = %d, GLshort t = "
+            "%d, GLshort r = %d, GLshort q = %d\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4s(context, target, s, t, r, q));
@@ -994,6 +1266,12 @@ void GL_APIENTRY MultiTexCoord4sv(GLenum target, const GLshort *v)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiTexCoord4sv(): context = %d, GLenum target = %s, const GLshort *v = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMultiTexCoord4sv(context, target, v));
@@ -1013,6 +1291,11 @@ void GL_APIENTRY SampleCoverage(GLfloat value, GLboolean invert)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glSampleCoverage(): context = %d, GLfloat value = %f, GLboolean invert = %s\n",
+            CID(context), value, GLbooleanToString(invert));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateSampleCoverage(context, value, invert));
