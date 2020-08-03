@@ -798,10 +798,6 @@ class BufferHelper final : public Resource
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
-    // Currently always returns false. Should be smarter about accumulation.
-    bool canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType);
-    bool canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType);
-
     bool updateReadBarrier(VkAccessFlags readAccessType,
                            VkPipelineStageFlags readStage,
                            PipelineBarrier *barrier);
@@ -833,6 +829,21 @@ class BufferHelper final : public Resource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+};
+
+// Read or write access.
+enum class BufferAccessMode
+{
+    Read,
+    Write,
+};
+
+// A subresource access for a buffer.
+struct BufferAccess
+{
+    BufferAccessMode mode;
+    uint64_t offset;
+    uint64_t size;
 };
 
 // CommandBufferHelper (CBH) class wraps ANGLE's custom command buffer
@@ -964,6 +975,9 @@ struct CommandBufferHelper : angle::NonCopyable
         return mFramebuffer.getHandle();
     }
 
+    bool usesBuffer(const BufferHelper &buffer, uint64_t offset, uint64_t size) const;
+    bool usesBufferForWrite(const BufferHelper &buffer, uint64_t offset, uint64_t size) const;
+
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
@@ -1001,6 +1015,9 @@ struct CommandBufferHelper : angle::NonCopyable
     bool mDepthTestEverEnabled;
     bool mStencilTestEverEnabled;
     uint32_t mDepthStencilAttachmentIndex;
+
+    // Tracks resources used in the command buffer.
+    std::unordered_multimap<BufferSerial, BufferAccess> mUsedBuffers;
 };
 static constexpr uint32_t kInvalidAttachmentIndex = -1;
 

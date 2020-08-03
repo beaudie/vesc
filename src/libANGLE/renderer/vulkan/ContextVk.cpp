@@ -1527,10 +1527,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     size_t bufferCount                       = executable->getTransformFeedbackBufferCount();
     const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
         transformFeedbackVk->getBufferHelpers();
-    const gl::TransformFeedbackBuffersArray<VkDeviceSize> &offsets =
-        transformFeedbackVk->getBufferOffsets();
     const gl::TransformFeedbackBuffersArray<VkDeviceSize> &sizes =
         transformFeedbackVk->getBufferSizes();
+
+    gl::TransformFeedbackBuffersArray<int32_t> offsets;
+    transformFeedbackVk->getBufferOffsets(this, mXfbBaseVertex, offsets.data(), offsets.size());
 
     for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
@@ -1579,10 +1580,10 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     {
         vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
         ASSERT(bufferHelper);
-        mRenderPassCommands->bufferWrite(
-            &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
-            vk::PipelineStage::TransformFeedback, bufferOffsets[bufferIndex],
-            bufferSizes[bufferIndex], bufferHelper);
+        // Tracking XFB requires offset computation which we don't currently have.
+        mRenderPassCommands->bufferWrite(&mResourceUseList,
+                                         VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
+                                         vk::PipelineStage::TransformFeedback, 0, 0, bufferHelper);
     }
 
     commandBuffer->bindTransformFeedbackBuffers(static_cast<uint32_t>(bufferCount),
@@ -4345,7 +4346,8 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
 
     ANGLE_TRY(endRenderPass());
 
-    if (!buffer->canAccumulateRead(this, readAccessType))
+    // A current write access means we need to start a new command buffer.
+    if (mOutsideRenderPassCommands->usesBufferForWrite(*buffer, readOffset, readSize))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
@@ -4366,7 +4368,8 @@ angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
 
     ANGLE_TRY(endRenderPass());
 
-    if (!buffer->canAccumulateWrite(this, writeAccessType))
+    // Any current write access means we need to start a new command buffer.
+    if (mOutsideRenderPassCommands->usesBuffer(*buffer, writeOffset, writeSize))
     {
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
