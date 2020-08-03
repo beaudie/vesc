@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aade96fb_51f22e6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5346,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-03T22:00:55Z",
+      "side": 1,
+      "message": "nit: A bit weird that the implementation is in vk_helpers.cpp but declaration in vk_cache_utils.h. I get why you did that, but I still think it\u0027s less confusing if the implementation lived in vk_cache_utils.cpp.",
+      "revId": "492ebb06f43fd0fcb38c86478e887a50853a3807",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
