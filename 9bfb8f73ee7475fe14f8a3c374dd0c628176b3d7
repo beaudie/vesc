@@ -16,6 +16,23 @@
       "revId": "9bfb8f73ee7475fe14f8a3c374dd0c628176b3d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b75248e_1b8a59ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-03T15:10:22Z",
+      "side": 1,
+      "message": "Can you share any of the data here or on the bug that shows the hotspot and the improvement?  Were you seeing the hash calculation spike?",
+      "revId": "9bfb8f73ee7475fe14f8a3c374dd0c628176b3d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
