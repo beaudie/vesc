@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e6a89e2c_879ac027",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-03T19:02:55Z",
+      "side": 1,
+      "message": "How confident are we that this is true and what are the consequences if it isn\u0027t?",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60cb54d6_96dc3dd2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -16,6 +39,115 @@
       "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3bd3bc71_a528efa1",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-03T19:02:55Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 53,
+        "startChar": 64,
+        "endLine": 53,
+        "endChar": 95
+      },
+      "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f59d246d_7cafd863",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-03T19:02:55Z",
+      "side": 1,
+      "message": "It looks like this isn\u0027t really an index anymore, since it can never be \u00270\u0027.   Instead, it\u0027s a count of the number of valid Serials, so it\u0027s probably worth updating the name to something like \u0027mNumValidSerials\u0027 or \u0027mValidSerialsCount\u0027 to match that.",
+      "range": {
+        "startLine": 1809,
+        "startChar": 8,
+        "endLine": 1809,
+        "endChar": 28
+      },
+      "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e8fd54e_fe5a4c59",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5027,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-03T19:02:55Z",
+      "side": 1,
+      "message": "nit: \"Update\", since I\u0027d expect resetting it to mean setting it to vk::kInvalidImageViewSerial.",
+      "range": {
+        "startLine": 5027,
+        "startChar": 7,
+        "endLine": 5027,
+        "endChar": 12
+      },
+      "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a1ec2b1_bad1b51f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5304,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-03T19:02:55Z",
+      "side": 1,
+      "message": "Can you ASSERT(mImageViewSerial.valid()) here also?",
+      "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8827bb_74593bb0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-03T19:02:55Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 1708,
+        "startChar": 48,
+        "endLine": 1708,
+        "endChar": 92
+      },
+      "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
