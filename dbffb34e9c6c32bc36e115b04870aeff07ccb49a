@@ -78,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "d69826be_426fe752",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-03T14:56:39Z",
+      "side": 1,
+      "message": "Actually, I am planning to add more buftype in future, for example, supporting creating PBuffer from external MTLTexture. This switch code is just a template for future addition.",
+      "parentUuid": "c8df8d08_673b933e",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 33
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fb7df51_c25258fb",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 3
@@ -146,6 +170,30 @@
       "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0172136_13882fa2",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-03T14:56:39Z",
+      "side": 1,
+      "message": "The old code was actually formatted by clang-format. I had additional (.) after \"clang-format off\" thus the clang-format wasn\u0027t disabled properly.\nThe new patchset has this code formatted by hand.",
+      "parentUuid": "3fea2609_c6b5c0c5",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -222,6 +270,30 @@
       "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d7d6a7e_c6f7b516",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-03T14:56:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e82491cf_23463d66",
+      "range": {
+        "startLine": 960,
+        "startChar": 0,
+        "endLine": 980,
+        "endChar": 5
+      },
+      "revId": "dbffb34e9c6c32bc36e115b04870aeff07ccb49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
