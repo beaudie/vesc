@@ -451,6 +451,16 @@ ANGLE_INLINE ComponentType GetVertexAttributeComponentType(bool pureInteger, Ver
         return ComponentType::Float;
     }
 }
+
+bool CalculatePixelFormatInfo(const Extents &extents,
+                              const InternalFormat &formatInfo,
+                              const PixelUnpackState &unpack,
+                              GLenum type,
+                              bool is3D,
+                              GLuint *inputRowPitch,
+                              GLuint *inputDepthPitch,
+                              GLuint *inputSkipBytes);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_FORMATUTILS_H_

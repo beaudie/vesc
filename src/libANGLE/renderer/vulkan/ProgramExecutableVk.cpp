@@ -975,22 +975,24 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
 
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+        uint64_t offset                = bufferBinding.getOffset();
 
-        WriteBufferDescriptorSetBinding(bufferHelper, bufferBinding.getOffset(), size,
-                                        descriptorSet, descriptorType, binding, arrayElement, 0,
-                                        &bufferInfo, &writeInfo);
+        WriteBufferDescriptorSetBinding(bufferHelper, offset, size, descriptorSet, descriptorType,
+                                        binding, arrayElement, 0, &bufferInfo, &writeInfo);
 
         if (isStorageBuffer)
         {
             // We set the SHADER_READ_BIT to be conservative.
             VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
             commandBufferHelper->bufferWrite(resourceUseList, accessFlags,
-                                             kPipelineStageShaderMap[shaderType], &bufferHelper);
+                                             kPipelineStageShaderMap[shaderType], offset, size,
+                                             &bufferHelper);
         }
         else
         {
             commandBufferHelper->bufferRead(resourceUseList, VK_ACCESS_UNIFORM_READ_BIT,
-                                            kPipelineStageShaderMap[shaderType], &bufferHelper);
+                                            kPipelineStageShaderMap[shaderType], offset, size,
+                                            &bufferHelper);
         }
     }
 }
@@ -1053,9 +1055,10 @@ void ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
                                         &writeInfo);
 
         // We set SHADER_READ_BIT to be conservative.
-        commandBufferHelper->bufferWrite(resourceUseList,
-                                         VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-                                         kPipelineStageShaderMap[shaderType], &bufferHelper);
+        commandBufferHelper->bufferWrite(
+            resourceUseList, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            kPipelineStageShaderMap[shaderType], bufferBinding.getOffset(), bufferBinding.getSize(),
+            &bufferHelper);
 
         writtenBindings.set(binding);
     }

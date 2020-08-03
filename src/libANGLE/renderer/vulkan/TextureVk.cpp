@@ -378,9 +378,11 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         GLuint inputDepthPitch         = 0;
         GLuint inputSkipBytes          = 0;
 
-        ANGLE_TRY(mImage->CalculateBufferInfo(
-            contextVk, gl::Extents(area.width, area.height, area.depth), formatInfo, unpack, type,
-            index.usesTex3D(), &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
+        gl::Extents glExtents(area.width, area.height, area.depth);
+
+        ANGLE_VK_CHECK_MATH(contextVk, gl::CalculatePixelFormatInfo(
+                                           glExtents, formatInfo, unpack, type, index.usesTex3D(),
+                                           &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
 
         size_t offsetBytes = static_cast<size_t>(offset + inputSkipBytes);
 
@@ -401,8 +403,13 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             GLuint rowLengthPixels   = inputRowPitch / pixelSize * blockWidth;
             GLuint imageHeightPixels = inputDepthPitch / inputRowPitch * blockHeight;
 
+            GLuint unpackEndByte;
+            ANGLE_VK_CHECK_MATH(
+                contextVk, formatInfo.computePackUnpackEndByte(type, glExtents, unpack,
+                                                               index.usesTex3D(), &unpackEndByte));
+
             ANGLE_TRY(copyBufferDataToImage(contextVk, &bufferHelper, index, rowLengthPixels,
-                                            imageHeightPixels, area, offsetBytes));
+                                            imageHeightPixels, area, offsetBytes, unpackEndByte));
         }
         else
         {
@@ -1384,7 +1391,8 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
                                                uint32_t rowLength,
                                                uint32_t imageHeight,
                                                const gl::Box &sourceArea,
-                                               size_t offset)
+                                               size_t offset,
+                                               GLuint unpackEndByte)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "TextureVk::copyBufferDataToImage");
 
@@ -1399,7 +1407,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
     vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->onBufferTransferRead(srcBuffer));
+    ANGLE_TRY(contextVk->onBufferTransferRead(offset, unpackEndByte, srcBuffer));
     ANGLE_TRY(
         contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst, mImage));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));

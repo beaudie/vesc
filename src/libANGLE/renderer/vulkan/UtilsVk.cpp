@@ -775,8 +775,8 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
     ANGLE_TRY(ensureConvertIndexResourcesInitialized(contextVk));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(src));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dest));
+    ANGLE_TRY(contextVk->onBufferComputeShaderRead(0, src->getSize(), src));
+    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(0, dest->getSize(), dest));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     VkDescriptorSet descriptorSet;
@@ -837,10 +837,10 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
     ANGLE_TRY(ensureConvertIndexIndirectResourcesInitialized(contextVk));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndirectBuf));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndexBuf));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndirectBuf));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndexBuf));
+    ANGLE_TRY(contextVk->onBufferComputeShaderRead(0, srcIndirectBuf->getSize(), srcIndirectBuf));
+    ANGLE_TRY(contextVk->onBufferComputeShaderRead(0, srcIndexBuf->getSize(), srcIndexBuf));
+    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(0, dstIndirectBuf->getSize(), dstIndirectBuf));
+    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(0, dstIndexBuf->getSize(), dstIndexBuf));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     VkDescriptorSet descriptorSet;
@@ -905,10 +905,12 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
     ANGLE_TRY(ensureConvertIndexIndirectLineLoopResourcesInitialized(contextVk));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndexBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndexBuffer));
+    ANGLE_TRY(
+        contextVk->onBufferComputeShaderRead(0, srcIndirectBuffer->getSize(), srcIndirectBuffer));
+    ANGLE_TRY(contextVk->onBufferComputeShaderRead(0, srcIndexBuffer->getSize(), srcIndexBuffer));
+    ANGLE_TRY(
+        contextVk->onBufferComputeShaderWrite(0, dstIndirectBuffer->getSize(), dstIndirectBuffer));
+    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(0, dstIndexBuffer->getSize(), dstIndexBuffer));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     VkDescriptorSet descriptorSet;
@@ -965,9 +967,12 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
     ANGLE_TRY(ensureConvertIndirectLineLoopResourcesInitialized(contextVk));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(destIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(destIndexBuffer));
+    ANGLE_TRY(
+        contextVk->onBufferComputeShaderRead(0, srcIndirectBuffer->getSize(), srcIndirectBuffer));
+    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(0, destIndirectBuffer->getSize(),
+                                                    destIndirectBuffer));
+    ANGLE_TRY(
+        contextVk->onBufferComputeShaderWrite(0, destIndexBuffer->getSize(), destIndexBuffer));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     VkDescriptorSet descriptorSet;
@@ -1021,8 +1026,8 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
     ANGLE_TRY(ensureConvertVertexResourcesInitialized(contextVk));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(src));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dest));
+    ANGLE_TRY(contextVk->onBufferComputeShaderRead(0, src->getSize(), src));
+    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(0, dest->getSize(), dest));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     ConvertVertexShaderParams shaderParams;
@@ -1970,7 +1975,8 @@ angle::Result UtilsVk::cullOverlayWidgets(ContextVk *contextVk,
                                     &descriptorSet));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(enabledWidgetsBuffer));
+    ANGLE_TRY(contextVk->onBufferComputeShaderRead(0, enabledWidgetsBuffer->getSize(),
+                                                   enabledWidgetsBuffer));
     ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT,
                                       vk::ImageLayout::ComputeShaderWrite, dest));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
@@ -2047,8 +2053,10 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
                                      vk::ImageLayout::ComputeShaderReadOnly, culledWidgets));
     ANGLE_TRY(contextVk->onImageRead(VK_IMAGE_ASPECT_COLOR_BIT,
                                      vk::ImageLayout::ComputeShaderReadOnly, font));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(textWidgetsBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(graphWidgetsBuffer));
+    ANGLE_TRY(
+        contextVk->onBufferComputeShaderRead(0, textWidgetsBuffer->getSize(), textWidgetsBuffer));
+    ANGLE_TRY(
+        contextVk->onBufferComputeShaderRead(0, graphWidgetsBuffer->getSize(), graphWidgetsBuffer));
 
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 

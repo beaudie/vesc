@@ -479,21 +479,33 @@ class ContextVk : public ContextImpl, public vk::Context
 
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
 
-    angle::Result onBufferTransferRead(vk::BufferHelper *buffer)
+    angle::Result onBufferTransferRead(uint64_t readOffset,
+                                       uint64_t readSize,
+                                       vk::BufferHelper *buffer)
     {
-        return onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, vk::PipelineStage::Transfer, buffer);
+        return onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, vk::PipelineStage::Transfer, readOffset,
+                            readSize, buffer);
     }
-    angle::Result onBufferTransferWrite(vk::BufferHelper *buffer)
+    angle::Result onBufferTransferWrite(uint64_t writeOffset,
+                                        uint64_t writeSize,
+                                        vk::BufferHelper *buffer)
     {
-        return onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, vk::PipelineStage::Transfer, buffer);
+        return onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, vk::PipelineStage::Transfer, writeOffset,
+                             writeSize, buffer);
     }
-    angle::Result onBufferComputeShaderRead(vk::BufferHelper *buffer)
+    angle::Result onBufferComputeShaderRead(uint64_t readOffset,
+                                            uint64_t readSize,
+                                            vk::BufferHelper *buffer)
     {
-        return onBufferRead(VK_ACCESS_SHADER_READ_BIT, vk::PipelineStage::ComputeShader, buffer);
+        return onBufferRead(VK_ACCESS_SHADER_READ_BIT, vk::PipelineStage::ComputeShader, readOffset,
+                            readSize, buffer);
     }
-    angle::Result onBufferComputeShaderWrite(vk::BufferHelper *buffer)
+    angle::Result onBufferComputeShaderWrite(uint64_t writeOffset,
+                                             uint64_t writeSize,
+                                             vk::BufferHelper *buffer)
     {
-        return onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT, vk::PipelineStage::ComputeShader, buffer);
+        return onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT, vk::PipelineStage::ComputeShader,
+                             writeOffset, writeSize, buffer);
     }
 
     angle::Result onImageRead(VkImageAspectFlags aspectFlags,
@@ -699,6 +711,7 @@ class ContextVk : public ContextImpl, public vk::Context
                                     DirtyBits dirtyBitMask,
                                     vk::BufferHelper *indirectBuffer,
                                     VkDeviceSize indirectBufferOffset,
+                                    uint64_t indirectBufferSize,
                                     vk::CommandBuffer **commandBufferOut);
     angle::Result setupIndexedIndirectDraw(const gl::Context *context,
                                            gl::PrimitiveMode mode,
@@ -858,9 +871,13 @@ class ContextVk : public ContextImpl, public vk::Context
 
     angle::Result onBufferRead(VkAccessFlags readAccessType,
                                vk::PipelineStage readStage,
+                               uint64_t readOffset,
+                               uint64_t readSize,
                                vk::BufferHelper *buffer);
     angle::Result onBufferWrite(VkAccessFlags writeAccessType,
                                 vk::PipelineStage writeStage,
+                                uint64_t writeOffset,
+                                uint64_t writeSize,
                                 vk::BufferHelper *buffer);
 
     void initIndexTypeMap();
