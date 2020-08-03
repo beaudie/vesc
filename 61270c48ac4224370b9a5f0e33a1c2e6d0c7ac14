@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "297ef88f_b0f81b90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T17:00:53Z",
+      "side": 1,
+      "message": "Thanks for the reviews. There are no outstanding reviewers and Shabi\u0027s comment was mostly resolved so would like to land this. Let me know if there\u0027s anything that needs follow-up, otherwise 1+1 \u003d 2.",
+      "revId": "61270c48ac4224370b9a5f0e33a1c2e6d0c7ac14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

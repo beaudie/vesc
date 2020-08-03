@@ -16,6 +16,24 @@
       "revId": "0ebf0adeb33a676adf898e7d73cbabe0f6d28ad2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "37090a7f_c5d9a40f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T17:00:53Z",
+      "side": 1,
+      "message": "Serial regeneration mostly (could be always) happens on object reallocation. So only storage changes would trigger the atomic. The cost of the serial allocation should be dominated by the memory ops.",
+      "parentUuid": "d8a17291_20741591",
+      "revId": "0ebf0adeb33a676adf898e7d73cbabe0f6d28ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
