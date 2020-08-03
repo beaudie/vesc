@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cff74cd_cf967825",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-03T20:41:31Z",
+      "side": 1,
+      "message": "To address the linked Fuchsia bug, I spec\u0027ed and implemented an extension to EXT_external_objects that allows the application to specify the Vulkan create and usage flags when importing Vulkan images as GL textures.\n\nEXT_external_objects issue 13 asks specifically whether this information is wanted (usage flags, that extension doesn\u0027t even consider create flags). The resolution is:\n\n\u003e The agreed resolution is to use the final option: Require all\n\u003e supported usage flags be specified by the application on the Vulkan\n\u003e side if the image is intended to alias with an OpenGL texture.\n\nEvidently, this is detrimental to performance on ARM.\n\nThe implementation and tests are in the last change in this CL chain if you are interested.",
+      "revId": "d5209ee066a494489642f6320078c99c95d78812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
