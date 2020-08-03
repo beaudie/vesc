@@ -744,6 +744,10 @@ class ContextVk : public ContextImpl, public vk::Context
                                     uint32_t *numIndicesOut);
     angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
 
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    void writeOpenGlApiString(const gl::Context *context, vk::CommandBuffer *commandBuffer);
+#endif
+
     gl::Rectangle getCorrectedViewport(const gl::Rectangle &viewport) const;
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,

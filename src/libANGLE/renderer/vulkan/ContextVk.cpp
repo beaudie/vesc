@@ -1048,6 +1048,10 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     mGraphicsDirtyBits &= ~dirtyBitMask;
 
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    writeOpenGlApiString(context, *commandBufferOut);
+#endif
+
     return angle::Result::Continue;
 }
 
@@ -1268,8 +1272,27 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context,
 
     mComputeDirtyBits.reset();
 
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    writeOpenGlApiString(context, *commandBufferOut);
+#endif
+
     return angle::Result::Continue;
 }
+
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+void ContextVk::writeOpenGlApiString(const gl::Context *context, vk::CommandBuffer *commandBuffer)
+{
+    if (strlen(context->getOglApiString()) > 0)
+    {
+        // Insert OGL commands into debug label
+        VkDebugUtilsLabelEXT label = {VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+                                      nullptr,
+                                      context->getOglApiString(),
+                                      {0.0f, 0.0f, 0.0f, 0.0f}};
+        commandBuffer->insertDebugUtilsLabelEXT(label);
+    }
+}
+#endif
 
 angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(const gl::Context *context,
                                                            vk::CommandBuffer *commandBuffer)

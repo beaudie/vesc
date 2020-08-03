@@ -344,6 +344,12 @@ using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
 using QueryMap             = ResourceMap<Query, QueryID>;
 using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>;
 
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+constexpr size_t kTempApiMappingStringSize = 1024;
+// Don't allow API string to grow unbounded. 10k is max size.
+constexpr size_t kMaxApiMappingStringSize = 10240;
+#endif
+
 class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
 {
   public:
@@ -627,6 +633,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const;
     bool noopClearBuffer(GLenum buffer, GLint drawbuffer) const;
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    void updateOglApiString(const char *format, ...);
+    void resetOglApiString() { mApiMappingString.clear(); }
+    const char *getOglApiString() const { return mApiMappingString.c_str(); }
+#endif
 
   private:
     void initialize();
@@ -781,6 +792,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     std::unique_ptr<angle::FrameCapture> mFrameCapture;
 
     OverlayType mOverlay;
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    std::string mApiMappingString;
+    char mTempApiMappingString[kTempApiMappingStringSize];
+#endif
 };
 }  // namespace gl
 

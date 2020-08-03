@@ -2249,6 +2249,9 @@ void Context::drawArraysInstanced(PrimitiveMode mode,
         mImplementation->drawArraysInstanced(this, mode, first, count, instanceCount));
     MarkTransformFeedbackBufferUsage(this, count, instanceCount);
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawElementsInstanced(PrimitiveMode mode,
@@ -2267,6 +2270,9 @@ void Context::drawElementsInstanced(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(
         mImplementation->drawElementsInstanced(this, mode, count, type, indices, instances));
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawElementsBaseVertex(PrimitiveMode mode,
@@ -2285,6 +2291,9 @@ void Context::drawElementsBaseVertex(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(
         mImplementation->drawElementsBaseVertex(this, mode, count, type, indices, basevertex));
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawElementsInstancedBaseVertex(PrimitiveMode mode,
@@ -2304,6 +2313,9 @@ void Context::drawElementsInstancedBaseVertex(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(mImplementation->drawElementsInstancedBaseVertex(
         this, mode, count, type, indices, instancecount, basevertex));
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawRangeElements(PrimitiveMode mode,
@@ -2323,6 +2335,9 @@ void Context::drawRangeElements(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(
         mImplementation->drawRangeElements(this, mode, start, end, count, type, indices));
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawRangeElementsBaseVertex(PrimitiveMode mode,
@@ -2343,6 +2358,9 @@ void Context::drawRangeElementsBaseVertex(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(mImplementation->drawRangeElementsBaseVertex(this, mode, start, end, count,
                                                                    type, indices, basevertex));
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawArraysIndirect(PrimitiveMode mode, const void *indirect)
@@ -2350,6 +2368,9 @@ void Context::drawArraysIndirect(PrimitiveMode mode, const void *indirect)
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawArraysIndirect(this, mode, indirect));
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, const void *indirect)
@@ -2357,6 +2378,9 @@ void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, co
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawElementsIndirect(this, mode, type, indirect));
     MarkShaderStorageUsage(this);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::flush()
@@ -5686,6 +5710,10 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
     // with a PPO, we need to convert it back to a "draw"-type.
     convertPpoToComputeOrDraw(false);
 
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
+
     if (ANGLE_UNLIKELY(IsError(result)))
     {
         return;
@@ -5715,6 +5743,10 @@ void Context::dispatchComputeIndirect(GLintptr indirect)
     ANGLE_CONTEXT_TRY(mImplementation->dispatchComputeIndirect(this, indirect));
 
     MarkShaderStorageUsage(this);
+
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::texStorage2D(TextureType target,
@@ -5821,6 +5853,9 @@ void Context::drawArraysInstancedBaseInstance(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(mImplementation->drawArraysInstancedBaseInstance(
         this, mode, first, count, instanceCount, baseInstance));
     MarkTransformFeedbackBufferUsage(this, count, 1);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::drawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mode,
@@ -5855,6 +5890,9 @@ void Context::drawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mode,
 
     ANGLE_CONTEXT_TRY(mImplementation->drawElementsInstancedBaseVertexBaseInstance(
         this, mode, count, type, indices, instanceCounts, baseVertex, baseInstance));
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::multiDrawArraysInstancedBaseInstance(PrimitiveMode mode,
@@ -5867,6 +5905,9 @@ void Context::multiDrawArraysInstancedBaseInstance(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->multiDrawArraysInstancedBaseInstance(
         this, mode, firsts, counts, instanceCounts, baseInstances, drawcount));
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::multiDrawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mode,
@@ -5881,6 +5922,9 @@ void Context::multiDrawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mod
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->multiDrawElementsInstancedBaseVertexBaseInstance(
         this, mode, counts, type, indices, instanceCounts, baseVertices, baseInstances, drawcount));
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 void Context::provokingVertex(ProvokingVertexConvention provokeMode)
@@ -8378,6 +8422,22 @@ void Context::onGPUSwitch()
     // which must be visible to applications.
     initRendererString();
 }
+
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+ANGLE_FORMAT_PRINTF(2, 3)
+void Context::updateOglApiString(const char *format, ...)
+{
+    if (mApiMappingString.size() < kMaxApiMappingStringSize)
+    {
+        va_list args;
+        va_start(args, format);
+        // Write current call into temp string and append to persistent string
+        vsnprintf(mTempApiMappingString, kTempApiMappingStringSize, format, args);
+        mApiMappingString += mTempApiMappingString;
+        va_end(args);
+    }
+}
+#endif
 
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context) {}
