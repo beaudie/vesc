@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60cb54d6_96dc3dd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T14:52:53Z",
+      "side": 1,
+      "message": "Shabi/Tim PTAL. You were working with Ian on ImageView improvements.\n\nA direction I\u0027d like to go in is to do away with all the permutations in ImageViewHelper and just store a cache which indexes based on the bits needed to uniquely identify the particular sub-view. I think minimally it\u0027s be something similar to this plus a few bits for sRGB (and maybe a separate cache with bits for swizzle). That\u0027s out-of-scope for this CL just wanted to mention it.",
+      "revId": "ca2a745019451be1f604fc33dbfa74052b6b3802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
