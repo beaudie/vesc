@@ -19,6 +19,121 @@
     },
     {
       "key": {
+        "uuid": "3d3c067c_13cb1097",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "nit: you can omit \u0027has\u0027",
+      "range": {
+        "startLine": 504,
+        "startChar": 66,
+        "endLine": 504,
+        "endChar": 70
+      },
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d780904b_2acaec6c",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "nit: \u0027timed out\u0027, you can omit \u0027has\u0027 as well",
+      "range": {
+        "startLine": 509,
+        "startChar": 70,
+        "endLine": 509,
+        "endChar": 79
+      },
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb1a2690_78da5b51",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "nit: trace files",
+      "range": {
+        "startLine": 524,
+        "startChar": 76,
+        "endLine": 524,
+        "endChar": 88
+      },
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35707add_5e968912",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "in general, can omit \u0027has\u0027 from the tenses of these messages",
+      "range": {
+        "startLine": 546,
+        "startChar": 67,
+        "endLine": 546,
+        "endChar": 71
+      },
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "021cb685_66a773a1",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "nit: timed out",
+      "range": {
+        "startLine": 571,
+        "startChar": 69,
+        "endLine": 571,
+        "endChar": 76
+      },
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b244aba1_c7d2da66",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 6
@@ -30,6 +145,70 @@
       "writtenOn": "2020-08-03T20:28:43Z",
       "side": 1,
       "message": "This can probably be moved later in the function, maybe the end?",
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6be0af96_7f325343",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "naming nit: use ANGLE style",
+      "range": {
+        "startLine": 509,
+        "startChar": 37,
+        "endLine": 509,
+        "endChar": 47
+      },
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "363d9109_e72f2f18",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "How about making this a command line option as well, something like --angle-per-test-capture-label ?",
+      "parentUuid": "b244aba1_c7d2da66",
+      "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b342a4f6_a401eb60",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T20:38:38Z",
+      "side": 1,
+      "message": "use the angle helpers for these.",
+      "range": {
+        "startLine": 513,
+        "startChar": 4,
+        "endLine": 513,
+        "endChar": 10
+      },
       "revId": "e1a3e7e0d8adc45b12233136acce1cec605d57bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
