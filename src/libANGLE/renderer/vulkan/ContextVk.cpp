@@ -1299,6 +1299,11 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
         mGraphicsPipelineTransition.reset();
     }
     mRenderPassCommands->pauseTransformFeedbackIfStarted();
+    VkDebugUtilsObjectNameInfoEXT testObjName = {
+        VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT, nullptr, VK_OBJECT_TYPE_PIPELINE,
+        (uint64_t)mCurrentGraphicsPipeline->getPipeline().getHandle(),
+        "This is what a debug object name looks like"};
+    vkSetDebugUtilsObjectNameEXT(mRenderer->getDevice(), &testObjName);
     commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
