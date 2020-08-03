@@ -34,6 +34,121 @@
       "revId": "db4d10ebcb01d077d254d0f0fb6f8b9b8345f9f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f35fdd9b_a74f7c8c",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T13:45:27Z",
+      "side": 1,
+      "message": "nit: you can use a range-for here",
+      "range": {
+        "startLine": 568,
+        "startChar": 0,
+        "endLine": 573,
+        "endChar": 5
+      },
+      "revId": "db4d10ebcb01d077d254d0f0fb6f8b9b8345f9f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e7e378b_73d27b18",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T13:45:27Z",
+      "side": 1,
+      "message": "nit: you can use a range-for here",
+      "range": {
+        "startLine": 577,
+        "startChar": 0,
+        "endLine": 581,
+        "endChar": 5
+      },
+      "revId": "db4d10ebcb01d077d254d0f0fb6f8b9b8345f9f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52149bcd_6fa5ffdd",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T13:45:27Z",
+      "side": 1,
+      "message": "once you serialize both textures and renderbuffers, you no longer need to serialize Framebuffer Attachment pixels for non-Surface types (it will be duplicated).",
+      "range": {
+        "startLine": 588,
+        "startChar": 7,
+        "endLine": 588,
+        "endChar": 28
+      },
+      "revId": "db4d10ebcb01d077d254d0f0fb6f8b9b8345f9f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4b3342b_12b97976",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T13:45:27Z",
+      "side": 1,
+      "message": "grammar:\n\n\u0027can not\u0027 instead of \u0027is not\u0027.",
+      "range": {
+        "startLine": 643,
+        "startChar": 0,
+        "endLine": 644,
+        "endChar": 54
+      },
+      "revId": "db4d10ebcb01d077d254d0f0fb6f8b9b8345f9f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0ce87af_a74ebf84",
+        "filename": "src/libANGLE/frame_capture_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T13:45:27Z",
+      "side": 1,
+      "message": "nit: naming-wise, this is a Serialize function too. I\u0027d call it SerializeTextureData or SerializeTexturePixelData.",
+      "range": {
+        "startLine": 645,
+        "startChar": 14,
+        "endLine": 645,
+        "endChar": 35
+      },
+      "revId": "db4d10ebcb01d077d254d0f0fb6f8b9b8345f9f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
