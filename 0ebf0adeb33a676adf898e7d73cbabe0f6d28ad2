@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8a17291_20741591",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-03T16:19:47Z",
+      "side": 1,
+      "message": "I guess the only need is from imageHelper creation in the surfaceVK. Its a bit pity that now we have to eat another indirection and atomic just because of this.",
+      "revId": "0ebf0adeb33a676adf898e7d73cbabe0f6d28ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
