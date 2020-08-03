@@ -855,10 +855,14 @@ struct CommandBufferHelper : angle::NonCopyable
     void bufferRead(vk::ResourceUseList *resourceUseList,
                     VkAccessFlags readAccessType,
                     vk::PipelineStage readStage,
+                    uint64_t readOffset,
+                    uint64_t readSize,
                     vk::BufferHelper *buffer);
     void bufferWrite(vk::ResourceUseList *resourceUseList,
                      VkAccessFlags writeAccessType,
                      vk::PipelineStage writeStage,
+                     uint64_t writeOffset,
+                     uint64_t writeSize,
                      vk::BufferHelper *buffer);
 
     void imageRead(vk::ResourceUseList *resourceUseList,
@@ -1414,16 +1418,6 @@ class ImageHelper final : public Resource, public angle::Subject
                              void *pixels,
                              DynamicBuffer *stagingBuffer);
 
-    angle::Result CalculateBufferInfo(ContextVk *contextVk,
-                                      const gl::Extents &glExtents,
-                                      const gl::InternalFormat &formatInfo,
-                                      const gl::PixelUnpackState &unpack,
-                                      GLenum type,
-                                      bool is3D,
-                                      GLuint *inputRowPitch,
-                                      GLuint *inputDepthPitch,
-                                      GLuint *inputSkipBytes);
-
     void onWrite() { mCurrentSingleClearValue.reset(); }
     bool hasImmutableSampler() { return mExternalFormat != 0; }
     uint64_t getExternalFormat() const { return mExternalFormat; }
@@ -1453,6 +1447,7 @@ class ImageHelper final : public Resource, public angle::Subject
     {
         BufferHelper *bufferHelper;
         VkBufferImageCopy copyRegion;
+        uint64_t bufferSize;
     };
     struct ImageUpdate
     {
@@ -1463,7 +1458,9 @@ class ImageHelper final : public Resource, public angle::Subject
     struct SubresourceUpdate
     {
         SubresourceUpdate();
-        SubresourceUpdate(BufferHelper *bufferHelperIn, const VkBufferImageCopy &copyRegion);
+        SubresourceUpdate(BufferHelper *bufferHelperIn,
+                          const VkBufferImageCopy &copyRegion,
+                          uint64_t bufferSize);
         SubresourceUpdate(ImageHelper *image, const VkImageCopy &copyRegion);
         SubresourceUpdate(VkImageAspectFlags aspectFlags,
                           const VkClearValue &clearValue,

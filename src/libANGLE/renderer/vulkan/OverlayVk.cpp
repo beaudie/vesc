@@ -122,7 +122,8 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
 
     // Copy font data from staging buffer.
     vk::CommandBuffer *fontDataUpload;
-    ANGLE_TRY(contextVk->onBufferTransferRead(&fontDataBuffer.get()));
+    ANGLE_TRY(
+        contextVk->onBufferTransferRead(0, fontDataBuffer.get().getSize(), &fontDataBuffer.get()));
     ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
                                       &mFontImage));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&fontDataUpload));
