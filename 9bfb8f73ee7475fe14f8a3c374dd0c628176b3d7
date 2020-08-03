@@ -33,6 +33,24 @@
       "revId": "9bfb8f73ee7475fe14f8a3c374dd0c628176b3d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2ec070b_8a7b3d8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-03T16:04:28Z",
+      "side": 1,
+      "message": "I was seeing unordered_map queries showing up in the sampling profiler (vtune) on Windows trace perf tests. This should increase the signal to noise ratio with the scores. I don\u0027t have numbers right now, can grab some later.",
+      "parentUuid": "0b75248e_1b8a59ef",
+      "revId": "9bfb8f73ee7475fe14f8a3c374dd0c628176b3d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
