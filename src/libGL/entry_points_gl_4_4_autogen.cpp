@@ -38,7 +38,14 @@ void GL_APIENTRY BindBuffersBase(GLenum target, GLuint first, GLsizei count, con
 
     if (context)
     {
-        const BufferID *buffersPacked                         = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindBuffersBase(): context = %d, GLenum target = %s, GLuint first = %u, GLsizei "
+            "count = %d, const GLuint *buffers = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::BufferTargetARB, target), first, count,
+            (uintptr_t)buffers);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBindBuffersBase(context, target, first, count, buffersPacked));
@@ -67,7 +74,16 @@ void GL_APIENTRY BindBuffersRange(GLenum target,
 
     if (context)
     {
-        const BufferID *buffersPacked                         = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindBuffersRange(): context = %d, GLenum target = %s, GLuint first = %u, GLsizei "
+            "count = %d, const GLuint *buffers = 0x%016" PRIxPTR
+            ", const GLintptr *offsets = 0x%016" PRIxPTR
+            ", const GLsizeiptr *sizes = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::BufferTargetARB, target), first, count,
+            (uintptr_t)buffers, (uintptr_t)offsets, (uintptr_t)sizes);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBindBuffersRange(context, target, first, count,
@@ -91,6 +107,12 @@ void GL_APIENTRY BindImageTextures(GLuint first, GLsizei count, const GLuint *te
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindImageTextures(): context = %d, GLuint first = %u, GLsizei count = %d, const "
+            "GLuint *textures = 0x%016" PRIxPTR "\n",
+            CID(context), first, count, (uintptr_t)textures);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBindImageTextures(context, first, count, textures));
@@ -112,6 +134,12 @@ void GL_APIENTRY BindSamplers(GLuint first, GLsizei count, const GLuint *sampler
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindSamplers(): context = %d, GLuint first = %u, GLsizei count = %d, const GLuint "
+            "*samplers = 0x%016" PRIxPTR "\n",
+            CID(context), first, count, (uintptr_t)samplers);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBindSamplers(context, first, count, samplers));
@@ -133,6 +161,12 @@ void GL_APIENTRY BindTextures(GLuint first, GLsizei count, const GLuint *texture
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindTextures(): context = %d, GLuint first = %u, GLsizei count = %d, const GLuint "
+            "*textures = 0x%016" PRIxPTR "\n",
+            CID(context), first, count, (uintptr_t)textures);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBindTextures(context, first, count, textures));
@@ -159,7 +193,14 @@ void GL_APIENTRY BindVertexBuffers(GLuint first,
 
     if (context)
     {
-        const BufferID *buffersPacked                         = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindVertexBuffers(): context = %d, GLuint first = %u, GLsizei count = %d, const "
+            "GLuint *buffers = 0x%016" PRIxPTR ", const GLintptr *offsets = 0x%016" PRIxPTR
+            ", const GLsizei *strides = 0x%016" PRIxPTR "\n",
+            CID(context), first, count, (uintptr_t)buffers, (uintptr_t)offsets, (uintptr_t)strides);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -185,6 +226,14 @@ void GL_APIENTRY BufferStorage(GLenum target, GLsizeiptr size, const void *data,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBufferStorage(): context = %d, GLenum target = %s, GLsizeiptr size = %llu, const "
+            "void *data = 0x%016" PRIxPTR ", GLbitfield flags = %s\n",
+            CID(context), GLenumToString(GLenumGroup::BufferStorageTarget, target),
+            static_cast<unsigned long long>(size), (uintptr_t)data,
+            GLbitfieldToString(GLenumGroup::MapBufferUsageMask, flags).c_str());
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBufferStorage(context, target, size, data, flags));
@@ -208,7 +257,14 @@ ClearTexImage(GLuint texture, GLint level, GLenum format, GLenum type, const voi
 
     if (context)
     {
-        TextureID texturePacked                               = FromGL<TextureID>(texture);
+        TextureID texturePacked = FromGL<TextureID>(texture);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glClearTexImage(): context = %d, GLuint texture = %u, GLint level = %d, GLenum format "
+            "= %s, GLenum type = %s, const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), texture, level, GLenumToString(GLenumGroup::PixelFormat, format),
+            GLenumToString(GLenumGroup::PixelType, type), (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -245,7 +301,17 @@ void GL_APIENTRY ClearTexSubImage(GLuint texture,
 
     if (context)
     {
-        TextureID texturePacked                               = FromGL<TextureID>(texture);
+        TextureID texturePacked = FromGL<TextureID>(texture);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glClearTexSubImage(): context = %d, GLuint texture = %u, GLint level = %d, GLint "
+            "xoffset = %d, GLint yoffset = %d, GLint zoffset = %d, GLsizei width = %d, GLsizei "
+            "height = %d, GLsizei depth = %d, GLenum format = %s, GLenum type = %s, const void "
+            "*data = 0x%016" PRIxPTR "\n",
+            CID(context), texture, level, xoffset, yoffset, zoffset, width, height, depth,
+            GLenumToString(GLenumGroup::PixelFormat, format),
+            GLenumToString(GLenumGroup::PixelType, type), (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||

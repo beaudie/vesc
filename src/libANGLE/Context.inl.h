@@ -130,6 +130,9 @@ ANGLE_INLINE void Context::drawArrays(PrimitiveMode mode, GLint first, GLsizei c
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
     MarkTransformFeedbackBufferUsage(this, count, 1);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 ANGLE_INLINE void Context::drawElements(PrimitiveMode mode,
@@ -145,6 +148,9 @@ ANGLE_INLINE void Context::drawElements(PrimitiveMode mode,
 
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    resetOglApiString();
+#endif
 }
 
 ANGLE_INLINE void StateCache::onBufferBindingChange(Context *context)
