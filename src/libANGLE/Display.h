@@ -154,7 +154,8 @@ class Display final : public LabeledObject,
     Error makeCurrent(const Thread *thread,
                       Surface *drawSurface,
                       Surface *readSurface,
-                      gl::Context *context);
+                      gl::Context *context,
+                      bool updateRefCount);
 
     Error destroySurface(Surface *surface);
     void destroyImage(Image *image);
@@ -246,6 +247,9 @@ class Display final : public LabeledObject,
 
     angle::ScratchBuffer requestZeroFilledBuffer();
     void returnZeroFilledBuffer(angle::ScratchBuffer zeroFilledBuffer);
+
+    void incRefContext(gl::Context *context);
+    Error decRefContext(gl::Context *context);
 
     egl::Error handleGPUSwitch();
 
