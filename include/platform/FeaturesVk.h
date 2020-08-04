@@ -369,6 +369,13 @@ struct FeaturesVk : FeatureSetBase
         "force_max_uniform_buffer_size_16K", FeatureCategory::VulkanWorkarounds,
         "Force max uniform buffer size to 16K on some device due to bug", &members,
         "https://issuetracker.google.com/161903006"};
+
+    // Force clear call on an empty renderpass also use clearWithClearAttachment instead of loadOp.
+    // http://crbug.com/1112101
+    Feature forceClearWithClearAttachmentOnEmptyRenderPass = {
+        "context_attributes_alpha_depth_stencil_antialias", FeatureCategory::VulkanWorkarounds,
+        "Force clear with empty renderpass to clearWithClearAttachment", &members,
+        "http://crbug.com/1112101"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
