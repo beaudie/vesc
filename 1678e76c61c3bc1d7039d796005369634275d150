@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47f5bd30_5c9575aa",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T14:07:31Z",
+      "side": 1,
+      "message": "nit: this doesn\u0027t use any member variables, can be a private static function up at the top of the file in a namespace {} block",
+      "range": {
+        "startLine": 507,
+        "startChar": 20,
+        "endLine": 507,
+        "endChar": 56
+      },
+      "revId": "1678e76c61c3bc1d7039d796005369634275d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
