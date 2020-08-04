@@ -16,6 +16,24 @@
       "revId": "22e6fc037b3a8e86413a8a3f6dc62ab609698e87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27ad736f_8a71be8a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T16:02:35Z",
+      "side": 0,
+      "message": "I should probably write a one-pager on image view serials.\n\ntl;dr: the combination of {subresource, imageview serial} uniquely identifies a VkImageView for the descriptor set and framebuffer caches. Those two places are the only places we the serials. And it\u0027s a heck of a lot less tracking this way than using the map or using a serial for each individual imageview.\n\nUpdated description with a bit more specific info.",
+      "parentUuid": "16f7429d_3dafaf1b",
+      "revId": "22e6fc037b3a8e86413a8a3f6dc62ab609698e87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
