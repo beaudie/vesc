@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "d2feb25c_52126a92",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T21:20:08Z",
+      "side": 1,
+      "message": "getMipmapMaxLevel clamps to getEffectiveMaxLevel. See https://chromium.googlesource.com/angle/angle.git/+/d41280a787d1594470053dfa15b3330822049612/src/libANGLE/Texture.cpp#163 . This part was a bit tricky because there were so many options of methods to call. Left a short comment.",
+      "parentUuid": "5a91f4b8_59e7e2cc",
+      "range": {
+        "startLine": 2521,
+        "startChar": 33,
+        "endLine": 2521,
+        "endChar": 52
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cfca255_021083ce",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 21
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "683be948_e35ec6e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1732,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T21:20:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cfca255_021083ce",
+      "range": {
+        "startLine": 1731,
+        "startChar": 0,
+        "endLine": 1732,
+        "endChar": 73
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b080e116_24012089",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 21
@@ -82,6 +130,30 @@
       "writtenOn": "2020-08-04T18:52:50Z",
       "side": 1,
       "message": "Maybe make it levelCountMinusOne? 64 doesn\u0027t fit in 6 bits, and we don\u0027t have levelCount \u003d\u003d 0.",
+      "range": {
+        "startLine": 793,
+        "startChar": 4,
+        "endLine": 793,
+        "endChar": 27
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59e0356e_6fc61389",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T21:20:08Z",
+      "side": 1,
+      "message": "I\u0027ll leave it levelCount to ensure that the invalid serial is totally unique and so we don\u0027t need a few operations overhead to pack/unpack (if we ever unpack). If it turns out we need another bit we can reorganize this to take more bits away from \u0027layer\u0027 which only needs 11 bits. As it stands you shouldn\u0027t need to generate 64 levels. You\u0027d need a lot of 1x1 levels because 2**64 is a very large number. Updated comment.",
+      "parentUuid": "b080e116_24012089",
       "range": {
         "startLine": 793,
         "startChar": 4,
