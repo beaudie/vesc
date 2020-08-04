@@ -628,6 +628,14 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const;
     bool noopClearBuffer(GLenum buffer, GLint drawbuffer) const;
 
+    void incRefCount() const { mRefCount++; }
+
+    size_t decRefCount() const
+    {
+        mRefCount--;
+        return mRefCount;
+    }
+
   private:
     void initialize();
 
@@ -779,6 +787,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // Note: we use a raw pointer here so we can exclude frame capture sources from the build.
     std::unique_ptr<angle::FrameCapture> mFrameCapture;
+
+    mutable size_t mRefCount;
 
     OverlayType mOverlay;
 };
