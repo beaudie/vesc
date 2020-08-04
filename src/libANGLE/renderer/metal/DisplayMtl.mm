@@ -627,8 +627,7 @@ void DisplayMtl::initializeExtensions() const
 
     mNativeExtensions.eglSyncOES = false;
 
-    // NOTE(hqle): support occlusion query
-    mNativeExtensions.occlusionQueryBoolean = false;
+    mNativeExtensions.occlusionQueryBoolean = true;
 
     mNativeExtensions.disjointTimerQuery          = false;
     mNativeExtensions.queryCounterBitsTimeElapsed = false;
