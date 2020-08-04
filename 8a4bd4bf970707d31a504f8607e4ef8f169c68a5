@@ -16,6 +16,240 @@
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd64e203_9872f093",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "Neat!",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d189b469_c523674b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "It doesn\u0027t have to have commands. If it\u0027s just open and has loadOp\u003dclear, you can still take this path.",
+      "range": {
+        "startLine": 1075,
+        "startChar": 42,
+        "endLine": 1075,
+        "endChar": 65
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdc248c9_f0fa2d1c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "suggest: then the multisampled render pass is already done and whose data is already flushed from the tile (in a tile-based renderer), so there\u0027s no chance for the resolve attachment to take advantage of the data already being present in the tile.\n\nChange the wording as you see fit. I think \"multisample draw has already occured\" is inaccurate; that\u0027s always true, the draw has already occurred. It\u0027s the render pass we care about. \"no longer has an opportunity to be written to\" is also inaccurate; I mean, it always has the opportunity to be written to, it\u0027s just the *how* that\u0027s the question (subpass resolve vs command)",
+      "range": {
+        "startLine": 1076,
+        "startChar": 89,
+        "endLine": 1078,
+        "endChar": 46
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f041111f_aacac6ad",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "Irrelevant. There could be a simultaneous depth/stencil resolve which can take a separate path while the color resolve takes the subpass path.\n\nYou can always write a test for this.",
+      "range": {
+        "startLine": 1079,
+        "startChar": 65,
+        "endLine": 1080,
+        "endChar": 34
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c301f02_27f5684b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "This should check that the render pass is from the read framebuffer. You can write a regression test doing this:\n\n- FBO 1 -\u003e multisample draw\n- FBO 2 -\u003e multisample draw\n- Bind FBO 1 as read\n- Bind FBO 3 as draw\n- Resolve\n\nWith the current code, you will end up resolving FBO 2 instead of FBO 1.\n\nFramebufferVk::invalidateImpl was suffering from the same bug in the past.",
+      "range": {
+        "startLine": 1080,
+        "startChar": 38,
+        "endLine": 1080,
+        "endChar": 83
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caa1a58c_384fe3f2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "Another limitation is that there shouldn\u0027t already be a resolve attachment on this framebuffer. The endRenderPass() below should make sure this doesn\u0027t happen with this optimization, so better ASSERT it. You can write a test like this:\n\n- Draw multisampled in FBO 1\n- Bind FBO 1 as read\n- Bind FBO 2 as draw\n- Resolve\n- Bind FBO 3 as draw\n- Resolve",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d7b48c5_46e9d869",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "nit: this is more than an \"in case\"",
+      "range": {
+        "startLine": 1217,
+        "startChar": 9,
+        "endLine": 1217,
+        "endChar": 16
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "676ba002_0887ac02",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "A change just landed that changes this in FramebufferVk::blit. If the read buffer is multisampled-render-to-buffer, then srcFramebuffer-\u003egetSamples(context) gives \u003e 1, but there\u0027s no resolve happening as the read buffer\u0027s singlesampled image will be used as blit src.\n\nIt can get a little complicated as you would need the blit mask to know how to correctly deduce this (see https://chromium-review.googlesource.com/c/angle/angle/+/2333987/5/src/libANGLE/renderer/vulkan/FramebufferVk.cpp#853). How about instead do this:\n\n    if (command !\u003d gl::Command::Blit)\n    {\n        // Don\u0027t end the render pass when handling a blit, since we may be able to optimize\n        // color resolves in a way that requires modifying the current render pass.\n        ANGLE_TRY(contextVk-\u003eendRenderPass());\n    }\n\nThen inside FramebufferVk::blit:\n\n    // \u003cAppropriate comment\u003e\n    if (!isColorResolve)\n    {\n        ANGLE_TRY(contextVk-\u003eendRenderPass());\n    }",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbb82f3c_989f6442",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "You can ASSERT there are no resolve attachments. An anonymous helper function can be used that returns true/false based on whether resolve attachment exists, then ASSERT(callThatFunction()).",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fab8e094_634b5e48",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "You can ASSERT there are no resolve attachments. An anonymous helper function can be used that returns true/false based on whether resolve attachment exists, then ASSERT(callThatFunction()).",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18403e9f_a2865606",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ed734a_744ba56f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T16:52:07Z",
+      "side": 1,
+      "message": "If possible, please draw a gradient and verify at least the corners are right. Just to make sure the optimization is not accidentally doing flips or what not.",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
