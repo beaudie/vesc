@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "03c565bc_3865dfa7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T23:21:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d2feb25c_52126a92",
+      "range": {
+        "startLine": 2521,
+        "startChar": 33,
+        "endLine": 2521,
+        "endChar": 52
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1cfca255_021083ce",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 21
@@ -163,6 +187,30 @@
       "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a6c7884_624f3788",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T23:21:30Z",
+      "side": 1,
+      "message": "Actually nevermind, we limit levels to `IMPLEMENTATION_MAX_TEXTURE_LEVELS \u003d 16`, so basically we are good with 5 bits.\n\nI didn\u0027t understand the comment about 1x1 levels and 2**64. The view serial corresponds to an allocated image, so the range [level, level+levelCount) is mip-complete.",
+      "parentUuid": "59e0356e_6fc61389",
+      "range": {
+        "startLine": 793,
+        "startChar": 4,
+        "endLine": 793,
+        "endChar": 27
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
