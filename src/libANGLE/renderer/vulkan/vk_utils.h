@@ -486,8 +486,7 @@ template <typename T>
 class BindingPointer final : angle::NonCopyable
 {
   public:
-    BindingPointer() : mRefCounted(nullptr) {}
-
+    BindingPointer() = default;
     ~BindingPointer() { reset(); }
 
     BindingPointer(BindingPointer &&other)
@@ -519,7 +518,7 @@ class BindingPointer final : angle::NonCopyable
     bool valid() const { return mRefCounted != nullptr; }
 
   private:
-    RefCounted<T> *mRefCounted;
+    RefCounted<T> *mRefCounted = nullptr;
 };
 
 // Helper class to share ref-counted Vulkan objects.  Requires that T have a destroy method
@@ -787,6 +786,7 @@ void InitExternalSemaphoreCapabilitiesFunctions(VkInstance instance);
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
 GLenum CalculateGenerateMipmapFilter(ContextVk *contextVk, const vk::Format &format);
+size_t PackSampleCount(GLint sampleCount);
 
 namespace gl_vk
 {
