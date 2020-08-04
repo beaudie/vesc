@@ -322,6 +322,10 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         UnpackResolveAttachmentDesc(&attachmentDescs[colorResolveIndexVk], format);
 
         ++attachmentCount;
+
+        // Discard the multisample image data
+        attachmentDescs[colorIndexGL].storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachmentDescs[colorIndexGL].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
 
     VkSubpassDescription subpassDesc = {};
