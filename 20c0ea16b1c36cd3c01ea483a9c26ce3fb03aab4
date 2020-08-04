@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "35da885d_7d660c87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T23:26:36Z",
+      "side": 1,
+      "message": "Also, please make the title self sufficient, rather than linking to a bug. For example:\n\n    Vulkan: Workaround vkCmdClearAttachments bug on Intel.\n\nAlso, Intel drivers on Linux and windows are completely different. If it\u0027s Intel/Windows, please indicate it as such.",
+      "parentUuid": "ad03360b_0c979d98",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "20c0ea16b1c36cd3c01ea483a9c26ce3fb03aab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cb49efc_8eef7762",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -87,6 +111,75 @@
       "revId": "20c0ea16b1c36cd3c01ea483a9c26ce3fb03aab4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7b7480b_3315902a",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T23:26:36Z",
+      "side": 1,
+      "message": "crbug",
+      "range": {
+        "startLine": 374,
+        "startChar": 14,
+        "endLine": 374,
+        "endChar": 22
+      },
+      "revId": "20c0ea16b1c36cd3c01ea483a9c26ce3fb03aab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9015cf56_9b920256",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T23:26:36Z",
+      "side": 1,
+      "message": "crbug",
+      "range": {
+        "startLine": 378,
+        "startChar": 16,
+        "endLine": 378,
+        "endChar": 24
+      },
+      "revId": "20c0ea16b1c36cd3c01ea483a9c26ce3fb03aab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8aab1d_9ea8a9f8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T23:26:36Z",
+      "side": 1,
+      "message": "Again, if this is windows-specific, make it isIntel \u0026\u0026 IsWindows().",
+      "range": {
+        "startLine": 1846,
+        "startChar": 88,
+        "endLine": 1846,
+        "endChar": 95
+      },
+      "revId": "20c0ea16b1c36cd3c01ea483a9c26ce3fb03aab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
