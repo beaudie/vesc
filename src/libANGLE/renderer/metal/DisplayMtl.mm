@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 
+#include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
@@ -70,6 +71,8 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
             return angle::Result::Stop;
         }
 
+        mMetalDeviceVendorId = mtl::GetDeviceVendorId(mMetalDevice);
+
         mCmdQueue.set([[mMetalDevice.get() newCommandQueue] ANGLE_MTL_AUTORELEASE]);
 
         mCapsInitialized = false;
@@ -99,6 +102,8 @@ void DisplayMtl::terminate()
     mDefaultShaders  = nil;
     mMetalDevice     = nil;
     mCapsInitialized = false;
+
+    mMetalDeviceVendorId = 0;
 
     if (mGlslangInitialized)
     {
@@ -577,9 +582,9 @@ void DisplayMtl::initializeExtensions() const
     mNativeExtensions.mapBufferOES           = true;
     mNativeExtensions.mapBufferRange         = false;
     mNativeExtensions.textureStorage         = true;
-    mNativeExtensions.drawBuffers            = false;
+    mNativeExtensions.drawBuffers            = true;
     mNativeExtensions.fragDepth              = true;
-    mNativeExtensions.framebufferBlit        = false;
+    mNativeExtensions.framebufferBlit        = true;
     mNativeExtensions.framebufferMultisample = false;
     mNativeExtensions.copyTexture            = true;
     mNativeExtensions.copyCompressedTexture  = false;
@@ -654,6 +659,7 @@ void DisplayMtl::initializeFeatures()
     mFeatures.hasBaseVertexInstancedDraw.enabled        = true;
     mFeatures.hasDepthTextureFiltering.enabled          = false;
     mFeatures.hasNonUniformDispatch.enabled             = true;
+    mFeatures.hasStencilOutput.enabled                  = false;
     mFeatures.hasTextureSwizzle.enabled                 = false;
     mFeatures.allowSeparatedDepthStencilBuffers.enabled = false;
 
@@ -662,6 +668,12 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), allowMultisampleStoreAndResolve,
                             supportEitherGPUFamily(3, 1));
 
+    if (ANGLE_APPLE_AVAILABLE_XCI(10.14, 13.0, 12.0))
+    {
+        // http://anglebug.com/4919
+        // Stencil blit shader is not compiled on Intel & NVIDIA, need investigation.
+        ANGLE_FEATURE_CONDITION((&mFeatures), hasStencilOutput, !isIntel() && !isNVIDIA());
+    }
     if (ANGLE_APPLE_AVAILABLE_XCI(10.15, 13.0, 13.0))
     {
         ANGLE_FEATURE_CONDITION((&mFeatures), hasTextureSwizzle, supportEitherGPUFamily(1, 2));
@@ -695,11 +707,27 @@ angle::Result DisplayMtl::initializeShaderLibrary()
     size_t compiled_shader_binary_len;
 
 #if !defined(NDEBUG)
-    compiled_shader_binary     = compiled_default_metallib_debug;
-    compiled_shader_binary_len = compiled_default_metallib_debug_len;
+    if (getFeatures().hasStencilOutput.enabled)
+    {
+        compiled_shader_binary     = compiled_default_metallib_2_1_debug;
+        compiled_shader_binary_len = compiled_default_metallib_2_1_debug_len;
+    }
+    else
+    {
+        compiled_shader_binary     = compiled_default_metallib_debug;
+        compiled_shader_binary_len = compiled_default_metallib_debug_len;
+    }
 #else
-    compiled_shader_binary     = compiled_default_metallib;
-    compiled_shader_binary_len = compiled_default_metallib_len;
+    if (getFeatures().hasStencilOutput.enabled)
+    {
+        compiled_shader_binary     = compiled_default_metallib_2_1;
+        compiled_shader_binary_len = compiled_default_metallib_2_1_len;
+    }
+    else
+    {
+        compiled_shader_binary     = compiled_default_metallib;
+        compiled_shader_binary_len = compiled_default_metallib_len;
+    }
 #endif
 
     mDefaultShaders = CreateShaderLibraryFromBinary(getMetalDevice(), compiled_shader_binary,
@@ -862,6 +890,21 @@ bool DisplayMtl::supportMacGPUFamily(uint8_t macFamily) const
 bool DisplayMtl::supportEitherGPUFamily(uint8_t iOSFamily, uint8_t macFamily) const
 {
     return supportiOSGPUFamily(iOSFamily) || supportMacGPUFamily(macFamily);
+}
+
+bool DisplayMtl::isAMD() const
+{
+    return angle::IsAMD(mMetalDeviceVendorId);
+}
+
+bool DisplayMtl::isIntel() const
+{
+    return angle::IsIntel(mMetalDeviceVendorId);
+}
+
+bool DisplayMtl::isNVIDIA() const
+{
+    return angle::IsNVIDIA(mMetalDeviceVendorId);
 }
 
 }  // namespace rx

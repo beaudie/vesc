@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/metal/FrameBufferMtl.h"
 #include "libANGLE/renderer/metal/ProgramMtl.h"
 #include "libANGLE/renderer/metal/RenderBufferMtl.h"
+#include "libANGLE/renderer/metal/RenderTargetMtl.h"
 #include "libANGLE/renderer/metal/ShaderMtl.h"
 #include "libANGLE/renderer/metal/TextureMtl.h"
 #include "libANGLE/renderer/metal/VertexArrayMtl.h"
@@ -1229,36 +1230,32 @@ mtl::RenderCommandEncoder *ContextMtl::getRenderCommandEncoder(const mtl::Render
     return &mRenderEncoder.restart(desc);
 }
 
-// Utilities to quickly create render command enconder to a specific texture:
+// Utilities to quickly create render command encoder to a specific texture:
 // The previous content of texture will be loaded if clearColor is not provided
 mtl::RenderCommandEncoder *ContextMtl::getRenderCommandEncoder(
-    const mtl::TextureRef &textureTarget,
-    const gl::ImageIndex &index,
+    const RenderTargetMtl &renderTarget,
     const Optional<MTLClearColor> &clearColor)
 {
-    ASSERT(textureTarget && textureTarget->valid());
+    ASSERT(renderTarget.getTexture());
 
     mtl::RenderPassDesc rpDesc;
-
-    rpDesc.colorAttachments[0].texture      = textureTarget;
-    rpDesc.colorAttachments[0].level        = index.getLevelIndex();
-    rpDesc.colorAttachments[0].sliceOrDepth = index.hasLayer() ? index.getLayerIndex() : 0;
-    rpDesc.numColorAttachments              = 1;
+    renderTarget.toRenderPassAttachmentDesc(&rpDesc.colorAttachments[0]);
+    rpDesc.numColorAttachments = 1;
+    rpDesc.sampleCount         = renderTarget.getRenderSamples();
 
     if (clearColor.valid())
     {
         rpDesc.colorAttachments[0].loadAction = MTLLoadActionClear;
-        rpDesc.colorAttachments[0].clearColor =
-            mtl::EmulatedAlphaClearColor(clearColor.value(), textureTarget->getColorWritableMask());
+        rpDesc.colorAttachments[0].clearColor = mtl::EmulatedAlphaClearColor(
+            clearColor.value(), renderTarget.getTexture()->getColorWritableMask());
     }
 
     return getRenderCommandEncoder(rpDesc);
 }
 // The previous content of texture will be loaded
-mtl::RenderCommandEncoder *ContextMtl::getRenderCommandEncoder(const mtl::TextureRef &textureTarget,
-                                                               const gl::ImageIndex &index)
+mtl::RenderCommandEncoder *ContextMtl::getRenderCommandEncoder(const RenderTargetMtl &renderTarget)
 {
-    return getRenderCommandEncoder(textureTarget, index, Optional<MTLClearColor>());
+    return getRenderCommandEncoder(renderTarget, Optional<MTLClearColor>());
 }
 
 mtl::BlitCommandEncoder *ContextMtl::getBlitCommandEncoder()
@@ -1403,25 +1400,33 @@ void ContextMtl::updateDrawFrameBufferBinding(const gl::Context *context)
 
     mDrawFramebuffer->onStartedDrawingToFrameBuffer(context);
 
-    onDrawFrameBufferChange(context, mDrawFramebuffer);
+    onDrawFrameBufferChangedState(context, mDrawFramebuffer, true);
 }
 
-void ContextMtl::onDrawFrameBufferChange(const gl::Context *context, FramebufferMtl *framebuffer)
+void ContextMtl::onDrawFrameBufferChangedState(const gl::Context *context,
+                                               FramebufferMtl *framebuffer,
+                                               bool renderPassChanged)
 {
     const gl::State &glState = getState();
     ASSERT(framebuffer == mtl::GetImpl(glState.getDrawFramebuffer()));
-
-    mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER);
 
     updateViewport(framebuffer, glState.getViewport(), glState.getNearPlane(),
                    glState.getFarPlane());
     updateFrontFace(glState);
     updateScissor(glState);
 
-    // End any render encoding using the old render pass.
-    endEncoding(false);
-    // Need to re-apply state to RenderCommandEncoder
-    invalidateState(context);
+    if (renderPassChanged)
+    {
+        // End any render encoding using the old render pass.
+        endEncoding(false);
+        // Need to re-apply state to RenderCommandEncoder
+        invalidateState(context);
+    }
+    else
+    {
+        // Invalidate current pipeline only.
+        invalidateRenderPipeline();
+    }
 }
 
 void ContextMtl::onBackbufferResized(const gl::Context *context, WindowSurfaceMtl *backbuffer)
@@ -1797,6 +1802,9 @@ angle::Result ContextMtl::checkIfPipelineChanged(
         mRenderPipelineDesc.inputPrimitiveTopology = topologyClass;
         mRenderPipelineDesc.alphaToCoverageEnabled = mState.isSampleAlphaToCoverageEnabled();
         mRenderPipelineDesc.emulateCoverageMask    = mState.isSampleCoverageEnabled();
+
+        mRenderPipelineDesc.outputDescriptor.updateEnabledDrawBuffers(
+            mDrawFramebuffer->getState().getEnabledDrawBuffers());
 
         *changedPipelineDesc = mRenderPipelineDesc;
     }
