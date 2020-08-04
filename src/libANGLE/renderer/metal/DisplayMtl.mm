@@ -257,6 +257,16 @@ void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->flexibleSurfaceCompatibility = true;
     outExtensions->iosurfaceClientBuffer        = true;
     outExtensions->surfacelessContext           = true;
+    outExtensions->displayTextureShareGroup     = true;
+
+    // This is enabled because it was added as a requirement for Chrome, which will
+    // likely change when crbug.com/1112800 is resolved
+    outExtensions->displaySemaphoreShareGroup = true;
+
+    // Note that robust resource initialization is not yet implemented. We only expose
+    // this extension so that ANGLE can be initialized in Chrome. WebGL will fail to use
+    // this extension (anglebug.com/4929)
+    outExtensions->robustResourceInitialization = true;
 }
 
 void DisplayMtl::generateCaps(egl::Caps *outCaps) const {}
