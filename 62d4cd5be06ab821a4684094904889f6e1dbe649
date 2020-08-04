@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "5a91f4b8_59e7e2cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T18:52:50Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this say getEffectiveMaxLevel()?\n\nWhen the max level changes, this is unaffected so you end up using the wrong view, isn\u0027t that so? If I\u0027m right, a regression test is in order!",
+      "range": {
+        "startLine": 2521,
+        "startChar": 33,
+        "endLine": 2521,
+        "endChar": 52
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cfca255_021083ce",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 21
@@ -41,6 +64,29 @@
         "startChar": 0,
         "endLine": 1732,
         "endChar": 73
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b080e116_24012089",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T18:52:50Z",
+      "side": 1,
+      "message": "Maybe make it levelCountMinusOne? 64 doesn\u0027t fit in 6 bits, and we don\u0027t have levelCount \u003d\u003d 0.",
+      "range": {
+        "startLine": 793,
+        "startChar": 4,
+        "endLine": 793,
+        "endChar": 27
       },
       "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
