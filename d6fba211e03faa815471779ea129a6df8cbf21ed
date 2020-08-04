@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a92b8306_c5342d67",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T16:25:13Z",
+      "side": 1,
+      "message": "nit: Caps for static method",
+      "range": {
+        "startLine": 359,
+        "startChar": 5,
+        "endLine": 359,
+        "endChar": 41
+      },
+      "revId": "d6fba211e03faa815471779ea129a6df8cbf21ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f96b89a_48fee042",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T16:25:13Z",
+      "side": 1,
+      "message": "nit: gPrefix",
+      "range": {
+        "startLine": 251,
+        "startChar": 12,
+        "endLine": 251,
+        "endChar": 42
+      },
+      "revId": "d6fba211e03faa815471779ea129a6df8cbf21ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
