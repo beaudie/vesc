@@ -877,7 +877,7 @@ Error Display::terminate(const Thread *thread)
         ANGLE_TRY(destroyContext(thread, *mContextSet.begin()));
     }
 
-    ANGLE_TRY(makeCurrent(thread, nullptr, nullptr, nullptr));
+    ANGLE_TRY(makeCurrent(thread->getContext(), nullptr, nullptr, nullptr));
 
     // The global texture and semaphore managers should be deleted with the last context that uses
     // it.
@@ -1194,6 +1194,8 @@ Error Display::createContext(const Config *configuration,
     ASSERT(context != nullptr);
     mContextSet.insert(context);
 
+    context->addRef();
+
     ASSERT(outContext != nullptr);
     *outContext = context;
     return NoError();
@@ -1225,7 +1227,7 @@ Error Display::createSync(const gl::Context *currentContext,
     return NoError();
 }
 
-Error Display::makeCurrent(const Thread *thread,
+Error Display::makeCurrent(gl::Context *previousContext,
                            egl::Surface *drawSurface,
                            egl::Surface *readSurface,
                            gl::Context *context)
@@ -1235,10 +1237,10 @@ Error Display::makeCurrent(const Thread *thread,
         return NoError();
     }
 
-    gl::Context *previousContext = thread->getContext();
     if (previousContext)
     {
         ANGLE_TRY(previousContext->unMakeCurrent(this));
+        ANGLE_TRY(decRefContext(previousContext));
     }
 
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
@@ -1246,6 +1248,7 @@ Error Display::makeCurrent(const Thread *thread,
     if (context != nullptr)
     {
         ANGLE_TRY(context->makeCurrent(this, drawSurface, readSurface));
+        context->addRef();
     }
 
     // Tick all the scratch buffers to make sure they get cleaned up eventually if they stop being
@@ -1322,18 +1325,16 @@ void Display::destroyStream(egl::Stream *stream)
     SafeDelete(stream);
 }
 
-Error Display::destroyContext(const Thread *thread, gl::Context *context)
+// decRefContext must be called with the context being deleted as current.
+// To do that we can only call this in two places, Display::makeCurrent at the point where this
+// context is being made uncurrent and in Display::destroyContext where we make the context current
+// as part of destruction.
+Error Display::decRefContext(gl::Context *context)
 {
-    gl::Context *currentContext   = thread->getContext();
-    Surface *currentDrawSurface   = thread->getCurrentDrawSurface();
-    Surface *currentReadSurface   = thread->getCurrentReadSurface();
-    bool changeContextForDeletion = context != currentContext;
-
-    // Make the context being deleted current during it's deletion.  This allows it to delete
-    // any resources it's holding.
-    if (changeContextForDeletion)
+    size_t refCount = context->release();
+    if (refCount > 0)
     {
-        ANGLE_TRY(makeCurrent(thread, nullptr, nullptr, context));
+        return NoError();
     }
 
     if (context->usingDisplayTextureShareGroup())
@@ -1368,10 +1369,29 @@ Error Display::destroyContext(const Thread *thread, gl::Context *context)
     mContextSet.erase(context);
     SafeDelete(context);
 
+    return NoError();
+}
+
+Error Display::destroyContext(const Thread *thread, gl::Context *context)
+{
+    gl::Context *currentContext   = thread->getContext();
+    Surface *currentDrawSurface   = thread->getCurrentDrawSurface();
+    Surface *currentReadSurface   = thread->getCurrentReadSurface();
+    bool changeContextForDeletion = context != currentContext;
+
+    // Make the context being deleted current during it's deletion.  This allows it to delete
+    // any resources it's holding.
+    if (changeContextForDeletion)
+    {
+        ANGLE_TRY(makeCurrent(currentContext, nullptr, nullptr, context));
+    }
+
+    ANGLE_TRY(decRefContext(context));
+
     // Set the previous context back to current
     if (changeContextForDeletion)
     {
-        ANGLE_TRY(makeCurrent(thread, currentDrawSurface, currentReadSurface, currentContext));
+        ANGLE_TRY(makeCurrent(context, currentDrawSurface, currentReadSurface, currentContext));
     }
 
     return NoError();

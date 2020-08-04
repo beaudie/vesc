@@ -151,7 +151,7 @@ class Display final : public LabeledObject,
                      const AttributeMap &attribs,
                      Sync **outSync);
 
-    Error makeCurrent(const Thread *thread,
+    Error makeCurrent(gl::Context *previousContext,
                       Surface *drawSurface,
                       Surface *readSurface,
                       gl::Context *context);
@@ -246,6 +246,8 @@ class Display final : public LabeledObject,
 
     angle::ScratchBuffer requestZeroFilledBuffer();
     void returnZeroFilledBuffer(angle::ScratchBuffer zeroFilledBuffer);
+
+    Error decRefContext(gl::Context *context);
 
     egl::Error handleGPUSwitch();
 
