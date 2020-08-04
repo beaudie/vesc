@@ -834,6 +834,10 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
                                          desc.hasColorUnresolveAttachment(colorIndexGL));
 
         ++attachmentCount;
+
+        // Discard the multisample image data
+        attachmentDescs[colorIndexGL].storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachmentDescs[colorIndexGL].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
 
     // Pack depth/stencil resolve attachment, if any
