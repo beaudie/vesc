@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0410a1e5_4a6c71e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-04T21:55:24Z",
+      "side": 1,
+      "message": "Technically this isn\u0027t a revert, this is adding a workaround that implements pre-b/162521656 behavior.",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "20c0ea16b1c36cd3c01ea483a9c26ce3fb03aab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cb49efc_8eef7762",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
