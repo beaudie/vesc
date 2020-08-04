@@ -50,6 +50,23 @@
       "revId": "53b124d40567c353c458e3628ecef1c116a6083e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e446cf7_a96cae36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-04T16:22:29Z",
+      "side": 1,
+      "message": "LGTM\n\nFrank: FYI",
+      "revId": "53b124d40567c353c458e3628ecef1c116a6083e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
