@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2ee0eae6_7e2032d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T21:19:37Z",
+      "side": 1,
+      "message": "Reworded. The issue was the same sampler would get a different ID if the *SamplerVk* had a state change.",
+      "parentUuid": "8fff3bf5_5e673ede",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "3766313c52beb79f5cbd85d716c3520a053e9591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7d58214_2c8a52c1",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -56,6 +80,24 @@
       "revId": "3766313c52beb79f5cbd85d716c3520a053e9591",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b17b93c9_953922e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2460,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T21:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d9cc96d_a0ce9a6d",
+      "revId": "3766313c52beb79f5cbd85d716c3520a053e9591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
