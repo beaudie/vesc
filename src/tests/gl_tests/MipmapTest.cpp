@@ -1115,10 +1115,6 @@ TEST_P(MipmapTest, MipmapsForTexture3DOES)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_3D"));
 
-    // http://anglebug.com/4921.
-    // Metal built-in mipmap generation doesn't use box filtering for 3D textures.
-    ANGLE_SKIP_TEST_IF(IsMetal());
-
     int px = getWindowWidth() / 2;
     int py = getWindowHeight() / 2;
 
