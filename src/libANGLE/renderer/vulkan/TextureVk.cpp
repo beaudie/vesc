@@ -1816,6 +1816,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     ASSERT(imageIndex.getLevelIndex() >= 0);
 
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
 
     if (!mImage->valid())
     {
@@ -1826,6 +1827,30 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
         ANGLE_TRY(initImage(contextVk, format, baseLevelDesc.format.info->sized, baseLevelExtents,
                             levelCount));
+    }
+
+    // If the texture is attached to an FBO normally and later to another FBO as
+    // multisampled-render-to-texture, or vice versa, we need to recreate the render targets.  Same
+    // if the texture is attached with different sample counts.
+    const GLsizei currentRenderToTextureSamples =
+        mMultisampledImage.valid() ? mMultisampledImage.getSamples() : 0;
+    const bool isRenderToTextureChange = currentRenderToTextureSamples != samples;
+
+    if (isRenderToTextureChange)
+    {
+        // Recreate the multisampled image if the number of samples have changed.
+        if (mMultisampledImage.valid())
+        {
+            mMultisampledImage.releaseImage(renderer);
+            mMultisampledImageViews.release(renderer);
+        }
+
+        // Make sure the render targets are recreated.
+        const GLuint levelIndex = imageIndex.getLevelIndex();
+        if (mRenderTargets.size() > levelIndex)
+        {
+            mRenderTargets[levelIndex].clear();
+        }
     }
 
     // If samples > 1 here, we have a singlesampled texture that's being multisampled rendered to.
