@@ -86,6 +86,75 @@
       "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f12ea22_02094825",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T22:52:13Z",
+      "side": 1,
+      "message": "consider breaking this up into a few sentences so it reads very simply. e.g. \u0027introduces corresponding entry points for textures adding ... to communicate which Vulkan .. was created with\u0027 is a bit hard to parse. something like \u0027..objects. This extension introduces new Texture entry points for specifying create and usage flag parameters. These parameters match a external Texture\u0027s corresponding Vulkan create and usage flags.\u0027",
+      "range": {
+        "startLine": 39,
+        "startChar": 26,
+        "endLine": 41,
+        "endChar": 67
+      },
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a91f8ee_34d79a8e",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T22:52:13Z",
+      "side": 1,
+      "message": "nit: can clarify if you mean revising the extension or making a new extension (e.g. flags2)",
+      "range": {
+        "startLine": 292,
+        "startChar": 21,
+        "endLine": 292,
+        "endChar": 53
+      },
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fc82b6c_e49ee342",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-04T22:52:13Z",
+      "side": 1,
+      "message": "I suggest you categorize this as undefined behaviour in the extension main spec and also keep this issues question here. That way we don\u0027t have the validate it and yet it\u0027s still part of the extension\u0027s spec (which this kind of isn\u0027t). Mention the reason: validating this is expensive and unnecessary is almost all applications.",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 76
+      },
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
