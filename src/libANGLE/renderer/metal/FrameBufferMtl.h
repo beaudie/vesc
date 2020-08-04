@@ -120,6 +120,13 @@ class FramebufferMtl : public FramebufferImpl
   private:
     void reset();
     angle::Result invalidateImpl(ContextMtl *contextMtl, size_t count, const GLenum *attachments);
+    angle::Result blitWithDraw(const gl::Context *context,
+                               FramebufferMtl *srcFrameBuffer,
+                               bool blitColorBuffer,
+                               bool blitDepthBuffer,
+                               bool blitStencilBuffer,
+                               GLenum filter,
+                               const mtl::BlitParams &baseParams);
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,
                             mtl::ClearRectParams *clearOpts);
@@ -127,6 +134,15 @@ class FramebufferMtl : public FramebufferImpl
     angle::Result clearWithLoadOp(const gl::Context *context,
                                   gl::DrawBufferMask clearColorBuffers,
                                   const mtl::ClearRectParams &clearOpts);
+
+    angle::Result clearWithLoadOpRenderPassNotStarted(const gl::Context *context,
+                                                      gl::DrawBufferMask clearColorBuffers,
+                                                      const mtl::ClearRectParams &clearOpts);
+
+    angle::Result clearWithLoadOpRenderPassStarted(const gl::Context *context,
+                                                   gl::DrawBufferMask clearColorBuffers,
+                                                   const mtl::ClearRectParams &clearOpts,
+                                                   mtl::RenderCommandEncoder *encoder);
 
     angle::Result clearWithDraw(const gl::Context *context,
                                 gl::DrawBufferMask clearColorBuffers,
