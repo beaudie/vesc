@@ -1204,6 +1204,129 @@ TEST_P(MipmapTest, MipmapsForTexture3DOES)
     EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::red);
 }
 
+// This test verifies 3D texture mipmap generation uses box filter on Metal back-end.
+TEST_P(MipmapTest, GenMipmapsForTexture3DOESWithBoxFilter)
+{
+    // Only Metal is known to uses box filter for 3D mipmap generation.
+    ANGLE_SKIP_TEST_IF(!IsMetal());
+
+    int px = getWindowWidth() / 2;
+    int py = getWindowHeight() / 2;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_3D, texture);
+
+    glTexImage3DOES(GL_TEXTURE_3D, 0, GL_RGBA, 32, 32, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage3DOES(GL_TEXTURE_3D, 1, GL_RGBA, 16, 16, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage3DOES(GL_TEXTURE_3D, 2, GL_RGBA, 8, 8, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage3DOES(GL_TEXTURE_3D, 3, GL_RGBA, 4, 4, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage3DOES(GL_TEXTURE_3D, 4, GL_RGBA, 2, 2, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage3DOES(GL_TEXTURE_3D, 5, GL_RGBA, 1, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Fill the first layer with red
+    std::vector<GLColor> pixelsRed(32 * 32, GLColor::red);
+    glTexSubImage3DOES(GL_TEXTURE_3D, 0, 0, 0, 0, 32, 32, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                       pixelsRed.data());
+
+    // Fill the second layer with green
+    std::vector<GLColor> pixelsGreen(32 * 32, GLColor::green);
+    glTexSubImage3DOES(GL_TEXTURE_3D, 0, 0, 0, 1, 32, 32, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                       pixelsGreen.data());
+
+    // Fill the 3rd layer with blue
+    std::vector<GLColor> pixelsBlue(32 * 32, GLColor::blue);
+    glTexSubImage3DOES(GL_TEXTURE_3D, 0, 0, 0, 2, 32, 32, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                       pixelsBlue.data());
+
+    // Fill the 4th layer with yellow
+    std::vector<GLColor> pixelsYellow(32 * 32, GLColor::yellow);
+    glTexSubImage3DOES(GL_TEXTURE_3D, 0, 0, 0, 3, 32, 32, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                       pixelsYellow.data());
+
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    EXPECT_GL_NO_ERROR();
+
+    glGenerateMipmap(GL_TEXTURE_3D);
+
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(m3DProgram);
+
+    EXPECT_GL_NO_ERROR();
+
+    // Mipmap level 0
+    // Draw the first slice
+    glUniform1f(mTexture3DLODUniformLocation, 0.);
+    glUniform1f(mTexture3DSliceUniformLocation, 0.125f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::red);
+
+    // Draw the second slice
+    glUniform1f(mTexture3DSliceUniformLocation, 0.375f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::green);
+
+    // Draw the 3rd slice
+    glUniform1f(mTexture3DSliceUniformLocation, 0.625f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::blue);
+
+    // Draw the 4th slice
+    glUniform1f(mTexture3DSliceUniformLocation, 0.875f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::yellow);
+
+    // Mipmap level 1
+    // The second mipmap should have two slice.
+    glUniform1f(mTexture3DLODUniformLocation, 1.);
+    glUniform1f(mTexture3DSliceUniformLocation, 0.25f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(px, py, 127, 127, 0, 255, 1.0);
+
+    glUniform1f(mTexture3DSliceUniformLocation, 0.75f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(px, py, 127, 127, 127, 255, 1.0);
+
+    // Mipmap level 2
+    // The 3rd mipmap should only have one slice.
+    glUniform1f(mTexture3DLODUniformLocation, 2.);
+    glUniform1f(mTexture3DSliceUniformLocation, 0.25f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(px, py, 127, 127, 64, 255, 1.0);
+
+    glUniform1f(mTexture3DSliceUniformLocation, 0.75f);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(px, py, 127, 127, 64, 255, 1.0);
+
+    // Mipmap level 3
+    glUniform1f(mTexture3DLODUniformLocation, 3.);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(px, py, 127, 127, 64, 255, 1.0);
+
+    // Mipmap level 4
+    glUniform1f(mTexture3DLODUniformLocation, 4.);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(px, py, 127, 127, 64, 255, 1.0);
+
+    // Mipmap level 5
+    glUniform1f(mTexture3DLODUniformLocation, 5.);
+    drawQuad(m3DProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(px, py, 127, 127, 64, 255, 1.0);
+}
+
 // Creates a mipmapped 2D array texture with three layers, and calls ANGLE's GenerateMipmap.
 // Then tests if the mipmaps are rendered correctly for all three layers.
 TEST_P(MipmapTestES3, MipmapsForTextureArray)
