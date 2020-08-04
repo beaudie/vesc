@@ -33,6 +33,23 @@
       "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "efe30aa8_e1140afb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-04T15:35:03Z",
+      "side": 1,
+      "message": "I took at a look at where updateScissor is called, and it looks like the only place this is optimizing is when gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING is handled. Is that correct?\n\nWhy doesn\u0027t the `if (!mRenderPassCommands-\u003egetRenderArea().encloses(scissoredRenderArea))` test already prevent end render pass? And what does it mean if that indices the render pass must end, but you prevent it?\n",
+      "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
