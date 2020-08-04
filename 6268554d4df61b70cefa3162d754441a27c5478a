@@ -51,6 +51,24 @@
       "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ad6634a_05dffc54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-08-04T22:03:21Z",
+      "side": 1,
+      "message": "I see - thanks for asking - re-reading the spec, the names and spec text look good. There\u0027s always a tradeoff between expressivity / clarity and function name length; the MemFlags* name choice sounds fine. Another choice might be MemObjFlags*.",
+      "parentUuid": "6f665925_0a6a85f1",
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
