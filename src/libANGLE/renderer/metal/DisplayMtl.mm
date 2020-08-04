@@ -627,7 +627,7 @@ void DisplayMtl::initializeExtensions() const
 
     mNativeExtensions.textureNPOTOES = true;
 
-    mNativeExtensions.texture3DOES = false;
+    mNativeExtensions.texture3DOES = true;
 
     mNativeExtensions.standardDerivativesOES = true;
 
