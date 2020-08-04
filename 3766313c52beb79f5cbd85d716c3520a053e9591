@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8fff3bf5_5e673ede",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-04T18:36:24Z",
+      "side": 1,
+      "message": "Isn\u0027t this still the Serial?   I don\u0027t see any other values being used to ID Samplers, though I could be missing it.",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "3766313c52beb79f5cbd85d716c3520a053e9591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7d58214_2c8a52c1",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -16,6 +39,23 @@
       "revId": "3766313c52beb79f5cbd85d716c3520a053e9591",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3d9cc96d_a0ce9a6d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2460,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-04T18:36:24Z",
+      "side": 1,
+      "message": "Can this step be part of the vk::SamplerHelper constructor since it\u0027s not expected to change?",
+      "revId": "3766313c52beb79f5cbd85d716c3520a053e9591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
