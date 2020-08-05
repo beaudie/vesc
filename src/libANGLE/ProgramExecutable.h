@@ -291,6 +291,8 @@ class ProgramExecutable final : public angle::Subject
         return *mResources;
     }
 
+    const gl::ProgramMergedVaryings &getMergedVaryings() const { return mMergedVaryings; }
+
     void saveLinkedStateInfo(const ProgramState &state);
     std::vector<sh::ShaderVariable> getLinkedOutputVaryings(ShaderType shaderType)
     {
@@ -393,6 +395,7 @@ class ProgramExecutable final : public angle::Subject
 
     bool mIsCompute;
 
+    gl::ProgramMergedVaryings mMergedVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;
     ShaderMap<int> mLinkedShaderVersions;

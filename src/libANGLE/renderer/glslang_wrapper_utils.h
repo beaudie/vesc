@@ -81,6 +81,12 @@ struct ShaderInterfaceVariableInfo
     uint32_t xfbBuffer = kInvalid;
     uint32_t xfbOffset = kInvalid;
     uint32_t xfbStride = kInvalid;
+    // Indicates that the precision needs to be fixed in generated SPIR-V
+    bool fixPrecision = false;
+    // Indicate if varying is input or output
+    bool varyingIsOutput        = false;
+    uint32_t fixedVaryingId     = kInvalid;
+    uint32_t fixedVaryingTypeId = kInvalid;
 };
 
 // TODO: http://anglebug.com/4524: Need a different hash key than a string, since
