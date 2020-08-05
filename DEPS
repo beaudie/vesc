@@ -28,7 +28,7 @@ vars = {
   'checkout_angle_internal': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'ed7912a248d52ab5aae92fdef67734ef628c440e',
+  'chromium_revision': '6246c58f3c342346099fcec80cced5e5308a3abc',
 
   # Current revision of VK-GL-CTS (a.k.a dEQP).
   'vk_gl_cts_revision': '4b40207be32deac1c567dacc70cde031bea005aa',
@@ -89,7 +89,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@0eaf1510a921b1d7db062cc2d035c855c882f693',
+    'url': '{chromium_git}/chromium/src/build.git@8bb482bf85fd6419f78c43ca66ae17d2410efea7',
     'condition': 'not build_with_chromium',
   },
 
@@ -99,7 +99,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@165367ff940af902e2505d538ffb82b90c5295e3',
+    'url': '{chromium_git}/chromium/src/testing@4b30a5a933fb7a47fa0552d6e197c46ce7605657',
     'condition': 'not build_with_chromium',
   },
 
@@ -248,7 +248,7 @@ deps = {
   },
 
   'tools/clang': {
-    'url': '{chromium_git}/chromium/src/tools/clang.git@1078c4141a00d7174786d9d0fae2e7804c2a54e3',
+    'url': '{chromium_git}/chromium/src/tools/clang.git@8a232eb21c25d1901794b418b8aeaae772e3cd0f',
     'condition': 'not build_with_chromium',
   },
 
