@@ -81,6 +81,8 @@ struct ShaderInterfaceVariableInfo
     uint32_t xfbBuffer = kInvalid;
     uint32_t xfbOffset = kInvalid;
     uint32_t xfbStride = kInvalid;
+    // Used to match precision between stages
+    GLenum precision = kInvalid;
 };
 
 // TODO: http://anglebug.com/4524: Need a different hash key than a string, since
