@@ -548,7 +548,7 @@ void CaptureGetUniformfv_params(const State &glState,
                                 GLfloat *params,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = 16;
 }
 
 void CaptureGetUniformiv_params(const State &glState,
@@ -558,7 +558,11 @@ void CaptureGetUniformiv_params(const State &glState,
                                 GLint *params,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = 16;
+    /*Program *programObj = glState.getShaderProgramManagerForCapture().getProgram(program);
+    ASSERT(programObj);
+    const LinkedUniform &uniform      = programObj->getUniformByLocation(location);
+    paramCapture->readBufferSizeBytes = uniform.getElementSize() * uniform.getElementComponents();*/
 }
 
 void CaptureGetVertexAttribPointerv_pointer(const State &glState,
