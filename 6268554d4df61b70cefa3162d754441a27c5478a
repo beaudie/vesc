@@ -112,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "bf866ef3_46492d92",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T08:23:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f12ea22_02094825",
+      "range": {
+        "startLine": 39,
+        "startChar": 26,
+        "endLine": 41,
+        "endChar": 67
+      },
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a91f8ee_34d79a8e",
         "filename": "extensions/ANGLE_external_objects_flags.txt",
         "patchSetId": 2
@@ -135,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "a84de2d1_0d2fdce0",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T08:23:23Z",
+      "side": 1,
+      "message": "The latter. Done\n\nOf course while this extensions is not \"official\", we can modify it.",
+      "parentUuid": "8a91f8ee_34d79a8e",
+      "range": {
+        "startLine": 292,
+        "startChar": 21,
+        "endLine": 292,
+        "endChar": 53
+      },
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5fc82b6c_e49ee342",
         "filename": "extensions/ANGLE_external_objects_flags.txt",
         "patchSetId": 2
@@ -155,6 +203,30 @@
       "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e7f3ce5_3d723ebc",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T08:23:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fc82b6c_e49ee342",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 76
+      },
+      "revId": "6268554d4df61b70cefa3162d754441a27c5478a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
