@@ -117,8 +117,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
             BufferVk *bufferVk             = vk::GetImpl(buffer);
             vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-            vk::CommandBuffer *commandBuffer;
-            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+            vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
             // Queue ownership transfer.
             bufferHelper.acquireFromExternal(contextVk, VK_QUEUE_FAMILY_EXTERNAL,
