@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "b56639ba_cb6b96d2",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-05T16:36:51Z",
+      "side": 1,
+      "message": "Geoff and I looked at that Monday, there would be circular dependencies with RefCountObject as it uses the gl::Context we are trying to ref count.\nHmm, we were looking at class RefCountObject : public gl::RefCountObjectNoID\nI see later in the file we have a using RefCountObject \u003d angle::RefCountObject\u003cDisplay, Error\u003e; I\u0027ll look at that.\n\nNo I don\u0027t think RefCountObject will work due to work (unMakeCurrent) that needs to happen at onDestroy time which requires us to return an error from onDestroy.",
+      "parentUuid": "62666519_eca91d43",
+      "range": {
+        "startLine": 631,
+        "startChar": 9,
+        "endLine": 631,
+        "endChar": 20
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f4a868b_30214ee6",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 4
@@ -79,6 +103,30 @@
       "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2399e0b4_1dc18a4b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-05T16:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f4a868b_30214ee6",
+      "range": {
+        "startLine": 1251,
+        "startChar": 7,
+        "endLine": 1251,
+        "endChar": 31
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "3e6bfa21_34709e37",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-05T16:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fca2ec9f_09aee49c",
+      "range": {
+        "startLine": 1327,
+        "startChar": 0,
+        "endLine": 1331,
+        "endChar": 1
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "080ef532_6e8eaf8b",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 4
@@ -116,6 +188,30 @@
       "writtenOn": "2020-08-05T14:51:02Z",
       "side": 1,
       "message": "you can probably keep the old name. deleteBuffer/etc won\u0027t necessarily delete them. and we want to use the same name as the EP.",
+      "range": {
+        "startLine": 1337,
+        "startChar": 15,
+        "endLine": 1337,
+        "endChar": 28
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f46e468_bd2e5df7",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-05T16:36:51Z",
+      "side": 1,
+      "message": "I have Display::destroyContext below as there is a little more work that needs to be done for the destroy EP. Display:: is called by destroy, but also makeCurrent and terminate.\nI\u0027ve renamed this to Display::releaseContext and made it a private method to Display.",
+      "parentUuid": "080ef532_6e8eaf8b",
       "range": {
         "startLine": 1337,
         "startChar": 15,
@@ -148,6 +244,30 @@
       "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0489826_e7708e86",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-05T16:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c179996b_775aa271",
+      "range": {
+        "startLine": 250,
+        "startChar": 9,
+        "endLine": 250,
+        "endChar": 22
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
