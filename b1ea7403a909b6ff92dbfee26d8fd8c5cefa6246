@@ -16,6 +16,23 @@
       "revId": "b1ea7403a909b6ff92dbfee26d8fd8c5cefa6246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b258a401_61588cc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T15:30:19Z",
+      "side": 1,
+      "message": "LGTM - would be great to land.",
+      "revId": "b1ea7403a909b6ff92dbfee26d8fd8c5cefa6246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
