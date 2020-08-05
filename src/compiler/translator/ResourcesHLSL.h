@@ -66,6 +66,11 @@ class ResourcesHLSL : angle::NonCopyable
         return mUniformRegisterMap;
     }
 
+    const std::map<TType, TString> &getTranslateStructuredBufferTypesMap() const
+    {
+        return translateStructuredBufferTypes;
+    }
+
     unsigned int getReadonlyImage2DRegisterIndex() const { return mReadonlyImage2DRegisterIndex; }
     unsigned int getImage2DRegisterIndex() const { return mImage2DRegisterIndex; }
     bool shouldTranslateUniformBlockToStructuredBuffer(const TInterfaceBlock &interfaceBlock);
@@ -147,6 +152,8 @@ class ResourcesHLSL : angle::NonCopyable
     std::map<std::string, bool> mUniformBlockUseStructuredBufferMap;
     unsigned int mReadonlyImage2DRegisterIndex;
     unsigned int mImage2DRegisterIndex;
+
+    std::map<TType, TString> translateStructuredBufferTypes;
 };
 }  // namespace sh
 

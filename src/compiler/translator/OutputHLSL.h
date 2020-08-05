@@ -97,6 +97,13 @@ class OutputHLSL : public TIntermTraverser
     bool visitIfElse(Visit visit, TIntermIfElse *) override;
     bool visitSwitch(Visit visit, TIntermSwitch *) override;
     bool visitCase(Visit visit, TIntermCase *) override;
+    void getFunctionParamsPendingStrings(
+        const TFunction *func,
+        size_t index,
+        size_t paramCount,
+        const std::map<TType, TString> &translateStructuredBufferTypesMap,
+        std::vector<TString> &paramStrings,
+        std::vector<TString> &paramStringResults);
     void visitFunctionPrototype(TIntermFunctionPrototype *node) override;
     bool visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node) override;
     bool visitAggregate(Visit visit, TIntermAggregate *) override;

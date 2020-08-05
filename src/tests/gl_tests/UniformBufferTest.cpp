@@ -3092,6 +3092,56 @@ TEST_P(UniformBufferTest, InstanceArrayUniformBlockWithOneLargeMatrixArray)
     }
 }
 
+// Test that compile uniform buffer with a large matrix array member or a large struct array member,
+// and transfer this member as an actual parameter for user-defined function.
+TEST_P(UniformBufferTest, UniformBlockWithOneLargeMatrixArrayAsActualParameter)
+{
+    constexpr char kVS[] = R"(#version 300 es
+layout(location=0) in vec3 a_position;
+
+struct S
+{
+    mat4x4 s;
+};
+
+uniform UBO1{
+    S[90] buf1;
+};
+
+uniform UBO2{
+    mat4x4[90] buf2;
+} instance;
+
+vec4 test2(mat4x4[90] param, vec3 pos)
+{
+    return param[3] * vec4(pos, 1.0);
+}
+
+vec4 test1(S[90] param1, mat4x4[90] param2, vec3 pos){
+    return param1[2].s * test2(param2, pos);
+}
+
+void main(void)
+{
+    gl_PointSize = 30.0;
+
+    gl_Position = test1(buf1, instance.buf2, a_position);
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+
+uniform vec3 u_color;
+out vec4 oFragColor;
+
+void main(void)
+{
+    oFragColor = vec4( u_color, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 // Test a uniform block where an array of row-major matrices is dynamically indexed.
 TEST_P(UniformBufferTest, Std140UniformBlockWithDynamicallyIndexedRowMajorArray)
 {

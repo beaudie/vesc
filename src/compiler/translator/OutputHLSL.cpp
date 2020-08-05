@@ -442,6 +442,18 @@ void OutputHLSL::output(TIntermNode *treeRoot, TInfoSinkBase &objSink)
     header(mHeader, std140Structs, &builtInFunctionEmulator);
     mInfoSinkStack.pop();
 
+    // If there are some uniform block with a large array member which had translated to
+    // StructuredBuffer, and in the meantime use uniform block as a actual parameter for
+    // user-defined function, should also change the function's formal parameter type to
+    // StructuredBuffer, so re-traverse the tree.
+    if (mResourcesHLSL->getTranslateStructuredBufferTypesMap().size() > 0)
+    {
+        mBody.erase();
+        mInfoSinkStack.push(&mBody);
+        treeRoot->traverse(this);
+        mInfoSinkStack.pop();
+    }
+
     objSink << mHeader.c_str();
     objSink << mBody.c_str();
     objSink << mFooter.c_str();
@@ -2185,6 +2197,53 @@ bool OutputHLSL::visitBlock(Visit visit, TIntermBlock *node)
     return false;
 }
 
+void OutputHLSL::getFunctionParamsPendingStrings(
+    const TFunction *func,
+    size_t index,
+    size_t paramCount,
+    const std::map<TType, TString> &translateStructuredBufferTypesMap,
+    std::vector<TString> &paramStrings,
+    std::vector<TString> &paramsPendingStrings)
+{
+    if (index == paramCount)
+    {
+        TString paramsPendingString;
+        for (size_t i = 0; i < paramCount; i++)
+        {
+            paramsPendingString += paramStrings[i];
+            paramsPendingString += i < paramCount - 1 ? ", " : "";
+        }
+        paramsPendingStrings.push_back(paramsPendingString);
+        return;
+    }
+
+    TInfoSinkBase paramSink;
+    writeParameter(func->getParam(index), paramSink);
+    paramStrings[index] = TString(paramSink.c_str());
+    getFunctionParamsPendingStrings(func, index + 1, paramCount, translateStructuredBufferTypesMap,
+                                    paramStrings, paramsPendingStrings);
+
+    // If the formal parameter's type of this function matches the type of uniform block, which had
+    // been translated to StructuredBuffer, the function may accept this uniform block as a actual
+    // parameter, so add an overloaded function which accepts StructuredBuffer type as its formal
+    // parameter.
+    if (translateStructuredBufferTypesMap.find(func->getParam(index)->getType()) !=
+        translateStructuredBufferTypesMap.end())
+    {
+        const TType &type    = func->getParam(index)->getType();
+        TQualifier qualifier = type.getQualifier();
+
+        TString nameStr = DecorateVariableIfNeeded(*func->getParam(index));
+        ASSERT(nameStr != "");  // HLSL demands named arguments, also for prototypes
+
+        paramStrings[index] = TString(QualifierString(qualifier)) + " StructuredBuffer<" +
+                              translateStructuredBufferTypesMap.at(type) + "> " + nameStr;
+        getFunctionParamsPendingStrings(func, index + 1, paramCount,
+                                        translateStructuredBufferTypesMap, paramStrings,
+                                        paramsPendingStrings);
+    }
+}
+
 bool OutputHLSL::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node)
 {
     TInfoSinkBase &out = getInfoSink();
@@ -2220,39 +2279,52 @@ bool OutputHLSL::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition 
                 UNREACHABLE();
                 break;
         }
+
+        mInsideFunction = true;
+        mInsideMain     = true;
+
+        node->getBody()->traverse(this);
+
+        mInsideFunction = false;
+        mInsideMain     = false;
     }
     else
     {
-        out << TypeString(node->getFunctionPrototype()->getType()) << " ";
-        out << DecorateFunctionIfNeeded(func) << DisambiguateFunctionName(func)
-            << (mOutputLod0Function ? "Lod0(" : "(");
-
         size_t paramCount = func->getParamCount();
-        for (unsigned int i = 0; i < paramCount; i++)
+        if (paramCount == 0)
         {
-            const TVariable *param = func->getParam(i);
-            ensureStructDefined(param->getType());
+            out << TypeString(node->getFunctionPrototype()->getType()) << " ";
+            out << DecorateFunctionIfNeeded(func) << DisambiguateFunctionName(func)
+                << (mOutputLod0Function ? "Lod0()\n" : "()\n");
 
-            writeParameter(param, out);
+            mInsideFunction = true;
+            node->getBody()->traverse(this);
+            mInsideFunction = false;
+        }
+        else
+        {
+            std::vector<TString> paramsPendingStrings;
+            std::vector<TString> paramStrings(paramCount);
+            const std::map<TType, TString> &translateStructuredBufferTypesMap =
+                mResourcesHLSL->getTranslateStructuredBufferTypesMap();
+            getFunctionParamsPendingStrings(func, 0, paramCount, translateStructuredBufferTypesMap,
+                                            paramStrings, paramsPendingStrings);
 
-            if (i < paramCount - 1)
+            ASSERT(paramsPendingStrings.size() > 0);
+            for (size_t i = 0; i < paramsPendingStrings.size(); i++)
             {
-                out << ", ";
+                out << TypeString(node->getFunctionPrototype()->getType()) << " ";
+                out << DecorateFunctionIfNeeded(func) << DisambiguateFunctionName(func)
+                    << (mOutputLod0Function ? "Lod0(" : "(");
+                out << paramsPendingStrings[i];
+                out << ")\n";
+
+                mInsideFunction = true;
+                node->getBody()->traverse(this);
+                mInsideFunction = false;
             }
         }
-
-        out << ")\n";
     }
-
-    mInsideFunction = true;
-    if (func->isMain())
-    {
-        mInsideMain = true;
-    }
-    // The function body node will output braces.
-    node->getBody()->traverse(this);
-    mInsideFunction = false;
-    mInsideMain     = false;
 
     mCurrentFunctionMetadata = nullptr;
 
@@ -2356,22 +2428,32 @@ void OutputHLSL::visitFunctionPrototype(TIntermFunctionPrototype *node)
 
     const TFunction *func = node->getFunction();
 
-    TString name = DecorateFunctionIfNeeded(func);
-    out << TypeString(node->getType()) << " " << name << DisambiguateFunctionName(func)
-        << (mOutputLod0Function ? "Lod0(" : "(");
-
     size_t paramCount = func->getParamCount();
-    for (unsigned int i = 0; i < paramCount; i++)
+    if (paramCount == 0)
     {
-        writeParameter(func->getParam(i), out);
+        out << TypeString(node->getType()) << " ";
+        out << DecorateFunctionIfNeeded(func) << DisambiguateFunctionName(func)
+            << (mOutputLod0Function ? "Lod0();\n" : "();\n");
+    }
+    else
+    {
+        std::vector<TString> paramsPendingStrings;
+        std::vector<TString> paramStrings(paramCount);
+        const std::map<TType, TString> &translateStructuredBufferTypesMap =
+            mResourcesHLSL->getTranslateStructuredBufferTypesMap();
+        getFunctionParamsPendingStrings(func, 0, paramCount, translateStructuredBufferTypesMap,
+                                        paramStrings, paramsPendingStrings);
 
-        if (i < paramCount - 1)
+        ASSERT(paramsPendingStrings.size() > 0);
+        for (size_t i = 0; i < paramsPendingStrings.size(); i++)
         {
-            out << ", ";
+            out << TypeString(node->getType()) << " ";
+            out << DecorateFunctionIfNeeded(func) << DisambiguateFunctionName(func)
+                << (mOutputLod0Function ? "Lod0(" : "(");
+            out << paramsPendingStrings[i];
+            out << ");\n";
         }
     }
-
-    out << ");\n";
 
     // Also prototype the Lod0 variant if needed
     bool needsLod0 = mASTMetadataList[index].mNeedsLod0;

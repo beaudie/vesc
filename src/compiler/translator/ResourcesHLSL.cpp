@@ -826,6 +826,8 @@ TString ResourcesHLSL::uniformBlockWithOneLargeArrayMemberString(
         typeString = "matrix" + Decorate(field.name());
     }
 
+    translateStructuredBufferTypes[fieldType] = typeString;
+
     if (instanceVariable != nullptr)
     {
 
