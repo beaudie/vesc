@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "493de95e_9f5de3d7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T19:12:00Z",
+      "side": 1,
+      "message": "Wasted half a day trying to make mImage point to mMultisampledImages[0] instead of `new`ing, but it became rather impossible with EGL images. With `releaseOwnershipOfImage`, I used `new` + the image\u0027s move constructor to get the image out. That revealed a number of bugs in that constructor (hence this CL: https://chromium-review.googlesource.com/c/angle/angle/+/2339543).\n\nI finally gave up when I saw a test using `getImage()` (returning mMultisampledImages[0]) to store a pointer in an EGL image, then giving that pointer to another TextureVk as a non-owned image. Later, `releaseOwnershipOfImage` was called on the first TextureVk. That caused havoc as the second TextureVk now had a pointer to one of the first TextureVk\u0027s mMultisampledImages[0] and its image, which was supposed to match the EGL image was now different (due to the move constructor).",
+      "range": {
+        "startLine": 427,
+        "startChar": 9,
+        "endLine": 427,
+        "endChar": 55
+      },
+      "revId": "138e00fea0f1b7ae370f9585d1c4a4e5aa1c9109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ef6ab1e_d8207f4d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T19:12:00Z",
+      "side": 1,
+      "message": "@Jamie, did you say you wanted even more views? ;)",
+      "range": {
+        "startLine": 438,
+        "startChar": 4,
+        "endLine": 438,
+        "endChar": 23
+      },
+      "revId": "138e00fea0f1b7ae370f9585d1c4a4e5aa1c9109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
