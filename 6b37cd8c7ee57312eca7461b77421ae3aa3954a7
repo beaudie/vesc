@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e289bf0_2e00dd85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T19:05:30Z",
+      "side": 1,
+      "message": "Shabi - Charlie had some questions about this CL as well, so let me know when you\u0027ve had a chance to take a look and we can all jump on a quick GVC to go over any other concerns.",
+      "revId": "6b37cd8c7ee57312eca7461b77421ae3aa3954a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

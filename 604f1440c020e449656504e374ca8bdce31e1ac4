@@ -86,6 +86,24 @@
       "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f22e4e1a_a3c8a20b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T19:05:30Z",
+      "side": 1,
+      "message": "This is the simplified sequence:\n\n1.) Draw to FBO 1 (1641x777)\n2.) Bind the backbuffer and clear it (777x1641)\n  - This gets deferred, since no other work is being done on the backbuffer.\n3.) Bind FBO 1 as read and FBO 2 as draw (both 1641x777)\n\nWe want to avoid ending the render pass when binding a new draw framebuffer with a different render area, if nothing is actually done with that new FBO.\n\nWhile rotation is involved, it\u0027s not actually important and more of a coincidence that the different dimensions are rotations of each other.   That aspect an be safely ignored.\n\nNo scissor updates are being skipped, we just aren\u0027t immediately ending the render pass if the render area is changed since ending the render pass will happen elsewhere when necessary.   In your scenario, each render pass will be correctly closed by either:\n- draw: the new draw will close any open render passes and start a new one (which we want, since the attachments have changed)\n- read pixels: necessarily needs to close the render pass to see the results\n\nI\u0027ve added the test you request as FramebufferTest::BindAndDrawDifferentSizedFBOs().   I changed the large dimensions to be square, since drawQuad() seems to require it (it was only drawing part of the rectangle otherwise).   The test passes without any additional code changes, so I think everything is working correctly.",
+      "parentUuid": "b11e4b68_88acd453",
+      "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
