@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6519dd3a_ce71dbb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-05T19:02:24Z",
+      "side": 1,
+      "message": "Thanks for writing this up Manh.",
+      "revId": "110f923732fe1bd02103dc6adfff3110248e3f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "36f18fea_ed2bc6c5",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-05T19:02:24Z",
+      "side": 1,
+      "message": "Possible empty space in a few places, hard to tell in this gerrit interface.",
+      "range": {
+        "startLine": 189,
+        "startChar": 83,
+        "endLine": 189,
+        "endChar": 84
+      },
+      "revId": "110f923732fe1bd02103dc6adfff3110248e3f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0726794b_6b46b5ec",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-05T19:02:24Z",
+      "side": 1,
+      "message": "Can you break these into a bulleted list for clarity?",
+      "range": {
+        "startLine": 193,
+        "startChar": 64,
+        "endLine": 198,
+        "endChar": 74
+      },
+      "revId": "110f923732fe1bd02103dc6adfff3110248e3f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3a6810b_1bc3bcfb",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-05T19:02:24Z",
+      "side": 1,
+      "message": "Can these be relative paths, rather than fully qualified with the branch name?",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 123
+      },
+      "revId": "110f923732fe1bd02103dc6adfff3110248e3f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
