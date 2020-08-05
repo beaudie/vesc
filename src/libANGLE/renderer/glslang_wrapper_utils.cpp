@@ -1397,6 +1397,14 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
         case spv::DecorationDescriptorSet:
             newDecorationValue = info->descriptorSet;
             break;
+        case spv::DecorationRelaxedPrecision:
+            if (info->precision != ShaderInterfaceVariableInfo::kInvalid &&
+                info->precision > GL_MEDIUM_FLOAT)
+            {
+                // Don't want relaxed precision, drop decoration
+                return true;
+            }
+            break;
         default:
             break;
     }
