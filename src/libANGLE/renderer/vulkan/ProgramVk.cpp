@@ -199,6 +199,8 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
         return std::make_unique<LinkEventDone>(status);
     }
 
+    mExecutable.resolvePrecisionMismatch(mState.getExecutable().getMergedVaryings());
+
     status = mExecutable.createPipelineLayout(context);
     return std::make_unique<LinkEventDone>(status);
 }
@@ -286,6 +288,8 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     {
         return std::make_unique<LinkEventDone>(status);
     }
+
+    mExecutable.resolvePrecisionMismatch(mState.getExecutable().getMergedVaryings());
 
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576

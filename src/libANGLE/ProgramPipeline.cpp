@@ -418,7 +418,7 @@ void ProgramPipeline::updateExecutable()
     updateHasBooleans();
 }
 
-ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
+void ProgramPipeline::getMergedVaryings(ProgramMergedVaryings &merged) const
 {
     ASSERT(!mState.mExecutable->isCompute());
 
@@ -447,8 +447,6 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
 
     ShaderMap<std::map<std::string, size_t>> outputVaryingNameToIndexShaderMap;
     ShaderMap<std::map<int, size_t>> outputVaryingLocationToIndexShaderMap;
-
-    ProgramMergedVaryings merged;
 
     // Gather output varyings.
     for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
@@ -531,8 +529,6 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
             ref->backShaderStage = shaderType;
         }
     }
-
-    return merged;
 }
 
 // The attached shaders are checked for linking errors by matching up their variables.
@@ -575,14 +571,12 @@ angle::Result ProgramPipeline::link(const Context *context)
             static_cast<GLuint>(context->getState().getCaps().maxVaryingVectors);
         VaryingPacking varyingPacking(maxVaryingVectors, packMode);
 
-        const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
         for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
         {
             Program *program = mState.mPrograms[shaderType];
             ASSERT(program);
             program->getExecutable().getResources().varyingPacking.reset();
-            ANGLE_TRY(
-                program->linkMergedVaryings(context, program->getExecutable(), mergedVaryings));
+            ANGLE_TRY(program->linkMergedVaryings(context, program->getExecutable()));
         }
     }
 
