@@ -131,8 +131,6 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-VkDeviceCreateInfo-pNext-pNext",
     "VUID-VkPipelineRasterizationStateCreateInfo-pNext-pNext",
     "VUID_Undefined",
-    // http://anglebug.com/3078
-    "UNASSIGNED-CoreValidation-Shader-InterfaceTypeMismatch",
     // http://anglebug.com/4583
     "VUID-VkGraphicsPipelineCreateInfo-blendEnable-02023",
     // https://issuetracker.google.com/issues/159493191
