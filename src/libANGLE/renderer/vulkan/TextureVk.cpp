@@ -796,10 +796,9 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         // Make sure any updates to the image are already flushed.
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
-        vk::CommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
                                           mImage));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
         VkImageSubresourceLayers destSubresource = srcSubresource;
         destSubresource.mipLevel                 = level;
@@ -818,7 +817,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         }
 
         vk::ImageHelper::Copy(srcImage, mImage, srcOffset, destOffsetModified, extents,
-                              srcSubresource, destSubresource, commandBuffer);
+                              srcSubresource, destSubresource, &commandBuffer);
     }
     else
     {
@@ -831,10 +830,9 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
                                               gl::Extents(sourceBox.width, sourceBox.height, 1),
                                               destFormat, kTransferStagingImageFlags, layerCount));
 
-        vk::CommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
                                           stagingImage.get()));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
         VkImageSubresourceLayers destSubresource = srcSubresource;
         destSubresource.mipLevel                 = 0;
@@ -849,7 +847,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         }
 
         vk::ImageHelper::Copy(srcImage, stagingImage.get(), srcOffset, gl::kOffsetZero, extents,
-                              srcSubresource, destSubresource, commandBuffer);
+                              srcSubresource, destSubresource, &commandBuffer);
 
         // Stage the copy for when the image storage is actually created.
         VkImageType imageType = gl_vk::GetImageType(mState.getType());
@@ -1113,8 +1111,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
     if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
     {
-        vk::CommandBuffer *commandBuffer = nullptr;
-        vk::ImageLayout newLayout        = vk::ImageLayout::AllGraphicsShadersReadWrite;
+        vk::ImageLayout newLayout = vk::ImageLayout::AllGraphicsShadersReadWrite;
         if (mImage->getUsage() & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
         {
             newLayout = vk::ImageLayout::ColorAttachment;
@@ -1129,9 +1126,9 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
             newLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
         }
 
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
         mImage->changeLayoutAndQueue(mImage->getAspectFlags(), newLayout, rendererQueueFamilyIndex,
-                                     commandBuffer);
+                                     &commandBuffer);
     }
 
     return angle::Result::Continue;
@@ -1400,11 +1397,11 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     // Make sure the source is initialized and its images are flushed.
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
-    vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->onBufferTransferRead(srcBuffer));
     ANGLE_TRY(
         contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst, mImage));
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+
+    vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
     VkBufferImageCopy region               = {};
     region.bufferOffset                    = offset;
@@ -1427,8 +1424,8 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
         region.imageSubresource.layerCount = sourceArea.depth;
     }
 
-    commandBuffer->copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
-                                     mImage->getCurrentLayout(), 1, &region);
+    commandBuffer.copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
+                                    mImage->getCurrentLayout(), 1, &region);
 
     return angle::Result::Continue;
 }
@@ -1930,11 +1927,10 @@ angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk)
 {
     ASSERT(mImage->valid());
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
     return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), mImage->getLevelCount(),
                                       getNativeImageLayer(0), mImage->getLayerCount(),
-                                      mRedefinedLevels, commandBuffer);
+                                      mRedefinedLevels, &commandBuffer);
 }
 
 angle::Result TextureVk::initRenderTargets(ContextVk *contextVk,
