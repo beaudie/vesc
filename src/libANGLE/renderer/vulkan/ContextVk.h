@@ -543,10 +543,9 @@ class ContextVk : public ContextImpl, public vk::Context
                                         vk::AliasingMode::Allowed, image);
     }
 
-    angle::Result getOutsideRenderPassCommandBuffer(vk::CommandBuffer **commandBufferOut)
+    vk::CommandBuffer &getOutsideRenderPassCommandBuffer()
     {
-        *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
-        return angle::Result::Continue;
+        return mOutsideRenderPassCommands->getCommandBuffer();
     }
 
     angle::Result flushAndBeginRenderPass(const vk::Framebuffer &framebuffer,
