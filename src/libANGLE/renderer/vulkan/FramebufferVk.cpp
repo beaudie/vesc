@@ -418,10 +418,9 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         RenderTargetVk *depthStencilRT = mRenderTargetCache.getDepthStencil(true);
         vk::ImageHelper *image         = &depthStencilRT->getImageForWrite();
 
-        vk::CommandBuffer *commandBuffer;
         ANGLE_TRY(
             contextVk->onImageWrite(image->getAspectFlags(), vk::ImageLayout::TransferDst, image));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
         VkImageSubresourceRange range;
         range.aspectMask     = image->getAspectFlags();
@@ -430,9 +429,9 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         range.baseArrayLayer = depthStencilRT->getLayerIndex();
         range.layerCount     = 1;
 
-        commandBuffer->clearDepthStencilImage(image->getImage(),
-                                              VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                              clearDepthStencilValue, 1, &range);
+        commandBuffer.clearDepthStencilImage(image->getImage(),
+                                             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                             clearDepthStencilValue, 1, &range);
         clearDepth   = false;
         clearStencil = false;
     }
@@ -795,10 +794,9 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
         blitAspectMask &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
     }
 
-    vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->onImageRead(imageAspectMask, vk::ImageLayout::TransferSrc, srcImage));
     ANGLE_TRY(contextVk->onImageWrite(imageAspectMask, vk::ImageLayout::TransferDst, dstImage));
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
     VkImageBlit blit                   = {};
     blit.srcSubresource.aspectMask     = blitAspectMask;
@@ -814,9 +812,9 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
     blit.dstOffsets[0]                 = {destArea.x0(), destArea.y0(), 0};
     blit.dstOffsets[1]                 = {destArea.x1(), destArea.y1(), 1};
 
-    commandBuffer->blitImage(srcImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                             dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
-                             gl_vk::GetFilter(filter));
+    commandBuffer.blitImage(srcImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                            dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
+                            gl_vk::GetFilter(filter));
 
     return angle::Result::Continue;
 }
@@ -1203,7 +1201,6 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
                                                      const UtilsVk::BlitResolveParameters &params,
                                                      vk::ImageHelper *srcImage)
 {
-    vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(
         contextVk->onImageRead(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc, srcImage));
 
@@ -1229,12 +1226,13 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
         ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
                                           &drawRenderTarget->getImageForWrite()));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
         resolveRegion.dstSubresource.mipLevel       = drawRenderTarget->getLevelIndex();
         resolveRegion.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
 
-        srcImage->resolve(&drawRenderTarget->getImageForWrite(), resolveRegion, commandBuffer);
+        srcImage->resolve(&drawRenderTarget->getImageForWrite(), resolveRegion, &commandBuffer);
     }
 
     return angle::Result::Continue;
