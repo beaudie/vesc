@@ -122,6 +122,24 @@
       "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9a58fb3_79b5437c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T19:56:42Z",
+      "side": 1,
+      "message": "Correct, they\u0027re just preemptively clearing the backbuffer between the multisample draw and the blit, neither of which use the backbuffer.   And agreed, no idea why they\u0027re doing this, but at least we can handle it.",
+      "parentUuid": "35bff809_d6fcad0b",
+      "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
