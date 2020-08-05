@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62c4056b_6d06b02b",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T13:57:51Z",
+      "side": 1,
+      "message": "nit: stray tabs",
+      "range": {
+        "startLine": 226,
+        "startChar": 0,
+        "endLine": 226,
+        "endChar": 1
+      },
+      "revId": "adad153f7fc651df9f5f25f67cbc46ab8d5aa77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07c7b99c_86130a49",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T13:57:51Z",
+      "side": 1,
+      "message": "nit: stray tab",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 1
+      },
+      "revId": "adad153f7fc651df9f5f25f67cbc46ab8d5aa77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
