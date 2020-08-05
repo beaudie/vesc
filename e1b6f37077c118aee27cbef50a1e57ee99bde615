@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7ae2695_1b96e668",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T21:05:07Z",
+      "side": 1,
+      "message": "Thanks for adding the test! LGTM, will let the other reviewers take over.",
+      "revId": "e1b6f37077c118aee27cbef50a1e57ee99bde615",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
