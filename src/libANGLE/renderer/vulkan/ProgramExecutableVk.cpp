@@ -234,6 +234,7 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *
             info->xfbBuffer    = stream->readInt<uint32_t>();
             info->xfbOffset    = stream->readInt<uint32_t>();
             info->xfbStride    = stream->readInt<uint32_t>();
+            info->precision    = stream->readInt<uint32_t>();
         }
     }
 
@@ -257,6 +258,7 @@ void ProgramExecutableVk::save(gl::BinaryOutputStream *stream)
             stream->writeInt<uint32_t>(it.second.xfbBuffer);
             stream->writeInt<uint32_t>(it.second.xfbOffset);
             stream->writeInt<uint32_t>(it.second.xfbStride);
+            stream->writeInt<uint32_t>(it.second.precision);
         }
     }
 }
@@ -876,6 +878,33 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
     mDynamicBufferOffsets.resize(glExecutable.getLinkedShaderStageCount());
 
     return angle::Result::Continue;
+}
+
+void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryings &mergedVaryings)
+{
+    for (auto &mergedVarying : mergedVaryings)
+    {
+        if (mergedVarying.frontShader && mergedVarying.backShader)
+        {
+            GLenum frontPrecision = mergedVarying.frontShader->precision;
+            GLenum backPrecision  = mergedVarying.backShader->precision;
+            if (frontPrecision != backPrecision)
+            {
+                ShaderInterfaceVariableInfo *info =
+                    &mVariableInfoMap[mergedVarying.frontShaderStage]
+                                     [mergedVarying.frontShader->mappedName];
+                ASSERT(info->activeStages[mergedVarying.frontShaderStage]);
+                ASSERT(frontPrecision >= GL_LOW_FLOAT && frontPrecision <= GL_HIGH_FLOAT);
+                ASSERT(backPrecision >= GL_LOW_FLOAT && backPrecision <= GL_HIGH_FLOAT);
+                GLenum resolvedPrecision = std::max(frontPrecision, backPrecision);
+                info->precision          = resolvedPrecision;
+
+                info = &mVariableInfoMap[mergedVarying.backShaderStage]
+                                        [mergedVarying.backShader->mappedName];
+                info->precision = resolvedPrecision;
+            }
+        }
+    }
 }
 
 void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(

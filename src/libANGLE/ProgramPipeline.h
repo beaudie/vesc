@@ -122,7 +122,7 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
 
     Program *getShaderProgram(ShaderType shaderType) const { return mState.mPrograms[shaderType]; }
 
-    ProgramMergedVaryings getMergedVaryings() const;
+    void getMergedVaryings(std::vector<ProgramVaryingRef> &mergedVaryings) const;
     angle::Result link(const gl::Context *context);
     bool linkVaryings(InfoLog &infoLog) const;
     void validate(const gl::Context *context);

@@ -486,9 +486,7 @@ class Program final : public LabeledObject, public angle::Subject
     void bindFragmentOutputLocation(GLuint index, const char *name);
     void bindFragmentOutputIndex(GLuint index, const char *name);
 
-    angle::Result linkMergedVaryings(const Context *context,
-                                     const ProgramExecutable &executable,
-                                     const ProgramMergedVaryings &mergedVaryings);
+    angle::Result linkMergedVaryings(const Context *context, const ProgramExecutable &executable);
 
     void dumpMergedVaryings(const ProgramMergedVaryings &mergedVaryings);
 
@@ -910,7 +908,7 @@ class Program final : public LabeledObject, public angle::Subject
 
     void gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings, ShaderType stage);
 
-    ProgramMergedVaryings getMergedVaryings() const;
+    void getMergedVaryings(std::vector<ProgramVaryingRef> &mergedVaryings) const;
     int getOutputLocationForLink(const sh::ShaderVariable &outputVariable) const;
     bool isOutputSecondaryForLink(const sh::ShaderVariable &outputVariable) const;
     bool linkOutputVariables(const Caps &caps,
