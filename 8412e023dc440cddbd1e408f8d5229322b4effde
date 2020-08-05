@@ -115,6 +115,24 @@
       "revId": "8412e023dc440cddbd1e408f8d5229322b4effde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dd385a7_b362bda5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T21:44:16Z",
+      "side": 1,
+      "message": "You missed the change at the bottom of the class that says:\n\n    RefCounted\u003cT\u003e *mRefCounted \u003d nullptr;\n\nBasically the bug was that the move constructor below had garbage in `mRefCounted`, and `set` was trying to `release` it.",
+      "parentUuid": "759645e6_0013ef56",
+      "revId": "8412e023dc440cddbd1e408f8d5229322b4effde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
