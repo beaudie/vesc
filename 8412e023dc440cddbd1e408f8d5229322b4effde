@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "780faebf_38f60a29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T21:32:13Z",
+      "side": 1,
+      "message": "Nice sleuthing! One question about your second comment.",
+      "revId": "8412e023dc440cddbd1e408f8d5229322b4effde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6972ca6e_95f30eee",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -42,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "c2cc3ac8_3a2ae293",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2561,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T21:32:13Z",
+      "side": 1,
+      "message": "Nice find!",
+      "parentUuid": "6972ca6e_95f30eee",
+      "range": {
+        "startLine": 2561,
+        "startChar": 6,
+        "endLine": 2561,
+        "endChar": 32
+      },
+      "revId": "8412e023dc440cddbd1e408f8d5229322b4effde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1033530e_57517a91",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 1
@@ -53,6 +94,24 @@
       "writtenOn": "2020-08-05T19:16:44Z",
       "side": 1,
       "message": "This fixes an ASSERT in moving `mYuvConversionSampler` in ImageHelper\u0027s move constructor.",
+      "revId": "8412e023dc440cddbd1e408f8d5229322b4effde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "759645e6_0013ef56",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T21:32:13Z",
+      "side": 1,
+      "message": "I don\u0027t quite get it. How does leaving mRefCounted undefined help?",
+      "parentUuid": "1033530e_57517a91",
       "revId": "8412e023dc440cddbd1e408f8d5229322b4effde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
