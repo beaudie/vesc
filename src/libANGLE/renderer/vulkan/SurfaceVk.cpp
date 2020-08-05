@@ -1164,8 +1164,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         contextVk->optimizeRenderPassForPresent(currentFramebuffer.getHandle());
     }
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    vk::CommandBuffer *commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
 
     if (mColorImageMS.valid())
     {
@@ -1174,7 +1173,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
                                          &mColorImageMS));
         ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
                                           &image.image));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+        commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
 
         VkImageResolve resolveRegion                = {};
         resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
