@@ -68,6 +68,24 @@
       "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b11e4b68_88acd453",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T09:42:08Z",
+      "side": 1,
+      "message": "\u003e The problem is that the backbuffer\u0027s dimensions don\u0027t match Framebuffer 3486\u0027s (since it\u0027s rotated, but the FBOs are not)\n\u003e ...\n\u003e The app is rendering correctly\n\nThat doesn\u0027t make sense to me. If the app renders correctly it means that the read and draw framebuffers must have had the same dimensions, so they must have had the same scissor too.\n\nI actually don\u0027t understand how this optimization can work with rotation. Say the device is rotated 90 degrees. The dimensions of the images of the backbuffer are (W, H). The images of the FBO are (H, W). Isn\u0027t that correct? How can one be used as the resolve attachment of the other?\n\nEdit: I went to check, and indeed the condition under which vkCmdResolveImage is called has \"rotation \u003d\u003d SurfaceRotation::Identity\". The new code to use the resolve attachment is also under the same code. Does it matter then that the render pass gets closed with prerotation?\n\n\u003e As an aside, calling updateScissorAndEndRenderPass() in FramebufferVk::syncState() is fine.\n\nYou can\u0027t rely on FramebufferVk::syncState to do the right thing because it may never be called (if framebuffer is not dirty).\n\n---\n\nYou should in fact be able to write a test to trigger a bug in this change:\n\n1. Create FBO 1 with dimensions 16*32\n2. Draw red into FBO 1 (note, FramebufferVk::syncState is called)\n3. Create FBO 2 with dimensions 8x8\n4. Draw green into FBO 2 (note, FramebufferVk::syncState is called)\n5. Bind FBO 1 (note, it\u0027s not dirty)\n6. Draw blue into FBO 1\n7. Verify FBO 1 is entirely blue\n\nAt step 4, the scissor is updated to 8x8. At step 5, this change is skipping the scissor update. At step 6, the 8x8 scissor is used, leaving FBO 1 partially red. At step 7, verifying any coordinate outside the (0,0)-(8,8) rectangle should fail.\n\nNote that the test shouldn\u0027t verify pixels in the interim to avoid a flush (though I\u0027m not sure if that would mask the bug or not)",
+      "parentUuid": "28ecc828_3fa1ee9f",
+      "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
