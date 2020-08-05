@@ -16,6 +16,23 @@
       "revId": "2b0714a8cee635c22fe7d4a51524cb547e5f0efb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9e7b879_5b85c9fb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5681,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T09:17:09Z",
+      "side": 1,
+      "message": "So this being done after convertPpoToComputeOrDraw() is a bug? That\u0027s counter intuitive. Wouldn\u0027t convertPpoToComputeOrDraw(false) affect the active buffers and images?\n\nAt least a comment here would be useful.",
+      "revId": "2b0714a8cee635c22fe7d4a51524cb547e5f0efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
