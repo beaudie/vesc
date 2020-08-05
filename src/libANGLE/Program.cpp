@@ -1368,9 +1368,9 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
 }
 
 angle::Result Program::linkMergedVaryings(const Context *context,
-                                          const ProgramExecutable &executable,
-                                          const ProgramMergedVaryings &mergedVaryings)
+                                          const ProgramExecutable &executable)
 {
+    const ProgramMergedVaryings &mergedVaryings = executable.mMergedVaryings;
     ShaderType tfStage =
         mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
     InfoLog &infoLog = getExecutable().getInfoLog();
@@ -1584,15 +1584,13 @@ angle::Result Program::linkImpl(const Context *context)
         ProgramPipeline *programPipeline = context->getState().getProgramPipeline();
         if (programPipeline && programPipeline->usesShaderProgram(id()))
         {
-            const ProgramMergedVaryings &mergedVaryings =
-                context->getState().getProgramPipeline()->getMergedVaryings();
-            ANGLE_TRY(linkMergedVaryings(context, *mState.mExecutable, mergedVaryings));
+            programPipeline->getMergedVaryings(&mState.mExecutable->mMergedVaryings);
         }
         else
         {
-            const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
-            ANGLE_TRY(linkMergedVaryings(context, *mState.mExecutable, mergedVaryings));
+            getMergedVaryings(&mState.mExecutable->mMergedVaryings);
         }
+        ANGLE_TRY(linkMergedVaryings(context, *mState.mExecutable));
     }
 
     updateLinkedShaderStages();
@@ -4386,9 +4384,11 @@ void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyi
     }
 }
 
-ProgramMergedVaryings Program::getMergedVaryings() const
+void Program::getMergedVaryings(ProgramMergedVaryings *merged) const
 {
     ASSERT(mState.mAttachedShaders[ShaderType::Compute] == nullptr);
+
+    merged->clear();
 
     // Varyings are matched between pairs of consecutive stages, by location if assigned or
     // by name otherwise.  Note that it's possible for one stage to specify location and the other
@@ -4416,8 +4416,6 @@ ProgramMergedVaryings Program::getMergedVaryings() const
     ShaderMap<std::map<std::string, size_t>> outputVaryingNameToIndex;
     ShaderMap<std::map<int, size_t>> outputVaryingLocationToIndex;
 
-    ProgramMergedVaryings merged;
-
     // Gather output varyings.
     for (Shader *shader : mState.mAttachedShaders)
     {
@@ -4429,20 +4427,20 @@ ProgramMergedVaryings Program::getMergedVaryings() const
 
         for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
         {
-            merged.push_back({});
-            ProgramVaryingRef *ref = &merged.back();
+            merged->push_back({});
+            ProgramVaryingRef *ref = &merged->back();
 
             ref->frontShader      = &varying;
             ref->frontShaderStage = stage;
 
             // Always map by name.  Even if location is provided in this stage, it may not be in the
             // paired stage.
-            outputVaryingNameToIndex[stage][varying.name] = merged.size() - 1;
+            outputVaryingNameToIndex[stage][varying.name] = merged->size() - 1;
 
             // If location is provided, also keep it in a map by location.
             if (varying.location != -1)
             {
-                outputVaryingLocationToIndex[stage][varying.location] = merged.size() - 1;
+                outputVaryingLocationToIndex[stage][varying.location] = merged->size() - 1;
             }
         }
     }
@@ -4459,7 +4457,7 @@ ProgramMergedVaryings Program::getMergedVaryings() const
 
         for (const sh::ShaderVariable &varying : shader->getInputVaryings())
         {
-            size_t mergedIndex = merged.size();
+            size_t mergedIndex = merged->size();
             if (previousStage != ShaderType::InvalidEnum)
             {
                 // If location is provided, see if we can match by location.
@@ -4474,7 +4472,7 @@ ProgramMergedVaryings Program::getMergedVaryings() const
                 }
 
                 // If not found, try to match by name.
-                if (mergedIndex == merged.size())
+                if (mergedIndex == merged->size())
                 {
                     auto byNameIter = outputVaryingNameToIndex[previousStage].find(varying.name);
                     if (byNameIter != outputVaryingNameToIndex[previousStage].end())
@@ -4485,20 +4483,18 @@ ProgramMergedVaryings Program::getMergedVaryings() const
             }
 
             // If no previous stage, or not matched by location or name, create a new entry for it.
-            if (mergedIndex == merged.size())
+            if (mergedIndex == merged->size())
             {
-                merged.push_back({});
-                mergedIndex = merged.size() - 1;
+                merged->push_back({});
+                mergedIndex = merged->size() - 1;
             }
 
-            ProgramVaryingRef *ref = &merged[mergedIndex];
+            ProgramVaryingRef *ref = &(*merged)[mergedIndex];
 
             ref->backShader      = &varying;
             ref->backShaderStage = stage;
         }
     }
-
-    return merged;
 }
 
 bool CompareOutputVariable(const sh::ShaderVariable &a, const sh::ShaderVariable &b)
