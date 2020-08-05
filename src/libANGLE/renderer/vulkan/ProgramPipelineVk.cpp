@@ -86,6 +86,11 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext)
         }
     }
 
+    if (contextVk->getFeatures().enablePrecisionQualifiers.enabled)
+    {
+        mExecutable.resolvePrecisionMismatch(glState.getProgramExecutable()->getMergedVaryings());
+    }
+
     return mExecutable.createPipelineLayout(glContext);
 }
 
