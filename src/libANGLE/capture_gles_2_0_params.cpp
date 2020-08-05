@@ -548,7 +548,8 @@ void CaptureGetUniformfv_params(const State &glState,
                                 GLfloat *params,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // the value returned cannot have size larger than a vec4 of floats
+    paramCapture->readBufferSizeBytes = 16;
 }
 
 void CaptureGetUniformiv_params(const State &glState,
@@ -558,7 +559,8 @@ void CaptureGetUniformiv_params(const State &glState,
                                 GLint *params,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // the value returned cannot have size larger than a vec4 of ints
+    paramCapture->readBufferSizeBytes = 16;
 }
 
 void CaptureGetVertexAttribPointerv_pointer(const State &glState,
