@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f903d4e6_41310918",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3448,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T13:59:56Z",
+      "side": 1,
+      "message": "nit: these should be in validationESEXT.cpp",
+      "range": {
+        "startLine": 3448,
+        "startChar": 5,
+        "endLine": 3448,
+        "endChar": 38
+      },
+      "revId": "e4e2a847dab3512f10f28f212d8f6911336ed069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
