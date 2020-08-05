@@ -16,6 +16,7 @@
 
 #include "sys/stat.h"
 
+#include "common/hash_utils.h"
 #include "common/mathutil.h"
 #include "common/string_utils.h"
 #include "common/system_utils.h"
@@ -347,29 +348,33 @@ void WriteStringPointerParamReplay(DataCounters *counters,
                                    const CallCapture &call,
                                    const ParamCapture &param)
 {
-    int counter = counters->getAndIncrement(call.entryPoint, param.name);
-
-    header << "const char *";
-    WriteParamStaticVarName(call, param, counter, header);
-    header << "[] = { \n";
-
-    for (const std::vector<uint8_t> &data : param.data)
+    int counter = -1;
+    if (counters->getAndIncrementIfUnique(call.entryPoint, param.name, param.data, counter))
     {
-        // null terminate C style string
-        ASSERT(data.size() > 0 && data.back() == '\0');
-        std::string str(data.begin(), data.end() - 1);
+        header << "const char *";
+        WriteParamStaticVarName(call, param, counter, header);
+        header << "[] = { \n";
 
-        // Break up long strings for MSVC
-        for (size_t i = 0; i < str.length(); i += kStringLengthLimit)
+        for (const std::vector<uint8_t> &data : param.data)
         {
-            size_t copyLength = ((str.length() - i) >= kStringLengthLimit) ? kStringLengthLimit
-                                                                           : (str.length() - i);
-            header << "    R\"(" << str.substr(i, copyLength) << ")\"\n";
+            // null terminate C style string
+            ASSERT(data.size() > 0 && data.back() == '\0');
+            std::string str(data.begin(), data.end() - 1);
+
+            // Break up long strings for MSVC
+            for (size_t i = 0; i < str.length(); i += kStringLengthLimit)
+            {
+                size_t copyLength = ((str.length() - i) >= kStringLengthLimit) ? kStringLengthLimit
+                                                                               : (str.length() - i);
+                header << "    R\"(" << str.substr(i, copyLength) << ")\"\n";
+            }
+            header << ",";
         }
-        header << ",";
+
+        header << " };\n";
     }
 
-    header << " };\n";
+    ASSERT(counter >= 0);
     WriteParamStaticVarName(call, param, counter, out);
 }
 
@@ -4156,6 +4161,30 @@ int DataCounters::getAndIncrement(gl::EntryPoint entryPoint, const std::string &
 {
     Counter counterKey = {entryPoint, paramName};
     return mData[counterKey]++;
+}
+
+bool DataCounters::getAndIncrementIfUnique(gl::EntryPoint entryPoint,
+                                           const std::string &paramName,
+                                           const ParamData &paramData,
+                                           int &counter)
+{
+    // This function only increments the counter if the incoming data is unique, and returns whether
+    // it was unique
+    size_t hash    = ComputeGenericHash(paramData);
+    const auto &id = mDataHashMap.find(hash);
+    if (id == mDataHashMap.end())
+    {
+        // New data, create a counter and track it
+        counter            = getAndIncrement(entryPoint, paramName);
+        mDataHashMap[hash] = counter;
+        return true;
+    }
+    else
+    {
+        // We've seen this before, return the existing counter
+        counter = mDataHashMap[hash];
+        return false;
+    }
 }
 
 ResourceTracker::ResourceTracker() = default;
