@@ -287,6 +287,11 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
         return std::make_unique<LinkEventDone>(status);
     }
 
+    if (contextVk->getFeatures().enablePrecisionQualifiers.enabled)
+    {
+        mExecutable.resolvePrecisionMismatch(mState.getExecutable().getMergedVaryings());
+    }
+
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
     status = mExecutable.createPipelineLayout(context);
