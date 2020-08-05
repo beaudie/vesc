@@ -983,6 +983,7 @@ class SpirvTransformer final : angle::NonCopyable
     bool transformEntryPoint(const uint32_t *instruction, size_t wordCount);
     bool transformDecorate(const uint32_t *instruction, size_t wordCount);
     bool transformTypePointer(const uint32_t *instruction, size_t wordCount);
+    bool transformReturn(const uint32_t *instruction, size_t wordCount);
     bool transformVariable(const uint32_t *instruction, size_t wordCount);
     bool transformExecutionMode(const uint32_t *instruction, size_t wordCount);
 
@@ -1006,8 +1007,9 @@ class SpirvTransformer final : angle::NonCopyable
     SpirvBlob *mSpirvBlobOut;
 
     // Traversal state:
-    size_t mCurrentWord       = 0;
-    bool mIsInFunctionSection = false;
+    size_t mCurrentWord           = 0;
+    bool mIsInFunctionSection     = false;
+    bool mInsertFunctionVariables = false;
 
     // Transformation state:
 
@@ -1024,7 +1026,13 @@ class SpirvTransformer final : angle::NonCopyable
     // duplicated with a similar instruction but which defines a type with the Private storage
     // class.  If inactive varyings are encountered, its type is changed to the Private one.  The
     // following vector maps the Output type id to the corresponding Private one.
-    std::vector<uint32_t> mTypePointerTransformedId;
+    struct TransformedIDs
+    {
+        uint32_t privateID;
+        uint32_t functionID;
+        uint32_t typeID;
+    };
+    std::vector<TransformedIDs> mTypePointerTransformedId;
 };
 
 bool SpirvTransformer::transform()
@@ -1042,12 +1050,13 @@ bool SpirvTransformer::transform()
     // Make sure the SpirvBlob is not reused.
     ASSERT(mSpirvBlobOut->empty());
 
+    // Copy the header to SpirvBlob, we need that to be defined for SpirvTransformer::getNewId to
+    // work.
+    mSpirvBlobOut->assign(mSpirvBlobIn.begin(), mSpirvBlobIn.begin() + kHeaderIndexInstructions);
+
     // First, find all necessary ids and associate them with the information required to transform
     // their decorations.
     resolveVariableIds();
-
-    // Copy the header to SpirvBlob
-    mSpirvBlobOut->assign(mSpirvBlobIn.begin(), mSpirvBlobIn.begin() + kHeaderIndexInstructions);
 
     mCurrentWord = kHeaderIndexInstructions;
     while (mCurrentWord < mSpirvBlobIn.size())
@@ -1102,7 +1111,8 @@ void SpirvTransformer::resolveVariableIds()
 
     // Allocate storage for Output type pointer map.  At index i, this vector holds the identical
     // type as %i except for its storage class turned to Private.
-    mTypePointerTransformedId.resize(indexBound + 1, 0);
+    // Also store a FunctionID and TypeID for when we need to fix a precision mismatch
+    mTypePointerTransformedId.resize(indexBound + 1, {0, 0, 0});
 
     size_t currentWord = kHeaderIndexInstructions;
 
@@ -1144,10 +1154,14 @@ void SpirvTransformer::resolveVariableIds()
 
 void SpirvTransformer::transformInstruction()
 {
-    const uint32_t *instruction = &mSpirvBlobIn[mCurrentWord];
+    WARN() << "mCurrentWord: " << mCurrentWord;
+    ASSERT(mCurrentWord < mSpirvBlobIn.size());
+    // const uint32_t *instruction = &mSpirvBlobIn[mCurrentWord];
+    const uint32_t *instruction = &mSpirvBlobIn.at(mCurrentWord);
 
     const uint32_t wordCount = GetSpirvInstructionLength(instruction);
     const uint32_t opCode    = GetSpirvInstructionOp(instruction);
+    WARN() << "wordCount: " << wordCount << ", opCode: " << opCode;
 
     // Since glslang succeeded in producing SPIR-V, we assume it to be valid.
     ASSERT(mCurrentWord + wordCount <= mSpirvBlobIn.size());
@@ -1156,7 +1170,8 @@ void SpirvTransformer::transformInstruction()
     {
         // SPIR-V is structured in sections.  Function declarations come last.  Only Op*Access*
         // opcodes inside functions need to be inspected.
-        mIsInFunctionSection = true;
+        mIsInFunctionSection     = true;
+        mInsertFunctionVariables = mShaderType != gl::ShaderType::Compute;
     }
 
     // Only look at interesting instructions.
@@ -1164,6 +1179,50 @@ void SpirvTransformer::transformInstruction()
 
     if (mIsInFunctionSection)
     {
+        WARN();
+        // After we process an OpFunction instruction and any instructions that must come
+        // immediately after OpFunction we need to check if there are any precision mismatches that
+        // need to be handled. If so, output OpVariable for each variable that needed to change from
+        // an StorageClassOutput to a StorageClassFunction.
+        if (mInsertFunctionVariables && opCode != spv::OpFunction &&
+            opCode != spv::OpFunctionParameter && opCode != spv::OpLabel)
+        {
+            for (uint32_t id = 0; id < mVariableInfoById.size(); id++)
+            {
+                constexpr size_t kInstIndex         = 0;
+                constexpr size_t kTypeIdIndex       = 1;
+                constexpr size_t kResultIdIndex     = 2;
+                constexpr size_t kStorageClassIndex = 3;
+                constexpr size_t kInstructionLength = 4;
+
+                // const ShaderInterfaceVariableInfo *info = mVariableInfoById[id];
+                WARN() << "id: " << id;
+                const ShaderInterfaceVariableInfo *info = mVariableInfoById.at(id);
+                ASSERT(static_cast<size_t>(mShaderType) < info->activeStages.size());
+                WARN() << "mShaderType: " << mShaderType;
+                if (info && info->fixPrecision && info->activeStages[mShaderType])
+                {
+                    const uint32_t typeId = info->fixedVaryingTypeId;
+                    WARN() << "typeId: " << typeId;
+                    ASSERT(typeId < mTypePointerTransformedId.size());
+                    ASSERT(mTypePointerTransformedId.at(typeId).functionID != 0);
+
+                    // Build OpVariable instruction to define the original variable as a local
+                    // function variable
+                    uint32_t inst[kInstructionLength];
+                    SetSpirvInstructionLength(&inst[kInstIndex], kInstructionLength);
+                    SetSpirvInstructionOp(&inst[kInstIndex], spv::OpVariable);
+                    WARN();
+                    inst[kTypeIdIndex] = mTypePointerTransformedId.at(typeId).functionID;
+                    WARN();
+                    inst[kResultIdIndex]     = id;
+                    inst[kStorageClassIndex] = spv::StorageClassFunction;
+                    copyInstruction(inst, kInstructionLength);
+                }
+                WARN();
+            }
+            mInsertFunctionVariables = false;
+        }
         // Look at in-function opcodes.
         switch (opCode)
         {
@@ -1172,6 +1231,10 @@ void SpirvTransformer::transformInstruction()
             case spv::OpPtrAccessChain:
             case spv::OpInBoundsPtrAccessChain:
                 transformed = transformAccessChain(instruction, wordCount);
+                break;
+
+            case spv::OpReturn:
+                transformed = transformReturn(instruction, wordCount);
                 break;
             default:
                 break;
@@ -1221,6 +1284,7 @@ void SpirvTransformer::transformInstruction()
     }
 
     // If the instruction was not transformed, copy it to output as is.
+    WARN() << "transformed: " << transformed;
     if (!transformed)
     {
         copyInstruction(instruction, wordCount);
@@ -1345,10 +1409,18 @@ void SpirvTransformer::visitVariable(const uint32_t *instruction)
     auto infoIter = mVariableInfoMap.find(name);
     ASSERT(infoIter != mVariableInfoMap.end());
 
-    const ShaderInterfaceVariableInfo *info = &infoIter->second;
+    ShaderInterfaceVariableInfo *info =
+        const_cast<ShaderInterfaceVariableInfo *>(&infoIter->second);
 
     // Associate the id of this name with its info.
     mVariableInfoById[id] = info;
+
+    if (info && info->fixPrecision && info->activeStages[mShaderType] &&
+        info->fixedVaryingId == ShaderInterfaceVariableInfo::kInvalid)
+    {
+        info->fixedVaryingId     = getNewId();
+        info->fixedVaryingTypeId = typeId;
+    }
 
     // Note if the variable is captured by transform feedback.  In that case, the TransformFeedback
     // capability needs to be added.
@@ -1369,6 +1441,8 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     uint32_t id         = instruction[kIdIndex];
     uint32_t decoration = instruction[kDecorationIndex];
 
+    WARN() << "id: " << id << ", mVariableInfoById.size(): " << mVariableInfoById.size();
+    ASSERT(id < mVariableInfoById.size());
     const ShaderInterfaceVariableInfo *info = mVariableInfoById[id];
 
     // If variable is not a shader interface variable that needs modification, there's nothing to
@@ -1378,6 +1452,7 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
         return false;
     }
 
+    WARN();
     // If it's an inactive varying, remove the decoration altogether.
     if (!info->activeStages[mShaderType])
     {
@@ -1386,6 +1461,7 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
 
     uint32_t newDecorationValue = ShaderInterfaceVariableInfo::kInvalid;
 
+    WARN() << "decoration: " << decoration;
     switch (decoration)
     {
         case spv::DecorationLocation:
@@ -1397,10 +1473,23 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
         case spv::DecorationDescriptorSet:
             newDecorationValue = info->descriptorSet;
             break;
+        case spv::DecorationFlat:
+            newDecorationValue = spv::DecorationFlat;
+            if (info->fixPrecision)
+            {
+                WARN();
+                // Change the id to replacement variable
+                ASSERT(info->fixedVaryingId != ShaderInterfaceVariableInfo::kInvalid);
+                const size_t instructionOffset = copyInstruction(instruction, wordCount);
+                (*mSpirvBlobOut)[instructionOffset + kIdIndex] = info->fixedVaryingId;
+                return true;
+            }
+            break;
         default:
             break;
     }
 
+    WARN() << "newDecorationValue: " << newDecorationValue;
     // If the decoration is not something we care about modifying, there's nothing to do.
     if (newDecorationValue == ShaderInterfaceVariableInfo::kInvalid)
     {
@@ -1418,6 +1507,24 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
         return true;
     }
 
+    if (info->fixPrecision)
+    {
+        WARN();
+        // Change the id to replacement variable
+        ASSERT(info->fixedVaryingId != ShaderInterfaceVariableInfo::kInvalid);
+        (*mSpirvBlobOut)[instructionOffset + kIdIndex] = info->fixedVaryingId;
+
+        // Add reduced precision decoration for fixedVaryingId
+        constexpr size_t kInstDecorateRelaxedPrecisionWordCount = 3;
+        uint32_t inst[kInstDecorateRelaxedPrecisionWordCount];
+        SetSpirvInstructionLength(inst, kInstDecorateRelaxedPrecisionWordCount);
+        SetSpirvInstructionOp(inst, spv::OpDecorate);
+        inst[kIdIndex]         = info->fixedVaryingId;
+        inst[kDecorationIndex] = spv::DecorationRelaxedPrecision;
+        copyInstruction(inst, kInstDecorateRelaxedPrecisionWordCount);
+    }
+
+    WARN() << "info->component" << info->component;
     // Add component decoration, if any.
     if (info->component != ShaderInterfaceVariableInfo::kInvalid)
     {
@@ -1432,6 +1539,7 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     if (mShaderType != gl::ShaderType::Fragment &&
         info->xfbBuffer != ShaderInterfaceVariableInfo::kInvalid)
     {
+        WARN();
         ASSERT(info->xfbStride != ShaderInterfaceVariableInfo::kInvalid);
         ASSERT(info->xfbOffset != ShaderInterfaceVariableInfo::kInvalid);
 
@@ -1456,6 +1564,7 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
             (*mSpirvBlobOut)[xfbInstructionOffset + kDecorationValueIndex] = xfbDecorationValues[i];
         }
     }
+    WARN();
 
     return true;
 }
@@ -1535,6 +1644,11 @@ bool SpirvTransformer::transformEntryPoint(const uint32_t *instruction, size_t w
             continue;
         }
 
+        // If ID is one we had to replace due to varying mismatch, use the fixed ID.
+        if (info->fixedVaryingId != ShaderInterfaceVariableInfo::kInvalid)
+        {
+            id = info->fixedVaryingId;
+        }
         filteredEntryPoint[writeIndex] = id;
         ++writeIndex;
     }
@@ -1604,19 +1718,69 @@ bool SpirvTransformer::transformTypePointer(const uint32_t *instruction, size_t 
         return false;
     }
 
-    // Copy the type declaration for modification.
+    // Insert OpTypePointer definition for new PrivateType.
     const size_t instructionOffset = copyInstruction(instruction, wordCount);
 
-    const uint32_t newTypeId                                 = getNewId();
-    (*mSpirvBlobOut)[instructionOffset + kIdIndex]           = newTypeId;
+    const uint32_t newPrivateTypeId                          = getNewId();
+    (*mSpirvBlobOut)[instructionOffset + kIdIndex]           = newPrivateTypeId;
     (*mSpirvBlobOut)[instructionOffset + kStorageClassIndex] = spv::StorageClassPrivate;
 
     // Remember the id of the replacement.
     ASSERT(id < mTypePointerTransformedId.size());
-    mTypePointerTransformedId[id] = newTypeId;
+    mTypePointerTransformedId[id].privateID = newPrivateTypeId;
+
+    // Insert OpTypePointer definition for new FunctionType
+    const uint32_t newFunctionTypeId           = getNewId();
+    mTypePointerTransformedId[id].functionID   = newFunctionTypeId;
+    mTypePointerTransformedId[id].typeID       = typeId;
+    const size_t functionTypeInstructionOffset = copyInstruction(instruction, wordCount);
+    (*mSpirvBlobOut)[functionTypeInstructionOffset + kIdIndex] = newFunctionTypeId;
+    (*mSpirvBlobOut)[functionTypeInstructionOffset + kStorageClassIndex] =
+        spv::StorageClassFunction;
 
     // The original instruction should still be present as well.  At this point, we don't know
     // whether we will need the Output or Private type.
+    return false;
+}
+
+bool SpirvTransformer::transformReturn(const uint32_t *instruction, size_t wordCount)
+{
+    for (uint32_t id = 0; id < mVariableInfoById.size(); id++)
+    {
+        constexpr size_t kInstIndex                = 0;
+        constexpr size_t kIdIndex                  = 1;
+        constexpr size_t kObjectIndex              = 2;
+        constexpr size_t kOpStoreInstructionLength = 3;
+
+        constexpr size_t kResultTypeIndex         = 1;
+        constexpr size_t kResultIdIndex           = 2;
+        constexpr size_t kLoadIdIndex             = 3;
+        constexpr size_t kOpLoadInstructionLength = 4;
+        const ShaderInterfaceVariableInfo *info   = mVariableInfoById[id];
+        if (info && info->fixPrecision && info->activeStages[mShaderType])
+        {
+            // Build OpLoad instruction to load the highp value into a temporary
+            ASSERT(info->fixedVaryingTypeId != 0);
+            ASSERT(mTypePointerTransformedId[info->fixedVaryingTypeId].typeID != 0);
+
+            uint32_t opLoad[kOpLoadInstructionLength];
+            uint32_t tempVar = getNewId();
+            SetSpirvInstructionOp(opLoad, spv::OpLoad);
+            SetSpirvInstructionLength(opLoad, kOpLoadInstructionLength);
+            opLoad[kResultTypeIndex] = mTypePointerTransformedId[info->fixedVaryingTypeId].typeID;
+            opLoad[kResultIdIndex]   = tempVar;
+            opLoad[kLoadIdIndex]     = id;
+            copyInstruction(opLoad, kOpLoadInstructionLength);
+
+            // Build OpStore instruction to cast the highp value to mediump for output
+            uint32_t opStore[kOpStoreInstructionLength];
+            SetSpirvInstructionLength(&opStore[kInstIndex], kOpStoreInstructionLength);
+            SetSpirvInstructionOp(&opStore[kInstIndex], spv::OpStore);
+            opStore[kIdIndex]     = info->fixedVaryingId;
+            opStore[kObjectIndex] = tempVar;
+            copyInstruction(opStore, kOpStoreInstructionLength);
+        }
+    }
     return false;
 }
 
@@ -1645,20 +1809,31 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
     ASSERT(storageClass != spv::StorageClassInput || info->activeStages[mShaderType]);
     if (info->activeStages[mShaderType])
     {
+        if (info->fixPrecision && storageClass == spv::StorageClassOutput)
+        {
+            // Change existing OpVariable Output to use fixedVaryingId
+            const size_t instructionOffset = copyInstruction(instruction, wordCount);
+            ASSERT(info->fixedVaryingId != ShaderInterfaceVariableInfo::kInvalid);
+            (*mSpirvBlobOut)[instructionOffset + kIdIndex] = info->fixedVaryingId;
+
+            return true;
+        }
         return false;
     }
 
     ASSERT(storageClass == spv::StorageClassOutput);
 
+    // We have an inactive varying, change it's storage class to private.
     // Copy the variable declaration for modification.  Change its type to the corresponding type
     // with the Private storage class, as well as changing the storage class respecified in this
     // instruction.
     const size_t instructionOffset = copyInstruction(instruction, wordCount);
 
     ASSERT(typeId < mTypePointerTransformedId.size());
-    ASSERT(mTypePointerTransformedId[typeId] != 0);
+    ASSERT(mTypePointerTransformedId[typeId].privateID != 0);
 
-    (*mSpirvBlobOut)[instructionOffset + kTypeIdIndex]       = mTypePointerTransformedId[typeId];
+    (*mSpirvBlobOut)[instructionOffset + kTypeIdIndex] =
+        mTypePointerTransformedId[typeId].privateID;
     (*mSpirvBlobOut)[instructionOffset + kStorageClassIndex] = spv::StorageClassPrivate;
 
     return true;
@@ -1685,9 +1860,10 @@ bool SpirvTransformer::transformAccessChain(const uint32_t *instruction, size_t 
     const size_t instructionOffset = copyInstruction(instruction, wordCount);
 
     ASSERT(typeId < mTypePointerTransformedId.size());
-    ASSERT(mTypePointerTransformedId[typeId] != 0);
+    ASSERT(mTypePointerTransformedId[typeId].privateID != 0);
 
-    (*mSpirvBlobOut)[instructionOffset + kTypeIdIndex] = mTypePointerTransformedId[typeId];
+    (*mSpirvBlobOut)[instructionOffset + kTypeIdIndex] =
+        mTypePointerTransformedId[typeId].privateID;
 
     return true;
 }
@@ -1711,6 +1887,7 @@ bool SpirvTransformer::transformExecutionMode(const uint32_t *instruction, size_
 size_t SpirvTransformer::copyInstruction(const uint32_t *instruction, size_t wordCount)
 {
     size_t instructionOffset = mSpirvBlobOut->size();
+    ASSERT(GetSpirvInstructionLength(instruction) != 0);
     mSpirvBlobOut->insert(mSpirvBlobOut->end(), instruction, instruction + wordCount);
     return instructionOffset;
 }

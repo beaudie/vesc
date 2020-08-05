@@ -219,10 +219,14 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *
             info->location      = stream->readInt<uint32_t>();
             info->component     = stream->readInt<uint32_t>();
             // PackedEnumBitSet uses uint8_t
-            info->activeStages = gl::ShaderBitSet(stream->readInt<uint8_t>());
-            info->xfbBuffer    = stream->readInt<uint32_t>();
-            info->xfbOffset    = stream->readInt<uint32_t>();
-            info->xfbStride    = stream->readInt<uint32_t>();
+            info->activeStages       = gl::ShaderBitSet(stream->readInt<uint8_t>());
+            info->xfbBuffer          = stream->readInt<uint32_t>();
+            info->xfbOffset          = stream->readInt<uint32_t>();
+            info->xfbStride          = stream->readInt<uint32_t>();
+            info->precision          = stream->readInt<GLenum>();
+            info->fixPrecision       = stream->readInt<uint8_t>() != 0;
+            info->fixedVaryingId     = stream->readInt<uint32_t>();
+            info->fixedVaryingTypeId = stream->readInt<uint32_t>();
         }
     }
 
@@ -246,6 +250,10 @@ void ProgramExecutableVk::save(gl::BinaryOutputStream *stream)
             stream->writeInt<uint32_t>(it.second.xfbBuffer);
             stream->writeInt<uint32_t>(it.second.xfbOffset);
             stream->writeInt<uint32_t>(it.second.xfbStride);
+            stream->writeInt<GLenum>(it.second.precision);
+            stream->writeInt<uint8_t>(it.second.fixPrecision);
+            stream->writeInt<uint32_t>(it.second.fixedVaryingId);
+            stream->writeInt<uint32_t>(it.second.fixedVaryingTypeId);
         }
     }
 }
@@ -865,6 +873,33 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
     mDynamicBufferOffsets.resize(glExecutable.getLinkedShaderStageCount());
 
     return angle::Result::Continue;
+}
+
+void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryings &mergedVaryings)
+{
+    for (auto &mergedVarying : mergedVaryings)
+    {
+        if (mergedVarying.frontShader && mergedVarying.backShader)
+        {
+            GLenum frontPrecision = mergedVarying.frontShader->precision;
+            GLenum backPrecision  = mergedVarying.backShader->precision;
+            if (frontPrecision != backPrecision)
+            {
+                ShaderInterfaceVariableInfo *info =
+                    &mVariableInfoMap[mergedVarying.frontShaderStage]
+                                     [mergedVarying.frontShader->mappedName];
+                ASSERT(frontPrecision >= GL_LOW_FLOAT && frontPrecision <= GL_HIGH_INT);
+                ASSERT(backPrecision >= GL_LOW_FLOAT && backPrecision <= GL_HIGH_INT);
+                if (frontPrecision > backPrecision)
+                {
+                    // We only modify things when going from high precision to lower precision in
+                    // the next stage.
+                    info->precision    = backPrecision;
+                    info->fixPrecision = true;
+                }
+            }
+        }
+    }
 }
 
 void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(

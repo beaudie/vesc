@@ -169,7 +169,10 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
         ANGLE_TRY(result);
 
         if (result == angle::Result::Continue)
+        {
+            WARN() << "loaded program binary from cache";
             return angle::Result::Continue;
+        }
 
         // Cache load failed, evict.
         if (mIssuedWarnings++ < kWarningLimit)
