@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fc84393_6f33b0de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T14:51:02Z",
+      "side": 1,
+      "message": "Would appreciate Geoff\u0027s eyes on this.",
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62666519_eca91d43",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T14:51:02Z",
+      "side": 1,
+      "message": "nit: addRef/Release (see other objects in ANGLE.)\n\nCan you use RefCountObject?",
+      "range": {
+        "startLine": 631,
+        "startChar": 9,
+        "endLine": 631,
+        "endChar": 20
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f4a868b_30214ee6",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T14:51:02Z",
+      "side": 1,
+      "message": "can\u0027t context manage the refs itself?",
+      "range": {
+        "startLine": 1251,
+        "startChar": 7,
+        "endLine": 1251,
+        "endChar": 31
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fca2ec9f_09aee49c",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T14:51:02Z",
+      "side": 1,
+      "message": "don\u0027t think you need this function.",
+      "range": {
+        "startLine": 1327,
+        "startChar": 0,
+        "endLine": 1331,
+        "endChar": 1
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "080ef532_6e8eaf8b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T14:51:02Z",
+      "side": 1,
+      "message": "you can probably keep the old name. deleteBuffer/etc won\u0027t necessarily delete them. and we want to use the same name as the EP.",
+      "range": {
+        "startLine": 1337,
+        "startChar": 15,
+        "endLine": 1337,
+        "endChar": 28
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c179996b_775aa271",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T14:51:02Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 250,
+        "startChar": 9,
+        "endLine": 250,
+        "endChar": 22
+      },
+      "revId": "f17816773af5d5499554c58a9affdd09482e2a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
