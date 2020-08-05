@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e94db56f_270d6daf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T02:26:41Z",
+      "side": 1,
+      "message": "Shabi - PTAL at the latest updates/test.",
+      "revId": "2b0714a8cee635c22fe7d4a51524cb547e5f0efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "03df8562_65a18f9e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5706,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T02:26:41Z",
+      "side": 1,
+      "message": "After chatting with Charlie, I was able to find the bug remove this conditional by reordering the calls to MarkShaderStorageUsage() and convertPpoToComputeOrDraw().\n\nI\u0027ve also added the test VertexAttributeTestES31::UseComputeShaderToUpdateVertexBufferSamePpo() which binds the VS+FS program and CS program to the same PPO, which does draw/dispatch/draw.",
+      "parentUuid": "5ba404e9_39b17cbb",
+      "range": {
+        "startLine": 5706,
+        "startChar": 12,
+        "endLine": 5706,
+        "endChar": 21
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35b58914_9ccdda20",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -164,6 +188,30 @@
       "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95b25f6e_d8930b09",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T02:26:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7a830c6_06e9a87c",
+      "range": {
+        "startLine": 1652,
+        "startChar": 47,
+        "endLine": 1654,
+        "endChar": 96
+      },
+      "revId": "7aaaecc69042c7590473afd692f06a7bb5bdcff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
