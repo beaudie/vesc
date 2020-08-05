@@ -211,6 +211,30 @@
       "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c887f7f9_a42756bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-05T02:37:04Z",
+      "side": 1,
+      "message": "You\u0027re allowed to have any number of 1x1 levels at the end of the mip chain IIRC.\n\ne.g. 8x8, 4x4, 2x1, 1x1, 1x1, 1x1, and so on.",
+      "parentUuid": "2a6c7884_624f3788",
+      "range": {
+        "startLine": 793,
+        "startChar": 4,
+        "endLine": 793,
+        "endChar": 27
+      },
+      "revId": "62d4cd5be06ab821a4684094904889f6e1dbe649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
