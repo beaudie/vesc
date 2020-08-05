@@ -50,6 +50,24 @@
       "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28ecc828_3fa1ee9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T06:03:13Z",
+      "side": 1,
+      "message": "Yes, the problematic updateScissor() call that\u0027s ending the render pass is handling the case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING in ContextVk::syncState().\n\nIan\u0027s email has a good write-up on why the render pass is closed:\nhttps://groups.google.com/a/google.com/g/angle-for-android/c/ygQTl6ZghlM/m/FkXnJNVmCQAJ\n\nThe GL commands that are closing the RP are:\n\n    glDrawElements()\n    1753        glBindFramebuffer\n      target    GL_FRAMEBUFFER   \n      framebuffer Framebuffer 3486     \u003c\u003c--- dimensions: 1641x777\n\n    glClear()\n    1780        glBindFramebuffer                                 \n      target    GL_FRAMEBUFFER                                    \n      framebuffer Backbuffer FBO       \u003c\u003c--- dimensions: 777x1641 (rotated)\n    1781        glDepthMask                                       \n      flag      True                                              \n    1782        glClear                                           \n      mask      GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT\n\n    glBlitFramebuffer()\n    1783            glUseProgram       \n      program       Program 3234       \n    1784            glBindFramebuffer  \n      target        GL_READ_FRAMEBUFFER  \u003c\u003c--- dimensions: 1641x777\n      framebuffer   Framebuffer 3486   \n    1785            glBindFramebuffer  \n      target        GL_DRAW_FRAMEBUFFER  \u003c\u003c--- dimensions: 1641x777\n      framebuffer   Framebuffer 3484   \n    1786            glBlitFramebuffer  \n      readFramebuffer Framebuffer 3486   \n      drawFramebuffer Framebuffer 3484   \n      srcX0         0                  \n      srcY0         0                  \n      srcX1         1641               \n      srcY1         777                \n      dstX0         0                  \n      dstY0         0                  \n      dstX1         1641               \n      dstY1         777                \n      mask          GL_COLOR_BUFFER_BIT\n      filter        GL_NEAREST\n\nThe problem is that the backbuffer\u0027s dimensions don\u0027t match Framebuffer 3486\u0027s (since it\u0027s rotated, but the FBOs are not), so it ends the render pass before we can update it for the blit to resolve.\n\nThe app is rendering correctly and CQ is passing, so it seems safe so far.   I believe this is Jamie\u0027s deferred clears stuff hanging on to the clear (in the backbuffer\u0027s FramebufferVk) until it\u0027s actually necessary, to help optimize exactly this case, but I haven\u0027t dug in to prove it.\n\nAs an aside, calling updateScissorAndEndRenderPass() in FramebufferVk::syncState() is fine, since the dimensions do match at that point so the RP isn\u0027t ended.   I kept it with updateScissor() though, since there are explicit ends to the RP in that function also.",
+      "parentUuid": "efe30aa8_e1140afb",
+      "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
