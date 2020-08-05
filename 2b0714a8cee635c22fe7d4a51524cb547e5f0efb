@@ -33,6 +33,24 @@
       "revId": "2b0714a8cee635c22fe7d4a51524cb547e5f0efb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "016abdf3_2ef251a6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5681,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-05T18:44:26Z",
+      "side": 1,
+      "message": "I\u0027ve added a comment.\n\nThe problem is that MarkShaderStorageUsage() uses the values that StateCache::onProgramExecutableChange() changes (which is now called as part of this CL):\n\n    void StateCache::onProgramExecutableChange(Context *context)\n    {\n        updateActiveAttribsMask(context);\n        updateVertexElementLimits(context);\n        updateBasicDrawStatesError();\n        updateValidDrawModes(context);\n        updateActiveShaderStorageBufferIndices(context);  \u003c\u003c--- this guy\n        updateActiveImageUnitIndices(context);  \u003c\u003c--- and this guy\n        updateCanDraw(context);\n    }\n\n    ANGLE_INLINE void MarkShaderStorageUsage(const Context *context)\n    {\n        for (size_t index : context-\u003egetStateCache().getActiveShaderStorageBufferIndices())\n        {\n            Buffer *buffer \u003d context-\u003egetState().getIndexedShaderStorageBuffer(index).get();\n            if (buffer)\n            {\n                buffer-\u003eonDataChanged();\n            }\n        }\n\n        for (size_t index : context-\u003egetStateCache().getActiveImageUnitIndices())\n        {\n            const ImageUnit \u0026imageUnit \u003d context-\u003egetState().getImageUnit(index);\n            const Texture *texture     \u003d imageUnit.texture.get();\n            if (texture)\n            {\n                texture-\u003eonStateChange(angle::SubjectMessage::ContentsChanged);\n            }\n        }\n    }\n\nSo we need to call MarkShaderStorageUsage() before the call to convertPpoToComputeOrDraw() that reverts the PPO back to graphics, so MarkShaderStorageUsage() uses the correct compute PPO values.",
+      "parentUuid": "a9e7b879_5b85c9fb",
+      "revId": "2b0714a8cee635c22fe7d4a51524cb547e5f0efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
