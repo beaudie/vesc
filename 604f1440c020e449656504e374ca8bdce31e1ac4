@@ -104,6 +104,24 @@
       "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "35bff809_d6fcad0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-05T19:35:05Z",
+      "side": 1,
+      "message": "So the backbuffer has nothing to do with this resolve, right? Sigh at the fact that they are clearing the backbuffer in the middle of this.\n\nOk, I\u0027m convinced. Changing framebuffers must necessarily already handle closing the render pass with whatever command, even if their dimensions are identical. I realize now that `ContextVk::updateScissor`\u0027s `if` was bogus anyway when framebuffers change.",
+      "parentUuid": "f22e4e1a_a3c8a20b",
+      "revId": "604f1440c020e449656504e374ca8bdce31e1ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
