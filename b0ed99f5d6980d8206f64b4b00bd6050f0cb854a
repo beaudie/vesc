@@ -33,6 +33,24 @@
       "revId": "b0ed99f5d6980d8206f64b4b00bd6050f0cb854a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d61186bc_f9c5e303",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-06T15:51:15Z",
+      "side": 1,
+      "message": "Integer formats are not officially supported yet since Metal is still in ES2 state.\nBut for sRGB, I\u0027m a little confused, why there shouldn\u0027t be any conversion? I don\u0027t see any mentioning of this in the extension spec.",
+      "parentUuid": "bc1a03b7_1df18136",
+      "revId": "b0ed99f5d6980d8206f64b4b00bd6050f0cb854a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
