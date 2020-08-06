@@ -49,6 +49,15 @@ struct FrontendFeatures : angle::FeatureSetBase
         "scalarize_vec_and_mat_constructor_args", angle::FeatureCategory::FrontendWorkarounds,
         "Always rewrite vec/mat constructors to be consistent", &members,
         "http://crbug.com/398694"};
+
+    angle::Feature downscaleBackbufferTextures = {
+        "downscale_backbuffer_textures", angle::FeatureCategory::FrontendWorkarounds,
+        "Downscale textures and renderbuffers that are the same size as the backbuffer", &members,
+        ""};
+
+    // Constant factor to downscale all backbuffer-sized textures and rederbuffers. Ideally this is
+    // configurable at runtime.
+    float getDownscaleTextureScale() const { return 0.75f; }
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
