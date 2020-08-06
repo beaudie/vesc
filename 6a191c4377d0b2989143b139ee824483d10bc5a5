@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a09943fd_4ff207b3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:22:45Z",
+      "side": 1,
+      "message": "Yes, just _1 is better. identifiers cannot begin with numbers.\n\nAlso this enum should be just SampleCount and you can put it somewhere in the gl namespace like angletypes.h.",
+      "parentUuid": "7735cd0f_6b0b133e",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60bcf805_e523c0d4",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2020-08-06T19:19:48Z",
       "side": 1,
       "message": "My concern with this is that we are hurting the common case to help the (much less common) MSAA case.\n\nCan you restore the old mImageViews instead?   Indexing into mMultisampledImageViews is controlled by the enum, so it can start at any value we want with `_2 \u003d 0`.\n\nThis would also require some special handling in places like TextureVk::getAttachmentRenderTarget() and TextureVk::initRenderTargets(), but it should be simple enough to set a pointer/reference at the start of those functions (which also removes a lot of redundant indexing anyway).",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 5
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "264e8f02_7ebcf541",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:22:45Z",
+      "side": 1,
+      "message": "One indirection to read the enum isn\u0027t going to kill us here.",
+      "parentUuid": "60bcf805_e523c0d4",
       "range": {
         "startLine": 251,
         "startChar": 0,
@@ -81,6 +129,29 @@
         "startChar": 32,
         "endLine": 471,
         "endChar": 34
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b4973b6_4e334974",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:22:45Z",
+      "side": 1,
+      "message": "nit: have this return your enum",
+      "range": {
+        "startLine": 789,
+        "startChar": 0,
+        "endLine": 789,
+        "endChar": 42
       },
       "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
