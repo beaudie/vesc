@@ -454,10 +454,11 @@ class ContextVk : public ContextImpl, public vk::Context
     }
 
     RenderPassCache &getRenderPassCache() { return mRenderPassCache; }
-    bool isCurrentRenderPassOfFramebuffer(vk::Framebuffer *framebuffer)
+
+    bool hasStartedRenderPassWithFramebuffer(vk::Framebuffer *framebuffer)
     {
-        return mRenderPassFramebuffer != VK_NULL_HANDLE && framebuffer != nullptr &&
-               mRenderPassFramebuffer == framebuffer->getHandle();
+        return hasStartedRenderPass() &&
+               mRenderPassCommands->getFramebufferHandle() == framebuffer->getHandle();
     }
 
     vk::DescriptorSetLayoutDesc getDriverUniformsDescriptorSetDesc(
@@ -861,11 +862,7 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result flushOutsideRenderPassCommands();
     void flushDescriptorSetUpdates();
 
-    ANGLE_INLINE void onRenderPassFinished()
-    {
-        mRenderPassCommandBuffer = nullptr;
-        mRenderPassFramebuffer   = VK_NULL_HANDLE;
-    }
+    ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
 
     angle::Result onBufferRead(VkAccessFlags readAccessType,
                                vk::PipelineStage readStage,
@@ -1021,7 +1018,6 @@ class ContextVk : public ContextImpl, public vk::Context
 
     vk::CommandBufferHelper *mOutsideRenderPassCommands;
     vk::CommandBufferHelper *mRenderPassCommands;
-    VkFramebuffer mRenderPassFramebuffer;
     vk::PrimaryCommandBuffer mPrimaryCommands;
     // Function recycleCommandBuffer() is public above
     bool mHasPrimaryCommands;
