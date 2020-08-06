@@ -1736,6 +1736,8 @@ void Display::initializeFrontendFeatures()
     ANGLE_FEATURE_CONDITION((&mFrontendFeatures), loseContextOnOutOfMemory, true);
     ANGLE_FEATURE_CONDITION((&mFrontendFeatures), scalarizeVecAndMatConstructorArgs, true);
 
+    ANGLE_FEATURE_CONDITION((&mFrontendFeatures), downscaleBackbufferTextures, true);
+
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
 
     rx::ApplyFeatureOverrides(&mFrontendFeatures, mState);

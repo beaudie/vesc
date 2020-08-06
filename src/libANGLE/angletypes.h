@@ -65,6 +65,8 @@ struct Rectangle
 
     bool encloses(const gl::Rectangle &inside) const;
 
+    void scale(float factor);
+
     int x;
     int y;
     int width;
@@ -100,6 +102,12 @@ struct Extents
     Extents &operator=(const Extents &other) = default;
 
     bool empty() const { return (width * height * depth) == 0; }
+    void scale(float factor)
+    {
+        width  = std::max(static_cast<int>(width * factor), 1);
+        height = std::max(static_cast<int>(height * factor), 1);
+        depth  = std::max(static_cast<int>(depth * factor), 1);
+    }
 
     int width;
     int height;

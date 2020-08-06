@@ -27,6 +27,7 @@
 #include "libANGLE/queryutils.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/TextureImpl.h"
+#include "platform/FrontendFeatures.h"
 
 namespace gl
 {
@@ -411,6 +412,10 @@ void State::initialize(Context *context)
     mNearZ           = 0.0f;
     mFarZ            = 1.0f;
 
+    mUserScissor      = mScissor;
+    mUserViewport     = mViewport;
+    mFramebufferScale = 1.0f;
+
     mActiveSampler = 0;
 
     mVertexAttribCurrentValues.resize(caps.maxVertexAttributes);
@@ -574,6 +579,19 @@ void State::reset(const Context *context)
     mClipDistancesEnabled.reset();
 
     setAllDirtyBits();
+}
+
+void State::setFramebufferScale(float scaleFactor)
+{
+    if (mFramebufferScale != scaleFactor)
+    {
+        mFramebufferScale = scaleFactor;
+
+        // Re-sync the viewport and scissor
+        setViewportParams(mUserViewport.x, mUserViewport.y, mUserViewport.width,
+                          mUserViewport.height);
+        setScissorParams(mUserScissor.x, mUserScissor.y, mUserScissor.width, mUserScissor.height);
+    }
 }
 
 ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
@@ -1080,13 +1098,18 @@ void State::setScissorTest(bool enabled)
 
 void State::setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height)
 {
+    mUserScissor.x      = x;
+    mUserScissor.y      = y;
+    mUserScissor.width  = width;
+    mUserScissor.height = height;
+
+    gl::Rectangle scissor = mUserScissor;
+    scissor.scale(mFramebufferScale);
+
     // Skip if same scissor info
-    if (mScissor.x != x || mScissor.y != y || mScissor.width != width || mScissor.height != height)
+    if (mScissor != scissor)
     {
-        mScissor.x      = x;
-        mScissor.y      = y;
-        mScissor.width  = width;
-        mScissor.height = height;
+        mScissor = scissor;
         mDirtyBits.set(DIRTY_BIT_SCISSOR);
     }
 }
@@ -1450,14 +1473,17 @@ void State::setFragmentShaderDerivativeHint(GLenum hint)
 
 void State::setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    // Skip if same viewport info
-    if (mViewport.x != x || mViewport.y != y || mViewport.width != width ||
-        mViewport.height != height)
+    mUserViewport.x      = x;
+    mUserViewport.y      = y;
+    mUserViewport.width  = width;
+    mUserViewport.height = height;
+
+    gl::Rectangle viewport = mUserViewport;
+    viewport.scale(mFramebufferScale);
+
+    if (mViewport != viewport)
     {
-        mViewport.x      = x;
-        mViewport.y      = y;
-        mViewport.width  = width;
-        mViewport.height = height;
+        mViewport = viewport;
         mDirtyBits.set(DIRTY_BIT_VIEWPORT);
     }
 }
@@ -3131,7 +3157,13 @@ angle::Result State::syncReadFramebuffer(const Context *context, Command command
 angle::Result State::syncDrawFramebuffer(const Context *context, Command command)
 {
     ASSERT(mDrawFramebuffer);
-    return mDrawFramebuffer->syncState(context, GL_DRAW_FRAMEBUFFER, command);
+    ANGLE_TRY(mDrawFramebuffer->syncState(context, GL_DRAW_FRAMEBUFFER, command));
+
+    setFramebufferScale(mDrawFramebuffer->isDownscaled()
+                            ? context->getFrontendFeatures().getDownscaleTextureScale()
+                            : 1.0f);
+
+    return angle::Result::Continue;
 }
 
 angle::Result State::syncTextures(const Context *context, Command command)

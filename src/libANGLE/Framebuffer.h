@@ -303,6 +303,9 @@ class Framebuffer final : public angle::ObserverInterface,
     // for draws, clears, and blits.
     const gl::Offset &getSurfaceTextureOffset() const;
 
+    // If an attachment of this framebuffer is using the downscaleBackbufferTextures feature
+    bool isDownscaled() const;
+
     angle::Result discard(const Context *context, size_t count, const GLenum *attachments);
     angle::Result invalidate(const Context *context, size_t count, const GLenum *attachments);
     angle::Result invalidateSub(const Context *context,

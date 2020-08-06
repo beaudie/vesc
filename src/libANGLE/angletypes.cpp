@@ -554,6 +554,14 @@ bool Rectangle::encloses(const gl::Rectangle &inside) const
     return x0() <= inside.x0() && y0() <= inside.y0() && x1() >= inside.x1() && y1() >= inside.y1();
 }
 
+void Rectangle::scale(float factor)
+{
+    x      = static_cast<int>(x * factor);
+    y      = static_cast<int>(y * factor);
+    width  = static_cast<int>(width * factor);
+    height = static_cast<int>(height * factor);
+}
+
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection)
 {
     int minSourceX, maxSourceX, minSourceY, maxSourceY;
