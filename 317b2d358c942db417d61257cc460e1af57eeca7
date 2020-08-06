@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "cc374e85_309e7a8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:40:25Z",
+      "side": 1,
+      "message": "This requires a special ANGLE build to get the functionality. Is that what we want?\nSeems like this could be implemented in an OpenGL layer. Well mostly, need to use an OpenGL extension to send down the debug string. Having it be a layer would allow AGI to include it for any ANGLE build.",
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97291ce7_2686e5bc",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
