@@ -4074,6 +4074,10 @@ void ImageHelper::stageClearIfEmulatedFormat(Context *context)
     if (!mFormat->hasEmulatedImageChannels() || context->isRobustResourceInitEnabled())
         return;
 
+    // If we only have an emulated channel, we uses VkImageView's swizzle to set alpha to one
+    if (mFormat->hasEmulatedAlphaChannelOnly())
+        return;
+
     VkClearValue clearValue;
     if (mFormat->intendedFormat().hasDepthOrStencilBits())
     {
