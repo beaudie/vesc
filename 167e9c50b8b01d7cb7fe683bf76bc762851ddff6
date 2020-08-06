@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6066ec2c_5729cbdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T02:31:07Z",
+      "side": 1,
+      "message": "Something with cube map array seems to be broken? Looks like reserved word tests are also failing. You could write compiler unittests (under src/tests/compiler_tests/) for those for easier debugging.",
+      "revId": "167e9c50b8b01d7cb7fe683bf76bc762851ddff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d8efea2_f5eec9fe",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T02:31:07Z",
+      "side": 1,
+      "message": "Wrong group name",
+      "range": {
+        "startLine": 672,
+        "startChar": 12,
+        "endLine": 672,
+        "endChar": 30
+      },
+      "revId": "167e9c50b8b01d7cb7fe683bf76bc762851ddff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72a9fb7a_7b935d49",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T02:31:07Z",
+      "side": 1,
+      "message": "nit: spacing",
+      "range": {
+        "startLine": 1074,
+        "startChar": 2,
+        "endLine": 1074,
+        "endChar": 4
+      },
+      "revId": "167e9c50b8b01d7cb7fe683bf76bc762851ddff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
