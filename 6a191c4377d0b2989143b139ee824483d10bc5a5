@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7735cd0f_6b0b133e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-06T19:19:48Z",
+      "side": 1,
+      "message": "This name feels misleading, since they *are* rendering to a texture, just not a multisampled render to texture.   Using _1 seems more appropriate.\n\nAs a nit: Does using \u00272x\u0027, \u00274x\u0027, etc. look better than the leading underscore, so it matches with the normal 2xMSAA, 4xMSAA usages?",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60bcf805_e523c0d4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-06T19:19:48Z",
+      "side": 1,
+      "message": "My concern with this is that we are hurting the common case to help the (much less common) MSAA case.\n\nCan you restore the old mImageViews instead?   Indexing into mMultisampledImageViews is controlled by the enum, so it can start at any value we want with `_2 \u003d 0`.\n\nThis would also require some special handling in places like TextureVk::getAttachmentRenderTarget() and TextureVk::initRenderTargets(), but it should be simple enough to set a pointer/reference at the start of those functions (which also removes a lot of redundant indexing anyway).",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 5
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49616d16_f910d788",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-06T19:19:48Z",
+      "side": 1,
+      "message": "Remove this comment, since the enum RenderToTextureSampleCount owns the restriction and can be updated at any time without this comment being updated as well.",
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "485568a1_820cf0d6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-06T19:19:48Z",
+      "side": 1,
+      "message": "nit: typo?",
+      "range": {
+        "startLine": 471,
+        "startChar": 32,
+        "endLine": 471,
+        "endChar": 34
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
