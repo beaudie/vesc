@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfd1853f_93cfad87",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T02:46:38Z",
+      "side": 1,
+      "message": "`isReferenced()` is what I\u0027ve seen elsewhere, return `mRefCount !\u003d 0`",
+      "range": {
+        "startLine": 635,
+        "startChar": 11,
+        "endLine": 635,
+        "endChar": 22
+      },
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bf80486_021638eb",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T02:46:38Z",
+      "side": 1,
+      "message": "What\u0027s this about?",
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90f07281_1043d9e0",
+        "filename": "src/tests/egl_tests/EGLContextASANTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T02:46:38Z",
+      "side": 1,
+      "message": "Could potentially be pulled to a shared header between this and the test it was copied from.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 6
+      },
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "841ce752_31b60f06",
+        "filename": "src/tests/egl_tests/EGLContextASANTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T02:46:38Z",
+      "side": 1,
+      "message": "Copy-paste error. Texture is not shared in this test.",
+      "range": {
+        "startLine": 151,
+        "startChar": 11,
+        "endLine": 151,
+        "endChar": 17
+      },
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
