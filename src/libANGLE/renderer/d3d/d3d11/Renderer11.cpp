@@ -1462,8 +1462,34 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
         *samples = sampleCount != 1 ? sampleCount : 0;
     }
 
+    GLenum internalFormat = GL_NONE;
+
+    if (attribs.contains(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE))
+    {
+        internalFormat =
+            static_cast<GLenum>(attribs.get(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_NONE));
+        switch (internalFormat)
+        {
+            case GL_R8_EXT:
+            case GL_R16_EXT:
+            case GL_RG8_EXT:
+            case GL_RGB8_OES:
+            case GL_RGBA8_OES:
+            case GL_BGRA8_EXT:
+            case GL_RG16_EXT:
+            case GL_RGBA16F_EXT:
+                break;
+            default:
+                return egl::EglBadParameter()
+                       << "Invalid client buffer texture internal format: " << std::hex
+                       << internalFormat;
+        }
+    }
+
+    DXGI_FORMAT dxgiFormat = desc.Format;
+
     // From table egl.restrictions in EGL_ANGLE_d3d_texture_client_buffer.
-    switch (desc.Format)
+    switch (dxgiFormat)
     {
         case DXGI_FORMAT_R8G8B8A8_UNORM:
         case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
@@ -1474,50 +1500,76 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
         case DXGI_FORMAT_R32G32B32A32_FLOAT:
         case DXGI_FORMAT_R10G10B10A2_UNORM:
+        case DXGI_FORMAT_NV12:
+        case DXGI_FORMAT_P010:
             break;
 
         default:
-            return egl::EglBadParameter()
-                   << "Invalid client buffer texture format: " << desc.Format;
+            return egl::EglBadParameter() << "Invalid client buffer texture format: " << dxgiFormat;
     }
 
-    const angle::Format *textureAngleFormat = &d3d11_angle::GetFormat(desc.Format);
-    ASSERT(textureAngleFormat);
-
-    GLenum sizedInternalFormat = textureAngleFormat->glInternalFormat;
-
-    if (attribs.contains(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE))
+    if (dxgiFormat == DXGI_FORMAT_NV12)
     {
-        const GLenum internalFormat =
-            static_cast<GLenum>(attribs.get(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE));
-        switch (internalFormat)
+        if (internalFormat == GL_RG8_EXT)
         {
-            case GL_RGBA:
-            case GL_BGRA_EXT:
-            case GL_RGB:
-                break;
-            default:
-                return egl::EglBadParameter()
-                       << "Invalid client buffer texture internal format: " << std::hex
-                       << internalFormat;
+            if (width)
+            {
+                *width = *width / 2;
+            }
+            if (height)
+            {
+                *height = *height / 2;
+            }
+            dxgiFormat = DXGI_FORMAT_R8G8_UNORM;
         }
-
-        const GLenum type = gl::GetSizedInternalFormatInfo(sizedInternalFormat).type;
-
-        const auto format = gl::Format(internalFormat, type);
-        if (!format.valid())
+        else if (internalFormat == GL_R8_EXT)
+        {
+            dxgiFormat = DXGI_FORMAT_R8_UNORM;
+        }
+        else
         {
             return egl::EglBadParameter()
                    << "Invalid client buffer texture internal format: " << std::hex
                    << internalFormat;
         }
+    }
+    else if (dxgiFormat == DXGI_FORMAT_P010)
+    {
+        if (internalFormat == GL_RG16_EXT)
+        {
+            if (width)
+            {
+                *width = *width / 2;
+            }
+            if (height)
+            {
+                *height = *height / 2;
+            }
+            dxgiFormat = DXGI_FORMAT_R16G16_UNORM;
+        }
+        else if (internalFormat == GL_R16_EXT)
+        {
+            dxgiFormat = DXGI_FORMAT_R16_UNORM;
+        }
+        else
+        {
+            return egl::EglBadParameter()
+                   << "Invalid client buffer texture internal format: " << std::hex
+                   << internalFormat;
+        }
+    }
 
-        sizedInternalFormat = format.info->sizedInternalFormat;
+    const angle::Format *textureAngleFormat = &d3d11_angle::GetFormat(dxgiFormat);
+    ASSERT(textureAngleFormat);
+
+    if (internalFormat == GL_NONE)
+    {
+        internalFormat = textureAngleFormat->glInternalFormat;
     }
 
     if (glFormat)
     {
-        *glFormat = gl::Format(sizedInternalFormat);
+        *glFormat = gl::Format(internalFormat);
     }
 
     if (angleFormat)
