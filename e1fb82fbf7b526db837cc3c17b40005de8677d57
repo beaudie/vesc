@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "596b0444_9205d682",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:28:05Z",
+      "side": 1,
+      "message": "RefCountObject uses getRefCount which is what I modeled this after.",
+      "parentUuid": "dfd1853f_93cfad87",
+      "range": {
+        "startLine": 635,
+        "startChar": 11,
+        "endLine": 635,
+        "endChar": 22
+      },
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bf80486_021638eb",
         "filename": "src/libANGLE/Shader.h",
         "patchSetId": 8
@@ -39,6 +63,24 @@
       "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1649ea67_7099f263",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:28:05Z",
+      "side": 1,
+      "message": "This is to fix an ASAN error. Originally this was a reference into the gl::Context\u0027s mState.mRendererLimitations. However, that can go away so I make a copy instead.\nHmm, it goes away because the context is deleted in some tests before the shader is compiled. The shader does not increment the context\u0027s reference count. Could do that, but seems easier to just make a copy.\nActually much easier. Compiling the shader is a gl activity, manipulating context\u0027s is an egl activity and would require grabbing the egl global lock and messing around with makecurrent which would be really ugly.",
+      "parentUuid": "4bf80486_021638eb",
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "3e338174_6bb65c21",
+        "filename": "src/tests/egl_tests/EGLContextASANTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "90f07281_1043d9e0",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 6
+      },
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "841ce752_31b60f06",
         "filename": "src/tests/egl_tests/EGLContextASANTest.cpp",
         "patchSetId": 8
@@ -85,6 +151,30 @@
       "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "765063a8_347d1993",
+        "filename": "src/tests/egl_tests/EGLContextASANTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:28:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "841ce752_31b60f06",
+      "range": {
+        "startLine": 151,
+        "startChar": 11,
+        "endLine": 151,
+        "endChar": 17
+      },
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
