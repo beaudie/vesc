@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "c2ec63b0_97581880",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-06T16:05:58Z",
+      "side": 1,
+      "message": "Other options are making sure that gl::State is storing a pointer/ref to the Renderer\u0027s gl::Limitations.",
+      "parentUuid": "1649ea67_7099f263",
+      "revId": "e1fb82fbf7b526db837cc3c17b40005de8677d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90f07281_1043d9e0",
         "filename": "src/tests/egl_tests/EGLContextASANTest.cpp",
         "patchSetId": 8

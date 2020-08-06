@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae11abd4_792cf351",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-06T16:05:58Z",
+      "side": 1,
+      "message": "Maybe this isn\u0027t necessary anymore?  There is a possiblity mImplementation-\u003eonUnMakeCurrent wants to reference the current surface.",
+      "range": {
+        "startLine": 697,
+        "startChar": 3,
+        "endLine": 697,
+        "endChar": 41
+      },
+      "revId": "204c6151332ad9c49cfcd2e9c50b43d181e23de3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60e62fc5_af1e4eb7",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-06T16:05:58Z",
+      "side": 1,
+      "message": "nit: suggest removing the newlines between these functions.",
+      "revId": "204c6151332ad9c49cfcd2e9c50b43d181e23de3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
