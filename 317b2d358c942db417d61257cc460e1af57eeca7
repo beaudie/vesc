@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "9461fb49_a86bd0bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:43:25Z",
+      "side": 1,
+      "message": "+ Shabi\u0027s comments of course.",
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97291ce7_2686e5bc",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
@@ -47,6 +64,30 @@
       "writtenOn": "2020-08-06T03:01:38Z",
       "side": 1,
       "message": "Unnecessary if using std::string. Otherwise might as well delete it. On overflow just keeping the message truncated sounds more useful to me.",
+      "range": {
+        "startLine": 8419,
+        "startChar": 0,
+        "endLine": 8425,
+        "endChar": 5
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d335a67_cd5087e4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8425,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:43:25Z",
+      "side": 1,
+      "message": "I suspect that there is a limit to the size of the payload that we can store in the system trace.",
+      "parentUuid": "97291ce7_2686e5bc",
       "range": {
         "startLine": 8419,
         "startChar": 0,
