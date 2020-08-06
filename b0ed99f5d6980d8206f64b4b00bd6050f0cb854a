@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc1a03b7_1df18136",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T13:59:48Z",
+      "side": 1,
+      "message": "FYI there are some subtleties here, like if you copy from int to float types, there should be normalization applied (or vice versa). Or if you copy from sRGB to non-sRGB (or vice versa), there shouldn\u0027t be an sRGB conversion.",
+      "revId": "b0ed99f5d6980d8206f64b4b00bd6050f0cb854a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
