@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82f11237_83a260ce",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T14:05:30Z",
+      "side": 1,
+      "message": "pretty sure these can be mat4. so that would be 16x4 bytes max.",
+      "range": {
+        "startLine": 551,
+        "startChar": 0,
+        "endLine": 552,
+        "endChar": 43
+      },
+      "revId": "305165f0c60ea5471a05bd6677cf6da62d041822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd859dde_dcbfddd1",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T14:05:30Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 563,
+        "endChar": 43
+      },
+      "revId": "305165f0c60ea5471a05bd6677cf6da62d041822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
