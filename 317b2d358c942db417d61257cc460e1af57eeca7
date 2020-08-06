@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "233b83e0_3bb60395",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-06T00:12:33Z",
+      "side": 1,
+      "message": "This is first iteration of adding debug utils labels into VK command stream to include the OpenGL commands.\n\nMost of the code changes are from codegen modification that touches all GL entrypoints.\n\nThe feature is #defined off by default and turned on w/ GN arg \"angle_enable_gl_vk_api_mapping \u003d true\".\n\nThere\u0027s a block of memory in the gl::Context where gl commands are written to by the new code-gen\u0027d calls in the GL entrypoints. I tried re-using the existing macro but b/c the string of commands is being appended to and persists, the gl::Context seemed like a reasonable place to store it.\n\n\nWhen a draw call is reached, a vkCmdInsertDebugUtilsLabelEXT() call is made that includes a label with a string of all the OpenGL calls up to that point.\n\nBecause the gl::Context is always treated as const in the VK backend, I\u0027m currently resetting the GL string in the gl::Context draw call points after its been recorded in the VK implementation.\n\nNone of this is perfect but it\u0027s a good start.\n\nWould be nice to land some form of this disabled, as the codegen can lead to conflicts so will simplify merges once it\u0027s landed.\n",
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
