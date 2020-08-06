@@ -1637,6 +1637,7 @@ TEST_P(CopyTextureTestDest, AlphaCopyWithRGB)
     // http://anglebug.com/4121
     ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux() && IsOpenGLES());
     ANGLE_SKIP_TEST_IF(!checkExtensions());
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_half_float"));
 
     GLColor originalPixels(50u, 100u, 150u, 155u);
     GLColor expectedPixels(0u, 0u, 0u, 155u);
@@ -2363,13 +2364,15 @@ ANGLE_INSTANTIATE_TEST_COMBINE_5(CopyTextureVariationsTest,
                                  ES2_D3D11(),
                                  ES2_OPENGL(),
                                  ES2_OPENGLES(),
-                                 ES2_VULKAN());
+                                 ES2_VULKAN(),
+                                 ES2_METAL());
 ANGLE_INSTANTIATE_TEST_ES2(CopyTextureTestWebGL);
 ANGLE_INSTANTIATE_TEST(CopyTextureTestDest,
                        ES2_D3D11(),
                        ES2_OPENGL(),
                        ES2_OPENGLES(),
-                       ES2_VULKAN());
+                       ES2_VULKAN(),
+                       ES2_METAL());
 ANGLE_INSTANTIATE_TEST_ES3(CopyTextureTestES3);
 
 }  // namespace angle
