@@ -51,6 +51,24 @@
       "revId": "b0ed99f5d6980d8206f64b4b00bd6050f0cb854a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dd40f16_71053912",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T15:57:12Z",
+      "side": 1,
+      "message": "The spec for CHROMIUM_copy_texture is quite vague. We found in the Vulkan backend that this is what chromium expects. Basically an sRGB-\u003elinear copy (everything else about the format being identical) can be done with a direct copy (if not flipped, etc). Same with uint to unorm for example.",
+      "parentUuid": "d61186bc_f9c5e303",
+      "revId": "b0ed99f5d6980d8206f64b4b00bd6050f0cb854a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
