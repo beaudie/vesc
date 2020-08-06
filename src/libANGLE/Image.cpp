@@ -130,6 +130,11 @@ bool ImageSibling::isRenderable(const gl::Context *context,
     return mTargetOf->isRenderable(context);
 }
 
+bool ImageSibling::isDownscaled() const
+{
+    return false;
+}
+
 void ImageSibling::notifySiblings(angle::SubjectMessage message)
 {
     if (mTargetOf.get())

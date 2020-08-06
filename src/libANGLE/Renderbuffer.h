@@ -45,6 +45,9 @@ class RenderbufferState final : angle::NonCopyable
     MultisamplingMode getMultisamplingMode() const;
     InitState getInitState() const;
 
+    void setDownscaled(bool downscaled);
+    bool isDownscaled() const;
+
   private:
     friend class Renderbuffer;
 
@@ -63,6 +66,9 @@ class RenderbufferState final : angle::NonCopyable
 
     // For robust resource init.
     InitState mInitState;
+
+    // For the downscaleBackbufferTextures frontend feature
+    bool mDownscaled;
 };
 
 class Renderbuffer final : public RefCountObject<RenderbufferID>,
@@ -114,6 +120,7 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
     bool isRenderable(const Context *context,
                       GLenum binding,
                       const ImageIndex &imageIndex) const override;
+    bool isDownscaled() const override;
 
     void onAttach(const Context *context, rx::Serial framebufferSerial) override;
     void onDetach(const Context *context, rx::Serial framebufferSerial) override;

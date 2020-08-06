@@ -1586,6 +1586,17 @@ bool Framebuffer::hasValidDepthStencil() const
     return mState.getDepthStencilAttachment() != nullptr;
 }
 
+bool Framebuffer::isDownscaled() const
+{
+    const FramebufferAttachment *attachment = getFirstNonNullAttachment();
+    if (!attachment)
+    {
+        return false;
+    }
+
+    return attachment->isDownscaled();
+}
+
 const gl::Offset &Framebuffer::getSurfaceTextureOffset() const
 {
     return mState.getSurfaceTextureOffset();
