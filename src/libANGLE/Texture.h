@@ -171,6 +171,9 @@ class TextureState final : private angle::NonCopyable
 
     InitState getInitState() const { return mInitState; }
 
+    void setDownscaled(bool downscaled);
+    bool isDownscaled() const;
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -235,6 +238,9 @@ class TextureState final : private angle::NonCopyable
     mutable SamplerFormat mCachedSamplerFormat;
     mutable GLenum mCachedSamplerCompareMode;
     mutable bool mCachedSamplerFormatValid;
+
+    // For the downscaleBackbufferTextures frontend feature
+    bool mDownscaled;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
@@ -481,6 +487,7 @@ class Texture final : public RefCountObject<TextureID>,
     bool isRenderable(const Context *context,
                       GLenum binding,
                       const ImageIndex &imageIndex) const override;
+    bool isDownscaled() const override;
 
     bool getAttachmentFixedSampleLocations(const ImageIndex &imageIndex) const;
 

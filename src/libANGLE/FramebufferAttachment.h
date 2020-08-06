@@ -132,6 +132,7 @@ class FramebufferAttachment final
     GLenum type() const { return mType; }
     bool isAttached() const { return mType != GL_NONE; }
     bool isRenderable(const Context *context) const;
+    bool isDownscaled() const;
 
     Renderbuffer *getRenderbuffer() const;
     Texture *getTexture() const;
@@ -208,6 +209,9 @@ class FramebufferAttachmentObject : public angle::Subject, public angle::Observe
                               GLenum binding,
                               const ImageIndex &imageIndex) const                          = 0;
 
+    // Check if this attachment is using the downscaleBackbufferTextures feature
+    virtual bool isDownscaled() const = 0;
+
     virtual void onAttach(const Context *context, rx::Serial framebufferSerial) = 0;
     virtual void onDetach(const Context *context, rx::Serial framebufferSerial) = 0;
     virtual GLuint getId() const                                                = 0;
@@ -272,6 +276,12 @@ inline bool FramebufferAttachment::isRenderable(const Context *context) const
 {
     ASSERT(mResource);
     return mResource->isRenderable(context, mTarget.binding(), mTarget.textureIndex());
+}
+
+inline bool FramebufferAttachment::isDownscaled() const
+{
+    ASSERT(mResource);
+    return mResource->isDownscaled();
 }
 
 }  // namespace gl

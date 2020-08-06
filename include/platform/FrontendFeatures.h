@@ -65,6 +65,35 @@ struct FrontendFeatures : angle::FeatureSetBase
     angle::Feature allowCompressedFormats = {"allow_compressed_formats",
                                              angle::FeatureCategory::FrontendWorkarounds,
                                              "Allow compressed formats", &members};
+
+    // Downscale textures and renderbuffers with sizes matching the backbuffer for performance
+    // comparisions. ANGLE is non-conformant if this feature is enabled.  If multiple features are
+    // enabled, the highest one will be used.
+    std::array<angle::Feature, 5> downscaleBackbufferTextures = {
+        angle::Feature{"downscale_backbuffer_textures_87_5",
+                       angle::FeatureCategory::FrontendWorkarounds,
+                       "Downscale textures and renderbuffers that are the same size as the "
+                       "backbuffer to 87.5%.",
+                       &members},
+        angle::Feature{
+            "downscale_backbuffer_textures_75", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 75%.",
+            &members},
+        angle::Feature{"downscale_backbuffer_textures_62_5",
+                       angle::FeatureCategory::FrontendWorkarounds,
+                       "Downscale textures and renderbuffers that are the same size as the "
+                       "backbuffer to 62.5%.",
+                       &members},
+        angle::Feature{
+            "downscale_backbuffer_textures_50", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 50%.",
+            &members},
+        angle::Feature{"downscale_backbuffer_textures_37_5",
+                       angle::FeatureCategory::FrontendWorkarounds,
+                       "Downscale textures and renderbuffers that are the same size as the "
+                       "backbuffer to 37.5%.",
+                       &members},
+    };
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

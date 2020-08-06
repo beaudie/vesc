@@ -51,6 +51,7 @@ class ImageSibling : public gl::FramebufferAttachmentObject
     bool isRenderable(const gl::Context *context,
                       GLenum binding,
                       const gl::ImageIndex &imageIndex) const override;
+    bool isDownscaled() const override;
 
   protected:
     // Set the image target of this sibling

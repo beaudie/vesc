@@ -556,6 +556,12 @@ bool Surface::isRenderable(const gl::Context *context,
     return true;
 }
 
+bool Surface::isDownscaled() const
+{
+    // downscaleBackbufferTextures is not implemented for surfaces
+    return false;
+}
+
 GLuint Surface::getId() const
 {
     UNREACHABLE();

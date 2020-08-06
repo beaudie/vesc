@@ -556,6 +556,14 @@ bool Rectangle::encloses(const gl::Rectangle &inside) const
     return x0() <= inside.x0() && y0() <= inside.y0() && x1() >= inside.x1() && y1() >= inside.y1();
 }
 
+void Rectangle::scale(float factor)
+{
+    x      = static_cast<int>(x * factor);
+    y      = static_cast<int>(y * factor);
+    width  = static_cast<int>(width * factor);
+    height = static_cast<int>(height * factor);
+}
+
 bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection)
 {
     angle::CheckedNumeric<int> sourceX2(source.x);
@@ -638,6 +646,13 @@ bool operator==(const Offset &a, const Offset &b)
 bool operator!=(const Offset &a, const Offset &b)
 {
     return !(a == b);
+}
+
+void Extents::scale(float factor)
+{
+    width  = std::max(static_cast<int>(width * factor), 1);
+    height = std::max(static_cast<int>(height * factor), 1);
+    depth  = std::max(static_cast<int>(depth * factor), 1);
 }
 
 bool operator==(const Extents &lhs, const Extents &rhs)
