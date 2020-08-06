@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56540c70_7b59a159",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2718,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-06T19:29:31Z",
+      "side": 1,
+      "message": "Is this necessary?   Can\u0027t Serials increment forever without any problems?\n\nIf so, I would have expected to see something similar for BufferHelper:\n\n    void BufferHelper::release(RendererVk *renderer)\n    {\n        unmap(renderer);\n        mSize       \u003d 0;\n        mViewFormat \u003d nullptr;\n\n        renderer-\u003ecollectGarbageAndReinit(\u0026mUse, \u0026mBuffer, \u0026mBufferView, \u0026mAllocation);\n    }",
+      "revId": "0798daacf4e94e2afbea8f9c7f6e5b70c5b387e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "933a4bdc_4873574b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-06T19:29:31Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "0798daacf4e94e2afbea8f9c7f6e5b70c5b387e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
