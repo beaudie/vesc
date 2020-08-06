@@ -15,10 +15,13 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Image.h"
 #include "libANGLE/Renderbuffer.h"
+#include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/feature_utils.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
+#include "platform/FrontendFeatures.h"
 
 namespace gl
 {
@@ -34,7 +37,8 @@ RenderbufferState::RenderbufferState()
       mFormat(GL_RGBA4),
       mSamples(0),
       mMultisamplingMode(MultisamplingMode::Regular),
-      mInitState(InitState::MayNeedInit)
+      mInitState(InitState::MayNeedInit),
+      mDownscaled(false)
 {}
 
 RenderbufferState::~RenderbufferState() {}
@@ -84,6 +88,16 @@ void RenderbufferState::update(GLsizei width,
     mInitState         = InitState::MayNeedInit;
 }
 
+void RenderbufferState::setDownscaled(bool downscaled)
+{
+    mDownscaled = downscaled;
+}
+
+bool RenderbufferState::isDownscaled() const
+{
+    return mDownscaled;
+}
+
 // Renderbuffer implementation.
 Renderbuffer::Renderbuffer(rx::GLImplFactory *implFactory, RenderbufferID id)
     : RefCountObject(implFactory->generateSerial(), id),
@@ -122,11 +136,28 @@ angle::Result Renderbuffer::setStorage(const Context *context,
                                        GLsizei width,
                                        GLsizei height)
 {
-    ANGLE_TRY(orphanImages(context));
-    ANGLE_TRY(mImplementation->setStorage(context, internalformat, width, height));
+    Extents finalSize(static_cast<GLsizei>(width), static_cast<GLsizei>(height), 1);
+    Format formatInfo(internalformat);
 
-    mState.update(width, height, Format(internalformat), 0, MultisamplingMode::Regular,
-                  InitState::MayNeedInit);
+    if (angle::IsDownscaleBackbufferTextureEnabledForRenderbuffer(context, formatInfo, &finalSize))
+    {
+        mState.setDownscaled(true);
+        INFO() << "glRenderbufferStorage: Downscaling renderbuffer " << getId() << " from ("
+               << width << ", " << height << ") to (" << finalSize.width << ", " << finalSize.height
+               << ").";
+    }
+    else if (mState.isDownscaled())
+    {
+        mState.setDownscaled(false);
+        ERR() << "Calling glRenderbufferStorage on downscaled renderbuffer " << getId() << "!";
+    }
+
+    ANGLE_TRY(orphanImages(context));
+    ANGLE_TRY(
+        mImplementation->setStorage(context, internalformat, finalSize.width, finalSize.height));
+
+    mState.update(static_cast<GLsizei>(finalSize.width), static_cast<GLsizei>(finalSize.height),
+                  Format(internalformat), 0, MultisamplingMode::Regular, InitState::MayNeedInit);
     onStateChange(angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
@@ -139,16 +170,34 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
                                                   GLsizei height,
                                                   MultisamplingMode mode)
 {
+    Extents finalSize(static_cast<GLsizei>(width), static_cast<GLsizei>(height), 1);
+    Format formatInfo(internalformat);
+
+    if (angle::IsDownscaleBackbufferTextureEnabledForRenderbuffer(context, formatInfo, &finalSize))
+    {
+        mState.setDownscaled(true);
+        INFO() << "glRenderbufferStorageMultisample: Downscaling renderbuffer " << getId()
+               << " from (" << width << ", " << height << ") to (" << finalSize.width << ", "
+               << finalSize.height << ").";
+    }
+    else if (mState.isDownscaled())
+    {
+        mState.setDownscaled(false);
+        ERR() << "Calling glRenderbufferStorageMultisample on downscaled renderbuffer " << getId()
+              << "!";
+    }
+
     ANGLE_TRY(orphanImages(context));
 
     // Potentially adjust "samples" to a supported value
     const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
     samples                       = formatCaps.getNearestSamples(samples);
 
-    ANGLE_TRY(mImplementation->setStorageMultisample(context, samples, internalformat, width,
-                                                     height, mode));
+    ANGLE_TRY(mImplementation->setStorageMultisample(context, samples, internalformat,
+                                                     finalSize.width, finalSize.height, mode));
 
-    mState.update(width, height, Format(internalformat), samples, mode, InitState::MayNeedInit);
+    mState.update(static_cast<GLsizei>(finalSize.width), static_cast<GLsizei>(finalSize.height),
+                  Format(internalformat), samples, mode, InitState::MayNeedInit);
     onStateChange(angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
@@ -250,6 +299,11 @@ GLint Renderbuffer::getMemorySize() const
     size *= mState.mHeight;
     size *= std::max(mState.mSamples, 1);
     return size.ValueOrDefault(std::numeric_limits<GLint>::max());
+}
+
+bool Renderbuffer::isDownscaled() const
+{
+    return mState.isDownscaled();
 }
 
 void Renderbuffer::onAttach(const Context *context, rx::Serial framebufferSerial)

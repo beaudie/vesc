@@ -274,6 +274,8 @@ libangle_headers = [
   "src/libANGLE/entry_points_enum_autogen.h",
   "src/libANGLE/entry_points_utils.h",
   "src/libANGLE/features.h",
+  "src/libANGLE/feature_utils.cpp",
+  "src/libANGLE/feature_utils.h",
   "src/libANGLE/formatutils.h",
   "src/libANGLE/histogram_macros.h",
   "src/libANGLE/queryconversions.h",
