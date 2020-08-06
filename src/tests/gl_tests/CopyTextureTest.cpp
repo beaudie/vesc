@@ -2363,13 +2363,15 @@ ANGLE_INSTANTIATE_TEST_COMBINE_5(CopyTextureVariationsTest,
                                  ES2_D3D11(),
                                  ES2_OPENGL(),
                                  ES2_OPENGLES(),
-                                 ES2_VULKAN());
+                                 ES2_VULKAN(),
+                                 ES2_METAL());
 ANGLE_INSTANTIATE_TEST_ES2(CopyTextureTestWebGL);
 ANGLE_INSTANTIATE_TEST(CopyTextureTestDest,
                        ES2_D3D11(),
                        ES2_OPENGL(),
                        ES2_OPENGLES(),
-                       ES2_VULKAN());
+                       ES2_VULKAN(),
+                       ES2_METAL());
 ANGLE_INSTANTIATE_TEST_ES3(CopyTextureTestES3);
 
 }  // namespace angle
