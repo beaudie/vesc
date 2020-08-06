@@ -188,6 +188,10 @@ class TextureState final : private angle::NonCopyable
 
     InitState getInitState() const { return mInitState; }
 
+    // Textures can only go into the downscaled state, not out of it
+    void setDownscaled();
+    bool isDownscaled() const;
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -268,6 +272,9 @@ class TextureState final : private angle::NonCopyable
     mutable SamplerFormat mCachedSamplerFormat;
     mutable GLenum mCachedSamplerCompareMode;
     mutable bool mCachedSamplerFormatValid;
+
+    // For the downscaleBackbufferTextures frontend feature
+    bool mDownscaled;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
@@ -517,6 +524,8 @@ class Texture final : public RefCountObject<TextureID>,
 
     GLint getMemorySize() const;
     GLint getLevelMemorySize(TextureTarget target, GLint level) const;
+
+    bool isDownscaled() const;
 
     void signalDirtyStorage(InitState initState);
 

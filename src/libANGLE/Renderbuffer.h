@@ -44,6 +44,10 @@ class RenderbufferState final : angle::NonCopyable
     GLsizei getSamples() const;
     InitState getInitState() const;
 
+    // Renderbuffers can only go into the downscaled state, not out of it
+    void setDownscaled();
+    bool isDownscaled() const;
+
   private:
     friend class Renderbuffer;
 
@@ -60,6 +64,9 @@ class RenderbufferState final : angle::NonCopyable
 
     // For robust resource init.
     InitState mInitState;
+
+    // For the downscaleBackbufferTextures frontend feature
+    bool mDownscaled;
 };
 
 class Renderbuffer final : public RefCountObject<RenderbufferID>,
@@ -101,6 +108,8 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
     const RenderbufferState &getState() const;
 
     GLint getMemorySize() const;
+
+    bool isDownscaled() const;
 
     // FramebufferAttachmentObject Impl
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
