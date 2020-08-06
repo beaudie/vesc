@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "9a66efcb_3c1ef908",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T17:26:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcce6c30_7bdddbd9",
+      "range": {
+        "startLine": 1268,
+        "startChar": 0,
+        "endLine": 1276,
+        "endChar": 1
+      },
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c494fd61_f7aac943",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 9
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "46dc7c3d_f5687637",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T17:26:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c494fd61_f7aac943",
+      "range": {
+        "startLine": 238,
+        "startChar": 25,
+        "endLine": 238,
+        "endChar": 35
+      },
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f06a60c_907b7147",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 9
@@ -102,6 +150,30 @@
       "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af28e099_b221470f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T17:26:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f06a60c_907b7147",
+      "range": {
+        "startLine": 427,
+        "startChar": 46,
+        "endLine": 427,
+        "endChar": 47
+      },
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
