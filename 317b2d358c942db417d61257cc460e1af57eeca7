@@ -16,6 +16,121 @@
       "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97291ce7_2686e5bc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T03:01:38Z",
+      "side": 1,
+      "message": "Unnecessary if using std::string. Otherwise might as well delete it. On overflow just keeping the message truncated sounds more useful to me.",
+      "range": {
+        "startLine": 8419,
+        "startChar": 0,
+        "endLine": 8425,
+        "endChar": 5
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0638995_466faaed",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T03:01:38Z",
+      "side": 1,
+      "message": "Please use ANGLE_FORMAT_PRINTF to make sure the compiler validates parameters to this function.",
+      "range": {
+        "startLine": 635,
+        "startChar": 28,
+        "endLine": 635,
+        "endChar": 51
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19b092ce_f9c3a1cc",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T03:01:38Z",
+      "side": 1,
+      "message": "Just use a std::string?",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 29
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f4f49d_aa156b78",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T03:01:38Z",
+      "side": 1,
+      "message": "Not a valid color. Description of VkDebugUtilsLabelEXT says passing all 0s \u003d\u003d ignore, maybe that\u0027s what you want?",
+      "range": {
+        "startLine": 1060,
+        "startChar": 39,
+        "endLine": 1060,
+        "endChar": 61
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "991a4f55_c84d6cca",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T03:01:38Z",
+      "side": 1,
+      "message": "Might as well add it for `setupDispatch` too while you\u0027re at it.",
+      "range": {
+        "startLine": 1053,
+        "startChar": 0,
+        "endLine": 1063,
+        "endChar": 6
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
