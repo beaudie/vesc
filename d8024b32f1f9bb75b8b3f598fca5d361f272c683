@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e42e1fe_081784e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T14:18:55Z",
+      "side": 1,
+      "message": "PTAL. Bots are green (see previous PS, one D3D failure skipped in new PS).",
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
