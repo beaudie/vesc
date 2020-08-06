@@ -30,6 +30,18 @@ namespace gl
 class Buffer;
 class Texture;
 
+enum class Command
+{
+    Other,
+    Blit,
+    CopyImage,
+    Dispatch,
+    Draw,
+    GenerateMipmap,
+    ReadPixels,
+    TexImage
+};
+
 struct Rectangle
 {
     Rectangle() : x(0), y(0), width(0), height(0) {}
