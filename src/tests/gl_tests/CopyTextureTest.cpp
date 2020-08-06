@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "common/mathutil.h"
 #include "test_utils/gl_raii.h"
 
 namespace angle
@@ -145,6 +146,9 @@ std::string CopyTextureVariationsTestPrint(
         case GL_BGRA_EXT:
             out << "BGRA";
             break;
+        case GL_SRGB_ALPHA_EXT:
+            out << "SRGBA";
+            break;
         default:
             out << "UPDATE_THIS_SWITCH";
     }
@@ -161,6 +165,9 @@ std::string CopyTextureVariationsTestPrint(
             break;
         case GL_BGRA_EXT:
             out << "BGRA";
+            break;
+        case GL_SRGB_ALPHA_EXT:
+            out << "SRGBA";
             break;
         default:
             out << "UPDATE_THIS_SWITCH";
@@ -232,6 +239,12 @@ class CopyTextureVariationsTest : public ANGLETestWithParam<CopyTextureVariation
             return false;
         }
 
+        if ((destFormat == GL_SRGB_ALPHA_EXT || destFormat == GL_SRGB_ALPHA_EXT) &&
+            !IsGLExtensionEnabled("GL_EXT_sRGB"))
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -264,6 +277,10 @@ class CopyTextureVariationsTest : public ANGLETestWithParam<CopyTextureVariation
             case GL_BGRA_EXT:
                 color = GLColor(sourceColor[2], sourceColor[1], sourceColor[0], sourceColor[3]);
                 break;
+            case GL_SRGB_ALPHA_EXT:
+                color = GLColor(gl::sRGBToLinear(sourceColor[0]), gl::sRGBToLinear(sourceColor[1]),
+                                gl::sRGBToLinear(sourceColor[2]), sourceColor[3]);
+                break;
             default:
                 EXPECT_EQ(true, false);
         }
@@ -292,6 +309,7 @@ class CopyTextureVariationsTest : public ANGLETestWithParam<CopyTextureVariation
                 break;
             case GL_RGBA:
             case GL_BGRA_EXT:
+            case GL_SRGB_ALPHA_EXT:
                 break;
             default:
                 EXPECT_EQ(true, false);
@@ -880,7 +898,8 @@ namespace
 {
 constexpr GLenum kCopyTextureVariationsSrcFormats[] = {
     GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_BGRA_EXT};
-constexpr GLenum kCopyTextureVariationsDstFormats[] = {GL_RGB, GL_RGBA, GL_BGRA_EXT};
+constexpr GLenum kCopyTextureVariationsDstFormats[] = {GL_RGB, GL_RGBA, GL_BGRA_EXT,
+                                                       GL_SRGB_ALPHA_EXT};
 }  // anonymous namespace
 
 TEST_P(CopyTextureVariationsTest, CopyTexture)
@@ -1637,6 +1656,7 @@ TEST_P(CopyTextureTestDest, AlphaCopyWithRGB)
     // http://anglebug.com/4121
     ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux() && IsOpenGLES());
     ANGLE_SKIP_TEST_IF(!checkExtensions());
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_half_float"));
 
     GLColor originalPixels(50u, 100u, 150u, 155u);
     GLColor expectedPixels(0u, 0u, 0u, 155u);
@@ -2363,13 +2383,15 @@ ANGLE_INSTANTIATE_TEST_COMBINE_5(CopyTextureVariationsTest,
                                  ES2_D3D11(),
                                  ES2_OPENGL(),
                                  ES2_OPENGLES(),
-                                 ES2_VULKAN());
+                                 ES2_VULKAN(),
+                                 ES2_METAL());
 ANGLE_INSTANTIATE_TEST_ES2(CopyTextureTestWebGL);
 ANGLE_INSTANTIATE_TEST(CopyTextureTestDest,
                        ES2_D3D11(),
                        ES2_OPENGL(),
                        ES2_OPENGLES(),
-                       ES2_VULKAN());
+                       ES2_VULKAN(),
+                       ES2_METAL());
 ANGLE_INSTANTIATE_TEST_ES3(CopyTextureTestES3);
 
 }  // namespace angle
