@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fbd656b3_6196a2e1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T20:19:08Z",
+      "side": 1,
+      "message": "_1 is wrong. If the texture is truly multisampled, then index 0 will actually be a multisampled image.\n\nI don\u0027t mind putting it in angletypes.h, but I\u0027d like to again emphasize that this is a special MSRTT thing.\n\nHow about these enum values?\n\n    enum class TextureImageIndex // or maybe some better name\n    {\n        // The default image of the texture, where data is expected to be.\n        Default \u003d 0,\n        // Intermediate multisampled images for EXT_multisampled_render_to_texture.\n        MultisampledRenderToTextureIntermediateImage2xMSAA \u003d 1,\n        MultisampledRenderToTextureIntermediateImage4xMSAA \u003d 2,\n        MultisampledRenderToTextureIntermediateImage8xMSAA \u003d 3,\n        MultisampledRenderToTextureIntermediateImage16xMSAA \u003d 4,\n\n        // We currently only support up to 16xMSAA.\n        InvalidEnum \u003d 5,\n        EnumCount   \u003d 5,\n    };",
+      "parentUuid": "a09943fd_4ff207b3",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60bcf805_e523c0d4",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 10
@@ -93,6 +117,30 @@
       "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c994a4_21d950a9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T20:19:08Z",
+      "side": 1,
+      "message": "You could check in assembly Tim, but I bet there are 0 instructions added due to this indexing. The index expression is a constant 0, so `\u0026mMultisampledImageViews` and `\u0026mMultisampledImageViews[0]` are identical. In turn, `\u0026mMultisampledImageViews` is `this + some_constant`. `\u0026mImageViews` is also `this + some_constant`. If `mImageViews` was a separate variable, the assembly generated to access it should be identical (short of `some_constant` being another constant). (Mind you, if the index expression was another constant, the compiler would still generate `this + some_constant` to directly get to it. I.e. the constant index being 0 is not relevant).\n\nNote that this array is indexed directly by log(samples), so having default\u003d0 works out nicely elsewhere.",
+      "parentUuid": "264e8f02_7ebcf541",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 5
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -147,6 +195,30 @@
       "writtenOn": "2020-08-06T19:22:45Z",
       "side": 1,
       "message": "nit: have this return your enum",
+      "range": {
+        "startLine": 789,
+        "startChar": 0,
+        "endLine": 789,
+        "endChar": 42
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0c4a25a_8efa4558",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T20:19:08Z",
+      "side": 1,
+      "message": "This is used by RenderPassDesc too, where that enum doesn\u0027t make sense.",
+      "parentUuid": "6b4973b6_4e334974",
       "range": {
         "startLine": 789,
         "startChar": 0,
