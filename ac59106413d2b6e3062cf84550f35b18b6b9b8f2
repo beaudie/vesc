@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "f6a0fb3e_8d6ed5a2",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-06T17:46:44Z",
+      "side": 1,
+      "message": "very minor nit: supports*\nAlso can capitalize IOS because of CamelCase",
+      "range": {
+        "startLine": 111,
+        "startChar": 2,
+        "endLine": 113,
+        "endChar": 54
+      },
+      "revId": "ac59106413d2b6e3062cf84550f35b18b6b9b8f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d51b66b0_7a6e18a2",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-06T17:46:44Z",
+      "side": 1,
+      "message": "nit: Can you make this a friendly variable and put this into the ANGLE_FEATURE_CONDITION so it\u0027s exposed to users in the feature description?",
+      "range": {
+        "startLine": 665,
+        "startChar": 4,
+        "endLine": 665,
+        "endChar": 53
+      },
+      "revId": "ac59106413d2b6e3062cf84550f35b18b6b9b8f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b95b3cb7_d418fbb9",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-06T17:46:44Z",
+      "side": 1,
+      "message": "Wrap in ANGLE_FEATURE_CONDITION",
+      "range": {
+        "startLine": 671,
+        "startChar": 4,
+        "endLine": 671,
+        "endChar": 54
+      },
+      "revId": "ac59106413d2b6e3062cf84550f35b18b6b9b8f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4f531836_b6917830",
         "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
         "patchSetId": 8
