@@ -15,9 +15,11 @@
 #include "libANGLE/Image.h"
 #include "libANGLE/State.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/feature_utils.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/TextureImpl.h"
+#include "platform/FrontendFeatures.h"
 
 namespace gl
 {
@@ -137,7 +139,8 @@ TextureState::TextureState(TextureType type)
       mInitState(InitState::MayNeedInit),
       mCachedSamplerFormat(SamplerFormat::InvalidEnum),
       mCachedSamplerCompareMode(GL_NONE),
-      mCachedSamplerFormatValid(false)
+      mCachedSamplerFormatValid(false),
+      mDownscaled(false)
 {}
 
 TextureState::~TextureState() {}
@@ -672,6 +675,16 @@ void TextureState::clearImageDescs()
     }
 }
 
+void TextureState::setDownscaled(bool downscaled)
+{
+    mDownscaled = downscaled;
+}
+
+bool TextureState::isDownscaled() const
+{
+    return mDownscaled;
+}
+
 Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
     : RefCountObject(factory->generateSerial(), id),
       mState(type),
@@ -1068,6 +1081,11 @@ GLint Texture::getLevelMemorySize(TextureTarget target, GLint level) const
     return mState.getImageDesc(target, level).getMemorySize();
 }
 
+bool Texture::isDownscaled() const
+{
+    return mState.isDownscaled();
+}
+
 void Texture::signalDirtyStorage(InitState initState)
 {
     mState.mInitState = initState;
@@ -1101,13 +1119,29 @@ angle::Result Texture::setImage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
-    ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
+    Extents finalSize = size;
+    Format formatInfo(internalFormat, type);
 
-    ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size, format, type, unpackState,
-                                 unpackBuffer, pixels));
+    if (angle::IsDownscaleBackbufferTextureEnabledForTexture(context, TextureTargetToType(target),
+                                                             formatInfo, level, &finalSize))
+    {
+        mState.setDownscaled(true);
+        INFO() << "glTexImage2D: Downscaling texture " << getId() << " from (" << size.width << ", "
+               << size.height << ") to (" << finalSize.width << ", " << finalSize.height << ").";
+    }
+    else if (mState.isDownscaled())
+    {
+        mState.setDownscaled(false);
+        ERR() << "Calling glTexImage on downscaled texture " << getId() << "!";
+    }
+
+    ImageIndex index = ImageIndex::MakeFromTarget(target, level, finalSize.depth);
+
+    ANGLE_TRY(mTexture->setImage(context, index, internalFormat, finalSize, format, type,
+                                 unpackState, unpackBuffer, pixels));
 
     InitState initState = DetermineInitState(context, unpackBuffer, pixels);
-    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
+    mState.setImageDesc(target, level, ImageDesc(finalSize, formatInfo, initState));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1127,6 +1161,11 @@ angle::Result Texture::setSubImage(Context *context,
                                    const uint8_t *pixels)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
+
+    if (mState.isDownscaled())
+    {
+        ERR() << "Calling glTexSubImage on downscaled texture " << getId() << "!";
+    }
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, area.depth);
     ANGLE_TRY(ensureSubImageInitialized(context, index, area));
@@ -1151,6 +1190,11 @@ angle::Result Texture::setCompressedImage(Context *context,
                                           const uint8_t *pixels)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
+
+    if (mState.isDownscaled())
+    {
+        ERR() << "Calling glCompressedTexImage on downscaled texture " << getId() << "!";
+    }
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     ANGLE_TRY(releaseTexImageInternal(context));
@@ -1181,6 +1225,11 @@ angle::Result Texture::setCompressedSubImage(const Context *context,
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
+    if (mState.isDownscaled())
+    {
+        ERR() << "Calling glCompressedTexSubImage on downscaled texture " << getId() << "!";
+    }
+
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, area.depth);
     ANGLE_TRY(ensureSubImageInitialized(context, index, area));
 
@@ -1200,6 +1249,11 @@ angle::Result Texture::copyImage(Context *context,
                                  Framebuffer *source)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
+
+    if (mState.isDownscaled())
+    {
+        ERR() << "Calling glCopyTexImage to downscaled texture " << getId() << "!";
+    }
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     ANGLE_TRY(releaseTexImageInternal(context));
@@ -1274,6 +1328,11 @@ angle::Result Texture::copySubImage(Context *context,
                                     Framebuffer *source)
 {
     ASSERT(TextureTargetToType(index.getTarget()) == mState.mType);
+
+    if (mState.isDownscaled())
+    {
+        ERR() << "Calling glCopyTexSubImage on downscaled texture " << getId() << "!";
+    }
 
     // Most if not all renderers clip these copies to the size of the source framebuffer, leaving
     // other pixels untouched. For safety in robust resource initialization, assume that that
@@ -1403,13 +1462,29 @@ angle::Result Texture::setStorage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
+    Format formatInfo(internalFormat);
+    Extents finalSize = size;
+
+    if (angle::IsDownscaleBackbufferTextureEnabledForTexture(context, type, formatInfo, 0,
+                                                             &finalSize))
+    {
+        mState.setDownscaled(false);
+        mState.setDownscaled(true);
+        INFO() << "glTexStorage: downscaling texture " << getId() << " from (" << size.width << ", "
+               << size.height << ") to (" << finalSize.width << ", " << finalSize.height << ").";
+    }
+    else if (mState.isDownscaled())
+    {
+        ERR() << "Calling glTexStorage on downscaled texture " << getId() << "!";
+    }
+
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(levels);
 
-    ANGLE_TRY(mTexture->setStorage(context, type, levels, internalFormat, size));
+    ANGLE_TRY(mTexture->setStorage(context, type, levels, internalFormat, finalSize));
 
     mState.clearImageDescs();
-    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
+    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), finalSize, formatInfo,
                              InitState::MayNeedInit);
 
     // Changing the texture to immutable can trigger a change in the base and max levels:
@@ -1465,17 +1540,34 @@ angle::Result Texture::setStorageMultisample(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
+    Format formatInfo(internalFormat);
+    Extents finalSize = size;
+
+    if (angle::IsDownscaleBackbufferTextureEnabledForTexture(context, type, formatInfo, 0,
+                                                             &finalSize))
+    {
+        mState.setDownscaled(true);
+        INFO() << "glTexStorageMultisample: downscaling texture " << getId() << " from ("
+               << size.width << ", " << size.height << ") to (" << finalSize.width << ", "
+               << finalSize.height << ").";
+    }
+    else if (mState.isDownscaled())
+    {
+        mState.setDownscaled(false);
+        ERR() << "Calling glTexStorage on downscaled texture " << getId() << "!";
+    }
+
     // Potentially adjust "samples" to a supported value
     const TextureCaps &formatCaps = context->getTextureCaps().get(internalFormat);
     samples                       = formatCaps.getNearestSamples(samples);
 
-    ANGLE_TRY(mTexture->setStorageMultisample(context, type, samples, internalFormat, size,
+    ANGLE_TRY(mTexture->setStorageMultisample(context, type, samples, internalFormat, finalSize,
                                               fixedSampleLocations));
 
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(1);
     mState.clearImageDescs();
-    mState.setImageDescChainMultisample(size, Format(internalFormat), samples, fixedSampleLocations,
+    mState.setImageDescChainMultisample(size, formatInfo, samples, fixedSampleLocations,
                                         InitState::MayNeedInit);
 
     signalDirtyStorage(InitState::MayNeedInit);

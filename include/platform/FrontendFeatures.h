@@ -65,6 +65,36 @@ struct FrontendFeatures : angle::FeatureSetBase
     angle::Feature allowCompressedFormats = {"allow_compressed_formats",
                                              angle::FeatureCategory::FrontendWorkarounds,
                                              "Allow compressed formats", &members};
+
+    // Downscale textures and renderbuffers with sizes matching the backbuffer for performance
+    // comparisions. ANGLE is non-conformant if this feature is enabled.  If multiple features are
+    // enabled, the highest one will be used.
+    std::array<angle::Feature, 6> downscaleBackbufferTextures = {
+        angle::Feature{
+            "downscale_backbuffer_textures_90", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 90%.",
+            &members},
+        angle::Feature{
+            "downscale_backbuffer_textures_80", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 80%.",
+            &members},
+        angle::Feature{
+            "downscale_backbuffer_textures_70", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 70%.",
+            &members},
+        angle::Feature{
+            "downscale_backbuffer_textures_60", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 60%.",
+            &members},
+        angle::Feature{
+            "downscale_backbuffer_textures_50", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 50%.",
+            &members},
+        angle::Feature{
+            "downscale_backbuffer_textures_40", angle::FeatureCategory::FrontendWorkarounds,
+            "Downscale textures and renderbuffers that are the same size as the backbuffer to 40%.",
+            &members},
+    };
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
