@@ -16,6 +16,92 @@
       "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "702aa440_b8deae77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T15:00:52Z",
+      "side": 1,
+      "message": "Would recommend using a typed enum for the sample count.",
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fcce6c30_7bdddbd9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T15:00:52Z",
+      "side": 1,
+      "message": "nit: probably should be inlined in the header",
+      "range": {
+        "startLine": 1268,
+        "startChar": 0,
+        "endLine": 1276,
+        "endChar": 1
+      },
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c494fd61_f7aac943",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T15:00:52Z",
+      "side": 1,
+      "message": "nit: use get to prefix for consistency with ANGLE code.",
+      "range": {
+        "startLine": 238,
+        "startChar": 25,
+        "endLine": 238,
+        "endChar": 35
+      },
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f06a60c_907b7147",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T15:00:52Z",
+      "side": 1,
+      "message": "nit: could make this clear using an enum with the 5 values, and using PackedEnumMap instead of std::array",
+      "range": {
+        "startLine": 427,
+        "startChar": 46,
+        "endLine": 427,
+        "endChar": 47
+      },
+      "revId": "d8024b32f1f9bb75b8b3f598fca5d361f272c683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
