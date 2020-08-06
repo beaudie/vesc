@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96ff0f4b_9643e357",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4329,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-06T18:01:27Z",
+      "side": 1,
+      "message": "Nit. I find the new API name is a bit confusing, not sure if others feel the same. Would be better to change to something like isUsingBuffer(). Or canAccumulateRead makes it more clear to me.",
+      "range": {
+        "startLine": 4329,
+        "startChar": 36,
+        "endLine": 4329,
+        "endChar": 54
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67883fa7_bcbada5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-06T18:01:27Z",
+      "side": 1,
+      "message": "What if a buffer is first used as Write and then used as Read, this will only keep the last usage. It should be OR in all usage, right?",
+      "range": {
+        "startLine": 592,
+        "startChar": 4,
+        "endLine": 592,
+        "endChar": 65
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5439d868_00e69b45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-06T18:01:27Z",
+      "side": 1,
+      "message": "Nit, Maybe change to aliasingMode \u003d\u003d BufferAliasingMode::Disallowed?",
+      "range": {
+        "startLine": 612,
+        "startChar": 8,
+        "endLine": 612,
+        "endChar": 51
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea1575e1_c50bd3ae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-06T18:01:27Z",
+      "side": 1,
+      "message": "reset is not called by command buffer initialize function, will it still get initialized properly (mostly asking, I am not a C++ expert here)?",
+      "range": {
+        "startLine": 912,
+        "startChar": 4,
+        "endLine": 912,
+        "endChar": 17
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
