@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3b7ddad5_b366fc43",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T16:00:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69b04f71_8d74d5cd",
+      "revId": "b037d10e77ade017073d166781acd8476ba79f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd220829_4032acb3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 13
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "f9f65ff4_a9f3c3f1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4347,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T16:00:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd220829_4032acb3",
+      "range": {
+        "startLine": 4347,
+        "startChar": 19,
+        "endLine": 4347,
+        "endChar": 31
+      },
+      "revId": "b037d10e77ade017073d166781acd8476ba79f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "587bb244_9832052b",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 13
@@ -79,6 +121,30 @@
       "revId": "b037d10e77ade017073d166781acd8476ba79f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7a8a0d0_521d193c",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T16:00:41Z",
+      "side": 1,
+      "message": "The counter was named incorrectly. It\u0027s the count of flushed outside RP command buffers. Renamed in a prior commit.",
+      "parentUuid": "587bb244_9832052b",
+      "range": {
+        "startLine": 168,
+        "startChar": 52,
+        "endLine": 168,
+        "endChar": 75
+      },
+      "revId": "b037d10e77ade017073d166781acd8476ba79f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
