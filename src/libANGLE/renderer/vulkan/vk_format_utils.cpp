@@ -208,6 +208,16 @@ bool Format::hasEmulatedImageChannels() const
            (angleFmt.stencilBits == 0 && textureFmt.stencilBits > 0);
 }
 
+bool Format::hasEmulatedAlphaChannelOnly() const
+{
+    const angle::Format &angleFmt   = intendedFormat();
+    const angle::Format &textureFmt = actualImageFormat();
+
+    return (angleFmt.alphaBits == 0 && textureFmt.alphaBits > 0) &&
+           (angleFmt.blueBits == textureFmt.blueBits) &&
+           (angleFmt.greenBits == textureFmt.greenBits) && (angleFmt.redBits == textureFmt.redBits);
+}
+
 bool operator==(const Format &lhs, const Format &rhs)
 {
     return &lhs == &rhs;
