@@ -1,0 +1,89 @@
+Tests are still running. Remaining workers: 3. Unstarted jobs: 3
+Starting 8 tests on worker 0. Unstarted jobs: 2
+Starting 8 tests on worker 1. Unstarted jobs: 1
+Starting 8 tests on worker 2. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Tests are still running. Remaining workers: 3. Unstarted jobs: 0
+Passed: 
+	Texture2DTest.CopySubImageFloat_RG_R/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RG_RG/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGB_R/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGB_RG/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGB_RGB/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGBA_R/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGBA_RG/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGBA_RGB/ES2_Vulkan
+
+Passed: 
+	Texture2DTest.CopySubImageFloat_RGBA_RGBA/ES2_Vulkan
+	Texture2DTest.TextureNPOT_GL_ALPHA_UBYTE/ES2_Vulkan
+	Texture2DTest.NPOTSubImageParameters/ES2_Vulkan
+	Texture2DTest.TextureLuminanceImplicitAlpha1/ES2_Vulkan
+	Texture2DTest.TextureLuminanceRGBSame/ES2_Vulkan
+	Texture2DTest.TextureLuminanceAlphaRGBSame/ES2_Vulkan
+	Texture2DTest.TextureLuminance32ImplicitAlpha1/ES2_Vulkan
+	Texture2DTest.TextureLuminance16ImplicitAlpha1/ES2_Vulkan
+
+Passed: 
+	Texture2DTest.NegativeAPISubImage/ES2_Vulkan
+	Texture2DTest.QueryBinding/ES2_Vulkan
+	Texture2DTest.ZeroSizedUploads/ES2_Vulkan
+	Texture2DTest.DefineMultipleLevelsWithoutMipmapping/ES2_Vulkan
+	Texture2DTest.TexStorage/ES2_Vulkan
+	Texture2DTest.TexStorageWithPBO/ES2_Vulkan
+	Texture2DTest.PBOWithMultipleDraws/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_R_R/ES2_Vulkan
+
+
+
+
+
+Results:
+Passed: 
+	Texture2DTest.CopySubImageFloat_RG_R/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RG_RG/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGB_R/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGB_RG/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGB_RGB/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGBA_R/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGBA_RG/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_RGBA_RGB/ES2_Vulkan
+
+Passed: 
+	Texture2DTest.CopySubImageFloat_RGBA_RGBA/ES2_Vulkan
+	Texture2DTest.TextureNPOT_GL_ALPHA_UBYTE/ES2_Vulkan
+	Texture2DTest.NPOTSubImageParameters/ES2_Vulkan
+	Texture2DTest.TextureLuminanceImplicitAlpha1/ES2_Vulkan
+	Texture2DTest.TextureLuminanceRGBSame/ES2_Vulkan
+	Texture2DTest.TextureLuminanceAlphaRGBSame/ES2_Vulkan
+	Texture2DTest.TextureLuminance32ImplicitAlpha1/ES2_Vulkan
+	Texture2DTest.TextureLuminance16ImplicitAlpha1/ES2_Vulkan
+
+Passed: 
+	Texture2DTest.NegativeAPISubImage/ES2_Vulkan
+	Texture2DTest.QueryBinding/ES2_Vulkan
+	Texture2DTest.ZeroSizedUploads/ES2_Vulkan
+	Texture2DTest.DefineMultipleLevelsWithoutMipmapping/ES2_Vulkan
+	Texture2DTest.TexStorage/ES2_Vulkan
+	Texture2DTest.TexStorageWithPBO/ES2_Vulkan
+	Texture2DTest.PBOWithMultipleDraws/ES2_Vulkan
+	Texture2DTest.CopySubImageFloat_R_R/ES2_Vulkan
+
+
+
+
+Elapsed time: 254.12552690505981 seconds
+Passed: 24 Failed: 0 Crashed: 0 CompileFailed: 0 Skipped: 0 Timeout: 0
+Failed tests:
+Crashed tests:
+Compile failed tests:
+Skipped tests:
+Timeout tests:
