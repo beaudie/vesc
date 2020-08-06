@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "058e40c7_3af5f016",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2718,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:56:59Z",
+      "side": 1,
+      "message": "I did this for validation purposes. In a few places I have checks that a serial is valid and this caught some places where I was missing regeneration. We should keep these even if they\u0027re not strictly necessary.",
+      "parentUuid": "56540c70_7b59a159",
+      "revId": "0798daacf4e94e2afbea8f9c7f6e5b70c5b387e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "933a4bdc_4873574b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 18
@@ -50,6 +68,24 @@
       "revId": "0798daacf4e94e2afbea8f9c7f6e5b70c5b387e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdd139e4_ba7fc67a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:56:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "933a4bdc_4873574b",
+      "revId": "0798daacf4e94e2afbea8f9c7f6e5b70c5b387e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
