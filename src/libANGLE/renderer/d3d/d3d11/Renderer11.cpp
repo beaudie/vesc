@@ -1438,14 +1438,8 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
     D3D11_TEXTURE2D_DESC desc = {};
     d3dTexture->GetDesc(&desc);
 
-    if (width)
-    {
-        *width = static_cast<EGLint>(desc.Width);
-    }
-    if (height)
-    {
-        *height = static_cast<EGLint>(desc.Height);
-    }
+    EGLint imageWidth  = static_cast<EGLint>(desc.Width);
+    EGLint imageHeight = static_cast<EGLint>(desc.Height);
 
     GLsizei sampleCount = static_cast<GLsizei>(desc.SampleDesc.Count);
     if (configuration && (configuration->samples != sampleCount))
@@ -1459,40 +1453,71 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
             return egl::EglBadParameter() << "Texture's sample count does not match.";
         }
     }
-    if (samples)
-    {
-        // EGL samples 0 corresponds to D3D11 sample count 1.
-        *samples = sampleCount != 1 ? sampleCount : 0;
-    }
+
+    const angle::Format *textureAngleFormat = nullptr;
+
+    const GLenum internalFormat =
+        static_cast<GLenum>(attribs.get(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_NONE));
 
     // From table egl.restrictions in EGL_ANGLE_d3d_texture_client_buffer.
-    switch (desc.Format)
+    if (desc.Format == DXGI_FORMAT_NV12 || desc.Format == DXGI_FORMAT_P010 ||
+        desc.Format == DXGI_FORMAT_P016)
     {
-        case DXGI_FORMAT_R8G8B8A8_UNORM:
-        case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
-        case DXGI_FORMAT_R8G8B8A8_TYPELESS:
-        case DXGI_FORMAT_B8G8R8A8_UNORM:
-        case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
-        case DXGI_FORMAT_B8G8R8A8_TYPELESS:
-        case DXGI_FORMAT_R16G16B16A16_FLOAT:
-        case DXGI_FORMAT_R32G32B32A32_FLOAT:
-        case DXGI_FORMAT_R10G10B10A2_UNORM:
-            break;
-
-        default:
+        if (!attribs.contains(EGL_D3D11_TEXTURE_PLANE_ANGLE))
+        {
             return egl::EglBadParameter()
-                   << "Invalid client buffer texture format: " << desc.Format;
+                   << "EGL_D3D11_TEXTURE_PLANE_ANGLE must be specified for YUV textures.";
+        }
+
+        EGLint plane = attribs.getAsInt(EGL_D3D11_TEXTURE_PLANE_ANGLE);
+
+        // P010 and P016 have the same memory layout, SRV/RTV format, etc.
+        const bool isNV12 = (desc.Format == DXGI_FORMAT_NV12);
+        if (plane == 0)
+        {
+            textureAngleFormat = isNV12 ? &angle::Format::Get(angle::FormatID::R8_UNORM)
+                                        : &angle::Format::Get(angle::FormatID::R16_UNORM);
+        }
+        else if (plane == 1)
+        {
+            textureAngleFormat = isNV12 ? &angle::Format::Get(angle::FormatID::R8G8_UNORM)
+                                        : &angle::Format::Get(angle::FormatID::R16G16_UNORM);
+            imageWidth /= 2;
+            imageHeight /= 2;
+        }
+        else
+        {
+            return egl::EglBadParameter() << "Invalid client buffer texture plane: " << plane;
+        }
+
+        if (internalFormat != textureAngleFormat->glInternalFormat)
+        {
+            return egl::EglBadParameter()
+                   << "Invalid client buffer internal format: " << std::hex << internalFormat;
+        }
     }
-
-    const angle::Format *textureAngleFormat = &d3d11_angle::GetFormat(desc.Format);
-    ASSERT(textureAngleFormat);
-
-    GLenum sizedInternalFormat = textureAngleFormat->glInternalFormat;
-
-    if (attribs.contains(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE))
+    else
     {
-        const GLenum internalFormat =
-            static_cast<GLenum>(attribs.get(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE));
+        switch (desc.Format)
+        {
+            case DXGI_FORMAT_R8G8B8A8_UNORM:
+            case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+            case DXGI_FORMAT_R8G8B8A8_TYPELESS:
+            case DXGI_FORMAT_B8G8R8A8_UNORM:
+            case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+            case DXGI_FORMAT_B8G8R8A8_TYPELESS:
+            case DXGI_FORMAT_R16G16B16A16_FLOAT:
+            case DXGI_FORMAT_R32G32B32A32_FLOAT:
+            case DXGI_FORMAT_R10G10B10A2_UNORM:
+                break;
+
+            default:
+                return egl::EglBadParameter()
+                       << "Invalid client buffer texture format: " << desc.Format;
+        }
+
+        textureAngleFormat = &d3d11_angle::GetFormat(desc.Format);
+
         switch (internalFormat)
         {
             case GL_RGBA:
@@ -1504,23 +1529,29 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
                        << "Invalid client buffer texture internal format: " << std::hex
                        << internalFormat;
         }
+    }
+    ASSERT(textureAngleFormat);
 
-        const GLenum type = gl::GetSizedInternalFormatInfo(sizedInternalFormat).type;
+    if (width)
+    {
+        *width = imageWidth;
+    }
+    if (height)
+    {
+        *height = imageHeight;
+    }
 
-        const auto format = gl::Format(internalFormat, type);
-        if (!format.valid())
-        {
-            return egl::EglBadParameter()
-                   << "Invalid client buffer texture internal format: " << std::hex
-                   << internalFormat;
-        }
-
-        sizedInternalFormat = format.info->sizedInternalFormat;
+    if (samples)
+    {
+        // EGL samples 0 corresponds to D3D11 sample count 1.
+        *samples = sampleCount != 1 ? sampleCount : 0;
     }
 
     if (glFormat)
     {
-        *glFormat = gl::Format(sizedInternalFormat);
+        const auto defaultFormat = gl::Format(textureAngleFormat->glInternalFormat);
+        *glFormat = gl::Format(internalFormat ? internalFormat : defaultFormat.info->internalFormat,
+                               defaultFormat.info->type);
     }
 
     if (angleFormat)
