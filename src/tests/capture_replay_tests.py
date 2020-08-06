@@ -19,17 +19,18 @@ Script testing capture_replay with angle_end2end_tests
 # Run this script with Python to test capture replay on angle_end2end tests
 # python path/to/capture_replay_tests.py
 # Command line arguments:
-# --capture_build_dir: specifies capture build directory relative to angle folder.
+# --capture-build-dir: specifies capture build directory relative to angle folder.
 # Default is out/CaptureDebug
-# --replay_build_dir: specifies replay build directory relative to angle folder.
+# --replay-build-dir: specifies replay build directory relative to angle folder.
 # Default is out/ReplayDebug
-# --use_goma: uses goma for compiling and linking test. Off by default
+# --use-goma: uses goma for compiling and linking test. Off by default
 # --gtest_filter: same as gtest_filter of Google's test framework. Default is */ES2_Vulkan
-# --test_suite: test suite to execute on. Default is angle_end2end_tests
-# --batch_count: number of tests in a batch. Default is 8
-# --keep_temp_files: whether to keep the temp files and folders. Off by default
-# --goma_dir: set goma directory. Default is the system's default
-# --output_to_file: whether to write output to output.txt. Off by default
+# --test-suite: test suite to execute on. Default is angle_end2end_tests
+# --batch-count: number of tests in a batch. Default is 8
+# --keep-temp-files: whether to keep the temp files and folders. Off by default
+# --goma-dir: set goma directory. Default is the system's default
+# --output-to-file: whether to write output to output.txt. Off by default
+# --verbose: Off by default
 
 import argparse
 import distutils.util
@@ -237,6 +238,8 @@ class ChildProcessesManager():
         try:
             returncode, output = self.subprocesses[subprocess_id].BlockingRun(timeout)
             self.RemoveSubprocess(subprocess_id)
+            if returncode != 0:
+                return -1, output
             return returncode, output
         except KeyboardInterrupt:
             raise
@@ -388,8 +391,10 @@ def WriteAngleTraceGLHeader():
 class GroupedResult():
     Passed = "Passed"
     Failed = "Failed"
+    TimedOut = "Timeout"
+    Crashed = "Crashed"
+    CompileFailed = "CompileFailed"
     Skipped = "Skipped"
-    Timeout = "Timeout"
 
     def __init__(self, resultcode, message, output, tests):
         self.resultcode = resultcode
@@ -402,11 +407,16 @@ class GroupedResult():
 
 class TestBatchResult():
 
-    def __init__(self, grouped_results):
+    display_output_lines = 200
+
+    def __init__(self, grouped_results, verbose):
         self.passes = []
         self.fails = []
-        self.skips = []
         self.timeouts = []
+        self.crashes = []
+        self.compile_fails = []
+        self.skips = []
+
         for grouped_result in grouped_results:
             if grouped_result.resultcode == GroupedResult.Passed:
                 for test in grouped_result.tests:
@@ -414,27 +424,41 @@ class TestBatchResult():
             elif grouped_result.resultcode == GroupedResult.Failed:
                 for test in grouped_result.tests:
                     self.fails.append(test.full_test_name)
+            elif grouped_result.resultcode == GroupedResult.TimedOut:
+                for test in grouped_result.tests:
+                    self.timeouts.append(test.full_test_name)
+            elif grouped_result.resultcode == GroupedResult.Crashed:
+                for test in grouped_result.tests:
+                    self.crashes.append(test.full_test_name)
+            elif grouped_result.resultcode == GroupedResult.CompileFailed:
+                for test in grouped_result.tests:
+                    self.compile_fails.append(test.full_test_name)
             elif grouped_result.resultcode == GroupedResult.Skipped:
                 for test in grouped_result.tests:
                     self.skips.append(test.full_test_name)
-            elif grouped_result.resultcode == GroupedResult.Timeout:
-                for test in grouped_result.tests:
-                    self.timeouts.append(test.full_test_name)
+
         self.repr_str = ""
-        self.GenerateRepresentationString(grouped_results)
+        self.GenerateRepresentationString(grouped_results, verbose)
 
     def __str__(self):
         return self.repr_str
 
-    def GenerateRepresentationString(self, grouped_results):
+    def GenerateRepresentationString(self, grouped_results, verbose):
         self.repr_str += "TestBatch\n"
         for grouped_result in grouped_results:
             self.repr_str += grouped_result.resultcode + ": " + grouped_result.message + "\n"
             for test in grouped_result.tests:
                 self.repr_str += "\t" + test.full_test_name + "\n"
-            self.repr_str += "\n"
-            self.repr_str += grouped_result.output
-        self.repr_str += "-" * 30 + "\n"
+            self.repr_str += "Output: "
+            if verbose:
+                self.repr_str += grouped_result.output
+            else:
+                self.repr_str += TestBatchResult.GetAbbreviatedOutput(grouped_result.output)
+
+    def GetAbbreviatedOutput(output):
+        lines = output.splitlines()
+        return "".join([lines[-1 - i] + "\n" \
+            for i in range(min(len(lines), TestBatchResult.display_output_lines)-1, -1, -1)])
 
 
 class Test():
@@ -479,12 +503,13 @@ class Test():
 
 class TestBatch():
 
-    def __init__(self, use_goma, batch_count, keep_temp_files, goma_dir):
+    def __init__(self, use_goma, batch_count, keep_temp_files, goma_dir, verbose):
         self.use_goma = use_goma
         self.tests = []
         self.batch_count = batch_count
         self.keep_temp_files = keep_temp_files
         self.goma_dir = goma_dir
+        self.verbose = verbose
         self.results = []
 
     def Run(self, test_exe_path, trace_folder_path, child_processes_manager):
@@ -502,11 +527,11 @@ class TestBatch():
             capture_proc_id, SUBPROCESS_TIMEOUT)
         if returncode == -1:
             self.results.append(
-                GroupedResult(GroupedResult.Skipped, "Capture run crashed", output, self.tests))
+                GroupedResult(GroupedResult.Crashed, "Capture run crashed", output, self.tests))
             return False
         elif returncode == -2:
             self.results.append(
-                GroupedResult(GroupedResult.Timeout, "Capture run timed out", "", self.tests))
+                GroupedResult(GroupedResult.TimedOut, "Capture run timed out", "", self.tests))
             return False
         return True
 
@@ -544,7 +569,7 @@ class TestBatch():
         returncode, output = child_processes_manager.RunSubprocessBlocking(gn_proc_id)
         if returncode != 0:
             self.results.append(
-                GroupedResult(GroupedResult.Skipped, "Build replay failed at gn generation",
+                GroupedResult(GroupedResult.CompileFailed, "Build replay failed at gn generation",
                               output, tests))
             return False
         autoninja_command = CreateAutoninjaCommand(autoninja_path, build_dir, replay_exec)
@@ -552,8 +577,8 @@ class TestBatch():
         returncode, output = child_processes_manager.RunSubprocessBlocking(autoninja_proc_id)
         if returncode != 0:
             self.results.append(
-                GroupedResult(GroupedResult.Skipped, "Build replay failed at compilation", output,
-                              tests))
+                GroupedResult(GroupedResult.CompileFailed, "Build replay failed at autoninja",
+                              output, tests))
             return False
         return True
 
@@ -565,11 +590,11 @@ class TestBatch():
             replay_proc_id, SUBPROCESS_TIMEOUT)
         if returncode == -1:
             self.results.append(
-                GroupedResult(GroupedResult.Failed, "Replay run crashed", output, tests))
+                GroupedResult(GroupedResult.Crashed, "Replay run crashed", output, tests))
             return
         elif returncode == -2:
             self.results.append(
-                GroupedResult(GroupedResult.Timeout, "Replay run timed out", "", tests))
+                GroupedResult(GroupedResult.TimedOut, "Replay run timed out", "", tests))
             return
         output_lines = output.splitlines()
         passes = []
@@ -686,7 +711,7 @@ class TestBatch():
         return iter(self.tests)
 
     def GetResults(self):
-        return TestBatchResult(self.results)
+        return TestBatchResult(self.results, self.verbose)
 
 
 def ClearFolderContent(path):
@@ -703,8 +728,8 @@ def SetCWDToAngleFolder():
     return cwd
 
 
-def RunTests(job_queue, gn_path, autoninja_path, capture_build_dir, replay_build_dir, test_exec,
-             replay_exec, trace_dir, result_list, message_queue):
+def RunTests(worker_id, job_queue, gn_path, autoninja_path, capture_build_dir, replay_build_dir,
+             test_exec, replay_exec, trace_dir, result_list, message_queue):
     trace_folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, trace_dir)
     test_exec_path = os.path.join(capture_build_dir, test_exec)
     replay_exec_path = os.path.join(replay_build_dir, replay_exec)
@@ -717,15 +742,20 @@ def RunTests(job_queue, gn_path, autoninja_path, capture_build_dir, replay_build
     while not job_queue.empty():
         try:
             test_batch = job_queue.get()
-            message_queue.put("Running " + str(test_batch))
+            message_queue.put("Starting {} tests on worker {}. Unstarted jobs: {}".format(
+                len(test_batch.tests), worker_id, job_queue.qsize()))
             success = test_batch.Run(test_exec_path, trace_folder_path, child_processes_manager)
             if not success:
                 result_list.append(test_batch.GetResults())
+                message_queue.put(
+                    str(test_batch.GetResults()) + "\nUnstarted jobs: " + str(job_queue.qsize()))
                 continue
             continued_tests = test_batch.RemoveTestsThatDoNotProduceAppropriateTraceFiles(
                 trace_folder_path)
             if len(continued_tests) == 0:
                 result_list.append(test_batch.GetResults())
+                message_queue.put(
+                    str(test_batch.GetResults()) + "\nUnstarted jobs: " + str(job_queue.qsize()))
                 continue
             success = test_batch.BuildReplay(gn_path, autoninja_path, replay_build_dir, trace_dir,
                                              replay_exec, trace_folder_path, composite_file_id,
@@ -734,9 +764,13 @@ def RunTests(job_queue, gn_path, autoninja_path, capture_build_dir, replay_build
                 composite_file_id += 1
             if not success:
                 result_list.append(test_batch.GetResults())
+                message_queue.put(
+                    str(test_batch.GetResults()) + "\nUnstarted jobs: " + str(job_queue.qsize()))
                 continue
             test_batch.RunReplay(replay_exec_path, child_processes_manager, continued_tests)
             result_list.append(test_batch.GetResults())
+            message_queue.put(
+                str(test_batch.GetResults()) + "\nUnstarted jobs: " + str(job_queue.qsize()))
         except KeyboardInterrupt:
             child_processes_manager.KillAll()
             raise
@@ -793,7 +827,7 @@ def DeleteTraceFolders(folder_num, trace_folder):
 
 
 def main(capture_build_dir, replay_build_dir, use_goma, gtest_filter, test_exec, batch_count,
-         keep_temp_files, goma_dir, output_to_file):
+         keep_temp_files, goma_dir, output_to_file, verbose):
     logger = Logger(output_to_file)
     child_processes_manager = ChildProcessesManager()
     try:
@@ -861,7 +895,7 @@ def main(capture_build_dir, replay_build_dir, use_goma, gtest_filter, test_exec,
 
         # put the test batchs into the job queue
         for batch_index in range(test_batch_num):
-            batch = TestBatch(use_goma, batch_count, keep_temp_files, goma_dir)
+            batch = TestBatch(use_goma, batch_count, keep_temp_files, goma_dir, verbose)
             for test_in_batch_index in range(batch.batch_count):
                 test_index = batch_index * batch.batch_count + test_in_batch_index
                 if test_index >= len(test_names_and_params):
@@ -879,11 +913,16 @@ def main(capture_build_dir, replay_build_dir, use_goma, gtest_filter, test_exec,
 
         passed_count = 0
         failed_count = 0
+        timedout_count = 0
+        crashed_count = 0
+        compile_failed_count = 0
         skipped_count = 0
-        timeout_count = 0
+
         failed_tests = []
+        timed_out_tests = []
+        crashed_tests = []
+        compile_failed_tests = []
         skipped_tests = []
-        timeout_tests = []
 
         # result list is created by manager and can be shared by multiple processes. Each
         # subprocess populates the result list with the results of its test runs. After all
@@ -899,7 +938,7 @@ def main(capture_build_dir, replay_build_dir, use_goma, gtest_filter, test_exec,
         for i in range(worker_count):
             proc = multiprocessing.Process(
                 target=RunTests,
-                args=(job_queue, gn_path, autoninja_path, capture_build_dir,
+                args=(i, job_queue, gn_path, autoninja_path, capture_build_dir,
                       replay_build_dir + str(i), test_exec, replay_exec, trace_folder + str(i),
                       result_list, message_queue))
             child_processes_manager.AddWorker(proc)
@@ -938,27 +977,40 @@ def main(capture_build_dir, replay_build_dir, use_goma, gtest_filter, test_exec,
             logger.Log(str(test_batch_result))
             passed_count += len(test_batch_result.passes)
             failed_count += len(test_batch_result.fails)
+            timedout_count += len(test_batch_result.timeouts)
+            crashed_count += len(test_batch_result.crashes)
+            compile_failed_count += len(test_batch_result.compile_fails)
             skipped_count += len(test_batch_result.skips)
-            timeout_count += len(test_batch_result.timeouts)
 
             for failed_test in test_batch_result.fails:
                 failed_tests.append(failed_test)
+            for timeout_test in test_batch_result.timeouts:
+                timed_out_tests.append(timeout_test)
+            for crashed_test in test_batch_result.crashes:
+                crashed_tests.append(crashed_test)
+            for compile_failed_test in test_batch_result.compile_fails:
+                compile_failed_tests.append(compile_failed_test)
             for skipped_test in test_batch_result.skips:
                 skipped_tests.append(skipped_test)
-            for timeout_test in test_batch_result.timeouts:
-                timeout_tests.append(timeout_test)
         logger.Log("\n\n")
         logger.Log("Elapsed time: " + str(end_time - start_time) + " seconds")
         logger.Log("Passed: "+ str(passed_count) + " Failed: " + str(failed_count) + \
-        " Skipped: " + str(skipped_count) + " Timeout: " + str(timeout_count))
+        " Crashed: " + str(crashed_count) + " CompileFailed: " + str(compile_failed_count) + \
+        " Skipped: " + str(skipped_count) + " Timeout: " + str(timedout_count))
         logger.Log("Failed tests:")
         for failed_test in failed_tests:
             logger.Log("\t" + failed_test)
+        logger.Log("Crashed tests:")
+        for crashed_test in crashed_tests:
+            logger.Log("\t" + crashed_test)
+        logger.Log("Compile failed tests:")
+        for compile_failed_test in compile_failed_tests:
+            logger.Log("\t" + compile_failed_test)
         logger.Log("Skipped tests:")
         for skipped_test in skipped_tests:
             logger.Log("\t" + skipped_test)
         logger.Log("Timeout tests:")
-        for timeout_test in timeout_tests:
+        for timeout_test in timed_out_tests:
             logger.Log("\t" + timeout_test)
 
         # delete generated folders if --keep_temp_files flag is set to false
@@ -976,17 +1028,17 @@ def main(capture_build_dir, replay_build_dir, use_goma, gtest_filter, test_exec,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--capture_build_dir', default=DEFAULT_CAPTURE_BUILD_DIR)
-    parser.add_argument('--replay_build_dir', default=DEFAULT_REPLAY_BUILD_DIR)
-    parser.add_argument('--use_goma', default="false")
+    parser.add_argument('--capture-build-dir', default=DEFAULT_CAPTURE_BUILD_DIR)
+    parser.add_argument('--replay-build-dir', default=DEFAULT_REPLAY_BUILD_DIR)
+    parser.add_argument('--use-goma', action='store_true')
     parser.add_argument('--gtest_filter', default=DEFAULT_FILTER)
-    parser.add_argument('--test_suite', default=DEFAULT_TEST_SUITE)
-    parser.add_argument('--batch_count', default=DEFAULT_BATCH_COUNT)
-    parser.add_argument('--keep_temp_files', default="false")
-    parser.add_argument("--goma_dir", default="")
-    parser.add_argument("--output_to_file", default="false")
+    parser.add_argument('--test-suite', default=DEFAULT_TEST_SUITE)
+    parser.add_argument('--batch-count', default=DEFAULT_BATCH_COUNT)
+    parser.add_argument('--keep-temp-files', action='store_true')
+    parser.add_argument("--goma-dir", default="")
+    parser.add_argument("--output-to-file", action='store_true')
+    parser.add_argument("--verbose", action='store_true')
     args = parser.parse_args()
-    main(args.capture_build_dir, args.replay_build_dir, args.use_goma,
-         args.gtest_filter, args.test_suite, int(args.batch_count),
-         distutils.util.strtobool(args.keep_temp_files), args.goma_dir,
-         distutils.util.strtobool(args.output_to_file))
+    main(args.capture_build_dir, args.replay_build_dir,
+         str(args.use_goma).lower(), args.gtest_filter, args.test_suite, int(args.batch_count),
+         args.keep_temp_files, args.goma_dir, args.output_to_file, args.verbose)
