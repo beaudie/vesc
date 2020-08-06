@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "de72191b_06e1881b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4329,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:19:06Z",
+      "side": 1,
+      "message": "usesBufferForWrite seems clear enough. canAccumulate is not accurate any more because the barrier management is done elsewhere. Open to other suggestions.",
+      "parentUuid": "524ed79b_c9d8cb90",
+      "range": {
+        "startLine": 4329,
+        "startChar": 36,
+        "endLine": 4329,
+        "endChar": 54
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67883fa7_bcbada5b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -184,6 +208,30 @@
     },
     {
       "key": {
+        "uuid": "4883c984_c3484d8c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:19:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5439d868_00e69b45",
+      "range": {
+        "startLine": 612,
+        "startChar": 8,
+        "endLine": 612,
+        "endChar": 51
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea1575e1_c50bd3ae",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -204,6 +252,30 @@
       "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c31cc585_bb24be04",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T19:19:06Z",
+      "side": 1,
+      "message": "It\u0027ll certainly get initialized just fine in the constructor. I added an assert to the init function that verifies the list is empty when init is called.",
+      "parentUuid": "ea1575e1_c50bd3ae",
+      "range": {
+        "startLine": 912,
+        "startChar": 4,
+        "endLine": 912,
+        "endChar": 17
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
