@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "43fb8a45_37bdd2cb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T22:35:25Z",
+      "side": 1,
+      "message": "The names for values \u003e 0 are not used (there\u0027s a static_cast from PackSampleCount() (which returns log(sampleCount)), so it\u0027s probably no big deal if the names are long. I did keep the first one (Default) short though for readability :)\n\nA final note is that value 0 is used regardless of MSRTT (which is why I\u0027m hesitant about calling the enum MSRTTIndex).\n\nBut we\u0027re bikeshedding. With enough comments, the names shouldn\u0027t really matter much. There\u0027s like two places they are even spelled out.",
+      "parentUuid": "70fd82eb_291093c0",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60bcf805_e523c0d4",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 10
