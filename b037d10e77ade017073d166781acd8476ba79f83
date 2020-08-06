@@ -16,6 +16,69 @@
       "revId": "b037d10e77ade017073d166781acd8476ba79f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69b04f71_8d74d5cd",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T15:03:28Z",
+      "side": 1,
+      "message": "Avoiding this means VK_ACCESS_TRANSFER_READ_BIT is not set (only WRITE is set). Something like this could work:\n\n    // Check for self-dependency.\n    if (sourceBuffer.getBufferSerial() \u003d\u003d mBuffer-\u003egetBufferSerial())\n    {\n        ANGLE_TRY(contextVk-\u003eonBufferTransferReadWrite(\u0026sourceBuffer));\n    }\n    else\n    {\n        ANGLE_TRY(contextVk-\u003eonBufferTransferRead(\u0026sourceBuffer));\n        ANGLE_TRY(contextVk-\u003eonBufferTransferWrite(mBuffer));\n    }\n\nWhere:\n\n    angle::Result onBufferTransferReadWrite(vk::BufferHelper *buffer)\n    {\n        return onBufferWrite(VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT, vk::PipelineStage::Transfer, buffer);\n    }",
+      "revId": "b037d10e77ade017073d166781acd8476ba79f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd220829_4032acb3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4347,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T15:03:28Z",
+      "side": 1,
+      "message": "s/write access/access",
+      "range": {
+        "startLine": 4347,
+        "startChar": 19,
+        "endLine": 4347,
+        "endChar": 31
+      },
+      "revId": "b037d10e77ade017073d166781acd8476ba79f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "587bb244_9832052b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T15:03:28Z",
+      "side": 1,
+      "message": "Does this rely on the fact that there\u0027s always one pre-open? Just looking at the test, it looks like this should be 0 and later 1.",
+      "range": {
+        "startLine": 168,
+        "startChar": 52,
+        "endLine": 168,
+        "endChar": 75
+      },
+      "revId": "b037d10e77ade017073d166781acd8476ba79f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
