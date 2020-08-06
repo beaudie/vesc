@@ -33,6 +33,23 @@
       "revId": "b1ea7403a909b6ff92dbfee26d8fd8c5cefa6246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "096f86ec_9b585687",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T14:11:27Z",
+      "side": 1,
+      "message": "Looks like we\u0027ll need to ignore a few validation errors for this to land clean.",
+      "revId": "b1ea7403a909b6ff92dbfee26d8fd8c5cefa6246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
