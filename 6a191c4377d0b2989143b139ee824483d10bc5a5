@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "70fd82eb_291093c0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-06T21:06:46Z",
+      "side": 1,
+      "message": "I see. How about MSRTTIndex { Texture, _2, _4, _8, _16 } I\u0027m fine if you want to leave this in Vk. Maybe it could apply to other back-ends? We want to keep these enums very compact for readability.",
+      "parentUuid": "fbd656b3_6196a2e1",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60bcf805_e523c0d4",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 10
