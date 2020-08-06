@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d8e239fb_811cd038",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T16:22:03Z",
+      "side": 1,
+      "message": "I had to move this because I\u0027d hit an use-after-free error in onUnMakeCurrent if I did unsetDefaultFramebuffer() first.\nLooks like it\u0027s still needed due to ASSERT(mCurrentDrawSurface \u003d\u003d nullptr); in Context::setDefaultFramebuffer.\nI tried disabling the asserts as well and we get lots of validation errors. So looks like there are expectations for what needs to happen here.",
+      "parentUuid": "ae11abd4_792cf351",
+      "range": {
+        "startLine": 697,
+        "startChar": 3,
+        "endLine": 697,
+        "endChar": 41
+      },
+      "revId": "204c6151332ad9c49cfcd2e9c50b43d181e23de3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60e62fc5_af1e4eb7",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 9
@@ -39,6 +63,24 @@
       "revId": "204c6151332ad9c49cfcd2e9c50b43d181e23de3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f076185b_0ef2f7f2",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-06T16:22:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60e62fc5_af1e4eb7",
+      "revId": "204c6151332ad9c49cfcd2e9c50b43d181e23de3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
