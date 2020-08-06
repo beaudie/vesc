@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "5889c454_409dcf2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-06T00:34:07Z",
+      "side": 1,
+      "message": "Almost forgot to tell you. RenderTargetVk keeps the levelGL/layer of the image and creates views based on that. With multisampled render to texture, both the image and the resolve image have identical views for levelGL and layer. With this change though they could be different so you would need to keep two of that pair.\n\nYou can duplicate the test in this change and adapt it so that FBO 1 is for example attached to level 1 of a (e.g.) 64x64 texture and FBO 2 attached to level 2 of a 128x128 texture. With the current code, you should see failures + VVL errors.",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
