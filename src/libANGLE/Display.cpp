@@ -1763,6 +1763,14 @@ void Display::initializeFrontendFeatures()
     ANGLE_FEATURE_CONDITION((&mFrontendFeatures), scalarizeVecAndMatConstructorArgs, true);
     ANGLE_FEATURE_CONDITION((&mFrontendFeatures), allowCompressedFormats, true);
 
+    for (size_t downscaleFeatureIdx = 0;
+         downscaleFeatureIdx < mFrontendFeatures.downscaleBackbufferTextures.size();
+         downscaleFeatureIdx++)
+    {
+        ANGLE_FEATURE_CONDITION(&mFrontendFeatures,
+                                downscaleBackbufferTextures[downscaleFeatureIdx], false);
+    }
+
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
 
     rx::ApplyFeatureOverrides(&mFrontendFeatures, mState);

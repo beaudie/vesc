@@ -857,6 +857,8 @@ class State : angle::NonCopyable
   private:
     friend class Context;
 
+    void setFramebufferScale(float scaleFactor);
+
     void unsetActiveTextures(ActiveTextureMask textureMask);
     void setActiveTextureDirty(size_t textureIndex, Texture *texture);
     void updateTextureBinding(const Context *context, size_t textureIndex, Texture *texture);
@@ -978,6 +980,11 @@ class State : angle::NonCopyable
     Rectangle mViewport;
     float mNearZ;
     float mFarZ;
+
+    // Store original user scissor and viewport for the downscaleBackbufferTextures frontend feature
+    Rectangle mUserScissor;
+    Rectangle mUserViewport;
+    float mFramebufferScale;
 
     Framebuffer *mReadFramebuffer;
     Framebuffer *mDrawFramebuffer;
