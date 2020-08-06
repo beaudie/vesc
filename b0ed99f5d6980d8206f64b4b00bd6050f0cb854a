@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "8588a94b_dab6587a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-06T17:31:36Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "b0ed99f5d6980d8206f64b4b00bd6050f0cb854a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc1a03b7_1df18136",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 2
