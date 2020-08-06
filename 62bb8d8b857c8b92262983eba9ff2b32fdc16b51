@@ -137,6 +137,30 @@
     },
     {
       "key": {
+        "uuid": "3911d26f_5a712123",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-06T19:10:52Z",
+      "side": 1,
+      "message": "right, I missed it.",
+      "parentUuid": "8647c556_5c2d9400",
+      "range": {
+        "startLine": 592,
+        "startChar": 4,
+        "endLine": 592,
+        "endChar": 65
+      },
+      "revId": "62bb8d8b857c8b92262983eba9ff2b32fdc16b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5439d868_00e69b45",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
