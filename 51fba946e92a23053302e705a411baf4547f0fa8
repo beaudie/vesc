@@ -16,6 +16,24 @@
       "revId": "51fba946e92a23053302e705a411baf4547f0fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7a29ec6_c26c331b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-07T15:23:29Z",
+      "side": 1,
+      "message": "I just assumed that the ext spec is correct and there is no sRGB as source, only sRGB as destination texture FYI.",
+      "parentUuid": "c41ad253_8c504e5d",
+      "revId": "51fba946e92a23053302e705a411baf4547f0fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
