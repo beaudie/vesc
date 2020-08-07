@@ -236,7 +236,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxVertexAttribBindings = LimitToInt(limitsVk.maxVertexInputBindings);
     // Offset and stride are stored as uint16_t in PackedAttribDesc.
     mNativeCaps.maxVertexAttribRelativeOffset =
-        std::min(static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()),
+        std::min(static_cast<uint32_t>((1 << kAttributeOffsetMaxBits) - 1),
                  limitsVk.maxVertexInputAttributeOffset);
     mNativeCaps.maxVertexAttribStride =
         std::min(static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()),
