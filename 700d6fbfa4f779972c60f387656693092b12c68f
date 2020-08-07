@@ -46,6 +46,30 @@
       "revId": "700d6fbfa4f779972c60f387656693092b12c68f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6de3093_b70b139b",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T22:05:52Z",
+      "side": 1,
+      "message": "I am not expert here, looks like it can be any value. I think the name \"other\" seems a bit odd here. If this is \"Default\" or something, then it makes more sense yoiu want it been zero. But anyway, it is very minor thing, I do not have strong opinion here.",
+      "parentUuid": "fb11a57e_63a787f1",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "700d6fbfa4f779972c60f387656693092b12c68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
