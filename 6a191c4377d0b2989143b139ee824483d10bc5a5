@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "2b14da64_b69b6a2f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T14:07:06Z",
+      "side": 1,
+      "message": "You\u0027re right, the other backends could benefit from this. I know D3D doesn\u0027t handle this correctly (anglebug.com/4935).\n\nMoved to angletypes.h. See if you\u0027re ok with the names now.",
+      "parentUuid": "43fb8a45_37bdd2cb",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "6a191c4377d0b2989143b139ee824483d10bc5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60bcf805_e523c0d4",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 10
