@@ -27,6 +27,7 @@ class DisplayMtl;
 class FramebufferMtl;
 class VertexArrayMtl;
 class ProgramMtl;
+class RenderTargetMtl;
 class WindowSurfaceMtl;
 
 class ContextMtl : public ContextImpl, public mtl::Context
@@ -266,7 +267,9 @@ class ContextMtl : public ContextImpl, public mtl::Context
     void invalidateRenderPipeline();
 
     // Call this to notify ContextMtl whenever FramebufferMtl's state changed
-    void onDrawFrameBufferChange(const gl::Context *context, FramebufferMtl *framebuffer);
+    void onDrawFrameBufferChangedState(const gl::Context *context,
+                                       FramebufferMtl *framebuffer,
+                                       bool renderPassChanged);
     void onBackbufferResized(const gl::Context *context, WindowSurfaceMtl *backbuffer);
 
     const MTLClearColor &getClearColorValue() const;
@@ -307,14 +310,15 @@ class ContextMtl : public ContextImpl, public mtl::Context
     // Unless hasStartedRenderPass(desc) returns true.
     mtl::RenderCommandEncoder *getRenderCommandEncoder(const mtl::RenderPassDesc &desc);
 
-    // Utilities to quickly create render command enconder to a specific texture:
-    // The previous content of texture will be loaded if clearColor is not provided
-    mtl::RenderCommandEncoder *getRenderCommandEncoder(const mtl::TextureRef &textureTarget,
-                                                       const gl::ImageIndex &index,
-                                                       const Optional<MTLClearColor> &clearColor);
+    // Utilities to quickly create render command encoder to a specific texture:
     // The previous content of texture will be loaded
     mtl::RenderCommandEncoder *getRenderCommandEncoder(const mtl::TextureRef &textureTarget,
                                                        const gl::ImageIndex &index);
+    // The previous content of texture will be loaded if clearColor is not provided
+    mtl::RenderCommandEncoder *getRenderCommandEncoder(const RenderTargetMtl &renderTarget,
+                                                       const Optional<MTLClearColor> &clearColor);
+    // The previous content of texture will be loaded
+    mtl::RenderCommandEncoder *getRenderCommandEncoder(const RenderTargetMtl &renderTarget);
 
     // Will end current command encoder and start new blit command encoder. Unless a blit comamnd
     // encoder is already started.
