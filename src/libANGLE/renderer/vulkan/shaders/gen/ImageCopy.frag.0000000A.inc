@@ -5,7 +5,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// shaders/gen/ImageCopy.frag.0000000A.inc:
+// shaders\gen\ImageCopy.frag.0000000A.inc:
 //   Pre-generated shader for the ANGLE Vulkan back-end.
 
 #pragma once

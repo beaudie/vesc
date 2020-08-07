@@ -5,7 +5,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// shaders/gen/BlitResolveStencilNoExport.comp.00000003.inc:
+// shaders\gen\BlitResolveStencilNoExport.comp.00000003.inc:
 //   Pre-generated shader for the ANGLE Vulkan back-end.
 
 #pragma once

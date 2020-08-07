@@ -256,7 +256,9 @@ struct PackedAttribDesc final
     uint8_t divisor;
 
     // Can only take 11 bits on NV.
-    uint16_t offset;
+    uint16_t offset : 15;
+
+    uint8_t compressed : 1;
 
     // Although technically stride can be any value in ES 2.0, in practice supporting stride
     // greater than MAX_USHORT should not be that helpful. Note that stride limits are
@@ -461,6 +463,7 @@ class GraphicsPipelineDesc final
                            GLuint stride,
                            GLuint divisor,
                            angle::FormatID format,
+                           bool compressed,
                            GLuint relativeOffset);
 
     // Input assembly info

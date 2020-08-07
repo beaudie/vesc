@@ -354,6 +354,14 @@ struct FeaturesVk : FeatureSetBase
     Feature enableMultisampledRenderToTexture = {
         "enable_multisampled_render_to_texture", FeatureCategory::VulkanWorkarounds,
         "Expose EXT_multisampled_render_to_texture", &members, "http://anglebug.com/4937"};
+
+    // Fallback to smaller-sized vertex formats for performance. Using this features makes ANGLE
+    // non-conformant.
+    angle::Feature compressVertexData = {"compress_vertex_data",
+                                         angle::FeatureCategory::VulkanWorkarounds,
+                                         "Compress vertex data to smaller data types when "
+                                         "possible. Using this feature makes ANGLE non-conformant.",
+                                         &members, ""};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

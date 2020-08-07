@@ -39,6 +39,9 @@ struct ConversionBuffer
 
     // The conversion is stored in a dynamic buffer.
     vk::DynamicBuffer data;
+
+    // Number of times this buffer has been used for a conversion
+    uint64_t conversionCount;
 };
 
 class BufferVk : public BufferImpl
@@ -119,6 +122,9 @@ class BufferVk : public BufferImpl
                                                 GLuint stride,
                                                 size_t offset,
                                                 bool hostVisible);
+    ConversionBuffer *getExistingVertexConversionBuffer(angle::FormatID formatID,
+                                                        GLuint stride,
+                                                        size_t offset);
 
   private:
     angle::Result initializeShadowBuffer(ContextVk *contextVk,

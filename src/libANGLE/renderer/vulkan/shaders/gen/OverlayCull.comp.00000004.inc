@@ -5,7 +5,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// shaders/gen/OverlayCull.comp.00000004.inc:
+// shaders\gen\OverlayCull.comp.00000004.inc:
 //   Pre-generated shader for the ANGLE Vulkan back-end.
 
 #pragma once
