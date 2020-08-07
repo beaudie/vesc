@@ -103,6 +103,24 @@
       "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "392b82d1_b8c16d94",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-07T16:01:17Z",
+      "side": 1,
+      "message": "I\u0027m exploring both of these suggestions (my initial approach allowed Cody and I to get broader testing of the basic approach).\n\nProcessing the gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING bit has pros/cons.\n\n+ Pro: Work is deferred until needed \u0026 isn\u0027t duplicated (e.g. app changes scissor)\n\n    + Especially true for most apps which draw to an offscreen FBO at the start of a frame, and don\u0027t need this fix (as the dirty bit will be processed)\n\n+ Pro: We get correct results, as at least the following is needed:\n\n    + Set mCurrentRotationDrawFramebuffer\n    + Update the viewport\n    + Update the scissor\n\n- Con: More work is done that isn\u0027t needed for a rotation/size change (e.g. updateColorMask)\n\nUsing the dirty bit works.  Jamie, if you want, I\u0027ll try doing just the 3 things that I know are needed.",
+      "parentUuid": "d2985359_cc15eed9",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
