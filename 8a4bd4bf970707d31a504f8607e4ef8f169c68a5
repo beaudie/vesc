@@ -161,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "2089c505_298a4e37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T22:42:08Z",
+      "side": 1,
+      "message": "For blits, we pass in the ImageView from the destination framebuffer to use when recreating the source framebuffer (resolveImageViewIn).   We don\u0027t use the source framebuffer render target\u0027s resolve attachments, since those resolve attachments don\u0027t have any correlation to the destination framebuffer.\n\n    // Color resolve attachments.\n    if (resolveImageViewIn)\n    {\n        ASSERT(!HasResolveAttachment(colorRenderTargets, mState.getEnabledDrawBuffers()));\n\n        // Need to use the passed in ImageView for the resolve attachment, since it came from\n        // another Framebuffer.\n[[[ blit path ]]]\n        attachments.push_back(resolveImageViewIn-\u003egetHandle());\n    }\n    else\n    {\n        // This Framebuffer owns all of the ImageViews, including its own resolve ImageViews.\n        for (size_t colorIndexGL : mState.getEnabledDrawBuffers())\n        {\n            RenderTargetVk *colorRenderTarget \u003d colorRenderTargets[colorIndexGL];\n            ASSERT(colorRenderTarget);\n\n            if (colorRenderTarget-\u003ehasResolveAttachment())\n            {\n                const vk::ImageView *resolveImageView \u003d nullptr;\n[[[ *not* blit path ]]]\n                ANGLE_TRY(colorRenderTarget-\u003egetResolveImageView(contextVk, \u0026resolveImageView));\n\n                attachments.push_back(resolveImageView-\u003egetHandle());\n\n                ASSERT(!attachmentsSize.empty());\n            }\n        }\n    }",
+      "parentUuid": "378990e3_a17dd8b6",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
