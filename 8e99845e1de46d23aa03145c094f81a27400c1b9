@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0b9257e_9cd4ccae",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:15:25Z",
+      "side": 1,
+      "message": "texture",
+      "range": {
+        "startLine": 1753,
+        "startChar": 34,
+        "endLine": 1753,
+        "endChar": 40
+      },
+      "revId": "8e99845e1de46d23aa03145c094f81a27400c1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "306c1904_79838a01",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1848,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:15:25Z",
+      "side": 1,
+      "message": "I suggest removing this. Non-zero mips aren\u0027t used, and besides the texture doesn\u0027t have any data in it.",
+      "range": {
+        "startLine": 1847,
+        "startChar": 0,
+        "endLine": 1848,
+        "endChar": 25
+      },
+      "revId": "8e99845e1de46d23aa03145c094f81a27400c1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2fe0854_b30ff352",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:15:25Z",
+      "side": 1,
+      "message": "You can just do this instead:\n\n    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, kMsaaSize, kMsaaSize, 0, GL_RGBA,\n                 GL_UNSIGNED_BYTE, nullptr);\n    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);",
+      "range": {
+        "startLine": 1852,
+        "startChar": 4,
+        "endLine": 1854,
+        "endChar": 36
+      },
+      "revId": "8e99845e1de46d23aa03145c094f81a27400c1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e371871_e50f3b8f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:15:25Z",
+      "side": 1,
+      "message": "ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);",
+      "range": {
+        "startLine": 1876,
+        "startChar": 4,
+        "endLine": 1876,
+        "endChar": 88
+      },
+      "revId": "8e99845e1de46d23aa03145c094f81a27400c1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

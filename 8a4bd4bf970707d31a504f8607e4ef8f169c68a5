@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "5555a562_c7514d85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:15:25Z",
+      "side": 1,
+      "message": "Sorry I just noticed you did do that already.\n\nMy concern is still there though, RenderTargetVk::getResolveImageView is wrong in this scenario. Need to find a way to trigger that bug.",
+      "parentUuid": "3c456590_ba227d2d",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
