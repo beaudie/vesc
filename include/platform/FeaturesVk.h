@@ -369,6 +369,14 @@ struct FeaturesVk : FeatureSetBase
         "force_max_uniform_buffer_size_16K", FeatureCategory::VulkanWorkarounds,
         "Force max uniform buffer size to 16K on some device due to bug", &members,
         "https://issuetracker.google.com/161903006"};
+
+    // Fallback to smaller-sized vertex formats for performance. Using this features makes ANGLE
+    // non-conformant.
+    angle::Feature compressVertexData = {"compress_vertex_data",
+                                         angle::FeatureCategory::VulkanWorkarounds,
+                                         "Compress vertex data to smaller data types when "
+                                         "possible. Using this feature makes ANGLE non-conformant.",
+                                         &members, ""};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

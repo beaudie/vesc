@@ -5,7 +5,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// shaders/gen/GenerateMipmap.comp.00000003.inc:
+// shaders\gen\GenerateMipmap.comp.00000003.inc:
 //   Pre-generated shader for the ANGLE Vulkan back-end.
 
 #pragma once
@@ -512,7 +512,7 @@ constexpr uint8_t kGenerateMipmap_comp_00000003[] = {
 //    vec3 opARcpF3(out vec3 d, in vec3 a){ d = ARcpF3(a);return d;}
 //    vec4 opARcpF4(out vec4 d, in vec4 a){ d = ARcpF4(a);return d;}
 //
-// #line 70 "shaders/src/GenerateMipmap.comp"
+// #line 70 "shaders\src\GenerateMipmap.comp"
 //
 // shared f16vec4 spd_intermediate[16][16];
 //
@@ -1186,7 +1186,7 @@ constexpr uint8_t kGenerateMipmap_comp_00000003[] = {
 //     SpdDownsampleNextFourH(x, y, uvec2(0, 0), localInvocationIndex, 8, mips);
 // }
 //
-// #line 177 "shaders/src/GenerateMipmap.comp"
+// #line 177 "shaders\src\GenerateMipmap.comp"
 //
 // void main()
 // {
