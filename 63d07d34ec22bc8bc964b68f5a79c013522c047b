@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9810c03_105223ad",
+        "filename": "extensions/EGL_ANGLE_d3d_texture_client_buffer.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T13:37:41Z",
+      "side": 1,
+      "message": "Drive by: What if we added a new parameter to specify array index or subresource index instead of using the format to determine the plane?",
+      "range": {
+        "startLine": 82,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 79
+      },
+      "revId": "63d07d34ec22bc8bc964b68f5a79c013522c047b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
