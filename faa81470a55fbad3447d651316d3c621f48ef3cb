@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "c3644a2c_d25259d4",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:24:10Z",
+      "side": 1,
+      "message": "nit: sampling from",
+      "range": {
+        "startLine": 91,
+        "startChar": 13,
+        "endLine": 91,
+        "endChar": 14
+      },
+      "revId": "faa81470a55fbad3447d651316d3c621f48ef3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f9af3da_9b4ea039",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:24:10Z",
+      "side": 1,
+      "message": "nit: rendering to",
+      "range": {
+        "startLine": 134,
+        "startChar": 13,
+        "endLine": 134,
+        "endChar": 14
+      },
+      "revId": "faa81470a55fbad3447d651316d3c621f48ef3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2d22ee3_55518966",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 3
@@ -13,6 +59,30 @@
       "writtenOn": "2020-08-07T14:58:31Z",
       "side": 1,
       "message": "By putting this line here, I\u0027m not sure how this test ensures that the renderpass wasn\u0027t broken.  There\u0027s only one draw call happening.  If you were to move this line up to above the glTexImage2D call, would that help?",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 65
+      },
+      "revId": "faa81470a55fbad3447d651316d3c621f48ef3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5538ff79_ca4d8d16",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:24:10Z",
+      "side": 1,
+      "message": "glTexImage2D shouldn\u0027t start a renderpass, so I don\u0027t think that would help.\n\n---\n\nIs the draw call here creating two render passes?",
+      "parentUuid": "e2d22ee3_55518966",
       "range": {
         "startLine": 159,
         "startChar": 4,
