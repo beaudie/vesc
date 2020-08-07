@@ -506,6 +506,24 @@
     },
     {
       "key": {
+        "uuid": "cbe735fa_b1e06f98",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:06:59Z",
+      "side": 1,
+      "message": "That\u0027s what I was suggesting too, a global function in the anonymous namespace at the top of the file should do.",
+      "parentUuid": "b388bff9_7fc2f7e7",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18403e9f_a2865606",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 15
