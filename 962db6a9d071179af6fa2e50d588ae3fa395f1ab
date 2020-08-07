@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0ff9da4_ff7dc788",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "Someone may add `mRenderPassFramebuffer \u003d nullptr` back in the future, and the optimization will silently be disabled.\n\nI like Jamie\u0027s new fashion of writing performance-counter-based tests to verify these things. You can add a counter and duplicate FramebufferTest_ES31.MultisampleResolveWithBlit in that test suite. Then if the optimization is disabled by mistake, we\u0027ll have a test failure.",
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "055df529_44ed63d3",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);",
+      "range": {
+        "startLine": 1200,
+        "startChar": 4,
+        "endLine": 1200,
+        "endChar": 88
+      },
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43251754_e889b800",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);",
+      "range": {
+        "startLine": 1215,
+        "startChar": 4,
+        "endLine": 1215,
+        "endChar": 87
+      },
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d614716_76740a9c",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);",
+      "range": {
+        "startLine": 1232,
+        "startChar": 4,
+        "endLine": 1232,
+        "endChar": 88
+      },
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80c7d9a9_b57e60b4",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);",
+      "range": {
+        "startLine": 1265,
+        "startChar": 4,
+        "endLine": 1265,
+        "endChar": 88
+      },
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09659957_6b1c460c",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);",
+      "range": {
+        "startLine": 1282,
+        "startChar": 4,
+        "endLine": 1282,
+        "endChar": 88
+      },
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae26a47c_c82553d9",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "Please move this verification to the end so the render pass lives until the next resolve.",
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67b4010d_d481b71e",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);",
+      "range": {
+        "startLine": 1303,
+        "startChar": 4,
+        "endLine": 1303,
+        "endChar": 88
+      },
+      "revId": "962db6a9d071179af6fa2e50d588ae3fa395f1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "2f3eab05_e0a106fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "Don\u0027t forget about this one!",
+      "parentUuid": "5889c454_409dcf2e",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -276,6 +294,24 @@
     },
     {
       "key": {
+        "uuid": "8ec5e636_ac5fbb43",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "Sounds good. I think the endRenderPass() call below also makes sure that works. That\u0027s why I asked for an ASSERT() here that there\u0027s no resolve attachment already.",
+      "parentUuid": "c19d646a_71bb8bfa",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d7b48c5_46e9d869",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -323,6 +359,30 @@
     },
     {
       "key": {
+        "uuid": "7490e304_a843fb27",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "e9e98bf3_9bb6e33e",
+      "range": {
+        "startLine": 1217,
+        "startChar": 9,
+        "endLine": 1217,
+        "endChar": 16
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "676ba002_0887ac02",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -352,6 +412,24 @@
       "side": 1,
       "message": "Hm, the blit should end the render pass already (via ImageRead() or otherwise), so adding it to there may not be necessary.   I\u0027ll try it and see what CQ says.",
       "parentUuid": "676ba002_0887ac02",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07134c33_72d27c64",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:04:07Z",
+      "side": 1,
+      "message": "Sounds good. MultisampledRenderToTextureES31Test.BlitFramebufferAttachment1 should be triggering this discrepancy believe.",
+      "parentUuid": "18cd9511_6ac86b9b",
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
