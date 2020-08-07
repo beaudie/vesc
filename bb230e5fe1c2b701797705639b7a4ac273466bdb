@@ -139,6 +139,24 @@
       "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e27b2afa_101e58bd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T16:55:59Z",
+      "side": 1,
+      "message": "Ian, when you tried that, did you check that the current framebuffer is the default framebuffer?",
+      "parentUuid": "3e5f4de5_de5fb273",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
