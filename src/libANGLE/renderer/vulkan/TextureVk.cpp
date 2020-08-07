@@ -1929,6 +1929,11 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLe
 angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk)
 {
     ASSERT(mImage->valid());
+    // Don't end render pass if nothing to do
+    if (!mImage->hasStagedUpdates())
+    {
+        return angle::Result::Continue;
+    }
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
