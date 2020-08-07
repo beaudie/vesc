@@ -179,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "e62eb9ed_7d8524c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T23:00:46Z",
+      "side": 1,
+      "message": "Ah I see. I always assumed you would modify the RT, then use the normal path to recreate the FB. I did notice that code, but it just didn\u0027t register at the time.\n\nDo you mind updating the comment in RenderTargetVk before mIsImageTransient and remove mentions of this optimization then?\n\nAlso, you can add this test:\n\n- Attach two MSAA textures to FBO1\n- Set read buffer 0\n- Resolve into FBO2\n- Set read buffer 1\n- Resolve into FBO3\n\nIdeally both resolves could have been done with this optimization. Temporarily passing the view of the resolve attachment makes this impossible. However, the endRenderPass() in FramebufferVk::resolveColorWithSubpass() disallows it, so it won\u0027t fail.\n\nCould be a good regression test for the future in case that further optimization is attempted (or the endRenderPass() is removed).",
+      "parentUuid": "2089c505_298a4e37",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
