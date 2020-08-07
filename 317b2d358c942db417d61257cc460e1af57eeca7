@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "eb85e9d5_09842105",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:33:32Z",
+      "side": 1,
+      "message": "I\u0027ve used `vsnprintf(nullptr, 0, format, args)` numerous times before. I\u0027m curious as to what format/args caused it to return wrong values. Do you have that handy?",
+      "parentUuid": "bcda9c15_95006da2",
+      "range": {
+        "startLine": 8419,
+        "startChar": 0,
+        "endLine": 8425,
+        "endChar": 5
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0638995_466faaed",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 6
