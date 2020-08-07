@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "85cd8452_65102511",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T15:33:46Z",
+      "side": 1,
+      "message": "Better done in the front-end",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08a0c92b_187d004d",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -47,6 +64,24 @@
       "writtenOn": "2020-08-07T13:34:38Z",
       "side": 1,
       "message": "Can we just set gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING and avoid the extra function and tests?",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2985359_cc15eed9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T15:33:46Z",
+      "side": 1,
+      "message": "Another way:\n\nwhy not just update the rotation directly from SurfaceVk-\u003eContextVk instead of using dirty bits?",
+      "parentUuid": "08a0c92b_187d004d",
       "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
