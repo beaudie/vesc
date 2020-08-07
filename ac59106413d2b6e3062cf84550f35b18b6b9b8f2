@@ -115,6 +115,30 @@
       "revId": "ac59106413d2b6e3062cf84550f35b18b6b9b8f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c48cbb9_be667f9e",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T19:21:47Z",
+      "side": 1,
+      "message": "OK thanks. This table looks a lot like some of the ones in formatutils.cpp and those ones are good examples of what *not* to do. 😊",
+      "parentUuid": "6fda488c_cb6d7234",
+      "range": {
+        "startLine": 278,
+        "startChar": 4,
+        "endLine": 278,
+        "endChar": 17
+      },
+      "revId": "ac59106413d2b6e3062cf84550f35b18b6b9b8f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
