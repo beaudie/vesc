@@ -92,7 +92,7 @@ ConversionBuffer::ConversionBuffer(RendererVk *renderer,
                                    size_t initialSize,
                                    size_t alignment,
                                    bool hostVisible)
-    : dirty(true), lastAllocationOffset(0)
+    : dirty(true), lastAllocationOffset(0), conversionCount(0)
 {
     data.init(renderer, usageFlags, alignment, initialSize, hostVisible);
 }
@@ -620,6 +620,20 @@ ConversionBuffer *BufferVk::getVertexConversionBuffer(RendererVk *renderer,
                                                       size_t offset,
                                                       bool hostVisible)
 {
+    ConversionBuffer *existingBuffer = getExistingVertexConversionBuffer(formatID, stride, offset);
+    if (existingBuffer)
+    {
+        return existingBuffer;
+    }
+
+    mVertexConversionBuffers.emplace_back(renderer, formatID, stride, offset, hostVisible);
+    return &mVertexConversionBuffers.back();
+}
+
+rx::ConversionBuffer *BufferVk::getExistingVertexConversionBuffer(angle::FormatID formatID,
+                                                                  GLuint stride,
+                                                                  size_t offset)
+{
     for (VertexConversionBuffer &buffer : mVertexConversionBuffers)
     {
         if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset == offset)
@@ -627,9 +641,7 @@ ConversionBuffer *BufferVk::getVertexConversionBuffer(RendererVk *renderer,
             return &buffer;
         }
     }
-
-    mVertexConversionBuffers.emplace_back(renderer, formatID, stride, offset, hostVisible);
-    return &mVertexConversionBuffers.back();
+    return nullptr;
 }
 
 void BufferVk::markConversionBuffersDirty()
