@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "24e5ab81_7d2fd9ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T22:48:22Z",
+      "side": 1,
+      "message": "Nice cleanup.   Some drive-by comments.",
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0143fbbb_eb9498bf",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 5
@@ -18,6 +35,29 @@
         "startChar": 8,
         "endLine": 458,
         "endChar": 44
+      },
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8f67651_5be98106",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T22:48:22Z",
+      "side": 1,
+      "message": "Why are you singling out setupDraw() here, since render passes are started in FramebufferVk::flushDeferredClears() and UtilsVk::clearFramebuffer:\n\nContextVk::setupDraw\nFramebufferVk::flushDeferredClears\n    FramebufferVk::blit\n    FramebufferVk::clearImmediatelyWithRenderPassOp\n    FramebufferVk::clearImpl\n    FramebufferVk::invalidateImpl\n    FramebufferVk::invalidateSub\n    FramebufferVk::readPixels\n    FramebufferVk::syncState\nUtilsVk::clearFramebuffer",
+      "range": {
+        "startLine": 545,
+        "startChar": 66,
+        "endLine": 545,
+        "endChar": 75
       },
       "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -45,6 +85,23 @@
       "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f3f1e8_719854e6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T22:48:22Z",
+      "side": 1,
+      "message": "Nice. I needed to do this in my MSAA CL too so it\u0027s good to see it validated here also.",
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
