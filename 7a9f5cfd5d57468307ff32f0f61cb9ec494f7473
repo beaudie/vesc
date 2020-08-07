@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4ff8229_812f7cce",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 8776,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "Also need to check ES 3.2 here?",
+      "range": {
+        "startLine": 8776,
+        "startChar": 30,
+        "endLine": 8776,
+        "endChar": 53
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e183f4e8_062beb45",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "3.2 check?",
+      "range": {
+        "startLine": 439,
+        "startChar": 8,
+        "endLine": 439,
+        "endChar": 37
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09eafd43_a74b994c",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "this gets set twice",
+      "range": {
+        "startLine": 1792,
+        "startChar": 4,
+        "endLine": 1792,
+        "endChar": 35
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d7d7a8f_bdefb766",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1697,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "nit: Move to be in the same order as the header.",
+      "range": {
+        "startLine": 1697,
+        "startChar": 0,
+        "endLine": 1697,
+        "endChar": 85
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67a89158_3b9f5f2c",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1702,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "We have a history of needing workarounds for texture formats and I expect this will need them eventually too.  Can you add a new struct TexBufferFormat and GetTexBufferFormat to formatutislgl.h ? It will just return the original format for now.",
+      "range": {
+        "startLine": 1702,
+        "startChar": 49,
+        "endLine": 1702,
+        "endChar": 63
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32ea86c1_8830db3c",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "The buffer needs to be bound first with a \n\n   stateManager-\u003ebindTexture(getType(), mTextureID);",
+      "range": {
+        "startLine": 1701,
+        "startChar": 4,
+        "endLine": 1703,
+        "endChar": 85
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d617404f_9afe1d69",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1938,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "3.2 check",
+      "range": {
+        "startLine": 1938,
+        "startChar": 17,
+        "endLine": 1938,
+        "endChar": 60
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d66a5631_c30c83ac",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-07T14:03:16Z",
+      "side": 1,
+      "message": "Let\u0027s add these to formatutils! Add a new SupportCheckFunction to InternalFormat called textureBufferSupport and then informatutils.cpp, add a new parameter to AddRGBAFormat.\n\nThis will make a big diff but is more maintainable as new extensions add new formats.",
+      "range": {
+        "startLine": 2212,
+        "startChar": 0,
+        "endLine": 2241,
+        "endChar": 25
+      },
+      "revId": "7a9f5cfd5d57468307ff32f0f61cb9ec494f7473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
