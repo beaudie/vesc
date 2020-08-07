@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "75569ea5_2559dce8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T16:02:10Z",
+      "side": 1,
+      "message": "Yeah. We use it pretty much for precisely this purpose (annotating GL calls around D3D for example).",
+      "parentUuid": "60ea916d_bfb26fce",
+      "range": {
+        "startLine": 1057,
+        "startChar": 8,
+        "endLine": 1057,
+        "endChar": 28
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0f4f49d_aa156b78",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
