@@ -361,6 +361,14 @@ struct FeaturesVk : FeatureSetBase
         "preferred_large_heap_block_size_4M", FeatureCategory::VulkanWorkarounds,
         "Use 4 MB preferred large heap block size with AMD allocator", &members,
         "http://anglebug.com/4995"};
+
+    // Fallback to smaller-sized vertex formats for performance. Using this features makes ANGLE
+    // non-conformant.
+    angle::Feature compressVertexData = {"compress_vertex_data",
+                                         angle::FeatureCategory::VulkanWorkarounds,
+                                         "Compress vertex data to smaller data types when "
+                                         "possible. Using this feature makes ANGLE non-conformant.",
+                                         &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
