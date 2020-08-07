@@ -116,6 +116,30 @@
       "revId": "faa81470a55fbad3447d651316d3c621f48ef3cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b83afb2f_2460a128",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T16:14:13Z",
+      "side": 1,
+      "message": "@Ian, Shabi is right. The code above this line does not start any renderpass.\n\nIn this test, the glClear call triggers renderpass. But it sees the texture has a staged clear operation due to emulated alpha channel (which is my fix try to get rid of), so it starts a new renderpass to do the alpha clear and then starts renderpass for glClear. SO right now there are two renderpasses.",
+      "parentUuid": "097a450f_ddbf1f8d",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 65
+      },
+      "revId": "faa81470a55fbad3447d651316d3c621f48ef3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
