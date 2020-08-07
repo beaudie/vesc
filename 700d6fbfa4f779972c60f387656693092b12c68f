@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed4a4848_780ceef8",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T16:32:20Z",
+      "side": 1,
+      "message": "Is there any reason Other is moved to the first entry? Just wondering since it breaks alphabet order and usually these misc enums are the bottom one.",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "700d6fbfa4f779972c60f387656693092b12c68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
