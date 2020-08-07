@@ -33,6 +33,24 @@
       "revId": "5350668f475e8033a8f27ca7bc83640e0061fe29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf4add66_e0a6d99e",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:26:42Z",
+      "side": 1,
+      "message": "I split this off into a separate CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2338823",
+      "parentUuid": "15bfb3c3_2aa900e0",
+      "revId": "5350668f475e8033a8f27ca7bc83640e0061fe29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
