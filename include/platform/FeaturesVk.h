@@ -379,6 +379,14 @@ struct FeaturesVk : FeatureSetBase
 
     Feature forcePointFiltering = {"force_point_filtering", FeatureCategory::VulkanWorkarounds,
                                    "Force point filtering when sampling.", &members};
+
+    // Fallback to smaller-sized vertex formats for performance. Using this features makes ANGLE
+    // non-conformant.
+    angle::Feature compressVertexData = {"compress_vertex_data",
+                                         angle::FeatureCategory::VulkanWorkarounds,
+                                         "Compress vertex data to smaller data types when "
+                                         "possible. Using this feature makes ANGLE non-conformant.",
+                                         &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
