@@ -655,6 +655,7 @@ void GraphicsPipelineDesc::initDefaults()
         SetBitField(packedAttrib.stride, 0);
         SetBitField(packedAttrib.divisor, 0);
         SetBitField(packedAttrib.format, defaultFormat);
+        SetBitField(packedAttrib.compressed, 0);
         SetBitField(packedAttrib.offset, 0);
     }
 
@@ -851,7 +852,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         angle::FormatID formatID         = static_cast<angle::FormatID>(packedAttrib.format);
         const vk::Format &format         = contextVk->getRenderer()->getFormat(formatID);
         const angle::Format &angleFormat = format.intendedFormat();
-        VkFormat vkFormat                = format.vkBufferFormat;
+        VkFormat vkFormat =
+            packedAttrib.compressed ? format.vkCompressedBufferFormat : format.vkBufferFormat;
 
         gl::ComponentType attribType =
             GetVertexAttributeComponentType(angleFormat.isPureInt(), angleFormat.vertexAttribType);
@@ -1078,6 +1080,7 @@ void GraphicsPipelineDesc::updateVertexInput(GraphicsPipelineTransitionBits *tra
                                              GLuint stride,
                                              GLuint divisor,
                                              angle::FormatID format,
+                                             bool compressed,
                                              GLuint relativeOffset)
 {
     vk::PackedAttribDesc &packedAttrib = mVertexInputAttribs.attribs[attribIndex];
@@ -1091,6 +1094,7 @@ void GraphicsPipelineDesc::updateVertexInput(GraphicsPipelineTransitionBits *tra
     }
 
     SetBitField(packedAttrib.format, format);
+    SetBitField(packedAttrib.compressed, compressed);
     SetBitField(packedAttrib.offset, relativeOffset);
 
     constexpr size_t kAttribBits = kPackedAttribDescSize * kBitsPerByte;
