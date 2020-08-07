@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0143fbbb_eb9498bf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T22:22:46Z",
+      "side": 1,
+      "message": "since you are touching this, it might better move it to line 553 to group them together",
+      "range": {
+        "startLine": 458,
+        "startChar": 8,
+        "endLine": 458,
+        "endChar": 44
+      },
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc59c86b_65d82e57",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T22:22:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be an assertion instead of check? if setupDraw has not called, you will not have a started mRenderPassCommands, right?",
+      "range": {
+        "startLine": 546,
+        "startChar": 15,
+        "endLine": 546,
+        "endChar": 39
+      },
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
