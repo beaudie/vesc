@@ -16,6 +16,23 @@
       "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "36468955_60d56f31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-07T03:54:03Z",
+      "side": 1,
+      "message": "Hey Ian, I can confirm this fixes both scenarios for me: the transition from Angry Birds 2 to Candy Crush, and Mobile Legends by itself.  I see no visual errors or Vulkan validation warnings or errors in the log.  Thanks!",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
