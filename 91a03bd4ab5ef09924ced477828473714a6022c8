@@ -22,6 +22,30 @@
       "revId": "91a03bd4ab5ef09924ced477828473714a6022c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a736a0_8521cac0",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T19:09:12Z",
+      "side": 1,
+      "message": "Also note these are very minor bikeshedding things as you said. So not necessary to fix.",
+      "parentUuid": "4230930b_892819a3",
+      "range": {
+        "startLine": 716,
+        "startChar": 4,
+        "endLine": 716,
+        "endChar": 12
+      },
+      "revId": "91a03bd4ab5ef09924ced477828473714a6022c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
