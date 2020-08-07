@@ -16,6 +16,52 @@
       "revId": "2d4ce0c306a716d89a344e6012e6f5ab42a04a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "158528d4_6da3eb34",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T00:11:54Z",
+      "side": 1,
+      "message": "still feels like we could do better by storing each string individually rather than trying to make them all one item. anyway that might be a more complex refactor so I\u0027m fine if you want to move on.",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 20
+      },
+      "revId": "2d4ce0c306a716d89a344e6012e6f5ab42a04a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87dbae50_db910c1a",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T00:11:54Z",
+      "side": 1,
+      "message": "nit: probably just calling this StringCounter(s) is alright",
+      "range": {
+        "startLine": 182,
+        "startChar": 6,
+        "endLine": 182,
+        "endChar": 23
+      },
+      "revId": "2d4ce0c306a716d89a344e6012e6f5ab42a04a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
