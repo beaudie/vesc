@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "200dfde4_377ae632",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T18:11:49Z",
+      "side": 1,
+      "message": "Just hadn\u0027t gotten to this one yet.\n\nIt looks like GLES doesn\u0027t support exactly what you\u0027re requesting:\n- Multisampled textures can\u0027t have any sampling states set with glTexParameteri(), so no GL_NEAREST_MIPMAP_NEAREST.\n- glFramebufferTexture2D() only accepts level 0 with GL_TEXTURE_2D_MULTISAMPLE, so no using a multisampled mip levels as the soure for the blit.\n\nI don\u0027t know what glGenerateMipmap(GL_TEXTURE_2D_MULTISAMPLE) is doing in this case, but I left it since it isn\u0027t hurting.   Since we can only bind level 0 to the FBO, it\u0027s probably not doing anything meaningful here though.\n\nIt also didn\u0027t require any code changes for this test to pass and there are no VVL errors.   I suspect this works for the same reason FramebufferTest_ES31::MultisampleResolveWithBlitMultipleResolves() does (FramebufferDesc forces the correct pairings).\n\nLet me know if there\u0027s something missing here.",
+      "parentUuid": "2f3eab05_e0a106fa",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
