@@ -33,6 +33,24 @@
       "revId": "cf8214fa105b3a5943f75be5fcf153e176208665",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79d47bf0_e70d1f7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-07T19:27:04Z",
+      "side": 1,
+      "message": "Yeah, we could use other values, but 5K was a number that popped up as a reasonable limit in previous conversations.  I haven\u0027t measured other limits, NBA2K20 is about the hardest app to recapture.",
+      "parentUuid": "31f7f6eb_6f443c83",
+      "revId": "cf8214fa105b3a5943f75be5fcf153e176208665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
