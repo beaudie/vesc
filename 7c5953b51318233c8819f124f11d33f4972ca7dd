@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a140e67_cb9ed5de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-07T21:30:49Z",
+      "side": 1,
+      "message": "It\u0027s re-implemented using the subject-observer pattern.  Look good?",
+      "revId": "7c5953b51318233c8819f124f11d33f4972ca7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

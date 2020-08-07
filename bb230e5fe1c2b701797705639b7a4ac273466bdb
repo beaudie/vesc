@@ -193,6 +193,24 @@
       "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbbda1a8_9718a51b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-07T21:30:49Z",
+      "side": 1,
+      "message": "After some discussion in Chat, I learned about ANGLE\u0027s subject-observer pattern, and re-implemented this CL using that.",
+      "parentUuid": "4029a324_19cf8cb7",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
