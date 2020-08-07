@@ -684,12 +684,14 @@ class State : angle::NonCopyable
     {
         mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
         mDirtyObjects.set(DIRTY_OBJECT_READ_ATTACHMENTS);
+        mDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
     }
 
     ANGLE_INLINE void setDrawFramebufferDirty()
     {
         mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
         mDirtyObjects.set(DIRTY_OBJECT_DRAW_ATTACHMENTS);
+        mDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
     }
 
     ANGLE_INLINE void setProgramPipelineDirty()
