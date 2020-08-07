@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "156beaa6_4747c495",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8425,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T18:42:34Z",
+      "side": 1,
+      "message": "The 3rd string to be written was:\nglCreateShader(): context \u003d 3, GLenum type \u003d GL_VERTEX_SHADER\\n\n\nHowever, vnsprintf(nullptr, 0, format, args) returns 59 for the size which cuts off the last 3 chars.",
+      "parentUuid": "eb85e9d5_09842105",
+      "range": {
+        "startLine": 8419,
+        "startChar": 0,
+        "endLine": 8425,
+        "endChar": 5
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0638995_466faaed",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 6

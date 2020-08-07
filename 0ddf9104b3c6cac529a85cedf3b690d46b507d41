@@ -50,6 +50,23 @@
       "revId": "0ddf9104b3c6cac529a85cedf3b690d46b507d41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cafad32d_481ce631",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T18:42:34Z",
+      "side": 1,
+      "message": "Response to Shabi on vnsprintf() error",
+      "revId": "0ddf9104b3c6cac529a85cedf3b690d46b507d41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
