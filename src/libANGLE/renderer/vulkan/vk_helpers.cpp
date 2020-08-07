@@ -4207,11 +4207,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                               gl::TexLevelMask skipLevelsMask,
                                               CommandBuffer *commandBuffer)
 {
-    if (mSubresourceUpdates.empty())
-    {
-        return angle::Result::Continue;
-    }
-
+    ASSERT(!mSubresourceUpdates.empty());
     removeSupersededUpdates(skipLevelsMask);
 
     // If a clear is requested and we know it just has been cleared with the same value, we drop the
@@ -4367,6 +4363,12 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
 angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
+    // Don't end render pass if nothing to do
+    if (!hasStagedUpdates())
+    {
+        return angle::Result::Continue;
+    }
+
     // Clear the image.
     CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
