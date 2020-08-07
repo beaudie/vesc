@@ -508,6 +508,24 @@
     },
     {
       "key": {
+        "uuid": "0fb8d74a_8f36a00a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T21:05:17Z",
+      "side": 1,
+      "message": "Looks like ending the render pass in FramebufferVk::blit() is not required, so I\u0027ll leave it out for now.",
+      "parentUuid": "07134c33_72d27c64",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cbb82f3c_989f6442",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
