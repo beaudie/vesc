@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "81ef5e4c_12bd52c8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T23:21:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0143fbbb_eb9498bf",
+      "range": {
+        "startLine": 458,
+        "startChar": 8,
+        "endLine": 458,
+        "endChar": 44
+      },
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8f67651_5be98106",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 5
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "680daa83_6fcff829",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T23:21:38Z",
+      "side": 1,
+      "message": "It could probably be cleaned up better. For now I\u0027m just reflecting what the code does.",
+      "parentUuid": "c8f67651_5be98106",
+      "range": {
+        "startLine": 545,
+        "startChar": 66,
+        "endLine": 545,
+        "endChar": 75
+      },
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc59c86b_65d82e57",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 5
@@ -76,6 +124,30 @@
       "writtenOn": "2020-08-07T22:22:46Z",
       "side": 1,
       "message": "Shouldn\u0027t this be an assertion instead of check? if setupDraw has not called, you will not have a started mRenderPassCommands, right?",
+      "range": {
+        "startLine": 546,
+        "startChar": 15,
+        "endLine": 546,
+        "endChar": 39
+      },
+      "revId": "e00a637440d265468042b76bf930bbcf83f291b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde804c8_e77897cb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T23:21:38Z",
+      "side": 1,
+      "message": "You still have a started mRenderPassCommands that might be finished by onRenderPassFinished and not yet flushed. It\u0027s a bit tricky and not sure on the best solution right now.",
+      "parentUuid": "bc59c86b_65d82e57",
       "range": {
         "startLine": 546,
         "startChar": 15,
