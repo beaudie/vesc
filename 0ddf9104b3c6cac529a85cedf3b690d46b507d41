@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6a62a4d_1662e2d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:24:43Z",
+      "side": 1,
+      "message": "Looks like I forgot to hit Reply. Had written this a few days back.",
+      "revId": "0ddf9104b3c6cac529a85cedf3b690d46b507d41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

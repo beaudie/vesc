@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "941082d8_78ad1709",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:24:43Z",
+      "side": 1,
+      "message": "How about moving it to `State` and making it `mutable`? Then you can reset it directly in setupDraw/setupDispatch and remove all the resets from the frontend.",
+      "parentUuid": "233b83e0_3bb60395",
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97291ce7_2686e5bc",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
