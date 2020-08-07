@@ -34,6 +34,24 @@
       "revId": "51fba946e92a23053302e705a411baf4547f0fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0de67886_22591b9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:27:03Z",
+      "side": 1,
+      "message": "You may be right, I did the sRGB fix without paying attention to that.",
+      "parentUuid": "e7a29ec6_c26c331b",
+      "revId": "51fba946e92a23053302e705a411baf4547f0fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
