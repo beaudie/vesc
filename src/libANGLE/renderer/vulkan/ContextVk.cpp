@@ -4445,6 +4445,8 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
         *commandBufferOut = mRenderPassCommandBuffer;
     }
 
+    mPerfCounters.renderPasses++;
+
     return angle::Result::Continue;
 }
 
@@ -4486,8 +4488,6 @@ angle::Result ContextVk::endRenderPass()
     }
 
     onRenderPassFinished();
-
-    mPerfCounters.renderPasses++;
 
     if (mGpuEventsEnabled)
     {
