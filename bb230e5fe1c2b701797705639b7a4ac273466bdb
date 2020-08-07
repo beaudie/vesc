@@ -157,6 +157,24 @@
       "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9be8e800_19075b6b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-07T17:18:40Z",
+      "side": 1,
+      "message": "Doing a little more work when a surface\u0027s rotation changes shouldn\u0027t be a big deal.\nI was hoping to avoid adding an extra check that rarely fires into setup for every draw call.",
+      "parentUuid": "e27b2afa_101e58bd",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
