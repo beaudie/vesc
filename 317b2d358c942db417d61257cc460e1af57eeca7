@@ -118,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "bcda9c15_95006da2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8425,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T15:28:24Z",
+      "side": 1,
+      "message": "I\u0027ve switched to a std::string, which is nicer, and I\u0027ve added a safeguard to prevent it from growing unbounded, currently a 10k max size.\nInitially I tried using snprintf(nullptr, 0, format, args) to get the size to write, then grow the string by that size. However, for at least one call that was returning too small of a size which broke the string after that point. Not sure what was causing it so as an alternative I\u0027m currently using a temp 1k buffer that I write into and append that into the std::string.\nThere\u0027s probably a nicer way to just write the update string onto the back of the std::string so let me know if you have suggestions.",
+      "parentUuid": "0d335a67_cd5087e4",
+      "range": {
+        "startLine": 8419,
+        "startChar": 0,
+        "endLine": 8425,
+        "endChar": 5
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0638995_466faaed",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 6
@@ -138,6 +162,30 @@
       "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04efbfcb_8ea72e90",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T15:28:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0638995_466faaed",
+      "range": {
+        "startLine": 635,
+        "startChar": 28,
+        "endLine": 635,
+        "endChar": 51
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -164,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "cf61e64d_1dac50d0",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T15:28:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19b092ce_f9c3a1cc",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 29
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "420926ad_60c874b7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -175,6 +247,30 @@
       "writtenOn": "2020-08-06T14:44:43Z",
       "side": 1,
       "message": "Tobin: can you take a look at gl::DebugAnnotator and see if we can do a DebugAnnotatorVk class?",
+      "range": {
+        "startLine": 1057,
+        "startChar": 8,
+        "endLine": 1057,
+        "endChar": 28
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60ea916d_bfb26fce",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T15:28:24Z",
+      "side": 1,
+      "message": "There\u0027s potential for this.\nIs your thought to migrate the current code into a DebugAnnotatorVk class, or to mimic the existing gl::DebugAnnotator behavior by inserting trace events for gl calls?\nI\u0027m suspecting the first option. If so, I can explore this further after my vacation next week.",
+      "parentUuid": "420926ad_60c874b7",
       "range": {
         "startLine": 1057,
         "startChar": 8,
@@ -210,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "42a31211_323854b6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T15:28:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0f4f49d_aa156b78",
+      "range": {
+        "startLine": 1060,
+        "startChar": 39,
+        "endLine": 1060,
+        "endChar": 61
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "991a4f55_c84d6cca",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -230,6 +350,30 @@
       "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "347a5261_490d943a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T15:28:24Z",
+      "side": 1,
+      "message": "Done. Also added resetting api string in Context::dispatchComputeIndirect() and Context::dispatchCompute() which I believe are the only corresponding entry points in gl::Context.",
+      "parentUuid": "991a4f55_c84d6cca",
+      "range": {
+        "startLine": 1053,
+        "startChar": 0,
+        "endLine": 1063,
+        "endChar": 6
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
