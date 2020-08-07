@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "3ff67f7f_86c23101",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:31:52Z",
+      "side": 1,
+      "message": "I imagine that\u0027s the output string right? Do you know what the format string and the args individually were? Something like: \"glCreateShader(): context \u003d %u, GLenum type \u003d %s\\n\", 3, \"GL_VERTEX_SHADER\", or something like that.\n\nI\u0027m sorry, but I kind of find it hard to believe that `vsnprintf(nullptr, 0, ...)` could have such an obvious bug.",
+      "parentUuid": "156beaa6_4747c495",
+      "range": {
+        "startLine": 8419,
+        "startChar": 0,
+        "endLine": 8425,
+        "endChar": 5
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0638995_466faaed",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 6
