@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ef2b0b7_270b7249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T01:26:00Z",
+      "side": 1,
+      "message": "This is not ready for review yet, but want to ensure this is the right path forward. The fundamental problem is that with RGB format, we are using RGBA. We are staging a clear for alpha channel which costs us a renderpass (or a vkCommand call at least). Instead, we could just leave alpha channel as is and use imageview\u0027s swizzle operation to set alpha to one. I think I just need to fix the readPixel path to deal with the fact that alpha channel contains undefined data and force it to one if needed. readPixels is not in per critical path, so okay to eat the cost than try to sample from RGB texture.",
+      "revId": "c0af938000dd8804de2c99f3d49954ff4c1ee088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
