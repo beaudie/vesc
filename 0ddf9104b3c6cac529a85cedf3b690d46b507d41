@@ -67,6 +67,23 @@
       "revId": "0ddf9104b3c6cac529a85cedf3b690d46b507d41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e73fb83_d3988897",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-07T21:58:11Z",
+      "side": 1,
+      "message": "More info for Shabi.\n\n@Cody, ContextVk-\u003einsertEventMarker() resolves to the same vkCmdInsertDebugUtilsLabelEXT() that I\u0027m using. However that and the push/popGroupMarker() calls all put the debug label into the outsideRenderPassCommand buffer.\nI currently put the commands immediately into the renderPassCommand buffer prior to the Draw cmd.\nSo, it\u0027s no problem to pass the OGL command strings via push/popGroupMarker() calls. I could just surround the Draw call as a starting point.\nRenderDoc will already give special treatment to the existing vkCmdInsertDebugUtilsLabelEXT() usage and should display the OGL API calls inline in the api stream in the same manner as the \"setBaseLevel\" debug code from contextVk-\u003einsertEventMarker() in your Debug Markers in VK doc.",
+      "revId": "0ddf9104b3c6cac529a85cedf3b690d46b507d41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
