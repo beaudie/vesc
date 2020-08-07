@@ -392,6 +392,14 @@ struct FeaturesVk : FeatureSetBase
     // comparisons. ANGLE is non-conformant if this feature is enabled.
     Feature forceNearestFiltering = {"force_nearest_filtering", FeatureCategory::VulkanWorkarounds,
                                      "Force nearest filtering when sampling.", &members};
+
+    // Fallback to smaller-sized vertex formats for performance. ANGLE is non-conformant if this
+    // feature is enabled.
+    angle::Feature compressVertexData = {"compress_vertex_data",
+                                         angle::FeatureCategory::VulkanWorkarounds,
+                                         "Compress vertex data to smaller data types when "
+                                         "possible. Using this feature makes ANGLE non-conformant.",
+                                         &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
