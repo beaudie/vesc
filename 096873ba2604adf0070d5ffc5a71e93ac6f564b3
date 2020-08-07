@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "e6252037_9e185c4c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:49:59Z",
+      "side": 1,
+      "message": "I wanted to suggest this to Tim in another review!",
+      "range": {
+        "startLine": 460,
+        "startChar": 15,
+        "endLine": 460,
+        "endChar": 40
+      },
+      "revId": "096873ba2604adf0070d5ffc5a71e93ac6f564b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "806684d9_79ed0c6f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
@@ -30,6 +53,30 @@
       "writtenOn": "2020-08-07T19:23:07Z",
       "side": 1,
       "message": "this is really the only tricky part.",
+      "range": {
+        "startLine": 544,
+        "startChar": 15,
+        "endLine": 544,
+        "endChar": 40
+      },
+      "revId": "096873ba2604adf0070d5ffc5a71e93ac6f564b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51607602_8ae333c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:49:59Z",
+      "side": 1,
+      "message": "Sounds like it needs a comment. Why is it needed now and wasn\u0027t before?",
+      "parentUuid": "806684d9_79ed0c6f",
       "range": {
         "startLine": 544,
         "startChar": 15,
