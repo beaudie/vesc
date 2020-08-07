@@ -250,6 +250,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
+    // When the surface is recreated, it may mean a new rotation.
+    void surfaceRecreated();
     // When the device/surface is rotated such that the surface's aspect ratio is different than
     // the native device (e.g. 90 degrees), the width and height of the viewport, scissor, and
     // render area must be swapped.
@@ -902,6 +904,7 @@ class ContextVk : public ContextImpl, public vk::Context
     // mCurrentWindowSurface->getPreTransform().
     SurfaceRotation mCurrentRotationDrawFramebuffer;
     SurfaceRotation mCurrentRotationReadFramebuffer;
+    bool mSurfaceRecreated;
 
     // Keep a cached pipeline description structure that can be used to query the pipeline cache.
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.

@@ -765,6 +765,9 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
 
     angle::Result result = createSwapChain(contextVk, extents, lastSwapchain);
 
+    // Inform the ContextVk that it needs to revisit the surface's rotation.
+    contextVk->surfaceRecreated();
+
     // If the most recent swapchain was never used, destroy it right now.
     if (swapchainToDestroy)
     {

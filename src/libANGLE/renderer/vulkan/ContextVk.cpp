@@ -633,6 +633,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentWindowSurface(nullptr),
       mCurrentRotationDrawFramebuffer(SurfaceRotation::Identity),
       mCurrentRotationReadFramebuffer(SurfaceRotation::Identity),
+      mSurfaceRecreated(false),
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
@@ -2787,7 +2788,14 @@ angle::Result ContextVk::syncState(const gl::Context *context,
         invalidateCurrentGraphicsPipeline();
     }
 
-    for (auto iter = dirtyBits.begin(), endIter = dirtyBits.end(); iter != endIter; ++iter)
+    gl::State::DirtyBits fullDirtyBits = dirtyBits;
+    if (mSurfaceRecreated)
+    {
+        mSurfaceRecreated = false;
+        fullDirtyBits.set(gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
+    }
+
+    for (auto iter = fullDirtyBits.begin(), endIter = fullDirtyBits.end(); iter != endIter; ++iter)
     {
         size_t dirtyBit = *iter;
         switch (dirtyBit)
@@ -3173,6 +3181,11 @@ void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
     gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mCurrentRotationReadFramebuffer =
         DetermineSurfaceRotation(readFramebuffer, mCurrentWindowSurface);
+}
+
+void ContextVk::surfaceRecreated()
+{
+    mSurfaceRecreated = true;
 }
 
 gl::Caps ContextVk::getNativeCaps() const
