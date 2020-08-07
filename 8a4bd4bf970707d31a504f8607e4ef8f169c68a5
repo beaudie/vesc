@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "a0877028_a118c7c5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d189b469_c523674b",
+      "range": {
+        "startLine": 1075,
+        "startChar": 42,
+        "endLine": 1075,
+        "endChar": 65
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdc248c9_f0fa2d1c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -96,6 +120,30 @@
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e52b84a_67f986e4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "I took your wording, since I trust your understanding of the details much more than my own.",
+      "parentUuid": "cdc248c9_f0fa2d1c",
+      "range": {
+        "startLine": 1076,
+        "startChar": 89,
+        "endLine": 1078,
+        "endChar": 46
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -145,6 +193,54 @@
     },
     {
       "key": {
+        "uuid": "2da8678b_204cd7fb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "Good catch.   I added the test FramebufferTest_ES31::MultisampleResolveWithBlitMultipleFBOs() which does as you describes.\n\nThis was fixed with a check of ContextVk::isCurrentRenderPassOfFramebuffer() for the source framebuffer.\n\nThis also requires updating onRenderPassFinished() to remove setting mRenderPassFramebuffer \u003d VK_NULL_HANDLE, since we need to know which VkFramebuffer the render pass was for.   onRenderPassFinished() is called as part of ContextVk::syncState() when handling gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING.   This should be safe, since all of the callers of isCurrentRenderPassOfFramebuffer() also check if the render pass is started...for now anyway.",
+      "parentUuid": "6c301f02_27f5684b",
+      "range": {
+        "startLine": 1080,
+        "startChar": 38,
+        "endLine": 1080,
+        "endChar": 83
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "370aeb70_eb18852e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "Done\n\nI thought I was hitting some dEQP failures without these, but CQ seems clean so far (patchset 16).",
+      "parentUuid": "f041111f_aacac6ad",
+      "range": {
+        "startLine": 1079,
+        "startChar": 65,
+        "endLine": 1080,
+        "endChar": 34
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "caa1a58c_384fe3f2",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -159,6 +255,24 @@
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c19d646a_71bb8bfa",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "I created FramebufferTest_ES31::MultisampleResolveWithBlitMultipleResolves() to test what you describe.   This test passes without any updates required.\n\nThe reason this works already is that we update the FramebufferDesc with the destination ImageView\u0027s Serial, which keeps them all unique and essentially creating all of the necessary read-draw framebuffer attachment pairings.   When FramebufferVk::getFramebuffer() looks for the vk::Framebuffer to return, the cache is able to differentiate between the different destination images (by Serial), and create a new vk::Framebuffer if they don\u0027t match.\n\nLet me know what you think.",
+      "parentUuid": "caa1a58c_384fe3f2",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -185,6 +299,30 @@
     },
     {
       "key": {
+        "uuid": "e9e98bf3_9bb6e33e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "A new framebuffer may not need to be created if the framebuffer cache is able to find one to re-use (as is typically what happens in Asphalt 8).   In that case, the resolve attachment pointer is unused.",
+      "parentUuid": "7d7b48c5_46e9d869",
+      "range": {
+        "startLine": 1217,
+        "startChar": 9,
+        "endLine": 1217,
+        "endChar": 16
+      },
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "676ba002_0887ac02",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -196,6 +334,24 @@
       "writtenOn": "2020-08-04T16:52:07Z",
       "side": 1,
       "message": "A change just landed that changes this in FramebufferVk::blit. If the read buffer is multisampled-render-to-buffer, then srcFramebuffer-\u003egetSamples(context) gives \u003e 1, but there\u0027s no resolve happening as the read buffer\u0027s singlesampled image will be used as blit src.\n\nIt can get a little complicated as you would need the blit mask to know how to correctly deduce this (see https://chromium-review.googlesource.com/c/angle/angle/+/2333987/5/src/libANGLE/renderer/vulkan/FramebufferVk.cpp#853). How about instead do this:\n\n    if (command !\u003d gl::Command::Blit)\n    {\n        // Don\u0027t end the render pass when handling a blit, since we may be able to optimize\n        // color resolves in a way that requires modifying the current render pass.\n        ANGLE_TRY(contextVk-\u003eendRenderPass());\n    }\n\nThen inside FramebufferVk::blit:\n\n    // \u003cAppropriate comment\u003e\n    if (!isColorResolve)\n    {\n        ANGLE_TRY(contextVk-\u003eendRenderPass());\n    }",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18cd9511_6ac86b9b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "Hm, the blit should end the render pass already (via ImageRead() or otherwise), so adding it to there may not be necessary.   I\u0027ll try it and see what CQ says.",
+      "parentUuid": "676ba002_0887ac02",
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -236,6 +392,42 @@
     },
     {
       "key": {
+        "uuid": "b388bff9_7fc2f7e7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "I think a normal private function would be better for readability than the lamda here, but let me know what you think.",
+      "parentUuid": "cbb82f3c_989f6442",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "113f4e7f_922522dc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fab8e094_634b5e48",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18403e9f_a2865606",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 15
@@ -253,6 +445,24 @@
     },
     {
       "key": {
+        "uuid": "d24a9ad1_b7d89c5d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "Oops, yup, forgot to back this out.   Done.",
+      "parentUuid": "18403e9f_a2865606",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77ed734a_744ba56f",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 15
@@ -267,6 +477,24 @@
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bf2acc9_6f95fe87",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T01:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77ed734a_744ba56f",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
