@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "378990e3_a17dd8b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T22:35:34Z",
+      "side": 1,
+      "message": "Don\u0027t you need to recreate the vk framebuffer given that a new resolve attachment is added where there wasn\u0027t one before?",
+      "parentUuid": "276d42b4_38449bed",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -523,6 +541,24 @@
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "235084cb_25736634",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T22:35:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0fb8d74a_8f36a00a",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
