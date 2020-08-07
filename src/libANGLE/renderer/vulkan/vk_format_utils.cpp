@@ -145,11 +145,29 @@ void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *
     imageInitializerFunction = info[i].initializer;
 }
 
-void Format::initBufferFallback(RendererVk *renderer, const BufferFormatInitInfo *info, int numInfo)
+void Format::initBufferFallback(RendererVk *renderer,
+                                const BufferFormatInitInfo *info,
+                                int numInfo,
+                                int compressedStartIndex)
 {
-    size_t skip = renderer->getFeatures().forceFallbackFormat.enabled ? 1 : 0;
-    int i       = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo),
-                                HasFullBufferFormatSupport);
+    // By default, skip nothing and iterate up to the start of the compressed formats
+    size_t skip         = 0;
+    uint32_t numFormats = compressedStartIndex;
+
+    if (renderer->getFeatures().compressVertexData.enabled && compressedStartIndex < numInfo)
+    {
+        // Start at the compressed formats and loop back to the real format and fallbacks if the
+        // compressed formats are not supported
+        skip       = compressedStartIndex;
+        numFormats = numInfo;
+    }
+    else if (renderer->getFeatures().forceFallbackFormat.enabled)
+    {
+        // Skip the first format and don't check compressed formats
+        skip = 1;
+    }
+
+    int i = FindSupportedFormat(renderer, info, skip, numFormats, HasFullBufferFormatSupport);
 
     actualBufferFormatID         = info[i].format;
     vkBufferFormat               = info[i].vkFormat;

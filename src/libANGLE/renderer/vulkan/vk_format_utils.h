@@ -94,7 +94,10 @@ struct Format final : private angle::NonCopyable
 
     // These are used in the format table init.
     void initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *info, int numInfo);
-    void initBufferFallback(RendererVk *renderer, const BufferFormatInitInfo *info, int numInfo);
+    void initBufferFallback(RendererVk *renderer,
+                            const BufferFormatInitInfo *fallbackInfo,
+                            int numInfo,
+                            int compressedStartIndex);
 
     angle::FormatID intendedFormatID;
     GLenum internalFormat;
