@@ -87,6 +87,24 @@
       "revId": "51fba946e92a23053302e705a411baf4547f0fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c720a187_6c86d8e3",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-07T18:59:12Z",
+      "side": 1,
+      "message": "It seems to be called in copyImage here for webgl contexts",
+      "parentUuid": "5c28aa53_089d5930",
+      "revId": "51fba946e92a23053302e705a411baf4547f0fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
