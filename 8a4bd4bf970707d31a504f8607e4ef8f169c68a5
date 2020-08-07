@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3c456590_ba227d2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:07:09Z",
+      "side": 1,
+      "message": "Let\u0027s change that proposed test to level 0 and level 1. Level 0 for MSAA, level 1 for single-sampled.\n\nSo:\n\n- Attach FBO 1 to MSAA texture at level 0\n- Attach FBO 2 to resolve texture at level 1 (where level 1\u0027s size matches MSAA texture\u0027s level 0)\n- Trigger this optimization\n\nFBO 1\u0027s RenderTargetVk has the MSAA texture\u0027s image as mImage, the resolve texture\u0027s image as mResolveImage and has levelGL \u003d 0.\n\nWhen taking the resolve view out of the render target, the wrong level is selected for mResolveImage.",
+      "parentUuid": "200dfde4_377ae632",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
