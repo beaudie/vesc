@@ -3751,6 +3751,15 @@ bool ValidateTransformFeedbackVaryings(const Context *context,
         return false;
     }
 
+    for (GLsizei index = 0; index < count; ++index)
+    {
+        if (strchr(varyings[index], '[') != nullptr)
+        {
+            context->validationError(GL_INVALID_VALUE, "TODO");
+            return false;
+        }
+    }
+
     switch (bufferMode)
     {
         case GL_INTERLEAVED_ATTRIBS:
