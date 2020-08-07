@@ -98,6 +98,15 @@ void TestPlatform_overrideFeaturesVk(PlatformMethods *platform, FeaturesVk *feat
     }
 }
 
+void TestPlatform_overrideFeaturesMetal(PlatformMethods *platform, FeaturesMtl *featuresMtl)
+{
+    auto *testPlatformContext = static_cast<TestPlatformContext *>(platform->context);
+    if (testPlatformContext->currentTest)
+    {
+        testPlatformContext->currentTest->overrideFeaturesMetal(featuresMtl);
+    }
+}
+
 const std::array<Vector3, 6> kQuadVertices = {{
     Vector3(-1.0f, 1.0f, 0.5f),
     Vector3(-1.0f, -1.0f, 0.5f),
@@ -507,6 +516,7 @@ void ANGLETestBase::ANGLETestSetUp()
 
     gDefaultPlatformMethods.overrideWorkaroundsD3D = TestPlatform_overrideWorkaroundsD3D;
     gDefaultPlatformMethods.overrideFeaturesVk     = TestPlatform_overrideFeaturesVk;
+    gDefaultPlatformMethods.overrideFeaturesMtl    = TestPlatform_overrideFeaturesMetal;
     gDefaultPlatformMethods.logError               = TestPlatform_logError;
     gDefaultPlatformMethods.logWarning             = TestPlatform_logWarning;
     gDefaultPlatformMethods.logInfo                = TestPlatform_logInfo;

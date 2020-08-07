@@ -4,12 +4,28 @@
 // found in the LICENSE file.
 //
 
+#include "platform/FeaturesMtl.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
 using namespace angle;
 
-class BlitFramebufferANGLETest : public ANGLETest
+// The blit frame buffer test will have 2 parameters: platform and boolean flag.
+// The boolean flag indicating the stencil output in shader is supported on Metal back-end or not.
+using BlitFramebufferTestParams = std::tuple<angle::PlatformParameters, bool>;
+
+std::string PrintToStringParamName(const ::testing::TestParamInfo<BlitFramebufferTestParams> &info)
+{
+    ::std::stringstream ss;
+    ss << std::get<0>(info.param);
+    if (std::get<1>(info.param))
+    {
+        ss << "__NoStencilOutput";
+    }
+    return ss.str();
+}
+
+class BlitFramebufferANGLETest : public ANGLETestWithParam<BlitFramebufferTestParams>
 {
   protected:
     BlitFramebufferANGLETest()
@@ -59,6 +75,15 @@ class BlitFramebufferANGLETest : public ANGLETest
         mBGRAFBO                      = 0;
         mBGRAMultisampledRenderbuffer = 0;
         mBGRAMultisampledFBO          = 0;
+    }
+
+    void overrideFeaturesMetal(FeaturesMtl *features) override
+    {
+        // Simulate missing stencil output feature on Metal.
+        if (::testing::get<1>(GetParam()))
+        {
+            features->overrideFeatures({"has_stencil_output"}, false);
+        }
     }
 
     void testSetUp() override
@@ -833,6 +858,9 @@ TEST_P(BlitFramebufferANGLETest, BlitStencil)
 
     // http://anglebug.com/2205
     ANGLE_SKIP_TEST_IF(IsIntel() && IsD3D9());
+
+    // http://anglebug.com/4919
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMetal());
 
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
@@ -1999,13 +2027,25 @@ TEST_P(BlitFramebufferTest, BlitFramebufferSizeOverflow2)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES2_D3D11_PRESENT_PATH_FAST(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_VULKAN(),
-                       ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_COMBINE_1(BlitFramebufferANGLETest,
+                                 PrintToStringParamName,
+                                 testing::Values(false),
+                                 ES2_D3D9(),
+                                 ES2_D3D11(),
+                                 ES2_D3D11_PRESENT_PATH_FAST(),
+                                 ES2_OPENGL(),
+                                 ES3_OPENGL(),
+                                 ES2_VULKAN(),
+                                 ES3_VULKAN(),
+                                 ES2_METAL());
+
+namespace stencil_output_feature_off
+{
+// Simulate missing shader's stencil output feature in Metal.
+ANGLE_INSTANTIATE_TEST_COMBINE_1(BlitFramebufferANGLETest,
+                                 PrintToStringParamName,
+                                 testing::Values(true),
+                                 ES2_METAL());
+}  // namespace stencil_output_feature_off
 
 ANGLE_INSTANTIATE_TEST_ES3(BlitFramebufferTest);
