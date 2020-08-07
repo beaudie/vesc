@@ -92,6 +92,30 @@
       "revId": "faa81470a55fbad3447d651316d3c621f48ef3cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "097a450f_ddbf1f8d",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-07T16:12:05Z",
+      "side": 1,
+      "message": "Maybe this is here so the test can pass in the \"Broken\" state? That\u0027s why I landed my test as skipped (so that the test was correct but we could lift the skip expectation)",
+      "parentUuid": "5538ff79_ca4d8d16",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 65
+      },
+      "revId": "faa81470a55fbad3447d651316d3c621f48ef3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
