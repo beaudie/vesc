@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "b4f58ff7_177d3108",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-07T13:28:01Z",
+      "side": 1,
+      "message": "That\u0027s what the mutable key word is for. Saw other structs do something similar for refcount-like values.",
+      "parentUuid": "291dace8_6d2bc1a1",
+      "range": {
+        "startLine": 631,
+        "startChar": 0,
+        "endLine": 632,
+        "endChar": 41
+      },
+      "revId": "fb073f14b11fb37d43c100d1323d22e2e4bac07f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36063223_5c1c3303",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 10
@@ -62,6 +86,30 @@
       "revId": "fb073f14b11fb37d43c100d1323d22e2e4bac07f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a8f75dc_0c621414",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-07T13:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36063223_5c1c3303",
+      "range": {
+        "startLine": 1240,
+        "startChar": 4,
+        "endLine": 1242,
+        "endChar": 68
+      },
+      "revId": "fb073f14b11fb37d43c100d1323d22e2e4bac07f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "cda76c5c_9931bbf4",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-07T13:28:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "24bd78d0_fd3b2080",
+      "range": {
+        "startLine": 1338,
+        "startChar": 0,
+        "endLine": 1341,
+        "endChar": 26
+      },
+      "revId": "fb073f14b11fb37d43c100d1323d22e2e4bac07f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7096d37b_bda396fa",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 10
@@ -108,6 +180,30 @@
       "revId": "fb073f14b11fb37d43c100d1323d22e2e4bac07f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7078878_fddea861",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-07T13:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7096d37b_bda396fa",
+      "range": {
+        "startLine": 1401,
+        "startChar": 53,
+        "endLine": 1401,
+        "endChar": 57
+      },
+      "revId": "fb073f14b11fb37d43c100d1323d22e2e4bac07f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
