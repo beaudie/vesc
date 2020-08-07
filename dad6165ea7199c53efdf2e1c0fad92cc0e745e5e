@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eec428a2_a2d542b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-07T15:39:31Z",
+      "side": 1,
+      "message": "Looks good, but needs a refresh once crrev/c/2340787 is finished.",
+      "revId": "dad6165ea7199c53efdf2e1c0fad92cc0e745e5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
