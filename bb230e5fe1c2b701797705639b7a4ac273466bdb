@@ -121,6 +121,24 @@
       "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e5f4de5_de5fb273",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-07T16:29:10Z",
+      "side": 1,
+      "message": "I tried just doing the following in ContextVk::surfaceRecreated(), and the correct rendering did NOT occur:\n\n    + Set mCurrentRotationDrawFramebuffer\n    + Update the viewport\n    + Update the scissor\n\nIt looks like I can\u0027t set the dirty bit here, since the dirty bits are in the gl::State class, and ContextVk methods can only get a const reference of gl::State.  I remember exploring a few different approaches yesterday before settling on my current approach.\n\nCan we live with this approach, or is there another alternative to explore?",
+      "parentUuid": "392b82d1_b8c16d94",
+      "revId": "bb230e5fe1c2b701797705639b7a4ac273466bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
