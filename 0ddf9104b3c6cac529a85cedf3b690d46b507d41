@@ -33,6 +33,23 @@
       "revId": "0ddf9104b3c6cac529a85cedf3b690d46b507d41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ecceded7_52751dc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-07T15:57:24Z",
+      "side": 1,
+      "message": "Is there any chance of using ANGLE\u0027s pushDebugGroup/popDebugGroup to capture this information instead?  RendeDoc already supports displaying VK calls nested under a debug group.  You could set the message to the API entry point and parameters.",
+      "revId": "0ddf9104b3c6cac529a85cedf3b690d46b507d41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
