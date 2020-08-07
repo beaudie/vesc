@@ -46,6 +46,30 @@
       "revId": "91a03bd4ab5ef09924ced477828473714a6022c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88a2057b_2916d017",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T19:27:23Z",
+      "side": 1,
+      "message": "Sorry this got landed. Will fix in a follow up",
+      "parentUuid": "f1a736a0_8521cac0",
+      "range": {
+        "startLine": 716,
+        "startChar": 4,
+        "endLine": 716,
+        "endChar": 12
+      },
+      "revId": "91a03bd4ab5ef09924ced477828473714a6022c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
