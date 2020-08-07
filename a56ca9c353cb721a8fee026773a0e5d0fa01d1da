@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a24340a0_1ed09236",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T01:19:05Z",
+      "side": 1,
+      "message": "This white box test is expected to fail, right now. Should be fixed with the following CLs.",
+      "revId": "a56ca9c353cb721a8fee026773a0e5d0fa01d1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
