@@ -481,6 +481,128 @@ TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDerivativeDraw)
     ASSERT_GL_NO_ERROR();
 }
 
+// Constants for different window sizes for the resize test
+constexpr int kSmallSize       = 1;
+constexpr int kSmallSizeCoord  = 0;
+constexpr int kMediumSize      = 128;
+constexpr int kMediumSizeCoord = 127;
+constexpr int kLargeSize       = 256;
+constexpr int kLargeSizeCoord  = 255;
+
+// Test that resizing the window causes ContextVk::syncState() to handle the new window size
+TEST_P(EGLPreRotationSurfaceTest, ResizeWindowWithDraw)
+{
+    // http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
+
+    // Flaky on Linux SwANGLE http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+
+    // To aid in debugging, we want this window visible
+    setWindowVisible(mOSWindow, true);
+
+    initializeDisplay();
+    initializeSurfaceWithRGBA8888Config();
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    // Use the window's currently-large height
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    // Clear to red
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_EGL_SUCCESS();
+
+    // The most-interior pixels should be red
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, kSmallSizeCoord, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, kSmallSizeCoord, GLColor::red);
+    // The medium-interior pixels should be red
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, kMediumSizeCoord, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, kMediumSizeCoord, GLColor::red);
+    // The outside-edge pixels should be red
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, kLargeSizeCoord, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, kLargeSizeCoord, GLColor::red);
+
+    // Set the window size to small
+    mOSWindow->resize(kSmallSize, kSmallSize);
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    // Clear to green
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_EGL_SUCCESS();
+
+    // The most-interior pixels should be green
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, kSmallSizeCoord, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, kSmallSizeCoord, GLColor::green);
+    // The medium-interior pixels (now outside the window) should be transparent-black
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, kMediumSizeCoord, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(0, kMediumSizeCoord, GLColor::transparentBlack);
+    // The outside-edge pixels (now outside the window) should be transparent-black
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, kLargeSizeCoord, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(0, kLargeSizeCoord, GLColor::transparentBlack);
+
+    // Set the window size to medium
+    mOSWindow->resize(kMediumSize, kMediumSize);
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    // Clear to blue
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_EGL_SUCCESS();
+
+    // The most-interior pixels should be blue
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, kSmallSizeCoord, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(0, kSmallSizeCoord, GLColor::blue);
+    // The medium-interior pixels (now inside the window) should be blue
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, kMediumSizeCoord, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(0, kMediumSizeCoord, GLColor::blue);
+    // The outside-edge pixels (now outside the window) should be transparent-black
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, kLargeSizeCoord, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(0, kLargeSizeCoord, GLColor::transparentBlack);
+
+    // Set the window size back to large
+    mOSWindow->resize(kLargeSize, kLargeSize);
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    // Clear to yellow
+    glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_EGL_SUCCESS();
+
+    // The most-interior pixels should be yellow
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, 0, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(kSmallSizeCoord, kSmallSizeCoord, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(0, kSmallSizeCoord, GLColor::yellow);
+    // The medium-interior pixels (now inside the window) should be yellow
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, 0, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(kMediumSizeCoord, kMediumSizeCoord, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(0, kMediumSizeCoord, GLColor::yellow);
+    // The outside-edge pixels (now inside the window) should be yellow
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, 0, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(kLargeSizeCoord, kLargeSizeCoord, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(0, kLargeSizeCoord, GLColor::yellow);
+}
+
 // A slight variation of EGLPreRotationSurfaceTest, where the initial window size is 400x300, yet
 // the drawing is still 256x256.  In addition, gl_FragCoord is used in a "clever" way, as the color
 // of the 256x256 drawing area, which reproduces an interesting pre-rotation case from the
