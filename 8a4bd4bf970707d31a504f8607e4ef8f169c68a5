@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "276d42b4_38449bed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T20:58:05Z",
+      "side": 1,
+      "message": "RenderTargetVk::getResolveImageView() isn\u0027t called when handling a blit.",
+      "parentUuid": "5555a562_c7514d85",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -575,6 +593,24 @@
       "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7746383_9378c603",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-07T20:58:05Z",
+      "side": 1,
+      "message": "Oh, misunderstood what you meant there.   Moved it to HasResolveAttachment() in the anonymous namespace above.",
+      "parentUuid": "cbe735fa_b1e06f98",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
