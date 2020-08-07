@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b6dba30_b12cdeea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-07T15:17:02Z",
+      "side": 1,
+      "message": "PTAL. The typo fix is not uploaded (to let the dry-run run). Will upload with next batch of feedback, if any.",
+      "revId": "bce6c30288b3696b93842e7d412f9b7a54cfe1c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
