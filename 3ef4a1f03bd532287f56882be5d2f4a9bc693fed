@@ -51,6 +51,24 @@
       "revId": "3ef4a1f03bd532287f56882be5d2f4a9bc693fed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "00827fb9_a1883cb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-07T17:15:47Z",
+      "side": 1,
+      "message": "Yea, all agree with what you guys said. But I think even after Jamie\u0027s fix, this is still a good (not required) change so that we could easily bail out early.",
+      "parentUuid": "f58f2810_ff69e47d",
+      "revId": "3ef4a1f03bd532287f56882be5d2f4a9bc693fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
