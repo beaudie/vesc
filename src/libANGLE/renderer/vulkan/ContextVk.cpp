@@ -4362,12 +4362,9 @@ angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
 
     ANGLE_TRY(endRenderPassIfImageUsed(*image));
 
-    if (image->isLayoutChangeNecessary(imageLayout))
-    {
-        image->changeLayout(aspectFlags, imageLayout,
-                            &mOutsideRenderPassCommands->getCommandBuffer());
-    }
+    image->readBarrier(aspectFlags, imageLayout, &mOutsideRenderPassCommands->getCommandBuffer());
     image->retain(&mResourceUseList);
+
     return angle::Result::Continue;
 }
 
@@ -4378,12 +4375,9 @@ angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
     ASSERT(!image->isReleasedToExternal());
     ASSERT(image->getImageSerial().valid());
 
-    // Barriers are always required for image writes.
-    ASSERT(image->isLayoutChangeNecessary(imageLayout));
-
     ANGLE_TRY(endRenderPassIfImageUsed(*image));
 
-    image->changeLayout(aspectFlags, imageLayout, &mOutsideRenderPassCommands->getCommandBuffer());
+    image->writeBarrier(aspectFlags, imageLayout, &mOutsideRenderPassCommands->getCommandBuffer());
     image->retain(&mResourceUseList);
     image->onWrite();
 
