@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c621ee7_87cf5177",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-08T20:21:47Z",
+      "side": 1,
+      "message": "I meant that since you\u0027re not modifying the RenderTargetVk for this optimization, you might as well remove all mention of it in this file.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 18
+      },
+      "revId": "30128746ba396dc1b0cb2d1539675c2d9d8708ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cf542a1_8b1ed297",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-08T20:21:47Z",
+      "side": 1,
+      "message": "This will close the render pass, so the optimization in this change won\u0027t take effect. You would need to create the two-attachment FBO first, then draw into both at the same time.\n\nSee MultisampledRenderToTextureES3Test.ColorAttachments0And3 for inspiration, like what shaders to use. So the test would go:\n\n- Create FBO1 with two attachment\n- Draw into both attachment with one draw call (one red, one green)\n- ReadBuffer(0)\n- Resolve into FBO 2\n- ReadBUffer(1)\n- Resolve into FBO 3\n- Readbacks and verifications\n\nUntil \"Readbacks and verifications\", there should be nothing that can break the renderpass.\n\nCurrently, the first resolve force-closes the render pass (which is why the test would pass), but it technically didn\u0027t have to.",
+      "range": {
+        "startLine": 1408,
+        "startChar": 0,
+        "endLine": 1412,
+        "endChar": 51
+      },
+      "revId": "30128746ba396dc1b0cb2d1539675c2d9d8708ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
