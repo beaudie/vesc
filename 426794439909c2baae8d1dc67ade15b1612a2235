@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "4d688bc1_de346442",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-08T00:28:06Z",
+      "side": 1,
+      "message": "After discussing with Shabi and I confirm that the clear gets removed during flushStagedUpdates call. So we are not initializing alpha twice. I think we don\u0027t need this CL.",
+      "revId": "426794439909c2baae8d1dc67ade15b1612a2235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6b763e0_1ef3adc4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
