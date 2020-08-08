@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f7a483d_15de436d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-08T00:03:03Z",
+      "side": 1,
+      "message": "Initial test added.  I can see (with Visual Studio on Windows) that the test exercises my code; but it passes with or without my change.  The test fails on Android, because the test framework can\u0027t really change the size of the window (nor change the rotation).",
+      "revId": "23e2e4b1a980c38693ff18ac8cd1ae61d0ca1b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
