@@ -75,6 +75,7 @@ struct ImageMemoryBarrierData
 {
     // The Vk layout corresponding to the ImageLayout key.
     VkImageLayout layout;
+
     // The stage in which the image is used (or Bottom/Top if not using any specific stage).  Unless
     // Bottom/Top (Bottom used for transition to and Top used for transition from), the two values
     // should match.
@@ -527,6 +528,10 @@ bool IsExternalQueueFamily(uint32_t queueFamilyIndex)
 }
 #endif
 
+bool IsShaderReadLayout(const ImageMemoryBarrierData &imageLayout)
+{
+    return imageLayout.layout == VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL;
+}
 }  // anonymous namespace
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
@@ -2742,7 +2747,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.queueFamilyIndexCount = 0;
     imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = kImageMemoryBarrierData[initialLayout].layout;
+    imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(initialLayout);
 
     mCurrentLayout = initialLayout;
 
@@ -3130,7 +3135,7 @@ bool ImageHelper::isCombinedDepthStencilFormat() const
 
 VkImageLayout ImageHelper::getCurrentLayout() const
 {
-    return kImageMemoryBarrierData[mCurrentLayout].layout;
+    return ConvertImageLayoutToVkImageLayout(mCurrentLayout);
 }
 
 gl::Extents ImageHelper::getLevelExtents(uint32_t levelVK) const
@@ -3288,8 +3293,7 @@ bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
         VkPipelineStageFlags srcStageMask            = transitionFrom.srcStageMask;
         VkPipelineStageFlags dstStageMask            = transitionTo.dstStageMask;
 
-        if (transitionTo.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
-            transitionFrom.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+        if (IsShaderReadLayout(transitionTo) && IsShaderReadLayout(transitionFrom))
         {
             // If we are switching between different shader stage reads, then there is no actual
             // layout change or access type change. We only need a barrier if we are making a read
@@ -3326,9 +3330,9 @@ bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
 
             // If we are transition into shaderRead layout, remember the last
             // non-shaderRead layout here.
-            if (transitionTo.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            if (IsShaderReadLayout(transitionTo))
             {
-                ASSERT(transitionFrom.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                ASSERT(!IsShaderReadLayout(transitionFrom));
                 mLastNonShaderReadOnlyLayout = mCurrentLayout;
                 mCurrentShaderReadStageMask  = dstStageMask;
             }
