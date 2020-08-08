@@ -798,13 +798,13 @@ class BufferHelper final : public Resource
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
-    bool updateReadBarrier(VkAccessFlags readAccessType,
-                           VkPipelineStageFlags readStage,
-                           PipelineBarrier *barrier);
+    bool readBarrier(VkAccessFlags readAccessType,
+                     VkPipelineStageFlags readStage,
+                     PipelineBarrier *barrier);
 
-    bool updateWriteBarrier(VkAccessFlags writeAccessType,
-                            VkPipelineStageFlags writeStage,
-                            PipelineBarrier *barrier);
+    bool writeBarrier(VkAccessFlags writeAccessType,
+                      VkPipelineStageFlags writeStage,
+                      PipelineBarrier *barrier);
 
   private:
     angle::Result mapImpl(ContextVk *contextVk);
@@ -1353,22 +1353,26 @@ class ImageHelper final : public Resource, public angle::Subject
     bool isUpdateStaged(uint32_t levelGL, uint32_t layer);
     bool hasStagedUpdates() const { return !mSubresourceUpdates.empty(); }
 
-    // changeLayout automatically skips the layout change if it's unnecessary.  This function can be
-    // used to prevent creating a command graph node and subsequently a command buffer for the sole
-    // purpose of performing a transition (which may then not be issued).
-    bool isLayoutChangeNecessary(ImageLayout newLayout) const;
-
-    template <typename CommandBufferT>
-    void changeLayout(VkImageAspectFlags aspectMask,
+    void writeBarrier(VkImageAspectFlags aspectMask,
                       ImageLayout newLayout,
-                      CommandBufferT *commandBuffer)
+                      CommandBuffer *commandBuffer)
     {
-        if (!isLayoutChangeNecessary(newLayout))
+        barrierImpl(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
+    }
+
+    // This function can be used to prevent issuing redundant layout transition commands.
+    bool isReadBarrierNecessary(ImageLayout newLayout) const;
+
+    void readBarrier(VkImageAspectFlags aspectMask,
+                     ImageLayout newLayout,
+                     CommandBuffer *commandBuffer)
+    {
+        if (!isReadBarrierNecessary(newLayout))
         {
             return;
         }
 
-        forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
+        barrierImpl(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
     }
 
     bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
@@ -1531,10 +1535,10 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Generalized to accept both "primary" and "secondary" command buffers.
     template <typename CommandBufferT>
-    void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
-                                   ImageLayout newLayout,
-                                   uint32_t newQueueFamilyIndex,
-                                   CommandBufferT *commandBuffer);
+    void barrierImpl(VkImageAspectFlags aspectMask,
+                     ImageLayout newLayout,
+                     uint32_t newQueueFamilyIndex,
+                     CommandBufferT *commandBuffer);
 
     // If the image has emulated channels, we clear them once so as not to leave garbage on those
     // channels.
