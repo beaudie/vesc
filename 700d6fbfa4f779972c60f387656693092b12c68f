@@ -70,6 +70,30 @@
       "revId": "700d6fbfa4f779972c60f387656693092b12c68f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc33f952_c8617f62",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-08T03:36:52Z",
+      "side": 1,
+      "message": "I moved it to the end to match everything else.   Having the value change when new values are added should be fine.",
+      "parentUuid": "d6de3093_b70b139b",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "700d6fbfa4f779972c60f387656693092b12c68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
