@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "ce9b0b91_4e32bff4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-08T20:21:56Z",
+      "side": 1,
+      "message": "Tried with g++ and clang++, both return 62 for this, with and without -O2:\n\n    #include \u003cstdio.h\u003e\n    #include \u003cstdarg.h\u003e\n    \n    int get_len(const char *format, ...)\n    {\n        va_list args;\n        va_start(args, format);\n        int ret \u003d vsnprintf(nullptr, 0, format, args);\n        va_end(args);\n        return ret;\n    }\n    \n    int main()\n    {\n        printf(\"%d\\n\", get_len(\"glCreateShader(): context \u003d %d, GLenum type \u003d %s\\n\", 3, \"GL_VERTEX_SHADER\"));\n        return 0;\n    }\n\nWhat compiler/platform are you seeing this issue with?",
+      "parentUuid": "0cf60659_5da3c9dc",
+      "range": {
+        "startLine": 8419,
+        "startChar": 0,
+        "endLine": 8425,
+        "endChar": 5
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0638995_466faaed",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 6
