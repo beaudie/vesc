@@ -197,6 +197,24 @@
     },
     {
       "key": {
+        "uuid": "6cb9833c_3d1d16dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-08T00:31:22Z",
+      "side": 1,
+      "message": "\u003e Do you mind updating the comment in RenderTargetVk before mIsImageTransient and remove mentions of this optimization then?\n\nI updated the comment referring to glBlitFramebuffer.\n\n\u003e Also, you can add this test:\n\u003e \n\u003e - Attach two MSAA textures to FBO1\n\u003e - Set read buffer 0\n\u003e - Resolve into FBO2\n\u003e - Set read buffer 1\n\u003e - Resolve into FBO3\n\nDone:\nFramebufferTest_ES31::MultipleTextureMultisampleResolveWithBlitMultipleResolves()\n\nI\u0027m not sure about the actual GL commands for that guy, but it seems to work and passes without any additional changes.\n\n\u003e Ideally both resolves could have been done with this optimization.\n\nI\u0027m intentionally keeping this simple, since this is all the app does.   MSAA is already something very few Android apps do, so it\u0027s not really worth the effort (yet anyway) to make sure we cover every use-case until we see apps actually doing it.\n\nIt seems others agree that optimizing this case is not worth it:\n\nhttps://stackoverflow.com/a/1793104\n\n\u003e From the EXT_framebuffer_blit specification\n\u003e \n\u003e 12) Should we add support for multiple ReadBuffers, so that multiple color buffers may be copied with a single call to BlitFramebuffer?\n\u003e \n\u003e Resolved: No, we considered this but the behavior is awkward to define and the functionality is of limited use.\n\nBased on that, I\u0027m going to mark this as resolved.   If you think this is worth pursuing, please open a bug and we can come back to it.",
+      "parentUuid": "e62eb9ed_7d8524c1",
+      "revId": "8a4bd4bf970707d31a504f8607e4ef8f169c68a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d189b469_c523674b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
