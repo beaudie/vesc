@@ -188,6 +188,20 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::VertexShaderDepthStencilReadOnly,
+        {
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            BarrierType::Read,
+            PipelineStage::VertexShader,
+        },
+    },
+    {
         ImageLayout::VertexShaderReadOnly,
         {
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -213,6 +227,20 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             BarrierType::Write,
             PipelineStage::VertexShader,
+        },
+    },
+    {
+        ImageLayout::GeometryShaderDepthStencilReadOnly,
+        {
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT,
+            VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            BarrierType::Read,
+            PipelineStage::GeometryShader,
         },
     },
     {
@@ -244,6 +272,20 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::FragmentShaderDepthStencilReadOnly,
+        {
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            BarrierType::Read,
+            PipelineStage::FragmentShader,
+        },
+    },
+    {
         ImageLayout::FragmentShaderReadOnly,
         {
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -269,6 +311,20 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             BarrierType::Write,
             PipelineStage::FragmentShader,
+        },
+    },
+    {
+        ImageLayout::ComputeShaderReadOnly,
+        {
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            BarrierType::Read,
+            PipelineStage::ComputeShader,
         },
     },
     {
@@ -315,7 +371,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
-        ImageLayout::AllGraphicsShadersReadWrite,
+        ImageLayout::AllGraphicsShadersWrite,
         {
             VK_IMAGE_LAYOUT_GENERAL,
             kAllShadersPipelineStageFlags,
