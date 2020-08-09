@@ -1414,6 +1414,7 @@ void RobustResourceInitTest::maskedDepthClear(ClearFunc clearFunc)
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
 
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    glFlush();
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black) << "depth should not be 0.5f";
 

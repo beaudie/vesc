@@ -116,12 +116,13 @@ class FramebufferVk : public FramebufferImpl
 
     angle::Result startNewRenderPass(ContextVk *contextVk,
                                      const gl::Rectangle &renderArea,
+                                     bool depthWritesEnabled,
                                      vk::CommandBuffer **commandBufferOut);
 
     RenderTargetVk *getFirstRenderTarget() const;
     GLint getSamples() const;
 
-    const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    const vk::RenderPassDesc &getRenderPassDesc(bool depthWritesEnabled);
     const vk::FramebufferDesc &getFramebufferDesc() const { return mCurrentFramebufferDesc; }
     // We only support depth/stencil packed format and depthstencil attachment always follow all
     // color attachments
@@ -129,6 +130,8 @@ class FramebufferVk : public FramebufferImpl
     {
         return getState().getEnabledDrawBuffers().count();
     }
+
+    void invalidateCurrentFramebuffer() { mFramebuffer = nullptr; }
 
   private:
     FramebufferVk(RendererVk *renderer,
@@ -158,7 +161,9 @@ class FramebufferVk : public FramebufferImpl
     angle::Result copyResolveToMultisampedAttachment(ContextVk *contextVk,
                                                      RenderTargetVk *colorRenderTarget);
 
-    angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
+    angle::Result getFramebuffer(ContextVk *contextVk,
+                                 bool depthWritesEnabled,
+                                 vk::Framebuffer **framebufferOut);
 
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,

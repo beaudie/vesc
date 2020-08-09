@@ -197,6 +197,7 @@ struct DepthStencilState final
 
     bool isDepthMaskedOut() const;
     bool isStencilMaskedOut() const;
+    bool areDepthWritesEnabled() const;
 
     bool depthTest;
     GLenum depthFunc;
