@@ -109,6 +109,11 @@ bool DepthStencilState::isDepthMaskedOut() const
     return !depthMask;
 }
 
+bool DepthStencilState::areDepthWritesEnabled() const
+{
+    return depthTest && depthMask;
+}
+
 bool DepthStencilState::isStencilMaskedOut() const
 {
     return (stencilMask & stencilWritemask) == 0;

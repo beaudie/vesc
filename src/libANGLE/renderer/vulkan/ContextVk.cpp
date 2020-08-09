@@ -111,12 +111,6 @@ GLenum DefaultGLErrorCode(VkResult result)
     }
 }
 
-constexpr gl::ShaderMap<vk::ImageLayout> kShaderDepthStencilReadOnlyImageLayouts = {
-    {gl::ShaderType::Vertex, vk::ImageLayout::VertexShaderDepthStencilReadOnly},
-    {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderDepthStencilReadOnly},
-    {gl::ShaderType::Geometry, vk::ImageLayout::GeometryShaderDepthStencilReadOnly},
-    {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderDepthStencilReadOnly}};
-
 constexpr gl::ShaderMap<vk::ImageLayout> kShaderReadOnlyImageLayouts = {
     {gl::ShaderType::Vertex, vk::ImageLayout::VertexShaderReadOnly},
     {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderReadOnly},
@@ -1005,7 +999,9 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     if (!mRenderPassCommandBuffer)
     {
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
-        ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
+        const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+        bool readOnlyDepth = !dsState.areDepthWritesEnabled() && !mDrawFramebuffer->hasStencil();
+        ANGLE_TRY(startRenderPass(scissoredRenderArea, readOnlyDepth, nullptr));
     }
 
     // We keep a local copy of the command buffer. It's possible that some state changes could
@@ -1375,6 +1371,10 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
                                                     : vk::ImageLayout::AllGraphicsShadersWrite;
         }
+        else if (isDepthStencil)
+        {
+            textureLayout = vk::ImageLayout::DepthStencilReadOnly;
+        }
         else
         {
             gl::ShaderBitSet remainingShaderBits =
@@ -1386,25 +1386,11 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             // given that we only support vertex/frag shaders
             if (remainingShaderBits.any())
             {
-                if (isDepthStencil)
-                {
-                    textureLayout = vk::ImageLayout::AllGraphicsShaderDepthStencilReadOnly;
-                }
-                else
-                {
-                    textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
-                }
+                textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
             }
             else
             {
-                if (isDepthStencil)
-                {
-                    textureLayout = kShaderDepthStencilReadOnlyImageLayouts[firstShader];
-                }
-                else
-                {
-                    textureLayout = kShaderReadOnlyImageLayouts[firstShader];
-                }
+                textureLayout = kShaderReadOnlyImageLayouts[firstShader];
             }
         }
         // Ensure the image is in read-only layout
@@ -2847,10 +2833,12 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               glState.getDepthStencilState(),
                                                               glState.getDrawFramebuffer());
-                if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
-                {
-                    mRenderPassCommands->setDepthTestEnabled();
-                }
+                ANGLE_TRY(endRenderPass());
+                vk::GetImpl(glState.getDrawFramebuffer())->invalidateCurrentFramebuffer();
+                // if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
+                //{
+                //    mRenderPassCommands->setDepthTestEnabled();
+                //}
                 break;
             case gl::State::DIRTY_BIT_DEPTH_FUNC:
                 mGraphicsPipelineDesc->updateDepthFunc(&mGraphicsPipelineTransition,
@@ -2860,6 +2848,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthWriteEnabled(&mGraphicsPipelineTransition,
                                                                glState.getDepthStencilState(),
                                                                glState.getDrawFramebuffer());
+                ANGLE_TRY(endRenderPass());
+                vk::GetImpl(glState.getDrawFramebuffer())->invalidateCurrentFramebuffer();
                 break;
             case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
                 mGraphicsPipelineDesc->updateStencilTestEnabled(&mGraphicsPipelineTransition,
@@ -2983,7 +2973,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                        glState.getRasterizerState(),
                                                        isViewportFlipEnabledForDrawFBO());
                 ANGLE_TRY(updateScissor(glState));
-                const gl::DepthStencilState depthStencilState = glState.getDepthStencilState();
+                const gl::DepthStencilState &depthStencilState = glState.getDepthStencilState();
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               depthStencilState, drawFramebuffer);
                 mGraphicsPipelineDesc->updateDepthWriteEnabled(&mGraphicsPipelineTransition,
@@ -2994,8 +2984,12 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     &mGraphicsPipelineTransition, depthStencilState, drawFramebuffer);
                 mGraphicsPipelineDesc->updateStencilBackWriteMask(
                     &mGraphicsPipelineTransition, depthStencilState, drawFramebuffer);
-                mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
-                                                            mDrawFramebuffer->getRenderPassDesc());
+
+                bool readOnlyDepth =
+                    !depthStencilState.areDepthWritesEnabled() && !mDrawFramebuffer->hasStencil();
+                mGraphicsPipelineDesc->updateRenderPassDesc(
+                    &mGraphicsPipelineTransition,
+                    mDrawFramebuffer->getRenderPassDesc(readOnlyDepth));
                 break;
             }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
@@ -3338,7 +3332,8 @@ void ContextVk::invalidateDriverUniforms()
 
 void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
 {
-    const vk::RenderPassDesc &renderPassDesc = framebufferVk->getRenderPassDesc();
+    bool depthWritesEnabled = mState.getDepthStencilState().areDepthWritesEnabled();
+    const vk::RenderPassDesc &renderPassDesc = framebufferVk->getRenderPassDesc(depthWritesEnabled);
 
     // Ensure that the RenderPass description is updated.
     invalidateCurrentGraphicsPipeline();
@@ -4418,10 +4413,12 @@ angle::Result ContextVk::flushAndBeginRenderPass(
 }
 
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
+                                         bool readOnlyDepth,
                                          vk::CommandBuffer **commandBufferOut)
 {
     mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
-    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
+    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, readOnlyDepth,
+                                                   &mRenderPassCommandBuffer));
     if (mActiveQueryAnySamples)
     {
         mActiveQueryAnySamples->getQueryHelper()->beginOcclusionQuery(this,

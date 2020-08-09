@@ -396,13 +396,14 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     clearStencil                                       = clearStencil && stencilAttachment;
     ASSERT(!clearStencil || stencilAttachment->isAttached());
 
-    uint8_t stencilMask =
-        static_cast<uint8_t>(contextVk->getState().getDepthStencilState().stencilWritemask);
+    const gl::DepthStencilState &dsState = contextVk->getState().getDepthStencilState();
+
+    uint8_t stencilMask = static_cast<uint8_t>(dsState.stencilWritemask);
 
     // The front-end should ensure we don't attempt to clear color if all channels are masked.
     ASSERT(!clearColor || colorMaskFlags != 0);
     // The front-end should ensure we don't attempt to clear depth if depth write is disabled.
-    ASSERT(!clearDepth || contextVk->getState().getDepthStencilState().depthMask);
+    ASSERT(!clearDepth || dsState.depthMask);
     // The front-end should ensure we don't attempt to clear stencil if all bits are masked.
     ASSERT(!clearStencil || stencilMask != 0);
 
@@ -461,7 +462,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     if (clearAnyWithRenderPassLoadOp)
     {
         vk::Framebuffer *currentFramebuffer = nullptr;
-        ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer));
+        ANGLE_TRY(getFramebuffer(contextVk, false, &currentFramebuffer));
 
         gl::DrawBufferMask clearColorDrawBuffersMask;
         if (clearColorWithRenderPassLoadOp)
@@ -1347,19 +1348,23 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     //- Bind FBO 2, draw
     //- Bind FBO 1, invalidate D/S
     // to invalidate the D/S of FBO 2 since it would be the currently active renderpass.
+    bool readOnlyDepth =
+        !contextVk->getState().getDepthStencilState().areDepthWritesEnabled() &&
+        depthStencilRenderTarget->getImageFormat().intendedFormat().stencilBits == 0;
     vk::Framebuffer *currentFramebuffer = nullptr;
-    ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer));
+    ANGLE_TRY(getFramebuffer(contextVk, readOnlyDepth, &currentFramebuffer));
 
     if (contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer))
     {
+        vk::CommandBufferHelper &renderPass = contextVk->getStartedRenderPassCommands();
+
         // Set the appropriate storeOp for attachments.
         size_t attachmentIndexVk = 0;
         for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
         {
             if (invalidateColorBuffers.test(colorIndexGL))
             {
-                contextVk->getStartedRenderPassCommands().invalidateRenderPassColorAttachment(
-                    attachmentIndexVk);
+                renderPass.invalidateRenderPassColorAttachment(attachmentIndexVk);
             }
             ++attachmentIndexVk;
         }
@@ -1368,14 +1373,12 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
         {
             if (invalidateDepthBuffer)
             {
-                contextVk->getStartedRenderPassCommands().invalidateRenderPassDepthAttachment(
-                    attachmentIndexVk);
+                renderPass.invalidateRenderPassDepthAttachment(attachmentIndexVk);
             }
 
             if (invalidateStencilBuffer)
             {
-                contextVk->getStartedRenderPassCommands().invalidateRenderPassStencilAttachment(
-                    attachmentIndexVk);
+                renderPass.invalidateRenderPassStencilAttachment(attachmentIndexVk);
             }
         }
 
@@ -1687,18 +1690,18 @@ void FramebufferVk::updateRenderPassDesc()
             mRenderPassDesc.packColorAttachmentGap(colorIndexGL);
         }
     }
-
-    // Depth/stencil attachment.
-    RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
-    if (depthStencilRenderTarget)
-    {
-        mRenderPassDesc.packDepthStencilAttachment(
-            depthStencilRenderTarget->getImageForRenderPass().getFormat().intendedFormatID);
-    }
 }
 
-angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut)
+angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
+                                            bool readOnlyDepth,
+                                            vk::Framebuffer **framebufferOut)
 {
+    if (!mDeferredClears.empty())
+    {
+        readOnlyDepth = false;
+    }
+    mCurrentFramebufferDesc.updateReadOnlyDepth(readOnlyDepth);
+
     // First return a presently valid Framebuffer
     if (mFramebuffer != nullptr)
     {
@@ -1721,7 +1724,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
         }
     }
     vk::RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(getRenderPassDesc(readOnlyDepth),
+                                                 &compatibleRenderPass));
 
     // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
     if (mBackbuffer)
@@ -2067,10 +2071,16 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 const gl::Rectangle &renderArea,
+                                                bool readOnlyDepth,
                                                 vk::CommandBuffer **commandBufferOut)
 {
+    if (!mDeferredClears.empty())
+    {
+        readOnlyDepth = false;
+    }
+
     vk::Framebuffer *framebuffer = nullptr;
-    ANGLE_TRY(getFramebuffer(contextVk, &framebuffer));
+    ANGLE_TRY(getFramebuffer(contextVk, readOnlyDepth, &framebuffer));
 
     ANGLE_TRY(contextVk->endRenderPass());
 
@@ -2141,6 +2151,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        const vk::Format &format = depthStencilRenderTarget->getImageFormat();
+
         // depth stencil attachment always immediately follow color attachment
         depthStencilAttachmentIndex = colorAttachmentCount;
 
@@ -2167,9 +2179,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         }
 
-        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex,
-                                           vk::ImageLayout::DepthStencilAttachment,
-                                           vk::ImageLayout::DepthStencilAttachment);
+        vk::ImageLayout dsLayout = readOnlyDepth ? vk::ImageLayout::DepthStencilReadOnly
+                                                 : vk::ImageLayout::DepthStencilAttachment;
+        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex, dsLayout, dsLayout);
 
         if (mDeferredClears.testDepth() || mDeferredClears.testStencil())
         {
@@ -2200,7 +2212,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                     kUninitializedClearValue);
         }
 
-        const vk::Format &format = depthStencilRenderTarget->getImageFormat();
         // If the format we picked has stencil but user did not ask for it due to hardware
         // limitations, use DONT_CARE for load/store. The same logic for depth follows.
         if (format.intendedFormat().stencilBits == 0)
@@ -2219,7 +2230,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     }
 
     ANGLE_TRY(contextVk->flushAndBeginRenderPass(
-        *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps,
+        *framebuffer, renderArea, getRenderPassDesc(readOnlyDepth), renderPassAttachmentOps,
         depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
 
     // Transition the images to the correct layout (through onColorDraw) after the
@@ -2236,7 +2247,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // tracking content valid very loosely here that as long as it is attached, it assumes will
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
-        depthStencilRenderTarget->onDepthStencilDraw(contextVk);
+        depthStencilRenderTarget->onDepthStencilDraw(contextVk, readOnlyDepth);
     }
 
     return angle::Result::Continue;
@@ -2346,6 +2357,24 @@ angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk,
     if (mDeferredClears.empty())
         return angle::Result::Continue;
 
-    return contextVk->startRenderPass(renderArea, nullptr);
+    return contextVk->startRenderPass(renderArea, false, nullptr);
+}
+
+const vk::RenderPassDesc &FramebufferVk::getRenderPassDesc(bool readOnlyDepth)
+{
+    if (!mDeferredClears.empty())
+    {
+        readOnlyDepth = false;
+    }
+
+    // Depth/stencil attachment.
+    RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
+    if (depthStencilRenderTarget)
+    {
+        const vk::Format &format = depthStencilRenderTarget->getImageForRenderPass().getFormat();
+        mRenderPassDesc.packDepthStencilAttachment(format.intendedFormatID, readOnlyDepth);
+    }
+
+    return mRenderPassDesc;
 }
 }  // namespace rx
