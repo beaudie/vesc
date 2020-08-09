@@ -1371,6 +1371,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         {
             gl::ShaderBitSet shaderBits =
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
+            ASSERT(shaderBits.any());
             if (shaderBits.any())
             {
                 gl::ShaderType shader =
