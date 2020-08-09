@@ -2067,6 +2067,7 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 const gl::Rectangle &renderArea,
+                                                bool depthWritesEnabled,
                                                 vk::CommandBuffer **commandBufferOut)
 {
     vk::Framebuffer *framebuffer = nullptr;
@@ -2236,7 +2237,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // tracking content valid very loosely here that as long as it is attached, it assumes will
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
-        depthStencilRenderTarget->onDepthStencilDraw(contextVk);
+        depthStencilRenderTarget->onDepthStencilDraw(contextVk, depthWritesEnabled);
     }
 
     return angle::Result::Continue;
@@ -2346,6 +2347,6 @@ angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk,
     if (mDeferredClears.empty())
         return angle::Result::Continue;
 
-    return contextVk->startRenderPass(renderArea, nullptr);
+    return contextVk->startRenderPass(renderArea, true, nullptr);
 }
 }  // namespace rx

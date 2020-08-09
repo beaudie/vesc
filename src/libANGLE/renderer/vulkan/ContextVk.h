@@ -575,7 +575,9 @@ class ContextVk : public ContextImpl, public vk::Context
     }
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
-    angle::Result startRenderPass(gl::Rectangle renderArea, vk::CommandBuffer **commandBufferOut);
+    angle::Result startRenderPass(gl::Rectangle renderArea,
+                                  bool depthWritesEnabled,
+                                  vk::CommandBuffer **commandBufferOut);
     angle::Result endRenderPass();
 
     angle::Result syncExternalMemory();
