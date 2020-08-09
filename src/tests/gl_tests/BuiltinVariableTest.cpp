@@ -86,6 +86,7 @@ class BuiltinVariableVertexIdTest : public ANGLETest
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLint) * indices.size(), indices.data(),
                      GL_STATIC_DRAW);
+        glFlush();
 
         std::vector<GLint> expectedIds = makeRange(count);
 
@@ -93,6 +94,7 @@ class BuiltinVariableVertexIdTest : public ANGLETest
         glBindBuffer(GL_ARRAY_BUFFER, mExpectedIdBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLint) * expectedIds.size(), expectedIds.data(),
                      GL_STATIC_DRAW);
+        glFlush();
 
         glBindBuffer(GL_ARRAY_BUFFER, mPositionBuffer);
         glVertexAttribPointer(mPositionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -105,6 +107,7 @@ class BuiltinVariableVertexIdTest : public ANGLETest
         glUseProgram(mProgram);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
         glDrawElements(drawMode, count, GL_UNSIGNED_INT, 0);
+        glFlush();
 
         std::vector<GLColor> pixels(getWindowWidth() * getWindowHeight());
         glReadPixels(0, 0, getWindowWidth(), getWindowHeight(), GL_RGBA, GL_UNSIGNED_BYTE,

@@ -1144,7 +1144,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     const gl::Rectangle &scissoredRenderArea = params.clearArea;
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->startRenderPass(scissoredRenderArea, &commandBuffer));
+    ANGLE_TRY(contextVk->startRenderPass(scissoredRenderArea, false, &commandBuffer));
 
     ImageClearShaderParams shaderParams;
     shaderParams.clearValue = params.colorClearValue;
@@ -1155,7 +1155,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     pipelineDesc.setColorWriteMask(0, gl::DrawBufferMask());
     pipelineDesc.setSingleColorWriteMask(params.colorAttachmentIndexGL, params.colorMaskFlags);
     pipelineDesc.setRasterizationSamples(framebuffer->getSamples());
-    pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
+    pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc(true));
     // Note: depth test is disabled by default so this should be unnecessary, but works around an
     // Intel bug on windows.  http://anglebug.com/3348
     pipelineDesc.setDepthWriteEnabled(false);
@@ -1371,7 +1371,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         pipelineDesc.setColorWriteMask(0, gl::DrawBufferMask());
     }
     pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
-    pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
+    pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc(true));
     pipelineDesc.setDepthTestEnabled(blitDepth);
     pipelineDesc.setDepthWriteEnabled(blitDepth);
     pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
@@ -1402,7 +1402,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     pipelineDesc.setScissor(gl_vk::GetRect(params.blitArea));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer));
+    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, true, &commandBuffer));
     contextVk->onImageRenderPassRead(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
                                      src);
 

@@ -13,6 +13,7 @@
 #include "common/vulkan/vk_headers.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
@@ -56,7 +57,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     // Note: RenderTargets should be called in order, with the depth/stencil onRender last.
     void onColorDraw(ContextVk *contextVk);
-    void onDepthStencilDraw(ContextVk *contextVk);
+    void onDepthStencilDraw(ContextVk *contextVk, bool depthWritesEnabled);
 
     vk::ImageHelper &getImageForRenderPass();
     const vk::ImageHelper &getImageForRenderPass() const;
@@ -77,7 +78,13 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     angle::Result getAndRetainCopyImageView(ContextVk *contextVk,
                                             const vk::ImageView **imageViewOut) const;
 
-    const vk::Format &getImageFormat() const;
+    const vk::Format &getImageFormat() const
+    {
+        ASSERT(mImage && mImage->valid());
+        return mImage->getFormat();
+    }
+
+    bool hasStencil() const { return getImageFormat().actualImageFormat().stencilBits > 0; }
     gl::Extents getExtents() const;
     uint32_t getLevelIndex() const { return mLevelIndexGL; }
     uint32_t getLayerIndex() const { return mLayerIndex; }
