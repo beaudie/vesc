@@ -1148,6 +1148,8 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
             imageInfo.imageView   = imageView->getHandle();
             imageInfo.imageLayout = image->getCurrentLayout();
 
+            ASSERT(imageInfo.imageLayout != VK_IMAGE_LAYOUT_UNDEFINED);
+
             writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             writeInfo.pNext            = nullptr;
             writeInfo.dstSet           = descriptorSet;
@@ -1344,6 +1346,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
 
                 imageInfos[arrayElement].sampler     = samplerVk.get().getHandle();
                 imageInfos[arrayElement].imageLayout = image.getCurrentLayout();
+
+                ASSERT(imageInfos[arrayElement].imageLayout != VK_IMAGE_LAYOUT_UNDEFINED);
 
                 if (emulateSeamfulCubeMapSampling)
                 {

@@ -111,6 +111,12 @@ GLenum DefaultGLErrorCode(VkResult result)
     }
 }
 
+constexpr gl::ShaderMap<vk::ImageLayout> kShaderDepthStencilReadOnlyImageLayouts = {
+    {gl::ShaderType::Vertex, vk::ImageLayout::VertexShaderDepthStencilReadOnly},
+    {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderDepthStencilReadOnly},
+    {gl::ShaderType::Geometry, vk::ImageLayout::GeometryShaderDepthStencilReadOnly},
+    {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderDepthStencilReadOnly}};
+
 constexpr gl::ShaderMap<vk::ImageLayout> kShaderReadOnlyImageLayouts = {
     {gl::ShaderType::Vertex, vk::ImageLayout::VertexShaderReadOnly},
     {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderReadOnly},
@@ -1355,6 +1361,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         TextureVk *textureVk        = unit.texture;
         vk::ImageHelper &image      = textureVk->getImage();
 
+        bool isDepthStencil = image.getFormat().actualImageFormat().hasDepthOrStencilBits();
+
         // The image should be flushed and ready to use at this point. There may still be
         // lingering staged updates in its staging buffer for unused texture mip levels or
         // layers. Therefore we can't verify it has no staged updates right here.
@@ -1365,7 +1373,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         if (textureVk->isBoundAsImageTexture(mState.getContextID()))
         {
             textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
-                                                    : vk::ImageLayout::AllGraphicsShadersReadWrite;
+                                                    : vk::ImageLayout::AllGraphicsShadersWrite;
         }
         else
         {
@@ -1378,11 +1386,25 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             // given that we only support vertex/frag shaders
             if (remainingShaderBits.any())
             {
-                textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+                if (isDepthStencil)
+                {
+                    textureLayout = vk::ImageLayout::AllGraphicsShaderDepthStencilReadOnly;
+                }
+                else
+                {
+                    textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+                }
             }
             else
             {
-                textureLayout = kShaderReadOnlyImageLayouts[firstShader];
+                if (isDepthStencil)
+                {
+                    textureLayout = kShaderDepthStencilReadOnlyImageLayouts[firstShader];
+                }
+                else
+                {
+                    textureLayout = kShaderReadOnlyImageLayouts[firstShader];
+                }
             }
         }
         // Ensure the image is in read-only layout
@@ -3924,7 +3946,7 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
             // This is accessed by multiple shaders
             if (shaderBits.any())
             {
-                imageLayout = vk::ImageLayout::AllGraphicsShadersReadWrite;
+                imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
             }
             else
             {
@@ -3933,7 +3955,7 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         }
         else
         {
-            imageLayout = vk::ImageLayout::AllGraphicsShadersReadWrite;
+            imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
         }
         VkImageAspectFlags aspectFlags = image->getAspectFlags();
 
