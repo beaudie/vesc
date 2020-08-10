@@ -39,6 +39,29 @@
       "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a73eac8_8da1c52b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-10T22:40:41Z",
+      "side": 1,
+      "message": "Can\u0027t this be symmetrical to buffer API, i.e. usesImage()?",
+      "range": {
+        "startLine": 980,
+        "startChar": 9,
+        "endLine": 980,
+        "endChar": 30
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
