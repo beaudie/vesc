@@ -311,9 +311,7 @@ template_capture_method_with_return_value = """
 CallCapture Capture{short_name}({params_with_type}, {return_value_type_original} returnValue)
 {{
     ParamBuffer paramBuffer;
-
     {parameter_captures}
-
     ParamCapture returnValueCapture("returnValue", ParamType::T{return_value_type_custom});
     InitParamValue(ParamType::T{return_value_type_custom}, returnValue, &returnValueCapture.value);
     paramBuffer.addReturnValue(std::move(returnValueCapture));
@@ -326,9 +324,7 @@ template_capture_method_no_return_value = """
 CallCapture Capture{short_name}({params_with_type})
 {{
     ParamBuffer paramBuffer;
-
     {parameter_captures}
-
     return CallCapture(gl::EntryPoint::{short_name}, std::move(paramBuffer));
 }}
 """
@@ -338,10 +334,19 @@ template_parameter_capture_value = """paramBuffer.addValueParam("{name}", ParamT
 template_parameter_capture_gl_enum = """paramBuffer.addEnumParam("{name}", GLenumGroup::{group}, ParamType::T{type}, {name});"""
 
 template_parameter_capture_pointer = """
-    ParamCapture {name}Param("{name}", ParamType::T{type});
-    InitParamValue(ParamType::T{type}, {name}, &{name}Param.value);
-    {capture_name}({params}, &{name}Param);
-    paramBuffer.addParam(std::move({name}Param));
+    if (isCallValid) 
+    {{
+        ParamCapture {name}Param("{name}", ParamType::T{type});
+        InitParamValue(ParamType::T{type}, {name}, &{name}Param.value);
+        {capture_name}({params}, &{name}Param);
+        paramBuffer.addParam(std::move({name}Param));
+    }}
+    else 
+    {{
+        ParamCapture {name}Param("{name}", ParamType::T{type});
+        InitParamValue(ParamType::T{type}, static_cast<{cast_type}>(nullptr), &{name}Param.value);
+        paramBuffer.addParam(std::move({name}Param));
+    }}
 """
 
 template_parameter_capture_pointer_func = """void {name}({params});"""
@@ -675,6 +680,16 @@ template_resource_id_type_name_case = """        case ResourceIDType::{resource_
             return "{resource_id_type}";"""
 
 
+def GenerateCastType(typename):
+    pointers_num = typename.count("Pointer")
+    start_ptr_idx = typename.find("Pointer")
+    start_const_idx = typename.find("Const")
+    assert start_ptr_idx != -1 and pointers_num > 0
+    if start_const_idx == -1:
+        return typename[:start_ptr_idx] + ("*" * pointers_num)
+    return "const " + typename[:min(start_ptr_idx, start_const_idx)] + ("*" * pointers_num)
+
+
 def script_relative(path):
     return os.path.join(os.path.dirname(sys.argv[0]), path)
 
@@ -917,7 +932,11 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
             params = params_just_name
             capture_name = "Capture%s_%s" % (cmd_name[2:], param_name)
             capture = template_parameter_capture_pointer.format(
-                name=param_name, type=param_type, capture_name=capture_name, params=params)
+                name=param_name,
+                type=param_type,
+                capture_name=capture_name,
+                params=params,
+                cast_type=GenerateCastType(param_type))
 
             capture_pointer_func = template_parameter_capture_pointer_func.format(
                 name=capture_name, params=params_with_type + ", angle::ParamCapture *paramCapture")
@@ -944,7 +963,6 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
         "return_value_type_original": return_type,
         "return_value_type_custom": get_capture_param_type_name(return_type)
     }
-
     if return_type == "void":
         return template_capture_method_no_return_value.format(**format_args)
     else:

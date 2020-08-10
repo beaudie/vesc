@@ -205,8 +205,10 @@ class SubProcess():
 
     def BlockingRun(self, timeout):
         output = self.proc_handle.communicate(timeout=timeout)[0]
-        if output:
+        if output != None:
             output = output.decode("utf-8")
+        else:
+            output = ""
         return self.proc_handle.returncode, output
 
     def Pid(self):
