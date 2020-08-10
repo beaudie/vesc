@@ -16,6 +16,23 @@
       "revId": "de60e3e08c3f1d8bab7d539ea6999e0a9c957167",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "521e8f12_f02b587f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-10T16:04:25Z",
+      "side": 1,
+      "message": "nit: this ends up calling hasStartedRenderPass twice.",
+      "revId": "de60e3e08c3f1d8bab7d539ea6999e0a9c957167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
