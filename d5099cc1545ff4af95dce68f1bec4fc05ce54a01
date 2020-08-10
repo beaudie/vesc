@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be8fb8b7_dc823745",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:01:44Z",
+      "side": 0,
+      "message": "nit: you can leave these blank lines in",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 4
+      },
+      "revId": "d5099cc1545ff4af95dce68f1bec4fc05ce54a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d597f16_e6eaef42",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:01:44Z",
+      "side": 0,
+      "message": "nit: you can leave these lines in",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 0
+      },
+      "revId": "d5099cc1545ff4af95dce68f1bec4fc05ce54a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59497789_08b0eda0",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:01:44Z",
+      "side": 0,
+      "message": "nit: can revert this whitespace change",
+      "revId": "d5099cc1545ff4af95dce68f1bec4fc05ce54a01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
