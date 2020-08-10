@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0da89f_d666d6a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T15:01:18Z",
+      "side": 1,
+      "message": "I consolidated my new test into the already-existing EGLSurfaceTest.ResizeWindowWithDraw, and have it passing on Android.\n\nJamie, PTAL",
+      "revId": "a85cea1289e2bf517ab68df6f6f8a2c63cf76820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
