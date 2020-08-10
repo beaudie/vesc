@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16a64f35_2bf76d23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:41:00Z",
+      "side": 1,
+      "message": "Le Hoang: are you able to submit CLs yourself or do you need us to submit them for you?",
+      "revId": "033f45d9f513923a8d05209e4cd05f41b990a5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
