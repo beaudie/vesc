@@ -481,7 +481,7 @@ void CaptureGetShaderSource_length(const State &glState,
                                    GLchar *source,
                                    ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLsizei);
 }
 
 void CaptureGetShaderSource_source(const State &glState,
@@ -492,7 +492,8 @@ void CaptureGetShaderSource_source(const State &glState,
                                    GLchar *source,
                                    ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    Shader *shaderObj = glState.getShaderProgramManagerForCapture().getShader(shader);
+    paramCapture->readBufferSizeBytes = shaderObj->getSourceLength();
 }
 
 void CaptureGetShaderiv_params(const State &glState,
