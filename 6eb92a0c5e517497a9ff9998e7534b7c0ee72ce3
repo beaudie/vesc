@@ -16,6 +16,144 @@
       "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d7626842_5819be0d",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T21:18:25Z",
+      "side": 1,
+      "message": "there\u0027s already functions for these. use setReadFramebufferDirty and setDrawFramebufferDirty. It\u0027s fine if you dirty the ATTACHMENTS bit too.",
+      "range": {
+        "startLine": 759,
+        "startChar": 0,
+        "endLine": 767,
+        "endChar": 0
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "177b55ff_914666b8",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T21:18:25Z",
+      "side": 1,
+      "message": "nit: use ANGLE_GL_PROGRAM",
+      "range": {
+        "startLine": 516,
+        "startChar": 0,
+        "endLine": 518,
+        "endChar": 26
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48ba6de4_a9d1d345",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T21:18:25Z",
+      "side": 1,
+      "message": "nit: also use the RAII types",
+      "range": {
+        "startLine": 527,
+        "startChar": 0,
+        "endLine": 531,
+        "endChar": 39
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75427eb9_56d4af0e",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T21:18:25Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 41
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6f7698_1dc89051",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T21:18:25Z",
+      "side": 1,
+      "message": "nit: suggest using parens",
+      "range": {
+        "startLine": 572,
+        "startChar": 12,
+        "endLine": 572,
+        "endChar": 17
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c51ea38_8c2b54b0",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T21:18:25Z",
+      "side": 1,
+      "message": "nit: use angle::Sleep",
+      "range": {
+        "startLine": 589,
+        "startChar": 8,
+        "endLine": 589,
+        "endChar": 13
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
