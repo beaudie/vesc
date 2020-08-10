@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4206f112_68f774c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:38:24Z",
+      "side": 1,
+      "message": "nit: more specifically you\u0027re fixing parameter capture for invalid calls. The fix isn\u0027t specific to end2end_tests or the script.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 63
+      },
+      "revId": "b74fabfb986c58f61dd356f6f25e889b60e230ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1462fa49_7f9bbd92",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -16,6 +39,98 @@
       "revId": "b74fabfb986c58f61dd356f6f25e889b60e230ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b5109248_d86f5719",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:38:24Z",
+      "side": 1,
+      "message": "update this to a new name like\n\ncapture_param_type \u003d get_capture_param_type_name\n\nthen you don\u0027t need your new function and you can use param_type directly. Make sure to update the rest of the function accordingly. Alternately you could change the above param_type \u003d to a new name.",
+      "range": {
+        "startLine": 933,
+        "startChar": 8,
+        "endLine": 933,
+        "endChar": 18
+      },
+      "revId": "b74fabfb986c58f61dd356f6f25e889b60e230ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1713495d_97dcf65f",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:38:24Z",
+      "side": 1,
+      "message": "these changes look unrelated - maybe split them off?",
+      "range": {
+        "startLine": 484,
+        "startChar": 3,
+        "endLine": 484,
+        "endChar": 56
+      },
+      "revId": "b74fabfb986c58f61dd356f6f25e889b60e230ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6857c9a0_5f775eb5",
+        "filename": "src/libANGLE/capture_gles_ext_params.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:38:24Z",
+      "side": 1,
+      "message": "these changes look unrelated - maybe split them off?\n\nAlso these should share code with DrawElementsIntanced.",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 1
+      },
+      "revId": "b74fabfb986c58f61dd356f6f25e889b60e230ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51581597_b691591b",
+        "filename": "src/libANGLE/capture_gles_ext_params.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2299,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:38:24Z",
+      "side": 1,
+      "message": "similar for these",
+      "range": {
+        "startLine": 2291,
+        "startChar": 0,
+        "endLine": 2299,
+        "endChar": 5
+      },
+      "revId": "b74fabfb986c58f61dd356f6f25e889b60e230ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
