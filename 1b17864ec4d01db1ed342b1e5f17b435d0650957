@@ -16,6 +16,40 @@
       "revId": "1b17864ec4d01db1ed342b1e5f17b435d0650957",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4dfea10e_9d995d7f",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-10T19:06:48Z",
+      "side": 1,
+      "message": "Need to wrap this in braces.",
+      "revId": "1b17864ec4d01db1ed342b1e5f17b435d0650957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c85cc0_6495e472",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-10T19:06:48Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "1b17864ec4d01db1ed342b1e5f17b435d0650957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
