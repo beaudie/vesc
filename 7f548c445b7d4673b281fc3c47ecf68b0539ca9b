@@ -16,6 +16,29 @@
       "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be2af1b1_9f1b3011",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4322,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-10T22:31:36Z",
+      "side": 1,
+      "message": "I think this should be \nif(mRenderPassCommanbds-\u003euseBufferForWrite(*buffer))\n    endRenderPass();",
+      "range": {
+        "startLine": 4322,
+        "startChar": 29,
+        "endLine": 4322,
+        "endChar": 39
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
