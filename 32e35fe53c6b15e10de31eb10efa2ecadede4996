@@ -22,6 +22,30 @@
       "revId": "32e35fe53c6b15e10de31eb10efa2ecadede4996",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990a65e2_147df565",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T16:22:28Z",
+      "side": 1,
+      "message": "I need to do it because 0 would be converted to nullptr_t type so the InitParamValue would try to call a template SetParamVal\u003cnullptr_t\u003e which we don\u0027t have. So UNBREAKABLE macro will be reached.",
+      "parentUuid": "b54cc0fa_a245a29c",
+      "range": {
+        "startLine": 347,
+        "startChar": 43,
+        "endLine": 347,
+        "endChar": 76
+      },
+      "revId": "32e35fe53c6b15e10de31eb10efa2ecadede4996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
