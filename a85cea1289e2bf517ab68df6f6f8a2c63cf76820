@@ -34,6 +34,24 @@
       "revId": "a85cea1289e2bf517ab68df6f6f8a2c63cf76820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49dbb7a0_80283dde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T21:10:31Z",
+      "side": 1,
+      "message": "I didn\u0027t know that setOrientation had been added to OSWindow.h.  This required a bit of experimenting to get something that works.  It\u0027s only implemented for Android (UNIMPLEMENTED() for other window systems).  It takes effect sometime later (frequently \u003e1 second later).\n\nThe test fails when my fix is disabled, and passes when it\u0027s enabled (tested multiple times).",
+      "parentUuid": "cb915143_527ed8bb",
+      "revId": "a85cea1289e2bf517ab68df6f6f8a2c63cf76820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
