@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e18bd650_e459d616",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T20:15:56Z",
+      "side": 1,
+      "message": "Yes... I think redesigning the API to make this impossible is wise. I\u0027m not sure how best to do it without inflating our code with a bunch of unnecessary ops. I\u0027m thinking you call some method like \"acquire command buffer\" or \"acquire render pass\" and you pass all the dependencies in there instead of one-at-a-time. I\u0027ll defer this for now. It\u0027s a good idea if we can make it work.",
+      "parentUuid": "6f043b11_075b25bd",
+      "revId": "5f7e7ec41131e151d3ca7c977cc9cc38577746c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8ddc929_0ed451ae",
         "filename": "src/libANGLE/renderer/vulkan/README.md",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "5f7e7ec41131e151d3ca7c977cc9cc38577746c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9403773_09bba9f3",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T20:15:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8ddc929_0ed451ae",
+      "revId": "5f7e7ec41131e151d3ca7c977cc9cc38577746c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "5f7e7ec41131e151d3ca7c977cc9cc38577746c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d1a2b4_1aec0808",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4786,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T20:15:56Z",
+      "side": 1,
+      "message": "Done in a follow-up.",
+      "parentUuid": "20ac37ad_3c4d8268",
+      "range": {
+        "startLine": 4784,
+        "startChar": 0,
+        "endLine": 4786,
+        "endChar": 65
+      },
+      "revId": "5f7e7ec41131e151d3ca7c977cc9cc38577746c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
