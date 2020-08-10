@@ -51,6 +51,7 @@ constexpr char kEnabledVarName[]               = "ANGLE_CAPTURE_ENABLED";
 constexpr char kOutDirectoryVarName[]          = "ANGLE_CAPTURE_OUT_DIR";
 constexpr char kFrameStartVarName[]            = "ANGLE_CAPTURE_FRAME_START";
 constexpr char kFrameEndVarName[]              = "ANGLE_CAPTURE_FRAME_END";
+constexpr char kCaptureTriggerVarName[]        = "ANGLE_CAPTURE_TRIGGER";
 constexpr char kCaptureLabel[]                 = "ANGLE_CAPTURE_LABEL";
 constexpr char kCompression[]                  = "ANGLE_CAPTURE_COMPRESSION";
 constexpr char kSerializeStateEnabledVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
@@ -67,6 +68,7 @@ constexpr char kAndroidCaptureEnabled[] = "debug.angle.capture.enabled";
 constexpr char kAndroidOutDir[]         = "debug.angle.capture.out_dir";
 constexpr char kAndroidFrameStart[]     = "debug.angle.capture.frame_start";
 constexpr char kAndroidFrameEnd[]       = "debug.angle.capture.frame_end";
+constexpr char kAndroidCaptureTrigger[] = "debug.angle.capture.trigger";
 constexpr char kAndroidCaptureLabel[]   = "debug.angle.capture.label";
 constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
 
@@ -123,6 +125,13 @@ void PrimeAndroidEnvironmentVariables()
     {
         INFO() << "Frame capture read " << frameEnd << " from " << kAndroidFrameEnd;
         setenv(kFrameEndVarName, frameEnd.c_str(), 1);
+    }
+
+    std::string captureTrigger = AndroidGetEnvFromProp(kAndroidCaptureTrigger);
+    if (!captureTrigger.empty())
+    {
+        INFO() << "Capture trigger read " << captureTrigger << " from " << kAndroidCaptureTrigger;
+        setenv(kCaptureTriggerVarName, captureTrigger.c_str(), 1);
     }
 
     std::string captureLabel = AndroidGetEnvFromProp(kAndroidCaptureLabel);
@@ -3347,7 +3356,8 @@ FrameCapture::FrameCapture()
       mFrameEnd(10),
       mClientArraySizes{},
       mReadBufferSize(0),
-      mHasResourceType{}
+      mHasResourceType{},
+      mCaptureTrigger(0)
 {
     reset();
 
@@ -3387,6 +3397,18 @@ FrameCapture::FrameCapture()
     if (!endFromEnv.empty())
     {
         mFrameEnd = atoi(endFromEnv.c_str());
+    }
+
+    std::string captureTriggerFromEnv = angle::GetEnvironmentVar(kCaptureTriggerVarName);
+    if (!captureTriggerFromEnv.empty())
+    {
+        mCaptureTrigger = atoi(captureTriggerFromEnv.c_str());
+
+        // If the trigger has been populated, ignore the other frame range variables by setting them
+        // to unreasonable values. This isn't perfect, but it is effective.
+        mFrameStart = mFrameEnd = std::numeric_limits<uint32_t>::max();
+        INFO() << "Capture trigger detected, overriding mFrameStart and mFrameEnd to "
+               << mFrameStart;
     }
 
     std::string labelFromEnv = angle::GetEnvironmentVar(kCaptureLabel);
@@ -4056,8 +4078,42 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
     (void)buffer->unmap(context, &dontCare);
 }
 
+void FrameCapture::checkForCaptureTrigger()
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // If the capture trigger has been set, polling the value for a change
+    if (mCaptureTrigger != 0)
+    {
+        std::string captureTriggerStr = AndroidGetEnvFromProp(kAndroidCaptureTrigger);
+        if (!captureTriggerStr.empty())
+        {
+            uint32_t captureTrigger = atoi(captureTriggerStr.c_str());
+
+            // If the value has changed, use the original value as the frame count
+            if (captureTrigger != mCaptureTrigger)
+            {
+                // Start mid-execution capture for the next frame
+                mFrameStart = mFrameIndex + 1;
+
+                // Use the original trigger value as the frame count
+                mFrameEnd = mFrameStart + (mCaptureTrigger - 1);
+
+                INFO() << "Capture triggered at frame " << mFrameStart << " for " << mCaptureTrigger
+                       << " frames";
+
+                // Stop polling
+                mCaptureTrigger = 0;
+            }
+        }
+    }
+#endif
+}
+
 void FrameCapture::onEndFrame(const gl::Context *context)
 {
+    // On Android, we can trigger a capture during the run
+    checkForCaptureTrigger();
+
     // Note that we currently capture before the start frame to collect shader and program sources.
     if (!mFrameCalls.empty() && mFrameIndex >= mFrameStart)
     {
