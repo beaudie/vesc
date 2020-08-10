@@ -174,7 +174,16 @@ void CaptureDrawElementsInstancedANGLE_indices(const State &glState,
                                                GLsizei primcount,
                                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (glState.getVertexArray()->getElementArrayBuffer())
+    {
+        paramCapture->value.voidConstPointerVal = indices;
+    }
+    else
+    {
+        GLuint typeSize = gl::GetDrawElementsTypeSize(typePacked);
+        CaptureMemory(indices, typeSize * count, paramCapture);
+        paramCapture->value.voidConstPointerVal = paramCapture->data[0].data();
+    }
 }
 
 void CaptureDrawElementsBaseVertexEXT_indices(const State &glState,
@@ -2279,7 +2288,15 @@ void CaptureInsertEventMarkerEXT_marker(const State &glState,
                                         const GLchar *marker,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (length == 0)
+    {
+        CaptureString(marker, paramCapture);
+    }
+    else
+    {
+        std::string pushedMarker{marker, marker + length};
+        CaptureString(pushedMarker.c_str(), paramCapture);
+    }
 }
 
 void CapturePushGroupMarkerEXT_marker(const State &glState,
@@ -2288,7 +2305,19 @@ void CapturePushGroupMarkerEXT_marker(const State &glState,
                                       const GLchar *marker,
                                       ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (marker == nullptr)
+    {
+        CaptureString("", paramCapture);
+    }
+    else if (length == 0)
+    {
+        CaptureString(marker, paramCapture);
+    }
+    else
+    {
+        std::string pushedMarker{marker, marker + length};
+        CaptureString(pushedMarker.c_str(), paramCapture);
+    }
 }
 
 void CaptureDiscardFramebufferEXT_attachments(const State &glState,
@@ -2345,7 +2374,7 @@ void CaptureGetQueryObjectivEXT_params(const State &glState,
                                        GLint *params,
                                        ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint);
 }
 
 void CaptureGetQueryObjectui64vEXT_params(const State &glState,
@@ -2355,7 +2384,7 @@ void CaptureGetQueryObjectui64vEXT_params(const State &glState,
                                           GLuint64 *params,
                                           ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLuint64);
 }
 
 void CaptureGetQueryObjectuivEXT_params(const State &glState,
@@ -2375,7 +2404,7 @@ void CaptureGetQueryivEXT_params(const State &glState,
                                  GLint *params,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint);
 }
 
 void CaptureDrawBuffersEXT_bufs(const State &glState,
@@ -3308,7 +3337,16 @@ void CaptureGetTexImageANGLE_pixels(const State &glState,
                                     void *pixels,
                                     angle::ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (glState.getTargetBuffer(gl::BufferBinding::PixelPack))
+    {
+        paramCapture->readBufferSizeBytes = 8;
+        return;
+    }
+    Texture *textureObj = glState.getTargetTexture(TextureTargetToType(target));
+    ASSERT(textureObj);
+    static constexpr GLsizei kMaxPixelSize = 32;
+    paramCapture->readBufferSizeBytes =
+        kMaxPixelSize * textureObj->getWidth(target, level) * textureObj->getHeight(target, level);
 }
 
 void CaptureGetRenderbufferImageANGLE_pixels(const State &glState,
@@ -3319,6 +3357,10 @@ void CaptureGetRenderbufferImageANGLE_pixels(const State &glState,
                                              void *pixels,
                                              angle::ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    Renderbuffer *renderbuffer = glState.getCurrentRenderbuffer();
+    ASSERT(renderbuffer);
+    static constexpr GLsizei kMaxPixelSize = 32;
+    paramCapture->readBufferSizeBytes =
+        kMaxPixelSize * renderbuffer->getWidth() * renderbuffer->getHeight();
 }
 }  // namespace gl
