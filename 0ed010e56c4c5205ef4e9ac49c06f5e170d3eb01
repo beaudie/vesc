@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "42de6828_42b6a1eb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-10T18:40:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e868041_28b6cbdd",
+      "range": {
+        "startLine": 555,
+        "startChar": 8,
+        "endLine": 555,
+        "endChar": 31
+      },
+      "revId": "0ed010e56c4c5205ef4e9ac49c06f5e170d3eb01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "683140dd_bdf01a89",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 24
@@ -45,6 +69,30 @@
       "revId": "0ed010e56c4c5205ef4e9ac49c06f5e170d3eb01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec0145f9_0444d5c5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-10T18:40:42Z",
+      "side": 1,
+      "message": "This is only used in an ASSERT() below, and even then only when creating a vulkan framebuffer object (which will be rare since the framebuffer cache will typically contain what we need):\n\nFramebufferVk::getFramebuffer()\n    if (resolveImageViewIn)\n    {\n        ASSERT(!HasResolveAttachment(colorRenderTargets, mState.getEnabledDrawBuffers()));\n\n        // Need to use the passed in ImageView for the resolve attachment, since it came from\n        // another Framebuffer.\n        attachments.push_back(resolveImageViewIn-\u003egetHandle());\n    }\n\nUsing a second source of truth to speed up an assert will hurt the normal case, since it would need to always be updated, so I\u0027m going to keep this as a function.",
+      "parentUuid": "683140dd_bdf01a89",
+      "range": {
+        "startLine": 250,
+        "startChar": 5,
+        "endLine": 250,
+        "endChar": 25
+      },
+      "revId": "0ed010e56c4c5205ef4e9ac49c06f5e170d3eb01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
