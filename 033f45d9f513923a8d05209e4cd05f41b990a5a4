@@ -52,6 +52,24 @@
       "revId": "033f45d9f513923a8d05209e4cd05f41b990a5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bceed2bc_2bcf6ee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-10T15:12:37Z",
+      "side": 1,
+      "message": "If by \"submit\", you meant \"Commit Queue +2\", then no, I don\u0027t have permission. Probably not what you asked, but just in case.",
+      "parentUuid": "d56d33cd_c846cec8",
+      "revId": "033f45d9f513923a8d05209e4cd05f41b990a5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
