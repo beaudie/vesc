@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68d91609_5b6a5551",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-10T16:19:58Z",
+      "side": 1,
+      "message": "Changes look good.  Steps don\u0027t work until the following CL lands, so I recommend waiting for it:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2340787",
+      "revId": "8843543eed364fe47b857d4f1aa87d1f71016006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
