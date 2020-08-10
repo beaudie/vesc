@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e868041_28b6cbdd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-10T18:11:42Z",
+      "side": 1,
+      "message": "This has been removed by 2341761, so this needs to be updated.",
+      "range": {
+        "startLine": 555,
+        "startChar": 8,
+        "endLine": 555,
+        "endChar": 31
+      },
+      "revId": "0ed010e56c4c5205ef4e9ac49c06f5e170d3eb01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "683140dd_bdf01a89",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-10T18:11:42Z",
+      "side": 1,
+      "message": "Can this just updated and stored with a boolean when FramebufferVk is created so that we do not need to do this for loop again every time getFramebuffer is called? This wont change once FB is created.",
+      "range": {
+        "startLine": 250,
+        "startChar": 5,
+        "endLine": 250,
+        "endChar": 25
+      },
+      "revId": "0ed010e56c4c5205ef4e9ac49c06f5e170d3eb01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
