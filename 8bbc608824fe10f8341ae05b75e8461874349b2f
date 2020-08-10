@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fefbe821_da001984",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:39:15Z",
+      "side": 1,
+      "message": "nit: From the command line, navigate to the angle root folder",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 26
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc6d0535_08fb2109",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:39:15Z",
+      "side": 1,
+      "message": "nit: \":\"",
+      "range": {
+        "startLine": 189,
+        "startChar": 82,
+        "endLine": 189,
+        "endChar": 83
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07076d7d_327fff74",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:39:15Z",
+      "side": 1,
+      "message": "maybe this should take a parameter explicitly",
+      "range": {
+        "startLine": 191,
+        "startChar": 99,
+        "endLine": 191,
+        "endChar": 115
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d2367e_af83b5ff",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:39:15Z",
+      "side": 1,
+      "message": "again, this directory requires a specific goma dir. You probably want to leave it off as most people might not have it set up.",
+      "range": {
+        "startLine": 191,
+        "startChar": 42,
+        "endLine": 191,
+        "endChar": 52
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "851396a2_caa0b1d2",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:39:15Z",
+      "side": 1,
+      "message": "I\u0027d recommend leaving this off the default, right?",
+      "range": {
+        "startLine": 191,
+        "startChar": 81,
+        "endLine": 191,
+        "endChar": 98
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16b6bab9_f0f4cb8b",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:39:15Z",
+      "side": 1,
+      "message": "nit: command line",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 12
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "953dcbea_25af7409",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:39:15Z",
+      "side": 1,
+      "message": "nit: please include spaces between : and the first character",
+      "range": {
+        "startLine": 203,
+        "startChar": 15,
+        "endLine": 203,
+        "endChar": 18
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
