@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dc1aed6_b4796a52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T14:44:34Z",
+      "side": 1,
+      "message": "Courtney: PTAL when you have a sec",
+      "revId": "de60e3e08c3f1d8bab7d539ea6999e0a9c957167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
