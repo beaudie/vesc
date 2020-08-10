@@ -70,6 +70,24 @@
       "revId": "033f45d9f513923a8d05209e4cd05f41b990a5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a04c201_e11cafc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-10T16:56:02Z",
+      "side": 1,
+      "message": "I was asking if you had permission to CQ+2. I\u0027ve given you permission now so please feel free to land them yourself via the CQ once they\u0027re ready and outstanding feedback is addressed. Thanks again for all you\u0027ve contributed.",
+      "parentUuid": "bceed2bc_2bcf6ee0",
+      "revId": "033f45d9f513923a8d05209e4cd05f41b990a5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
