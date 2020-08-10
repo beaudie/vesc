@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "733d9d72_165cf870",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T14:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fefbe821_da001984",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 26
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4d0aeeb_2cdd10b5",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T14:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc6d0535_08fb2109",
+      "range": {
+        "startLine": 189,
+        "startChar": 82,
+        "endLine": 189,
+        "endChar": 83
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "07076d7d_327fff74",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 3
@@ -117,6 +165,78 @@
     },
     {
       "key": {
+        "uuid": "b464e52d_b7c576ad",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T14:54:06Z",
+      "side": 1,
+      "message": "Yeah it is off by default.",
+      "parentUuid": "851396a2_caa0b1d2",
+      "range": {
+        "startLine": 191,
+        "startChar": 81,
+        "endLine": 191,
+        "endChar": 98
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec2bb41a_2b5bbd1d",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T14:54:06Z",
+      "side": 1,
+      "message": "Yeah --use-goma --keep-temp-files and --output-to-file are all off by default.",
+      "parentUuid": "e0d2367e_af83b5ff",
+      "range": {
+        "startLine": 191,
+        "startChar": 42,
+        "endLine": 191,
+        "endChar": 52
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce5da77b_53d22b66",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T14:54:06Z",
+      "side": 1,
+      "message": "I will do that in this CL https://chromium-review.googlesource.com/c/angle/angle/+/2340787",
+      "parentUuid": "07076d7d_327fff74",
+      "range": {
+        "startLine": 191,
+        "startChar": 99,
+        "endLine": 191,
+        "endChar": 115
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16b6bab9_f0f4cb8b",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 3
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "c1ead2b9_2d94bc91",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T14:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16b6bab9_f0f4cb8b",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 12
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "953dcbea_25af7409",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 3
@@ -160,6 +304,30 @@
       "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be2dd318_a408080c",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-10T14:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "953dcbea_25af7409",
+      "range": {
+        "startLine": 203,
+        "startChar": 15,
+        "endLine": 203,
+        "endChar": 18
+      },
+      "revId": "8bbc608824fe10f8341ae05b75e8461874349b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
