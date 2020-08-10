@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7265678_00142599",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-10T18:55:35Z",
+      "side": 1,
+      "message": "Shabi is out for the week, can you review this Tim?",
+      "revId": "1b17864ec4d01db1ed342b1e5f17b435d0650957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
