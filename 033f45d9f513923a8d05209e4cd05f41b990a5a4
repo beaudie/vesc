@@ -16,6 +16,24 @@
       "revId": "033f45d9f513923a8d05209e4cd05f41b990a5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4fb7a79b_5e623a6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-10T15:05:36Z",
+      "side": 1,
+      "message": "I will be able to submit the remaining CLs for review once the current CLs are approved.",
+      "parentUuid": "16a64f35_2bf76d23",
+      "revId": "033f45d9f513923a8d05209e4cd05f41b990a5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
