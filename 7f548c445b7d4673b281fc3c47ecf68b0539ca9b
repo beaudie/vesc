@@ -66,6 +66,53 @@
     },
     {
       "key": {
+        "uuid": "14245512_0c63afb9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4322,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-10T22:59:31Z",
+      "side": 1,
+      "message": "yes, of course!",
+      "parentUuid": "c05824c0_9a8462ee",
+      "range": {
+        "startLine": 4322,
+        "startChar": 29,
+        "endLine": 4322,
+        "endChar": 39
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab5e215_efbff63a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-10T22:59:31Z",
+      "side": 1,
+      "message": "It will be more straight forward if you can just do this:\nASSERT(commands.getCommandBuffer().empty());\n\nAlso I am a bit confused why we need this new block of logic (between line 1962 to 2011) here? Is it refactor or required due to the functional change?",
+      "range": {
+        "startLine": 1964,
+        "startChar": 16,
+        "endLine": 1964,
+        "endChar": 61
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a73eac8_8da1c52b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 31
