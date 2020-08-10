@@ -244,6 +244,9 @@ ShaderInterfaceVariableInfo *AddLocationInfo(ShaderInterfaceVariableInfoMap *inf
     ASSERT(info->location == ShaderInterfaceVariableInfo::kInvalid);
     ASSERT(info->component == ShaderInterfaceVariableInfo::kInvalid);
 
+    WARN() << "info @ " << std::hex << info << " " << varName.c_str() << ": location = " << location
+           << ", stage = " << stage;
+
     info->location  = location;
     info->component = component;
     info->activeStages.set(stage);
@@ -592,6 +595,8 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
             const std::string &name = varying.isStructField()
                                           ? varying.frontVarying.parentStructMappedName
                                           : varying.frontVarying.varying->mappedName;
+            WARN() << name.c_str() << ": location = " << location
+                   << ", stage = " << varying.frontVarying.stage;
             AddLocationInfo(&(*variableInfoMapOut)[varying.frontVarying.stage], name, location,
                             component, varying.frontVarying.stage);
         }
@@ -600,6 +605,8 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
             const std::string &name = varying.isStructField()
                                           ? varying.backVarying.parentStructMappedName
                                           : varying.backVarying.varying->mappedName;
+            WARN() << name.c_str() << ": location = " << location
+                   << ", stage = " << varying.backVarying.stage;
             AddLocationInfo(&(*variableInfoMapOut)[varying.backVarying.stage], name, location,
                             component, varying.backVarying.stage);
         }
@@ -1446,6 +1453,8 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     switch (decoration)
     {
         case spv::DecorationLocation:
+            WARN() << "info @ " << std::hex << info << " " << mNamesById[id]
+                   << ": location = " << info->location;
             newDecorationValue = info->location;
             break;
         case spv::DecorationBinding:

@@ -18,6 +18,8 @@
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include "spirv-tools/libspirv.hpp"
+
 namespace rx
 {
 namespace
@@ -126,12 +128,21 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     gl::ShaderMap<SpirvBlob> transformedSpirvBlobs;
     SpirvBlob &transformedSpirvBlob = transformedSpirvBlobs[shaderType];
 
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+    std::string output;
+    // spirvTools.Disassemble(originalSpirvBlob, &output);
+    // WARN() << "Original spirv:\n" << output.c_str();
+
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(
         contextVk, shaderType, removeEarlyFragmentTestsOptimization, variableInfoMap[shaderType],
         originalSpirvBlob, &transformedSpirvBlob));
+
     ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
                                       transformedSpirvBlob.data(),
                                       transformedSpirvBlob.size() * sizeof(uint32_t)));
+
+    spirvTools.Disassemble(transformedSpirvBlob, &output, SPV_BINARY_TO_TEXT_OPTION_NONE);
+    WARN() << "Transformed spirv:\n" << output.c_str();
 
     mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
 
