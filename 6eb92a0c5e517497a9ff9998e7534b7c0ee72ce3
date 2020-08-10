@@ -177,6 +177,30 @@
       "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b30bd7b_f04be89a",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-10T21:30:46Z",
+      "side": 1,
+      "message": "I believe the JNI interface can also be used to query the current orientation, if you\u0027d prefer to wait until it applies.  May not matter for the way this test is written, but could be useful in the future.\n\nhttps://developer.android.com/reference/android/view/Display#getRotation()",
+      "parentUuid": "1c51ea38_8c2b54b0",
+      "range": {
+        "startLine": 589,
+        "startChar": 8,
+        "endLine": 589,
+        "endChar": 13
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
