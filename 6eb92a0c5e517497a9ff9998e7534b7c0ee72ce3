@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "4505be09_04761bdc",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T22:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7626842_5819be0d",
+      "range": {
+        "startLine": 759,
+        "startChar": 0,
+        "endLine": 767,
+        "endChar": 0
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "164063f2_411d5397",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 5
@@ -62,6 +86,30 @@
       "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d7dcc67_91a9987e",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T22:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "164063f2_411d5397",
+      "range": {
+        "startLine": 483,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 35
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "644640fe_a244918c",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T22:57:13Z",
+      "side": 1,
+      "message": "Part of the RAII work mentioned in other comments.\n\nI filed anglebug.com/4947",
+      "parentUuid": "177b55ff_914666b8",
+      "range": {
+        "startLine": 516,
+        "startChar": 0,
+        "endLine": 518,
+        "endChar": 26
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48ba6de4_a9d1d345",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 5
@@ -108,6 +180,30 @@
       "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29e4f87f_cc326475",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T22:57:13Z",
+      "side": 1,
+      "message": "I filed anglebug.com/4947",
+      "parentUuid": "48ba6de4_a9d1d345",
+      "range": {
+        "startLine": 527,
+        "startChar": 0,
+        "endLine": 531,
+        "endChar": 39
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "375e2ae6_2218a2e6",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T22:57:13Z",
+      "side": 1,
+      "message": "I filed anglebug.com/4947",
+      "parentUuid": "75427eb9_56d4af0e",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 41
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce6f7698_1dc89051",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 5
@@ -154,6 +274,30 @@
       "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33dc29c3_f78d779f",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T22:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce6f7698_1dc89051",
+      "range": {
+        "startLine": 572,
+        "startChar": 12,
+        "endLine": 572,
+        "endChar": 17
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -201,6 +345,30 @@
       "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "778ba0c0_637da48f",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-10T22:57:13Z",
+      "side": 1,
+      "message": "The way the test is written more-closely duplicates the original bug (where the window size changes at a different time than the rotation).",
+      "parentUuid": "2b30bd7b_f04be89a",
+      "range": {
+        "startLine": 589,
+        "startChar": 8,
+        "endLine": 589,
+        "endChar": 13
+      },
+      "revId": "6eb92a0c5e517497a9ff9998e7534b7c0ee72ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
