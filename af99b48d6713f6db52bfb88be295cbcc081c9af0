@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d64ca23e_1da883de",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T14:51:59Z",
+      "side": 1,
+      "message": "nit: it is good practice to use unique names for methods instead of overloading.",
+      "range": {
+        "startLine": 307,
+        "startChar": 31,
+        "endLine": 307,
+        "endChar": 54
+      },
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec2586b2_78f76509",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T14:51:59Z",
+      "side": 1,
+      "message": "thanks for getting the double underscore right! It\u0027s easy to miss.",
+      "range": {
+        "startLine": 23,
+        "startChar": 15,
+        "endLine": 23,
+        "endChar": 32
+      },
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "effebfd4_0aea2266",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T14:51:59Z",
+      "side": 1,
+      "message": "Can you please remove this and use the new way of specifying features via the EGL extension? This is legacy and we should probably add a comment not to use these.\n\nSee WithAllocateNonZeroMemory in RobustResourceInitTest.cpp.",
+      "range": {
+        "startLine": 357,
+        "startChar": 17,
+        "endLine": 357,
+        "endChar": 38
+      },
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
