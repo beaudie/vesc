@@ -147,6 +147,30 @@
     },
     {
       "key": {
+        "uuid": "f4ade80c_9e8613d6",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4085,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T15:18:45Z",
+      "side": 1,
+      "message": "How about we default the start from to some sentinel invalid value when the app doesn\u0027t explicitly set it? I don\u0027t know if anyone uses the implicit start frame. Maybe Manh\u0027s test?",
+      "parentUuid": "e14fac53_decd5dc7",
+      "range": {
+        "startLine": 4085,
+        "startChar": 0,
+        "endLine": 4085,
+        "endChar": 29
+      },
+      "revId": "002e15231b3cafc86b31c7396993d9caa2ee4b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29ec0958_3e54d016",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
