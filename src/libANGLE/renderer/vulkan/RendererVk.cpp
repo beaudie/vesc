@@ -131,8 +131,6 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-VkDeviceCreateInfo-pNext-pNext",
     "VUID-VkPipelineRasterizationStateCreateInfo-pNext-pNext",
     "VUID_Undefined",
-    // http://anglebug.com/3078
-    "UNASSIGNED-CoreValidation-Shader-InterfaceTypeMismatch",
     // http://anglebug.com/4583
     "VUID-VkGraphicsPipelineCreateInfo-blendEnable-02023",
     // https://issuetracker.google.com/issues/159493191
@@ -1642,11 +1640,16 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
         return;
     }
 
+    constexpr uint32_t kPixel2DriverWithRelaxedPrecision = 0x801EA000;
+
     bool isAMD      = IsAMD(mPhysicalDeviceProperties.vendorID);
     bool isIntel    = IsIntel(mPhysicalDeviceProperties.vendorID);
     bool isNvidia   = IsNvidia(mPhysicalDeviceProperties.vendorID);
     bool isQualcomm = IsQualcomm(mPhysicalDeviceProperties.vendorID);
     bool isARM      = IsARM(mPhysicalDeviceProperties.vendorID);
+    bool hasRelaxedPrecision =
+        !(IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) &&
+          (mPhysicalDeviceProperties.driverVersion < kPixel2DriverWithRelaxedPrecision));
     bool isSwiftShader =
         IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
 
@@ -1823,7 +1826,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(&mFeatures, enableFramebufferVkCache, !IsApple());
 
     // Currently disabled by default: http://anglebug.com/3078
-    ANGLE_FEATURE_CONDITION(&mFeatures, enablePrecisionQualifiers, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enablePrecisionQualifiers, hasRelaxedPrecision);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, isNvidia || isAMD || isIntel);
 
