@@ -101,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "58c1ecb2_8e788176",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T22:56:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41b48402_da0e4d69",
+      "range": {
+        "startLine": 1401,
+        "startChar": 0,
+        "endLine": 1406,
+        "endChar": 13
+      },
+      "revId": "8da5a1d0fd579dc98897d5696cc01388c325aec6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d274260_cbc01e1e",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 5
@@ -183,6 +207,30 @@
       "side": 1,
       "message": "We\u0027ve already computed the mergedVaryings in Program::getMergedVaryings and ProgramPipeline::getMergedVaryings as part of the link step, I figured I\u0027d just reuse that information here. Otherwise I need to do basically what they are doing to match up the inputs \u0026 outputs.\nWhat\u0027s the concern with storing this info?",
       "parentUuid": "89852748_0afdf541",
+      "range": {
+        "startLine": 874,
+        "startChar": 31,
+        "endLine": 874,
+        "endChar": 45
+      },
+      "revId": "8da5a1d0fd579dc98897d5696cc01388c325aec6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee6edb51_13c774ea",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T22:56:34Z",
+      "side": 1,
+      "message": "It is redundant to store the information twice. Am I missing something or does storing the extra information only basically save you one for loop?",
+      "parentUuid": "a9d406bf_890b8a6f",
       "range": {
         "startLine": 874,
         "startChar": 31,
