@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f04f73e_c01cd4c6",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T22:58:45Z",
+      "side": 1,
+      "message": "This is repeating the same work for each shader stage, just so it can assign the values to each Program\u0027s executable.   \n\nInstead, this should behave similar to how it used to, and just get the merged varyings for the PPO, and pass that to linkMergedVaryings() for each program.   That should also fix the bug below.",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16b9d171_f38e069f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T22:58:45Z",
+      "side": 1,
+      "message": "This looks like a bug.\n\nThis is using the PPO\u0027s executable\u0027s merged varyings, but that was never updated by ProgramPipeline::link().   Instead, you\u0027re updating each Program\u0027s executable.",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16c40c40_adff0ea0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T22:58:45Z",
+      "side": 1,
+      "message": "Can ProgramExecutable::save/load be updated to save/load the contents of mMergedVaryings instead of repeating this work?",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "233e89cd_098f4f94",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T22:58:45Z",
+      "side": 1,
+      "message": "Can this be enabled only for the vulkan backend, so resolvePrecisionMismatch() can be moved into the front end?   That would simplify this CL by removing mMergedVaryings (and the memory it consumes to duplicate the data).",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
