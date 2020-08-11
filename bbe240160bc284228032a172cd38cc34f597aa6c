@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adb9f92_a584a9b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-11T19:37:03Z",
+      "side": 1,
+      "message": "Damn. This first pass was good enough for the capture/replay sample, which I used for verification.  When I switched to the perf test, it exposed a problem with filenames.  It still uses the start frame in the files names:\n\nmobile_legends_3000_capture_context3.angledata.gz\nmobile_legends_3000_capture_context3.cpp\nmobile_legends_3000_capture_context3_files.txt\nmobile_legends_3000_capture_context3_frame3450.cpp\nmobile_legends_3000_capture_context3_frame3451.cpp\nmobile_legends_3000_capture_context3_frame3452.cpp\nmobile_legends_3000_capture_context3_frame3453.cpp\nmobile_legends_3000_capture_context3_frame3454.cpp\nmobile_legends_3000_capture_context3_frame3455.cpp\nmobile_legends_3000_capture_context3_frame3456.cpp\nmobile_legends_3000_capture_context3_frame3457.cpp\nmobile_legends_3000_capture_context3_frame3458.cpp\nmobile_legends_3000_capture_context3_frame3459.cpp\nmobile_legends_3000_capture_context3.h\n\nI\u0027ll need to touch that up.\n",
+      "revId": "bbe240160bc284228032a172cd38cc34f597aa6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
