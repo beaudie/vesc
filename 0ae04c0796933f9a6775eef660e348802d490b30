@@ -90,6 +90,30 @@
     },
     {
       "key": {
+        "uuid": "0a1e7f27_2884b525",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T15:01:26Z",
+      "side": 1,
+      "message": "The way you had it before is slightly better as you say because it only dirties the necessary bits. The way you have it now isn\u0027t wrong either. So yeah a slight advantage to going back to how it was before. Sorry for the confusion.",
+      "parentUuid": "48592fe0_863a2354",
+      "range": {
+        "startLine": 8202,
+        "startChar": 19,
+        "endLine": 8202,
+        "endChar": 62
+      },
+      "revId": "0ae04c0796933f9a6775eef660e348802d490b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70cb5864_dd1a9eb7",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 8
