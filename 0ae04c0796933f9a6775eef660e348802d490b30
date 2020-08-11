@@ -114,6 +114,30 @@
     },
     {
       "key": {
+        "uuid": "23092611_d2f272b8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8202,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-11T16:03:44Z",
+      "side": 1,
+      "message": "np, thanks for educating me!",
+      "parentUuid": "0a1e7f27_2884b525",
+      "range": {
+        "startLine": 8202,
+        "startChar": 19,
+        "endLine": 8202,
+        "endChar": 62
+      },
+      "revId": "0ae04c0796933f9a6775eef660e348802d490b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70cb5864_dd1a9eb7",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 8
@@ -134,6 +158,30 @@
       "revId": "0ae04c0796933f9a6775eef660e348802d490b30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca4ff7cf_fcfd5d39",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1904,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-11T16:03:44Z",
+      "side": 1,
+      "message": "Note (from discussion elsewhere): the preference is to not go down this path, but to do what I originally did.",
+      "parentUuid": "70cb5864_dd1a9eb7",
+      "range": {
+        "startLine": 1899,
+        "startChar": 8,
+        "endLine": 1904,
+        "endChar": 9
+      },
+      "revId": "0ae04c0796933f9a6775eef660e348802d490b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
