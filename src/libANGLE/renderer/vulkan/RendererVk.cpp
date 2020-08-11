@@ -1809,7 +1809,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(&mFeatures, enableFramebufferVkCache, !IsApple());
 
     // Currently disabled by default: http://anglebug.com/3078
-    ANGLE_FEATURE_CONDITION(&mFeatures, enablePrecisionQualifiers, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enablePrecisionQualifiers, true);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportDepthStencilRenderingFeedbackLoops, true);
 
