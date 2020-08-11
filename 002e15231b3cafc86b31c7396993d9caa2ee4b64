@@ -195,6 +195,30 @@
     },
     {
       "key": {
+        "uuid": "287a659c_6774cecc",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4085,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-11T16:15:12Z",
+      "side": 1,
+      "message": "I don\u0027t mind iterating on this to get it right.  Let\u0027s go with this initially and refactor after some more discussion.  I\u0027d like to get something that works for desktop as well.  I have some ideas I\u0027ll put into a design doc.",
+      "parentUuid": "486f3369_cbb7b673",
+      "range": {
+        "startLine": 4085,
+        "startChar": 0,
+        "endLine": 4085,
+        "endChar": 29
+      },
+      "revId": "002e15231b3cafc86b31c7396993d9caa2ee4b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29ec0958_3e54d016",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
