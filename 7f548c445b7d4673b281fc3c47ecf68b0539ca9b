@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "5c4ed9d8_756f52f6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4376,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T18:28:56Z",
+      "side": 1,
+      "message": "Again the code changed so much I forget all the iterations of things I tried. Just guessing, the issue is that read layout changes are not compatible. e.g. transfer vs shader read only. I left a comment here although I haven\u0027t fully verified this.",
+      "parentUuid": "7c9040a9_1322aa2d",
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23fc213b_69137801",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 31
@@ -118,6 +136,30 @@
       "writtenOn": "2020-08-11T00:12:38Z",
       "side": 1,
       "message": "Is the \"flush\" part of this name still accurate without flushing the outside render pass anymore?   Or are we considing endRenderPass() as flushing the current render pass?",
+      "range": {
+        "startLine": 4410,
+        "startChar": 25,
+        "endLine": 4410,
+        "endChar": 30
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a7470ea_f68bfa48",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4410,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T18:28:56Z",
+      "side": 1,
+      "message": "I renamed this to beginNewRenderPass and added an ASSERT. Let\u0027s see if it picks up anything on the bots.",
+      "parentUuid": "23fc213b_69137801",
       "range": {
         "startLine": 4410,
         "startChar": 25,
@@ -177,6 +219,30 @@
     },
     {
       "key": {
+        "uuid": "3565639e_6490d3f0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T18:28:56Z",
+      "side": 1,
+      "message": "Because we\u0027re no longer breaking RenderPasses as often the LoadOp clears get mucked up if we don\u0027t handle them explicitly. I\u0027d guess this new code isn\u0027t reachable before this CL so putting it in a prior CL won\u0027t necessarily be testable.\n\nLMK if this is OK.",
+      "parentUuid": "a6093289_66d6fadb",
+      "range": {
+        "startLine": 1964,
+        "startChar": 16,
+        "endLine": 1964,
+        "endChar": 61
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64c78cb7_0cc6a58e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 31
@@ -188,6 +254,24 @@
       "writtenOn": "2020-08-11T00:12:38Z",
       "side": 1,
       "message": "Why don\u0027t we need to treat these like storage buffers and only track usages when aliasing is disallowed?",
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0714860b_ee0cd930",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T18:28:56Z",
+      "side": 1,
+      "message": "It\u0027s a good question and I forget the details. This code changed so many times I don\u0027t recall the iteration where I disabled tracking for storage buffers. Is that a satisfactory answer or would you like me to look into it?",
+      "parentUuid": "64c78cb7_0cc6a58e",
       "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
