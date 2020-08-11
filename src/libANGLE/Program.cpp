@@ -1375,6 +1375,8 @@ angle::Result Program::linkMergedVaryings(const Context *context,
         mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
     InfoLog &infoLog = getExecutable().getInfoLog();
 
+    dumpMergedVaryings(mergedVaryings);
+
     if (!linkValidateTransformFeedback(context->getClientVersion(), infoLog, mergedVaryings,
                                        tfStage, context->getCaps()))
     {
@@ -1391,6 +1393,25 @@ angle::Result Program::linkMergedVaryings(const Context *context,
     mState.updateTransformFeedbackStrides();
 
     return angle::Result::Continue;
+}
+
+void Program::dumpMergedVaryings(const ProgramMergedVaryings &mergedVaryings)
+{
+    for (auto &varying : mergedVaryings)
+    {
+        if (varying.frontShader)
+        {
+            WARN() << "front stage: " << varying.frontShaderStage
+                   << ", mappedName: " << varying.frontShader->mappedName
+                   << ", location: " << varying.frontShader->location;
+        }
+        if (varying.backShader)
+        {
+            WARN() << "back stage: " << varying.backShaderStage
+                   << ", mappedName: " << varying.backShader->mappedName
+                   << ", location: " << varying.backShader->location;
+        }
+    }
 }
 
 angle::Result Program::link(const Context *context)
