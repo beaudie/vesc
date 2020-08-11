@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "a8e2e06c_d89e25ad",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-11T14:22:38Z",
+      "side": 1,
+      "message": "Ah, no, I misread this. You\u0027re dirtying the binding not the object.",
+      "parentUuid": "fd2f2536_8e2a3f02",
+      "range": {
+        "startLine": 8202,
+        "startChar": 19,
+        "endLine": 8202,
+        "endChar": 62
+      },
+      "revId": "0ae04c0796933f9a6775eef660e348802d490b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70cb5864_dd1a9eb7",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 8
