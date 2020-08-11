@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "48592fe0_863a2354",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8202,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-11T14:46:05Z",
+      "side": 1,
+      "message": "\u003e Ah, no, I misread this. You\u0027re dirtying the binding not the object.\n\nSorry, just to clarify ... In a previous comment, I eliminated my new set*FramebufferBindingDirty() methods and moved the setting of the dirty bits into set*FramebufferDirty()?  Are you suggesting that I back that out, or just not call this method for a re-created swapchain?",
+      "parentUuid": "a8e2e06c_d89e25ad",
+      "range": {
+        "startLine": 8202,
+        "startChar": 19,
+        "endLine": 8202,
+        "endChar": 62
+      },
+      "revId": "0ae04c0796933f9a6775eef660e348802d490b30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70cb5864_dd1a9eb7",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 8
