@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10ffc2d3_c75d0588",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-11T01:07:03Z",
+      "side": 1,
+      "message": "Suppressing mac-angle-rel failure in https://chromium-review.googlesource.com/c/angle/angle/+/2347463",
+      "revId": "063dc8ae4adcc74f91ad615d00fd02cb274cf96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
