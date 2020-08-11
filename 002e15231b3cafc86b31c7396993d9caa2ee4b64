@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "98a6b89b_486ebcdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-11T15:08:01Z",
+      "side": 1,
+      "message": "Thanks Jamie, a couple of replies.",
+      "revId": "002e15231b3cafc86b31c7396993d9caa2ee4b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7cec72d5_16a2d831",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -47,6 +64,30 @@
       "writtenOn": "2020-08-11T14:44:01Z",
       "side": 1,
       "message": "can you make this non-android-specific? i.e. we have a helper method that converts a prop to an env on android, then reads the env here? anyway not necessary just would make this code easier to maintain as we wouldn\u0027t get surprise compile failures on android.",
+      "range": {
+        "startLine": 4083,
+        "startChar": 0,
+        "endLine": 4083,
+        "endChar": 35
+      },
+      "revId": "002e15231b3cafc86b31c7396993d9caa2ee4b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0b8f2db_e61c7da2",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-11T15:08:01Z",
+      "side": 1,
+      "message": "I didn\u0027t think reading an env var would be appropriate on other platforms.  I would prefer to make more of this cross platform though, so I\u0027ll try to isolate the Android bits more.",
+      "parentUuid": "7cec72d5_16a2d831",
       "range": {
         "startLine": 4083,
         "startChar": 0,
@@ -82,6 +123,30 @@
     },
     {
       "key": {
+        "uuid": "e14fac53_decd5dc7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4085,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-11T15:08:01Z",
+      "side": 1,
+      "message": "We need a way to inform the capture tool that we don\u0027t want it to use frame start and frame end.  I thought it would be simplest to have this new setting override those two.  We could instead require that, if you want to use this trigger, you must ensure your frame start is set acceptably high, such that it won\u0027t be reached by the common code.  Then we could invert the logic on this trigger and start the capture when it becomes non-zero.  It makes the code simpler at the cost of (slightly) more complex usage.",
+      "parentUuid": "74e3470e_8cb462d0",
+      "range": {
+        "startLine": 4085,
+        "startChar": 0,
+        "endLine": 4085,
+        "endChar": 29
+      },
+      "revId": "002e15231b3cafc86b31c7396993d9caa2ee4b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29ec0958_3e54d016",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -93,6 +158,30 @@
       "writtenOn": "2020-08-11T14:44:01Z",
       "side": 1,
       "message": "nit: you can invert these ifs and early exit to flatten the code.",
+      "range": {
+        "startLine": 4088,
+        "startChar": 8,
+        "endLine": 4089,
+        "endChar": 9
+      },
+      "revId": "002e15231b3cafc86b31c7396993d9caa2ee4b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cce7a08_263e0106",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4089,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-11T15:08:01Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "29ec0958_3e54d016",
       "range": {
         "startLine": 4088,
         "startChar": 8,
