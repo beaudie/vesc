@@ -490,6 +490,8 @@ class Program final : public LabeledObject, public angle::Subject
                                      const ProgramExecutable &executable,
                                      const ProgramMergedVaryings &mergedVaryings);
 
+    void dumpMergedVaryings(const ProgramMergedVaryings &mergedVaryings);
+
     // KHR_parallel_shader_compile
     // Try to link the program asynchrously. As a result, background threads may be launched to
     // execute the linking tasks concurrently.
