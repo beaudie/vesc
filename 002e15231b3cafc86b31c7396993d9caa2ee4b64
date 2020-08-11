@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c4d79fe_ca40418b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-11T00:16:03Z",
+      "side": 1,
+      "message": "PTAL, I\u0027ll be using this for captures this week.",
+      "revId": "002e15231b3cafc86b31c7396993d9caa2ee4b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
