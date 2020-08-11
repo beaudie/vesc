@@ -90,6 +90,46 @@
     },
     {
       "key": {
+        "uuid": "7c9040a9_1322aa2d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4376,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T00:12:38Z",
+      "side": 1,
+      "message": "Similar to ContextVk::onBufferRead() above, can this only end the render pass if the image has only been read so far?",
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23fc213b_69137801",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4410,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T00:12:38Z",
+      "side": 1,
+      "message": "Is the \"flush\" part of this name still accurate without flushing the outside render pass anymore?   Or are we considing endRenderPass() as flushing the current render pass?",
+      "range": {
+        "startLine": 4410,
+        "startChar": 25,
+        "endLine": 4410,
+        "endChar": 30
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bab5e215_efbff63a",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 31
@@ -107,6 +147,47 @@
         "endLine": 1964,
         "endChar": 61
       },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6093289_66d6fadb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T00:12:38Z",
+      "side": 1,
+      "message": "I agree, these clear changes seem unrelated.   Can they be split off?",
+      "parentUuid": "bab5e215_efbff63a",
+      "range": {
+        "startLine": 1964,
+        "startChar": 16,
+        "endLine": 1964,
+        "endChar": 61
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64c78cb7_0cc6a58e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-11T00:12:38Z",
+      "side": 1,
+      "message": "Why don\u0027t we need to treat these like storage buffers and only track usages when aliasing is disallowed?",
       "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
