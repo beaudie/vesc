@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ce247c24_717affb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-11T17:18:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e39cd7b8_bd7cb7dc",
+      "range": {
+        "startLine": 10,
+        "startChar": 29,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "6ef0a8010f0e9e1a3e690780e2b4756c2329cb85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4ef1d06_1812f65f",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6dc5f91b_a670e958",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4409,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-11T17:18:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4ef1d06_1812f65f",
+      "range": {
+        "startLine": 4409,
+        "startChar": 32,
+        "endLine": 4409,
+        "endChar": 61
+      },
+      "revId": "6ef0a8010f0e9e1a3e690780e2b4756c2329cb85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d85cb2b_4d62acdb",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 4
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "86f4672b_9968ecb8",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-11T17:18:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d85cb2b_4d62acdb",
+      "revId": "6ef0a8010f0e9e1a3e690780e2b4756c2329cb85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4874a562_ccb03b82",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 4
@@ -79,6 +145,24 @@
       "revId": "6ef0a8010f0e9e1a3e690780e2b4756c2329cb85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e944dfa_d38e6240",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-11T17:18:53Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s the problem. Thanks!\nI\u0027m moving the storage of the mergedVaryings into the program-\u003egetExecutable() so that I can do additional processing for the precision attribute which needs this info.",
+      "parentUuid": "4874a562_ccb03b82",
+      "revId": "6ef0a8010f0e9e1a3e690780e2b4756c2329cb85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
