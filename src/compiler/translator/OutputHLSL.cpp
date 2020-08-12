@@ -297,20 +297,22 @@ const TConstantUnion *OutputHLSL::writeConstantUnionArray(TInfoSinkBase &out,
     return constUnionIterated;
 }
 
-OutputHLSL::OutputHLSL(sh::GLenum shaderType,
-                       ShShaderSpec shaderSpec,
-                       int shaderVersion,
-                       const TExtensionBehavior &extensionBehavior,
-                       const char *sourcePath,
-                       ShShaderOutput outputType,
-                       int numRenderTargets,
-                       int maxDualSourceDrawBuffers,
-                       const std::vector<ShaderVariable> &uniforms,
-                       ShCompileOptions compileOptions,
-                       sh::WorkGroupSize workGroupSize,
-                       TSymbolTable *symbolTable,
-                       PerformanceDiagnostics *perfDiagnostics,
-                       const std::vector<InterfaceBlock> &shaderStorageBlocks)
+OutputHLSL::OutputHLSL(
+    sh::GLenum shaderType,
+    ShShaderSpec shaderSpec,
+    int shaderVersion,
+    const TExtensionBehavior &extensionBehavior,
+    const char *sourcePath,
+    ShShaderOutput outputType,
+    int numRenderTargets,
+    int maxDualSourceDrawBuffers,
+    const std::vector<ShaderVariable> &uniforms,
+    ShCompileOptions compileOptions,
+    sh::WorkGroupSize workGroupSize,
+    TSymbolTable *symbolTable,
+    PerformanceDiagnostics *perfDiagnostics,
+    const std::map<int, const TInterfaceBlock *> &accessUniformBlockEntireArrayMember,
+    const std::vector<InterfaceBlock> &shaderStorageBlocks)
     : TIntermTraverser(true, true, true, symbolTable),
       mShaderType(shaderType),
       mShaderSpec(shaderSpec),
@@ -321,6 +323,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
       mCompileOptions(compileOptions),
       mInsideFunction(false),
       mInsideMain(false),
+      mDontTranslateToStructuredBuffer(accessUniformBlockEntireArrayMember),
       mNumRenderTargets(numRenderTargets),
       mMaxDualSourceDrawBuffers(maxDualSourceDrawBuffers),
       mCurrentFunctionMetadata(nullptr),
@@ -659,7 +662,8 @@ void OutputHLSL::header(TInfoSinkBase &out,
     out << mStructureHLSL->structsHeader();
 
     mResourcesHLSL->uniformsHeader(out, mOutputType, mReferencedUniforms, mSymbolTable);
-    out << mResourcesHLSL->uniformBlocksHeader(mReferencedUniformBlocks);
+    out << mResourcesHLSL->uniformBlocksHeader(mReferencedUniformBlocks,
+                                               mDontTranslateToStructuredBuffer);
     mSSBOOutputHLSL->writeShaderStorageBlocksHeader(out);
 
     if (!mEqualityFunctions.empty())
@@ -1649,7 +1653,7 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                         GetInterfaceBlockOfUniformBlockNearestIndexOperator(node->getLeft());
                     if (interfaceBlock &&
                         mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
-                            *interfaceBlock))
+                            *interfaceBlock, mDontTranslateToStructuredBuffer))
                     {
                         const TField *field = interfaceBlock->fields()[0];
                         if (field->type()->isMatrix())
@@ -1680,7 +1684,7 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                         GetInterfaceBlockOfUniformBlockNearestIndexOperator(node->getLeft());
                     if (interfaceBlock &&
                         mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
-                            *interfaceBlock))
+                            *interfaceBlock, mDontTranslateToStructuredBuffer))
                     {
                         const TField *field = interfaceBlock->fields()[0];
                         if (field->type()->isMatrix())
@@ -1747,7 +1751,8 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 const TIntermConstantUnion *index = node->getRight()->getAsConstantUnion();
                 const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
                 if (structInStd140UniformBlock ||
-                    mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(*interfaceBlock))
+                    mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
+                        *interfaceBlock, mDontTranslateToStructuredBuffer))
                 {
                     out << "_";
                 }

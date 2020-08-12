@@ -39,7 +39,9 @@ class ResourcesHLSL : angle::NonCopyable
     void samplerMetadataUniforms(TInfoSinkBase &out, unsigned int regIndex);
     unsigned int getSamplerCount() const { return mSamplerCount; }
     void imageMetadataUniforms(TInfoSinkBase &out, unsigned int regIndex);
-    TString uniformBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
+    TString uniformBlocksHeader(
+        const ReferencedInterfaceBlocks &referencedInterfaceBlocks,
+        const std::map<int, const TInterfaceBlock *> &dontTranslateToStructuredBuffer);
     TString shaderStorageBlocksHeader(const ReferencedInterfaceBlocks &referencedInterfaceBlocks);
 
     // Used for direct index references
@@ -68,7 +70,9 @@ class ResourcesHLSL : angle::NonCopyable
 
     unsigned int getReadonlyImage2DRegisterIndex() const { return mReadonlyImage2DRegisterIndex; }
     unsigned int getImage2DRegisterIndex() const { return mImage2DRegisterIndex; }
-    bool shouldTranslateUniformBlockToStructuredBuffer(const TInterfaceBlock &interfaceBlock);
+    bool shouldTranslateUniformBlockToStructuredBuffer(
+        const TInterfaceBlock &interfaceBlock,
+        const std::map<int, const TInterfaceBlock *> &dontTranslateToStructuredBuffer);
 
   private:
     TString uniformBlockString(const TInterfaceBlock &interfaceBlock,

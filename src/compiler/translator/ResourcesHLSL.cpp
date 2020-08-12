@@ -676,7 +676,8 @@ void ResourcesHLSL::imageMetadataUniforms(TInfoSinkBase &out, unsigned int regIn
 }
 
 TString ResourcesHLSL::uniformBlocksHeader(
-    const ReferencedInterfaceBlocks &referencedInterfaceBlocks)
+    const ReferencedInterfaceBlocks &referencedInterfaceBlocks,
+    const std::map<int, const TInterfaceBlock *> &dontTranslateToStructuredBuffer)
 {
     TString interfaceBlocks;
 
@@ -691,7 +692,8 @@ TString ResourcesHLSL::uniformBlocksHeader(
 
         // In order to avoid compile performance issue, translate uniform block to structured
         // buffer. anglebug.com/3682.
-        if (shouldTranslateUniformBlockToStructuredBuffer(interfaceBlock))
+        if (shouldTranslateUniformBlockToStructuredBuffer(interfaceBlock,
+                                                          dontTranslateToStructuredBuffer))
         {
             unsigned int structuredBufferRegister = mSRVRegister;
             if (instanceVariable != nullptr && instanceVariable->getType().isArray())
@@ -920,14 +922,24 @@ TString ResourcesHLSL::uniformBlockStructString(const TInterfaceBlock &interface
 }
 
 bool ResourcesHLSL::shouldTranslateUniformBlockToStructuredBuffer(
-    const TInterfaceBlock &interfaceBlock)
+    const TInterfaceBlock &interfaceBlock,
+    const std::map<int, const TInterfaceBlock *> &dontTranslateToStructuredBuffer)
 {
+    if (dontTranslateToStructuredBuffer.count(interfaceBlock.uniqueId().get()) != 0)
+    {
+        // For the uniform block array members which are referred as a whole array in the shader,
+        // we cannot directly modify its type from an array into a StructuredBuffer, or we will
+        // get a type mismatch compilation error from FXC. Temporarily we simply never translate
+        // such uniform blocks into StructuredBuffer.
+        return false;
+    }
+
     const TType &fieldType = *interfaceBlock.fields()[0]->type();
     // Restrict field and sub-fields types match std140 storage layout rules, even the uniform
     // does not use std140 qualifier.
     bool shouldPadUniformBlockMember = ShouldPadUniformBlockMemberForStructuredBuffer(fieldType);
 
-    return (mCompileOptions & SH_DONT_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) == 0 &&
+    return (mCompileOptions & SH_ALLOW_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) != 0 &&
            mSRVRegister < kMaxInputResourceSlotCount && interfaceBlock.fields().size() == 1u &&
            !shouldPadUniformBlockMember && fieldType.getNumArraySizes() == 1u &&
            fieldType.getOutermostArraySize() >= kMinArraySizeUseStructuredBuffer;
