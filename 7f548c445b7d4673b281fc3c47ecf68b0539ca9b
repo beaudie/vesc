@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "ab98befd_8305b832",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4376,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-12T18:29:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5c4ed9d8_756f52f6",
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23fc213b_69137801",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 31
@@ -169,6 +187,30 @@
       "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5253fa9a_839840ec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 4410,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-12T18:29:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a7470ea_f68bfa48",
+      "range": {
+        "startLine": 4410,
+        "startChar": 25,
+        "endLine": 4410,
+        "endChar": 30
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -243,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "702349be_e2e4e64b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-12T18:29:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3565639e_6490d3f0",
+      "range": {
+        "startLine": 1964,
+        "startChar": 16,
+        "endLine": 1964,
+        "endChar": 61
+      },
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64c78cb7_0cc6a58e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 31
@@ -272,6 +338,24 @@
       "side": 1,
       "message": "It\u0027s a good question and I forget the details. This code changed so many times I don\u0027t recall the iteration where I disabled tracking for storage buffers. Is that a satisfactory answer or would you like me to look into it?",
       "parentUuid": "64c78cb7_0cc6a58e",
+      "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57798064_365bf159",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-12T18:29:38Z",
+      "side": 1,
+      "message": "Please leave a comment here explaining why images are treated differently from buffers.",
+      "parentUuid": "0714860b_ee0cd930",
       "revId": "7f548c445b7d4673b281fc3c47ecf68b0539ca9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

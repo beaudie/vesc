@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf85761e_7825078e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-12T18:29:38Z",
+      "side": 1,
+      "message": "+1 assuming the test fixes aren\u0027t a big deal.",
+      "revId": "d9e4e7f101ed8719a8b8c1c9863aea24ca0fb107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
