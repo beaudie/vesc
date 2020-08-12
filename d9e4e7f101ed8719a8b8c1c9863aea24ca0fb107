@@ -16,6 +16,23 @@
       "revId": "d9e4e7f101ed8719a8b8c1c9863aea24ca0fb107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "766c3ef3_8e469ee4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-12T19:48:58Z",
+      "side": 1,
+      "message": "There is a perfCounter bug that I was trying to fix in 2338828, not sure if your test failure is the same issue or not.\n",
+      "revId": "d9e4e7f101ed8719a8b8c1c9863aea24ca0fb107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
