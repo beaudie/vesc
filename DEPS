@@ -28,7 +28,7 @@ vars = {
   'checkout_angle_internal': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'c8c2c646295cebc116b8b8f3f4cdfa48821f22fb',
+  'chromium_revision': '115004a25ec5f1115efb217e12ef3d025cbfa123',
 
   # Current revision of VK-GL-CTS (a.k.a dEQP).
   'vk_gl_cts_revision': 'b2be8f1659784a3ed261a895c323de40c0129dc1',
@@ -89,7 +89,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@113076662015f18c72ca5cb5b03517fdf2e7d2a6',
+    'url': '{chromium_git}/chromium/src/build.git@21db6d80b0ae48393c1c2e2b3807a5db9dbaca3b',
     'condition': 'not build_with_chromium',
   },
 
@@ -99,7 +99,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@e227df9cd519af4dcd720c3fb8341060408fdbf4',
+    'url': '{chromium_git}/chromium/src/testing@791ee854429c6e63a5d3c966dc3c91b3ed2b359c',
     'condition': 'not build_with_chromium',
   },
 
@@ -156,7 +156,7 @@ deps = {
 
   # libjpeg_turbo is used by glmark2.
   'third_party/libjpeg_turbo': {
-    'url': '{chromium_git}/chromium/deps/libjpeg_turbo.git@0241a1304fd183ee24fbdfe6891f18fdedea38f9',
+    'url': '{chromium_git}/chromium/deps/libjpeg_turbo.git@9d4f8005bc6c888e66b00fd00188531ee9bd3344',
     'condition': 'not build_with_chromium',
   },
 
