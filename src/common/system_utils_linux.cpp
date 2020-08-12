@@ -8,6 +8,7 @@
 
 #include "system_utils.h"
 
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -17,6 +18,14 @@
 
 namespace angle
 {
+#if defined(ANGLE_PLATFORM_ANDROID)
+std::string GetExecutableName()
+{
+    const char *executableName = getprogname();
+    return (executableName) ? std::string(executableName) : "ANGLE";
+}
+#endif  // ANGLE_PLATFORM_ANDROID
+
 std::string GetExecutablePath()
 {
     // We cannot use lstat to get the size of /proc/self/exe as it always returns 0
