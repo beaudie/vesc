@@ -34,6 +34,24 @@
       "revId": "111170600f5cf4487c85055bb3fc13a6b33c7fed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64bc34db_05829435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-12T20:26:02Z",
+      "side": 1,
+      "message": "\u003e linux variant is included for android as well, wouldnt that suffice?\n\nI actually don\u0027t know.  I remember that we went through some push-ups a while back to get the application name (but we were trying to get the Java strings (e.g. \"com.\u003ccompany\u003e.\u003capp\u003e\").",
+      "parentUuid": "4235e782_84c38624",
+      "revId": "111170600f5cf4487c85055bb3fc13a6b33c7fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
