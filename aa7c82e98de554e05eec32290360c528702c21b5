@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "54ffb311_03168238",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-12T21:50:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88b9b083_0d38c9e4",
+      "range": {
+        "startLine": 276,
+        "startChar": 3,
+        "endLine": 276,
+        "endChar": 14
+      },
+      "revId": "aa7c82e98de554e05eec32290360c528702c21b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fdfb794_318eeead",
         "filename": "build_overrides/angle.gni",
         "patchSetId": 6
@@ -68,6 +92,30 @@
       "revId": "aa7c82e98de554e05eec32290360c528702c21b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "173625a6_12b3c00b",
+        "filename": "build_overrides/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-12T21:50:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fdfb794_318eeead",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 15
+      },
+      "revId": "aa7c82e98de554e05eec32290360c528702c21b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
