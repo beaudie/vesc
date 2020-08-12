@@ -16,6 +16,24 @@
       "revId": "117ef899761521ff2e74c11bfb5986bfc64dbd5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8331c82d_25b70822",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-12T21:09:48Z",
+      "side": 1,
+      "message": "I don\u0027t see https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp/ in ANGLE DEPS, is there a bug open to add it?",
+      "parentUuid": "65b448a3_eb499faf",
+      "revId": "117ef899761521ff2e74c11bfb5986bfc64dbd5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
