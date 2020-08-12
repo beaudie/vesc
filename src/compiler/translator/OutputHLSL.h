@@ -50,6 +50,7 @@ class OutputHLSL : public TIntermTraverser
                sh::WorkGroupSize workGroupSize,
                TSymbolTable *symbolTable,
                PerformanceDiagnostics *perfDiagnostics,
+               std::map<int, const TInterfaceBlock *> &accessUniformBlockEntireArrayMember,
                const std::vector<InterfaceBlock> &shaderStorageBlocks);
 
     ~OutputHLSL() override;

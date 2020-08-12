@@ -310,6 +310,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
                        sh::WorkGroupSize workGroupSize,
                        TSymbolTable *symbolTable,
                        PerformanceDiagnostics *perfDiagnostics,
+                       std::map<int, const TInterfaceBlock *> &accessUniformBlockEntireArrayMember,
                        const std::vector<InterfaceBlock> &shaderStorageBlocks)
     : TIntermTraverser(true, true, true, symbolTable),
       mShaderType(shaderType),
@@ -372,7 +373,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     unsigned int firstUniformRegister =
         ((compileOptions & SH_SKIP_D3D_CONSTANT_REGISTER_ZERO) != 0) ? 1u : 0u;
     mResourcesHLSL = new ResourcesHLSL(mStructureHLSL, outputType, compileOptions, uniforms,
-                                       firstUniformRegister);
+                                       firstUniformRegister, accessUniformBlockEntireArrayMember);
 
     if (mOutputType == SH_HLSL_3_0_OUTPUT)
     {
