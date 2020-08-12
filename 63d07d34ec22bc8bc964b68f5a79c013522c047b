@@ -22,6 +22,30 @@
       "revId": "63d07d34ec22bc8bc964b68f5a79c013522c047b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56a175de_afc8dff3",
+        "filename": "extensions/EGL_ANGLE_d3d_texture_client_buffer.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-08-12T00:23:12Z",
+      "side": 1,
+      "message": "Any suggestions for names we could use?  Note that array index would not be accurate since we could have an array of NV12 textures where each texture has an array index.  Subresource index might be ok, but technically accessing YUV planes as subresources is only supported in D3D12, not D3D11.",
+      "parentUuid": "b9810c03_105223ad",
+      "range": {
+        "startLine": 82,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 79
+      },
+      "revId": "63d07d34ec22bc8bc964b68f5a79c013522c047b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
