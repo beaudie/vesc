@@ -1390,21 +1390,6 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
                     attachmentIndexVk);
             }
         }
-
-        // NOTE: Possible future optimization is to delay setting the storeOp and only do so if the
-        // render pass is closed by itself before another draw call.  Otherwise, in a situation like
-        // this:
-        //
-        //     draw()
-        //     invalidate()
-        //     draw()
-        //
-        // We would be discarding the attachments only to load them for the next draw (which is less
-        // efficient than keeping the render pass open and not do the discard at all).  While dEQP
-        // tests this pattern, this optimization may not be necessary if no application does this.
-        // It is expected that an application would invalidate() when it's done with the
-        // framebuffer, so the render pass would have closed either way.
-        ANGLE_TRY(contextVk->endRenderPass());
     }
 
     // If not a partial invalidate, mark the contents of the invalidated attachments as undefined,
