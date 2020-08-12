@@ -16,6 +16,23 @@
       "revId": "2d39a9aeb8c9405b93377036b1386e7c3b36a9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b86956a_b31ee7c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-12T19:54:14Z",
+      "side": 1,
+      "message": "Note: Based on Jan-Harald\u0027s description of what their driver is doing the current approach in this CL isn\u0027t right. Rather than trying to patch up the precision between the two need cast the output to the precision of the next stage. Maybe that can be done rewriting the spir-v, but more naturally is implemented at the source level (I think).",
+      "revId": "2d39a9aeb8c9405b93377036b1386e7c3b36a9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
