@@ -148,6 +148,8 @@ angle_translator_sources = [
   "src/compiler/translator/tree_ops/PruneNoOps.h",
   "src/compiler/translator/tree_ops/RecordConstantPrecision.cpp",
   "src/compiler/translator/tree_ops/RecordConstantPrecision.h",
+  "src/compiler/translator/tree_ops/RecordUniformBlockTranslatedToStructuredBuffer.cpp",
+  "src/compiler/translator/tree_ops/RecordUniformBlockTranslatedToStructuredBuffer.h",
   "src/compiler/translator/tree_ops/RegenerateStructNames.cpp",
   "src/compiler/translator/tree_ops/RegenerateStructNames.h",
   "src/compiler/translator/tree_ops/RemoveArrayLengthMethod.cpp",
