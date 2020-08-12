@@ -16,6 +16,115 @@
       "revId": "fbb7d5ea0fb6678392356f34f18e404cd3bf99ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f646b66_4900e5d9",
+        "filename": "src/compiler/translator/OutputHLSL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-08-12T09:16:11Z",
+      "side": 1,
+      "message": "Is it better to rename to \u0027uniformBlocksWithArrayMemberAsWholeEntity\u0027?",
+      "range": {
+        "startLine": 53,
+        "startChar": 55,
+        "endLine": 53,
+        "endChar": 90
+      },
+      "revId": "fbb7d5ea0fb6678392356f34f18e404cd3bf99ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfe5ca23_f337458a",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-08-12T09:16:11Z",
+      "side": 1,
+      "message": "Just comment that \u0027Currently,it\u0027s not supported to translate uniform block to structuredBuffer if arrays as whole entities in uniform blocks are operated.\u0027",
+      "range": {
+        "startLine": 930,
+        "startChar": 0,
+        "endLine": 931,
+        "endChar": 72
+      },
+      "revId": "fbb7d5ea0fb6678392356f34f18e404cd3bf99ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4d4ab08_e5e76a7c",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-08-12T09:16:11Z",
+      "side": 1,
+      "message": "Is it better to rename to \u0027RecordUniformBlocksWithArrayMemberAsWholeEntity\u0027?",
+      "range": {
+        "startLine": 189,
+        "startChar": 17,
+        "endLine": 189,
+        "endChar": 58
+      },
+      "revId": "fbb7d5ea0fb6678392356f34f18e404cd3bf99ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cd6b104_37c08268",
+        "filename": "src/compiler/translator/tree_ops/RecordAccessUniformBlockEntireArrayMember.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-08-12T09:16:11Z",
+      "side": 1,
+      "message": "\u0027mUniformBlocksWithArrayMemberAsWholeEntity\u0027?",
+      "range": {
+        "startLine": 35,
+        "startChar": 44,
+        "endLine": 35,
+        "endChar": 80
+      },
+      "revId": "fbb7d5ea0fb6678392356f34f18e404cd3bf99ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39f604b1_40deb6c4",
+        "filename": "src/compiler/translator/tree_ops/RecordAccessUniformBlockEntireArrayMember.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-08-12T09:16:11Z",
+      "side": 1,
+      "message": "Missing \u0027case EOpInitialize\u0027?",
+      "revId": "fbb7d5ea0fb6678392356f34f18e404cd3bf99ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
