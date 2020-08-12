@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "882e8b6a_f41ce2d5",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-12T15:50:36Z",
+      "side": 1,
+      "message": "The problem is lifetime of the mergedVaryings. I need that data in the Vulkan backend. I didn\u0027t want to call back to the front-end to recompute it so I\u0027m storing it in ProgramExecutable so that the Vulkan back-end can use the data.\nThis will compute the data multiple times for program pipelines. \nI found that mState.mExecutable is not the same as program-\u003egetExecutable() so called getMergedVaryings twice.\nI\u0027ll use a local outside the loop and copy that into the corresponding program-\u003egetExecutable().mMergedVaryings to save a little. Otherwise not sure how to get at the appropriate ProgramExecutible from outside the loop.\n\nWith the data in ProgramExecutible the Vulkan back-end can use it rather than re-compute it.",
+      "parentUuid": "4f04f73e_c01cd4c6",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "16b9d171_f38e069f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57cb974c_a50d28ff",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-12T15:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16b9d171_f38e069f",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "a8f3e5a5_9963d65c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-12T15:50:36Z",
+      "side": 1,
+      "message": "resolvePrecisionMismatch is updating the mVariableInfoMap based on the already computed \u0026 saved mergedVaryings data.\nHmm, looks like mExecutable.load already loaded that so shouldn\u0027t have to update anything. I\u0027ll remove this line.",
+      "parentUuid": "16c40c40_adff0ea0",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "233e89cd_098f4f94",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 6
@@ -67,6 +121,24 @@
       "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfe3a29f_e4612bf8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-12T15:50:36Z",
+      "side": 1,
+      "message": "This is enabled only for the Vulkan backend.\nresolvePrecisionMismatch is a Vulkan specific issue, doesn\u0027t belong in the front-end.\nThe data is now stored in the ProgramExecutable to keep it around for the back-end rather than a local variable and then tossed.",
+      "parentUuid": "233e89cd_098f4f94",
+      "revId": "13284ea989bcdb1a6ab791e7da5ca580c30b2201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
