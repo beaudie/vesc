@@ -12,6 +12,7 @@
 #include "compiler/translator/tree_ops/BreakVariableAliasingInInnerLoops.h"
 #include "compiler/translator/tree_ops/ExpandIntegerPowExpressions.h"
 #include "compiler/translator/tree_ops/PruneEmptyCases.h"
+#include "compiler/translator/tree_ops/RecordUniformBlockTranslatedToStructuredBuffer.h"
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.h"
 #include "compiler/translator/tree_ops/RewriteElseBlocks.h"
@@ -183,11 +184,22 @@ bool TranslatorHLSL::translate(TIntermBlock *root,
         }
     }
 
-    sh::OutputHLSL outputHLSL(getShaderType(), getShaderSpec(), getShaderVersion(),
-                              getExtensionBehavior(), getSourcePath(), getOutputType(),
-                              numRenderTargets, maxDualSourceDrawBuffers, getUniforms(),
-                              compileOptions, getComputeShaderLocalSize(), &getSymbolTable(),
-                              perfDiagnostics, mShaderStorageBlocks);
+    mUniformBlockTranslatedToStructuredBuffers.clear();
+    if (getShaderVersion() == 300 &&
+        (compileOptions & SH_ALLOW_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) != 0)
+    {
+        if (!sh::RecordUniformBlocksTranslatedToStructuredBuffers(
+                root, mUniformBlockTranslatedToStructuredBuffers))
+        {
+            return false;
+        }
+    }
+
+    sh::OutputHLSL outputHLSL(
+        getShaderType(), getShaderSpec(), getShaderVersion(), getExtensionBehavior(),
+        getSourcePath(), getOutputType(), numRenderTargets, maxDualSourceDrawBuffers, getUniforms(),
+        compileOptions, getComputeShaderLocalSize(), &getSymbolTable(), perfDiagnostics,
+        mUniformBlockTranslatedToStructuredBuffers, mShaderStorageBlocks);
 
     outputHLSL.output(root, getInfoSink().obj);
 
