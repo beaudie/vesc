@@ -2398,6 +2398,11 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
     bool isIvyBridge       = false;
     bool isAMD             = IsAMD(adapterDesc.VendorId);
     bool isFeatureLevel9_3 = (deviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3);
+#if defined(ANGLE_ENABLE_WINDOWS_UWP)
+    bool isWin10 = true;
+#else
+    bool isWin10 = IsWindows10OrGreater();
+#endif
 
     IntelDriverVersion capsVersion = IntelDriverVersion(0);
     if (isIntel)
@@ -2482,9 +2487,9 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
     // Intel, they've been blocklisted to the DX9 runtime.
     ANGLE_FEATURE_CONDITION(features, allowClearForRobustResourceInit, true);
 
-    // There is an issue(crbug.com/1112112) when translating uniform block to StructuredBuffer,
-    // so disable this feature temporarily.
-    ANGLE_FEATURE_CONDITION(features, dontTranslateUniformBlockToStructuredBuffer, true);
+    // Allow translate uniform block to StructuredBuffer on Windows 10. This is targeted
+    // to work around a slow fxc compile performance issue with dynamic uniform indexing.
+    ANGLE_FEATURE_CONDITION(features, allowTranslateUniformBlockToStructuredBuffer, isWin10);
 
     // Call platform hooks for testing overrides.
     auto *platform = ANGLEPlatformCurrent();
