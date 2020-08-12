@@ -141,11 +141,13 @@ static bool ShouldPadUniformBlockMemberForStructuredBuffer(const TType &type)
 }
 }  // anonymous namespace
 
-ResourcesHLSL::ResourcesHLSL(StructureHLSL *structureHLSL,
-                             ShShaderOutput outputType,
-                             ShCompileOptions compileOptions,
-                             const std::vector<ShaderVariable> &uniforms,
-                             unsigned int firstUniformRegister)
+ResourcesHLSL::ResourcesHLSL(
+    StructureHLSL *structureHLSL,
+    ShShaderOutput outputType,
+    ShCompileOptions compileOptions,
+    const std::vector<ShaderVariable> &uniforms,
+    unsigned int firstUniformRegister,
+    std::map<int, const TInterfaceBlock *> &accessUniformBlockEntireArrayMember)
     : mUniformRegister(firstUniformRegister),
       mUniformBlockRegister(0),
       mSRVRegister(0),
@@ -154,7 +156,8 @@ ResourcesHLSL::ResourcesHLSL(StructureHLSL *structureHLSL,
       mStructureHLSL(structureHLSL),
       mOutputType(outputType),
       mCompileOptions(compileOptions),
-      mUniforms(uniforms)
+      mUniforms(uniforms),
+      mAccessUniformBlockEntireArrayMember(accessUniformBlockEntireArrayMember)
 {}
 
 void ResourcesHLSL::reserveUniformRegisters(unsigned int registerCount)
@@ -922,6 +925,13 @@ TString ResourcesHLSL::uniformBlockStructString(const TInterfaceBlock &interface
 bool ResourcesHLSL::shouldTranslateUniformBlockToStructuredBuffer(
     const TInterfaceBlock &interfaceBlock)
 {
+    if (mAccessUniformBlockEntireArrayMember.count(interfaceBlock.uniqueId().get()) != 0)
+    {
+        // Will access uniform block entire array member, cannot change the array member's type,
+        // so will not translate this uniform block to StructuredBuffer.
+        return false;
+    }
+
     const TType &fieldType = *interfaceBlock.fields()[0]->type();
     // Restrict field and sub-fields types match std140 storage layout rules, even the uniform
     // does not use std140 qualifier.

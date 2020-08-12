@@ -26,7 +26,8 @@ class ResourcesHLSL : angle::NonCopyable
                   ShShaderOutput outputType,
                   ShCompileOptions compileOptions,
                   const std::vector<ShaderVariable> &uniforms,
-                  unsigned int firstUniformRegister);
+                  unsigned int firstUniformRegister,
+                  std::map<int, const TInterfaceBlock *> &wholeAccessUniformBlocks);
 
     void reserveUniformRegisters(unsigned int registerCount);
     void reserveUniformBlockRegisters(unsigned int registerCount);
@@ -147,6 +148,8 @@ class ResourcesHLSL : angle::NonCopyable
     std::map<std::string, bool> mUniformBlockUseStructuredBufferMap;
     unsigned int mReadonlyImage2DRegisterIndex;
     unsigned int mImage2DRegisterIndex;
+
+    std::map<int, const TInterfaceBlock *> mAccessUniformBlockEntireArrayMember;
 };
 }  // namespace sh
 

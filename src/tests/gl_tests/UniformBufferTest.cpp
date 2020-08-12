@@ -3148,6 +3148,73 @@ TEST_P(UniformBufferTest, Std140UniformBlockWithDynamicallyIndexedRowMajorArray)
     EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(0, 255, 0, 255), 5);
 }
 
+// Test that access entire array member of uniform block, and this array member is a
+// large array.
+TEST_P(UniformBufferTest, AccessUniformBlockEntireArrayMember)
+{
+    constexpr char kVS[] = R"(#version 300 es
+layout(location=0) in vec3 a_position;
+
+struct S
+{
+    mat4x4 s;
+};
+
+uniform UBO1{
+    S[60] buf1;
+};
+
+uniform UBO2{
+    mat4x4[60] buf2;
+} instance2[2];
+
+uniform UBO3{
+    mat4x4[60] buf3;
+} instance3;
+
+uniform UBO4{
+    mat4x4[60] buf4;
+} instance4[2];
+
+mat4x4[60] test2()
+{
+    if (instance4[0].buf4 == instance4[1].buf4)
+    {
+        return instance2[0].buf2;
+    }
+    else
+    {
+        return instance2[1].buf2;
+    }
+}
+
+vec4 test1(S[60] param1, mat4x4[60] param2, mat4x4[60] param3, mat4x4[60] param4, vec3 pos){
+    mat4x4 temp[60] = test2();
+    return param1[2].s * vec4(pos, 1.0) + temp[30] * vec4(pos, 1.0) + param2[25] * vec4(pos, 1.0)
+        + param3[4] * vec4(pos, 1.0) + param4[11] * vec4(pos, 1.0);
+}
+
+void main(void)
+{
+    mat4x4 temp[60] = instance3.buf3;
+
+    gl_Position = test1(buf1, instance2[0].buf2, instance3.buf3, temp, a_position);
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+
+uniform vec3 u_color;
+out vec4 oFragColor;
+
+void main(void)
+{
+    oFragColor = vec4( u_color, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES3(UniformBufferTest);

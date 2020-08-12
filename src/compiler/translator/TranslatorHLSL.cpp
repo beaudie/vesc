@@ -12,6 +12,7 @@
 #include "compiler/translator/tree_ops/BreakVariableAliasingInInnerLoops.h"
 #include "compiler/translator/tree_ops/ExpandIntegerPowExpressions.h"
 #include "compiler/translator/tree_ops/PruneEmptyCases.h"
+#include "compiler/translator/tree_ops/RecordAccessUniformBlockEntireArrayMember.h"
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.h"
 #include "compiler/translator/tree_ops/RewriteElseBlocks.h"
@@ -183,11 +184,20 @@ bool TranslatorHLSL::translate(TIntermBlock *root,
         }
     }
 
-    sh::OutputHLSL outputHLSL(getShaderType(), getShaderSpec(), getShaderVersion(),
-                              getExtensionBehavior(), getSourcePath(), getOutputType(),
-                              numRenderTargets, maxDualSourceDrawBuffers, getUniforms(),
-                              compileOptions, getComputeShaderLocalSize(), &getSymbolTable(),
-                              perfDiagnostics, mShaderStorageBlocks);
+    if ((compileOptions & SH_DONT_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) == 0)
+    {
+        if (!sh::RecordAccessUniformBlockEntireArrayMember(root,
+                                                           mAccessUniformBlockEntireArrayMember))
+        {
+            return false;
+        }
+    }
+
+    sh::OutputHLSL outputHLSL(
+        getShaderType(), getShaderSpec(), getShaderVersion(), getExtensionBehavior(),
+        getSourcePath(), getOutputType(), numRenderTargets, maxDualSourceDrawBuffers, getUniforms(),
+        compileOptions, getComputeShaderLocalSize(), &getSymbolTable(), perfDiagnostics,
+        mAccessUniformBlockEntireArrayMember, mShaderStorageBlocks);
 
     outputHLSL.output(root, getInfoSink().obj);
 
