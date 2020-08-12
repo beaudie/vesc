@@ -197,6 +197,8 @@ angle_translator_sources = [
   "src/compiler/translator/tree_ops/SplitSequenceOperator.h",
   "src/compiler/translator/tree_ops/UnfoldShortCircuitAST.cpp",
   "src/compiler/translator/tree_ops/UnfoldShortCircuitAST.h",
+  "src/compiler/translator/tree_ops/UniformBlockTranslatedToStructuredBuffer.cpp",
+  "src/compiler/translator/tree_ops/UniformBlockTranslatedToStructuredBuffer.h",
   "src/compiler/translator/tree_ops/UseInterfaceBlockFields.cpp",
   "src/compiler/translator/tree_ops/UseInterfaceBlockFields.h",
   "src/compiler/translator/tree_ops/VectorizeVectorScalarArithmetic.cpp",

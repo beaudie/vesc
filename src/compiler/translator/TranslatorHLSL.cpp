@@ -25,6 +25,7 @@
 #include "compiler/translator/tree_ops/SimplifyLoopConditions.h"
 #include "compiler/translator/tree_ops/SplitSequenceOperator.h"
 #include "compiler/translator/tree_ops/UnfoldShortCircuitToIf.h"
+#include "compiler/translator/tree_ops/UniformBlockTranslatedToStructuredBuffer.h"
 #include "compiler/translator/tree_ops/WrapSwitchStatementsInBlocks.h"
 #include "compiler/translator/tree_util/IntermNodePatternMatcher.h"
 
@@ -183,11 +184,22 @@ bool TranslatorHLSL::translate(TIntermBlock *root,
         }
     }
 
-    sh::OutputHLSL outputHLSL(getShaderType(), getShaderSpec(), getShaderVersion(),
-                              getExtensionBehavior(), getSourcePath(), getOutputType(),
-                              numRenderTargets, maxDualSourceDrawBuffers, getUniforms(),
-                              compileOptions, getComputeShaderLocalSize(), &getSymbolTable(),
-                              perfDiagnostics, mShaderStorageBlocks);
+    mUniformBlockTranslatedToStructuredBuffer.clear();
+    if (getShaderVersion() == 300 &&
+        (compileOptions & SH_ALLOW_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) != 0)
+    {
+        if (!sh::RecordUniformBlockTranslatedToStructuredBuffer(
+                root, mUniformBlockTranslatedToStructuredBuffer))
+        {
+            return false;
+        }
+    }
+
+    sh::OutputHLSL outputHLSL(
+        getShaderType(), getShaderSpec(), getShaderVersion(), getExtensionBehavior(),
+        getSourcePath(), getOutputType(), numRenderTargets, maxDualSourceDrawBuffers, getUniforms(),
+        compileOptions, getComputeShaderLocalSize(), &getSymbolTable(), perfDiagnostics,
+        mUniformBlockTranslatedToStructuredBuffer, mShaderStorageBlocks);
 
     outputHLSL.output(root, getInfoSink().obj);
 
