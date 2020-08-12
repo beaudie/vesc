@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8034e8ba_3201c6cf",
+        "filename": "src/tests/capture_replay_tests/test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-12T22:08:25Z",
+      "side": 1,
+      "message": "nit: suggest you call this capture_replay_test_expectations.txt (or just capture_replay_expectations.txt) to make it clear right from the filename\n\nCan you expand the parsing of this file to allow for \"#\" style Python comments? This would allow us to include a header that has the license as well as a description on the format of the file and which each line means (it\u0027s a skipped test set).\n\nVery nice work isolating the tests!",
+      "revId": "6df7d2e69db635c2ba21bfe131060c92aa034efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
