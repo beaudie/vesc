@@ -10,6 +10,16 @@
 
 namespace angle
 {
+#if !defined(ANGLE_PLATFORM_ANDROID)
+std::string GetExecutableName()
+{
+    std::string executableName = GetExecutablePath();
+    size_t lastPathSepLoc      = executableName.find_last_of(GetPathSeparator());
+    return (lastPathSepLoc > 0 ? executableName.substr(lastPathSepLoc + 1, executableName.length())
+                               : "ANGLE");
+}
+#endif  // ANGLE_PLATFORM_ANDROID
+
 bool PrependPathToEnvironmentVar(const char *variableName, const char *path)
 {
     std::string oldValue = GetEnvironmentVar(variableName);
