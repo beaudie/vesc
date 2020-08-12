@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "369b1a04_6f695ad1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-12T21:31:43Z",
+      "side": 1,
+      "message": "Could you please also add it to this list:\nhttps://chromium.googlesource.com/angle/angle/+/cc958e0e87034f591ea2a76d2809b13dad186c93/scripts/roll_chromium_deps.py#33",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "aa7c82e98de554e05eec32290360c528702c21b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
