@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65b448a3_eb499faf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-12T15:16:49Z",
+      "side": 1,
+      "message": "Tim: we should add it as part of the Chromium DEPS since it\u0027s a mirror of a Chromium repo.\n\nYuly FYI, another repo.",
+      "revId": "117ef899761521ff2e74c11bfb5986bfc64dbd5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
