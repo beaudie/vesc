@@ -104,6 +104,46 @@
       "revId": "111170600f5cf4487c85055bb3fc13a6b33c7fed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "232186e4_c7fd039f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-12T23:26:52Z",
+      "side": 1,
+      "message": "Does this work on Android?",
+      "revId": "111170600f5cf4487c85055bb3fc13a6b33c7fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b0f0d40_e6412b70",
+        "filename": "src/common/system_utils_linux.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-12T23:26:52Z",
+      "side": 1,
+      "message": "you can put these all in system_utils.cpp and use GetPathSeparator",
+      "range": {
+        "startLine": 20,
+        "startChar": 12,
+        "endLine": 20,
+        "endChar": 29
+      },
+      "revId": "111170600f5cf4487c85055bb3fc13a6b33c7fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
