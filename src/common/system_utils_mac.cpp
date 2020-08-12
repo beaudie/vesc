@@ -21,6 +21,14 @@
 
 namespace angle
 {
+std::string GetExecutableName()
+{
+    std::string executableName = GetExecutablePath();
+    size_t lastPathSepLoc      = executableName.find_last_of("/");
+    return (lastPathSepLoc > 0 ? executableName.substr(lastPathSepLoc + 1, executableName.length())
+                               : "ANGLE");
+}
+
 std::string GetExecutablePath()
 {
     std::string result;
