@@ -22,6 +22,30 @@
       "revId": "8706f365d4c519c709b2e70d81d1c337cf3310b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b122693b_c11bf92a",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-13T01:44:14Z",
+      "side": 1,
+      "message": "The actual command would be\ngclient getdep -r third_party/dummy_chromium\n(which gives exactly the same output as \"gclient getdep --var\u003dchromium_revision\", BTW)\n\nSo if I change it, it would be rolling \"third_party/chromium\".\nWDYT about \"dummy/chromium\"?",
+      "parentUuid": "15e06223_e9596cc2",
+      "range": {
+        "startLine": 127,
+        "startChar": 15,
+        "endLine": 127,
+        "endChar": 29
+      },
+      "revId": "8706f365d4c519c709b2e70d81d1c337cf3310b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
