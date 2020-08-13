@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ab71c08_3a9067b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-13T19:04:59Z",
+      "side": 1,
+      "message": "Fixed command ordering bug with queries in the latest patch set.",
+      "revId": "e7d35547ec55ab0ed210bc5d7e0f603a6e1d6714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
