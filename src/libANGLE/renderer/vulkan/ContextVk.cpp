@@ -1001,6 +1001,11 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
         ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
     }
+    else
+    {
+        // Allow any invalidated attachments to be un-invalidated
+        ANGLE_TRY(mDrawFramebuffer->resumeRenderPass(this));
+    }
 
     // We keep a local copy of the command buffer. It's possible that some state changes could
     // trigger a command buffer invalidation. The local copy ensures we retain the reference.

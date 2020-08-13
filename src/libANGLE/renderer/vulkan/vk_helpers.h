@@ -940,6 +940,38 @@ struct CommandBufferHelper : angle::NonCopyable
                     VK_ATTACHMENT_STORE_OP_DONT_CARE);
     }
 
+    void restoreRenderPassColorAttachment(size_t attachmentIndex)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if ((mAttachmentOps[attachmentIndex].loadOp != VK_ATTACHMENT_LOAD_OP_DONT_CARE) &&
+            (mAttachmentOps[attachmentIndex].storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE))
+        {
+            // The storeOp was set to DONT_CARE because of an invalidate, and should be restored to
+            // STORE because of a draw call
+            SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_STORE);
+        }
+    }
+
+    void restoreRenderPassDepthStencilAttachments(size_t attachmentIndex)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if ((mAttachmentOps[attachmentIndex].loadOp != VK_ATTACHMENT_LOAD_OP_DONT_CARE) &&
+            (mAttachmentOps[attachmentIndex].storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE))
+        {
+            // The storeOp was set to DONT_CARE because of an invalidate, and should be restored to
+            // STORE because of a draw call
+            SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_STORE);
+        }
+        if ((mAttachmentOps[attachmentIndex].stencilLoadOp != VK_ATTACHMENT_LOAD_OP_DONT_CARE) &&
+            (mAttachmentOps[attachmentIndex].stencilStoreOp == VK_ATTACHMENT_STORE_OP_DONT_CARE))
+        {
+            // The storeOp was set to DONT_CARE because of an invalidate, and should be restored to
+            // STORE because of a draw call
+            SetBitField(mAttachmentOps[attachmentIndex].stencilStoreOp,
+                        VK_ATTACHMENT_STORE_OP_STORE);
+        }
+    }
+
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
     {
         ASSERT(mIsRenderPassCommandBuffer);
