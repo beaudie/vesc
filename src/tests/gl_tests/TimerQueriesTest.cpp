@@ -468,7 +468,7 @@ TEST_P(TimerQueriesTest, Timestamp)
     std::cout << "Timestamps: " << result1 << " " << result2 << std::endl;
     EXPECT_LT(0ul, result1);
     EXPECT_LT(0ul, result2);
-    EXPECT_LT(result1, result2);
+    EXPECT_LE(result1, result2);
 }
 
 class TimerQueriesTestES3 : public TimerQueriesTest
