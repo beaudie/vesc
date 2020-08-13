@@ -34,6 +34,24 @@
       "revId": "6df7d2e69db635c2ba21bfe131060c92aa034efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6f1287e_69cd05a7",
+        "filename": "src/tests/capture_replay_tests/test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-08-13T14:35:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bde756b7_b6fdb66b",
+      "revId": "6df7d2e69db635c2ba21bfe131060c92aa034efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
