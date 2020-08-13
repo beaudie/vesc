@@ -160,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "83ed6793_ec2feb51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-13T16:24:30Z",
+      "side": 1,
+      "message": "The response from our mailing list is that we should update the framework code to pass down the package name to ANGLE.   We do some of this already:\n\nhttps://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/GraphicsEnvironment.java\n- This gets the package name and passes it to native code via JNI.\nhttps://android.googlesource.com/platform/frameworks/native/+/master/libs/graphicsenv/GraphicsEnv.cpp#\n- Opens ANGLE\u0027s libfeature_support.so and passes it the package name to compare against the rules file.\n\nIn particular, GraphicsEnv::setAngleInfo() includes setting the current package name on the C++ side, so we can call into ANGLE\u0027s libfeature_support.so via ANGLEShouldBeUsedForApplication() with the package name.\n\nFor Android, we will likely need to do something similar.",
+      "parentUuid": "df5e2e3e_80d38c1a",
+      "revId": "111170600f5cf4487c85055bb3fc13a6b33c7fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b0f0d40_e6412b70",
         "filename": "src/common/system_utils_linux.cpp",
         "patchSetId": 1
