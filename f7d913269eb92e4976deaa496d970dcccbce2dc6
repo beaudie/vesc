@@ -68,6 +68,24 @@
       "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b073fa5_64180ce6",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-13T18:04:11Z",
+      "side": 1,
+      "message": "I\u0027m just surprised it wasn\u0027t flaky before. How did your CL change the vulkan command stream here? Like did the timestamps broke render pass but now don\u0027t or something?\n\nI\u0027m fine with the change, but please verify with renderdoc or something that the command buffer is sane, and there\u0027s no bug introduced.",
+      "parentUuid": "9673d2d8_dccd3e0a",
+      "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
