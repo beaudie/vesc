@@ -86,6 +86,24 @@
       "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2fc9b5_8b963234",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-13T19:04:02Z",
+      "side": 1,
+      "message": "You were right... I looked at the command stream using the Vulkan Configurator and the apidump layer. I found that the timestamp writes were getting reordered before the draw command. Adding an explicit flush before the timestamp should fix the test on Linux/Intel. Good thing you pushed on this!",
+      "parentUuid": "9b073fa5_64180ce6",
+      "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
