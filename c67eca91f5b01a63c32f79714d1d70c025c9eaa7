@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fd77b0d1_2cbc7edf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-13T18:31:48Z",
+      "side": 1,
+      "message": "LGTM assuming you take Tim\u0027s suggestion.",
+      "revId": "c67eca91f5b01a63c32f79714d1d70c025c9eaa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8393260e_9f56c247",
         "filename": "src/common/system_utils_linux.cpp",
         "patchSetId": 3
@@ -13,6 +30,30 @@
       "writtenOn": "2020-08-13T18:27:53Z",
       "side": 1,
       "message": "Can this be an #else case in src/common/system_utils.cpp instead, so both definitions are near each other?   I don\u0027t think hiding it here is really helping, even with Android being (sort of) linux.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "c67eca91f5b01a63c32f79714d1d70c025c9eaa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d5220f4_124b4a62",
+        "filename": "src/common/system_utils_linux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-13T18:31:48Z",
+      "side": 1,
+      "message": "Agreed",
+      "parentUuid": "8393260e_9f56c247",
       "range": {
         "startLine": 21,
         "startChar": 0,
