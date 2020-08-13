@@ -97,6 +97,53 @@
       "revId": "45a3eb1f65f0379269e3a572b65355051b258597",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc6dfec5_e3ee3d80",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-13T22:59:03Z",
+      "side": 1,
+      "message": "These methods are for non-occlusion queries. Occlusion queries use \"beginOcclusionQuery\" etc below. I did have the some concern and double-checked with Manhattan before landing. I could rename these to something like \"beginNonOcclusionQuery\" to prevent future mishaps. In any case we can do that in a follow-up.\n\nYou can confirm by looking in QueryVk.",
+      "parentUuid": "f07cb7eb_ec0dab8d",
+      "range": {
+        "startLine": 1824,
+        "startChar": 0,
+        "endLine": 1827,
+        "endChar": 5
+      },
+      "revId": "45a3eb1f65f0379269e3a572b65355051b258597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba84a5cb_6fd3a63b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-13T22:59:03Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 1852,
+        "startChar": 18,
+        "endLine": 1852,
+        "endChar": 37
+      },
+      "revId": "45a3eb1f65f0379269e3a572b65355051b258597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
