@@ -16,6 +16,23 @@
       "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d15f22c8_b2f5e45a",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-13T15:28:17Z",
+      "side": 1,
+      "message": "The timestamp before and after the draw cannot be the same unless either:\n\n- The draw call took 0 time (which we can safely assume cannot happen)\n- The timestamp resolution is lower than the draw call time\n\nThe latter _may_ be true on some platforms, but I\u0027d much rather make the draw call more expensive instead. With LE, if the timestamps and the draw are reordered due to a bug for example, you won\u0027t catch that.\n\nThe anglebug says this started happening recently, maybe there\u0027s a real regression.",
+      "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
