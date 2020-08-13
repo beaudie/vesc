@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca1163a6_9b5ff7ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-13T15:23:07Z",
+      "side": 1,
+      "message": "Filed http://anglebug.com/4960 for the Intel Linux flake. Could be related. Updating the test here: http://crrev.com/c/2354276",
+      "revId": "434382059e8a462e6e1c7273d62d654e397d2f19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
