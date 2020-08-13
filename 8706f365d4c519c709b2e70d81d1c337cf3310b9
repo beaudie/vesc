@@ -94,6 +94,30 @@
       "revId": "8706f365d4c519c709b2e70d81d1c337cf3310b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b658588_d0c332ee",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-13T03:15:01Z",
+      "side": 1,
+      "message": "I\u0027m not sure where the name in commit message comes from.\nMy guess would be from \"childDisplayName\" like here:\nhttps://skia.googlesource.com/buildbot/+/refs/heads/master/autoroll/config/vk-gl-cts-angle.json#4",
+      "parentUuid": "1f8d6d51_a26fdf68",
+      "range": {
+        "startLine": 127,
+        "startChar": 15,
+        "endLine": 127,
+        "endChar": 29
+      },
+      "revId": "8706f365d4c519c709b2e70d81d1c337cf3310b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
