@@ -50,6 +50,29 @@
       "revId": "45a3eb1f65f0379269e3a572b65355051b258597",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da666f10_76b70beb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-13T22:43:25Z",
+      "side": 1,
+      "message": "Wasn\u0027t there a bunch of discussion a few months ago about queries and render passes?   I see stuff like:\n\n    if (isOcclusionQuery())\n    {\n        // For pathological usage case where begin/end is called back to back without flush and get\n        // result, we have to force flush so that the same mQueryHelper will not encoded in the same\n        // renderpass twice without resetting it.\n        if (mQueryHelper.hasPendingWork(contextVk))\n        {\n            ANGLE_TRY(contextVk-\u003eflushImpl(nullptr));\n            // As soon as beginQuery is called, previous query\u0027s result will not retrievable by API.\n            // We must clear it so that it will not count against current beginQuery call.\n            mStashedQueryHelpers.clear();\n            mQueryHelper.deinit();\n            ANGLE_TRY(contextVk-\u003egetQueryPool(getType())-\u003eallocateQuery(contextVk, \u0026mQueryHelper));\n        }\n        contextVk-\u003ebeginOcclusionQuery(this);\n    }\n\nIs that work still necessary with these additions?",
+      "range": {
+        "startLine": 1824,
+        "startChar": 0,
+        "endLine": 1827,
+        "endChar": 5
+      },
+      "revId": "45a3eb1f65f0379269e3a572b65355051b258597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
