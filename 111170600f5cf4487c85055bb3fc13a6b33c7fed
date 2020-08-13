@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "df5e2e3e_80d38c1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-13T00:38:17Z",
+      "side": 1,
+      "message": "I\u0027ve sent an email to our internal Android eng group to see what they recommend for how to get the package name in native code.   I\u0027ll pass along anything useful.\n\nIn the meantime, can you try this with something like Angry Birds to see what you get?",
+      "parentUuid": "b3ae98c1_9c1a811b",
+      "revId": "111170600f5cf4487c85055bb3fc13a6b33c7fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b0f0d40_e6412b70",
         "filename": "src/common/system_utils_linux.cpp",
         "patchSetId": 1
