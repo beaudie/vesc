@@ -46,6 +46,30 @@
       "revId": "8706f365d4c519c709b2e70d81d1c337cf3310b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ad3247d_5c2379ab",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-13T02:41:39Z",
+      "side": 1,
+      "message": "Basically my concern is the commit message.\n\nCurrently the roller script sets the commit message. Can we keep that or do we have to use the auto-roller\u0027s automatic commit message?\n\nIf we need to use the auto-roller message, I\u0027d prefer this to be just \u0027chromium\u0027. If we can keep the script\u0027s message, then we can use mildly insensitive words like \u0027dummy\u0027.",
+      "parentUuid": "b122693b_c11bf92a",
+      "range": {
+        "startLine": 127,
+        "startChar": 15,
+        "endLine": 127,
+        "endChar": 29
+      },
+      "revId": "8706f365d4c519c709b2e70d81d1c337cf3310b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
