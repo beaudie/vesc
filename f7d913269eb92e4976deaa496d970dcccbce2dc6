@@ -33,6 +33,24 @@
       "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9673d2d8_dccd3e0a",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-13T16:03:28Z",
+      "side": 1,
+      "message": "Two draw calls can most definitely have the same timestamp for any number of reasons that the driver can\u0027t identify individual timestamps. e.g. on tilers you only get timestamp resolution for RenderPasses. The Intel driver is likely having the same problem. The driver has no guarantee of resolution \u003d No bug here.",
+      "parentUuid": "d15f22c8_b2f5e45a",
+      "revId": "f7d913269eb92e4976deaa496d970dcccbce2dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
