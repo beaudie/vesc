@@ -124,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "a1c992aa_beb6b273",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-13T23:02:45Z",
+      "side": 1,
+      "message": "Right. occlusion query does not go into this function.",
+      "parentUuid": "fc6dfec5_e3ee3d80",
+      "range": {
+        "startLine": 1824,
+        "startChar": 0,
+        "endLine": 1827,
+        "endChar": 5
+      },
+      "revId": "45a3eb1f65f0379269e3a572b65355051b258597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84a5cb_6fd3a63b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 41
