@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a468f2f8_c27b1154",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-13T22:06:19Z",
+      "side": 0,
+      "message": "From looking at Cherry for the \"dEQP.GLES3/functional_fbo_invalidate_*\" tests, I believe this is a bug when isSubInvalidate is true.  It causes the contents of the attachment to not be stored (i.e. the whole content is lost because of the DONT_CARE storeOp), especially when the render pass is immediately ended.",
+      "range": {
+        "startLine": 1367,
+        "startChar": 0,
+        "endLine": 1393,
+        "endChar": 0
+      },
+      "revId": "5276639d27894f3f35c43af5f038bf84e3aafe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
