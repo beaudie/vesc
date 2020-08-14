@@ -16,6 +16,97 @@
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfeaedde_5fadeced",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-14T22:17:40Z",
+      "side": 1,
+      "message": "Oh man, tested this out on Android... it is trippy seeing that much rendering in on one tiny screen.  There are still some glitches in subway_surfer and temple_run, but the rest looked fine AFAICT.\n\nJust some comments, questions on the code, request for documentation.  Overall, quite a cool feature.",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "abe3915b_24c019b7",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-14T22:17:40Z",
+      "side": 1,
+      "message": "Yeah, really need to fix this (generally, not just right here, no need to hold up for it).  Some of the apps use very minimal configs (RGB8).",
+      "range": {
+        "startLine": 260,
+        "startChar": 34,
+        "endLine": 260,
+        "endChar": 76
+      },
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d1dda9a_62de79cb",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-14T22:17:40Z",
+      "side": 1,
+      "message": "Curious how you chose these values?  Maybe a comment.",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1247eac_907ad481",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-14T22:17:40Z",
+      "side": 1,
+      "message": "ASSERT offscreen here.",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ce8fc88_92da47cf",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-14T22:17:40Z",
+      "side": 1,
+      "message": "This is complex enough it could use a write up, maybe screenshots.",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
