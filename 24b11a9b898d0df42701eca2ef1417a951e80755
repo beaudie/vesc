@@ -16,6 +16,24 @@
       "revId": "24b11a9b898d0df42701eca2ef1417a951e80755",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2f604f19_461e00fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-14T20:11:34Z",
+      "side": 1,
+      "message": "There are multiple ways to solve this.  I do want the solution to allow all the helper functions (maybeCaptureClientData, maybeCapturePostCallUpdates, etc) to work seamlessly with whatever the new call is.\n\nI had a different approach at first that would allow using multiple new calls to replace one call, but it wasn\u0027t required for this situation.  I can bring that back, uplevel the replacement logic to to CaptureCallToFrameCapture() and issue calls to captureCall() with the new call(s).\n\nIs that closer to what you\u0027re thinking?",
+      "parentUuid": "b70ed7f2_3fa23115",
+      "revId": "24b11a9b898d0df42701eca2ef1417a951e80755",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
