@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b70ed7f2_3fa23115",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-14T19:01:43Z",
+      "side": 1,
+      "message": "I see . This is a bit weird. Why not just not push back the original call and push back a different one?",
+      "revId": "24b11a9b898d0df42701eca2ef1417a951e80755",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
