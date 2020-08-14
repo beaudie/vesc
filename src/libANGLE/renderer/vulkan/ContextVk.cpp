@@ -2435,10 +2435,9 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
     RenderTargetVk *depthStencilRenderTarget = mDrawFramebuffer->getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
-        size_t depthStencilAttachmentIndexVk = mDrawFramebuffer->getDepthStencilAttachmentIndexVk();
         // Change depthstencil attachment storeOp to DONT_CARE
-        mRenderPassCommands->invalidateRenderPassStencilAttachment(depthStencilAttachmentIndexVk);
-        mRenderPassCommands->invalidateRenderPassDepthAttachment(depthStencilAttachmentIndexVk);
+        mRenderPassCommands->invalidateRenderPassStencilAttachment(false);
+        mRenderPassCommands->invalidateRenderPassDepthAttachment(false);
         // Mark content as invalid so that we will not load them in next renderpass
         depthStencilRenderTarget->invalidateEntireContent();
     }
@@ -2845,9 +2844,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               glState.getDepthStencilState(),
                                                               glState.getDrawFramebuffer());
-                if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
+                if (mRenderPassCommands->started())
                 {
-                    mRenderPassCommands->setDepthTestEnabled();
+                    mRenderPassCommands->setDepthTestEnabled(mState.isDepthTestEnabled());
                 }
                 break;
             case gl::State::DIRTY_BIT_DEPTH_FUNC:
@@ -2863,9 +2862,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateStencilTestEnabled(&mGraphicsPipelineTransition,
                                                                 glState.getDepthStencilState(),
                                                                 glState.getDrawFramebuffer());
-                if (mState.isStencilTestEnabled() && mRenderPassCommands->started())
+                if (mRenderPassCommands->started())
                 {
-                    mRenderPassCommands->setStencilTestEnabled();
+                    mRenderPassCommands->setStencilTestEnabled(mState.isStencilTestEnabled());
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
@@ -4442,14 +4441,8 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
             this, mRenderPassCommandBuffer);
     }
 
-    if (mState.isDepthTestEnabled())
-    {
-        mRenderPassCommands->setDepthTestEnabled();
-    }
-    if (mState.isStencilTestEnabled())
-    {
-        mRenderPassCommands->setStencilTestEnabled();
-    }
+    mRenderPassCommands->setDepthTestEnabled(mState.isDepthTestEnabled());
+    mRenderPassCommands->setStencilTestEnabled(mState.isStencilTestEnabled());
 
     if (commandBufferOut)
     {
@@ -4498,6 +4491,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
         populateTransformFeedbackBufferSet(xfbBufferCount, transformFeedbackVk->getBufferHelpers());
     }
+
+    ANGLE_TRY(mDrawFramebuffer->updateDefinedContents(this));
 
     onRenderPassFinished();
 
