@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "e2a0e356_b7da4573",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-14T05:55:45Z",
+      "side": 1,
+      "message": "A few drive-by comments.\n\nI don\u0027t quite understand the implications of \u0027restoring\u0027 an attachment, or how it got invalidated in the first place.\n\nShabi just did a bunch of work fixing invalidate bugs and added a bunch of new tests, so a green CQ run should give us a bit more confidence things are working correctly here though.",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e92c401_a4417c68",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -30,6 +47,47 @@
       "writtenOn": "2020-08-14T03:09:09Z",
       "side": 1,
       "message": "Do you think I am correct, that we have a bug when isSubInvalidate?",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc865949_2f335533",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-14T05:55:45Z",
+      "side": 1,
+      "message": "I had the same concern, but Shabi pointed out that it should be fine:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2309111/7/src/libANGLE/renderer/vulkan/FramebufferVk.cpp#1268",
+      "parentUuid": "2e92c401_a4417c68",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e72449d1_98732614",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-14T05:55:45Z",
+      "side": 1,
+      "message": "What\u0027s the difference between a new bool and storeOp\u003dDONT_CARE to indicate that the contents are invalid?   What would we do differently for each case?\n\nstoreOp\u003dDONT_CARE, bool\u003dtrue\nstoreOp\u003dDONT_CARE, bool\u003dfalse",
+      "range": {
+        "startLine": 1366,
+        "startChar": 0,
+        "endLine": 1368,
+        "endChar": 30
+      },
       "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +111,24 @@
     },
     {
       "key": {
+        "uuid": "7c4bdd8f_4a7fa168",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-14T05:55:45Z",
+      "side": 1,
+      "message": "I\u0027m confused why restoring an attachment is necessary.\n\nThe caller gives the list of attachments to be invalidated, so we should have only set storeOp\u003dDONT_CARE for those particular attachments (in this case, depth).   How did the color attachments have their storeOps set to DONT_CARE also, and why do we need to restore them?   Doesn\u0027t that mean we\u0027ll also do all of the work (and GMEM store) for rendering that the caller told us they don\u0027t care about anymore?",
+      "parentUuid": "d0e28221_b6284cc1",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a1d7b3ee_ae6b2aab",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -64,6 +140,29 @@
       "writtenOn": "2020-08-14T03:09:09Z",
       "side": 1,
       "message": "I should add a comment ... I call this if the storeOp was actually changed back to STORE, so that future render passes will use a loadOp of LOAD.",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dcc20ad_f44233d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-14T05:55:45Z",
+      "side": 1,
+      "message": "Why is this loadOp check necessary (here and for depth/stencil below)?",
+      "range": {
+        "startLine": 946,
+        "startChar": 13,
+        "endLine": 946,
+        "endChar": 86
+      },
       "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
