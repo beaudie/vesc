@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "718c4aca_a886ff33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-14T14:10:10Z",
+      "side": 1,
+      "message": "I was thinking there might be a simpler way.\n\nFirst, let\u0027s keep the behavior for color invalidates (in that they close the RP). We can optimize that if any application needs it.\n\nLook at CommandBufferHelper::mDepthTestEverEnabled and mStencilTestEverEnabled, we have code that tracks whether the RP had depth/stencil test. We can augment that to also know if depth/stencil write was ever enabled. On invalidate, we reset those bools set storeOp\u003dDONT_CARE and don\u0027t close RP. On next endRP, we check if those bools are set, we set storeOp\u003dSTORE because it means depth/stencil write was enabled since last invalidate. We may need to add another bool to distinguish storeOp\u003dDONT_CARE due to invalidate vs other reasons (multisampled render to texture, swapchain optimizations etc).\n\nOnly thing that needs some thought is how to make sure the render target\u0027s mContentDefined is recovered in that case too.",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e92c401_a4417c68",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
