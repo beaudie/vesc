@@ -108,6 +108,30 @@
       "revId": "afa92b89f76df6239565c8e42dc36a6f507e8a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a73dba4f_fdd92e79",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-08-14T02:29:22Z",
+      "side": 1,
+      "message": "sorry now I understand the logic here. Please ignore this comment.",
+      "parentUuid": "9f81b1e1_4023bcf2",
+      "range": {
+        "startLine": 189,
+        "startChar": 17,
+        "endLine": 189,
+        "endChar": 58
+      },
+      "revId": "afa92b89f76df6239565c8e42dc36a6f507e8a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
