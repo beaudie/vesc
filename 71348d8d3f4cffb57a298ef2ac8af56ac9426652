@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc903db5_621d7aac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-14T14:50:40Z",
+      "side": 1,
+      "message": "nit: \"Bug\"",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 3
+      },
+      "revId": "71348d8d3f4cffb57a298ef2ac8af56ac9426652",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0619c014_29f1f709",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-14T14:50:40Z",
+      "side": 1,
+      "message": "nit: can you flip this feature into a positive one? e.g. remove the \"dont\", and flip the checks in the code.",
+      "range": {
+        "startLine": 2472,
+        "startChar": 38,
+        "endLine": 2472,
+        "endChar": 81
+      },
+      "revId": "71348d8d3f4cffb57a298ef2ac8af56ac9426652",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
