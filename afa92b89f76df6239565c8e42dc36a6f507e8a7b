@@ -16,6 +16,98 @@
       "revId": "afa92b89f76df6239565c8e42dc36a6f507e8a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0b3478_3e4b07c4",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-08-14T00:40:21Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 80
+      },
+      "revId": "afa92b89f76df6239565c8e42dc36a6f507e8a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2643e356_0595666f",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-08-14T00:40:21Z",
+      "side": 1,
+      "message": "For the uniform block array members which are referred as a whole array in the shader, we cannot directly modify its type from an array into a StructuredBuffer, or we will get a type mismatch compilation error from FXC. Temporarily we simply never translate such uniform blocks into StructuredBuffer.",
+      "range": {
+        "startLine": 930,
+        "startChar": 8,
+        "endLine": 931,
+        "endChar": 72
+      },
+      "revId": "afa92b89f76df6239565c8e42dc36a6f507e8a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25fc50c0_143e53f9",
+        "filename": "src/compiler/translator/ResourcesHLSL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-08-14T00:40:21Z",
+      "side": 1,
+      "message": "mUniformBlocksNotTranslateToStructuredBuffer",
+      "range": {
+        "startLine": 152,
+        "startChar": 43,
+        "endLine": 152,
+        "endChar": 79
+      },
+      "revId": "afa92b89f76df6239565c8e42dc36a6f507e8a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f81b1e1_4023bcf2",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-08-14T00:40:21Z",
+      "side": 1,
+      "message": "I think the logic here should be:\nif we enable the flag to translate the uniform blocks that meet some requirements to structured buffer:\n- then we must call RecordAccessUniformBlockEntireArrayMember() to avoid translating the uniform blocks whose large array member is being used as whole array.\n\nSo I think the flag SH_DONT_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER should mean that we NEVER translate any uniform blocks to structured buffer.",
+      "range": {
+        "startLine": 189,
+        "startChar": 17,
+        "endLine": 189,
+        "endChar": 58
+      },
+      "revId": "afa92b89f76df6239565c8e42dc36a6f507e8a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
