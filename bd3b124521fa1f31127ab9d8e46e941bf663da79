@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88751910_2973a6ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-14T03:02:49Z",
+      "side": 1,
+      "message": "Looking for early review.\n\nI have a large \"NOTE\" comment with a couple of ideas, one of which is that we might be able to store some info with the CommandBufferHelper::mAttachmentOps for this an other loadOp/storeOp optimizations.  I didn\u0027t do that with this patch set, wanting your feedback first.",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
