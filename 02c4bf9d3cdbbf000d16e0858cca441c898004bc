@@ -16,6 +16,41 @@
       "revId": "02c4bf9d3cdbbf000d16e0858cca441c898004bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc84f405_b486ed8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-14T13:34:42Z",
+      "side": 1,
+      "message": "I believe we added it when Cody(?) was adding 3D texture support for Vulkan and assumed it had feature parity with ES3 3D textures.\n\nI suppose it doesn\u0027t have full dEQP coverage?",
+      "parentUuid": "9cee6029_2cc706da",
+      "revId": "02c4bf9d3cdbbf000d16e0858cca441c898004bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e97618d_26f2a600",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-14T13:34:42Z",
+      "side": 1,
+      "message": "LGTM removing this for now.",
+      "revId": "02c4bf9d3cdbbf000d16e0858cca441c898004bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
