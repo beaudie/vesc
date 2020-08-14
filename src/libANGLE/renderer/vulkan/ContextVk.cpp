@@ -996,7 +996,9 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // function than an inlined if. We should probably replace the dirty bit dispatch table
     // with a switch with inlined handler functions.
     // TODO(jmadill): Use dirty bit. http://anglebug.com/3014
-    if (!mRenderPassCommandBuffer)
+    vk::Framebuffer *srcVkFramebuffer = nullptr;
+    ANGLE_TRY(mDrawFramebuffer->getFramebuffer(this, &srcVkFramebuffer));
+    if (!hasStartedRenderPassWithFramebuffer(srcVkFramebuffer))
     {
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
         ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
@@ -2947,13 +2949,6 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
-                // FramebufferVk::syncState signals that we should start a new command buffer.
-                // But changing the binding can skip FramebufferVk::syncState if the Framebuffer
-                // has no dirty bits. Thus we need to explicitly clear the current command
-                // buffer to ensure we start a new one. Note that we always start a new command
-                // buffer because we currently can only support one open RenderPass at a time.
-                onRenderPassFinished();
-
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
                 updateFlipViewportDrawFramebuffer(glState);
