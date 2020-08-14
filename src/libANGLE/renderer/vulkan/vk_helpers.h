@@ -1463,6 +1463,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void onWrite() { mCurrentSingleClearValue.reset(); }
     bool hasImmutableSampler() { return mExternalFormat != 0; }
     uint64_t getExternalFormat() const { return mExternalFormat; }
+    void setImmutableAllocation() { mImmutableAllocation = true; }
 
   private:
     enum class UpdateSource
@@ -1608,6 +1609,9 @@ class ImageHelper final : public Resource, public angle::Subject
     uint32_t mMaxLevel;
     uint32_t mLayerCount;
     uint32_t mLevelCount;
+
+    // The allocation will not change during life time of this object
+    bool mImmutableAllocation;
 
     // Staging buffer
     DynamicBuffer mStagingBuffer;

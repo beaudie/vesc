@@ -429,7 +429,11 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat));
     }
 
-    if (!mOwnsImage)
+    if (mState.getImmutableFormat())
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    }
+    else if (!mOwnsImage)
     {
         ANGLE_TRY(mImage->flushAllStagedUpdates(contextVk));
     }
@@ -1187,6 +1191,10 @@ angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Fo
     if (mImage == nullptr)
     {
         setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, 0, true);
+        if (mState.getImmutableFormat())
+        {
+            mImage->setImmutableAllocation();
+        }
     }
     else
     {

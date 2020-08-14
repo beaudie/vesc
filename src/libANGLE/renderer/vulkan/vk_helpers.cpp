@@ -2687,6 +2687,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
+      mImmutableAllocation(other.mImmutableAllocation),
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates)),
       mCurrentSingleClearValue(std::move(other.mCurrentSingleClearValue))
@@ -2718,6 +2719,7 @@ void ImageHelper::resetCachedProperties()
     mLayerCount                  = 0;
     mLevelCount                  = 0;
     mExternalFormat              = 0;
+    mImmutableAllocation         = false;
     mCurrentSingleClearValue.reset();
 }
 
@@ -3741,8 +3743,19 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
 
     uint8_t *stagingPointer    = nullptr;
     VkDeviceSize stagingOffset = 0;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
-                                      &stagingOffset, nullptr));
+    BufferHelper *stagingBuffer;
+    if (mImmutableAllocation)
+    {
+        ANGLE_TRY(contextVk->getStagingBufferStorage()->allocate(
+            contextVk, allocationSize, &stagingPointer, &bufferHandle, &stagingOffset, nullptr));
+        stagingBuffer = contextVk->getStagingBufferStorage()->getCurrentBuffer();
+    }
+    else
+    {
+        ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
+                                          &stagingOffset, nullptr));
+        stagingBuffer = mStagingBuffer.getCurrentBuffer();
+    }
 
     const uint8_t *source = pixels + static_cast<ptrdiff_t>(inputSkipBytes);
 
@@ -3803,7 +3816,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         stencilCopy.imageOffset                     = copy.imageOffset;
         stencilCopy.imageExtent                     = copy.imageExtent;
         stencilCopy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
-        appendSubresourceUpdate(SubresourceUpdate(mStagingBuffer.getCurrentBuffer(), stencilCopy));
+        appendSubresourceUpdate(SubresourceUpdate(stagingBuffer, stencilCopy));
 
         aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
     }
@@ -3827,7 +3840,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     if (aspectFlags)
     {
         copy.imageSubresource.aspectMask = aspectFlags;
-        appendSubresourceUpdate(SubresourceUpdate(mStagingBuffer.getCurrentBuffer(), copy));
+        appendSubresourceUpdate(SubresourceUpdate(stagingBuffer, copy));
     }
 
     return angle::Result::Continue;
