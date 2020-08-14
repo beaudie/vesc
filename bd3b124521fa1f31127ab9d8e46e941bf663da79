@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "c4ea0856_e71625ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-14T14:42:14Z",
+      "side": 1,
+      "message": "Ian, Shabi, Tim, and other reviewers, can we take a step back and put this into a design doc? There should be a more efficient and organized way to get the same result. Having the design discussion in a google doc would be a better way to record it and iterate on ideas.",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e92c401_a4417c68",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
