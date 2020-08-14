@@ -16,6 +16,57 @@
       "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e92c401_a4417c68",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-14T03:09:09Z",
+      "side": 1,
+      "message": "Do you think I am correct, that we have a bug when isSubInvalidate?",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0e28221_b6284cc1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-14T03:09:09Z",
+      "side": 1,
+      "message": "FYI ... The idea of this function is to turn back on the STORE storeOp when an attachment is being used again (since I didn\u0027t end the render pass in invalidateImpl().  I\u0027m assuming that if a color attachment has been invalidated, it should be \"restored\" (un-invalidated).  For depth/stencil, I only want to restore them if they are enabled (PUBG invalidates the depth/stencil buffers and then disables the depth/stencil functionality, and then keeps drawing to the color attachment).",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1d7b3ee_ae6b2aab",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2270,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-14T03:09:09Z",
+      "side": 1,
+      "message": "I should add a comment ... I call this if the storeOp was actually changed back to STORE, so that future render passes will use a loadOp of LOAD.",
+      "revId": "bd3b124521fa1f31127ab9d8e46e941bf663da79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
