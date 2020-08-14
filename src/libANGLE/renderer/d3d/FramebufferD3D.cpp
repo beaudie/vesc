@@ -362,7 +362,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
             // it to be attached to a new binding point.
             if (mDummyAttachment.isAttached())
             {
-                mDummyAttachment.detach(context);
+                mDummyAttachment.detach(context, Serial());
             }
 
             gl::Texture *dummyTex = nullptr;
@@ -374,7 +374,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
                 gl::ImageIndex index = gl::ImageIndex::Make2D(0);
                 mDummyAttachment     = gl::FramebufferAttachment(
                     context, GL_TEXTURE, GL_COLOR_ATTACHMENT0_EXT + activeProgramLocation, index,
-                    dummyTex);
+                    dummyTex, Serial());
                 colorAttachmentsForRender.push_back(&mDummyAttachment);
             }
         }
@@ -390,7 +390,7 @@ void FramebufferD3D::destroy(const gl::Context *context)
 {
     if (mDummyAttachment.isAttached())
     {
-        mDummyAttachment.detach(context);
+        mDummyAttachment.detach(context, Serial());
     }
 }
 

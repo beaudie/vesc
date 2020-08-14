@@ -143,8 +143,8 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
                       GLenum binding,
                       const gl::ImageIndex &imageIndex) const override;
 
-    void onAttach(const gl::Context *context) override {}
-    void onDetach(const gl::Context *context) override {}
+    void onAttach(const gl::Context *context, rx::Serial framebuferSerial) override {}
+    void onDetach(const gl::Context *context, rx::Serial framebuferSerial) override {}
     GLuint getId() const override;
 
     bool flexibleSurfaceCompatibilityRequested() const

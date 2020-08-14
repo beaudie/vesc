@@ -816,7 +816,6 @@ void SerializeContextBindingCount(gl::BinaryOutputStream *bos,
 {
     bos->writeInt(contextBindingCount.contextID);
     bos->writeInt(contextBindingCount.imageBindingCount);
-    bos->writeInt(contextBindingCount.samplerBindingCount);
 }
 
 void SerializeTextureState(gl::BinaryOutputStream *bos, const gl::TextureState &textureState)

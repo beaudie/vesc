@@ -97,7 +97,6 @@ struct SwizzleState final
 struct ContextBindingCount
 {
     ContextID contextID;
-    uint32_t samplerBindingCount;
     uint32_t imageBindingCount;
 };
 
@@ -146,10 +145,6 @@ class TextureState final : private angle::NonCopyable
     GLenum getUsage() const { return mUsage; }
     GLenum getDepthStencilTextureMode() const { return mDepthStencilTextureMode; }
     bool isStencilMode() const { return mDepthStencilTextureMode == GL_STENCIL_INDEX; }
-    bool isBoundAsSamplerTexture(ContextID contextID) const
-    {
-        return getBindingCount(contextID).samplerBindingCount > 0;
-    }
     bool isBoundAsImageTexture(ContextID contextID) const
     {
         return getBindingCount(contextID).imageBindingCount > 0;
@@ -216,7 +211,7 @@ class TextureState final : private angle::NonCopyable
             if (bindingCount.contextID == contextID)
                 return bindingCount;
         }
-        mBindingCounts.push_back({contextID, 0, 0});
+        mBindingCounts.push_back({contextID, 0});
         return mBindingCounts.back();
     }
 
@@ -480,30 +475,6 @@ class Texture final : public RefCountObject<TextureID>,
         mState.getBindingCount(contextID).imageBindingCount--;
     }
 
-    ANGLE_INLINE void onBindAsSamplerTexture(ContextID contextID)
-    {
-        ContextBindingCount &bindingCount = mState.getBindingCount(contextID);
-
-        ASSERT(bindingCount.samplerBindingCount < std::numeric_limits<uint32_t>::max());
-        bindingCount.samplerBindingCount++;
-        if (bindingCount.samplerBindingCount == 1)
-        {
-            onStateChange(angle::SubjectMessage::BindingChanged);
-        }
-    }
-
-    ANGLE_INLINE void onUnbindAsSamplerTexture(ContextID contextID)
-    {
-        ContextBindingCount &bindingCount = mState.getBindingCount(contextID);
-
-        ASSERT(mState.isBoundAsSamplerTexture(contextID));
-        bindingCount.samplerBindingCount--;
-        if (bindingCount.samplerBindingCount == 0)
-        {
-            onStateChange(angle::SubjectMessage::BindingChanged);
-        }
-    }
-
     egl::Surface *getBoundSurface() const;
     egl::Stream *getBoundStream() const;
 
@@ -545,8 +516,8 @@ class Texture final : public RefCountObject<TextureID>,
     void setGenerateMipmapHint(GLenum generate);
     GLenum getGenerateMipmapHint() const;
 
-    void onAttach(const Context *context) override;
-    void onDetach(const Context *context) override;
+    void onAttach(const Context *context, rx::Serial framebuferSerial) override;
+    void onDetach(const Context *context, rx::Serial framebuferSerial) override;
 
     // Used specifically for FramebufferAttachmentObject.
     GLuint getId() const override;
@@ -558,6 +529,17 @@ class Texture final : public RefCountObject<TextureID>,
     InitState initState(const ImageIndex &imageIndex) const override;
     InitState initState() const { return mState.mInitState; }
     void setInitState(const ImageIndex &imageIndex, InitState initState) override;
+
+    bool isBoundToFramebuffer(rx::Serial framebufferSerial) const
+    {
+        for (size_t index = 0; index < mBoundFramebufferSerials.size(); ++index)
+        {
+            if (mBoundFramebufferSerials[index] == framebufferSerial)
+                return true;
+        }
+
+        return false;
+    }
 
     enum DirtyBitType
     {
@@ -642,6 +624,9 @@ class Texture final : public RefCountObject<TextureID>,
 
     egl::Surface *mBoundSurface;
     egl::Stream *mBoundStream;
+
+    static constexpr uint32_t kFastFramebufferSerialCount = 8;
+    angle::FastVector<rx::Serial, kFastFramebufferSerialCount> mBoundFramebufferSerials;
 
     struct SamplerCompletenessCache
     {

@@ -138,12 +138,6 @@ constexpr const char *kSkippedMessages[] = {
     // https://issuetracker.google.com/issues/159493191
     "VUID-vkCmdDraw-None-02690",
     "VUID-vkCmdDrawIndexed-None-02690",
-    // http://anglebug.com/4959
-    "UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout",
-    "UNASSIGNED-CoreValidation-DrawState-DescriptorSetNotUpdated",
-    "VUID-VkDescriptorImageInfo-imageLayout-00344",
-    "UNASSIGNED-CoreValidation-DrawState-InvalidRenderpass",
-    "VUID-VkImageMemoryBarrier-oldLayout-01197",
     // Best Practices Skips issuetracker.google.com/156661359
     "UNASSIGNED-BestPractices-vkCreateCommandPool-command-buffer-reset",
     "UNASSIGNED-BestPractices-pipeline-stage-flags",

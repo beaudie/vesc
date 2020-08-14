@@ -270,7 +270,6 @@ ANGLE_INLINE void ActiveTexturesCache::reset(ContextID contextID, size_t texture
 {
     if (mTextures[textureIndex])
     {
-        mTextures[textureIndex]->onUnbindAsSamplerTexture(contextID);
         mTextures[textureIndex] = nullptr;
     }
 }
@@ -279,14 +278,7 @@ ANGLE_INLINE void ActiveTexturesCache::set(ContextID contextID,
                                            size_t textureIndex,
                                            Texture *texture)
 {
-    // We don't call reset() here to avoid setting nullptr before rebind.
-    if (mTextures[textureIndex])
-    {
-        mTextures[textureIndex]->onUnbindAsSamplerTexture(contextID);
-    }
-
     ASSERT(texture);
-    texture->onBindAsSamplerTexture(contextID);
     mTextures[textureIndex] = texture;
 }
 

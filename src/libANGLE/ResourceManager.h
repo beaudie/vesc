@@ -19,7 +19,12 @@
 namespace rx
 {
 class GLImplFactory;
-}
+}  // namespace rx
+
+namespace egl
+{
+class ShareGroup;
+}  // namespace egl
 
 namespace gl
 {
@@ -35,8 +40,8 @@ class Program;
 class ProgramPipeline;
 class Renderbuffer;
 class Sampler;
-class Shader;
 class Semaphore;
+class Shader;
 class Texture;
 
 template <typename HandleAllocatorType>
@@ -276,15 +281,15 @@ class FramebufferManager
     Framebuffer *checkFramebufferAllocation(rx::GLImplFactory *factory,
                                             const Caps &caps,
                                             FramebufferID handle,
-                                            ContextID owningContextID)
+                                            egl::ShareGroup *shareGroup)
     {
-        return checkObjectAllocation<const Caps &>(factory, handle, caps, owningContextID);
+        return checkObjectAllocation<const Caps &>(factory, handle, caps, shareGroup);
     }
 
     static Framebuffer *AllocateNewObject(rx::GLImplFactory *factory,
                                           FramebufferID handle,
                                           const Caps &caps,
-                                          ContextID owningContextID);
+                                          egl::ShareGroup *shareGroup);
     static void DeleteObject(const Context *context, Framebuffer *framebuffer);
 
   protected:
