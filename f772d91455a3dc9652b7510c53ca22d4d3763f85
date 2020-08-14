@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "400d6a64_589ebe16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-14T16:56:55Z",
+      "side": 1,
+      "message": "I probably won\u0027t land this until I figure out why we\u0027re crashing after 1200 frames, but with this CL I can record and playback 5-10 seconds of gameplay, and it looks plausible.",
+      "revId": "f772d91455a3dc9652b7510c53ca22d4d3763f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
