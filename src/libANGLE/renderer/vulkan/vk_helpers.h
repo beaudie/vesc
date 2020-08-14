@@ -927,17 +927,46 @@ class CommandBufferHelper : angle::NonCopyable
         SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
     }
 
-    void invalidateRenderPassDepthAttachment(size_t attachmentIndex)
+    void invalidateRenderPassDepthAttachment(bool depthEnablement)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        mDepthInvalidated = true;
+        mDepthEnablement  = depthEnablement;
     }
 
-    void invalidateRenderPassStencilAttachment(size_t attachmentIndex)
+    void invalidateRenderPassStencilAttachment(bool stencilEnablement)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        SetBitField(mAttachmentOps[attachmentIndex].stencilStoreOp,
-                    VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        mStencilInvalidated = true;
+        mStencilEnablement  = stencilEnablement;
+    }
+
+    bool isDepthAttachmentValid()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (!mDepthInvalidated || mDepthEnablement)
+        {
+            // The depth attachment buffer has either not been invalidated, or was invalidated and
+            // re-enabled, or was invalidated but left enabled (and since we don't ever check
+            // during draw calls, we must assume that a draw call occured and therefore the depth
+            // attachment was used)
+            return true;
+        }
+        return false;
+    }
+
+    bool isStencilAttachmentValid()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (!mStencilInvalidated || mStencilEnablement)
+        {
+            // The stencil attachment buffer has either not been invalidated, or was invalidated and
+            // re-enabled, or was invalidated but left enabled (and since we don't ever check
+            // during draw calls, we must assume that a draw call occured and therefore the stencil
+            // attachment was used)
+            return true;
+        }
+        return false;
     }
 
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
@@ -980,8 +1009,34 @@ class CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
-    void setDepthTestEnabled() { mDepthTestEverEnabled = true; }
-    void setStencilTestEnabled() { mStencilTestEverEnabled = true; }
+    void setDepthTestEnabled(bool enabled)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (enabled)
+        {
+            mDepthTestEverEnabled = true;
+            if (mDepthInvalidated && !mDepthEnablement)
+            {
+                // Re-enabling depth undoes the depth attachment's previous invalidation
+                mDepthInvalidated = false;
+            }
+        }
+        mDepthEnablement = enabled;
+    }
+    void setStencilTestEnabled(bool enabled)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (enabled)
+        {
+            mStencilTestEverEnabled = true;
+            if (mStencilInvalidated && !mStencilEnablement)
+            {
+                // Re-enabling stencil undoes the stencil attachment's previous invalidation
+                mStencilInvalidated = false;
+            }
+        }
+        mStencilEnablement = enabled;
+    }
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
@@ -1013,6 +1068,10 @@ class CommandBufferHelper : angle::NonCopyable
 
     bool mDepthTestEverEnabled;
     bool mStencilTestEverEnabled;
+    bool mDepthInvalidated;
+    bool mDepthEnablement;
+    bool mStencilInvalidated;
+    bool mStencilEnablement;
     uint32_t mDepthStencilAttachmentIndex;
 
     // Tracks resources used in the command buffer.
