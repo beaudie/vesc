@@ -719,7 +719,7 @@ class ContextVk : public ContextImpl, public vk::Context
                             GLsizei instanceCount,
                             gl::DrawElementsType indexTypeOrInvalid,
                             const void *indices,
-                            DirtyBits dirtyBitMask,
+                            const DirtyBits &dirtyBitMask,
                             vk::CommandBuffer **commandBufferOut);
 
     angle::Result setupIndexedDraw(const gl::Context *context,
