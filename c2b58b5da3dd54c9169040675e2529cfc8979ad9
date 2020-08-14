@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c4b870d_46651ce8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-14T23:23:22Z",
+      "side": 1,
+      "message": "PTAL. With Jamie\u0027s recent change, the test now passes. I think this test still have a bit value here that RGB texture has emulated alpha channel. Also this CL fix the renderpass count book keeping bug that it was incremented at endRenderpass() time instead of beginRenderPass() time. a drawQUad call will not end renderpass, which means it will not increment the count even thou we have started the renderpass. This CL fixes it.",
+      "revId": "c2b58b5da3dd54c9169040675e2529cfc8979ad9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
