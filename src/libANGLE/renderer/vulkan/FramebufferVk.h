@@ -130,6 +130,8 @@ class FramebufferVk : public FramebufferImpl
         return getState().getEnabledDrawBuffers().count();
     }
 
+    angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
+
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,
@@ -157,8 +159,6 @@ class FramebufferVk : public FramebufferImpl
     // data is normally discarded) take its data from the resolve attachment.
     angle::Result copyResolveToMultisampedAttachment(ContextVk *contextVk,
                                                      RenderTargetVk *colorRenderTarget);
-
-    angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
 
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,
