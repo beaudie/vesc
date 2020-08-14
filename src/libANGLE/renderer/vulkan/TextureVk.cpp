@@ -367,7 +367,12 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const uint8_t *pixels,
                                          const vk::Format &vkFormat)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk              = vk::GetImpl(context);
+    vk::DynamicBuffer *stagingStorage = nullptr;
+    if (mState.getImmutableFormat())
+    {
+        stagingStorage = contextVk->getStagingBufferStorage();
+    }
 
     if (unpackBuffer)
     {
@@ -416,20 +421,25 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             ANGLE_TRY(mImage->stageSubresourceUpdateImpl(
                 contextVk, getNativeImageIndex(index),
                 gl::Extents(area.width, area.height, area.depth),
-                gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, source, vkFormat,
-                inputRowPitch, inputDepthPitch, inputSkipBytes));
+                gl::Offset(area.x, area.y, area.z), formatInfo, unpack, stagingStorage, type,
+                source, vkFormat, inputRowPitch, inputDepthPitch, inputSkipBytes));
 
             ANGLE_TRY(unpackBufferVk->unmapImpl(contextVk));
         }
     }
     else if (pixels)
     {
-        ANGLE_TRY(mImage->stageSubresourceUpdate(
-            contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat));
+        ANGLE_TRY(mImage->stageSubresourceUpdate(contextVk, getNativeImageIndex(index),
+                                                 gl::Extents(area.width, area.height, area.depth),
+                                                 gl::Offset(area.x, area.y, area.z), formatInfo,
+                                                 unpack, stagingStorage, type, pixels, vkFormat));
     }
 
-    if (!mOwnsImage)
+    if (mState.getImmutableFormat())
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    }
+    else if (!mOwnsImage)
     {
         ANGLE_TRY(mImage->flushAllStagedUpdates(contextVk));
     }
