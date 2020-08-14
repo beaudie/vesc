@@ -16,6 +16,52 @@
       "revId": "f772d91455a3dc9652b7510c53ca22d4d3763f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d99edd0_aeae7044",
+        "filename": "src/common/PackedEnums.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-14T17:03:08Z",
+      "side": 1,
+      "message": "separate fix?",
+      "range": {
+        "startLine": 384,
+        "startChar": 19,
+        "endLine": 384,
+        "endChar": 40
+      },
+      "revId": "f772d91455a3dc9652b7510c53ca22d4d3763f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feccdc4e_090356e8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3980,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-14T17:03:08Z",
+      "side": 1,
+      "message": "pretty sure you want to replace the call if it\u0027s overridden.",
+      "range": {
+        "startLine": 3980,
+        "startChar": 4,
+        "endLine": 3980,
+        "endChar": 46
+      },
+      "revId": "f772d91455a3dc9652b7510c53ca22d4d3763f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
