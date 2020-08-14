@@ -130,6 +130,10 @@ class FramebufferVk : public FramebufferImpl
         return getState().getEnabledDrawBuffers().count();
     }
 
+    bool isReadOnlyDepthMode() const { return mCurrentFramebufferDesc.isReadOnlyDepth(); }
+
+    void setReadOnlyDepthMode();
+
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,

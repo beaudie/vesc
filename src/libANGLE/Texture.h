@@ -541,6 +541,11 @@ class Texture final : public RefCountObject<TextureID>,
         return false;
     }
 
+    bool isDepthOrStencil() const
+    {
+        return mState.getBaseLevelDesc().format.info->isDepthOrStencil();
+    }
+
     enum DirtyBitType
     {
         // Sampler state

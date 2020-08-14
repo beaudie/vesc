@@ -124,6 +124,8 @@ class FramebufferState final : angle::NonCopyable
 
     const gl::Offset &getSurfaceTextureOffset() const { return mSurfaceTextureOffset; }
 
+    rx::Serial getFramebufferSerial() const { return mFramebufferSerial; }
+
   private:
     const FramebufferAttachment *getWebGLDepthStencilAttachment() const;
     const FramebufferAttachment *getWebGLDepthAttachment() const;
