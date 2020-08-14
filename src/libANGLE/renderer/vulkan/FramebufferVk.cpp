@@ -1366,6 +1366,18 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     {
         // Set the appropriate storeOp for attachments.
         size_t attachmentIndexVk = 0;
+        // NOTE from ianelliott: The following approach (setting the storeOp to DONT_CARE) seems
+        // like a bug when isSubInvalidate is true.  We are only supposed to be invalidating a
+        // portion of the attachment, but DONT_CARE will cause the entire attachment to not be
+        // stored.  That means, the attachment's entire contents are being lost/invalidated.
+        //
+        // It would be good to store a new bool that the attachment is currently invalidated
+        // (rather than change to DONT_CARE).  With such an approach, we would process DONT_CARE at
+        // endRenderPass time.  However, there are no more bits available in
+        // PackedAttachmentOpsDesc.  For now, let's change the storeOp to DONT_CARE, and use the
+        // results of invalidateEntireContent() (below) to mark that the contents are invalid.
+        // That method sets RenderTargetVk::mContentDefined to false.  That will be our bool for
+        // now.
         for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
         {
             if (invalidateColorBuffers.test(colorIndexGL))
@@ -1390,21 +1402,6 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
                     attachmentIndexVk);
             }
         }
-
-        // NOTE: Possible future optimization is to delay setting the storeOp and only do so if the
-        // render pass is closed by itself before another draw call.  Otherwise, in a situation like
-        // this:
-        //
-        //     draw()
-        //     invalidate()
-        //     draw()
-        //
-        // We would be discarding the attachments only to load them for the next draw (which is less
-        // efficient than keeping the render pass open and not do the discard at all).  While dEQP
-        // tests this pattern, this optimization may not be necessary if no application does this.
-        // It is expected that an application would invalidate() when it's done with the
-        // framebuffer, so the render pass would have closed either way.
-        ANGLE_TRY(contextVk->endRenderPass());
     }
 
     // If not a partial invalidate, mark the contents of the invalidated attachments as undefined,
@@ -2219,6 +2216,56 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
         depthStencilRenderTarget->onDepthStencilDraw(contextVk);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result FramebufferVk::resumeRenderPass(ContextVk *contextVk)
+{
+    vk::Framebuffer *currentFramebuffer = nullptr;
+    ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer));
+    if (!contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer))
+    {
+        return angle::Result::Continue;
+    }
+
+    // See if any attachments were previously invalidated.  If so, change their storeOp back to
+    // STORE.
+    size_t attachmentIndexVk                 = 0;
+    const auto &colorRenderTargets           = mRenderTargetCache.getColors();
+    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil(true);
+
+    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    {
+        RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
+        ASSERT(colorRenderTarget);
+        if (!colorRenderTarget->hasDefinedContent())
+        {
+            if (contextVk->getStartedRenderPassCommands().restoreRenderPassColorAttachment(
+                    attachmentIndexVk))
+            {
+                colorRenderTarget->restoreEntireContent();
+            }
+        }
+        ++attachmentIndexVk;
+    }
+
+    if (depthStencilRenderTarget)
+    {
+        const gl::State &glState = contextVk->getState();
+        bool depthEnabled        = glState.isDepthTestEnabled();
+        bool stencilEnabled      = glState.isStencilTestEnabled();
+
+        // Only consider restoring depth/stencil attachments if depth and/or stencil is enabled:
+        if ((depthEnabled || stencilEnabled) && !depthStencilRenderTarget->hasDefinedContent())
+        {
+            if (contextVk->getStartedRenderPassCommands().restoreRenderPassDepthStencilAttachments(
+                    attachmentIndexVk, depthEnabled, stencilEnabled))
+            {
+                depthStencilRenderTarget->restoreEntireContent();
+            }
+        }
     }
 
     return angle::Result::Continue;

@@ -940,6 +940,48 @@ struct CommandBufferHelper : angle::NonCopyable
                     VK_ATTACHMENT_STORE_OP_DONT_CARE);
     }
 
+    bool restoreRenderPassColorAttachment(size_t attachmentIndex)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if ((mAttachmentOps[attachmentIndex].loadOp != VK_ATTACHMENT_LOAD_OP_DONT_CARE) &&
+            (mAttachmentOps[attachmentIndex].storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE))
+        {
+            // The storeOp was set to DONT_CARE because of an invalidate, and should be restored to
+            // STORE because of a draw call
+            SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_STORE);
+            return true;
+        }
+        return false;
+    }
+
+    bool restoreRenderPassDepthStencilAttachments(size_t attachmentIndex,
+                                                  bool depthEnabled,
+                                                  bool stencilEnabled)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        bool didRestore = false;
+        if (depthEnabled &&
+            (mAttachmentOps[attachmentIndex].loadOp != VK_ATTACHMENT_LOAD_OP_DONT_CARE) &&
+            (mAttachmentOps[attachmentIndex].storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE))
+        {
+            // The storeOp was set to DONT_CARE because of an invalidate, and should be restored to
+            // STORE because of a draw call
+            SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_STORE);
+            didRestore = true;
+        }
+        if (stencilEnabled &&
+            (mAttachmentOps[attachmentIndex].stencilLoadOp != VK_ATTACHMENT_LOAD_OP_DONT_CARE) &&
+            (mAttachmentOps[attachmentIndex].stencilStoreOp == VK_ATTACHMENT_STORE_OP_DONT_CARE))
+        {
+            // The storeOp was set to DONT_CARE because of an invalidate, and should be restored to
+            // STORE because of a draw call
+            SetBitField(mAttachmentOps[attachmentIndex].stencilStoreOp,
+                        VK_ATTACHMENT_STORE_OP_STORE);
+            didRestore = true;
+        }
+        return didRestore;
+    }
+
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
     {
         ASSERT(mIsRenderPassCommandBuffer);
