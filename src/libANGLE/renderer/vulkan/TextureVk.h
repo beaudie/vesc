@@ -192,6 +192,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     // Normally, initialize the image with enabled mipmap level counts.
     angle::Result ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels);
+    angle::Result ensureImageInitializedAndFlushSingleLevelStagedUpdate(
+        ContextVk *contextVk,
+        const gl::ImageIndex &index);
 
     vk::ImageViewSubresourceSerial getImageViewSubresourceSerial() const;
 
