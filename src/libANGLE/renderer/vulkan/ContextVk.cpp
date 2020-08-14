@@ -970,7 +970,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    GLsizei instanceCount,
                                    gl::DrawElementsType indexTypeOrInvalid,
                                    const void *indices,
-                                   DirtyBits dirtyBitMask,
+                                   const DirtyBits &dirtyBitMask,
                                    vk::CommandBuffer **commandBufferOut)
 {
     // Set any dirty bits that depend on draw call parameters or other objects.
@@ -998,8 +998,23 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // TODO(jmadill): Use dirty bit. http://anglebug.com/3014
     if (!mRenderPassCommandBuffer)
     {
-        gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
-        ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
+        vk::Framebuffer *srcVkFramebuffer = nullptr;
+        ANGLE_TRY(mDrawFramebuffer->getFramebuffer(this, &srcVkFramebuffer));
+        if (mRenderPassCommands->started() &&
+            mRenderPassCommands->getFramebufferHandle() == srcVkFramebuffer->getHandle())
+        {
+            // There is already a render pass open for this framebuffer, so just restore the pointer
+            // rather than starting a whole new render pass. One possible path here is if the draw
+            // framebuffer binding has changed from FBO A -> B -> A, without any commands that
+            // started a new render pass for FBO B (such as a clear being issued that was deferred).
+            mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
+        }
+        else
+        {
+            gl::Rectangle scissoredRenderArea =
+                mDrawFramebuffer->getRotatedScissoredRenderArea(this);
+            ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
+        }
     }
 
     // We keep a local copy of the command buffer. It's possible that some state changes could
