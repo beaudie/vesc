@@ -16,6 +16,23 @@
       "revId": "c2b58b5da3dd54c9169040675e2529cfc8979ad9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39360257_37677646",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-14T23:44:52Z",
+      "side": 1,
+      "message": "LGTM, definitely value in the RP counter fix and in the tests.",
+      "revId": "c2b58b5da3dd54c9169040675e2529cfc8979ad9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
