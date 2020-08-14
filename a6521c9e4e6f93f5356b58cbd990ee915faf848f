@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04fe571f_b3c67a80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-14T17:34:24Z",
+      "side": 1,
+      "message": "Just a small fix for WebGL test failures I saw on Janah\u0027s CL that enable WebGL for Metal.\nThis should be a temporary fix as upcoming texture 3D CL also has a fix for this issue.\nPTAL.",
+      "revId": "a6521c9e4e6f93f5356b58cbd990ee915faf848f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
