@@ -481,6 +481,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         }
         else
         {
+            ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
             clearWithLoadOp(contextVk, clearColorDrawBuffersMask, clearDepthWithRenderPassLoadOp,
                             clearStencilWithRenderPassLoadOp, clearColorValue,
                             clearDepthStencilValue);
