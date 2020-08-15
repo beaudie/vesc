@@ -44,6 +44,7 @@ struct TextureUnit final
 {
     TextureVk *texture;
     const SamplerHelper *sampler;
+    bool depthStencilReadOnly;
 };
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
@@ -980,7 +981,13 @@ class CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
-    void onDepthAccess(ResourceAccess access) { UpdateAccess(&mDepthStartAccess, access); }
+    void onDepthAccess(ResourceAccess access)
+    {
+        UpdateAccess(&mDepthStartAccess, access);
+        ASSERT((mRenderPassDesc.getDepthStencilAccess() != ResourceAccess::ReadOnly) ||
+               mDepthStartAccess != ResourceAccess::Write);
+    }
+
     void onStencilAccess(ResourceAccess access) { UpdateAccess(&mStencilStartAccess, access); }
 
   private:
