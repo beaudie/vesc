@@ -919,6 +919,7 @@ class FramebufferDesc
     bool operator==(const FramebufferDesc &other) const;
 
     uint32_t attachmentCount() const;
+    bool isReadOnlyDepth() const { return mReadOnlyDepth != 0; }
 
   private:
     void update(uint32_t index, ImageViewSubresourceSerial serial);

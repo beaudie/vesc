@@ -741,7 +741,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBits = mNewGraphicsCommandBufferDirtyBits;
     mComputeDirtyBits  = mNewComputeCommandBufferDirtyBits;
 
-    mActiveTextures.fill({nullptr, nullptr});
+    mActiveTextures.fill({nullptr, nullptr, false});
     mActiveImages.fill(nullptr);
 
     mPipelineDirtyBitsMask.set();
@@ -1366,6 +1366,10 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         {
             textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
                                                     : vk::ImageLayout::AllGraphicsShadersWrite;
+        }
+        else if (unit.depthStencilReadOnly)
+        {
+            textureLayout = vk::ImageLayout::DepthStencilReadOnly;
         }
         else
         {
@@ -3818,15 +3822,14 @@ void ContextVk::handleError(VkResult errorCode,
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 {
-    const gl::State &glState                = mState;
-    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
     uint32_t prevMaxIndex = mActiveTexturesDesc.getMaxIndex();
     memset(mActiveTextures.data(), 0, sizeof(mActiveTextures[0]) * prevMaxIndex);
     mActiveTexturesDesc.reset();
 
-    const gl::ActiveTexturesCache &textures        = glState.getActiveTexturesCache();
+    const gl::ActiveTexturesCache &textures        = mState.getActiveTexturesCache();
     const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
     const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
 
@@ -3838,10 +3841,37 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         gl::TextureType textureType = textureTypes[textureUnit];
         ASSERT(textureType != gl::TextureType::InvalidEnum);
 
+        vk::TextureUnit &activeTexture = mActiveTextures[textureUnit];
+
         // Null textures represent incomplete textures.
         if (texture == nullptr)
         {
             ANGLE_TRY(getIncompleteTexture(context, textureType, &texture));
+        }
+        else
+        {
+            bool depthStencilReadOnly =
+                texture->isDepthOrStencil() &&
+                texture->isBoundToFramebuffer(mDrawFramebuffer->getState().getFramebufferSerial());
+            if (depthStencilReadOnly && !mDrawFramebuffer->isReadOnlyDepthMode())
+            {
+                ANGLE_VK_CHECK(this, !mState.isDepthWriteEnabled(), VK_ERROR_NOT_PERMITTED_EXT);
+
+                // Special handling for deferred clears.
+                if (mDrawFramebuffer->hasDeferredClears())
+                {
+                    gl::Rectangle scissoredRenderArea =
+                        mDrawFramebuffer->getRotatedScissoredRenderArea(this);
+                    ANGLE_TRY(mDrawFramebuffer->flushDeferredClears(this, scissoredRenderArea));
+                }
+
+                // TODO(jmadill): Don't end RenderPass. http://anglebug.com/4959
+                if (hasStartedRenderPass())
+                {
+                    ANGLE_TRY(flushCommandsAndEndRenderPass());
+                }
+                mDrawFramebuffer->setReadOnlyDepthMode();
+            }
         }
 
         TextureVk *textureVk = vk::GetImpl(texture);
@@ -3850,8 +3880,10 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         const vk::SamplerHelper &samplerVk =
             sampler ? vk::GetImpl(sampler)->getSampler() : textureVk->getSampler();
 
-        mActiveTextures[textureUnit].texture = textureVk;
-        mActiveTextures[textureUnit].sampler = &samplerVk;
+        activeTexture.texture = textureVk;
+        activeTexture.sampler = &samplerVk;
+        activeTexture.depthStencilReadOnly =
+            texture->isDepthOrStencil() && mDrawFramebuffer->isReadOnlyDepthMode();
 
         vk::ImageViewSubresourceSerial imageViewSerial = textureVk->getImageViewSubresourceSerial();
         mActiveTexturesDesc.update(textureUnit, imageViewSerial, samplerVk.getSamplerSerial());
