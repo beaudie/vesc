@@ -915,6 +915,9 @@ class CommandBufferHelper : angle::NonCopyable
 
     void endRenderPass();
 
+    void restartRenderPassWithReadOnlyDepth(const Framebuffer &framebuffer,
+                                            const RenderPassDesc &renderPassDesc);
+
     void beginTransformFeedback(size_t validBufferCount,
                                 const VkBuffer *counterBuffers,
                                 bool rebindBuffers);
@@ -990,6 +993,8 @@ class CommandBufferHelper : angle::NonCopyable
 
     void onStencilAccess(ResourceAccess access) { UpdateAccess(&mStencilStartAccess, access); }
 
+    ResourceAccess getDepthStartAccess() const { return mDepthStartAccess; }
+
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
@@ -1009,6 +1014,7 @@ class CommandBufferHelper : angle::NonCopyable
     gl::Rectangle mRenderArea;
     ClearValuesArray mClearValues;
     bool mRenderPassStarted;
+    bool mForceIndividualBarriers;
 
     // Transform feedback state
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
