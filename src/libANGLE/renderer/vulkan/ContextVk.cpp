@@ -2973,6 +2973,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
+                mDrawFramebuffer->setReadOnlyDepthMode(false);
                 updateFlipViewportDrawFramebuffer(glState);
                 updateSurfaceRotationDrawFramebuffer(glState);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
@@ -3880,12 +3881,25 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
                 ANGLE_TRY(mDrawFramebuffer->flushDeferredClears(this, scissoredRenderArea));
             }
 
-            // TODO(jmadill): Don't end RenderPass. http://anglebug.com/4959
             if (hasStartedRenderPass())
             {
-                ANGLE_TRY(flushCommandsAndEndRenderPass());
+                if (mRenderPassCommands->getDepthStartAccess() == vk::ResourceAccess::Write)
+                {
+                    ANGLE_TRY(flushCommandsAndEndRenderPass());
+                    mDrawFramebuffer->setReadOnlyDepthMode(true);
+                }
+                else
+                {
+                    ANGLE_TRY(mDrawFramebuffer->restartRenderPassInReadOnlyDepthMode(
+                        this, mRenderPassCommands));
+                }
             }
-            mDrawFramebuffer->setReadOnlyDepthMode(true);
+            else
+            {
+                mDrawFramebuffer->setReadOnlyDepthMode(true);
+            }
+
+            ASSERT(mDrawFramebuffer->isReadOnlyDepthMode());
         }
 
         TextureVk *textureVk = vk::GetImpl(texture);
@@ -4794,7 +4808,7 @@ void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
 
 angle::Result ContextVk::updateRenderPassDepthAccess()
 {
-    if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
+    if (mState.isDepthTestEnabled() && hasStartedRenderPass())
     {
         vk::ResourceAccess access = GetDepthAccess(mState.getDepthStencilState());
 
