@@ -1630,11 +1630,20 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         ANGLE_TRY(flushDeferredClears(contextVk, rotatedScissoredRenderArea));
     }
 
+    // We cannot use read-only depth mode for clears.
+    if (mDeferredClears.any())
+    {
+        mCurrentFramebufferDesc.updateReadOnlyDepth(false);
+    }
+
     // No-op redundant changes to prevent closing the RenderPass.
     if (mCurrentFramebufferDesc == priorFramebufferDesc)
     {
         return angle::Result::Continue;
     }
+
+    // Default to writable depth on any Framebuffer change.
+    mCurrentFramebufferDesc.updateReadOnlyDepth(false);
 
     // The FBO's new attachment may have changed the renderable area
     const gl::State &glState = context->getState();
@@ -1694,9 +1703,12 @@ void FramebufferVk::updateRenderPassDesc()
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        vk::ResourceAccess dsAccess =
+            isReadOnlyDepthMode() ? vk::ResourceAccess::ReadOnly : vk::ResourceAccess::Write;
+
         mRenderPassDesc.packDepthStencilAttachment(
             depthStencilRenderTarget->getImageForRenderPass().getFormat().intendedFormatID,
-            vk::ResourceAccess::Write);
+            dsAccess);
     }
 }
 
@@ -2170,9 +2182,10 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         }
 
-        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex,
-                                           vk::ImageLayout::DepthStencilAttachment,
-                                           vk::ImageLayout::DepthStencilAttachment);
+        vk::ImageLayout dsLayout = isReadOnlyDepthMode() ? vk::ImageLayout::DepthStencilReadOnly
+                                                         : vk::ImageLayout::DepthStencilAttachment;
+
+        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex, dsLayout, dsLayout);
 
         if (mDeferredClears.testDepth() || mDeferredClears.testStencil())
         {
@@ -2239,7 +2252,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // tracking content valid very loosely here that as long as it is attached, it assumes will
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
-        depthStencilRenderTarget->onDepthStencilDraw(contextVk);
+        depthStencilRenderTarget->onDepthStencilDraw(contextVk, isReadOnlyDepthMode());
     }
 
     return angle::Result::Continue;
@@ -2350,5 +2363,13 @@ angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk,
         return angle::Result::Continue;
 
     return contextVk->startRenderPass(renderArea, nullptr);
+}
+
+void FramebufferVk::setReadOnlyDepthMode()
+{
+    ASSERT(!isReadOnlyDepthMode());
+    mCurrentFramebufferDesc.updateReadOnlyDepth(true);
+    mFramebuffer = nullptr;
+    updateRenderPassDesc();
 }
 }  // namespace rx
