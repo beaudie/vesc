@@ -758,6 +758,18 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mCounter++;
 }
 
+void CommandBufferHelper::restartRenderPassWithReadOnlyDepth(const Framebuffer &framebuffer,
+                                                             const RenderPassDesc &renderPassDesc)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(mRenderPassStarted);
+
+    mRenderPassDesc = renderPassDesc;
+    mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, ImageLayout::DepthStencilReadOnly,
+                              ImageLayout::DepthStencilReadOnly);
+    mFramebuffer.setHandle(framebuffer.getHandle());
+}
+
 void CommandBufferHelper::endRenderPass()
 {
     pauseTransformFeedbackIfStarted();
@@ -3207,6 +3219,11 @@ gl::Extents ImageHelper::getLevelExtents2D(uint32_t levelVK) const
     gl::Extents extents = getLevelExtents(levelVK);
     extents.depth       = 1;
     return extents;
+}
+
+bool ImageHelper::isDepthOrStencil() const
+{
+    return mFormat->actualImageFormat().hasDepthOrStencilBits();
 }
 
 bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
