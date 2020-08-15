@@ -44,7 +44,6 @@ struct TextureUnit final
 {
     TextureVk *texture;
     const SamplerHelper *sampler;
-    bool depthStencilReadOnly;
 };
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
@@ -916,6 +915,9 @@ class CommandBufferHelper : angle::NonCopyable
 
     void endRenderPass();
 
+    void restartRenderPassWithReadOnlyDepth(const Framebuffer &framebuffer,
+                                            const RenderPassDesc &renderPassDesc);
+
     void beginTransformFeedback(size_t validBufferCount,
                                 const VkBuffer *counterBuffers,
                                 bool rebindBuffers);
@@ -990,6 +992,8 @@ class CommandBufferHelper : angle::NonCopyable
 
     void onStencilAccess(ResourceAccess access) { UpdateAccess(&mStencilStartAccess, access); }
 
+    ResourceAccess getDepthStartAccess() const { return mDepthStartAccess; }
+
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
@@ -1009,6 +1013,7 @@ class CommandBufferHelper : angle::NonCopyable
     gl::Rectangle mRenderArea;
     ClearValuesArray mClearValues;
     bool mRenderPassStarted;
+    bool mForceIndividualBarriers;
 
     // Transform feedback state
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
@@ -1221,6 +1226,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // Helper function to calculate the extents of a render target created for a certain mip of the
     // image.
     gl::Extents getLevelExtents2D(uint32_t level) const;
+    bool isDepthOrStencil() const;
 
     // Clear either color or depth/stencil based on image format.
     void clear(VkImageAspectFlags aspectFlags,
