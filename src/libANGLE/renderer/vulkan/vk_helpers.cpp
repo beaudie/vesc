@@ -582,6 +582,7 @@ CommandBufferHelper::CommandBufferHelper()
       mCounter(0),
       mClearValues{},
       mRenderPassStarted(false),
+      mForceIndividualBarriers(false),
       mTransformFeedbackCounterBuffers{},
       mValidTransformFeedbackBufferCount(0),
       mRebindTransformFeedbackBuffers(false),
@@ -734,7 +735,7 @@ void CommandBufferHelper::executeBarriers(ContextVk *contextVk, PrimaryCommandBu
         return;
     }
 
-    if (contextVk->getFeatures().preferAggregateBarrierCalls.enabled)
+    if (!mForceIndividualBarriers && contextVk->getFeatures().preferAggregateBarrierCalls.enabled)
     {
         PipelineStagesMask::Iterator iter = mask.begin();
         PipelineBarrier &barrier          = mPipelineBarriers[*iter];
@@ -746,6 +747,8 @@ void CommandBufferHelper::executeBarriers(ContextVk *contextVk, PrimaryCommandBu
     }
     else
     {
+        mForceIndividualBarriers = false;
+
         for (PipelineStage pipelineStage : mask)
         {
             PipelineBarrier &barrier = mPipelineBarriers[pipelineStage];
@@ -770,12 +773,28 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mFramebuffer.setHandle(framebuffer.getHandle());
-    mRenderArea       = renderArea;
-    mClearValues      = clearValues;
-    *commandBufferOut = &mCommandBuffer;
+    mRenderArea              = renderArea;
+    mClearValues             = clearValues;
+    *commandBufferOut        = &mCommandBuffer;
+    mForceIndividualBarriers = false;
 
     mRenderPassStarted = true;
     mCounter++;
+}
+
+void CommandBufferHelper::restartRenderPassWithReadOnlyDepth(const Framebuffer &framebuffer,
+                                                             const RenderPassDesc &renderPassDesc)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(mRenderPassStarted);
+
+    mRenderPassDesc = renderPassDesc;
+    mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, ImageLayout::DepthStencilReadOnly,
+                              ImageLayout::DepthStencilReadOnly);
+    mFramebuffer.setHandle(framebuffer.getHandle());
+
+    // Barrier aggregation messes up with RenderPass restarting.
+    mForceIndividualBarriers = true;
 }
 
 void CommandBufferHelper::endRenderPass()
@@ -3227,6 +3246,11 @@ gl::Extents ImageHelper::getLevelExtents2D(uint32_t levelVK) const
     gl::Extents extents = getLevelExtents(levelVK);
     extents.depth       = 1;
     return extents;
+}
+
+bool ImageHelper::isDepthOrStencil() const
+{
+    return mFormat->actualImageFormat().hasDepthOrStencilBits();
 }
 
 bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
