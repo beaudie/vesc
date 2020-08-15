@@ -77,6 +77,23 @@
     },
     {
       "key": {
+        "uuid": "3f2319a9_32eb7179",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-08-15T00:50:43Z",
+      "side": 1,
+      "message": "Let\u0027s mark this CL obsolete in favor of https://chromium-review.googlesource.com/2354297 then.\n\nThanks Xinghua for preparing this and Jamie for landing it.\n",
+      "revId": "71348d8d3f4cffb57a298ef2ac8af56ac9426652",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0619c014_29f1f709",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 3
