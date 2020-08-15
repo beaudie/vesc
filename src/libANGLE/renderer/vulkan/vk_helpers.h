@@ -44,6 +44,7 @@ struct TextureUnit final
 {
     TextureVk *texture;
     const SamplerHelper *sampler;
+    bool depthStencilReadOnly;
 };
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
