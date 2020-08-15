@@ -302,6 +302,19 @@ vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState)
     // Simplify this check by returning write instead of checking the mask.
     return vk::ResourceAccess::Write;
 }
+
+bool ShouldSwitchToDepthReadOnlyMode(FramebufferVk *drawFramebuffer, gl::Texture *texture)
+{
+    // This is a bit fragile. When running compute we don't have a draw FBO.
+    if (!drawFramebuffer)
+    {
+        return false;
+    }
+
+    return texture->isDepthOrStencil() &&
+           texture->isBoundToFramebuffer(drawFramebuffer->getState().getFramebufferSerial()) &&
+           !drawFramebuffer->isReadOnlyDepthMode();
+}
 }  // anonymous namespace
 
 ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
@@ -1383,6 +1396,10 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         {
             textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
                                                     : vk::ImageLayout::AllGraphicsShadersWrite;
+        }
+        else if (image.isDepthOrStencil())
+        {
+            textureLayout = vk::ImageLayout::DepthStencilReadOnly;
         }
         else
         {
@@ -2843,11 +2860,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               glState.getDepthStencilState(),
                                                               glState.getDrawFramebuffer());
-                if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
-                {
-                    vk::ResourceAccess access = GetDepthAccess(mState.getDepthStencilState());
-                    mRenderPassCommands->onDepthAccess(access);
-                }
+                ANGLE_TRY(updateRenderPassDepthAccess());
                 break;
             }
             case gl::State::DIRTY_BIT_DEPTH_FUNC:
@@ -2859,11 +2872,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthWriteEnabled(&mGraphicsPipelineTransition,
                                                                glState.getDepthStencilState(),
                                                                glState.getDrawFramebuffer());
-                if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
-                {
-                    vk::ResourceAccess access = GetDepthAccess(mState.getDepthStencilState());
-                    mRenderPassCommands->onDepthAccess(access);
-                }
+                ANGLE_TRY(updateRenderPassDepthAccess());
                 break;
             }
             case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
@@ -3846,15 +3855,14 @@ void ContextVk::handleError(VkResult errorCode,
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 {
-    const gl::State &glState                = mState;
-    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
     uint32_t prevMaxIndex = mActiveTexturesDesc.getMaxIndex();
     memset(mActiveTextures.data(), 0, sizeof(mActiveTextures[0]) * prevMaxIndex);
     mActiveTexturesDesc.reset();
 
-    const gl::ActiveTexturesCache &textures        = glState.getActiveTexturesCache();
+    const gl::ActiveTexturesCache &textures        = mState.getActiveTexturesCache();
     const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
     const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
 
@@ -3866,10 +3874,31 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         gl::TextureType textureType = textureTypes[textureUnit];
         ASSERT(textureType != gl::TextureType::InvalidEnum);
 
+        vk::TextureUnit &activeTexture = mActiveTextures[textureUnit];
+
         // Null textures represent incomplete textures.
         if (texture == nullptr)
         {
             ANGLE_TRY(getIncompleteTexture(context, textureType, &texture));
+        }
+        else if (ShouldSwitchToDepthReadOnlyMode(mDrawFramebuffer, texture))
+        {
+            ANGLE_VK_CHECK(this, !mState.isDepthWriteEnabled(), VK_ERROR_NOT_PERMITTED_EXT);
+
+            // Special handling for deferred clears.
+            if (mDrawFramebuffer->hasDeferredClears())
+            {
+                gl::Rectangle scissoredRenderArea =
+                    mDrawFramebuffer->getRotatedScissoredRenderArea(this);
+                ANGLE_TRY(mDrawFramebuffer->flushDeferredClears(this, scissoredRenderArea));
+            }
+
+            // TODO(jmadill): Don't end RenderPass. http://anglebug.com/4959
+            if (hasStartedRenderPass())
+            {
+                ANGLE_TRY(flushCommandsAndEndRenderPass());
+            }
+            mDrawFramebuffer->setReadOnlyDepthMode(true);
         }
 
         TextureVk *textureVk = vk::GetImpl(texture);
@@ -3878,8 +3907,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         const vk::SamplerHelper &samplerVk =
             sampler ? vk::GetImpl(sampler)->getSampler() : textureVk->getSampler();
 
-        mActiveTextures[textureUnit].texture = textureVk;
-        mActiveTextures[textureUnit].sampler = &samplerVk;
+        activeTexture.texture = textureVk;
+        activeTexture.sampler = &samplerVk;
 
         vk::ImageViewSubresourceSerial imageViewSerial = textureVk->getImageViewSubresourceSerial();
         mActiveTexturesDesc.update(textureUnit, imageViewSerial, samplerVk.getSamplerSerial());
@@ -4774,6 +4803,28 @@ VkWriteDescriptorSet *ContextVk::allocWriteDescriptorSets(size_t count)
 void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
 {
     mDefaultUniformStorage.setMinimumSizeForTesting(minSize);
+}
+
+angle::Result ContextVk::updateRenderPassDepthAccess()
+{
+    if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
+    {
+        vk::ResourceAccess access = GetDepthAccess(mState.getDepthStencilState());
+
+        if (access == vk::ResourceAccess::Write && mDrawFramebuffer->isReadOnlyDepthMode())
+        {
+            ANGLE_TRY(flushCommandsAndEndRenderPass());
+
+            // Clear read-only depth mode.
+            mDrawFramebuffer->setReadOnlyDepthMode(false);
+        }
+        else
+        {
+            mRenderPassCommands->onDepthAccess(access);
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 }  // namespace rx
