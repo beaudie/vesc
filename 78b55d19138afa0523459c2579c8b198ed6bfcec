@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfccd87e_ac58d073",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-15T01:23:17Z",
+      "side": 1,
+      "message": "PTAL\n\nThis change is necessary for the MSAA stuff to modify the render pass and avoid the blit.\n\nThe Android failures look similar to the same batch we skipped earlier:\ndEQP.GLES2/functional_fbo_render_recreate_colorbuffer_no_rebind_*\n\nCL that skipped similar tests:\n2342267: Disabling failing dEQP-GLES2.functional.fbo.render.recreate_* tests | https://chromium-review.googlesource.com/c/angle/angle/+/2342267\n\nI can\u0027t recreate them locally with my Pixel 4 yet, so I\u0027ll have to try downloading the isolate next to see if I can make any progress on it.   Otherwise, I may need to see if I can head into the office to grab my Pixel 2 to try and debug things.",
+      "revId": "78b55d19138afa0523459c2579c8b198ed6bfcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
