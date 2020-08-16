@@ -11,6 +11,7 @@
 #ifndef COMMON_FASTVECTOR_H_
 #define COMMON_FASTVECTOR_H_
 
+#include "bitset_utils.h"
 #include "common/debug.h"
 
 #include <algorithm>
@@ -504,6 +505,102 @@ class FastUnorderedSet final
 
   private:
     FastVector<T, N> mData;
+};
+
+template <typename Value, Value Invalid>
+class FastIntegerMapUsingBitSet final
+{
+  public:
+    FastIntegerMapUsingBitSet() {}
+    ~FastIntegerMapUsingBitSet() {}
+
+    ANGLE_INLINE void initialize(size_t size) { resize(size); }
+
+    ANGLE_INLINE void insert(uint32_t key, Value value)
+    {
+        ASSERT(!contains(key));
+        ensureCapacity(key);
+        ASSERT(capacity() > key);
+
+        uint32_t index  = key >> kShiftForDivision;
+        uint32_t offset = key % kWindowSize;
+
+        mKeyData[index].set(offset, true);
+        mValueData[key] = value;
+    }
+
+    ANGLE_INLINE bool contains(uint32_t key) const
+    {
+        uint32_t index  = key >> kShiftForDivision;
+        uint32_t offset = key % kWindowSize;
+
+        return (key < capacity()) && (mKeyData[index].test(offset));
+    }
+
+    ANGLE_INLINE bool get(uint32_t key, Value *out) const
+    {
+        if (!contains(key))
+        {
+            return false;
+        }
+
+        *out = mValueData[key];
+        return true;
+    }
+
+    ANGLE_INLINE void clear()
+    {
+        mKeyData.assign(mKeyData.capacity(), angle::BitSet64<kWindowSize>::Zero());
+    }
+
+    ANGLE_INLINE bool empty() const
+    {
+        for (auto it = mKeyData.cbegin(); it != mKeyData.cend(); it++)
+        {
+            if (it->any())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    ANGLE_INLINE size_t size() const
+    {
+        size_t valid_entries = 0;
+        for (auto it = mKeyData.cbegin(); it != mKeyData.cend(); it++)
+        {
+            valid_entries += it->count();
+        }
+        return valid_entries;
+    }
+
+  private:
+    ANGLE_INLINE size_t capacity() const { return mValueData.size(); }
+
+    ANGLE_INLINE void resize(size_t newSize)
+    {
+        size_t alignedSize = ((newSize + kOneLessThanKWindowSize) & ~(kOneLessThanKWindowSize));
+        size_t count       = alignedSize >> kShiftForDivision;
+
+        mKeyData.resize(count, angle::BitSet64<kWindowSize>::Zero());
+        mValueData.resize(alignedSize);
+    }
+
+    ANGLE_INLINE void ensureCapacity(uint32_t key)
+    {
+        if (capacity() <= key)
+        {
+            resize(key * 2);
+        }
+    }
+
+    static constexpr size_t kWindowSize             = 64;
+    static constexpr size_t kOneLessThanKWindowSize = kWindowSize - 1;
+    static constexpr size_t kShiftForDivision       = 6;
+
+    std::vector<angle::BitSet64<kWindowSize>> mKeyData;
+    std::vector<Value> mValueData;
 };
 }  // namespace angle
 
