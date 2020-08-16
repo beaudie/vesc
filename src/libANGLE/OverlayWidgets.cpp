@@ -371,6 +371,38 @@ void AppendWidgetDataHelper::AppendVulkanSecondaryCommandBufferPoolWaste(
     }
 }
 
+// FIXME: make a general helper like with RGs
+void AppendWidgetDataHelper::AppendVulkanRenderPassBufferCount(const overlay::Widget *widget,
+                                                               const gl::Extents &imageExtent,
+                                                               TextWidgetData *textWidget,
+                                                               GraphWidgetData *graphWidget,
+                                                               OverlayWidgetCounts *widgetCounts)
+{
+    const overlay::RunningHistogram *secondaryCommandBufferPoolWaste =
+        static_cast<const overlay::RunningHistogram *>(widget);
+
+    std::vector<size_t> histogram = CreateHistogram(secondaryCommandBufferPoolWaste->runningValues);
+    auto maxValueIter             = std::max_element(histogram.rbegin(), histogram.rend());
+    const size_t maxValue         = *maxValueIter;
+    const int32_t graphHeight     = std::abs(widget->coords[3] - widget->coords[1]);
+    const float graphScale        = static_cast<float>(graphHeight) / maxValue;
+    auto highestValueIter =
+        std::find_if(histogram.rbegin(), histogram.rend(), [](size_t value) { return value != 0; });
+
+    AppendGraphCommon(widget, imageExtent, histogram, 0, graphScale, graphWidget, widgetCounts);
+
+    if ((*widgetCounts)[WidgetInternalType::Text] <
+        kWidgetInternalTypeMaxWidgets[WidgetInternalType::Text])
+    {
+        std::ostringstream text;
+        size_t peak   = std::distance(maxValueIter, histogram.rend() - 1);
+        size_t theMax = std::distance(highestValueIter, histogram.rend() - 1);
+        text << "RP Buffer Count (Peak: " << peak << ", Max: " << theMax << ")";
+        AppendTextCommon(&secondaryCommandBufferPoolWaste->description, imageExtent, text.str(),
+                         textWidget, widgetCounts);
+    }
+}
+
 void AppendWidgetDataHelper::AppendVulkanWriteDescriptorSetCount(const overlay::Widget *widget,
                                                                  const gl::Extents &imageExtent,
                                                                  TextWidgetData *textWidget,
