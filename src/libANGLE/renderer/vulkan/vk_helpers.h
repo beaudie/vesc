@@ -833,6 +833,7 @@ class BufferHelper final : public Resource
 
 enum class BufferAccess
 {
+    Unused,
     Read,
     Write,
 };
@@ -1020,7 +1021,7 @@ class CommandBufferHelper : angle::NonCopyable
     // For Buffers, we track the read/write access type so we can enable simuntaneous reads.
     // Images have unique layouts unlike buffers therefore we don't support multi-read.
     static constexpr uint32_t kFastMapSize = 16;
-    angle::FastUnorderedMap<BufferSerial, BufferAccess, kFastMapSize> mUsedBuffers;
+    angle::FastIntegerMap<uint32_t, BufferAccess, BufferAccess::Unused> mUsedBuffers;
     angle::FastUnorderedSet<ImageSerial, kFastMapSize> mRenderPassUsedImages;
 };
 
