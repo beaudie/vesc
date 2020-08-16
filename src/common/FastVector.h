@@ -504,6 +504,51 @@ class FastUnorderedSet final
   private:
     FastVector<T, N> mData;
 };
+
+template <typename Key, typename T, T Invalid>
+class FastIntegerMap final
+{
+  public:
+    FastIntegerMap() {}
+    ~FastIntegerMap() {}
+
+    void insert(Key key, T value)
+    {
+        ASSERT(!contains(key));
+        ensureCapacity(key);
+        ASSERT(mData.size() > key);
+        mData[key] = value;
+    }
+
+    bool contains(Key key) const
+    {
+        if (key >= mData.size())
+            return false;
+        return mData[key] != Invalid;
+    }
+
+    bool get(Key key, T *out) const
+    {
+        if (!contains(key))
+            return false;
+        *out = mData[key];
+        return true;
+    }
+
+    void clear() { mData.clear(); }
+    bool empty() const { return mData.empty(); }
+
+  private:
+    void ensureCapacity(Key key)
+    {
+        if (mData.size() <= key)
+        {
+            mData.resize(key * 2, Invalid);
+        }
+    }
+
+    std::vector<T> mData;
+};
 }  // namespace angle
 
 #endif  // COMMON_FASTVECTOR_H_
