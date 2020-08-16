@@ -295,4 +295,47 @@ TEST(FastUnorderedSet, BasicUsage)
         EXPECT_TRUE(testMap.contains(i));
     }
 }
+
+// Basic functionality for FastIntegerMap
+TEST(FastIntegerMap, BasicUsage)
+{
+    using KeyValuePairs             = std::pair<int, std::string>;
+    std::set<KeyValuePairs> entries = {KeyValuePairs(17, "testing"), KeyValuePairs(63, "fast"),
+                                       KeyValuePairs(97, "integer"), KeyValuePairs(256, "map")};
+
+    FastIntegerMap<std::string> testMap;
+    EXPECT_TRUE(testMap.empty());
+
+    std::string str;
+    testMap.insert(entries.begin()->first, entries.begin()->second);
+    EXPECT_TRUE(testMap.contains(entries.begin()->first));
+    EXPECT_FALSE(testMap.contains(entries.end()->first));
+    EXPECT_FALSE(testMap.empty());
+    EXPECT_EQ(testMap.size(), 1u);
+    EXPECT_TRUE(testMap.get(entries.begin()->first, &str));
+    EXPECT_EQ(entries.begin()->second, str);
+    EXPECT_FALSE(testMap.get(1, &str));
+    EXPECT_NE(entries.end()->second, str);
+
+    testMap.clear();
+    EXPECT_TRUE(testMap.empty());
+    EXPECT_EQ(testMap.size(), 0u);
+
+    for (auto entry : entries)
+    {
+        testMap.insert(entry.first, entry.second);
+    }
+    EXPECT_EQ(testMap.size(), 4u);
+
+    for (auto entry : entries)
+    {
+        std::string str;
+        EXPECT_TRUE(testMap.get(entry.first, &str));
+        EXPECT_EQ(entry.second, str);
+    }
+
+    testMap.clear();
+    EXPECT_TRUE(testMap.empty());
+    EXPECT_EQ(testMap.size(), 0u);
+}
 }  // namespace angle
