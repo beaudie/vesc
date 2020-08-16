@@ -604,6 +604,8 @@ CommandBufferHelper::~CommandBufferHelper()
 void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
 {
     ASSERT(mUsedBuffers.empty());
+    constexpr size_t initialBufferCount = 256;
+    mUsedBuffers.initialize(initialBufferCount);
 
     mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
     // Push a scope into the pool allocator so we can easily free and re-init on reset()
@@ -614,13 +616,13 @@ void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
 
 bool CommandBufferHelper::usesBuffer(const BufferHelper &buffer) const
 {
-    return mUsedBuffers.contains(buffer.getBufferSerial());
+    return mUsedBuffers.contains(buffer.getBufferSerial().getValue());
 }
 
 bool CommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer) const
 {
     BufferAccess access;
-    if (!mUsedBuffers.get(buffer.getBufferSerial(), &access))
+    if (!mUsedBuffers.get(buffer.getBufferSerial().getValue(), &access))
     {
         return false;
     }
@@ -640,9 +642,9 @@ void CommandBufferHelper::bufferRead(ResourceUseList *resourceUseList,
     }
 
     ASSERT(!usesBufferForWrite(*buffer));
-    if (!mUsedBuffers.contains(buffer->getBufferSerial()))
+    if (!mUsedBuffers.contains(buffer->getBufferSerial().getValue()))
     {
-        mUsedBuffers.insert(buffer->getBufferSerial(), BufferAccess::Read);
+        mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Read);
     }
 }
 
@@ -666,7 +668,7 @@ void CommandBufferHelper::bufferWrite(ResourceUseList *resourceUseList,
     if (aliasingMode == AliasingMode::Disallowed)
     {
         ASSERT(!usesBuffer(*buffer));
-        mUsedBuffers.insert(buffer->getBufferSerial(), BufferAccess::Write);
+        mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
     }
 }
 
