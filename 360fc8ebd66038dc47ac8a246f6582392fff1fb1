@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "698771e7_d7727664",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-17T16:39:00Z",
+      "side": 1,
+      "message": "My understanding is that clearWithLoadOp is not always to end RP. For example, if yoiu bind a FBO and disable depth test and draw something into color buffer, that starts a RP. Then you enable depth buffer and clear depth attachment, that should not starts a new RP.",
+      "range": {
+        "startLine": 484,
+        "startChar": 33,
+        "endLine": 484,
+        "endChar": 62
+      },
+      "revId": "360fc8ebd66038dc47ac8a246f6582392fff1fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
