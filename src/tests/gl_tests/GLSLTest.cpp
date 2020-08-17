@@ -2960,7 +2960,19 @@ class WebGLGLSLTest : public GLSLTest
     WebGLGLSLTest() { setWebGLCompatibilityEnabled(true); }
 };
 
-TEST_P(WebGLGLSLTest, MaxVaryingVec4PlusFragCoord)
+class WebGLGLSLTest_ES2 : public GLSLTest
+{
+  protected:
+    WebGLGLSLTest_ES2() { setWebGLCompatibilityEnabled(true); }
+};
+
+class WebGLGLSLTest_ES3 : public GLSLTest
+{
+  protected:
+    WebGLGLSLTest_ES3() { setWebGLCompatibilityEnabled(true); }
+};
+
+TEST_P(WebGLGLSLTest_ES2, MaxVaryingVec4PlusFragCoord)
 {
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -2970,7 +2982,7 @@ TEST_P(WebGLGLSLTest, MaxVaryingVec4PlusFragCoord)
     VaryingTestBase(0, 0, 0, 0, 0, 0, maxVaryings, 0, true, false, false, false);
 }
 
-TEST_P(WebGLGLSLTest, MaxVaryingVec4PlusPointCoord)
+TEST_P(WebGLGLSLTest_ES2, MaxVaryingVec4PlusPointCoord)
 {
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -2980,7 +2992,7 @@ TEST_P(WebGLGLSLTest, MaxVaryingVec4PlusPointCoord)
     VaryingTestBase(0, 0, 0, 0, 0, 0, maxVaryings, 0, false, true, false, false);
 }
 
-TEST_P(WebGLGLSLTest, MaxPlusOneVaryingVec3)
+TEST_P(WebGLGLSLTest_ES2, MaxPlusOneVaryingVec3)
 {
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -2988,7 +3000,7 @@ TEST_P(WebGLGLSLTest, MaxPlusOneVaryingVec3)
     VaryingTestBase(0, 0, 0, 0, maxVaryings + 1, 0, 0, 0, false, false, false, false);
 }
 
-TEST_P(WebGLGLSLTest, MaxPlusOneVaryingVec3Array)
+TEST_P(WebGLGLSLTest_ES2, MaxPlusOneVaryingVec3Array)
 {
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -2996,7 +3008,7 @@ TEST_P(WebGLGLSLTest, MaxPlusOneVaryingVec3Array)
     VaryingTestBase(0, 0, 0, 0, 0, maxVaryings / 2 + 1, 0, 0, false, false, false, false);
 }
 
-TEST_P(WebGLGLSLTest, MaxVaryingVec3AndOneVec2)
+TEST_P(WebGLGLSLTest_ES2, MaxVaryingVec3AndOneVec2)
 {
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -3004,7 +3016,7 @@ TEST_P(WebGLGLSLTest, MaxVaryingVec3AndOneVec2)
     VaryingTestBase(0, 0, 1, 0, maxVaryings, 0, 0, 0, false, false, false, false);
 }
 
-TEST_P(WebGLGLSLTest, MaxPlusOneVaryingVec2)
+TEST_P(WebGLGLSLTest_ES2, MaxPlusOneVaryingVec2)
 {
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -3012,7 +3024,7 @@ TEST_P(WebGLGLSLTest, MaxPlusOneVaryingVec2)
     VaryingTestBase(0, 0, 2 * maxVaryings + 1, 0, 0, 0, 0, 0, false, false, false, false);
 }
 
-TEST_P(WebGLGLSLTest, MaxVaryingVec3ArrayAndMaxPlusOneFloatArray)
+TEST_P(WebGLGLSLTest_ES2, MaxVaryingVec3ArrayAndMaxPlusOneFloatArray)
 {
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -4248,7 +4260,7 @@ TEST_P(GLSLTest_ES3, ConstantStatementAsLoopInit)
 }
 
 // Test that uninitialized local variables are initialized to 0.
-TEST_P(GLSLTest_ES3, InitUninitializedLocals)
+TEST_P(WebGLGLSLTest_ES3, InitUninitializedLocals)
 {
     // Test skipped on Android GLES because local variable initialization is disabled.
     // http://anglebug.com/2046
@@ -4285,7 +4297,7 @@ TEST_P(GLSLTest_ES3, InitUninitializedLocals)
 
 // Test that uninitialized structs containing arrays of structs are initialized to 0. This
 // specifically tests with two different struct variables declared in the same block.
-TEST_P(GLSLTest, InitUninitializedStructContainingArrays)
+TEST_P(WebGLGLSLTest, InitUninitializedStructContainingArrays)
 {
     // Test skipped on Android GLES because local variable initialization is disabled.
     // http://anglebug.com/2046
@@ -4369,7 +4381,7 @@ TEST_P(GLSLTest, StructureNameMatchingTest)
 }
 
 // Test that an uninitialized nameless struct inside a for loop init statement works.
-TEST_P(GLSLTest_ES3, UninitializedNamelessStructInForInitStatement)
+TEST_P(WebGLGLSLTest_ES3, UninitializedNamelessStructInForInitStatement)
 {
     // Test skipped on Android GLES because local variable initialization is disabled.
     // http://anglebug.com/2046
@@ -4750,7 +4762,7 @@ TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInVertexShader)
 }
 
 // Test that a varying struct that's not initialized in the vertex shader links successfully.
-TEST_P(GLSLTest_ES3, VaryingStructNotInitializedInVertexShader)
+TEST_P(WebGLGLSLTest_ES3, VaryingStructNotInitializedInVertexShader)
 {
     // GLSL ES allows the vertex shader to declare but not initialize a varying (with a
     // specification that the varying values are undefined in the fragment stage).  See section 9.1
@@ -8244,10 +8256,13 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTest);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTestNoValidation);
 
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(WebGLGLSLTest);
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES3(GLSLTest_ES3);
 
-ANGLE_INSTANTIATE_TEST_ES2(WebGLGLSLTest);
+ANGLE_INSTANTIATE_TEST_ES2(WebGLGLSLTest_ES2);
+
+ANGLE_INSTANTIATE_TEST_ES3(WebGLGLSLTest_ES3);
 
 ANGLE_INSTANTIATE_TEST_ES31(GLSLTest_ES31);
