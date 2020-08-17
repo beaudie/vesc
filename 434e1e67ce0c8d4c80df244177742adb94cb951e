@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "4abbc4e7_128b5103",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-17T23:45:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bd96c4aa_f49235b2",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 21
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f326ada_d5860bc4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
@@ -155,6 +179,30 @@
       "side": 1,
       "message": "Done- changed BufferHelper instead.",
       "parentUuid": "2f326ada_d5860bc4",
+      "range": {
+        "startLine": 1366,
+        "startChar": 9,
+        "endLine": 1366,
+        "endChar": 20
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9aa34b9_6e131461",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-17T23:45:37Z",
+      "side": 1,
+      "message": "Not sure what the angle convention on the API name here, but I saw most of APIs that modify things starts with a verb. I personally like the updateReadBarrier better than readBarrier (which sounds like a retrieving API). But anyway, that is just my opinion, I think I will let you (and others if has any opinion on this) to decide.",
+      "parentUuid": "678da353_d5f1f223",
       "range": {
         "startLine": 1366,
         "startChar": 9,
