@@ -175,9 +175,15 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     void releaseOwnershipOfImage(const gl::Context *context);
 
     const vk::ImageView &getReadImageViewAndRecordUse(ContextVk *contextVk) const;
+    const vk::ImageView &getReadImageViewAndRecordUseWithColorspaceOverride(
+        ContextVk *contextVk,
+        bool useLinearColorspace) const;
     // A special view for cube maps as a 2D array, used with shaders that do texelFetch() and for
     // seamful cube map emulation.
     const vk::ImageView &getFetchImageViewAndRecordUse(ContextVk *contextVk) const;
+    const vk::ImageView &getFetchImageViewAndRecordUseWithColorspaceOverride(
+        ContextVk *contextVk,
+        bool useLinearColorspace) const;
     // A special view used for texture copies that shouldn't perform swizzle.
     const vk::ImageView &getCopyImageViewAndRecordUse(ContextVk *contextVk) const;
     angle::Result getStorageImageView(ContextVk *contextVk,
@@ -217,12 +223,25 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return mState.isBoundAsImageTexture(contextID);
     }
 
+    ANGLE_INLINE bool hasSRGBViews() const { return mRequiresSRGBViews; }
+
+    bool shouldUseLinearColorspaceWithSampler(const SamplerVk *samplerVk) const;
+    bool shouldUseLinearColorspaceWithTexelFetch(bool colorspaceWithSampler,
+                                                 bool texelFetchForcesDecodeOn) const;
+
   private:
+    bool formatShouldUseLinearColorspace() const;
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
     gl::ImageIndex getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const;
     uint32_t getNativeImageLevel(uint32_t frontendLevel) const;
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
+
+    const vk::ImageView &getReadImageViewAndRecordUseImpl(ContextVk *contextVk,
+                                                          bool useLinearImageview) const;
+
+    const vk::ImageView &getFetchImageViewAndRecordUseImpl(ContextVk *contextVk,
+                                                           bool useLinearImageview) const;
 
     void releaseAndDeleteImage(ContextVk *contextVk);
     angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);

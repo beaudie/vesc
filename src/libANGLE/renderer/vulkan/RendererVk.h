@@ -171,6 +171,9 @@ class RendererVk : angle::NonCopyable
     bool hasImageFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
     bool hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
 
+    bool hasCachedImageFormatFeatureBits(VkFormat format,
+                                         const VkFormatFeatureFlags featureBits) const;
+
     ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
         return mPriorities[priority];
@@ -265,6 +268,7 @@ class RendererVk : angle::NonCopyable
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
+    bool getTextureSRGBDecodeSupport() const;
 
     void queryDeviceExtensionFeatures(const ExtensionNameList &deviceExtensionNames);
 
@@ -279,7 +283,14 @@ class RendererVk : angle::NonCopyable
                                               const VkFormatFeatureFlags featureBits);
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
+    VkFormatFeatureFlags getCachedFormatFeatureBits(VkFormat format,
+                                                    const VkFormatFeatureFlags featureBits) const;
+
+    template <VkFormatFeatureFlags VkFormatProperties::*features>
     bool hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
+
+    template <VkFormatFeatureFlags VkFormatProperties::*features>
+    bool hasCachedFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits) const;
 
     angle::Result cleanupGarbage(bool block);
 

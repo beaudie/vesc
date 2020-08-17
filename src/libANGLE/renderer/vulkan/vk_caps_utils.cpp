@@ -48,11 +48,6 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeExtensions.setTextureExtensionSupport(mNativeTextureCaps);
 
-    // TODO: http://anglebug.com/3609
-    // Due to a dEQP bug, this extension cannot be exposed until EXT_texture_sRGB_decode is
-    // implemented
-    mNativeExtensions.sRGBR8EXT = false;
-
     // To ensure that ETC2/EAC formats are enabled only on hardware that supports them natively,
     // this flag is not set by the function above and must be set explicitly. It exposes
     // ANGLE_compressed_texture_etc extension string.
@@ -190,9 +185,6 @@ void RendererVk::ensureCapsInitialized() const
     // creating a cube of any of these formats should be implicitly supported.
     mNativeExtensions.depthTextureCubeMapOES =
         mNativeExtensions.depthTextureOES && mNativeExtensions.packedDepthStencilOES;
-
-    // Vulkan natively supports format reinterpretation
-    mNativeExtensions.textureSRGBOverride = mNativeExtensions.sRGB;
 
     mNativeExtensions.gpuShader5EXT = vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures);
 
@@ -572,6 +564,79 @@ void RendererVk::ensureCapsInitialized() const
         mNativeCaps.maxClipDistances =
             std::min<GLuint>(limitsVk.maxClipDistances, gl::IMPLEMENTATION_MAX_CLIP_DISTANCES);
     }
+
+    // Vulkan natively supports format reinterpretation, but we still require support for all
+    // formats we may reinterpret to
+    mNativeExtensions.textureSRGBOverride = true;
+    mNativeExtensions.textureSRGBDecode   = getTextureSRGBDecodeSupport();
+}
+
+static bool formatReinterpretationSupported(const GLenum *optionalSizedFormats,
+                                            size_t N,
+                                            const RendererVk *rendererVk,
+                                            bool checkLinearFormat)
+{
+    for (size_t i = 0; i < N; i++)
+    {
+        GLenum glFormat = optionalSizedFormats[i];
+
+        const gl::TextureCaps &baseCaps = rendererVk->getNativeTextureCaps().get(glFormat);
+        if (baseCaps.texturable && baseCaps.filterable)
+        {
+            const vk::Format &vkFormat = rendererVk->getFormat(glFormat);
+
+            VkFormat reinterpretedFormat = checkLinearFormat
+                                               ? vk::ConvertToLinear(vkFormat.vkImageFormat)
+                                               : vk::ConvertToNonLinear(vkFormat.vkImageFormat);
+            ASSERT(reinterpretedFormat != VK_FORMAT_UNDEFINED);
+
+            constexpr uint32_t kBitsSampleFilter =
+                VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT |
+                VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+
+            if (!rendererVk->hasCachedImageFormatFeatureBits(reinterpretedFormat,
+                                                             kBitsSampleFilter))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+template <size_t N>
+static bool reinterpretToLinearSupported(const GLenum (&optionalSizedNonLinearFormats)[N],
+                                         const RendererVk *rendererVk)
+{
+    return formatReinterpretationSupported(optionalSizedNonLinearFormats, N, rendererVk, true);
+}
+template <size_t N>
+static bool reinterpretToNonlinearSupported(const GLenum (&optionalSizedLinearFormats)[N],
+                                            const RendererVk *rendererVk)
+{
+    return formatReinterpretationSupported(optionalSizedLinearFormats, N, rendererVk, false);
+}
+
+bool RendererVk::getTextureSRGBDecodeSupport() const
+{
+    // GL_SRGB and GL_SRGB_ALPHA unsized formats are also required by the spec, but the only valid
+    // type for them is GL_UNSIGNED_BYTE, so they are fully included in the sized formats listed
+    // here
+    constexpr GLenum optionalSizedNonLinearFormats[] = {
+        GL_SRGB8,
+        GL_SRGB8_ALPHA8_EXT,
+        GL_COMPRESSED_SRGB_S3TC_DXT1_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT,
+    };
+
+    if (!reinterpretToLinearSupported(optionalSizedNonLinearFormats, this))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 namespace vk

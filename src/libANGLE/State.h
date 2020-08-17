@@ -652,9 +652,10 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_READ_FRAMEBUFFER,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
         DIRTY_OBJECT_VERTEX_ARRAY,
-        DIRTY_OBJECT_TEXTURES,  // Top-level dirty bit. Also see mDirtyTextures.
-        DIRTY_OBJECT_IMAGES,    // Top-level dirty bit. Also see mDirtyImages.
-        DIRTY_OBJECT_SAMPLERS,  // Top-level dirty bit. Also see mDirtySamplers.
+        DIRTY_OBJECT_TEXTURES,       // Top-level dirty bit. Also see mDirtyTextures.
+        DIRTY_OBJECT_IMAGES,         // Top-level dirty bit. Also see mDirtyImages.
+        DIRTY_OBJECT_SAMPLERS,       // Top-level dirty bit. Also see mDirtySamplers.
+        DIRTY_OBJECT_TEXTURE_UNITS,  // Top-level dirty bit. Also see mDirtyTexureUnits.
         DIRTY_OBJECT_PROGRAM,
         DIRTY_OBJECT_PROGRAM_PIPELINE,
         DIRTY_OBJECT_UNKNOWN,
@@ -681,6 +682,8 @@ class State : angle::NonCopyable
     void setObjectDirty(GLenum target);
     void setTextureDirty(size_t textureUnitIndex);
     void setSamplerDirty(size_t samplerIndex);
+
+    ANGLE_INLINE void setTextureUnitsDirty() { mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS); }
 
     ANGLE_INLINE void setReadFramebufferDirty()
     {
@@ -875,6 +878,7 @@ class State : angle::NonCopyable
     angle::Result syncTextures(const Context *context, Command command);
     angle::Result syncImages(const Context *context, Command command);
     angle::Result syncSamplers(const Context *context, Command command);
+    angle::Result syncTextureUnits(const Context *context, Command command);
     angle::Result syncProgram(const Context *context, Command command);
     angle::Result syncProgramPipeline(const Context *context, Command command);
 
@@ -883,7 +887,8 @@ class State : angle::NonCopyable
         &State::syncTexturesInit,    &State::syncImagesInit,      &State::syncReadAttachments,
         &State::syncDrawAttachments, &State::syncReadFramebuffer, &State::syncDrawFramebuffer,
         &State::syncVertexArray,     &State::syncTextures,        &State::syncImages,
-        &State::syncSamplers,        &State::syncProgram,         &State::syncProgramPipeline,
+        &State::syncSamplers,        &State::syncTextureUnits,    &State::syncProgram,
+        &State::syncProgramPipeline,
     };
 
     // Robust init must happen before Framebuffer init for the Vulkan back-end.
@@ -902,8 +907,9 @@ class State : angle::NonCopyable
     static_assert(DIRTY_OBJECT_TEXTURES == 7, "check DIRTY_OBJECT_TEXTURES index");
     static_assert(DIRTY_OBJECT_IMAGES == 8, "check DIRTY_OBJECT_IMAGES index");
     static_assert(DIRTY_OBJECT_SAMPLERS == 9, "check DIRTY_OBJECT_SAMPLERS index");
-    static_assert(DIRTY_OBJECT_PROGRAM == 10, "check DIRTY_OBJECT_PROGRAM index");
-    static_assert(DIRTY_OBJECT_PROGRAM_PIPELINE == 11, "check DIRTY_OBJECT_PROGRAM_PIPELINE index");
+    static_assert(DIRTY_OBJECT_TEXTURE_UNITS == 10, "check DIRTY_OBJECT_TEXTURE_UNITS index");
+    static_assert(DIRTY_OBJECT_PROGRAM == 11, "check DIRTY_OBJECT_PROGRAM index");
+    static_assert(DIRTY_OBJECT_PROGRAM_PIPELINE == 12, "check DIRTY_OBJECT_PROGRAM_PIPELINE index");
 
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
@@ -1069,6 +1075,7 @@ class State : angle::NonCopyable
     mutable AttributesMask mDirtyCurrentValues;
     ActiveTextureMask mDirtyTextures;
     ActiveTextureMask mDirtySamplers;
+    ActiveTextureMask mDirtyTextureUnits;
     ImageUnitMask mDirtyImages;
 
     // The Overlay object, used by the backend to render the overlay.

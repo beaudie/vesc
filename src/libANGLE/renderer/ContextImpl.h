@@ -188,6 +188,11 @@ class ContextImpl : public GLImplFactory
                                     const gl::State::DirtyBits &dirtyBits,
                                     const gl::State::DirtyBits &bitMask) = 0;
 
+    // Synchronize state for a texture unit with a bound texture-sampler pair
+    virtual angle::Result syncTextureUnit(const gl::Context *context,
+                                          gl::Texture *texture,
+                                          gl::Sampler *sampler);
+
     // Disjoint timer queries
     virtual GLint getGPUDisjoint() = 0;
     virtual GLint64 getTimestamp() = 0;
