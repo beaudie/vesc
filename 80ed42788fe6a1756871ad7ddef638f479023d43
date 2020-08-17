@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afcdad5a_8034a6d3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-17T18:53:42Z",
+      "side": 1,
+      "message": "So, if the app enables depth (per processing of DIRTY_BIT_DEPTH_TEST_ENABLED in SyncState()), but the app has also set glDepthMastk(GL_FALSE), we\u0027ll consider the depth access \"read only\".  True?\n\nIs/should there be any interaction with RenderTargetVk::mContentDefined (which also affects the loadOp, like this CL does)?",
+      "revId": "80ed42788fe6a1756871ad7ddef638f479023d43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
