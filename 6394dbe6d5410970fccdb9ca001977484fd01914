@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3152cb2_c835025f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-17T16:53:09Z",
+      "side": 1,
+      "message": "IShaderReadOnlyLayout?",
+      "range": {
+        "startLine": 530,
+        "startChar": 5,
+        "endLine": 530,
+        "endChar": 23
+      },
+      "revId": "6394dbe6d5410970fccdb9ca001977484fd01914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3909bf5_c440247e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-17T16:53:09Z",
+      "side": 1,
+      "message": "Should be VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL?",
+      "range": {
+        "startLine": 532,
+        "startChar": 33,
+        "endLine": 532,
+        "endChar": 75
+      },
+      "revId": "6394dbe6d5410970fccdb9ca001977484fd01914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
