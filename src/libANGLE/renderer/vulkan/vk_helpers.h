@@ -980,8 +980,8 @@ class CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
-    void setDepthTestEnabled() { mDepthTestEverEnabled = true; }
-    void setStencilTestEnabled() { mStencilTestEverEnabled = true; }
+    void onDepthAccess(ResourceAccess access) { UpdateAccess(&mDepthStartAccess, access); }
+    void onStencilAccess(ResourceAccess access) { UpdateAccess(&mStencilStartAccess, access); }
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
@@ -1011,8 +1011,9 @@ class CommandBufferHelper : angle::NonCopyable
     bool mIsRenderPassCommandBuffer;
     bool mMergeBarriers;
 
-    bool mDepthTestEverEnabled;
-    bool mStencilTestEverEnabled;
+    ResourceAccess mDepthStartAccess;
+    ResourceAccess mStencilStartAccess;
+
     uint32_t mDepthStencilAttachmentIndex;
 
     // Tracks resources used in the command buffer.
