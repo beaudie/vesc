@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "acb941d9_5dfb33f3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T23:30:00Z",
+      "side": 1,
+      "message": "Note- went with ReadOnly/Write to match our nomenclature.",
+      "parentUuid": "434a3a12_dbd77d9b",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 0
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "183e09ff_7efa54be",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 11
