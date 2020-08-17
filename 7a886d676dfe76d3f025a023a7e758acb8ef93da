@@ -34,6 +34,29 @@
       "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dbd5c6f7_85e70827",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-17T19:23:29Z",
+      "side": 1,
+      "message": "I see this value is 0, and seemingly unused. It looks a bit misleading, I\u0027d just initialize to 0.",
+      "range": {
+        "startLine": 28,
+        "startChar": 38,
+        "endLine": 28,
+        "endChar": 49
+      },
+      "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
