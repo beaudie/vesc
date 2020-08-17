@@ -859,7 +859,7 @@ class CommandBufferHelper : angle::NonCopyable
     ~CommandBufferHelper();
 
     // General Functions (non-renderPass specific)
-    void initialize(bool isRenderPassCommandBuffer, bool mergeBarriers);
+    void initialize(bool isRenderPassCommandBuffer);
 
     void bufferRead(ResourceUseList *resourceUseList,
                     VkAccessFlags readAccessType,
@@ -885,7 +885,7 @@ class CommandBufferHelper : angle::NonCopyable
 
     angle::Result flushToPrimary(ContextVk *contextVk, PrimaryCommandBuffer *primary);
 
-    void executeBarriers(PrimaryCommandBuffer *primary);
+    void executeBarriers(ContextVk *contextVk, PrimaryCommandBuffer *primary);
 
     void setHasRenderPass(bool hasRenderPass) { mIsRenderPassCommandBuffer = hasRenderPass; }
     void reset();
@@ -1016,7 +1016,6 @@ class CommandBufferHelper : angle::NonCopyable
     bool mRebindTransformFeedbackBuffers;
 
     bool mIsRenderPassCommandBuffer;
-    bool mMergeBarriers;
 
     ResourceAccess mDepthStartAccess;
     ResourceAccess mStencilStartAccess;
