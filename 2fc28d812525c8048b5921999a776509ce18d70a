@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0cae5755_824cb3cf",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1745,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T17:41:05Z",
+      "side": 1,
+      "message": "nit: use -1, it\u0027s the special value in the spec. we should crash if it\u0027s \u003c -1",
+      "range": {
+        "startLine": 1745,
+        "startChar": 28,
+        "endLine": 1745,
+        "endChar": 29
+      },
+      "revId": "2fc28d812525c8048b5921999a776509ce18d70a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
