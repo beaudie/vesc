@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db6ef931_2d5c607f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-08-17T09:22:37Z",
+      "side": 1,
+      "message": "Hi Jamie,Shahbaz.\nThis patch refers to the issue angleproject:4952.\nI triggered the \"CQ DRY RUN\" and got some angle_end2end_tests failures on NV/Intel.\nI select the following tests to confirm,but they can all pass on our local NV/Intel platform.\n\nhttps://ci.chromium.org/p/chromium/builders/try/linux-angle-rel/10518?\nangle_end2end_tests on NVIDIA GPU on Linux failed because of:\nGLSLTest_ES3.InitUninitializedLocals/ES3_Vulkan\nangle_end2end_tests on Intel GPU on Linux failed because of:\nGLSLTest_ES3.DifferentStatementsInsideSwitch/ES3_Vulkan\nGLSLTest_ES31.MixOfAllResources/ES3_1_OpenGL\nGLSLTest_ES3.FlatVaryingUsedInFoldedTernary/ES3_Vulkan\nGLSLTest_ES31.ArrayStructArrayArraySampler/ES3_1_OpenGL",
+      "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
