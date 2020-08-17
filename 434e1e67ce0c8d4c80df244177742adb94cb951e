@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "434a3a12_dbd77d9b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T23:27:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "760eccdf_9dbce41f",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 0
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "183e09ff_7efa54be",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 11
@@ -36,6 +60,30 @@
       "writtenOn": "2020-08-17T18:43:35Z",
       "side": 1,
       "message": "I personally like this better than the boolean. But maybe add Shabi to the review list?",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 21
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd96c4aa_f49235b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T23:27:33Z",
+      "side": 1,
+      "message": "Shabi is out until next Monday - can we proceed with the code and follow up with changes if if necessary when Shabi\u0027s back? FWIW using an enum over a bool is non-controversial in ANGLE.",
+      "parentUuid": "183e09ff_7efa54be",
       "range": {
         "startLine": 90,
         "startChar": 4,
@@ -68,6 +116,30 @@
       "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "678da353_d5f1f223",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T23:27:33Z",
+      "side": 1,
+      "message": "Done- changed BufferHelper instead.",
+      "parentUuid": "2f326ada_d5860bc4",
+      "range": {
+        "startLine": 1366,
+        "startChar": 9,
+        "endLine": 1366,
+        "endChar": 20
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
