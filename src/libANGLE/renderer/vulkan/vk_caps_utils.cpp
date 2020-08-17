@@ -567,7 +567,7 @@ void RendererVk::ensureCapsInitialized() const
 
     // Vulkan natively supports format reinterpretation, but we still require support for all
     // formats we may reinterpret to
-    mNativeExtensions.textureSRGBOverride = true;
+    mNativeExtensions.textureSRGBOverride = getTextureSRGBOverrideSupport();
     mNativeExtensions.textureSRGBDecode   = getTextureSRGBDecodeSupport();
 }
 
@@ -615,6 +615,70 @@ static bool reinterpretToNonlinearSupported(const GLenum (&optionalSizedLinearFo
                                             const RendererVk *rendererVk)
 {
     return formatReinterpretationSupported(optionalSizedLinearFormats, N, rendererVk, false);
+}
+
+bool RendererVk::getTextureSRGBOverrideSupport() const
+{
+    // If the given linear format is supported, we also need to support its corresponding nonlinear
+    // format. If the given linear format is NOT supported, we don't care about its corresponding
+    // nonlinear format.
+    constexpr GLenum optionalLinearFormats[]     = {GL_RGB8,
+                                                GL_RGBA8,
+                                                GL_COMPRESSED_RGB8_ETC2,
+                                                GL_COMPRESSED_RGBA8_ETC2_EAC,
+                                                GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+                                                GL_COMPRESSED_RGBA_ASTC_4x4,
+                                                GL_COMPRESSED_RGBA_ASTC_5x4,
+                                                GL_COMPRESSED_RGBA_ASTC_5x5,
+                                                GL_COMPRESSED_RGBA_ASTC_6x5,
+                                                GL_COMPRESSED_RGBA_ASTC_6x6,
+                                                GL_COMPRESSED_RGBA_ASTC_8x5,
+                                                GL_COMPRESSED_RGBA_ASTC_8x6,
+                                                GL_COMPRESSED_RGBA_ASTC_8x8,
+                                                GL_COMPRESSED_RGBA_ASTC_10x5,
+                                                GL_COMPRESSED_RGBA_ASTC_10x6,
+                                                GL_COMPRESSED_RGBA_ASTC_10x8,
+                                                GL_COMPRESSED_RGBA_ASTC_10x10,
+                                                GL_COMPRESSED_RGBA_ASTC_12x10,
+                                                GL_COMPRESSED_RGBA_ASTC_12x12};
+    constexpr GLenum optionalS3TCLinearFormats[] = {
+        GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT};
+    constexpr GLenum optionalR8LinearFormats[]   = {GL_R8};
+    constexpr GLenum optionalBPTCLinearFormats[] = {GL_COMPRESSED_RGBA_BPTC_UNORM_EXT};
+
+    if (!reinterpretToNonlinearSupported(optionalLinearFormats, this))
+    {
+        return false;
+    }
+
+    if (mNativeExtensions.textureCompressionS3TCsRGB == true)
+    {
+        if (!reinterpretToNonlinearSupported(optionalS3TCLinearFormats, this))
+        {
+            return false;
+        }
+    }
+
+    if (mNativeExtensions.sRGBR8EXT == true)
+    {
+        if (!reinterpretToNonlinearSupported(optionalR8LinearFormats, this))
+        {
+            return false;
+        }
+    }
+
+    // TODO: http://anglebug.com/4932 check EXT_texture_sRGB_RG8
+
+    if (mNativeExtensions.textureCompressionBPTC == true)
+    {
+        if (!reinterpretToNonlinearSupported(optionalBPTCLinearFormats, this))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool RendererVk::getTextureSRGBDecodeSupport() const
