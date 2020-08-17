@@ -212,6 +212,30 @@
       "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b73e986c_447463ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T23:55:42Z",
+      "side": 1,
+      "message": "I was thinking about this too. I thought about \"issueBarrier\"... since update is a bit too loose. We want it to be clear this is recording a barrier not updating one. I found \"readBarrier\" clearer than \"issueReadBarrier\" or \"updateReadBarrier\". Also, FWIW, we do use verbs in names although we don\u0027t always begin with one. And \"barrier\" itself is a verb. So we could do something like \"barrierForRead\" for example. tl;dr it\u0027s mostly bikeshedding.",
+      "parentUuid": "d9aa34b9_6e131461",
+      "range": {
+        "startLine": 1366,
+        "startChar": 9,
+        "endLine": 1366,
+        "endChar": 20
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
