@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7dc3d2b_32306d3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-17T22:17:00Z",
+      "side": 1,
+      "message": "I can\u0027t update RenderTargetVk::mContentDefined at the end of the render pass, so must deal with it during ContextVk::syncState().\n\nI also updated some of the dirty-bit processing per another CL of Jamie\u0027s.",
+      "revId": "268fcd22f779da13ddcfd023715028fb7896123e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
