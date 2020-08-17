@@ -46,6 +46,30 @@
       "revId": "360fc8ebd66038dc47ac8a246f6582392fff1fb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9890b9df_fe42d7fa",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-17T17:30:27Z",
+      "side": 1,
+      "message": "True. So this is the case either RP not started, or started but empty, or started but with a stale FB. \nstarted but empty: Shouldn\u0027t we still not end RP?\nstarted but with a different RP: I can see why you do this now. But onRenderPassFinished is intended to force a new RP next time setupDraw is called, if that is removed, not just clear needs to handle it, setupDraw (and all other possible places that would normally start a new RP) also needs to change. If we truley pick tyhe route to defer end and start RP as much as possible, that is fine to me as well. Some explanation/comment in the source will be helpful.",
+      "parentUuid": "a5efd440_19e29389",
+      "range": {
+        "startLine": 484,
+        "startChar": 33,
+        "endLine": 484,
+        "endChar": 62
+      },
+      "revId": "360fc8ebd66038dc47ac8a246f6582392fff1fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
