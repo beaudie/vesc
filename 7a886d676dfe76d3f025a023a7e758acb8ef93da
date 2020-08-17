@@ -16,6 +16,24 @@
       "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a46b6fe5_057ed7c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T13:59:46Z",
+      "side": 1,
+      "message": "Hi Amy, thank you for the patch!\n\nOne question - where do you see MixOfAllResources/DifferentStatementsInsideSwitch failing? I don\u0027t see them in this try job. To me it looks like all the failures are related to uninitialized values.\n\nTo fix these failures we need to convert the uninitialized tests into WebGL tests. You can move the ES 2 tests into WebGLGLSLTest. For the ES3 ones we can make a new WebGL2GLSLTest test suite.\n\nYour CL is correct. The tests are being too strict. In non-WebGL GLSL the initial values are undefined:\n\n\u003e Reading a variable before writing (or initializing) it is legal, however the value is undefined.\n\n(From the GLSL spec)",
+      "parentUuid": "db6ef931_2d5c607f",
+      "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
