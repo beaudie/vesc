@@ -22,6 +22,30 @@
       "revId": "360fc8ebd66038dc47ac8a246f6582392fff1fb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5efd440_19e29389",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-17T16:56:10Z",
+      "side": 1,
+      "message": "This was relying on having already ended the render pass when a new draw FBO attachment was bound.   That is removed with this CL (the onRenderPassFinished() in ContextVk::syncState()), so we need to end it here if we have a started render pass for a different (previous) FBO.\n\nThe sequence of events you described should fall into the \u0027if\u0027 above, since the render pass was started by the draw command (hasStartedRenderPassWithCommands() \u003d\u003d true) and then the same FBO has the depth attachment cleared (hasStartedRenderPassWithFramebuffer() \u003d\u003d true).   However, if a new FBO is bound as the draw attachment, we will need to end the render pass by falling into the \u0027else\u0027 conditional here.",
+      "parentUuid": "698771e7_d7727664",
+      "range": {
+        "startLine": 484,
+        "startChar": 33,
+        "endLine": 484,
+        "endChar": 62
+      },
+      "revId": "360fc8ebd66038dc47ac8a246f6582392fff1fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
