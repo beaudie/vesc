@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfb05d3b_aee9fd9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-17T15:31:40Z",
+      "side": 1,
+      "message": "Excellent, thank you. LGTM. Jonah want to do the second review?",
+      "revId": "3705407c7f0d3762f06f5b22ce06e079b9330019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
