@@ -46,6 +46,30 @@
       "revId": "63d07d34ec22bc8bc964b68f5a79c013522c047b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0db8ea06_b13e3461",
+        "filename": "extensions/EGL_ANGLE_d3d_texture_client_buffer.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-17T15:22:17Z",
+      "side": 1,
+      "message": "I believe NV12 textures accessed as a 2D array textures to with the array index determining which YUV plane is sampled/rendered to.  Are there arrays of NV12 textures?\n\nThere are a few options for specifying the index I think:\n - EGL_EXT_image_dma_buf_import uses EGL_DMA_BUF_PLANE0_FD_EXT, EGL_DMA_BUF_PLANE1_FD_EXT, etc\n - EGL_KHR_gl_texture_3D_image uses EGL_GL_TEXTURE_ZOFFSET_KHR\n - EGL_IMG_image_plane_attribs uses EGL_NATIVE_BUFFER_PLANE_OFFSET_IMG\n\nI would suggest EGL_D3D_TEXTURE_ZOFFSET_ANGLE.",
+      "parentUuid": "56a175de_afc8dff3",
+      "range": {
+        "startLine": 82,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 79
+      },
+      "revId": "63d07d34ec22bc8bc964b68f5a79c013522c047b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
