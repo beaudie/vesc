@@ -927,17 +927,72 @@ class CommandBufferHelper : angle::NonCopyable
         SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
     }
 
-    void invalidateRenderPassDepthAttachment(size_t attachmentIndex)
+    void invalidateRenderPassDepthAttachment()
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        mDepthEverInvalidated = true;
+        mDepthInvalidated     = true;
     }
 
-    void invalidateRenderPassStencilAttachment(size_t attachmentIndex)
+    void invalidateRenderPassStencilAttachment()
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        SetBitField(mAttachmentOps[attachmentIndex].stencilStoreOp,
-                    VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        mStencilEverInvalidated = true;
+        mStencilInvalidated     = true;
+    }
+
+    bool shouldDontCareDepthAttachment()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (mDepthEverInvalidated && mDepthInvalidated && !mDepthEnablement)
+        {
+            // The depth buffer attachment has has been invalidated at least once, is currently
+            // invalidated, and has had depth functionality disabled (i.e. since we don't track
+            // draws, we are conservative and assume that a draw may have occured since
+            // invalidation unless depth functionality has also been disabled).  Therefore, its
+            // storeOp should be DONT_CARE.
+            return true;
+        }
+        return false;
+    }
+
+    bool shouldDontCareStencilAttachment()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (mStencilTestEverEnabled && mStencilInvalidated && !mStencilEnablement)
+        {
+            // The stencil buffer attachment has has been invalidated at least once, is currently
+            // invalidated, and has had stencil functionality disabled (i.e. since we don't track
+            // draws, we are conservative and assume that a draw may have occured since
+            // invalidation unless stencil functionality has also been disabled).  Therefore, its
+            // stencilStoreOp should be DONT_CARE.
+            return true;
+        }
+        return false;
+    }
+
+    bool shouldRestoreDepthAttachment()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (mDepthEverInvalidated && !mDepthInvalidated)
+        {
+            // The depth buffer attachment has has been invalidated, but no longer is.  Therefore,
+            // the corresponding RenderTargetVk::mContentDefined should be true.
+            return true;
+        }
+        return false;
+    }
+
+    bool shouldRestoreStencilAttachment()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (mStencilTestEverEnabled && !mStencilInvalidated)
+        {
+            // The stencil buffer attachment has has been invalidated, but no longer is.  Therefore,
+            // the corresponding RenderTargetVk::mContentDefined should be true.
+            return true;
+        }
+        return false;
     }
 
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
@@ -980,8 +1035,35 @@ class CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
-    void setDepthTestEnabled() { mDepthTestEverEnabled = true; }
-    void setStencilTestEnabled() { mStencilTestEverEnabled = true; }
+    void setDepthTestEnabled(const gl::DepthStencilState &dsState)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        bool enabled = (dsState.depthTest && dsState.depthMask);
+        if (enabled)
+        {
+            mDepthTestEverEnabled = true;
+            if (mDepthInvalidated && !mDepthEnablement)
+            {
+                // Re-enabling depth undoes the depth attachment's previous invalidation
+                mDepthInvalidated = false;
+            }
+        }
+        mDepthEnablement = enabled;
+    }
+    void setStencilTestEnabled(bool enabled)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        if (enabled)
+        {
+            mStencilTestEverEnabled = true;
+            if (mStencilInvalidated && !mStencilEnablement)
+            {
+                // Re-enabling stencil undoes the stencil attachment's previous invalidation
+                mStencilInvalidated = false;
+            }
+        }
+        mStencilEnablement = enabled;
+    }
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
@@ -1011,8 +1093,17 @@ class CommandBufferHelper : angle::NonCopyable
     bool mIsRenderPassCommandBuffer;
     bool mMergeBarriers;
 
+    // Bools to track whether to optimize the loadOp to DONT_CARE
     bool mDepthTestEverEnabled;
     bool mStencilTestEverEnabled;
+    // Bools to track whether to optimize the storeOp to DONT_CARE
+    bool mDepthEverInvalidated;
+    bool mDepthInvalidated;
+    bool mDepthEnablement;
+    bool mStencilEverInvalidated;
+    bool mStencilInvalidated;
+    bool mStencilEnablement;
+    // Keep track of the depth/stencil attachment index
     uint32_t mDepthStencilAttachmentIndex;
 
     // Tracks resources used in the command buffer.

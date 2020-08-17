@@ -547,6 +547,12 @@ CommandBufferHelper::CommandBufferHelper()
       mMergeBarriers(false),
       mDepthTestEverEnabled(false),
       mStencilTestEverEnabled(false),
+      mDepthEverInvalidated(false),
+      mDepthInvalidated(false),
+      mDepthEnablement(false),
+      mStencilEverInvalidated(false),
+      mStencilInvalidated(false),
+      mStencilEnablement(false),
       mDepthStencilAttachmentIndex(kInvalidAttachmentIndex)
 {}
 
@@ -744,6 +750,17 @@ void CommandBufferHelper::endRenderPass()
     if (mDepthStencilAttachmentIndex == kInvalidAttachmentIndex)
     {
         return;
+    }
+
+    // Address invalidated depth/stencil attachments
+    if (shouldDontCareDepthAttachment())
+    {
+        mAttachmentOps[mDepthStencilAttachmentIndex].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    }
+    if (shouldDontCareStencilAttachment())
+    {
+        mAttachmentOps[mDepthStencilAttachmentIndex].stencilStoreOp =
+            VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
 
     // Depth/Stencil buffer optimization: if we are loading or clearing the buffer, but the
@@ -951,6 +968,12 @@ void CommandBufferHelper::reset()
         mRebindTransformFeedbackBuffers    = false;
         mDepthTestEverEnabled              = false;
         mStencilTestEverEnabled            = false;
+        mDepthEverInvalidated              = false;
+        mDepthInvalidated                  = false;
+        mDepthEnablement                   = false;
+        mStencilEverInvalidated            = false;
+        mStencilInvalidated                = false;
+        mStencilEnablement                 = false;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
         mRenderPassUsedImages.clear();
     }
