@@ -70,6 +70,30 @@
       "revId": "63d07d34ec22bc8bc964b68f5a79c013522c047b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f78c2a3_606d227b",
+        "filename": "extensions/EGL_ANGLE_d3d_texture_client_buffer.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-08-17T17:47:54Z",
+      "side": 1,
+      "message": "\u003e I believe NV12 textures accessed as a 2D array textures to with the array index determining which YUV plane is sampled/rendered to.  Are there arrays of NV12 textures?\n\nYes, we have arrays of NV12 textures: https://source.chromium.org/chromium/chromium/src/+/master:media/gpu/windows/d3d11_video_decoder.cc;drc\u003d1f7e8b67b050415aa2756623901b99a10dd9c83a;l\u003d712\n\nIn D3D12 you can access the Y and UV planes explicitly as subresources, but in D3D11 you can only do that implicitly by creating SRVs with the correct format.  So calling it subresource index would be more appropriate than calling it array index.\n\nI was looking at the IO surface extension and thought EGL_D3D_TEXTURE_PLANE_ANGLE might be ok or EGL_D3D_TEXTURE_SUBRESOURCE_ANGLE (or SUBRESOURCE_INDEX) etc.\n\nAlso, how much validation do we want for this extension.  I think having the client specify the internal format, type, width and height in addition to the plane might be good, but it needs a lot of boilerplate code especially since you can bind regular R8G8B8A8 textures to R8 or R8G8 SRVs.  Not sure if we want to allow or disallow that much generality.",
+      "parentUuid": "0db8ea06_b13e3461",
+      "range": {
+        "startLine": 82,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 79
+      },
+      "revId": "63d07d34ec22bc8bc964b68f5a79c013522c047b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
