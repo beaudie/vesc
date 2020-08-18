@@ -626,6 +626,11 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::BufferHelper &getEmptyBuffer() { return mEmptyBuffer; }
     vk::DynamicBuffer *getStagingBufferStorage() { return &mStagingBufferStorage; }
 
+    void addTextureToPendingFlushList(TextureVk *textureVk)
+    {
+        mTextureVkPendingFlush.emplace_back(textureVk);
+    }
+
     const vk::PerfCounters &getPerfCounters() const { return mPerfCounters; }
 
   private:
@@ -1111,6 +1116,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // All staging buffer support is provided by a DynamicBuffer.
     vk::DynamicBuffer mStagingBufferStorage;
+
+    std::vector<TextureVk *> mTextureVkPendingFlush;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };

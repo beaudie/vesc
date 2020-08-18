@@ -433,6 +433,10 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     {
         ANGLE_TRY(mImage->flushAllStagedUpdates(contextVk));
     }
+    else
+    {
+        contextVk->addTextureToPendingFlushList(this);
+    }
 
     return angle::Result::Continue;
 }
