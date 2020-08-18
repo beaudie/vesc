@@ -80,6 +80,23 @@
       "revId": "57be909accff11088483c15a519bda422a518c30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4db3f435_a79bfc74",
+        "filename": "src/libANGLE/Overlay_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-18T17:55:21Z",
+      "side": 1,
+      "message": "Out of curiosity, is there a reason why the description info is set after the reset call?",
+      "revId": "57be909accff11088483c15a519bda422a518c30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
