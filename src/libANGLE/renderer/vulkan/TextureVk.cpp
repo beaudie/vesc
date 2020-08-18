@@ -557,6 +557,10 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     {
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
     }
+    else
+    {
+        contextVk->addTextureToPendingFlushList(this);
+    }
 
     return angle::Result::Continue;
 }

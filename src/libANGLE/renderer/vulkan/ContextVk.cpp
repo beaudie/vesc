@@ -5568,6 +5568,12 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
                                          vk::CommandBuffer **commandBufferOut,
                                          bool *renderPassDescChangedOut)
 {
+    for (TextureVk *textureVk : mTextureVkPendingFlush)
+    {
+        ANGLE_TRY(textureVk->ensureImageInitialized(this, ImageMipLevels::EnabledLevels));
+    }
+    mTextureVkPendingFlush.clear();
+
     ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer,
                                                    renderPassDescChangedOut));
 
