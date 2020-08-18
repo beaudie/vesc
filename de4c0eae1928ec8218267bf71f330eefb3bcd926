@@ -19,6 +19,149 @@
     },
     {
       "key": {
+        "uuid": "cceaad3f_99f81d16",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 481,
+        "startChar": 58,
+        "endLine": 481,
+        "endChar": 59
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e73b26c_9842e1de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "Can you explain what the trick is and why you need Color0 and ColorMax for DS Read/Write?   Maybe an example of how the mod and division below work.",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fe5e4c0_86e2a37a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "Should add back the other ASSERT also to make sure there is only a single DS attachment:\n\n    ASSERT(getDepthStencilAccess() \u003d\u003d ResourceAccess::Unused);",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79e338f1_124e33e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "How do you know to use Color0DepthStencilRead versus ColorMaxDepthStencilRead?",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ee43dd7_c01d470f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "hasDepthStencilAttachment()",
+      "range": {
+        "startLine": 589,
+        "startChar": 29,
+        "endLine": 589,
+        "endChar": 78
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b25799ea_8823d580",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2145,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "This pattern has come up a couple times, so it should probably be put back into a hasDepthStencilAttachment(), which would also help readability.",
+      "range": {
+        "startLine": 2144,
+        "startChar": 0,
+        "endLine": 2145,
+        "endChar": 47
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fa2ab92_acc7e336",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "A \u0027default\u0027 case that can be only 1 value seems odd.\n\nIt\u0027s probably better to just do an if-else (with an assert) rather than a switch statement here.",
+      "range": {
+        "startLine": 2153,
+        "startChar": 0,
+        "endLine": 2156,
+        "endChar": 22
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7838145d_15b745c7",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 17
@@ -58,6 +201,92 @@
         "startChar": 12,
         "endLine": 121,
         "endChar": 51
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2845de6e_c872e11d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "Why is this necessary?\n\n\u003e VK_ACCESS_SHADER_READ_BIT specifies read access to a storage buffer, physical storage buffer, shader binding table, uniform texel buffer, storage texel buffer, sampled image, or storage image.",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 37
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4ec78d1_242f322f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "Why is this necessary if the attachment is read only?\n\n\u003e VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT specifies write access to a depth/stencil attachment, via depth or stencil operations or via certain subpass load and store operations.",
+      "range": {
+        "startLine": 353,
+        "startChar": 86,
+        "endLine": 353,
+        "endChar": 130
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66760421_6953bd4a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "Why don\u0027t we need VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT here to specify all writes must complete before transitioning to read only?",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6baf5f95_61c15020",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:33:59Z",
+      "side": 1,
+      "message": "hasDepthStencilAttachment()",
+      "range": {
+        "startLine": 920,
+        "startChar": 28,
+        "endLine": 920,
+        "endChar": 77
       },
       "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
