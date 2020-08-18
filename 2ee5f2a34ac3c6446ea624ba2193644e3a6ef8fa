@@ -16,6 +16,29 @@
       "revId": "2ee5f2a34ac3c6446ea624ba2193644e3a6ef8fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "282a5d54_ee1b2cfd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-18T19:42:10Z",
+      "side": 1,
+      "message": "I think this should be earlyFragmentTest to take care the worst case. This is the destination stage that it will be barrier on. earlyFragmentTest means it will stopped on earlyFragmentTest until src barrier is finished.",
+      "range": {
+        "startLine": 357,
+        "startChar": 27,
+        "endLine": 357,
+        "endChar": 41
+      },
+      "revId": "2ee5f2a34ac3c6446ea624ba2193644e3a6ef8fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
