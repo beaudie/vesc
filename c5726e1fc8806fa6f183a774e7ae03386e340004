@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b7d5514_ada09a74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T23:50:54Z",
+      "side": 1,
+      "message": "It\u0027s working well and passes all of the tests (and helps PUBG).  Charlie PTAL.",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
