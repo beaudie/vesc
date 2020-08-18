@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "b819a205_eb6bd530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-08-18T11:02:22Z",
+      "side": 1,
+      "message": "Thanks,Jamie.I have moved the tests to the new WebGL test suites and changed some shaders of these tests.There wasn\u0027t MixOfAllResources/DifferentStatementsInsideSwitch,I had mixed up the test results.",
+      "parentUuid": "a46b6fe5_057ed7c3",
+      "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dbd5c6f7_85e70827",
         "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
         "patchSetId": 1
@@ -57,6 +75,30 @@
       "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36107b1d_728ff576",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-08-18T11:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbd5c6f7_85e70827",
+      "range": {
+        "startLine": 28,
+        "startChar": 38,
+        "endLine": 28,
+        "endChar": 49
+      },
+      "revId": "7a886d676dfe76d3f025a023a7e758acb8ef93da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
