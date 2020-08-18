@@ -16,6 +16,52 @@
       "revId": "0289152bca8625f7aeb031676b593644d5d07f58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1d18da6_c628cdf2",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-18T20:06:28Z",
+      "side": 1,
+      "message": "Add a comment linking to  \nsrc/libANGLE/renderer/metal/shaders/gen_mipmap.metal to explain why 4 is chosen",
+      "range": {
+        "startLine": 1619,
+        "startChar": 31,
+        "endLine": 1619,
+        "endChar": 32
+      },
+      "revId": "0289152bca8625f7aeb031676b593644d5d07f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61bd2364_271ad493",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-18T20:06:28Z",
+      "side": 1,
+      "message": "You can make the class named MipmapTestBoxFilter and at the end of the file only run it on Metal",
+      "range": {
+        "startLine": 1207,
+        "startChar": 0,
+        "endLine": 1211,
+        "endChar": 35
+      },
+      "revId": "0289152bca8625f7aeb031676b593644d5d07f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
