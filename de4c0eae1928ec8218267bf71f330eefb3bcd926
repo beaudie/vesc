@@ -59,6 +59,48 @@
     },
     {
       "key": {
+        "uuid": "f6ded1e0_ab38c055",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e73b26c_9842e1de",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bcff3087_14c535d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cceaad3f_99f81d16",
+      "range": {
+        "startLine": 481,
+        "startChar": 58,
+        "endLine": 481,
+        "endChar": 59
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fe5e4c0_86e2a37a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 17
@@ -76,6 +118,24 @@
     },
     {
       "key": {
+        "uuid": "4ac9b789_926cb7eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fe5e4c0_86e2a37a",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79e338f1_124e33e3",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 17
@@ -87,6 +147,24 @@
       "writtenOn": "2020-08-18T16:33:59Z",
       "side": 1,
       "message": "How do you know to use Color0DepthStencilRead versus ColorMaxDepthStencilRead?",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae03652_dc729ac9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "I don\u0027t follow the question. Can you try asking another way?\n\nThis offset is the base enum value which we the add the \"range\" to to get the real enum max.",
+      "parentUuid": "79e338f1_124e33e3",
       "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -116,6 +194,30 @@
     },
     {
       "key": {
+        "uuid": "abdfdbb1_d44ecf0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "I removed hasDepthStencilAttachment to make sure the code handles different access modes.\n\nedit - went and added it after a later comment.",
+      "parentUuid": "2ee43dd7_c01d470f",
+      "range": {
+        "startLine": 589,
+        "startChar": 29,
+        "endLine": 589,
+        "endChar": 78
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b25799ea_8823d580",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 17
@@ -139,6 +241,30 @@
     },
     {
       "key": {
+        "uuid": "12b4f3a6_6fc4674e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "OK, will do. I did it explicitly to make sure I always checked the access mode instead of the code operating with just \"bool\" results.",
+      "parentUuid": "b25799ea_8823d580",
+      "range": {
+        "startLine": 2144,
+        "startChar": 0,
+        "endLine": 2145,
+        "endChar": 47
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fa2ab92_acc7e336",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 17
@@ -150,6 +276,30 @@
       "writtenOn": "2020-08-18T16:33:59Z",
       "side": 1,
       "message": "A \u0027default\u0027 case that can be only 1 value seems odd.\n\nIt\u0027s probably better to just do an if-else (with an assert) rather than a switch statement here.",
+      "range": {
+        "startLine": 2153,
+        "startChar": 0,
+        "endLine": 2156,
+        "endChar": 22
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ad6bf44_1377a2a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "I had it your way originally and changed it to be this way I believe because of a compiler warning. Would prefer to keep this code if you don\u0027t mind.",
+      "parentUuid": "7fa2ab92_acc7e336",
       "range": {
         "startLine": 2153,
         "startChar": 0,
@@ -254,6 +404,54 @@
     },
     {
       "key": {
+        "uuid": "0dde158e_3e02bcf9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "This is transition \"to\". We need to flush out potential depth stencil attachment writes to this image.",
+      "parentUuid": "c4ec78d1_242f322f",
+      "range": {
+        "startLine": 353,
+        "startChar": 86,
+        "endLine": 353,
+        "endChar": 130
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f20947f9_01ecb962",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "This could be a depth stencil texture, same as other textures.",
+      "parentUuid": "2845de6e_c872e11d",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 37
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66760421_6953bd4a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 17
@@ -265,6 +463,24 @@
       "writtenOn": "2020-08-18T16:33:59Z",
       "side": 1,
       "message": "Why don\u0027t we need VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT here to specify all writes must complete before transitioning to read only?",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1704c624_9f7ff17a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "I think maybe you got to and from backwards? ReadOnly layouts all have zero here.",
+      "parentUuid": "66760421_6953bd4a",
       "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -291,6 +507,30 @@
       "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e0e3fdf_d98deaba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:45:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6baf5f95_61c15020",
+      "range": {
+        "startLine": 920,
+        "startChar": 28,
+        "endLine": 920,
+        "endChar": 77
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
