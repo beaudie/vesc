@@ -16,6 +16,23 @@
       "revId": "a4a166f85a3a3052d90a0b21acd01ae1945b61d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f456bc19_b62cbd06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000539
+      },
+      "writtenOn": "2020-08-18T21:39:01Z",
+      "side": 1,
+      "message": "Thanks! Looks like some header needs to be updated for those symbols. I\u0027ll take care of that asap.",
+      "revId": "a4a166f85a3a3052d90a0b21acd01ae1945b61d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
