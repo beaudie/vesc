@@ -332,6 +332,30 @@
       "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2da551f_5f21eba0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-18T00:56:23Z",
+      "side": 1,
+      "message": "I think it is better.",
+      "parentUuid": "943fa959_05ac9862",
+      "range": {
+        "startLine": 1366,
+        "startChar": 9,
+        "endLine": 1366,
+        "endChar": 20
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
