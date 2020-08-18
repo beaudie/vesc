@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dad359a8_9538b612",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:40:50Z",
+      "side": 1,
+      "message": "This is probably being discussed elsewhere (I remember one discussion in a meeting) ... could we have a feature flag that, by default, does an invalidate for the app?  If some app has a problem, we can flip the feature flag to see if that\u0027s the cause of the problem.  Just an idea since it sounds like most apps won\u0027t do the invalidate, but won\u0027t use the read FBO either.",
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7c5666a_84cbd790",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 36
@@ -13,6 +30,23 @@
       "writtenOn": "2020-08-18T05:44:25Z",
       "side": 1,
       "message": "PTAL\n\nMoved the render pass workaround stuff into FramebufferVk::blit() and tagged it with TODOs that reference Issue 4968: Vulkan: Support more than one open render pass at a time.   This limits the overhead to just the case of resolving with blit (which is potentially optimized to use subpass attachments), which should be rare.\n\nShuffled around reviewers since Shabi is out.",
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4fe05cf_ae8b6a9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:40:50Z",
+      "side": 1,
+      "message": "Drive by question below...",
       "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
