@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dd6512e_105b0530",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-18T17:19:52Z",
+      "side": 1,
+      "message": "i suppose the pathological case for this would be an app that has a large number of sequential create/delete pairs.",
+      "revId": "fc3f46d7e3fc8051e2f7925eeb6b4afc59b20711",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
