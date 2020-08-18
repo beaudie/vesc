@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1563f80e_24a45192",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-18T17:55:32Z",
+      "side": 1,
+      "message": "Excellent commit message. Change seems like a slam-dunk.",
+      "revId": "549a6f674b60987376bef0b88d8c9186f64d3f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
