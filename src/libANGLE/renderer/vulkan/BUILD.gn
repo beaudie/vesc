@@ -4,6 +4,7 @@
 #
 # This file houses the build configuration for the ANGLE Vulkan back-end.
 
+import("//build/config/sanitizers/sanitizers.gni")
 import("//build_overrides/swiftshader.gni")
 import("../../../../gni/angle.gni")
 
@@ -184,6 +185,10 @@ angle_source_set("angle_vk_mem_alloc_wrapper") {
       "-Wno-extra-semi-stmt",
       "-Wno-missing-field-initializers",
     ]
+
+    if (is_cfi && use_cfi_icall && current_toolchain == default_toolchain) {
+      cflags_cc += [ "-fno-sanitize=cfi-unrelated-cast" ]
+    }
   }
 }
 
