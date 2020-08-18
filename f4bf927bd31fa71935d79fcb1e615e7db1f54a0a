@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a617ef6_79bb08c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-18T18:50:38Z",
+      "side": 1,
+      "message": "Commit message \"moethod\"-\u003e\"method\"\n\nA couple of ?s",
+      "revId": "f4bf927bd31fa71935d79fcb1e615e7db1f54a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41a1f494_fab10eb5",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1782,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-18T18:50:38Z",
+      "side": 1,
+      "message": "Why are duplicates allowed?",
+      "revId": "f4bf927bd31fa71935d79fcb1e615e7db1f54a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cf699bc_314be2c7",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-18T18:50:38Z",
+      "side": 1,
+      "message": "No range-based for loop for angle::FastVector?",
+      "revId": "f4bf927bd31fa71935d79fcb1e615e7db1f54a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
