@@ -16,6 +16,24 @@
       "revId": "80ed42788fe6a1756871ad7ddef638f479023d43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41be9b0a_f4e011a9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T14:15:26Z",
+      "side": 1,
+      "message": "Disabling the depth test OR the mask makes depth not writable in GL. So yes on the first question.\n\nGood question on ContentDefined. I don\u0027t know if there\u0027s an interaction which could affect performance. The correctness tests seem OK. We chatted offline a bit about ContentDefined - it would be nice if we could figure out a way to track this such that the RP has access to it on end().",
+      "parentUuid": "afcdad5a_8034a6d3",
+      "revId": "80ed42788fe6a1756871ad7ddef638f479023d43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

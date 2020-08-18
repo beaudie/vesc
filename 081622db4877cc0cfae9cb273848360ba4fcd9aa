@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "55ed96f5_deff1b39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T14:15:26Z",
+      "side": 1,
+      "message": "I\u0027m hoping to land these pretty quickly. Maybe even as soon as today if the reviews go smoothly.",
+      "parentUuid": "dc68e6c9_43071e8a",
+      "revId": "081622db4877cc0cfae9cb273848360ba4fcd9aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1c1b395_7dd0982e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 3
@@ -47,6 +65,24 @@
       "writtenOn": "2020-08-17T18:53:42Z",
       "side": 1,
       "message": "I also modified these methods to address invalidate, and so I want to coordinate with you ...\n\nI changed the methods to always be called when gl*nable(GL_DEPTH_TEST) (or stencil) are called, to try to discern from syncState when an invalidated attachment becomes used again.  In essence, the states are:\n\nA) NeverInvalidated\nB) InvalidatedWithDepthEnabled\nC) InvalidatedWithDepthDisabled\nD) UsedAfterInvalidated\n\nFor PUBG, it typically goes from A to B (but could go directly) to C.  PUBG never goes to D, but the dEQP tests do (always from C to D).  At endRP, I set storeOp to DONT_CARE for C (since an app can theoretically draw again from state B, and we don\u0027t want to do anything in setupDraw()).",
+      "revId": "081622db4877cc0cfae9cb273848360ba4fcd9aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "268b3c0f_c6abba54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T14:15:26Z",
+      "side": 1,
+      "message": "I\u0027ll take a look at your CL today and we can coordinate. Thanks for the writeup.",
+      "parentUuid": "e1c1b395_7dd0982e",
       "revId": "081622db4877cc0cfae9cb273848360ba4fcd9aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
