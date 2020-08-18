@@ -16,6 +16,23 @@
       "revId": "7e15dc6a29049848881181b54169d128877fca48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc33bcd7_adc229f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T17:05:09Z",
+      "side": 1,
+      "message": "Shifting reviewers b/c Courtney is out.",
+      "revId": "7e15dc6a29049848881181b54169d128877fca48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
