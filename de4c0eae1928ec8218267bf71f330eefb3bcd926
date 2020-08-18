@@ -452,6 +452,30 @@
     },
     {
       "key": {
+        "uuid": "3fdda235_f7480239",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-18T18:07:12Z",
+      "side": 1,
+      "message": "I think you don\u0027t need this bit, see ComputeShaderReadOnly as an example. dstAccess means what we will do after we transition into this layout.",
+      "parentUuid": "0dde158e_3e02bcf9",
+      "range": {
+        "startLine": 353,
+        "startChar": 86,
+        "endLine": 353,
+        "endChar": 130
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66760421_6953bd4a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 17
