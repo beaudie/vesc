@@ -260,6 +260,30 @@
       "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5cf9fe42_7b472c54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T00:12:01Z",
+      "side": 1,
+      "message": "The issue with \u0027update\u0027 is that it\u0027s not descriptive. More or less every action changes state and this in particular is an action that isn\u0027t strictly a setter.\n\nWould you like to resolve this before landing? Or should I land this without a +2?",
+      "parentUuid": "c2e65459_32c8c99a",
+      "range": {
+        "startLine": 1366,
+        "startChar": 9,
+        "endLine": 1366,
+        "endChar": 20
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
