@@ -97,6 +97,24 @@
       "revId": "57be909accff11088483c15a519bda422a518c30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5dce3eb_04e52989",
+        "filename": "src/libANGLE/Overlay_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T21:01:22Z",
+      "side": 1,
+      "message": "The reset call sets the count to zero, etc. Probably not strictly necessary. The description info seems separate.",
+      "parentUuid": "4db3f435_a79bfc74",
+      "revId": "57be909accff11088483c15a519bda422a518c30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
