@@ -171,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "81492a31_e8998f49",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "Ok, I get it now.\n\nNumber of draw attachments \u003d {None, GL_COLOR_ATTACHMENT0, ..., gl::IMPLEMENTATION_MAX_DRAW_BUFFERS - 1} \u003d 9\nNumber of DS states \u003d {Unused, Read, Write} \u003d 3\n\nTotal values \u003d draw attachments * DS states \u003d 9 * 3 \u003d 27\n\nCreating a value \u003d num color attachments * DS state, which the enum pre-bakes.\n\nActive color attachments \u003d value % ColorMax\nDS state \u003d value / ColorMax, which is: {Unused, Read, Write} where Color0 \u003d Unused",
+      "parentUuid": "1ae03652_dc729ac9",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ee43dd7_c01d470f",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 17
@@ -300,6 +318,30 @@
       "side": 1,
       "message": "I had it your way originally and changed it to be this way I believe because of a compiler warning. Would prefer to keep this code if you don\u0027t mind.",
       "parentUuid": "7fa2ab92_acc7e336",
+      "range": {
+        "startLine": 2153,
+        "startChar": 0,
+        "endLine": 2156,
+        "endChar": 22
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d271ada_5db8ac31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "What is the compiler warning about?   Seems straightforward.\n\n    if (desc.hasDepthStencilAttachment())\n    {\n        vk::ResourceAccess dsAccess \u003d desc.getDepthStencilAccess();\n        vk::ImageLayout imageLayout;\n\n        if (dsAccess \u003d\u003d vk::ResourceAccess::ReadOnly)\n        {\n            imageLayout \u003d vk::ImageLayout::DepthStencilReadOnly;\n        } else {\n            ASSERT(dsAccess \u003d\u003d vk::ResourceAccess::Write);\n            imageLayout \u003d vk::ImageLayout::DepthStencilAttachment;\n        }\n\n        uint32_t depthStencilIndexVk \u003d colorAttachmentCount;\n        ops.initWithLoadStore(depthStencilIndexVk, imageLayout, imageLayout);\n    }",
+      "parentUuid": "5ad6bf44_1377a2a6",
       "range": {
         "startLine": 2153,
         "startChar": 0,
@@ -476,6 +518,54 @@
     },
     {
       "key": {
+        "uuid": "32b43e29_4bc4adb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "Shouldn\u0027t ImageLayout::DepthStencilAttachment below require this also then?",
+      "parentUuid": "f20947f9_01ecb962",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 37
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e071a267_c3fa5208",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0dde158e_3e02bcf9",
+      "range": {
+        "startLine": 353,
+        "startChar": 86,
+        "endLine": 353,
+        "endChar": 130
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66760421_6953bd4a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 17
@@ -508,6 +598,24 @@
       "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b546896_c0b64479",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "\u003e I think maybe you got to and from backwards?\n\nHm, yeah, I think so.",
+      "parentUuid": "1704c624_9f7ff17a",
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

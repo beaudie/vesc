@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "48c22c45_5c447620",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "The comment above states:\n\u003e The color attachment count state can have 9 values: no attachments + 1-8 attachments.\n\nThis is represented here, but with misleading naming since color attachments in GL have zero-based naming (GL_COLOR_ATTACHMENTi for i \u003d 0-7), while the enum is naming \"color0\" as \"no attachments\".\n\nI think this naming is a little clearer:\n\n    NoColor                   \u003d 0,\n    ColorMax                  \u003d NoColor + gl::IMPLEMENTATION_MAX_DRAW_BUFFERS,\n    NoColorDepthStencilRead,  // Automatically increments, but can be explicit if it\u0027s helpful\n    ColorMaxDepthStencilRead  \u003d NoColorDepthStencilRead + gl::IMPLEMENTATION_MAX_DRAW_BUFFERS,\n    NoColorDepthStencilWrite,\n    ColorMaxDepthStencilWrite \u003d Color0DepthStencilWrite + gl::IMPLEMENTATION_MAX_DRAW_BUFFERS,",
+      "range": {
+        "startLine": 490,
+        "startChar": 0,
+        "endLine": 495,
+        "endChar": 94
+      },
+      "revId": "b45bbcf2715321aae1cfcec12a36bc275c879f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f1c735e_78c2581c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "nit: PackedAttachmentCount::ColorMax + 1 to reference the same enum that mPackedColorAttachmentRangeAndDSAccess contains.",
+      "range": {
+        "startLine": 503,
+        "startChar": 53,
+        "endLine": 503,
+        "endChar": 92
+      },
+      "revId": "b45bbcf2715321aae1cfcec12a36bc275c879f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eddc6ba4_46e6af0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T18:42:18Z",
+      "side": 1,
+      "message": "nit: PackedAttachmentCount::ColorMax + 1 to reference the same enum that mPackedColorAttachmentRangeAndDSAccess contains.",
+      "range": {
+        "startLine": 509,
+        "startChar": 40,
+        "endLine": 509,
+        "endChar": 79
+      },
+      "revId": "b45bbcf2715321aae1cfcec12a36bc275c879f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29aab66e_23605078",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 18
