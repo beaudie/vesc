@@ -34,6 +34,24 @@
       "revId": "80ed42788fe6a1756871ad7ddef638f479023d43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84ace420_f884248b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "Answering my original question, I don\u0027t think there\u0027s any interaction with this CL (and the loadOp-for-this-RP optimization that it\u0027s trying to preserve) with RenderTargetVk::mContentDefined (and the loadOp-for-a-future-RP optimization that it\u0027s for).\n\nAs for modifying RenderTargetVk::mContentDefined at endRP time, I\u0027ve thought some about it, but am not sure of a good answer.  I\u0027ve thought of 3 ways:\n\n1) The way that other code (including FramebufferVk::invalidateImpl()) comes at it is from the FramebufferVk pointed to by ContextVk::mDrawFramebuffer.  However, in testing my CL, I\u0027ve frequently seen mDrawFB as pointing to freed memory.\n\n2) Having CommandBufferHelper point to the RenderTargetVk\u0027s for the different attachments.  I don\u0027t know if that could work out with object lifetime.\n\n3) The subject-observer pattern.",
+      "parentUuid": "41be9b0a_f4e011a9",
+      "revId": "80ed42788fe6a1756871ad7ddef638f479023d43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

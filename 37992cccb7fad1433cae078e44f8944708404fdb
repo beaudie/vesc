@@ -16,6 +16,125 @@
       "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90507239_0a98c3b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "LGTM with some nits/questions/comments.",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cea1cf7c_1ce0fd65",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "Nit: Because this function isn\u0027t called unless mState.isDepthTestEnabled() is true (see lines 2848, 2864, and 4447), this path will never be taken.  For my CL, I removed the call to mState.isDepthTestEnabled(), so that the test is just done once.",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b25ffec_a360c305",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "Similar to above (the call to mState.isStencilTestEnabled() on lines 2875 and 4454), this path will never be taken.",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a32e1241_7fbd81e1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2844,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "Nit: Just curious why you added curly braces here?  There are no local variables declared except for inside the curly braces of the \"if\" statement.",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09504d0b_f6d3d2d9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "FYI ... As mentioned above, I removed the test for mState.isDepthTestEnabled() in my CL.  For invalidate testing, it\u0027s good to know when depth is disabled.",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d91cb455_6584f258",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "I like how you structured the enum and this code.\n\nFYI ... PUBG sometimes transitions depth from Write to ReadOnly before it invalidates and disabled depth.",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9925b9bb_5e7102c9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-18T15:18:59Z",
+      "side": 1,
+      "message": "I don\u0027t see a getDepthStencilAccess() method.  Is that introduced in one of your other CLs in this chain?",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
