@@ -284,6 +284,30 @@
       "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "167670a7_83d0613d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-18T00:24:46Z",
+      "side": 1,
+      "message": "Without this name change, I will be happy to +2. With this name change I already give you +1, it is up to you and Tim to decided.",
+      "parentUuid": "5cf9fe42_7b472c54",
+      "range": {
+        "startLine": 1366,
+        "startChar": 9,
+        "endLine": 1366,
+        "endChar": 20
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
