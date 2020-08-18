@@ -236,6 +236,30 @@
       "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2e65459_32c8c99a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-18T00:06:49Z",
+      "side": 1,
+      "message": "My guess about the reason that the word \"update\" was used is that it is updating the state of the object here (for Buffers, mCurrentReadAccess, for images, mCurrentLayout). If this is not changing state of buffer/image but just insert a barrier in the command buffer, then I will update is the wrong word here. But since it is also updating the state of buffer/image, I am not really convinced that new name is better than old one.",
+      "parentUuid": "b73e986c_447463ba",
+      "range": {
+        "startLine": 1366,
+        "startChar": 9,
+        "endLine": 1366,
+        "endChar": 20
+      },
+      "revId": "434e1e67ce0c8d4c80df244177742adb94cb951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
