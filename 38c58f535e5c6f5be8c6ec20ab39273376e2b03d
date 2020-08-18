@@ -137,6 +137,30 @@
     },
     {
       "key": {
+        "uuid": "22d0b22a_32567ca6",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-08-18T19:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "301a281b_21ec7468",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "38c58f535e5c6f5be8c6ec20ab39273376e2b03d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9cefeea4_8ef87d2f",
         "filename": "src/third_party/volk/BUILD.gn",
         "patchSetId": 2
