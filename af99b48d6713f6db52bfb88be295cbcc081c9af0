@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "963ee7fe_90742025",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-18T20:37:35Z",
+      "side": 1,
+      "message": "LGMT with Jamie\u0027s comments addressed",
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2e863ab_056506ae",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-18T20:37:35Z",
+      "side": 1,
+      "message": "Can you change the logic so it\u0027s more clear? this looks like a typo to me since the whole rest of the function is wrapped in this if\n\nSomething like:\n#    if defined(ANGLE_PLATFORM_MACOS)\n    if (!@available(macOS 10.13, *))\n        return 0;\n#    endif\n\n\u003cfunction body\u003e",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 10
+      },
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d64ca23e_1da883de",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
         "patchSetId": 11
