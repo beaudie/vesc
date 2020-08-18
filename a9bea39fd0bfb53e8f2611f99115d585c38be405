@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d1ec672a_9ad8c61e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T16:46:59Z",
+      "side": 1,
+      "message": "Non-conformant changes have been discussed, but we haven\u0027t gotten as far as implementing them yet.   With Mohan\u0027s change to get the package name, we should be able to enable/disable a feature like that based on that app that\u0027s running if we wanted to though.   That\u0027s obviously \"cheating\" and opens us up to extra app-compat work to make sure app updates don\u0027t break our assumptions (as in, they don\u0027t suddenly start reading the multisampled image which has been discarded).   For Asphalt 8 in particular (which this optimization is for), we don\u0027t yet support ANGLE traces since they use multiple contexts, so we can\u0027t catch regressions in CQ (assuming traces were auto-updated when the app updates somehow).\n\nAs for the discard itself, we don\u0027t to go down the full invalidate path, just to update the storeOps.   I have a follow-on WIP CL to show what needs to be done, which the app-specifc feature enablement could be added to:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2336200\n\nHowever, because it\u0027s non-conformant, we can\u0027t enable it by default.   It would need to remain an app-specific optimization.",
+      "parentUuid": "dad359a8_9538b612",
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7c5666a_84cbd790",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 36
