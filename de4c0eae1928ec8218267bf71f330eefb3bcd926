@@ -354,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "9a372481_177c4d0f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T19:19:54Z",
+      "side": 1,
+      "message": "Oh, sorry, misunderstood you request. Done.",
+      "parentUuid": "3d271ada_5db8ac31",
+      "range": {
+        "startLine": 2153,
+        "startChar": 0,
+        "endLine": 2156,
+        "endChar": 22
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7838145d_15b745c7",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 17
@@ -563,6 +587,54 @@
       "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6799574f_b8684f7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T19:19:54Z",
+      "side": 1,
+      "message": "Removed this bit - Charlie\u0027s right (I think) in that this isn\u0027t necessary for reading.",
+      "parentUuid": "e071a267_c3fa5208",
+      "range": {
+        "startLine": 353,
+        "startChar": 86,
+        "endLine": 353,
+        "endChar": 130
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cb96288_f4dd0c0e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-18T19:19:54Z",
+      "side": 1,
+      "message": "We don\u0027t use DepthStencilAttachment when using depth textures. You\u0027ll see in a future patch where I start moving depth textures into this new layout. Previously we would use either ShaderRead or DepthAttachment instead of this new unified type.",
+      "parentUuid": "32b43e29_4bc4adb9",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 37
+      },
+      "revId": "de4c0eae1928ec8218267bf71f330eefb3bcd926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
