@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "688cb5a5_760b99c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "I added a brief description, but there isn\u0027t a lot going on to restore a render pass since we\u0027re just restoring a pointer if the framebuffer handles match.   Let me know if there\u0027s more you\u0027d like me to add.",
+      "parentUuid": "aced887a_bd35ac3c",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 0
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7c5666a_84cbd790",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 36
@@ -134,6 +158,30 @@
     },
     {
       "key": {
+        "uuid": "ae7a5386_86e7fbb8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "\u003e Is this checking that there\u0027s a finished RP? We should rename this to hasFinishedRenderPass.\n\nYeah, that\u0027s probably more accurate since onRenderPassFinished() is what sets it to null.\n\nThese have all been condensed down to restoreFinishedRenderPass(), but let me know what you think there.",
+      "parentUuid": "5401d88d_ced12136",
+      "range": {
+        "startLine": 554,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 35
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c167561_1d799d58",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 36
@@ -154,6 +202,30 @@
       "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0db52373_669802ef",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c167561_1d799d58",
+      "range": {
+        "startLine": 643,
+        "startChar": 21,
+        "endLine": 643,
+        "endChar": 22
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +252,30 @@
     },
     {
       "key": {
+        "uuid": "e559c0e1_a6947b04",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f908de96_30c1aec4",
+      "range": {
+        "startLine": 1116,
+        "startChar": 0,
+        "endLine": 1129,
+        "endChar": 13
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c678550e_ed4a1600",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 36
@@ -200,6 +296,30 @@
       "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8185daa6_181d2ff0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c678550e_ed4a1600",
+      "range": {
+        "startLine": 1268,
+        "startChar": 0,
+        "endLine": 1272,
+        "endChar": 0
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +346,30 @@
     },
     {
       "key": {
+        "uuid": "2fa1bc8b_c0097466",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3073bd68_6e64854a",
+      "range": {
+        "startLine": 1286,
+        "startChar": 0,
+        "endLine": 1288,
+        "endChar": 0
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09e74a9c_961af2e9",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 36
@@ -246,6 +390,30 @@
       "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46490e37_149674f0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09e74a9c_961af2e9",
+      "range": {
+        "startLine": 1337,
+        "startChar": 0,
+        "endLine": 1338,
+        "endChar": 43
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -272,6 +440,30 @@
     },
     {
       "key": {
+        "uuid": "d47c967c_6b6ae668",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "What\u0027s the todo for?   I don\u0027t think there\u0027s anything left here.\n\nAre you referring to this:\n\n\u003e since we may be able to optimize that path which requires modifying the current render pass.\n\nThat\u0027s not referring to more work here, but is instead regarding the work this CL is doing related to calling FramebufferVk::resolveColorWithSubpass(), which can only be done if  certain conditions are met (render pass is still open, 1 color attachment, etc.) and is where the \u0027may\u0027 comes from.",
+      "parentUuid": "e902da8e_13c805ef",
+      "range": {
+        "startLine": 1759,
+        "startChar": 0,
+        "endLine": 1768,
+        "endChar": 5
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df536334_c3f7cb51",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 36
@@ -292,6 +484,30 @@
       "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7b1515e_268263da",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df536334_c3f7cb51",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 82
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -318,6 +534,30 @@
     },
     {
       "key": {
+        "uuid": "7887addd_5ab55c90",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "707b86f7_d4b067bb",
+      "range": {
+        "startLine": 975,
+        "startChar": 0,
+        "endLine": 983,
+        "endChar": 5
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b92d86f_9d3b40c2",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 36
@@ -341,6 +581,30 @@
     },
     {
       "key": {
+        "uuid": "2641aa76_9fb0fcdf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b92d86f_9d3b40c2",
+      "range": {
+        "startLine": 756,
+        "startChar": 13,
+        "endLine": 756,
+        "endChar": 35
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ec6ac7c_e5d2c754",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 36
@@ -352,6 +616,30 @@
       "writtenOn": "2020-08-18T18:20:12Z",
       "side": 1,
       "message": "👍\n\nPersonally I find this test suite quite useful, glad you were able to take advantage of it.",
+      "range": {
+        "startLine": 271,
+        "startChar": 42,
+        "endLine": 271,
+        "endChar": 68
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84549630_a86332e4",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-18T21:45:35Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s easier than verifying on a device if the render pass is being broken or not with each change.   Should also prevent other CLs from silently breaking this change.",
+      "parentUuid": "5ec6ac7c_e5d2c754",
       "range": {
         "startLine": 271,
         "startChar": 42,
