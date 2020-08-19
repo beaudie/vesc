@@ -39,6 +39,30 @@
       "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0db41f74_886f624e",
+        "filename": "scripts/roll_chromium_deps.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1118354
+      },
+      "writtenOn": "2020-08-19T11:25:54Z",
+      "side": 1,
+      "message": "As the code is currently written, the autoroller shouldn\u0027t overwrite the edited commit message.  I can\u0027t promise that I won\u0027t forget about this and refactor something a year from now and break it though :)",
+      "parentUuid": "9d6b1976_a8c78320",
+      "range": {
+        "startLine": 529,
+        "startChar": 0,
+        "endLine": 535,
+        "endChar": 0
+      },
+      "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
