@@ -42,6 +42,63 @@
     },
     {
       "key": {
+        "uuid": "86d8b3d0_f9c5972c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3885,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T19:01:57Z",
+      "side": 1,
+      "message": "Can you move this declaration to where it\u0027s used below:\n\n        vk::TextureUnit \u0026activeTexture \u003d mActiveTextures[textureUnit];\n        activeTexture.texture \u003d textureVk;\n        activeTexture.sampler \u003d \u0026samplerVk;\n\nhttps://google.github.io/styleguide/cppguide.html#Local_Variables",
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16ed1138_f8d6f34c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3894,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T19:01:57Z",
+      "side": 1,
+      "message": "Why use ANGLE_VK_CHECK() here instead of an assert?",
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "144d3078_66c0eccf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3908,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T19:01:57Z",
+      "side": 1,
+      "message": "Since flushDeferredClears() will eventually call flushCommandsAndEndRenderPass() if there\u0027s work to do, I think you can combine them to an else-if:\n\n            // Special handling for deferred clears.\n            if (mDrawFramebuffer-\u003ehasDeferredClears())\n            {\n                gl::Rectangle scissoredRenderArea \u003d\n                    mDrawFramebuffer-\u003egetRotatedScissoredRenderArea(this);\n                ANGLE_TRY(mDrawFramebuffer-\u003eflushDeferredClears(this, scissoredRenderArea));\n            }\n            // TODO(jmadill): Don\u0027t end RenderPass. http://anglebug.com/4959\n            else if (hasStartedRenderPass())\n            {\n                ANGLE_TRY(flushCommandsAndEndRenderPass());\n            }\n\nThat shouldn\u0027t change the actual functionality any, but just makes it a little more clear we are only ending the render pass once and how.",
+      "range": {
+        "startLine": 3896,
+        "startChar": 0,
+        "endLine": 3908,
+        "endChar": 13
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f2d77e_405c4c33",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -129,6 +186,29 @@
         "startChar": 4,
         "endLine": 1641,
         "endChar": 5
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56c11d44_799427a9",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T19:01:57Z",
+      "side": 1,
+      "message": "Was this a bug that was missed?",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 50
       },
       "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
