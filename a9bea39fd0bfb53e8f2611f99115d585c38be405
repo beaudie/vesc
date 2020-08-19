@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "2125c369_ccac8de6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:23:18Z",
+      "side": 1,
+      "message": "Ack. Looks good.",
+      "parentUuid": "688cb5a5_760b99c8",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 0
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7c5666a_84cbd790",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 36
@@ -179,6 +203,30 @@
       "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d83df8b_ee685b1a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:23:18Z",
+      "side": 1,
+      "message": "Ack. Looks good.",
+      "parentUuid": "ae7a5386_86e7fbb8",
+      "range": {
+        "startLine": 554,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 35
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
