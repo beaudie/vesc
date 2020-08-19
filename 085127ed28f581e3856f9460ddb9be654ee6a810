@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "454b8739_b6c7dda0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T19:22:20Z",
+      "side": 1,
+      "message": "ensureImageInitialized() will get to flushAllStagedUpdates(), so these could probably be combined into a single check that matches the one above:\n\n    if (!mOwnsImage || mState.getImmutableFormat())\n    {\n        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));\n    }\n\nI don\u0027t know if that\u0027s necessarily better though.",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 448,
+        "endChar": 5
+      },
+      "revId": "085127ed28f581e3856f9460ddb9be654ee6a810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
