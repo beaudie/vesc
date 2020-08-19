@@ -171,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "9f93dd12_24bbbcd3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T19:40:18Z",
+      "side": 1,
+      "message": "Good point. Calling ensureImageInitialized flushes the staging buffer. So I\u0027ll change my suggestion to call \"TextureVk::initImage\" - this will ensure we have a valid ImageHelper without flushing the staging data.",
+      "parentUuid": "d250bec1_0bd65b81",
+      "range": {
+        "startLine": 1068,
+        "startChar": 11,
+        "endLine": 1068,
+        "endChar": 16
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a60a55b_8872a5b4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5

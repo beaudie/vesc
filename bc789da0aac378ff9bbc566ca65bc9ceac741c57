@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3a15e91_3f46b453",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T19:40:18Z",
+      "side": 1,
+      "message": "Looks good! A few last comments and suggestions. I\u0027m fine if you want to address them in a follow-up. It would be great to at some point create the image storage in setStorage instead of deferring it to setSubImage.",
+      "revId": "bc789da0aac378ff9bbc566ca65bc9ceac741c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1dddadae_e46f11b8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T19:40:18Z",
+      "side": 1,
+      "message": "nit: stagingBufferOverride to clarify it\u0027s not the same as the ImageHelper-owned staging buffer.",
+      "range": {
+        "startLine": 374,
+        "startChar": 23,
+        "endLine": 374,
+        "endChar": 37
+      },
+      "revId": "bc789da0aac378ff9bbc566ca65bc9ceac741c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68cd0be7_637dc69f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T19:40:18Z",
+      "side": 1,
+      "message": "here, or as a follow-up, can you change this to check to \"is my image helper valid \u0026\u0026 do I have only have staged updates inside the defined levels of my image helper\"\n\nthis would really streamline image updates.",
+      "range": {
+        "startLine": 375,
+        "startChar": 30,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "bc789da0aac378ff9bbc566ca65bc9ceac741c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f1e7aa5_2596c0d3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T19:40:18Z",
+      "side": 1,
+      "message": "regarding your RGB comment - maybe we should only flush the current level? flushing the other levels would flush the A emulated channel for the non-0 mips.",
+      "range": {
+        "startLine": 444,
+        "startChar": 18,
+        "endLine": 444,
+        "endChar": 40
+      },
+      "revId": "bc789da0aac378ff9bbc566ca65bc9ceac741c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
