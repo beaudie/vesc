@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "7bbfa984_446b526a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T19:38:13Z",
+      "side": 1,
+      "message": "I\u0027m not particularly a fan of \"restart\" here. It sounds like it starts the render pass again, but really it\u0027s \"unclosing\" it.",
+      "parentUuid": "0625eea7_02d49460",
+      "range": {
+        "startLine": 4437,
+        "startChar": 16,
+        "endLine": 4437,
+        "endChar": 41
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3fc2603_a42066de",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 37
@@ -88,6 +112,29 @@
     },
     {
       "key": {
+        "uuid": "140f4f73_204b2841",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T19:38:13Z",
+      "side": 1,
+      "message": "This section of this table is also not valid. You can remove everything here and say \"Invalid\" or something.",
+      "range": {
+        "startLine": 154,
+        "startChar": 65,
+        "endLine": 154,
+        "endChar": 89
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "daa943e1_836d08a1",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 37
@@ -104,6 +151,75 @@
         "startChar": 9,
         "endLine": 986,
         "endChar": 43
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f948b4d9_ad7246f8",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T19:38:13Z",
+      "side": 1,
+      "message": "The usual nit! :)",
+      "range": {
+        "startLine": 1165,
+        "startChar": 4,
+        "endLine": 1165,
+        "endChar": 88
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87aabe2a_6770ef78",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T19:38:13Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 1232,
+        "startChar": 4,
+        "endLine": 1232,
+        "endChar": 88
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9368b81e_9f315754",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T19:38:13Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 303,
+        "startChar": 4,
+        "endLine": 303,
+        "endChar": 88
       },
       "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
