@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "0bbd8297_cdf6cf5e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T20:03:23Z",
+      "side": 1,
+      "message": "This is a good question. I don\u0027t have data on the performance of changing to read-only layouts for depth Textures. I can confirm we lose the individual shader stage barriers for depth Textures. In practice depth formats won\u0027t be as common as other formats so we might not need to prioritize fixing the barriers.\n\nUsing this layout proactively has a huge design upside in that we don\u0027t need to re-transition a depth texture from shader read-only to depth-stencil read-only when we switch to the read-only feedback loop mode. This saves on RenderPasses breaks in this CL.\n\nIn the next CL it may be possible to use the \"restart RenderPass\" method to have both specialized layouts and fewer RPs. Again the uncertain part is how impactful these small optimizations may be. For sure we gain way more than we lose in this CL as it stands.\n\nI\u0027ll add a comment here detailing some of these concerns.",
+      "parentUuid": "8e836409_bb055d28",
+      "range": {
+        "startLine": 1389,
+        "startChar": 11,
+        "endLine": 1389,
+        "endChar": 66
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86d8b3d0_f9c5972c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -53,6 +77,24 @@
       "writtenOn": "2020-08-19T19:01:57Z",
       "side": 1,
       "message": "Can you move this declaration to where it\u0027s used below:\n\n        vk::TextureUnit \u0026activeTexture \u003d mActiveTextures[textureUnit];\n        activeTexture.texture \u003d textureVk;\n        activeTexture.sampler \u003d \u0026samplerVk;\n\nhttps://google.github.io/styleguide/cppguide.html#Local_Variables",
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96731e3e_3fae3c90",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3885,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T20:03:23Z",
+      "side": 1,
+      "message": "I use this in the next patch, would prefer to leave it just to avoid making a conflict in that next CL.",
+      "parentUuid": "86d8b3d0_f9c5972c",
       "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +118,24 @@
     },
     {
       "key": {
+        "uuid": "80ca217b_2fd3f7d0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3894,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T20:03:23Z",
+      "side": 1,
+      "message": "Done, a relic of a previous iteration.",
+      "parentUuid": "16ed1138_f8d6f34c",
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "144d3078_66c0eccf",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -87,6 +147,30 @@
       "writtenOn": "2020-08-19T19:01:57Z",
       "side": 1,
       "message": "Since flushDeferredClears() will eventually call flushCommandsAndEndRenderPass() if there\u0027s work to do, I think you can combine them to an else-if:\n\n            // Special handling for deferred clears.\n            if (mDrawFramebuffer-\u003ehasDeferredClears())\n            {\n                gl::Rectangle scissoredRenderArea \u003d\n                    mDrawFramebuffer-\u003egetRotatedScissoredRenderArea(this);\n                ANGLE_TRY(mDrawFramebuffer-\u003eflushDeferredClears(this, scissoredRenderArea));\n            }\n            // TODO(jmadill): Don\u0027t end RenderPass. http://anglebug.com/4959\n            else if (hasStartedRenderPass())\n            {\n                ANGLE_TRY(flushCommandsAndEndRenderPass());\n            }\n\nThat shouldn\u0027t change the actual functionality any, but just makes it a little more clear we are only ending the render pass once and how.",
+      "range": {
+        "startLine": 3896,
+        "startChar": 0,
+        "endLine": 3908,
+        "endChar": 13
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd29ef08_1cfdee14",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3908,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T20:03:23Z",
+      "side": 1,
+      "message": "when does flushDeferredClears call endRP? I don\u0027t see it calling that in tip of tree.",
+      "parentUuid": "144d3078_66c0eccf",
       "range": {
         "startLine": 3896,
         "startChar": 0,
@@ -193,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "aabc3ddb_134929bc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1641,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T20:03:23Z",
+      "side": 1,
+      "message": "The desc remains the same because we no longer \"null\" out the depth buffer on feedback loops. (Change in behaviour is in RendererVk where we disable the Feature).",
+      "parentUuid": "ab3d181b_2c141b80",
+      "range": {
+        "startLine": 1640,
+        "startChar": 4,
+        "endLine": 1641,
+        "endChar": 5
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56c11d44_799427a9",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 21
@@ -204,6 +312,30 @@
       "writtenOn": "2020-08-19T19:01:57Z",
       "side": 1,
       "message": "Was this a bug that was missed?",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 50
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a34e9f_36e7ce5f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T20:03:23Z",
+      "side": 1,
+      "message": "Sorry, not seeing it. Which bug?",
+      "parentUuid": "56c11d44_799427a9",
       "range": {
         "startLine": 124,
         "startChar": 0,
