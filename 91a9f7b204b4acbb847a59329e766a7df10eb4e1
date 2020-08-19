@@ -255,6 +255,30 @@
     },
     {
       "key": {
+        "uuid": "a411effb_b7e2d029",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3908,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:53:28Z",
+      "side": 1,
+      "message": "My point is that we don\u0027t need to do another flushCommandsAndEndRenderPass() if we already did it because hasDeferredClears() was true.   Either hasDeferredClears() \u003d\u003d true which leads to flushCommandsAndEndRenderPass() or hasStartedRenderPass() \u003d\u003d true and we need to flushCommandsAndEndRenderPass() directly.\n\nIt don\u0027t think we need to do two calls to flushCommandsAndEndRenderPass() if there were deferred clears, but maybe there\u0027s another piece I\u0027m missing.\n\nNot too big of a deal, since flushCommandsAndEndRenderPass() will bail early if there\u0027s nothing to do.",
+      "parentUuid": "49f05b6f_a0f4f2ae",
+      "range": {
+        "startLine": 3896,
+        "startChar": 0,
+        "endLine": 3908,
+        "endChar": 13
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f2d77e_405c4c33",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
