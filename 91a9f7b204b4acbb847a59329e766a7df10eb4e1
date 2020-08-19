@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1384496a_7a892415",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T14:36:40Z",
+      "side": 1,
+      "message": "PTAL. A second CL gets rid of a couple more RenderPasses. If you think of any cases that wouldn\u0027t be covered by our tests let me know.",
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
