@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "2a36e7d4_43ab3391",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T20:25:00Z",
+      "side": 1,
+      "message": "Maybe we should ask partners on this or write a test to get data ourselves.",
+      "parentUuid": "0bbd8297_cdf6cf5e",
+      "range": {
+        "startLine": 1389,
+        "startChar": 11,
+        "endLine": 1389,
+        "endChar": 66
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86d8b3d0_f9c5972c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
