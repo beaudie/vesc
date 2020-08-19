@@ -207,6 +207,30 @@
     },
     {
       "key": {
+        "uuid": "fe74bae2_9e73e06e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3908,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T21:19:49Z",
+      "side": 1,
+      "message": "This is what I see with ToT as of this morning:\n\n    angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk,\n                                                     const gl::Rectangle \u0026renderArea)\n    {\n        if (mDeferredClears.empty())\n            return angle::Result::Continue;\n\n        return contextVk-\u003estartRenderPass(renderArea, nullptr);\n    }\n\n\u003d\u003d\u003d\u003d\n\n    angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,\n                                             vk::CommandBuffer **commandBufferOut)\n    {\n        mGraphicsDirtyBits |\u003d mNewGraphicsCommandBufferDirtyBits;\n        ANGLE_TRY(mDrawFramebuffer-\u003estartNewRenderPass(this, renderArea, \u0026mRenderPassCommandBuffer));\n\n\u003d\u003d\u003d\u003d\n\n    angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,\n                                                    const gl::Rectangle \u0026renderArea,\n                                                    vk::CommandBuffer **commandBufferOut)\n    {\n        vk::Framebuffer *framebuffer \u003d nullptr;\n        ANGLE_TRY(getFramebuffer(contextVk, \u0026framebuffer));\n\n        ANGLE_TRY(contextVk-\u003eflushCommandsAndEndRenderPass());",
+      "parentUuid": "dd29ef08_1cfdee14",
+      "range": {
+        "startLine": 3896,
+        "startChar": 0,
+        "endLine": 3908,
+        "endChar": 13
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f2d77e_405c4c33",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -369,6 +393,30 @@
       "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4709ec3_65c0db2f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T21:19:49Z",
+      "side": 1,
+      "message": "Oh, nevermind, I missed it was being called before with DepthStencilAttachment.",
+      "parentUuid": "b0a34e9f_36e7ce5f",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 50
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
