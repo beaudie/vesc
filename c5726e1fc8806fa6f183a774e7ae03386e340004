@@ -144,6 +144,29 @@
     },
     {
       "key": {
+        "uuid": "af27787e_77b3349b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T16:51:43Z",
+      "side": 1,
+      "message": "I think this statement needs to be swapped.   The render pass\u0027s area is entirely enclosed by the invalidated area.",
+      "range": {
+        "startLine": 331,
+        "startChar": 19,
+        "endLine": 331,
+        "endChar": 79
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f79dd8e9_7f3bbe93",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -160,6 +183,29 @@
         "startChar": 32,
         "endLine": 2250,
         "endChar": 82
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de4d6af7_45eb49e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T16:51:43Z",
+      "side": 1,
+      "message": "This is an awkward name.   Maybe something like \u0027shouldDiscardDepthAttachment\u0027.",
+      "range": {
+        "startLine": 944,
+        "startChar": 9,
+        "endLine": 944,
+        "endChar": 38
       },
       "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -206,6 +252,29 @@
         "startChar": 43,
         "endLine": 949,
         "endChar": 50
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cb52f7c_5b19e9a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T16:51:43Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like mStencilEverInvalidated is necessary (or mDepthEverInvalidated).   Both mStencilEverInvalidated and mStencilInvalidated are set to true together, so if mStencilInvalidated is true, mStencilEverInvalidated must also be true too.\n\nIs there some other reason we need to know if it was ever invalidated beforehand?   Or can it be removed?",
+      "range": {
+        "startLine": 962,
+        "startChar": 12,
+        "endLine": 962,
+        "endChar": 35
       },
       "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -328,6 +397,29 @@
     },
     {
       "key": {
+        "uuid": "c206c568_dd998970",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T16:51:43Z",
+      "side": 1,
+      "message": "Can be removed.\n\nTaking it further, are either of these checks necessary or can you just always set mDepthInvalidated \u003d false?",
+      "range": {
+        "startLine": 1045,
+        "startChar": 16,
+        "endLine": 1045,
+        "endChar": 33
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "968db6ec_29d48f54",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 10
@@ -344,6 +436,46 @@
         "startChar": 31,
         "endLine": 1053,
         "endChar": 43
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dfdc941_f15e0895",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T16:51:43Z",
+      "side": 1,
+      "message": "Same as above with depth.",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3a07f79_616a5a7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T16:51:43Z",
+      "side": 1,
+      "message": "Similar to Shabi\u0027s comment above, this check can be removed.",
+      "range": {
+        "startLine": 1059,
+        "startChar": 16,
+        "endLine": 1059,
+        "endChar": 35
       },
       "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
