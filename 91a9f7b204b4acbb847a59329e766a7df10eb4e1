@@ -39,6 +39,30 @@
       "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce5fb15d_e0e1d59b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4832,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T17:40:15Z",
+      "side": 1,
+      "message": "isReadOnlyDepthMode -\u003e feedback loop . I call the new state \"read-only depth-stencil mode\".",
+      "parentUuid": "55f2d77e_405c4c33",
+      "range": {
+        "startLine": 4826,
+        "startChar": 8,
+        "endLine": 4832,
+        "endChar": 9
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
