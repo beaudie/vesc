@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6815cc9d_5b15d09c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-19T02:37:49Z",
+      "side": 1,
+      "message": "PTAL, sample command line for autoroller would be:\n./scripts/roll_chromium_deps.py --revision\u003da5b5daf87edf -v --ignore-unclean-workdir --autoroll",
+      "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9d6b1976_a8c78320",
+        "filename": "scripts/roll_chromium_deps.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-19T02:37:49Z",
+      "side": 1,
+      "message": "I decided to insert the changed deps before \"Bug:\" line, which means after autoroller\u0027s \"Documentation for the AutoRoller is here\" line.\nIt would have looked prettier before \"If this roll has caused a breakage\" line, but I don\u0027t want to rely on autoroller not changing it.\n\"Bug:\" should always be there, or it won\u0027t pass presubmit.",
+      "range": {
+        "startLine": 529,
+        "startChar": 0,
+        "endLine": 535,
+        "endChar": 0
+      },
+      "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
