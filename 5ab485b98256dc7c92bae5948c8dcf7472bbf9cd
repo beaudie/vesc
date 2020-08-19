@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe193b65_5a41a129",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:22:38Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0625eea7_02d49460",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:22:38Z",
+      "side": 1,
+      "message": "nit: maybe restart is clearer than restore? ymmv.",
+      "range": {
+        "startLine": 4437,
+        "startChar": 16,
+        "endLine": 4437,
+        "endChar": 41
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3fc2603_a42066de",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:22:38Z",
+      "side": 1,
+      "message": "maybe \"restartRenderPassIfFinished\" ?",
+      "range": {
+        "startLine": 1116,
+        "startChar": 23,
+        "endLine": 1116,
+        "endChar": 48
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de00006e_98d6c14c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:22:38Z",
+      "side": 1,
+      "message": "is this the only place you use this method? Maybe you can remove the method and just call mFramebuferDesc directly?",
+      "range": {
+        "startLine": 1239,
+        "startChar": 4,
+        "endLine": 1239,
+        "endChar": 37
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daa943e1_836d08a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:22:38Z",
+      "side": 1,
+      "message": "nit: maybe action-ify this command, like restartRenderPassOnResolve ? to clarify this is not for general use.",
+      "range": {
+        "startLine": 986,
+        "startChar": 9,
+        "endLine": 986,
+        "endChar": 43
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -464,6 +464,30 @@
     },
     {
       "key": {
+        "uuid": "a921edde_3546f5f6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:22:38Z",
+      "side": 1,
+      "message": "The TODO would be for simultaneous RPs, where we wouldn\u0027t need to special case flush/end for blit any more. Anyway not a big deal.",
+      "parentUuid": "d47c967c_6b6ae668",
+      "range": {
+        "startLine": 1759,
+        "startChar": 0,
+        "endLine": 1768,
+        "endChar": 5
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df536334_c3f7cb51",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 36
