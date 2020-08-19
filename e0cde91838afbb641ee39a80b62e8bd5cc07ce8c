@@ -33,6 +33,121 @@
       "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0f09135_7b72486e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T18:45:50Z",
+      "side": 1,
+      "message": "I can remove this.",
+      "range": {
+        "startLine": 950,
+        "startChar": 1,
+        "endLine": 951,
+        "endChar": 1
+      },
+      "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47ba0b9c_78f568e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T18:45:50Z",
+      "side": 1,
+      "message": "I can remove this from this method.  if mDepthInvalidated is true, this will be too.",
+      "range": {
+        "startLine": 960,
+        "startChar": 16,
+        "endLine": 960,
+        "endChar": 41
+      },
+      "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aedb489b_7864c7a8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T18:45:50Z",
+      "side": 1,
+      "message": "I can remove this.",
+      "range": {
+        "startLine": 969,
+        "startChar": 0,
+        "endLine": 969,
+        "endChar": 50
+      },
+      "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4afb13e2_af5ec51f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T18:45:50Z",
+      "side": 1,
+      "message": "I can remove this from this method.  if mStencilInvalidated is true, this will be too.",
+      "range": {
+        "startLine": 979,
+        "startChar": 16,
+        "endLine": 979,
+        "endChar": 43
+      },
+      "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0aa722d_c394679c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T18:45:50Z",
+      "side": 1,
+      "message": "These are needed.",
+      "range": {
+        "startLine": 995,
+        "startChar": 16,
+        "endLine": 995,
+        "endChar": 67
+      },
+      "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
