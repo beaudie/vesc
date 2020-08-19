@@ -4252,20 +4252,6 @@ void ImageHelper::stageSelfForBaseLevel()
                                     getLevelExtents(0), mImageType);
 }
 
-angle::Result ImageHelper::allocateStagingMemory(ContextVk *contextVk,
-                                                 size_t sizeInBytes,
-                                                 uint8_t **ptrOut,
-                                                 BufferHelper **bufferOut,
-                                                 StagingBufferOffsetArray *offsetOut,
-                                                 bool *newBufferAllocatedOut)
-{
-    VkBuffer handle;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, sizeInBytes, ptrOut, &handle, &(*offsetOut)[0],
-                                      newBufferAllocatedOut));
-    *bufferOut = mStagingBuffer.getCurrentBuffer();
-    return angle::Result::Continue;
-}
-
 angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contextVk,
                                                                uint32_t levelGL,
                                                                uint32_t layer,
@@ -4658,9 +4644,11 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
 
     const VkImageAspectFlags aspectFlags = getAspectFlags();
 
-    // Allocate staging buffer data
-    ANGLE_TRY(allocateStagingMemory(contextVk, *bufferSize, outDataPtr, bufferOut, bufferOffsetsOut,
-                                    nullptr));
+    // Allocate staging buffer data from context
+    VkBuffer bufferHandle;
+    ANGLE_TRY(contextVk->getStagingBufferStorage()->allocate(
+        contextVk, *bufferSize, outDataPtr, &bufferHandle, &(*bufferOffsetsOut)[0], nullptr));
+    *bufferOut = contextVk->getStagingBufferStorage()->getCurrentBuffer();
 
     uint32_t sourceLevelVk = static_cast<uint32_t>(sourceLevelGL) - mBaseLevel;
 
@@ -4717,8 +4705,7 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
 
     CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
-    commandBuffer.copyImageToBuffer(mImage, getCurrentLayout(),
-                                    (*bufferOut)->getBuffer().getHandle(), 1, regions);
+    commandBuffer.copyImageToBuffer(mImage, getCurrentLayout(), bufferHandle, 1, regions);
 
     return angle::Result::Continue;
 }
