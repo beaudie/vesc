@@ -123,6 +123,30 @@
     },
     {
       "key": {
+        "uuid": "d250bec1_0bd65b81",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T18:32:13Z",
+      "side": 1,
+      "message": "Isn\u0027t doing it here is too early? It does not have any data yet. If we call ensureImageInitialized here, and if it is RGB texture, you will end up flush out alpha channel writes here and then later on when user did provide data at TextureVk::setSubImageImpl, we flush out RGBA data again. If I do it in TextureVk::setSubImageImpl(), they will flush out once and there is logic there that will figure out alpha channel init is redundant an will remove the alpha init.",
+      "parentUuid": "c82ec4c0_6cfdab16",
+      "range": {
+        "startLine": 1068,
+        "startChar": 11,
+        "endLine": 1068,
+        "endChar": 16
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a60a55b_8872a5b4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -157,6 +181,30 @@
       "writtenOn": "2020-08-19T18:06:58Z",
       "side": 1,
       "message": "nit: stagingBufferOverride for naming consistent and clarity",
+      "range": {
+        "startLine": 1253,
+        "startChar": 60,
+        "endLine": 1253,
+        "endChar": 74
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f101cef2_af242292",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T18:32:13Z",
+      "side": 1,
+      "message": "The problem is a lot of places you have dynamciBuffer and the current buffer of dynamicBuffer, so there is some naming confusion here if you name it \"buffer\". The uniform buffer code was using word \"Storage\" for dynamicBuffer and use \"buffer\" for the current buffer in the dynamic buffer (before I made any change in the area). So there is some split there and I am incline more toward use the word stagingStorage for the dynamicBuffer and currentBuffer for the current buffer in the storage.\n\nEitherway, I agree we should be consistent. Maybe we should discuss and pick a name and do a sweep change of the naming.",
+      "parentUuid": "5e6e5e66_7632e441",
       "range": {
         "startLine": 1253,
         "startChar": 60,
