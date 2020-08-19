@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "799ba60a_e3b51295",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-19T19:22:10Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "ed4de524_eaeddfba",
+      "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d6b1976_a8c78320",
         "filename": "scripts/roll_chromium_deps.py",
         "patchSetId": 1
@@ -80,6 +98,30 @@
       "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516c348b_b2c7929c",
+        "filename": "scripts/roll_chromium_deps.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-08-19T19:22:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0db41f74_886f624e",
+      "range": {
+        "startLine": 529,
+        "startChar": 0,
+        "endLine": 535,
+        "endChar": 0
+      },
+      "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
