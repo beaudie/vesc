@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b2956e6_058c537a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T20:01:02Z",
+      "side": 1,
+      "message": "I replaced most of the bool\u0027s with a state-tracking enum.  It does simplify the logic (I hope you agree).",
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
