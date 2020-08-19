@@ -36,6 +36,70 @@
     },
     {
       "key": {
+        "uuid": "b05fc39d_11c994d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:06:58Z",
+      "side": 1,
+      "message": "Thinking about it more - see other comments.",
+      "parentUuid": "e5309eab_1a31fe2a",
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c70534b_ca50fa6e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:06:58Z",
+      "side": 1,
+      "message": "following up with my prior comment - you can make this \"if a) mOwnsImage is false, or b) the staging buffer is empty, and the image is defined\" and then we can condense a few cases.",
+      "range": {
+        "startLine": 374,
+        "startChar": 0,
+        "endLine": 378,
+        "endChar": 5
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88707b4a_9fcb332d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:06:58Z",
+      "side": 1,
+      "message": "here you can condense this case with the above logic.",
+      "range": {
+        "startLine": 440,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 0
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c82ec4c0_6cfdab16",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -52,6 +116,52 @@
         "startChar": 11,
         "endLine": 1068,
         "endChar": 16
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a60a55b_8872a5b4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3743,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:06:58Z",
+      "side": 1,
+      "message": "you can reorganize this case to use a single pointer and reduce code duplication.",
+      "range": {
+        "startLine": 3730,
+        "startChar": 0,
+        "endLine": 3743,
+        "endChar": 0
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6e5e66_7632e441",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T18:06:58Z",
+      "side": 1,
+      "message": "nit: stagingBufferOverride for naming consistent and clarity",
+      "range": {
+        "startLine": 1253,
+        "startChar": 60,
+        "endLine": 1253,
+        "endChar": 74
       },
       "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
