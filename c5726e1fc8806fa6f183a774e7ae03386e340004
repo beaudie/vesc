@@ -288,6 +288,29 @@
     },
     {
       "key": {
+        "uuid": "db89554d_a48ac03f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T16:12:59Z",
+      "side": 1,
+      "message": "if depthTest\u003d\u003dtrue and depthMask\u003d\u003dfalse, depth buffer is still been used for depth test (read), just not for write. mDepthTestEverEnabled should set to true so that we will not skip the depth load/clear. This change will make mDepthTestEverEnabled set to false, thus skip the depth load/clear",
+      "range": {
+        "startLine": 1044,
+        "startChar": 12,
+        "endLine": 1044,
+        "endChar": 40
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "968db6ec_29d48f54",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 10
