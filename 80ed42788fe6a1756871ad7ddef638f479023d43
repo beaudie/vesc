@@ -52,6 +52,24 @@
       "revId": "80ed42788fe6a1756871ad7ddef638f479023d43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "838e1cb3_bb396343",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T02:32:10Z",
+      "side": 1,
+      "message": "Can follow up on this. Will need to take more time to see what your other CL does.",
+      "parentUuid": "84ace420_f884248b",
+      "revId": "80ed42788fe6a1756871ad7ddef638f479023d43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

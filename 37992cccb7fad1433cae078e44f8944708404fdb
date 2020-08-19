@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "0bad7e7e_f09e1e6c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T02:32:10Z",
+      "side": 1,
+      "message": "I believe in a later CL I do use the !depthTest feature so I left it in. It seems more future proof to have the contract of the function be complete by handling the unused case. If we need to micro-optimize it\u0027s easier when you are targeting a specific benchmark.",
+      "parentUuid": "cea1cf7c_1ce0fd65",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b25ffec_a360c305",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -67,6 +85,24 @@
       "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8187fb89_2828118b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T02:32:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8b25ffec_a360c305",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "0d3ef63b_5476279e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2844,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T02:32:10Z",
+      "side": 1,
+      "message": "During my refactoring I had local variables before moving them into the \"GetDepthAccess\" helper function. I just happened to leave them in. We could remove them. No real reason to have them either way.",
+      "parentUuid": "a32e1241_7fbd81e1",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09504d0b_f6d3d2d9",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -98,6 +152,24 @@
       "writtenOn": "2020-08-18T15:18:59Z",
       "side": 1,
       "message": "FYI ... As mentioned above, I removed the test for mState.isDepthTestEnabled() in my CL.  For invalidate testing, it\u0027s good to know when depth is disabled.",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94fe79b0_6bf8901f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T02:32:10Z",
+      "side": 1,
+      "message": "Again no preference for the test. I left it in to be slightly faster (can early out in some cases) and just to alter the code less.",
+      "parentUuid": "09504d0b_f6d3d2d9",
       "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -132,6 +204,24 @@
       "writtenOn": "2020-08-18T15:18:59Z",
       "side": 1,
       "message": "I don\u0027t see a getDepthStencilAccess() method.  Is that introduced in one of your other CLs in this chain?",
+      "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e1c9dc6_015c64db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T02:32:10Z",
+      "side": 1,
+      "message": "Yes, an earlier CL.",
+      "parentUuid": "9925b9bb_5e7102c9",
       "revId": "37992cccb7fad1433cae078e44f8944708404fdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
