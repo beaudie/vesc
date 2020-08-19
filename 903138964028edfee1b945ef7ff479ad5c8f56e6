@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "ed4de524_eaeddfba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T13:30:28Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "903138964028edfee1b945ef7ff479ad5c8f56e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d6b1976_a8c78320",
         "filename": "scripts/roll_chromium_deps.py",
         "patchSetId": 1
