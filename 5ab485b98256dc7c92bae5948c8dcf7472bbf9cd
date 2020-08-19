@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "d39eaee2_8ca804f3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T19:42:12Z",
+      "side": 1,
+      "message": "Shabi: RenderPasses have two states: finished and started. Calling it restart (aka \"unfinish\") is consistent. Even if you personally don\u0027t like the terminology it is at least consistent to use the same terms.\n\nThat being said it really doesn\u0027t matter much what term we use here as they all are pretty good.",
+      "parentUuid": "7bbfa984_446b526a",
+      "range": {
+        "startLine": 4437,
+        "startChar": 16,
+        "endLine": 4437,
+        "endChar": 41
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3fc2603_a42066de",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 37
