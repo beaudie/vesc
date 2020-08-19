@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "8e836409_bb055d28",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T18:50:19Z",
+      "side": 1,
+      "message": "I know this layout works for sampling and depth test, but are we sure that there is no performance difference if this is only used for sampling? Just wondering if we should use it only when readonly feedback loop, since this looks like will use this layout for texture tetxure sampling regardless of there is feedback loop or not.",
+      "range": {
+        "startLine": 1389,
+        "startChar": 11,
+        "endLine": 1389,
+        "endChar": 66
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f2d77e_405c4c33",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -59,6 +82,53 @@
         "startChar": 8,
         "endLine": 4832,
         "endChar": 9
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64bd3f81_51f49aa0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4832,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T18:50:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ce5fb15d_e0e1d59b",
+      "range": {
+        "startLine": 4826,
+        "startChar": 8,
+        "endLine": 4832,
+        "endChar": 9
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab3d181b_2c141b80",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1641,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T18:50:19Z",
+      "side": 1,
+      "message": "I remember this is where I was seeing we endRP when there is feedback loop. I know it is working since you already tested. Just curious with your fix, how this \"\u003d\u003d\" will return true?",
+      "range": {
+        "startLine": 1640,
+        "startChar": 4,
+        "endLine": 1641,
+        "endChar": 5
       },
       "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
