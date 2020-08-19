@@ -384,6 +384,9 @@ TEST_P(IOSurfaceClientBufferTest, RenderToBGRA8888IOSurface)
 {
     ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
 
+    // TODO(http://anglebug.com/4369)
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'BGRA', 4);
 
     GLColor color(3, 2, 1, 4);
@@ -434,6 +437,9 @@ TEST_P(IOSurfaceClientBufferTest, RenderToRG88IOSurface)
 {
     ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
 
+    // TODO(http://anglebug.com/4369)
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, '2C08', 2);
 
     std::array<uint8_t, 2> color{1, 2};
@@ -455,6 +461,9 @@ TEST_P(IOSurfaceClientBufferTest, ReadFromRG88IOSurface)
 TEST_P(IOSurfaceClientBufferTest, RenderToR8IOSurface)
 {
     ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
+
+    // TODO(http://anglebug.com/4369)
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
 
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'L008', 1);
 
