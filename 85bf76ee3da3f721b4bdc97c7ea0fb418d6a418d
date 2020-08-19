@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a35e5ae3_285a0299",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T23:55:47Z",
+      "side": 1,
+      "message": "PTAL at the diff between Patch Sets 1 and 2 for the re-land.",
+      "revId": "85bf76ee3da3f721b4bdc97c7ea0fb418d6a418d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1cb218be_9337b695",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T23:55:47Z",
+      "side": 1,
+      "message": "can make this a split CL if you think I should",
+      "range": {
+        "startLine": 63,
+        "startChar": 61,
+        "endLine": 63,
+        "endChar": 66
+      },
+      "revId": "85bf76ee3da3f721b4bdc97c7ea0fb418d6a418d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
