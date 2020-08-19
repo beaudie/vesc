@@ -231,6 +231,30 @@
     },
     {
       "key": {
+        "uuid": "49f05b6f_a0f4f2ae",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3908,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T22:31:14Z",
+      "side": 1,
+      "message": "Right.. we flush before we start the RP. We never flush after we set up the load ups to clear. The code here is explicitly forcing the clears out by flushing - we can\u0027t use load op clear in a read-only depth/stencil.",
+      "parentUuid": "fe74bae2_9e73e06e",
+      "range": {
+        "startLine": 3896,
+        "startChar": 0,
+        "endLine": 3908,
+        "endChar": 13
+      },
+      "revId": "91a9f7b204b4acbb847a59329e766a7df10eb4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f2d77e_405c4c33",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
