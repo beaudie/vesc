@@ -374,7 +374,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     vk::DynamicBuffer *stagingBufferOverride = nullptr;
     if (!mOwnsImage || mState.getImmutableFormat())
     {
-        stagingBufferOverride = contextVk->getStagingBufferStorage();
+        stagingBufferOverride = contextVk->getStagingBuffer();
     }
 
     if (unpackBuffer)
