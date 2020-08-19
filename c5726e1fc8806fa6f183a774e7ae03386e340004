@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "1dd5f319_2c8222a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-19T16:30:45Z",
+      "side": 1,
+      "message": "I think you don\u0027t really need the extra state tracking here. The existing mDepthTestEverEnabled is enough for your purpose as well as I commented in the ddoc. What you try to detect if someone writes to depth buffer after invalidate. mDepthTestEVerEnabled tracks read_or_write. So on the surface, tracking write will make sure we do not turn storeOP on in the case of just doing read. But why would someone enable depth test after calling invalidate and without write to depth buffer? They will getting undefined depth values to do that, app will have rendering correctness issue. So logically if they actually want to use depth buffer after invalidate, they will enable depth test and enable write and write to it first (either via clear or set depthFunc to always pass or whatever other method). So if you just check depthTest, ignore depthMask, I think you are as good as you are now, and avoid all the complexity of tracking depthMask as well.",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c1811a8_40b238bd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
