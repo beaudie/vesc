@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "c98e5cd4_1c00fcf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-19T22:43:23Z",
+      "side": 1,
+      "message": "while trying out the patch -\n\n../../src\\libANGLE/renderer/vulkan/vk_helpers.h(980,62): error: no member named \u0027size\u0027 in \u0027angle::FastIntegerMap\u003cunsigned int, rx::vk::BufferAccess, rx::vk::BufferAccess::Unused\u003e\u0027\n    size_t getUsedBuffersCount() const { return mUsedBuffers.size(); }\n                                                ~~~~~~~~~~~~ ^\n1 error generated.",
+      "revId": "fc3f46d7e3fc8051e2f7925eeb6b4afc59b20711",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3dd6512e_105b0530",
         "filename": "src/common/FastVector.h",
         "patchSetId": 2
