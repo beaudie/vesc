@@ -90,6 +90,30 @@
     },
     {
       "key": {
+        "uuid": "b0a94d1c_d3f76dcc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "I agree that \"restart\" implies more work than is actually being done here, especially when comparing to everything done in startRenderPass().   \n\nI think there are really 2.5 states for a render pass:\n1) Started\n1.5) Finished: mRenderPassCommandBuffer \u003d nullptr\n2) Ended: flushCommandsAndEndRenderPass()\n\nWe\u0027re trying to get back from Finished -\u003e Started, which is where \"unfinish\" makes sense, though that\u0027s not really a word.\n\nI\u0027m going to stick with \u0027restore\u0027 for now, since that\u0027s really all that\u0027s being done here: restoring the pointer to what it was before it was set to null by onRenderPassFinished().",
+      "parentUuid": "d39eaee2_8ca804f3",
+      "range": {
+        "startLine": 4437,
+        "startChar": 16,
+        "endLine": 4437,
+        "endChar": 41
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3fc2603_a42066de",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 37
@@ -110,6 +134,30 @@
       "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12bf4393_72901e07",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "Resolving this comment since the discussion is above.",
+      "parentUuid": "b3fc2603_a42066de",
+      "range": {
+        "startLine": 1116,
+        "startChar": 23,
+        "endLine": 1116,
+        "endChar": 48
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -136,6 +184,30 @@
     },
     {
       "key": {
+        "uuid": "037f4086_6a038f6a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de00006e_98d6c14c",
+      "range": {
+        "startLine": 1239,
+        "startChar": 4,
+        "endLine": 1239,
+        "endChar": 37
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "140f4f73_204b2841",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 37
@@ -159,6 +231,30 @@
     },
     {
       "key": {
+        "uuid": "63e3339e_619ca771",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "140f4f73_204b2841",
+      "range": {
+        "startLine": 154,
+        "startChar": 65,
+        "endLine": 154,
+        "endChar": 89
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "daa943e1_836d08a1",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 37
@@ -170,6 +266,30 @@
       "writtenOn": "2020-08-19T18:22:38Z",
       "side": 1,
       "message": "nit: maybe action-ify this command, like restartRenderPassOnResolve ? to clarify this is not for general use.",
+      "range": {
+        "startLine": 986,
+        "startChar": 9,
+        "endLine": 986,
+        "endChar": 43
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3859c6da_bd086c1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "While the framebuffer handle and render pass desc are assigned during beginRenderPass(), as far as the CommandBufferHelper is concerned, the render pass was never ended so I don\u0027t think \"restarting\" fits here.\n\nHow is updateRenderPassForResolve()?   To be fair, this isn\u0027t updating everything related to the render pass in the CommandBufferHelper (e.g., it\u0027s not touching mAttachmentOps), but I think what\u0027s really important is the \"ForResolve\" piece to indicate why it should be called.",
+      "parentUuid": "daa943e1_836d08a1",
       "range": {
         "startLine": 986,
         "startChar": 9,
@@ -205,6 +325,30 @@
     },
     {
       "key": {
+        "uuid": "86803ba6_a0ce84cb",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "Lame.",
+      "parentUuid": "f948b4d9_ad7246f8",
+      "range": {
+        "startLine": 1165,
+        "startChar": 4,
+        "endLine": 1165,
+        "endChar": 88
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87aabe2a_6770ef78",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 37
@@ -228,6 +372,30 @@
     },
     {
       "key": {
+        "uuid": "e3f63b4d_ff617740",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87aabe2a_6770ef78",
+      "range": {
+        "startLine": 1232,
+        "startChar": 4,
+        "endLine": 1232,
+        "endChar": 88
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9368b81e_9f315754",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 37
@@ -248,6 +416,30 @@
       "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f25ff12_f8fcbba2",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9368b81e_9f315754",
+      "range": {
+        "startLine": 303,
+        "startChar": 4,
+        "endLine": 303,
+        "endChar": 88
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

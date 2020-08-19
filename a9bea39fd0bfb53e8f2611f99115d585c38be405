@@ -536,6 +536,30 @@
     },
     {
       "key": {
+        "uuid": "33e957d2_d8cc8ba2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-19T22:40:59Z",
+      "side": 1,
+      "message": "To clarify, we are ending the render pass if it is *not* a blit since the framebuffer has changed at this point and any new commands should apply to the new framebuffer/render pass combination.   The call to flushCommandsAndEndRenderPass() was already here, while the change is to skip it for blits.\n\nYou\u0027re probably right that supporting multiple render passes could allow us to remove this call entirely, but that likely applies to some/most calls to flushCommandsAndEndRenderPass().   I\u0027m not sure treating this particular one special by tagging it is helpful in that regard.\n\nSince this call was here already and supporting multiple render passes is still entirely open-ended in terms of design/implementation, I\u0027m going to leave out the TODO for now to avoid any assumptions about what that change may involve.   Let me know if that\u0027s ok or if it really should be tagged.",
+      "parentUuid": "a921edde_3546f5f6",
+      "range": {
+        "startLine": 1759,
+        "startChar": 0,
+        "endLine": 1768,
+        "endChar": 5
+      },
+      "revId": "a9bea39fd0bfb53e8f2611f99115d585c38be405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df536334_c3f7cb51",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 36
