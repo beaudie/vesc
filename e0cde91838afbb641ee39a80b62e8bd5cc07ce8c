@@ -16,6 +16,23 @@
       "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b49a8e5_ac7ed44e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T18:42:27Z",
+      "side": 1,
+      "message": "Ouch!  I didn\u0027t mean to leave this ifdef in place.\n\nNOTE: I moved this functionality into \"vk_helpers.cpp\".",
+      "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
