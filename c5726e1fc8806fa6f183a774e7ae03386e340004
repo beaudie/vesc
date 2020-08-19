@@ -16,6 +16,298 @@
       "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4878cdb2_1bb11140",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "Looks much better Ian! I have mostly nits.",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c1811a8_40b238bd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2830,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "This should only restore defined contents if write mask is enabled.",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2641014_25ef06da",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2849,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "806ae3a8_97138670",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "Same with stencil",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c8bbff_586b4986",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "Should also restore stencil defined contents when writemask is changed, similar to depth mask being changed.",
+      "range": {
+        "startLine": 2890,
+        "startChar": 0,
+        "endLine": 2899,
+        "endChar": 22
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f79dd8e9_7f3bbe93",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "Can drop this. It\u0027s probably cheaper to just set the bool to true, than to first test if it\u0027s false.",
+      "range": {
+        "startLine": 2250,
+        "startChar": 32,
+        "endLine": 2250,
+        "endChar": 82
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "431a1d96_05cbc77b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "\"Enablement\"? Should this just say \"mDepthEnabled\"? Or better \"mDepthTestEnabled\"?",
+      "range": {
+        "startLine": 947,
+        "startChar": 59,
+        "endLine": 947,
+        "endChar": 75
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3c308a2_096bbb8a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 949,
+        "startChar": 43,
+        "endLine": 949,
+        "endChar": 50
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "894c55c1_8bd764c4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "same typo",
+      "range": {
+        "startLine": 964,
+        "startChar": 45,
+        "endLine": 964,
+        "endChar": 52
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571fd106_2d8aaaf3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "same typo",
+      "range": {
+        "startLine": 979,
+        "startChar": 43,
+        "endLine": 979,
+        "endChar": 50
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11a3bf1d_2214f071",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "This:\n\n    if (x)\n        return true;\n    return false;\n\nis just:\n\n    return x;",
+      "range": {
+        "startLine": 977,
+        "startChar": 0,
+        "endLine": 984,
+        "endChar": 5
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c43a9aa_5fb162a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "same typo",
+      "range": {
+        "startLine": 991,
+        "startChar": 45,
+        "endLine": 991,
+        "endChar": 52
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "968db6ec_29d48f54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "Can take `const gl::DepthStencilState \u0026dsState` similarly and look at `isStencilMaskedOut()` as well.",
+      "range": {
+        "startLine": 1053,
+        "startChar": 31,
+        "endLine": 1053,
+        "endChar": 43
+      },
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecfa1723_e51546e6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-19T15:06:20Z",
+      "side": 1,
+      "message": "I would add a comment as to why Depth/StencilEverInvalidated is necessary. At a first glance it looks redundant, but it\u0027s there to distinguish between storeOp \u003d DONT_CARE because of invalidate or because of swapchain optimization or multisampled render to texture.",
+      "revId": "c5726e1fc8806fa6f183a774e7ae03386e340004",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
