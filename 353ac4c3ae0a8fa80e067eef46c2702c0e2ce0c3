@@ -16,6 +16,46 @@
       "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5309eab_1a31fe2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T17:42:50Z",
+      "side": 1,
+      "message": "You can change the code to always flush immediately when the storage is valid.",
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c82ec4c0_6cfdab16",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T17:42:50Z",
+      "side": 1,
+      "message": "you can ensure the image is initialized here.",
+      "range": {
+        "startLine": 1068,
+        "startChar": 11,
+        "endLine": 1068,
+        "endChar": 16
+      },
+      "revId": "353ac4c3ae0a8fa80e067eef46c2702c0e2ce0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
