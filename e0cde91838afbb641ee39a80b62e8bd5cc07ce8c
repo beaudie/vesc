@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fbdad8f_18b80dbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-19T18:40:22Z",
+      "side": 1,
+      "message": "I\u0027ve addressed all outstanding feedback.  I am working on another change that eliminates some of the state-tracking bool\u0027s in favor of a state-tracking enum (similar to what Jamie did for ResourceAccess).",
+      "revId": "e0cde91838afbb641ee39a80b62e8bd5cc07ce8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
