@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b292cc8_7d7d51fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-19T23:03:43Z",
+      "side": 1,
+      "message": "tim, its a simple resolution but can you upload a patchset with the merge conflict resolved so cherry-pick can be easy?",
+      "revId": "b58a153e0eb3ecf2d3433dfd1139310a1e4be4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
