@@ -216,7 +216,20 @@ bool IsOSX()
 
 bool IsOzone()
 {
-#if defined(USE_OZONE)
+#if defined(USE_OZONE) && defined(USE_X11)
+    // We do not have a proper support for Ozone/Linux yet. Still, we need to
+    // figure out how to properly initialize tests and differentiate between
+    // X11 and Wayland. Probably, passing a command line argument could be
+    // sufficient. At the moment, run tests only for X11 backend as we don't
+    // have Wayland support in Angle. Yes, this is a bit weird to return
+    // false, but it makes it possible to continue angle tests with X11
+    // regardless of the Chromium config for linux, which is use_x11 &&
+    // use_ozone.
+    //
+    // TODO(crbug.com/angleproject/4977): make it possible to switch between
+    // X11 and Wayland on Ozone/Linux builds.
+    return false;
+#elif defined(USE_OZONE)
     return true;
 #else
     return false;
