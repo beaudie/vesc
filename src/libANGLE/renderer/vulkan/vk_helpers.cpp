@@ -588,6 +588,12 @@ CommandBufferHelper::CommandBufferHelper()
       mIsRenderPassCommandBuffer(false),
       mDepthStartAccess(ResourceAccess::Unused),
       mStencilStartAccess(ResourceAccess::Unused),
+      mDepthEverInvalidated(false),
+      mDepthInvalidated(false),
+      mDepthEnabled(false),
+      mStencilEverInvalidated(false),
+      mStencilInvalidated(false),
+      mStencilEnabled(false),
       mDepthStencilAttachmentIndex(kInvalidAttachmentIndex)
 {}
 
@@ -725,6 +731,63 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
     }
 }
 
+void CommandBufferHelper::depthStateChanged(const gl::DepthStencilState &dsState)
+{
+    // Update depth state for optimizing this render pass's loadOp and storeOp
+    ASSERT(mIsRenderPassCommandBuffer);
+    vk::ResourceAccess access;
+
+    if (!dsState.depthTest)
+    {
+        access = vk::ResourceAccess::Unused;
+    }
+    else if (!dsState.depthMask)
+    {
+        access = vk::ResourceAccess::ReadOnly;
+    }
+    else
+    {
+        access = vk::ResourceAccess::Write;
+        if (mDepthInvalidated && !mDepthEnabled)
+        {
+            // Re-enabling depth undoes the depth attachment's previous invalidation
+            mDepthInvalidated = false;
+        }
+    }
+
+    // Update the access for optimizing this render pass's loadOp
+    UpdateAccess(&mDepthStartAccess, access);
+    // Update the invalidate state for optimizing this render pass's storeOp
+    mDepthEnabled = (access == vk::ResourceAccess::Write);
+}
+
+void CommandBufferHelper::stencilStateChanged(const gl::DepthStencilState &dsState)
+{
+    // Update depth state for optimizing this render pass's stencilLoadOp and stencilStoreOp
+    ASSERT(mIsRenderPassCommandBuffer);
+    vk::ResourceAccess access;
+
+    if (!dsState.stencilTest)
+    {
+        access = vk::ResourceAccess::Unused;
+    }
+    // Simplify this check by assuming write instead of checking the masks.
+    else
+    {
+        access = vk::ResourceAccess::Write;
+        if (mStencilInvalidated && !mStencilEnabled)
+        {
+            // Re-enabling stencil undoes the stencil attachment's previous invalidation
+            mStencilInvalidated = false;
+        }
+    }
+
+    // Update the access for optimizing this render pass's loadOp
+    UpdateAccess(&mStencilStartAccess, access);
+    // Update the invalidate state for optimizing this render pass's storeOp
+    mStencilEnabled = (access == vk::ResourceAccess::Write);
+}
+
 void CommandBufferHelper::executeBarriers(ContextVk *contextVk, PrimaryCommandBuffer *primary)
 {
     // make a local copy for faster access
@@ -785,6 +848,17 @@ void CommandBufferHelper::endRenderPass()
     if (mDepthStencilAttachmentIndex == kInvalidAttachmentIndex)
     {
         return;
+    }
+
+    // Address invalidated depth/stencil attachments
+    if (shouldDiscardDepthAttachment())
+    {
+        mAttachmentOps[mDepthStencilAttachmentIndex].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    }
+    if (shouldDiscardStencilAttachment())
+    {
+        mAttachmentOps[mDepthStencilAttachmentIndex].stencilStoreOp =
+            VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
 
     // Depth/Stencil buffer optimization: if we are loading or clearing the buffer, but the
@@ -997,6 +1071,12 @@ void CommandBufferHelper::reset()
         mRebindTransformFeedbackBuffers    = false;
         mDepthStartAccess                  = ResourceAccess::Unused;
         mStencilStartAccess                = ResourceAccess::Unused;
+        mDepthEverInvalidated              = false;
+        mDepthInvalidated                  = false;
+        mDepthEnabled                      = false;
+        mStencilEverInvalidated            = false;
+        mStencilInvalidated                = false;
+        mStencilEnabled                    = false;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
         mRenderPassUsedImages.clear();
     }

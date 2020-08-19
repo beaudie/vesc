@@ -927,17 +927,73 @@ class CommandBufferHelper : angle::NonCopyable
         SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
     }
 
-    void invalidateRenderPassDepthAttachment(size_t attachmentIndex)
+    void invalidateRenderPassDepthAttachment()
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        mDepthEverInvalidated = true;
+        mDepthInvalidated     = true;
     }
 
-    void invalidateRenderPassStencilAttachment(size_t attachmentIndex)
+    void invalidateRenderPassStencilAttachment()
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        SetBitField(mAttachmentOps[attachmentIndex].stencilStoreOp,
-                    VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        mStencilEverInvalidated = true;
+        mStencilInvalidated     = true;
+    }
+
+    bool shouldDiscardDepthAttachment()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        // Return true if storeOp should be DONT_CARE.  Return true if all of the following
+        // conditions are true about the depth buffer attachment and depth state:
+        //
+        // - It has been invalidated at least once
+        // - It is currently invalidated
+        // - The functionality is currently disabled
+        //
+        // This handles various scenarios that an app/test can do with valid GLES usage.  For
+        // example, consider an app that invalidates, doesn't disable the functionality, and draws
+        // again.  In that case, the drawing that occurs after the invalidate means that there is
+        // once again valid content in the attachment (i.e. that should not be discarded).  Since
+        // we don't track draws, we must be conservative and assume that a draw may have occured
+        // since invalidation unless the functionality has also been disabled.
+        return (mDepthEverInvalidated && mDepthInvalidated && !mDepthEnabled);
+    }
+
+    bool shouldDiscardStencilAttachment()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        // Return true if stencilStoreOp should be DONT_CARE.  Return true if all of the following
+        // conditions are true about the stencil buffer attachment and stencil state:
+        //
+        // - It has been invalidated at least once
+        // - It is currently invalidated
+        // - The functionality is currently disabled
+        //
+        // This handles various scenarios that an app/test can do with valid GLES usage.  For
+        // example, consider an app that invalidates, doesn't disable the functionality, and draws
+        // again.  In that case, the drawing that occurs after the invalidate means that there is
+        // once again valid content in the attachment (i.e. that should not be discarded).  Since
+        // we don't track draws, we must be conservative and assume that a draw may have occured
+        // since invalidation unless the functionality has also been disabled.
+        return (mStencilEverInvalidated && mStencilInvalidated && !mStencilEnabled);
+    }
+
+    bool shouldRestoreDepthStencilAttachment()
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        // Return true when both depth and stencil attachments were previously-invalidated, and at
+        // least one of those attachments are no longer invalidated.  When invalidated,
+        // RenderTargetVk::mContentDefined is set to false, which will result in the loadOp and
+        // stencilLoadOp of a future render pass being set to DONT_CARE.  ContextVk::syncState()
+        // will call this method to determine if RenderTargetVk::mContentDefined should be set back
+        // to true.  Return true if all of the following conditions are true about the depth and
+        // stencil buffer attachments and depth-stencil state:
+        //
+        // - Both depth and stencil attachments have been invalidated at least once
+        // - Either or both depth and stencil attachments are not currently invalidated
+        return (mDepthEverInvalidated && mStencilEverInvalidated &&
+                (!mDepthInvalidated || !mStencilInvalidated));
     }
 
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
@@ -981,8 +1037,8 @@ class CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
-    void onDepthAccess(ResourceAccess access) { UpdateAccess(&mDepthStartAccess, access); }
-    void onStencilAccess(ResourceAccess access) { UpdateAccess(&mStencilStartAccess, access); }
+    void depthStateChanged(const gl::DepthStencilState &dsState);
+    void stencilStateChanged(const gl::DepthStencilState &dsState);
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
@@ -1011,9 +1067,18 @@ class CommandBufferHelper : angle::NonCopyable
 
     bool mIsRenderPassCommandBuffer;
 
+    // State tracking for whether to optimize the loadOp to DONT_CARE
     ResourceAccess mDepthStartAccess;
     ResourceAccess mStencilStartAccess;
 
+    // State tracking for whether to optimize the storeOp to DONT_CARE
+    bool mDepthEverInvalidated;
+    bool mDepthInvalidated;
+    bool mDepthEnabled;
+    bool mStencilEverInvalidated;
+    bool mStencilInvalidated;
+    bool mStencilEnabled;
+    // Keep track of the depth/stencil attachment index
     uint32_t mDepthStencilAttachmentIndex;
 
     // Tracks resources used in the command buffer.
