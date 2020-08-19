@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "53fd7d84_1e25eccb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-19T17:44:46Z",
+      "side": 1,
+      "message": "Quyen: waiting on response on the nits. Let us know if you\u0027re too busy and potentially we could address this for you. This is now the front of the queue of patches to land.",
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2e863ab_056506ae",
         "filename": "src/gpu_info_util/SystemInfo_macos.mm",
         "patchSetId": 11
