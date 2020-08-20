@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "62af7349_e536bc55",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2855,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0da2660_a96ace14",
+      "range": {
+        "startLine": 2854,
+        "startChar": 0,
+        "endLine": 2855,
+        "endChar": 66
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5379f813_f37963ba",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 14
@@ -62,6 +86,30 @@
       "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3b25dc7_098d5a75",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2878,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5379f813_f37963ba",
+      "range": {
+        "startLine": 2877,
+        "startChar": 24,
+        "endLine": 2878,
+        "endChar": 66
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "9bb83a35_9e50058b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2896,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bd6064f_05a0bb50",
+      "range": {
+        "startLine": 2895,
+        "startChar": 22,
+        "endLine": 2896,
+        "endChar": 66
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e38a022_183e2d32",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 14
@@ -108,6 +180,30 @@
       "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16c6e212_0d5f8bca",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4469,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Thanks, I wondered if \"on\" should be used.",
+      "parentUuid": "4e38a022_183e2d32",
+      "range": {
+        "startLine": 4469,
+        "startChar": 25,
+        "endLine": 4469,
+        "endChar": 42
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "50707283_0f03716f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c8ba8b3_376f214e",
+      "range": {
+        "startLine": 2374,
+        "startChar": 55,
+        "endLine": 2374,
+        "endChar": 65
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecbcf0c4_43fedc09",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -154,6 +274,30 @@
       "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b78afe50_146d1b30",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecbcf0c4_43fedc09",
+      "range": {
+        "startLine": 732,
+        "startChar": 26,
+        "endLine": 732,
+        "endChar": 43
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +324,30 @@
     },
     {
       "key": {
+        "uuid": "abe11766_e1814793",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4eb1ac7_1c8b46f4",
+      "range": {
+        "startLine": 769,
+        "startChar": 26,
+        "endLine": 769,
+        "endChar": 45
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2555711_4d2f2ccb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 14
@@ -200,6 +368,30 @@
       "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30516fa9_43891c01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2555711_4d2f2ccb",
+      "range": {
+        "startLine": 963,
+        "startChar": 0,
+        "endLine": 977,
+        "endChar": 5
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +418,30 @@
     },
     {
       "key": {
+        "uuid": "9c1b4c3c_f48b29bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "99b1ac1d_b58b15fb",
+      "range": {
+        "startLine": 979,
+        "startChar": 9,
+        "endLine": 979,
+        "endChar": 44
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90e7696c_08b37a51",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 14
@@ -246,6 +462,30 @@
       "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "184f1230_e3acba70",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Yes, I botched the rebase I did during a meeting.  Fixed now.",
+      "parentUuid": "90e7696c_08b37a51",
+      "range": {
+        "startLine": 320,
+        "startChar": 4,
+        "endLine": 320,
+        "endChar": 10
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -272,6 +512,30 @@
     },
     {
       "key": {
+        "uuid": "f0f50106_d912b865",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Sorry I cloned these lines from another test (took a while to find a test that was using RAII types for this, to know what you were talking about:-).\n\nBTW, fixing legacy tests for RAII is my top item for \"fix it\" week.",
+      "parentUuid": "269f32fe_f441fb80",
+      "range": {
+        "startLine": 328,
+        "startChar": 8,
+        "endLine": 328,
+        "endChar": 15
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa46378_358176ed",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 14
@@ -295,6 +559,30 @@
     },
     {
       "key": {
+        "uuid": "54258834_4ae245cd",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done.  Again, another cloned line:-)",
+      "parentUuid": "baa46378_358176ed",
+      "range": {
+        "startLine": 342,
+        "startChar": 8,
+        "endLine": 342,
+        "endChar": 24
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2bbc99f_f00d2c53",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 14
@@ -315,6 +603,30 @@
       "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dbcdda5_d561aed9",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T19:23:45Z",
+      "side": 1,
+      "message": "Done.  Again, another cloned line:-)",
+      "parentUuid": "a2bbc99f_f00d2c53",
+      "range": {
+        "startLine": 368,
+        "startChar": 31,
+        "endLine": 368,
+        "endChar": 37
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
