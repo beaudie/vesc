@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0f0bbf5c_8a0faffa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3920,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T19:48:31Z",
+      "side": 1,
+      "message": "The \"readOnlyDepthMode\" is the feature I\u0027m adding to the Framebuffer/RenderPass. The ResourceAccess is part of the tracking. We only switch to \"read-only\" mode when there\u0027s loop. The tracking we do always for every RenderPass. We need the tracking to tell us when we can retroactively go back and change the RenderPass to read-only. If there are any writes we need to break and finish the current RP before starting the read-only one.\n\nAdded more comments here.",
+      "parentUuid": "ad727951_76cb8e72",
+      "range": {
+        "startLine": 3919,
+        "startChar": 0,
+        "endLine": 3920,
+        "endChar": 52
+      },
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a54c58a8_67fea74c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "f66e780f_287a1055",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3928,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T19:48:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a54c58a8_67fea74c",
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64f6b534_fb932904",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 22
@@ -53,6 +95,30 @@
       "writtenOn": "2020-08-20T18:37:43Z",
       "side": 1,
       "message": "This sounds like something that should be fixed, rather than worked around, if we can.\n\nWhat\u0027s getting messed up?",
+      "range": {
+        "startLine": 811,
+        "startChar": 0,
+        "endLine": 812,
+        "endChar": 36
+      },
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7d6eb2c_5276174d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T19:48:31Z",
+      "side": 1,
+      "message": "The issue is submitting a single barrier command with two image transitions for the *same image* makes a race.\n\nI unfortunately won\u0027t be able to fix this fully right now. Happy to address this in a follow up. I think we should proceed with landing some version of this code due to the benefit of the improvements in Manhattan. Is that ok? I don\u0027t expect there\u0027s any GPU side performance difference, and CPU impact should be small.",
+      "parentUuid": "64f6b534_fb932904",
       "range": {
         "startLine": 811,
         "startChar": 0,
