@@ -16,6 +16,75 @@
       "revId": "82183ebb1aaea603dad8d8130e2f8e1e664d373f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d108dc26_da27f633",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3976,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T20:16:26Z",
+      "side": 1,
+      "message": "nit: can pass the entry point enum directly.",
+      "range": {
+        "startLine": 3976,
+        "startChar": 14,
+        "endLine": 3976,
+        "endChar": 26
+      },
+      "revId": "82183ebb1aaea603dad8d8130e2f8e1e664d373f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8571915_2ae23ec5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3976,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T20:16:26Z",
+      "side": 1,
+      "message": "nit: in anonymous block",
+      "range": {
+        "startLine": 3976,
+        "startChar": 5,
+        "endLine": 3976,
+        "endChar": 13
+      },
+      "revId": "82183ebb1aaea603dad8d8130e2f8e1e664d373f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a169ea1b_f2b46018",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T20:16:26Z",
+      "side": 1,
+      "message": "is this necessary? seems like it\u0027s part of expect flow. Maybe INFO()?",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 394,
+        "endChar": 0
+      },
+      "revId": "82183ebb1aaea603dad8d8130e2f8e1e664d373f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
