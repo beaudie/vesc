@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdcfe8a1_dc2d02f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T19:37:41Z",
+      "side": 1,
+      "message": "was missing a vkCmdDrawIndexed suppression.",
+      "revId": "4e69d66426d2c616fddfd7ffeb7155ecf0af1bab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
