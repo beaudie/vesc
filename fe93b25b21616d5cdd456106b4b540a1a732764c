@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad727951_76cb8e72",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3920,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-20T18:37:43Z",
+      "side": 1,
+      "message": "Is getDepthStartAccess() \u003d\u003d ResourceAccess::ReadOnly possible here?   And if so, why do we need to restartRenderPassInReadOnlyDepthMode() here rather than the render pass already being in that mode?",
+      "range": {
+        "startLine": 3919,
+        "startChar": 0,
+        "endLine": 3920,
+        "endChar": 52
+      },
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a54c58a8_67fea74c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3928,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-20T18:37:43Z",
+      "side": 1,
+      "message": "It duplicates the call in restartRenderPassInReadOnlyDepthMode(), but it\u0027s probably easier to just do:\n\n    mDrawFramebuffer-\u003esetReadOnlyDepthMode(true);",
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64f6b534_fb932904",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-20T18:37:43Z",
+      "side": 1,
+      "message": "This sounds like something that should be fixed, rather than worked around, if we can.\n\nWhat\u0027s getting messed up?",
+      "range": {
+        "startLine": 811,
+        "startChar": 0,
+        "endLine": 812,
+        "endChar": 36
+      },
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
