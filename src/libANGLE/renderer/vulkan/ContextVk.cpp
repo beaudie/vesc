@@ -283,25 +283,6 @@ EventName GetTraceEventName(const char *title, uint32_t counter)
     snprintf(buf.data(), kMaxGpuEventNameLen - 1, "%s %u", title, counter);
     return buf;
 }
-
-vk::ResourceAccess GetDepthAccess(const gl::DepthStencilState &dsState)
-{
-    if (!dsState.depthTest)
-    {
-        return vk::ResourceAccess::Unused;
-    }
-    return dsState.depthMask ? vk::ResourceAccess::Write : vk::ResourceAccess::ReadOnly;
-}
-
-vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState)
-{
-    if (!dsState.stencilTest)
-    {
-        return vk::ResourceAccess::Unused;
-    }
-    // Simplify this check by returning write instead of checking the mask.
-    return vk::ResourceAccess::Write;
-}
 }  // anonymous namespace
 
 ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
@@ -2466,10 +2447,9 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
     RenderTargetVk *depthStencilRenderTarget = mDrawFramebuffer->getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
-        size_t depthStencilAttachmentIndexVk = mDrawFramebuffer->getDepthStencilAttachmentIndexVk();
         // Change depthstencil attachment storeOp to DONT_CARE
-        mRenderPassCommands->invalidateRenderPassStencilAttachment(depthStencilAttachmentIndexVk);
-        mRenderPassCommands->invalidateRenderPassDepthAttachment(depthStencilAttachmentIndexVk);
+        mRenderPassCommands->invalidateRenderPassStencilAttachment();
+        mRenderPassCommands->invalidateRenderPassDepthAttachment();
         // Mark content as invalid so that we will not load them in next renderpass
         depthStencilRenderTarget->invalidateEntireContent();
     }
@@ -2864,10 +2844,17 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               glState.getDepthStencilState(),
                                                               glState.getDrawFramebuffer());
-                if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
+                if (mRenderPassCommands->started())
                 {
-                    vk::ResourceAccess access = GetDepthAccess(mState.getDepthStencilState());
-                    mRenderPassCommands->onDepthAccess(access);
+                    mRenderPassCommands->depthStateChanged(mState.getDepthStencilState());
+                    // Did this depth-state change undo a previous invalidation of the depth-stencil
+                    // attachment?
+                    if (mRenderPassCommands->shouldRestoreDepthStencilAttachment())
+                    {
+                        FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
+                        assert(framebufferVk == mDrawFramebuffer);
+                        framebufferVk->restoreDepthStencilDefinedContents(this);
+                    }
                 }
                 break;
             }
@@ -2880,10 +2867,17 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthWriteEnabled(&mGraphicsPipelineTransition,
                                                                glState.getDepthStencilState(),
                                                                glState.getDrawFramebuffer());
-                if (mState.isDepthTestEnabled() && mRenderPassCommands->started())
+                if (mRenderPassCommands->started())
                 {
-                    vk::ResourceAccess access = GetDepthAccess(mState.getDepthStencilState());
-                    mRenderPassCommands->onDepthAccess(access);
+                    mRenderPassCommands->depthStateChanged(mState.getDepthStencilState());
+                    // Did this depth-state change undo a previous invalidation of the depth-stencil
+                    // attachment?
+                    if (mRenderPassCommands->shouldRestoreDepthStencilAttachment())
+                    {
+                        FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
+                        assert(framebufferVk == mDrawFramebuffer);
+                        framebufferVk->restoreDepthStencilDefinedContents(this);
+                    }
                 }
                 break;
             }
@@ -2891,10 +2885,17 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateStencilTestEnabled(&mGraphicsPipelineTransition,
                                                                 glState.getDepthStencilState(),
                                                                 glState.getDrawFramebuffer());
-                if (mState.isStencilTestEnabled() && mRenderPassCommands->started())
+                if (mRenderPassCommands->started())
                 {
-                    vk::ResourceAccess access = GetStencilAccess(mState.getDepthStencilState());
-                    mRenderPassCommands->onStencilAccess(access);
+                    mRenderPassCommands->stencilStateChanged(mState.getDepthStencilState());
+                    // Did this stencil-state change undo a previous invalidation of the
+                    // depth-stencil attachment?
+                    if (mRenderPassCommands->shouldRestoreDepthStencilAttachment())
+                    {
+                        FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
+                        assert(framebufferVk == mDrawFramebuffer);
+                        framebufferVk->restoreDepthStencilDefinedContents(this);
+                    }
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
@@ -4464,16 +4465,9 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
             this, mRenderPassCommandBuffer);
     }
 
-    if (mState.isDepthTestEnabled())
-    {
-        vk::ResourceAccess access = GetDepthAccess(mState.getDepthStencilState());
-        mRenderPassCommands->onDepthAccess(access);
-    }
-    if (mState.isStencilTestEnabled())
-    {
-        vk::ResourceAccess access = GetStencilAccess(mState.getDepthStencilState());
-        mRenderPassCommands->onStencilAccess(access);
-    }
+    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+    mRenderPassCommands->depthStateChanged(dsState);
+    mRenderPassCommands->stencilStateChanged(dsState);
 
     if (commandBufferOut)
     {

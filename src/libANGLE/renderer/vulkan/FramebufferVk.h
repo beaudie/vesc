@@ -117,6 +117,7 @@ class FramebufferVk : public FramebufferImpl
     angle::Result startNewRenderPass(ContextVk *contextVk,
                                      const gl::Rectangle &renderArea,
                                      vk::CommandBuffer **commandBufferOut);
+    void restoreDepthStencilDefinedContents(ContextVk *contextVk);
 
     RenderTargetVk *getFirstRenderTarget() const;
     GLint getSamples() const;
