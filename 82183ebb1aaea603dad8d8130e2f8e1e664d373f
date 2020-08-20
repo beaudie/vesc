@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31da881b_6382814b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-20T20:11:34Z",
+      "side": 1,
+      "message": "Jamie, here\u0027s a take on handling the debug callback routines by just skipping them, as opposed to figuring out the right way to hack each parameter to disable them.  LMKWYT.",
+      "revId": "82183ebb1aaea603dad8d8130e2f8e1e664d373f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
