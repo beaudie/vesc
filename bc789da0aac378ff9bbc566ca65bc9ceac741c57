@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "ca382209_42f56108",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-20T01:03:11Z",
+      "side": 1,
+      "message": "This whole \"move initImage early\" thing actually open up a can of changes. TextureVk::setStorageMultisample is not the right place to call initImage, because the image desc chain has not been initialized. I am still trying to understand the whole complex texture code, I will defer to the other CLs or anyone has intimate knowledge of this code willing to help out.",
+      "parentUuid": "68cd0be7_637dc69f",
+      "range": {
+        "startLine": 375,
+        "startChar": 30,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "bc789da0aac378ff9bbc566ca65bc9ceac741c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f1e7aa5_2596c0d3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 8
