@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "daa46c27_b4ddfcf8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2855,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "Wanted to point out that you should always use the capital ASSERT function in ANGLE instead of the c \u0027assert\u0027. ASSERT does the verification according to a controllable compile-time flag separate from debug/release so we can enable release checks for the bots. This code will probably change in the next revision.",
+      "range": {
+        "startLine": 2855,
+        "startChar": 24,
+        "endLine": 2855,
+        "endChar": 30
+      },
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ceed5a92_a81df0b7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 12
@@ -59,6 +82,29 @@
         "startChar": 0,
         "endLine": 2858,
         "endChar": 17
+      },
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20feb017_ee68f4b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "Thank you for the detailed comments!",
+      "range": {
+        "startLine": 752,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 97
       },
       "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",

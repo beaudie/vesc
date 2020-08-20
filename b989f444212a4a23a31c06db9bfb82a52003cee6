@@ -16,6 +16,305 @@
       "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0da2660_a96ace14",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2855,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: you can remove this and use mDrawFramebuffer , the framebuffer binding dirty bit is one of the very first bits. if you are paranoid you can add a static assert.\n\nalso fyi make sure to use ASSERT instead of assert as ASSERT can fire in release if checks are explicitly enabled (e.g. on the bots).",
+      "range": {
+        "startLine": 2854,
+        "startChar": 0,
+        "endLine": 2855,
+        "endChar": 66
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5379f813_f37963ba",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2878,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 2877,
+        "startChar": 24,
+        "endLine": 2878,
+        "endChar": 66
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bd6064f_05a0bb50",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2896,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 2895,
+        "startChar": 22,
+        "endLine": 2896,
+        "endChar": 66
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e38a022_183e2d32",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4469,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: \u0027on\u0027 prefix for these guys",
+      "range": {
+        "startLine": 4469,
+        "startChar": 25,
+        "endLine": 4469,
+        "endChar": 42
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c8ba8b3_376f214e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need to pass ContextVk",
+      "range": {
+        "startLine": 2374,
+        "startChar": 55,
+        "endLine": 2374,
+        "endChar": 65
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecbcf0c4_43fedc09",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "can you leave a TODO here to rework this as we discussed offline?",
+      "range": {
+        "startLine": 732,
+        "startChar": 26,
+        "endLine": 732,
+        "endChar": 43
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4eb1ac7_1c8b46f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 769,
+        "startChar": 26,
+        "endLine": 769,
+        "endChar": 45
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2555711_4d2f2ccb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: I only see these called once internally. Maybe remove them and inline the check?",
+      "range": {
+        "startLine": 963,
+        "startChar": 0,
+        "endLine": 977,
+        "endChar": 5
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99b1ac1d_b58b15fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: can be const. also technically not necessary - you can mark contents as defined whenever there\u0027s a switch to a writable state. anyway not a bad thing to only set content defined conditionally.",
+      "range": {
+        "startLine": 979,
+        "startChar": 9,
+        "endLine": 979,
+        "endChar": 44
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90e7696c_08b37a51",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "something got messed up here - you\u0027re inlining this test inside another test. this likely won\u0027t compile.",
+      "range": {
+        "startLine": 320,
+        "startChar": 4,
+        "endLine": 320,
+        "endChar": 10
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "269f32fe_f441fb80",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: use RAII types.",
+      "range": {
+        "startLine": 328,
+        "startChar": 8,
+        "endLine": 328,
+        "endChar": 15
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baa46378_358176ed",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: ASSERT_GL_FRAMEBUFFER_COMPLETE",
+      "range": {
+        "startLine": 342,
+        "startChar": 8,
+        "endLine": 342,
+        "endChar": 24
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2bbc99f_f00d2c53",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T18:12:10Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need the std::string casts.",
+      "range": {
+        "startLine": 368,
+        "startChar": 31,
+        "endLine": 368,
+        "endChar": 37
+      },
+      "revId": "b989f444212a4a23a31c06db9bfb82a52003cee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
