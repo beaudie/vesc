@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "102d819d_df5fc32a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3920,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-20T21:03:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0f0bbf5c_8a0faffa",
+      "range": {
+        "startLine": 3919,
+        "startChar": 0,
+        "endLine": 3920,
+        "endChar": 52
+      },
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a54c58a8_67fea74c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "The issue is submitting a single barrier command with two image transitions for the *same image* makes a race.\n\nI unfortunately won\u0027t be able to fix this fully right now. Happy to address this in a follow up. I think we should proceed with landing some version of this code due to the benefit of the improvements in Manhattan. Is that ok? I don\u0027t expect there\u0027s any GPU side performance difference, and CPU impact should be small.",
       "parentUuid": "64f6b534_fb932904",
+      "range": {
+        "startLine": 811,
+        "startChar": 0,
+        "endLine": 812,
+        "endChar": 36
+      },
+      "revId": "fe93b25b21616d5cdd456106b4b540a1a732764c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58968077_8ca04e5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-20T21:03:04Z",
+      "side": 1,
+      "message": "Sounds good.   Probably worth a bug/todo in CommandBufferHelper::executeBarriers().",
+      "parentUuid": "b7d6eb2c_5276174d",
       "range": {
         "startLine": 811,
         "startChar": 0,

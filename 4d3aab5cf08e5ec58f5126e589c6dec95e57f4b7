@@ -16,6 +16,29 @@
       "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e34cc28_596c682e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 3903,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-20T21:03:04Z",
+      "side": 1,
+      "message": "Looks like a bit of a missing thought or typo here.",
+      "range": {
+        "startLine": 3901,
+        "startChar": 66,
+        "endLine": 3903,
+        "endChar": 39
+      },
+      "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
