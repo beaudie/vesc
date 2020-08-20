@@ -86,6 +86,30 @@
       "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20105888_3621b14e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-20T21:19:54Z",
+      "side": 1,
+      "message": "On nvidia the individual barrier call is not just CPU performance, its the GPU performance (remember that I had to add the feature flag to special treat nvidia?). I am ok to land, just want to bring this up so you can do some quick test or whatever to see if this actually could improve on nvidia even more or just marginal.",
+      "parentUuid": "ea70c599_a3f850c5",
+      "range": {
+        "startLine": 738,
+        "startChar": 8,
+        "endLine": 738,
+        "endChar": 32
+      },
+      "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
