@@ -299,12 +299,6 @@ void UpdateRenderPassDepthStencilState(const gl::State &glState,
         {
             renderPassCommands->onStencilStateChanged(glState.getDepthStencilState());
         }
-        // Did this depth-state change undo a previous invalidation of the depth-stencil
-        // attachment?
-        if (renderPassCommands->shouldRestoreDepthStencilAttachment())
-        {
-            drawFramebuffer->restoreDepthStencilDefinedContents();
-        }
     }
 }
 }  // anonymous namespace
@@ -2472,8 +2466,8 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
     if (depthStencilRenderTarget)
     {
         // Change depthstencil attachment storeOp to DONT_CARE
-        mRenderPassCommands->invalidateRenderPassStencilAttachment();
-        mRenderPassCommands->invalidateRenderPassDepthAttachment();
+        mRenderPassCommands->invalidateRenderPassStencilAttachment(depthStencilRenderTarget);
+        mRenderPassCommands->invalidateRenderPassDepthAttachment(depthStencilRenderTarget);
         // Mark content as invalid so that we will not load them in next renderpass
         depthStencilRenderTarget->invalidateEntireContent();
     }
