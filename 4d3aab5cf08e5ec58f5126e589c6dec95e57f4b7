@@ -39,6 +39,29 @@
       "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6445a37b_903dc7be",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-20T21:04:53Z",
+      "side": 1,
+      "message": "I am wondering if nvidia will get hurt on this and would rather just break renderpass instead?",
+      "range": {
+        "startLine": 738,
+        "startChar": 8,
+        "endLine": 738,
+        "endChar": 32
+      },
+      "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
