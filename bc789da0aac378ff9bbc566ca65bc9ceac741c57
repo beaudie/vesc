@@ -89,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "0ef62902_348aab66",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T01:24:18Z",
+      "side": 1,
+      "message": "Ah, okay.\n\nThe fix is probably to initialize the image desc chain pre-call. For now it\u0027s ok if you want to defer this. It still is the right place to do it - no need to do it in this CL.",
+      "parentUuid": "ca382209_42f56108",
+      "range": {
+        "startLine": 375,
+        "startChar": 30,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "bc789da0aac378ff9bbc566ca65bc9ceac741c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f1e7aa5_2596c0d3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 8
