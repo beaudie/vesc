@@ -63,6 +63,30 @@
       "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ca3527a_2bd0145b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T23:05:10Z",
+      "side": 1,
+      "message": "\"Thinking out loud\" ...\n\nDoes such a change really help anything?  The users of mContentDefined for depth and stencil treat them together.  For example, RenderTargetVk::onDepthStencilDraw(), FramebufferVk::startNewRenderPass(), and FramebufferVk::invalidateImpl() all treat them as a unit, through the RenderTargetVk.\n\nIn favor of the idea, if we rework the code that treats them together, we can treat depth and stencil differently as far as loadOp and storeOp go.  That\u0027s an optimization.  Do we need to optimize it though?  IIRC PUBG doesn\u0027t create a stencil buffer, but does invalidate it.  Thus, it doesn\u0027t help PUBG, and PUBG is the only app we know of that invalidates depth/stencil and needs the render pass to not be broken.  The current CL meets PUBG\u0027s needs fine.\n\nSeems to me that it would be better to work on delaying vkAcquireNextImage, but I\u0027m open.\n\nYour thoughts?",
+      "parentUuid": "ebef2c70_c6057166",
+      "range": {
+        "startLine": 955,
+        "startChar": 8,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
