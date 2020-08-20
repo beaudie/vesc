@@ -16,6 +16,46 @@
       "revId": "ba8ae275c01e984fd1b2fa7d5148306023b89b37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5dbc7f70_59e104dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T19:28:42Z",
+      "side": 1,
+      "message": "Nice work, LGTM with one last nit.",
+      "revId": "ba8ae275c01e984fd1b2fa7d5148306023b89b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02e3a5e9_874ed99b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2857,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T19:28:42Z",
+      "side": 1,
+      "message": "nit: can be a helper function as Shabi mentioned, used in 3 places",
+      "range": {
+        "startLine": 2847,
+        "startChar": 0,
+        "endLine": 2857,
+        "endChar": 19
+      },
+      "revId": "ba8ae275c01e984fd1b2fa7d5148306023b89b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
