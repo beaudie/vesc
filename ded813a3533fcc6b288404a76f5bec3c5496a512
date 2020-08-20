@@ -39,6 +39,30 @@
       "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebef2c70_c6057166",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T22:38:22Z",
+      "side": 1,
+      "message": "FYI you\u0027d need a content defined in the ImageHelper per-subresource, so I was thinking you explicitly store mStencilContentDefined and mDepthContentDefined.",
+      "parentUuid": "26cbaffe_a248031e",
+      "range": {
+        "startLine": 955,
+        "startChar": 8,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
