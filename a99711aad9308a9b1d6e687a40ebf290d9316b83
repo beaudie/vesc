@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "6f671fd0_1daf0cff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2858,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T17:33:22Z",
+      "side": 1,
+      "message": "ACK.  I\u0027m deferring this.  In talking with Jamie, I\u0027m going to do a follow-on CL that will hopefully change how mContentDefine is handled.",
+      "parentUuid": "ceed5a92_a81df0b7",
+      "range": {
+        "startLine": 2847,
+        "startChar": 0,
+        "endLine": 2858,
+        "endChar": 17
+      },
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98b650b7_62b3cfb1",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
@@ -62,6 +86,30 @@
       "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cbb3e56_722e06a8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T17:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98b650b7_62b3cfb1",
+      "range": {
+        "startLine": 848,
+        "startChar": 66,
+        "endLine": 848,
+        "endChar": 77
+      },
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "30c313b3_7ef970db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T17:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3eb77fef_fe07c656",
+      "range": {
+        "startLine": 850,
+        "startChar": 74,
+        "endLine": 850,
+        "endChar": 77
+      },
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "301f7903_ecfa20b0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "370589c7_3425f27f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T17:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "301f7903_ecfa20b0",
+      "range": {
+        "startLine": 851,
+        "startChar": 51,
+        "endLine": 851,
+        "endChar": 58
+      },
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d03fe200_a484f3df",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
@@ -131,6 +227,30 @@
       "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "054f9f9b_9853f345",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-20T17:33:22Z",
+      "side": 1,
+      "message": "It is implied by the state being NoLongerInvalidated.  However, these lines are redundant with the opening sentence, and so I deleted them.",
+      "parentUuid": "d03fe200_a484f3df",
+      "range": {
+        "startLine": 989,
+        "startChar": 13,
+        "endLine": 989,
+        "endChar": 83
+      },
+      "revId": "a99711aad9308a9b1d6e687a40ebf290d9316b83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
