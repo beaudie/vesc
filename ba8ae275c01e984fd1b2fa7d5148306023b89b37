@@ -80,6 +80,30 @@
       "revId": "ba8ae275c01e984fd1b2fa7d5148306023b89b37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b506bc6_1cd38cc9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2857,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T20:56:14Z",
+      "side": 1,
+      "message": "Looks good. Can you wait for https://chromium-review.googlesource.com/c/angle/angle/+/2357973 to land before submitting? Shabi/Tim any outstanding comments?",
+      "parentUuid": "3475fae0_a367106e",
+      "range": {
+        "startLine": 2847,
+        "startChar": 0,
+        "endLine": 2857,
+        "endChar": 19
+      },
+      "revId": "ba8ae275c01e984fd1b2fa7d5148306023b89b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
