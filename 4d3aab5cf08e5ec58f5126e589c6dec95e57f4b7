@@ -62,6 +62,30 @@
       "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea70c599_a3f850c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T21:14:39Z",
+      "side": 1,
+      "message": "Good question. I do know this CL improves perf on NVIDIA as it stands. I would guess the improvement would be marginal from combining the barrier call into one, but not sure.\n\nCharlie did you have any outstanding comments or are you okay with me landing this once I address Tim\u0027s comments? If so feel free to mark +2. There are no other outstanding LGTMs missing.",
+      "parentUuid": "6445a37b_903dc7be",
+      "range": {
+        "startLine": 738,
+        "startChar": 8,
+        "endLine": 738,
+        "endChar": 32
+      },
+      "revId": "4d3aab5cf08e5ec58f5126e589c6dec95e57f4b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
