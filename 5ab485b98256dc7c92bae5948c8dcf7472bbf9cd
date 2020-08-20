@@ -114,6 +114,30 @@
     },
     {
       "key": {
+        "uuid": "669b0326_49f5a34c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-20T02:25:02Z",
+      "side": 1,
+      "message": "Since our functions are `startRenderPass` and `endRenderPass`, `unendRenderPass` could work too (implying that it\u0027s undoing endRenderPass)",
+      "parentUuid": "b0a94d1c_d3f76dcc",
+      "range": {
+        "startLine": 4437,
+        "startChar": 16,
+        "endLine": 4437,
+        "endChar": 41
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3fc2603_a42066de",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 37
