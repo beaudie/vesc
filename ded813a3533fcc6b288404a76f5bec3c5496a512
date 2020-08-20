@@ -16,6 +16,29 @@
       "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26cbaffe_a248031e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-20T22:37:27Z",
+      "side": 1,
+      "message": "instead of storing the RT pointer, you can store the ImageHelper * when we start the RP.\n\nthis will also involve moving mContentDefined into the ImageHelper.",
+      "range": {
+        "startLine": 955,
+        "startChar": 8,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
