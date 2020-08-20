@@ -138,6 +138,30 @@
     },
     {
       "key": {
+        "uuid": "a7f0b4e1_fbf2af6f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-20T03:46:08Z",
+      "side": 1,
+      "message": "I understand the argument for consistency is to use something with start/end, but I don\u0027t think that\u0027s the right association here since we are really between those two states.   Additionally, both of those states have a lot of other work/implications beyond setting a pointer.\n\nSince we\u0027re trying to get back from onRenderPassFinished():\n\n    ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer \u003d nullptr; }\n\nHow about undoRenderPassFinished() or resumeFromRenderPassFinished() or restoreFromRenderPassFinished()?",
+      "parentUuid": "669b0326_49f5a34c",
+      "range": {
+        "startLine": 4437,
+        "startChar": 16,
+        "endLine": 4437,
+        "endChar": 41
+      },
+      "revId": "5ab485b98256dc7c92bae5948c8dcf7472bbf9cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3fc2603_a42066de",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 37
