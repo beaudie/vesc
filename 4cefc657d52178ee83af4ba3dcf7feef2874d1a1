@@ -16,6 +16,23 @@
       "revId": "4cefc657d52178ee83af4ba3dcf7feef2874d1a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51e2b666_d10429fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T17:02:48Z",
+      "side": 1,
+      "message": "LGTM - if no comments from Shabi/Tim feel free to land.",
+      "revId": "4cefc657d52178ee83af4ba3dcf7feef2874d1a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
