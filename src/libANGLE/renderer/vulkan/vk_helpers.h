@@ -1447,6 +1447,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                uint32_t mipLevels,
                                uint32_t layerCount,
                                bool isRobustResourceInitEnabled,
+                               bool immutable,
                                bool *imageFormatListEnabledOut);
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
@@ -2038,6 +2039,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // different between the rotated and non-rotated extents.
     VkExtent3D mExtents;
     bool mRotatedAspectRatio;
+    // True if this is created by an immutable texture glTexStorage. For immutable texture, the
+    // underline VkImage object is always created from level 0 to mLevelCount-1.
+    bool mImmutable;
     const Format *mFormat;
     GLint mSamples;
     ImageSerial mImageSerial;

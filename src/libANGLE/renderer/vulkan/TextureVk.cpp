@@ -1291,6 +1291,13 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
     {
         releaseImage(contextVk);
     }
+
+    if (mState.getImmutableFormat())
+    {
+        ASSERT(!mRedefinedLevels.any());
+        ANGLE_TRY(initImmutableImage(contextVk, format));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -2036,11 +2043,18 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
         ANGLE_TRY(ensureImageAllocated(contextVk, format));
 
         // Create the image
-        const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
-        const gl::Extents &baseLevelExtents = baseLevelDesc.size;
-        const uint32_t levelCount           = getMipLevelCount(ImageMipLevels::EnabledLevels);
-        ANGLE_TRY(initImage(contextVk, format, baseLevelDesc.format.info->sized, baseLevelExtents,
-                            levelCount));
+        if (mState.getImmutableFormat())
+        {
+            ANGLE_TRY(initImmutableImage(contextVk, format));
+        }
+        else
+        {
+            const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
+            const gl::Extents &baseLevelExtents = baseLevelDesc.size;
+            const uint32_t levelCount           = getMipLevelCount(ImageMipLevels::EnabledLevels);
+            ANGLE_TRY(initImage(contextVk, format, baseLevelDesc.format.info->sized,
+                                baseLevelExtents, levelCount));
+        }
 
         // Set the newly created mImage as the destination for the staging operation
         dstImage = mImage;
@@ -2674,7 +2688,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         contextVk, mState.getType(), vkExtent, format, samples, mImageUsageFlags, mImageCreateFlags,
         vk::ImageLayout::Undefined, nullptr, gl::LevelIndex(mState.getEffectiveBaseLevel()),
         gl::LevelIndex(mState.getEffectiveMaxLevel()), levelCount, layerCount,
-        contextVk->isRobustResourceInitEnabled(), &imageFormatListEnabled));
+        contextVk->isRobustResourceInitEnabled(), false, &imageFormatListEnabled));
 
     mRequiresMutableStorage = (mImageCreateFlags & VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT) != 0;
 
@@ -2683,6 +2697,40 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
 
     ANGLE_TRY(initImageViews(contextVk, format, sized, levelCount, layerCount));
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::initImmutableImage(ContextVk *contextVk, const vk::Format &format)
+{
+    ASSERT(mState.getImmutableFormat());
+
+    // For immutable texture, we always create a underline image object with levels [0,
+    // levelCount-1] regardless of base level and max level. base/max level information are used to
+    // create ImageViewHelper object.
+    VkExtent3D vkExtent;
+    uint32_t layerCount;
+    const gl::ImageDesc &firstLevelDesc  = mState.getFirstLevelDesc();
+    const gl::Extents &firstLevelExtents = firstLevelDesc.size;
+    const uint32_t levelCount            = getMaxLevelCount();
+    gl_vk::GetExtentsAndLayerCount(mState.getType(), firstLevelExtents, &vkExtent, &layerCount);
+    GLint samples = mState.getBaseLevelDesc().samples ? mState.getBaseLevelDesc().samples : 1;
+
+    bool imageFormatListEnabled = false;
+    ANGLE_TRY(mImage->initExternal(
+        contextVk, mState.getType(), vkExtent, format, samples, mImageUsageFlags, mImageCreateFlags,
+        vk::ImageLayout::Undefined, nullptr, gl::LevelIndex(mState.getEffectiveBaseLevel()),
+        gl::LevelIndex(mState.getEffectiveMaxLevel()), levelCount, layerCount,
+        contextVk->isRobustResourceInitEnabled(), true, &imageFormatListEnabled));
+
+    mRequiresMutableStorage = false;
+
+    RendererVk *renderer              = contextVk->getRenderer();
+    const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
+
+    ANGLE_TRY(initImageViews(contextVk, format, firstLevelDesc.format.info->sized,
+                             getMipLevelCount(ImageMipLevels::EnabledLevels), layerCount));
 
     return angle::Result::Continue;
 }
@@ -2773,8 +2821,9 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
         case ImageMipLevels::EnabledLevels:
             return mState.getEnabledLevelCount();
         case ImageMipLevels::FullMipChain:
-            return getMaxLevelCount() - mState.getEffectiveBaseLevel();
-
+            // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always
+            // +1.
+            return mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel() + 1;
         default:
             UNREACHABLE();
             return 0;
@@ -2784,7 +2833,8 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
 uint32_t TextureVk::getMaxLevelCount() const
 {
     // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
-    return mState.getMipmapMaxLevel() + 1;
+    return mState.getImmutableFormat() ? mState.getImmutableLevels()
+                                       : mState.getMipmapMaxLevel() + 1;
 }
 
 angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
