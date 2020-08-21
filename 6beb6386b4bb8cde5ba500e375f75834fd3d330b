@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "89030fa0_395386a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T17:13:16Z",
+      "side": 1,
+      "message": "Done. Thanks!",
+      "parentUuid": "5c412f18_bb49cccc",
+      "revId": "6beb6386b4bb8cde5ba500e375f75834fd3d330b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e82dc468_20d691cc",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
         "patchSetId": 14
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-21T14:39:48Z",
       "side": 1,
       "message": "ooh, I wonder if this could be the threading garbage collection issue I see...",
+      "revId": "6beb6386b4bb8cde5ba500e375f75834fd3d330b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a063f23c_b7438f91",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T17:13:16Z",
+      "side": 1,
+      "message": "Maybe.. I just added this because the destroy was triggering a validation error, and I couldn\u0027t see what the value of mLifetime was when it was released. I don\u0027t think there\u0027s a functional change here but I could be wrong.",
+      "parentUuid": "e82dc468_20d691cc",
       "revId": "6beb6386b4bb8cde5ba500e375f75834fd3d330b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
