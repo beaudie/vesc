@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95dfe8b2_33c86d22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-21T16:20:06Z",
+      "side": 1,
+      "message": "Deja-vu... more code reduction goodness.",
+      "revId": "b5595240fc1aee6a65f74c3dbe89342a893371d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
