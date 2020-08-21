@@ -3608,6 +3608,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mUsage(other.mUsage),
       mExtents(other.mExtents),
       mRotatedAspectRatio(other.mRotatedAspectRatio),
+      mImmutable(other.mImmutable),
       mFormat(other.mFormat),
       mSamples(other.mSamples),
       mImageSerial(other.mImageSerial),
@@ -3617,6 +3618,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
       mYuvConversionSampler(std::move(other.mYuvConversionSampler)),
       mExternalFormat(other.mExternalFormat),
+      mFirstAllocateLevel(other.mFirstAllocateLevel),
       mBaseLevel(other.mBaseLevel),
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
@@ -3643,6 +3645,7 @@ void ImageHelper::resetCachedProperties()
     mUsage                       = 0;
     mExtents                     = {};
     mRotatedAspectRatio          = false;
+    mImmutable                   = false;
     mFormat                      = nullptr;
     mSamples                     = 1;
     mImageSerial                 = kInvalidImageSerial;
@@ -3650,6 +3653,7 @@ void ImageHelper::resetCachedProperties()
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
+    mFirstAllocateLevel          = gl::LevelIndex(0);
     mBaseLevel                   = gl::LevelIndex(0);
     mMaxLevel                    = gl::LevelIndex(0);
     mLayerCount                  = 0;
@@ -3761,7 +3765,8 @@ angle::Result ImageHelper::init(Context *context,
 {
     return initExternal(context, textureType, extents, format, samples, usage,
                         kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
-                        maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, nullptr);
+                        maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, false,
+                        nullptr);
 }
 
 angle::Result ImageHelper::initMSAASwapchain(Context *context,
@@ -3779,7 +3784,8 @@ angle::Result ImageHelper::initMSAASwapchain(Context *context,
 {
     ANGLE_TRY(initExternal(context, textureType, extents, format, samples, usage,
                            kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
-                           maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, nullptr));
+                           maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, false,
+                           nullptr));
     if (rotatedAspectRatio)
     {
         std::swap(mExtents.width, mExtents.height);
@@ -3802,6 +3808,7 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         uint32_t mipLevels,
                                         uint32_t layerCount,
                                         bool isRobustResourceInitEnabled,
+                                        bool immutable,
                                         bool *imageFormatListEnabledOut)
 {
     ASSERT(!valid());
@@ -3811,9 +3818,11 @@ angle::Result ImageHelper::initExternal(Context *context,
     mImageType          = gl_vk::GetImageType(textureType);
     mExtents            = extents;
     mRotatedAspectRatio = false;
+    mImmutable          = immutable;
     mFormat             = &format;
     mSamples            = std::max(samples, 1);
     mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+    mFirstAllocateLevel = immutable ? gl::LevelIndex(0) : baseLevel;
     mBaseLevel          = baseLevel;
     mMaxLevel           = maxLevel;
     mLevelCount         = mipLevels;
@@ -4363,7 +4372,7 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
         context, textureType, resolveImage.getExtents(), resolveImage.getFormat(), samples,
         kMultisampledUsageFlags, kMultisampledCreateFlags, ImageLayout::Undefined, nullptr,
         resolveImage.getBaseLevel(), resolveImage.getMaxLevel(), resolveImage.getLevelCount(),
-        resolveImage.getLayerCount(), isRobustResourceInitEnabled, nullptr));
+        resolveImage.getLayerCount(), isRobustResourceInitEnabled, false, nullptr));
 
     const VkMemoryPropertyFlags kMultisampledMemoryFlags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
@@ -4542,16 +4551,23 @@ void ImageHelper::setBaseAndMaxLevels(gl::LevelIndex baseLevel, gl::LevelIndex m
 {
     mBaseLevel = baseLevel;
     mMaxLevel  = maxLevel;
+
+    // For immutable texture, we always allocate the entire mipmap chain [0, mLevelCount-1].
+    // For mutable textures, we will try to reallocate based on baseLevel change
+    if (!mImmutable)
+    {
+        mFirstAllocateLevel = baseLevel;
+    }
 }
 
 LevelIndex ImageHelper::toVkLevel(gl::LevelIndex levelIndexGL) const
 {
-    return gl_vk::GetLevelIndex(levelIndexGL, mBaseLevel);
+    return gl_vk::GetLevelIndex(levelIndexGL, mFirstAllocateLevel);
 }
 
 gl::LevelIndex ImageHelper::toGLLevel(LevelIndex levelIndexVk) const
 {
-    return vk_gl::GetLevelIndex(levelIndexVk, mBaseLevel);
+    return vk_gl::GetLevelIndex(levelIndexVk, mFirstAllocateLevel);
 }
 
 ANGLE_INLINE void ImageHelper::initImageMemoryBarrierStruct(
@@ -5785,9 +5801,9 @@ void ImageHelper::stageSelfForBaseLevel(ContextVk *contextVk)
     setEntireContentUndefined();
 
     // Stage an update from the previous image.
-    const gl::ImageIndex baseLevelIndex =
-        gl::ImageIndex::Make2DArrayRange(mBaseLevel.get(), 0, mLayerCount);
-    stageSubresourceUpdateFromImage(prevImage.release(), baseLevelIndex, gl::kOffsetZero,
+    const gl::ImageIndex firstAllocateLevelIndex =
+        gl::ImageIndex::Make2DArrayRange(mFirstAllocateLevel.get(), 0, mLayerCount);
+    stageSubresourceUpdateFromImage(prevImage.release(), firstAllocateLevelIndex, gl::kOffsetZero,
                                     getLevelExtents(LevelIndex(0)), mImageType);
 }
 
@@ -6077,7 +6093,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
 angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
-    return flushStagedUpdates(contextVk, mBaseLevel, mBaseLevel + mLevelCount, 0, mLayerCount, {});
+    return flushStagedUpdates(contextVk, mFirstAllocateLevel, mFirstAllocateLevel + mLevelCount, 0,
+                              mLayerCount, {});
 }
 
 bool ImageHelper::hasStagedUpdatesForSubresource(gl::LevelIndex levelGL,
@@ -6113,7 +6130,7 @@ bool ImageHelper::hasStagedUpdatesForSubresource(gl::LevelIndex levelGL,
 
 bool ImageHelper::hasStagedUpdatesInAllocatedLevels() const
 {
-    return hasStagedUpdatesInLevels(mBaseLevel, mMaxLevel + 1);
+    return hasStagedUpdatesInLevels(mFirstAllocateLevel, mMaxLevel + 1);
 }
 
 bool ImageHelper::hasStagedUpdatesInLevels(gl::LevelIndex levelStart, gl::LevelIndex levelEnd) const
@@ -6222,7 +6239,7 @@ void ImageHelper::removeSupersededUpdates(ContextVk *contextVk, gl::TexLevelMask
         return false;
     };
 
-    for (gl::LevelIndex level = mBaseLevel; level <= mMaxLevel; ++level)
+    for (gl::LevelIndex level = mFirstAllocateLevel; level <= mMaxLevel; ++level)
     {
         std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(level);
         if (levelUpdates == nullptr)
