@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26bd4647_5b83cb6e",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-21T20:58:04Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "38d23fd78664119bec694a7d4a6c2597fced179c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9a17397_f7abefb3",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-21T20:58:04Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "38d23fd78664119bec694a7d4a6c2597fced179c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
