@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ef947c81_4bd7e857",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-21T20:30:05Z",
+      "side": 1,
+      "message": "Sorry, my typo - I mean to say irrelevant",
+      "parentUuid": "89d4513b_82fd7aec",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "5b935132594357259b3a6f978cdf477ca260fbec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa04a012_a5cde578",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
