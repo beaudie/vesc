@@ -3388,6 +3388,7 @@ void ContextVk::invalidateCurrentTransformFeedbackBuffers()
     }
     else if (getFeatures().emulateTransformFeedback.enabled)
     {
+        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 }
@@ -3402,6 +3403,7 @@ void ContextVk::onTransformFeedbackStateChanged()
     else if (getFeatures().emulateTransformFeedback.enabled)
     {
         invalidateGraphicsDriverUniforms();
+        invalidateCurrentTransformFeedbackBuffers();
     }
 }
 
