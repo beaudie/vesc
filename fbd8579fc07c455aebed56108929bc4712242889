@@ -16,6 +16,52 @@
       "revId": "fbd8579fc07c455aebed56108929bc4712242889",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "651b6ef6_c78b726b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-21T18:18:19Z",
+      "side": 1,
+      "message": "stencil",
+      "range": {
+        "startLine": 774,
+        "startChar": 14,
+        "endLine": 774,
+        "endChar": 19
+      },
+      "revId": "fbd8579fc07c455aebed56108929bc4712242889",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c19c5ba_b09d91bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-21T18:18:19Z",
+      "side": 1,
+      "message": "nit: This can change at any time without the comment being updated.   Instead, this should be generalized to something like \"This can be called to determine...\".",
+      "range": {
+        "startLine": 969,
+        "startChar": 74,
+        "endLine": 970,
+        "endChar": 32
+      },
+      "revId": "fbd8579fc07c455aebed56108929bc4712242889",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
