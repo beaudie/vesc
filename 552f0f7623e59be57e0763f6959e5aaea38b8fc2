@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad21d0c3_13c1bb21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-21T18:32:19Z",
+      "side": 1,
+      "message": "Nice! You can apply the same trick to CopyTex[Sub]Image",
+      "revId": "552f0f7623e59be57e0763f6959e5aaea38b8fc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
