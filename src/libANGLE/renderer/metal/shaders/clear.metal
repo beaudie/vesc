@@ -7,8 +7,6 @@
 
 #include "common.h"
 
-using namespace rx::mtl_shader;
-
 struct ClearParams
 {
     float4 clearColor;
@@ -21,7 +19,7 @@ vertex float4 clearVS(unsigned int vid [[ vertex_id ]],
     return float4(gCorners[vid], clearParams.clearDepth, 1.0);
 }
 
-fragment MultipleColorOutputs<float> clearFS(constant ClearParams &clearParams [[buffer(0)]])
+fragment float4 clearFS(constant ClearParams &clearParams [[buffer(0)]])
 {
-    return toMultipleColorOutputs(clearParams.clearColor);
+    return clearParams.clearColor;
 }

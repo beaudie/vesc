@@ -166,12 +166,6 @@ def main():
 
     # yapf: disable
     os_specific_autogen_files = [
-        'compiled/compiled_default_metallib_2_1_debug_ios_autogen.inc',
-        'compiled/compiled_default_metallib_2_1_debug_ios_sim_autogen.inc',
-        'compiled/compiled_default_metallib_2_1_debug_mac_autogen.inc',
-        'compiled/compiled_default_metallib_2_1_ios_autogen.inc',
-        'compiled/compiled_default_metallib_2_1_ios_sim_autogen.inc',
-        'compiled/compiled_default_metallib_2_1_mac_autogen.inc',
         'compiled/compiled_default_metallib_debug_ios_autogen.inc',
         'compiled/compiled_default_metallib_debug_ios_sim_autogen.inc',
         'compiled/compiled_default_metallib_debug_mac_autogen.inc',
@@ -215,10 +209,6 @@ def main():
     gen_precompiled_shaders(10.13, 11.0, 'compiled_default_metallib', '', src_files,
                             boilerplate_code)
     gen_precompiled_shaders(10.13, 11.0, 'compiled_default_metallib_debug',
-                            '-gline-tables-only -MO', src_files, boilerplate_code)
-    gen_precompiled_shaders(10.14, 12.0, 'compiled_default_metallib_2_1', '', src_files,
-                            boilerplate_code)
-    gen_precompiled_shaders(10.14, 12.0, 'compiled_default_metallib_2_1_debug',
                             '-gline-tables-only -MO', src_files, boilerplate_code)
 
     os.system('echo "// clang-format on" >> compiled/mtl_default_shaders_autogen.inc')
