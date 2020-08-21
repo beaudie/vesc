@@ -16,6 +16,24 @@
       "revId": "552f0f7623e59be57e0763f6959e5aaea38b8fc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30198321_2be2f890",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-21T20:27:25Z",
+      "side": 1,
+      "message": "Right, I am looking at all places uses per object staging buffer and going over one by one to see if they can switch to context\u0027s staging buffer. I am tacking easy ones first and then we will see what have left that is hard to tackle.",
+      "parentUuid": "ad21d0c3_13c1bb21",
+      "revId": "552f0f7623e59be57e0763f6959e5aaea38b8fc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
