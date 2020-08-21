@@ -16,6 +16,24 @@
       "revId": "c8b3680d2252464f74da3471e0a8931801677ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf62a9ee_6adebafb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-08-21T19:41:35Z",
+      "side": 1,
+      "message": "I\u0027ve changed project, is there someone who wants to take this on? I don\u0027t know about the referenced fuzzer errors.",
+      "parentUuid": "1312ce3c_bf958969",
+      "revId": "c8b3680d2252464f74da3471e0a8931801677ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
