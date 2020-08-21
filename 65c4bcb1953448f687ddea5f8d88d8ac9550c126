@@ -16,6 +16,184 @@
       "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "08fcc2b0_8820cd03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "Nice Mohan. Some nits below. If you have extra time you could add some simple unit tests in FastVector_unittest.cpp.",
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6d1fd98_6b97a87f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "do we even need the invalid value anymore if you are using the bit set to mask valid values? I don\u0027t think we do.",
+      "range": {
+        "startLine": 510,
+        "startChar": 32,
+        "endLine": 510,
+        "endChar": 39
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08aeab53_5498e8c7",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "nit: you can just call this FastIntegerMap - this is pretty much unconditionally better than my method.",
+      "range": {
+        "startLine": 511,
+        "startChar": 6,
+        "endLine": 511,
+        "endChar": 32
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60b87109_c58fb928",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "nit: can you just make ensureCapacity public and call that instead of using this method?",
+      "range": {
+        "startLine": 517,
+        "startChar": 22,
+        "endLine": 517,
+        "endChar": 32
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c59800b0_e113feab",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "nit: can you use \u0026 here?",
+      "range": {
+        "startLine": 526,
+        "startChar": 30,
+        "endLine": 526,
+        "endChar": 32
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7732ff3_1bf07e3d",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "same question",
+      "range": {
+        "startLine": 535,
+        "startChar": 29,
+        "endLine": 535,
+        "endChar": 31
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2750cc2a_89a925d5",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "nit: use range-for",
+      "range": {
+        "startLine": 571,
+        "startChar": 12,
+        "endLine": 571,
+        "endChar": 70
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c764f957_f4a4ec01",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-21T20:47:48Z",
+      "side": 1,
+      "message": "nit: rx::roundUp?",
+      "range": {
+        "startLine": 583,
+        "startChar": 29,
+        "endLine": 583,
+        "endChar": 95
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
