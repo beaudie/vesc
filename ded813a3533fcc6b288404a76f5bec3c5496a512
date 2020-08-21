@@ -176,6 +176,30 @@
       "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c80ee66_47a26a1e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-21T20:41:41Z",
+      "side": 1,
+      "message": "To clarify ...\n\n1) \"Split change\" meaning I land this CL and then do another CL for the bigger refactor?\n\n2) Move mContentDefined from RenderTargetVk -\u003e ImageHelper (for color as well as D/S).\n\n3) Modify all the code that uses mContentDefined, not just my previous CL.\n\n4) I should look at effort of splitting mContentDefined for depth and stencil, and do it if it fits in fixit week?",
+      "parentUuid": "2308ce04_14741fde",
+      "range": {
+        "startLine": 955,
+        "startChar": 8,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
