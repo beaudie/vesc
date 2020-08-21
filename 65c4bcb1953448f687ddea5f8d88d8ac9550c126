@@ -217,6 +217,29 @@
       "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d08e0b3_046bceb9",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-21T21:18:20Z",
+      "side": 1,
+      "message": "This will cause FastIntegerMapUsingBitSet::resize(1) to resize mValueData to 64.   That might be a bit awkward that resize(X) causes capacity() !\u003d X.   I don\u0027t think anyone would rely on that behavior, but I believe Jamie had some tests that verified the capacity matches what we initialized it to at some point.\n\nMight be better to just use newSize here to keep things matching, especially since this is where most of the memory use will be coming from.",
+      "range": {
+        "startLine": 587,
+        "startChar": 26,
+        "endLine": 587,
+        "endChar": 37
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
