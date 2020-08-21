@@ -444,6 +444,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     angle::Result respecifyImageStorage(ContextVk *contextVk);
     angle::Result respecifyImageStorageAndLevels(ContextVk *contextVk,
                                                  gl::LevelIndex previousBaseLevelGL,
+                                                 gl::LevelIndex firstLevelGL,
                                                  gl::LevelIndex baseLevelGL,
                                                  gl::LevelIndex maxLevelGL);
 
