@@ -33,6 +33,23 @@
       "revId": "b0fa40d9d4b6e0885b25ac92da30b12f74f0b25b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c165f2e6_242934de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-21T13:54:37Z",
+      "side": 1,
+      "message": "I agree that we should either suppress these failures or disable the tests, not revert any metal changes.\n\nLooks like Yuly landed suppression here: https://chromium-review.googlesource.com/c/chromium/src/+/2368421\n\nIt still crashes on ASAN. I believe we need to skip the image_bitmap_from_video/* tests. I\u0027ll upload a patch to test this",
+      "revId": "b0fa40d9d4b6e0885b25ac92da30b12f74f0b25b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
