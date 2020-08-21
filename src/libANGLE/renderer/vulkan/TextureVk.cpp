@@ -371,10 +371,10 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
     // Use context's staging buffer for immutable textures and flush out updates
     // immediately.
-    vk::DynamicBuffer *stagingBuffer = nullptr;
+    vk::DynamicBuffer *contextStagingBuffer = nullptr;
     if (!mOwnsImage || mState.getImmutableFormat())
     {
-        stagingBuffer = contextVk->getStagingBuffer();
+        contextStagingBuffer = contextVk->getStagingBuffer();
     }
 
     if (unpackBuffer)
@@ -424,24 +424,35 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             ANGLE_TRY(mImage->stageSubresourceUpdateImpl(
                 contextVk, getNativeImageIndex(index),
                 gl::Extents(area.width, area.height, area.depth),
-                gl::Offset(area.x, area.y, area.z), formatInfo, unpack, stagingBuffer, type, source,
-                vkFormat, inputRowPitch, inputDepthPitch, inputSkipBytes));
+                gl::Offset(area.x, area.y, area.z), formatInfo, unpack, contextStagingBuffer, type,
+                source, vkFormat, inputRowPitch, inputDepthPitch, inputSkipBytes));
 
             ANGLE_TRY(unpackBufferVk->unmapImpl(contextVk));
         }
     }
     else if (pixels)
     {
-        ANGLE_TRY(mImage->stageSubresourceUpdate(contextVk, getNativeImageIndex(index),
-                                                 gl::Extents(area.width, area.height, area.depth),
-                                                 gl::Offset(area.x, area.y, area.z), formatInfo,
-                                                 unpack, stagingBuffer, type, pixels, vkFormat));
+        ANGLE_TRY(mImage->stageSubresourceUpdate(
+            contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
+            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, contextStagingBuffer, type,
+            pixels, vkFormat));
     }
 
     // If we used context's staging buffer, flush out the updates
-    if (stagingBuffer)
+    if (contextStagingBuffer && mImage->hasStagedUpdates())
     {
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+        uint32_t levelStart              = getNativeImageLevel(index.getLevelIndex());
+        uint32_t levelEnd                = levelStart + 1;
+        uint32_t layerStart              = 0;
+        uint32_t layerEnd                = 1;
+        if (index.hasLayer())
+        {
+            layerStart = getNativeImageLayer(index.getLayerIndex());
+            layerEnd   = layerStart + index.getLayerCount();
+        }
+        return mImage->flushStagedUpdates(contextVk, levelStart, levelEnd, layerStart, layerEnd, {},
+                                          &commandBuffer);
     }
 
     return angle::Result::Continue;
@@ -1062,6 +1073,18 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
     {
         releaseImage(contextVk);
     }
+
+    if (mState.getImmutableFormat())
+    {
+        ASSERT(!mRedefinedLevels.any());
+        const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
+        const gl::Extents &baseLevelExtents = baseLevelDesc.size;
+        const uint32_t levelCount           = getMipLevelCount(ImageMipLevels::EnabledLevels);
+
+        ANGLE_TRY(initImage(contextVk, format, baseLevelDesc.format.info->sized, baseLevelExtents,
+                            levelCount));
+    }
+
     return angle::Result::Continue;
 }
 
