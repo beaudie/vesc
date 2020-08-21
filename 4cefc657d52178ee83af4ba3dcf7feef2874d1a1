@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c67704ee_333c078c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-21T16:51:35Z",
+      "side": 1,
+      "message": "Ported on top of Jamie\u0027s recent CL",
+      "revId": "4cefc657d52178ee83af4ba3dcf7feef2874d1a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
