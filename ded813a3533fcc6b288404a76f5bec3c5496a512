@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "86f49aed_0a6ffd49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-21T17:49:47Z",
+      "side": 1,
+      "message": "Looks like most of this change is reverting the previous change. Probably good to squash them.",
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26cbaffe_a248031e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
@@ -102,6 +119,30 @@
       "side": 1,
       "message": "Just to make sure, my previous comment was a sincere attempt to think through this.  I hope it came across that way.",
       "parentUuid": "6ca3527a_2bd0145b",
+      "range": {
+        "startLine": 955,
+        "startChar": 8,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ded901c_8bfa43c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-21T17:49:47Z",
+      "side": 1,
+      "message": "I\u0027m all for moving mContentDefined to ImageHelper, but perhaps it should be a split change.\n\n\u003e The users of mContentDefined for depth and stencil treat them together.\n\nBut they don\u0027t necessarily have to. Right now, if the application invalidates stencil but not depth, we still use loadOp\u003dLOAD for stencil because we don\u0027t track contents-defined separately.\n\nThat said, I don\u0027t know if any application would really invalidate one and not the other, or whether loading one and not the other has any practical benefits, so I\u0027m skeptical as to whether tracking them separately is useful TBH.",
+      "parentUuid": "1e498c4c_8d57d73c",
       "range": {
         "startLine": 955,
         "startChar": 8,
