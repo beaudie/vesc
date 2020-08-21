@@ -3502,6 +3502,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
       mYuvConversionSampler(std::move(other.mYuvConversionSampler)),
       mExternalFormat(other.mExternalFormat),
+      mFirstLevel(other.mFirstLevel),
       mBaseLevel(other.mBaseLevel),
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
@@ -3535,6 +3536,7 @@ void ImageHelper::resetCachedProperties()
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
+    mFirstLevel                  = gl::LevelIndex(0);
     mBaseLevel                   = gl::LevelIndex(0);
     mMaxLevel                    = gl::LevelIndex(0);
     mLayerCount                  = 0;
@@ -3698,6 +3700,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mFormat             = &format;
     mSamples            = std::max(samples, 1);
     mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+    mFirstLevel         = baseLevel;
     mBaseLevel          = baseLevel;
     mMaxLevel           = maxLevel;
     mLevelCount         = mipLevels;
@@ -4383,6 +4386,11 @@ bool ImageHelper::isReleasedToExternal() const
 #endif
 }
 
+void ImageHelper::setFirstLevel(gl::LevelIndex firstLevel)
+{
+    mFirstLevel = firstLevel;
+}
+
 void ImageHelper::setBaseAndMaxLevels(gl::LevelIndex baseLevel, gl::LevelIndex maxLevel)
 {
     mBaseLevel = baseLevel;
@@ -4391,12 +4399,12 @@ void ImageHelper::setBaseAndMaxLevels(gl::LevelIndex baseLevel, gl::LevelIndex m
 
 LevelIndex ImageHelper::toVkLevel(gl::LevelIndex levelIndexGL) const
 {
-    return gl_vk::GetLevelIndex(levelIndexGL, mBaseLevel);
+    return gl_vk::GetLevelIndex(levelIndexGL, mFirstLevel);
 }
 
 gl::LevelIndex ImageHelper::toGLLevel(LevelIndex levelIndexVk) const
 {
-    return vk_gl::GetLevelIndex(levelIndexVk, mBaseLevel);
+    return vk_gl::GetLevelIndex(levelIndexVk, mFirstLevel);
 }
 
 ANGLE_INLINE void ImageHelper::initImageMemoryBarrierStruct(

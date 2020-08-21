@@ -108,6 +108,9 @@ class TextureState final : private angle::NonCopyable
     ~TextureState();
 
     bool swizzleRequired() const;
+
+    GLuint getFirstLevel() const;
+
     GLuint getEffectiveBaseLevel() const;
     GLuint getEffectiveMaxLevel() const;
 
@@ -149,6 +152,8 @@ class TextureState final : private angle::NonCopyable
     bool hasBeenBoundAsImage() const { return mHasBeenBoundAsImage; }
 
     gl::SrgbOverride getSRGBOverride() const { return mSrgbOverride; }
+
+    const ImageDesc &getFirstLevelDesc() const;
 
     // Returns the desc of the base level. Only valid for cube-complete/mip-complete textures.
     const ImageDesc &getBaseLevelDesc() const;
