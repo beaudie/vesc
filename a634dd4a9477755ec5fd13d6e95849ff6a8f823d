@@ -16,6 +16,29 @@
       "revId": "a634dd4a9477755ec5fd13d6e95849ff6a8f823d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77128ed4_230e41fa",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-21T14:47:51Z",
+      "side": 1,
+      "message": "This is only referenced by State::getActiveTextureSampler which doesn\u0027t appear to be refenced by anything else.",
+      "range": {
+        "startLine": 293,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 1
+      },
+      "revId": "a634dd4a9477755ec5fd13d6e95849ff6a8f823d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
