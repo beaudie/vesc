@@ -105,6 +105,29 @@
     },
     {
       "key": {
+        "uuid": "46c84b13_1a4e1cf6",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-21T21:16:30Z",
+      "side": 1,
+      "message": "i should change the data type of key to \"uint64_t\" given that *Serial\u0027s underlying data type is a \"uint64_t\"",
+      "range": {
+        "startLine": 519,
+        "startChar": 29,
+        "endLine": 519,
+        "endChar": 37
+      },
+      "revId": "65c4bcb1953448f687ddea5f8d88d8ac9550c126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c59800b0_e113feab",
         "filename": "src/common/FastVector.h",
         "patchSetId": 1
