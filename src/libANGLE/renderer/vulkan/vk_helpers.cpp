@@ -3608,6 +3608,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mUsage(other.mUsage),
       mExtents(other.mExtents),
       mRotatedAspectRatio(other.mRotatedAspectRatio),
+      mImmutable(other.mImmutable),
       mFormat(other.mFormat),
       mSamples(other.mSamples),
       mImageSerial(other.mImageSerial),
@@ -3643,6 +3644,7 @@ void ImageHelper::resetCachedProperties()
     mUsage                       = 0;
     mExtents                     = {};
     mRotatedAspectRatio          = false;
+    mImmutable                   = false;
     mFormat                      = nullptr;
     mSamples                     = 1;
     mImageSerial                 = kInvalidImageSerial;
@@ -3761,7 +3763,8 @@ angle::Result ImageHelper::init(Context *context,
 {
     return initExternal(context, textureType, extents, format, samples, usage,
                         kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
-                        maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, nullptr);
+                        maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, false,
+                        nullptr);
 }
 
 angle::Result ImageHelper::initMSAASwapchain(Context *context,
@@ -3779,7 +3782,8 @@ angle::Result ImageHelper::initMSAASwapchain(Context *context,
 {
     ANGLE_TRY(initExternal(context, textureType, extents, format, samples, usage,
                            kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
-                           maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, nullptr));
+                           maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled, false,
+                           nullptr));
     if (rotatedAspectRatio)
     {
         std::swap(mExtents.width, mExtents.height);
@@ -3802,6 +3806,7 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         uint32_t mipLevels,
                                         uint32_t layerCount,
                                         bool isRobustResourceInitEnabled,
+                                        bool immutable,
                                         bool *imageFormatListEnabledOut)
 {
     ASSERT(!valid());
@@ -3811,6 +3816,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mImageType          = gl_vk::GetImageType(textureType);
     mExtents            = extents;
     mRotatedAspectRatio = false;
+    mImmutable          = immutable;
     mFormat             = &format;
     mSamples            = std::max(samples, 1);
     mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
@@ -4363,7 +4369,7 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
         context, textureType, resolveImage.getExtents(), resolveImage.getFormat(), samples,
         kMultisampledUsageFlags, kMultisampledCreateFlags, ImageLayout::Undefined, nullptr,
         resolveImage.getBaseLevel(), resolveImage.getMaxLevel(), resolveImage.getLevelCount(),
-        resolveImage.getLayerCount(), isRobustResourceInitEnabled, nullptr));
+        resolveImage.getLayerCount(), isRobustResourceInitEnabled, false, nullptr));
 
     const VkMemoryPropertyFlags kMultisampledMemoryFlags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
@@ -4546,12 +4552,16 @@ void ImageHelper::setBaseAndMaxLevels(gl::LevelIndex baseLevel, gl::LevelIndex m
 
 LevelIndex ImageHelper::toVkLevel(gl::LevelIndex levelIndexGL) const
 {
-    return gl_vk::GetLevelIndex(levelIndexGL, mBaseLevel);
+    // We always allocate the entire mipmap chain [0, mLevelCount-1] for immutable texture,
+    // regardless of base level and max level parameter
+    return mImmutable ? LevelIndex(levelIndexGL.get())
+                      : gl_vk::GetLevelIndex(levelIndexGL, mBaseLevel);
 }
 
 gl::LevelIndex ImageHelper::toGLLevel(LevelIndex levelIndexVk) const
 {
-    return vk_gl::GetLevelIndex(levelIndexVk, mBaseLevel);
+    return mImmutable ? gl::LevelIndex(levelIndexVk.get())
+                      : vk_gl::GetLevelIndex(levelIndexVk, mBaseLevel);
 }
 
 ANGLE_INLINE void ImageHelper::initImageMemoryBarrierStruct(

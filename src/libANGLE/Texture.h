@@ -108,6 +108,7 @@ class TextureState final : private angle::NonCopyable
     ~TextureState();
 
     bool swizzleRequired() const;
+
     GLuint getEffectiveBaseLevel() const;
     GLuint getEffectiveMaxLevel() const;
 
@@ -152,6 +153,7 @@ class TextureState final : private angle::NonCopyable
 
     // Returns the desc of the base level. Only valid for cube-complete/mip-complete textures.
     const ImageDesc &getBaseLevelDesc() const;
+    const ImageDesc &getLevelZeroDesc() const;
 
     // GLES1 emulation: For GL_OES_draw_texture
     void setCrop(const Rectangle &rect);
