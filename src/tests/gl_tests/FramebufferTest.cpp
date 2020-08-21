@@ -2473,7 +2473,7 @@ void main()
 TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithBeyondMaxLevel)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsMetal());
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;
@@ -2520,7 +2520,7 @@ TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithBeyondMaxLeve
 TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithSubImageWithBeyondMaxLevel)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsMetal());
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;
@@ -2572,7 +2572,7 @@ TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithSubImageWithB
 TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithBellowBaseLevelLOD)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsMetal());
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;

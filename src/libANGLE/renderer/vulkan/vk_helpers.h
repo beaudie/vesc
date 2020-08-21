@@ -1735,6 +1735,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
+    gl::LevelIndex getFirstLevel() const { return mFirstLevel; }
+    void setFirstLevel(gl::LevelIndex firstLevel);
     gl::LevelIndex getBaseLevel() const { return mBaseLevel; }
     void setBaseAndMaxLevels(gl::LevelIndex baseLevel, gl::LevelIndex maxLevel);
     gl::LevelIndex getMaxLevel() const { return mMaxLevel; }
@@ -2001,6 +2003,7 @@ class ImageHelper final : public Resource, public angle::Subject
     uint64_t mExternalFormat;
 
     // Cached properties.
+    gl::LevelIndex mFirstLevel;
     gl::LevelIndex mBaseLevel;
     gl::LevelIndex mMaxLevel;
     uint32_t mLayerCount;
