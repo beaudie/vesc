@@ -1262,7 +1262,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                              const gl::Offset &offset,
                                              const gl::InternalFormat &formatInfo,
                                              const gl::PixelUnpackState &unpack,
-                                             DynamicBuffer *stagingBufferOverride,
                                              GLenum type,
                                              const uint8_t *pixels,
                                              const Format &vkFormat,
@@ -1276,7 +1275,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                          const gl::Offset &offset,
                                          const gl::InternalFormat &formatInfo,
                                          const gl::PixelUnpackState &unpack,
-                                         DynamicBuffer *stagingBufferOverride,
                                          GLenum type,
                                          const uint8_t *pixels,
                                          const Format &vkFormat);
