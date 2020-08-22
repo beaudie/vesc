@@ -859,21 +859,6 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     *commandBufferOut        = &mCommandBuffer;
     mForceIndividualBarriers = false;
 
-    if (mDepthStencilAttachmentIndex != vk::kInvalidAttachmentIndex)
-    {
-        if (renderPassAttachmentOps[mDepthStencilAttachmentIndex].loadOp ==
-            VK_ATTACHMENT_LOAD_OP_CLEAR)
-        {
-            mDepthStartAccess = ResourceAccess::Write;
-        }
-
-        if (renderPassAttachmentOps[mDepthStencilAttachmentIndex].stencilLoadOp ==
-            VK_ATTACHMENT_LOAD_OP_CLEAR)
-        {
-            mStencilStartAccess = ResourceAccess::Write;
-        }
-    }
-
     mRenderPassStarted = true;
     mCounter++;
 }

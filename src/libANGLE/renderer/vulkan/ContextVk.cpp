@@ -3920,7 +3920,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 
             if (hasStartedRenderPass())
             {
-                if (mRenderPassCommands->getDepthStartAccess() == vk::ResourceAccess::Write)
+                if (mRenderPassCommands->hasDepthWriteOrClear())
                 {
                     ANGLE_TRY(flushCommandsAndEndRenderPass());
                 }

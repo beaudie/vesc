@@ -1051,6 +1051,12 @@ class CommandBufferHelper : angle::NonCopyable
                                     const vk::RenderPassDesc &renderPassDesc);
     ResourceAccess getDepthStartAccess() const { return mDepthStartAccess; }
 
+    bool hasDepthWriteOrClear() const
+    {
+        return mDepthStartAccess == ResourceAccess::Write ||
+               mAttachmentOps[mDepthStencilAttachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
+    }
+
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
