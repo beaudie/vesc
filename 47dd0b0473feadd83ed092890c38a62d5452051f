@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "f67e97c0_dfb593ac",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-22T17:26:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9d9acb0_e5f19ffe",
+      "range": {
+        "startLine": 570,
+        "startChar": 13,
+        "endLine": 570,
+        "endChar": 18
+      },
+      "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "473103cc_fc94e251",
         "filename": "src/common/FastVector.h",
         "patchSetId": 8
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "50251594_1dbbede2",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-22T17:26:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "473103cc_fc94e251",
+      "range": {
+        "startLine": 583,
+        "startChar": 13,
+        "endLine": 583,
+        "endChar": 18
+      },
+      "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e99de95_c403fd43",
         "filename": "src/common/FastVector.h",
         "patchSetId": 8
@@ -85,6 +133,30 @@
       "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c99d0d8b_b5545ce5",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-22T17:26:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e99de95_c403fd43",
+      "range": {
+        "startLine": 606,
+        "startChar": 16,
+        "endLine": 606,
+        "endChar": 44
+      },
+      "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -135,6 +207,30 @@
     },
     {
       "key": {
+        "uuid": "41935173_5f34aa94",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-22T17:26:40Z",
+      "side": 1,
+      "message": "yes and also, since the size of keydata is in the order of log N, data locality for repeated checks of contains(key) will be better",
+      "parentUuid": "a844b9dd_cb791e04",
+      "range": {
+        "startLine": 607,
+        "startChar": 9,
+        "endLine": 607,
+        "endChar": 15
+      },
+      "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f47d1095_9c3b57cb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -155,6 +251,30 @@
       "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e0dc4cf_a8d46173",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-22T17:26:40Z",
+      "side": 1,
+      "message": "Ooops, Done",
+      "parentUuid": "f47d1095_9c3b57cb",
+      "range": {
+        "startLine": 607,
+        "startChar": 21,
+        "endLine": 607,
+        "endChar": 22
+      },
+      "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
