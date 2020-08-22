@@ -138,6 +138,11 @@ if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
   import("angle_end2end_tests.gni")
 
   angle_test("angle_end2end_tests") {
+    if ((is_linux && !is_chromeos) ||
+        (build_with_chromium && chromeos_is_browser_only)) {
+      use_xvfb = true
+    }
+
     include_dirs = [ "." ]
 
     sources = angle_end2end_tests_sources
@@ -195,6 +200,11 @@ if (is_win || is_linux || is_mac || is_android) {
   import("angle_white_box_tests.gni")
 
   angle_test("angle_white_box_tests") {
+    if ((is_linux && !is_chromeos) ||
+        (build_with_chromium && chromeos_is_browser_only)) {
+      use_xvfb = true
+    }
+
     include_dirs = [ "." ]
     sources = angle_white_box_tests_sources
     main = "angle_end2end_tests_main"
@@ -1230,6 +1240,11 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     }
 
     angle_test("angle_deqp_${_api}_tests") {
+      if ((is_linux && !is_chromeos) ||
+          (build_with_chromium && chromeos_is_browser_only)) {
+        use_xvfb = true
+      }
+
       deps = [
         ":${shared_library_name}",
         ":angle_test_expectations",

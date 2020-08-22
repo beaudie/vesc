@@ -340,6 +340,10 @@ template("angle_test") {
   if (build_with_chromium) {
     _standalone_harness_test_name = "standalone_" + target_name
     test(target_name) {
+      if (defined(invoker.use_xvfb)) {
+        use_xvfb = invoker.use_xvfb
+      }
+
       public_deps = [ ":${_lib}" ]
       if (invoker.main != "") {
         sources = [ "//gpu/${invoker.main}.cc" ]
