@@ -88,6 +88,29 @@
     },
     {
       "key": {
+        "uuid": "1ac079d2_974c406f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-22T14:42:16Z",
+      "side": 1,
+      "message": "BTW, how does the bitset help if you\u0027re storing the full vector for the value data as well?",
+      "range": {
+        "startLine": 607,
+        "startChar": 9,
+        "endLine": 607,
+        "endChar": 15
+      },
+      "revId": "47dd0b0473feadd83ed092890c38a62d5452051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f47d1095_9c3b57cb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
