@@ -16,6 +16,23 @@
       "revId": "3dc1c228c8ffdd6af64fd76f39a1b5f254902808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bddf0d34_57efdfe5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T21:51:33Z",
+      "side": 1,
+      "message": "jamie, i believe we just ran the perf benchmark with and without the patch to verify avg wall time. will do the same and let you know if there are perf regressions",
+      "revId": "3dc1c228c8ffdd6af64fd76f39a1b5f254902808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
