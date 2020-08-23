@@ -224,6 +224,30 @@
       "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb3b59ab_bd2cd4b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T14:35:56Z",
+      "side": 1,
+      "message": "2) -\u003e there\u0027s good reasons to skip color for now. Basically due to the complexity that you\u0027re getting into with Shabi\u0027s comment weighed against the fact we haven\u0027t seen invalidate called on anything other than depth/stencil in the wild.\n\nAt the very least you could land a split CL that does depth/stencil then (potentially) handle color after.",
+      "parentUuid": "2d6e8a8b_6b78cb47",
+      "range": {
+        "startLine": 955,
+        "startChar": 8,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
