@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef4cedfd_274b3b02",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:04:28Z",
+      "side": 1,
+      "message": "nit: angle style is to comment before each test",
+      "range": {
+        "startLine": 2558,
+        "startChar": 0,
+        "endLine": 2558,
+        "endChar": 6
+      },
+      "revId": "1125b8d2aa638a9362b08c6620cdcf0e2b071217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0de22323_b3bd1184",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2591,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:04:28Z",
+      "side": 1,
+      "message": "nit: angle style is to comment before each test",
+      "range": {
+        "startLine": 2591,
+        "startChar": 0,
+        "endLine": 2591,
+        "endChar": 6
+      },
+      "revId": "1125b8d2aa638a9362b08c6620cdcf0e2b071217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
