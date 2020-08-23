@@ -33,6 +33,24 @@
       "revId": "5e5b7537d091c4d14785209a045c79971478c0d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d755b3b_4c48826e",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T05:14:27Z",
+      "side": 1,
+      "message": "This gets completely reworked with Mohan\u0027s CLs. The new design has O(1) insert and query time with a very low constant.",
+      "parentUuid": "602c6417_36575cb6",
+      "revId": "5e5b7537d091c4d14785209a045c79971478c0d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
