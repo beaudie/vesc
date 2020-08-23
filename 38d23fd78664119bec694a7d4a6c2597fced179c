@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dbd34751_25abb764",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T05:23:12Z",
+      "side": 1,
+      "message": "Should this be abandoned in favor of Mohan\u0027s implementation?",
+      "revId": "38d23fd78664119bec694a7d4a6c2597fced179c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26bd4647_5b83cb6e",
         "filename": "src/common/FastVector.h",
         "patchSetId": 4
