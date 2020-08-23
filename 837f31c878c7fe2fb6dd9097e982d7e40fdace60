@@ -16,6 +16,23 @@
       "revId": "837f31c878c7fe2fb6dd9097e982d7e40fdace60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be5c62ab_a1da7a88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T20:49:56Z",
+      "side": 1,
+      "message": "LGTM with the regression test. Thanks for cleaning this up.",
+      "revId": "837f31c878c7fe2fb6dd9097e982d7e40fdace60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
