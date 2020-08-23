@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e48956ee_7f73a89d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T19:21:41Z",
+      "side": 1,
+      "message": "Then I would specify the size under which the container performs best. O(log(N)) is not correct, neither is 512 even the intersection of log(N) and N/64.",
+      "parentUuid": "3e66c7a8_caae1703",
+      "range": {
+        "startLine": 9,
+        "startChar": 55,
+        "endLine": 11,
+        "endChar": 50
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72b7482c_ff40c786",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -155,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "2aab28f6_01899748",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T19:21:41Z",
+      "side": 1,
+      "message": "Whatever argument for \"this is fine\" can be applied to \"let\u0027s change the serial to a 16-bit number\". Whatever argument against \"let\u0027s change the serial to a 16-bit number\" can be used against \"this is fine\".\n\nShould we change the serials to 16-bit integers?\n\n---\n\nIn the end, it\u0027s not like any code that gets in is permanent, so I don\u0027t absolutely mind if you want to try this out! :) You might want to take a few games though, play them for a couple of hours and see if there\u0027s noticeable change in memory.",
+      "parentUuid": "b49dea68_c3c5e2ff",
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d411831b_c3a93172",
         "filename": "src/common/FastVector.h",
         "patchSetId": 10
@@ -190,6 +232,30 @@
       "side": 1,
       "message": "they are not unused, look here -\u003e\n1. empty() -\u003e https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/vk_helpers.cpp#606\n2. size() -\u003e https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/vk_helpers.h#1042",
       "parentUuid": "d411831b_c3a93172",
+      "range": {
+        "startLine": 572,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 5
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d082dfc_f2f9b21f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T19:21:41Z",
+      "side": 1,
+      "message": "I was going to suggest something more efficient, but neither of those are in the release build of ANGLE, so Ack!",
+      "parentUuid": "db3c22d5_682b87d9",
       "range": {
         "startLine": 572,
         "startChar": 0,
