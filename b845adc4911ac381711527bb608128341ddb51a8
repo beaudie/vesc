@@ -16,6 +16,46 @@
       "revId": "b845adc4911ac381711527bb608128341ddb51a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdcf8ebe_e90a515d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T18:31:42Z",
+      "side": 1,
+      "message": "LGTM with one suggestion.",
+      "revId": "b845adc4911ac381711527bb608128341ddb51a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ffdbe08_e651a30c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T18:31:42Z",
+      "side": 1,
+      "message": "actually, can you discard this enum and use vk::ResourceAccess?",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 0
+      },
+      "revId": "b845adc4911ac381711527bb608128341ddb51a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
