@@ -16,6 +16,29 @@
       "revId": "d08cde185479913d45ae30069b635e53f0e7210c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3877f406_be440b43",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T05:10:15Z",
+      "side": 1,
+      "message": "nit: we wrap comments to 100 chars.\n\nAlso, have you seen this? https://stackoverflow.com/a/45537237/912144 You could look for the WAYLAND_DISPLAY envvar to determine if running on wayland or not.",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 45
+      },
+      "revId": "d08cde185479913d45ae30069b635e53f0e7210c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
