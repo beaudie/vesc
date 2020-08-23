@@ -25,6 +25,47 @@
     },
     {
       "key": {
+        "uuid": "3e66c7a8_caae1703",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "the reason this exists is to communicate the size under which the container performs best, not just for this use case but for others who might need such a container in the future and have these size requirements.\n\nif you feel strongly i can remove this from the message",
+      "parentUuid": "659d539f_3c74ad3f",
+      "range": {
+        "startLine": 9,
+        "startChar": 55,
+        "endLine": 11,
+        "endChar": 50
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72b7482c_ff40c786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa8cdcf8_e8cb76c4",
         "filename": "src/common/FastVector.h",
         "patchSetId": 10
@@ -60,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "2810bd3f_2930de63",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "1. serial\u0027s getValue returns a 64bit value. 32bit builds have loss of precision errors which requires an explicit cast to size_t\n\n2.\n   \u003e As the application runs, this object would use more and more memory, with basically\n   \u003e the \"front\" of the vectors mostly unused\n\nwhen i profiled manhattan, 2K was the max key seen. but an app that runs for a long time with repeated buffer create/destroy will show this memory issue.\n\n3.\n   \u003e Another potentially good solution is to use unique buffer handles instead of serials\n\nthis is indeed the direction we need to go. GLES handles are already unique and can be reused over time. it would just be a matter to using those, instead of serials, as the key\n\nFYI - i have a WIP patch that introduces an indirection where i have a bitset that stores the index where we can find the value in a packed mValueData vector. I use the ensureCapacity input to guide the size of indirection. So if we expect 256 buffer counts, then the sizes will be like so -\n\n1. mKeyData will be 256/64\n2. mValueIndexData will be (256/64) * 6 - so we dedicate 6 bits for each key and store the value\u0027s index, with some work done during a subsequent resize\n3. mValueData will only be as large as the number of inserted items\n\nbut it seemed a bit of over engineering",
+      "parentUuid": "a6ad0a4b_21d8cdcb",
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d411831b_c3a93172",
         "filename": "src/common/FastVector.h",
         "patchSetId": 10
@@ -80,6 +139,30 @@
       "revId": "c33108c140a5d876447413df189aef2f4ef32480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3c22d5_682b87d9",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "they are not unused, look here -\u003e\n1. empty() -\u003e https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/vk_helpers.cpp#606\n2. size() -\u003e https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/vk_helpers.h#1042",
+      "parentUuid": "d411831b_c3a93172",
+      "range": {
+        "startLine": 572,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 5
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "06fef98b_b2d5d069",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09d125d0_39552635",
+      "range": {
+        "startLine": 302,
+        "startChar": 10,
+        "endLine": 302,
+        "endChar": 36
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f156e44e_f3608647",
         "filename": "src/common/FastVector_unittest.cpp",
         "patchSetId": 10
@@ -126,6 +233,30 @@
       "revId": "c33108c140a5d876447413df189aef2f4ef32480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51b8b9f9_4bd881b1",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f156e44e_f3608647",
+      "range": {
+        "startLine": 323,
+        "startChar": 9,
+        "endLine": 323,
+        "endChar": 14
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -152,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "c5e85d0f_478f7ba5",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3a52b6f_a05816aa",
+      "range": {
+        "startLine": 329,
+        "startChar": 9,
+        "endLine": 329,
+        "endChar": 14
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50f3d1a4_9369c7ea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 10
@@ -163,6 +318,30 @@
       "writtenOn": "2020-08-23T14:33:30Z",
       "side": 1,
       "message": "I do feel a bit unsure about using this structure everywhere. Maybe we could change it in one place first and then investigate using it other places.",
+      "range": {
+        "startLine": 667,
+        "startChar": 15,
+        "endLine": 667,
+        "endChar": 29
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06959a3a_72e04ca3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T16:35:16Z",
+      "side": 1,
+      "message": "i do partially agree with this since we dont go through that many descriptor sets, but the contains shows up so much on profile. let me know and i can revert this back to how it was",
+      "parentUuid": "50f3d1a4_9369c7ea",
       "range": {
         "startLine": 667,
         "startChar": 15,
