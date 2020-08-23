@@ -696,7 +696,7 @@ void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
         // We allow duplicate uses in the RP to accomodate for normal GL sampler usage.
         if (!usesImageInRenderPass(*image))
         {
-            mRenderPassUsedImages.insert(image->getImageSerial());
+            mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         }
     }
 }
@@ -727,7 +727,7 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
         }
         if (!usesImageInRenderPass(*image))
         {
-            mRenderPassUsedImages.insert(image->getImageSerial());
+            mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         }
     }
 }
