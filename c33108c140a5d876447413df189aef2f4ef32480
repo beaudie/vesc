@@ -197,6 +197,24 @@
     },
     {
       "key": {
+        "uuid": "628879d5_a9a07496",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T20:16:52Z",
+      "side": 1,
+      "message": "And TBH throughput is more important than memory right now, so a temporary regression in memory is acceptable. As long as there aren\u0027t unexpected OOM or any really egregious situations. I\u0027m fine with landing this and seeing what falls out. We can give people a heads up.",
+      "parentUuid": "2aab28f6_01899748",
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d411831b_c3a93172",
         "filename": "src/common/FastVector.h",
         "patchSetId": 10
