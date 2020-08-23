@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48cd27e6_ce8628f2",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T00:08:05Z",
+      "side": 1,
+      "message": "my guess is we might need it here as well for when we start launching these versions of these tests that use GPUs.",
+      "range": {
+        "startLine": 373,
+        "startChar": 7,
+        "endLine": 373,
+        "endChar": 36
+      },
+      "revId": "8edea21d0f2eebbcbf8558ff166caaa283a9615f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dcaa275_fcb70359",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T00:08:05Z",
+      "side": 1,
+      "message": "can you make this part of the template instead of defining in each test that uses the gpu? that way it\u0027ll reach each test. presumably angle_perftests needs it as well for example.",
+      "range": {
+        "startLine": 1243,
+        "startChar": 0,
+        "endLine": 1246,
+        "endChar": 7
+      },
+      "revId": "8edea21d0f2eebbcbf8558ff166caaa283a9615f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
