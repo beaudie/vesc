@@ -16,6 +16,23 @@
       "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "37dc0573_c728f6b0",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T05:00:15Z",
+      "side": 1,
+      "message": "Can you think of some template trick (on FastIntegerMap) or something to make FastIntegerSet not contain mValueData? Otherwise it could be refactored into a helper class and used by both.\n\nThere\u0027s no reason why a vector of 0s should to be maintained in this class.",
+      "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
