@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "03331972_e81813a4",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1d18da6_c628cdf2",
+      "range": {
+        "startLine": 1619,
+        "startChar": 31,
+        "endLine": 1619,
+        "endChar": 32
+      },
+      "revId": "0289152bca8625f7aeb031676b593644d5d07f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61bd2364_271ad493",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 9
@@ -62,6 +86,30 @@
       "revId": "0289152bca8625f7aeb031676b593644d5d07f58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "461b9d22_65ef07d7",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61bd2364_271ad493",
+      "range": {
+        "startLine": 1207,
+        "startChar": 0,
+        "endLine": 1211,
+        "endChar": 35
+      },
+      "revId": "0289152bca8625f7aeb031676b593644d5d07f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
