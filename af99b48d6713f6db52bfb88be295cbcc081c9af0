@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "b32d3225_b48e2094",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:00Z",
+      "side": 1,
+      "message": "Unfortunately, we cannot use NOT operator with @available directive.\nOnly two platforms support this code: macOS and mac Catalyst. On macOS, the code is only supported since 10.13 (this is what I got from Dawn\u0027s reference code anw).",
+      "parentUuid": "d2e863ab_056506ae",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 10
+      },
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d64ca23e_1da883de",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
         "patchSetId": 11
@@ -115,6 +139,30 @@
       "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16c96879_34f87f65",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d64ca23e_1da883de",
+      "range": {
+        "startLine": 307,
+        "startChar": 31,
+        "endLine": 307,
+        "endChar": 54
+      },
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +209,30 @@
       "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a37e453a_fff25bfc",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "effebfd4_0aea2266",
+      "range": {
+        "startLine": 357,
+        "startChar": 17,
+        "endLine": 357,
+        "endChar": 38
+      },
+      "revId": "af99b48d6713f6db52bfb88be295cbcc081c9af0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
