@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1a5b394_a5120e2a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T04:23:06Z",
+      "side": 0,
+      "message": "There can\u0027t be a RAW hazard if the layouts are the same!",
+      "revId": "1d331c9131bd0e6ddafdfca1b9e3ccb47a4e4fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
