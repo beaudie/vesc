@@ -274,7 +274,7 @@ TEST(FastUnorderedMap, BasicUsage)
 // Basic functionality for FastUnorderedSet
 TEST(FastUnorderedSet, BasicUsage)
 {
-    FastUnorderedSet<int, 3> testMap;
+    FastUnorderedSet testMap;
     EXPECT_TRUE(testMap.empty());
 
     testMap.insert(5);

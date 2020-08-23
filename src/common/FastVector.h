@@ -476,39 +476,8 @@ class FastUnorderedMap final
     FastVector<Pair, N> mData;
 };
 
-template <class T, size_t N>
-class FastUnorderedSet final
-{
-  public:
-    FastUnorderedSet() {}
-    ~FastUnorderedSet() {}
-
-    bool empty() const { return mData.empty(); }
-
-    void insert(T value)
-    {
-        ASSERT(!contains(value));
-        mData.push_back(value);
-    }
-
-    bool contains(T needle) const
-    {
-        for (T value : mData)
-        {
-            if (value == needle)
-                return true;
-        }
-        return false;
-    }
-
-    void clear() { mData.clear(); }
-
-  private:
-    FastVector<T, N> mData;
-};
-
 template <typename Value>
-class FastIntegerMap final
+class FastIntegerMap
 {
   private:
     static constexpr size_t kWindowSize             = 64;
@@ -605,6 +574,15 @@ class FastIntegerMap final
 
     std::vector<KeyBitSet> mKeyData;
     std::vector<Value> mValueData;
+};
+
+class FastUnorderedSet final : public FastIntegerMap<uint8_t>
+{
+  public:
+    FastUnorderedSet() {}
+    ~FastUnorderedSet() {}
+
+    void insert(uint64_t key) { FastIntegerMap::insert(key, 0); }
 };
 }  // namespace angle
 
