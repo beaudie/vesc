@@ -22,6 +22,30 @@
       "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cd5dcab_6a95eedc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T20:14:51Z",
+      "side": 1,
+      "message": "I don\u0027t think we have a prior case for VS depth-textures, but it could come along. Should fix this.",
+      "parentUuid": "0655b899_31497fdc",
+      "range": {
+        "startLine": 357,
+        "startChar": 12,
+        "endLine": 357,
+        "endChar": 45
+      },
+      "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
