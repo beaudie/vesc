@@ -87,6 +87,24 @@
       "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09447f81_6789e3ad",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-23T18:33:00Z",
+      "side": 1,
+      "message": "jamie, i started getting a weird style error -\n\nIn file included from ../../src\\libANGLE/Observer.h:16:\n../../src\\common/FastVector.h(519,5): error: [chromium-style] Complex constructor has an inlined body.\n    FastIntegerSet() {}\n    ^\n../../src\\common/FastVector.h(520,5): error: [chromium-style] Complex destructor has an inline body.\n    ~FastIntegerSet() {}\n    ^\n\ndo you know a workaround?",
+      "parentUuid": "361b42c8_06aaa714",
+      "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
