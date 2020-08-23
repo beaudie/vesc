@@ -4444,9 +4444,13 @@ angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
     ASSERT(!image->isReleasedToExternal());
     ASSERT(image->getImageSerial().valid());
 
-    // Note that different read methods are not compatible. A shader read uses a different layout
-    // than a transfer read. So we cannot support simultaneous read usage as easily as for Buffers.
-    ANGLE_TRY(endRenderPassIfImageUsed(*image));
+    if (image->isReadBarrierNecessary(imageLayout))
+    {
+        // Note that different read methods are not compatible. A shader read uses a different
+        // layout than a transfer read. So we cannot support simultaneous read usage as easily as
+        // for Buffers.
+        ANGLE_TRY(endRenderPassIfImageUsed(*image));
+    }
 
     image->recordReadBarrier(aspectFlags, imageLayout,
                              &mOutsideRenderPassCommands->getCommandBuffer());
