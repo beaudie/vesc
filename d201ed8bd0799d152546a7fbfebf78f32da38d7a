@@ -16,6 +16,24 @@
       "revId": "d201ed8bd0799d152546a7fbfebf78f32da38d7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc531701_990e1df0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 4568,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T05:12:24Z",
+      "side": 0,
+      "message": "Have not verified. If we\u0027re messing up here, we need to add a regression test.",
+      "parentUuid": "e23c791f_fcaf41d8",
+      "revId": "d201ed8bd0799d152546a7fbfebf78f32da38d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
