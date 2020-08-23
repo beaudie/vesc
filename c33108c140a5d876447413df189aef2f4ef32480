@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "659d539f_3c74ad3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T06:02:21Z",
+      "side": 1,
+      "message": "For N\u003c\u003d512, O(N)\u003dO(1) so there\u0027s no value in this statement.\n\nI mean, this is basically cutting down the operations by 64, let\u0027s call it what it is. The fact that log(N)\u003eN/64 for N\u003c512 is not relevant.",
+      "range": {
+        "startLine": 9,
+        "startChar": 55,
+        "endLine": 11,
+        "endChar": 50
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa8cdcf8_e8cb76c4",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T06:02:21Z",
+      "side": 1,
+      "message": "Suggest to use uint64_t for the intermediary variables (index, offset etc) and let the vector implicitly cast it.\n\n---\n\nWait, this is given the resource serials, but they are monotonically increasing values and are unbounded. As the application runs, this object would use more and more memory, with basically the \"front\" of the vectors mostly unused.\n\nNot sure if this is the best idea.",
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d411831b_c3a93172",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T06:02:21Z",
+      "side": 1,
+      "message": "Unused functionality, you could delete these.",
+      "range": {
+        "startLine": 572,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 5
+      },
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
