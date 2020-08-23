@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0655b899_31497fdc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T18:46:54Z",
+      "side": 1,
+      "message": "The description of this says:\n\n\u003e If layout has multiple stage mask bits, we pick the lowest stage as the index since it is the first stage that needs barrier.\n\nThis layout is used in All Graphics Stages as well as Fragment Tests. \"First stage\" is therefore VS. Shouldn\u0027t this be VS?\n\n@cclao",
+      "range": {
+        "startLine": 357,
+        "startChar": 12,
+        "endLine": 357,
+        "endChar": 45
+      },
+      "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
