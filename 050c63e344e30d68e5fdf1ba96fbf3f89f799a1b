@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0f9acf0_9a1103d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:08:54Z",
+      "side": 1,
+      "message": "Nice work on the feature override. One question about the namespace trick you\u0027re using and a couple nits.",
+      "revId": "050c63e344e30d68e5fdf1ba96fbf3f89f799a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "adf7835d_37ced010",
+        "filename": "include/platform/FeaturesMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:08:54Z",
+      "side": 1,
+      "message": "nit: you\u0027re consistent with \u0027allow\u0027 but it is redundant. you could just as easily say \u0027genMultipleMipsPerPass\u0027 and it would keep the meaning.",
+      "range": {
+        "startLine": 63,
+        "startChar": 12,
+        "endLine": 63,
+        "endChar": 39
+      },
+      "revId": "050c63e344e30d68e5fdf1ba96fbf3f89f799a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a186b224_0c192844",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:08:54Z",
+      "side": 1,
+      "message": "nit: final/NonCopyable?",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 314,
+        "endChar": 17
+      },
+      "revId": "050c63e344e30d68e5fdf1ba96fbf3f89f799a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2071b4a6_b5341a59",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1998,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:08:54Z",
+      "side": 1,
+      "message": "what\u0027s with this namespace trick? Is this necessary for some reason?",
+      "range": {
+        "startLine": 1998,
+        "startChar": 10,
+        "endLine": 1998,
+        "endChar": 24
+      },
+      "revId": "050c63e344e30d68e5fdf1ba96fbf3f89f799a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
