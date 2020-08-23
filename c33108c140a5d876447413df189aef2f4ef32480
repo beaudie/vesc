@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "9eea18fe_875cfbc4",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T16:44:21Z",
+      "side": 1,
+      "message": "GLES handles won\u0027t do Mohan. The lifetime of Vulkan objects can exceed that of GL. That being said we can use a different Vulkan handle for the BufferHelper. It\u0027s the implementation details about clearing out the caches that are more concerning.\n\nIf Shabi is okay with proceeding in this direction we can postpone the WIP patch and go with this CL + your second one with the suggested refactors.",
+      "parentUuid": "2810bd3f_2930de63",
+      "revId": "c33108c140a5d876447413df189aef2f4ef32480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d411831b_c3a93172",
         "filename": "src/common/FastVector.h",
         "patchSetId": 10
