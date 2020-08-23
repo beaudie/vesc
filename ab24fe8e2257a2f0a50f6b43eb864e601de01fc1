@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "028e16cc_a4bb9172",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:06:11Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "ab24fe8e2257a2f0a50f6b43eb864e601de01fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c91aa91_2f351896",
+        "filename": "src/libANGLE/renderer/metal/shaders/common.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:06:11Z",
+      "side": 1,
+      "message": "nit: static in a header doesn\u0027t do anything, you can omit it.",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 6
+      },
+      "revId": "ab24fe8e2257a2f0a50f6b43eb864e601de01fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2e8c855_04480821",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mipmap.metal",
+        "patchSetId": 9
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T21:06:11Z",
+      "side": 1,
+      "message": "nit: usually we put a top-level comment in source files.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "ab24fe8e2257a2f0a50f6b43eb864e601de01fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
