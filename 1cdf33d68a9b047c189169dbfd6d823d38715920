@@ -33,6 +33,24 @@
       "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "805e5ff5_cce49299",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T05:07:53Z",
+      "side": 1,
+      "message": "Yeah, we need to rework this slightly.\n\nNaming wise this should be FastIntegerSet. Design wise either you can make FastIntegerMap contain a FastIntegerSet and let FastIntegerSet handle the bitmask. The compose with private mValueData to form the values array.\n\n(We generally prefer a composition based design for simplicity).",
+      "parentUuid": "37dc0573_c728f6b0",
+      "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
