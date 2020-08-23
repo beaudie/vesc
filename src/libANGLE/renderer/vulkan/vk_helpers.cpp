@@ -65,7 +65,7 @@ constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> kPipeline
 
 constexpr size_t kDefaultPoolAllocatorPageSize = 16 * 1024;
 
-enum BarrierType
+enum LayoutType
 {
     ReadOnly,
     Write
@@ -89,7 +89,7 @@ struct ImageMemoryBarrierData
     // needs a READ bit, as WAR hazards don't need memory barriers (just execution barriers).
     VkAccessFlags srcAccessMask;
     // Read or write.
-    BarrierType type;
+    LayoutType type;
     // CommandBufferHelper tracks an array of PipelineBarriers. This indicates which array element
     // this should be merged into. Right now we track individual barrier for every PipelineStage. If
     // layout has a single stage mask bit, we use that stage as index. If layout has multiple stage
@@ -114,7 +114,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: there's no data in the image to care about.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::InvalidEnum,
         },
     },
@@ -129,7 +129,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_MEMORY_WRITE_BIT,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::InvalidEnum,
         },
     },
@@ -144,7 +144,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
         },
@@ -160,7 +160,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
         },
@@ -176,7 +176,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::Transfer,
         },
     },
@@ -191,7 +191,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_TRANSFER_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             PipelineStage::Transfer,
         },
     },
@@ -206,7 +206,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::VertexShader,
         },
     },
@@ -221,7 +221,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             PipelineStage::VertexShader,
         },
     },
@@ -236,7 +236,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::GeometryShader,
         },
     },
@@ -251,7 +251,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             PipelineStage::GeometryShader,
         },
     },
@@ -266,7 +266,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::FragmentShader,
         },
     },
@@ -281,7 +281,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             PipelineStage::FragmentShader,
         },
     },
@@ -296,7 +296,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::ComputeShader,
         },
     },
@@ -311,7 +311,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             PipelineStage::ComputeShader,
         },
     },
@@ -326,7 +326,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
         },
@@ -342,7 +342,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
         },
@@ -358,7 +358,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             PipelineStage::ColorAttachmentOutput,
         },
     },
@@ -369,11 +369,11 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
             kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
             kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-            // Transition to: all reads and writes must happen after barrier.
+            // Transition to: all reads must happen after barrier.
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
-            // Transition from: all writes must finish before barrier.
+            // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::EarlyFragmentTest,
         },
     },
@@ -388,7 +388,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-            BarrierType::Write,
+            LayoutType::Write,
             PipelineStage::EarlyFragmentTest,
         },
     },
@@ -408,7 +408,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            BarrierType::ReadOnly,
+            LayoutType::ReadOnly,
             PipelineStage::BottomOfPipe,
         },
     },
@@ -3381,7 +3381,7 @@ bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
 
     // RAW (read-after-write) hazards always requires a memory barrier.
     const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
-    return layoutData.type == BarrierType::Write;
+    return layoutData.type == LayoutType::Write;
 }
 
 void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -3499,7 +3499,7 @@ bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
     if (newLayout == mCurrentLayout)
     {
         const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
-        ASSERT(layoutData.type == BarrierType::Write);
+        ASSERT(layoutData.type == LayoutType::Write);
         // No layout change, only memory barrier is required
         barrier->mergeMemoryBarrier(layoutData.srcStageMask, layoutData.dstStageMask,
                                     layoutData.srcAccessMask, layoutData.dstAccessMask);
