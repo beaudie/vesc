@@ -3371,19 +3371,6 @@ bool ImageHelper::isDepthOrStencil() const
     return mFormat->actualImageFormat().hasDepthOrStencilBits();
 }
 
-bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
-{
-    // If transitioning to a different layout, we need always need a barrier.
-    if (mCurrentLayout != newLayout)
-    {
-        return true;
-    }
-
-    // RAW (read-after-write) hazards always requires a memory barrier.
-    const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
-    return layoutData.type == BarrierType::Write;
-}
-
 void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                        ImageLayout newLayout,
                                        uint32_t newQueueFamilyIndex,
