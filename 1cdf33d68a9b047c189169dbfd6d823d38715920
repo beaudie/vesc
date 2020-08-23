@@ -105,6 +105,24 @@
       "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9410ecc_768246dc",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T20:19:21Z",
+      "side": 1,
+      "message": "you can define it out-of-the class and use ANGLE_INLINE. We had this issue with a few other types. It\u0027s trying to get you to not inline this constructor, however it\u0027s easier to work around it.",
+      "parentUuid": "09447f81_6789e3ad",
+      "revId": "1cdf33d68a9b047c189169dbfd6d823d38715920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
