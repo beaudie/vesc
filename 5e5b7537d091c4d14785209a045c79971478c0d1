@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9c6b7a8_b299648d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T03:02:14Z",
+      "side": 1,
+      "message": "Do you have statistics on how ",
+      "revId": "5e5b7537d091c4d14785209a045c79971478c0d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "602c6417_36575cb6",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T03:02:14Z",
+      "side": 1,
+      "message": "Do you have statistics on how many times insert is called vs contains+get (proportionally)?\n\nIf num(queries)\u003e\u003enum(insert), I wonder if it would be faster if insert was sorted and queries did a binary search. There won\u0027t be a perf hit for the degenerate case this way.\n\nI\u0027m also not sure if dozens of buffers per RP is a degenerate case. If the application uses uniforms, sure we suballocate from a big buffer so we use a few of them, but if it manages uniform data through UBOs, it could easily have O(materials) buffers in an RP.",
+      "revId": "5e5b7537d091c4d14785209a045c79971478c0d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
