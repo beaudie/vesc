@@ -200,6 +200,30 @@
       "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d6e8a8b_6b78cb47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-23T05:19:19Z",
+      "side": 1,
+      "message": "IMO:\n\n1) Yes\n2) Yes\n3) Yes\n4) I personally wouldn\u0027t bother until proven necessary, but a trivial change either way, so whatever feels cleaner.\n\nRe: 2, we need to think about how to track mContentDefined per subresource as efficient as possible. I originally thought maybe we could use a bitset and do this per mip level. However, render targets on cube map faces are common, I think? I also thought about bitset on levels*layers and assume any subresource \u003e\u003d 64 is always defined (and hope doesn\u0027t cause trouble in practice), but a reasonable 1kx1k cubemap with mips has 66 subresources!\n\nProbably reasonable to expect no one creates a render target for the last mips, so I think the latter should work fine (that is, use a bitset\u003c64\u003e indexed by (levelVk * mLayerCount + layer) to track this, and assume true for indices \u003e\u003d 64).",
+      "parentUuid": "6c80ee66_47a26a1e",
+      "range": {
+        "startLine": 955,
+        "startChar": 8,
+        "endLine": 955,
+        "endChar": 33
+      },
+      "revId": "ded813a3533fcc6b288404a76f5bec3c5496a512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
