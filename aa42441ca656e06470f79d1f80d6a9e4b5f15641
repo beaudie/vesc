@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d8ad39e7_75591c3a",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:20Z",
+      "side": 1,
+      "message": "Done. Removed the first function. It was unused anw.",
+      "parentUuid": "207ce583_47e15f30",
+      "range": {
+        "startLine": 501,
+        "startChar": 24,
+        "endLine": 501,
+        "endChar": 35
+      },
+      "revId": "aa42441ca656e06470f79d1f80d6a9e4b5f15641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5019d5e2_34d1ff86",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "84ae1a5a_6d926dd0",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5019d5e2_34d1ff86",
+      "range": {
+        "startLine": 147,
+        "startChar": 9,
+        "endLine": 147,
+        "endChar": 22
+      },
+      "revId": "aa42441ca656e06470f79d1f80d6a9e4b5f15641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aec5f5b_45ba1c07",
         "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
         "patchSetId": 9
@@ -59,6 +107,30 @@
       "writtenOn": "2020-08-18T20:47:04Z",
       "side": 1,
       "message": "I\u0027m not a huge fans of having these duplicate tests for ES3 behavior, but at the same time I do think we should have an end2end test for this.\n\nMaybe you can make a tracking bug to delete these tests once Metal supports ES3 contexts?\nJamie, thoughts?",
+      "range": {
+        "startLine": 609,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 1
+      },
+      "revId": "aa42441ca656e06470f79d1f80d6a9e4b5f15641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2728be1e_220ab45b",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-23T17:50:20Z",
+      "side": 1,
+      "message": "I still think it is needed. Future back-end might need these tests when implementing ES extension before full ES3 implementation. Also the code is not 100% duplicated.\ne.g. glFramebufferTexture3DOES() is a bit different from ES3\u0027s glFramebufferTextureLayer()",
+      "parentUuid": "9aec5f5b_45ba1c07",
       "range": {
         "startLine": 609,
         "startChar": 0,
