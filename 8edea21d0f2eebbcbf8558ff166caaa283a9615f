@@ -86,6 +86,30 @@
       "revId": "8edea21d0f2eebbcbf8558ff166caaa283a9615f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da84e12d_87e8773b",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-23T20:58:04Z",
+      "side": 1,
+      "message": "Technically angle_unittests doesn\u0027t need it. I doubt it\u0027ll mess up to include the flag - if it does we can disable it there and leave it on by default. Or add a speicific \"uses_gpu\" state or something. Anyway, thanks!",
+      "parentUuid": "630dd6f0_0b47aed0",
+      "range": {
+        "startLine": 1243,
+        "startChar": 0,
+        "endLine": 1246,
+        "endChar": 7
+      },
+      "revId": "8edea21d0f2eebbcbf8558ff166caaa283a9615f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
