@@ -109,6 +109,30 @@
       "revId": "050c63e344e30d68e5fdf1ba96fbf3f89f799a1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa13567a_a222d11b",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1998,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-24T13:22:23Z",
+      "side": 1,
+      "message": "More clarification: `ANGLE_INSTANTIATE_TEST(MipmapTest, WithNoGenMultipleMipsPerPass(ES2_METAL()))` needs to be put into namespace due to MipmapTest already being instantiated.",
+      "parentUuid": "55bcbe46_16c2f048",
+      "range": {
+        "startLine": 1998,
+        "startChar": 10,
+        "endLine": 1998,
+        "endChar": 24
+      },
+      "revId": "050c63e344e30d68e5fdf1ba96fbf3f89f799a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
