@@ -42,15 +42,16 @@ void GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(
     GlslangProgramInterfaceInfo *glslangProgramInterfaceInfo)
 {
     glslangProgramInterfaceInfo->uniformsAndXfbDescriptorSetIndex =
-        kUniformsAndXfbDescriptorSetIndex;
+        toUnderlying(DescriptorSetIndex::UniformsAndXfb);
     glslangProgramInterfaceInfo->currentUniformBindingIndex = 0;
-    glslangProgramInterfaceInfo->textureDescriptorSetIndex  = kTextureDescriptorSetIndex;
+    glslangProgramInterfaceInfo->textureDescriptorSetIndex =
+        toUnderlying(DescriptorSetIndex::Texture);
     glslangProgramInterfaceInfo->currentTextureBindingIndex = 0;
     glslangProgramInterfaceInfo->shaderResourceDescriptorSetIndex =
-        kShaderResourceDescriptorSetIndex;
+        toUnderlying(DescriptorSetIndex::ShaderResource);
     glslangProgramInterfaceInfo->currentShaderResourceBindingIndex = 0;
     glslangProgramInterfaceInfo->driverUniformsDescriptorSetIndex =
-        kDriverUniformsDescriptorSetIndex;
+        toUnderlying(DescriptorSetIndex::DriverUniforms);
 
     glslangProgramInterfaceInfo->locationsUsedForXfbExtension = 0;
 }
