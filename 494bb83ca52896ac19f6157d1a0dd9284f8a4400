@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "9159d036_d739aed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-24T23:46:37Z",
+      "side": 1,
+      "message": "FYI - in case we do run into memory problems and abseil isn\u0027t available yet there is a CL that implements a sparse variant of the map -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/2373310",
+      "revId": "494bb83ca52896ac19f6157d1a0dd9284f8a4400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff33d6f0_fc967cf6",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
