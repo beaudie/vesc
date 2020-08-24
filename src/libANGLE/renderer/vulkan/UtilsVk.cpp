@@ -1202,7 +1202,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     ANGLE_TRY(setupProgram(contextVk, Function::ImageClear, fragmentShader, vertexShader,
                            imageClearProgram, &pipelineDesc, VK_NULL_HANDLE, &shaderParams,
                            sizeof(shaderParams), commandBuffer));
-    commandBuffer->draw(6, 0);
+    commandBuffer->draw(3, 0);
     return angle::Result::Continue;
 }
 
@@ -1467,7 +1467,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     ANGLE_TRY(setupProgram(contextVk, Function::BlitResolve, fragmentShader, vertexShader,
                            &mBlitResolvePrograms[flags], &pipelineDesc, descriptorSet,
                            &shaderParams, sizeof(shaderParams), commandBuffer));
-    commandBuffer->draw(6, 0);
+    commandBuffer->draw(3, 0);
     descriptorPoolBinding.reset();
 
     return angle::Result::Continue;
@@ -1849,7 +1849,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ANGLE_TRY(setupProgram(contextVk, Function::ImageCopy, fragmentShader, vertexShader,
                            &mImageCopyPrograms[flags], &pipelineDesc, descriptorSet, &shaderParams,
                            sizeof(shaderParams), commandBuffer));
-    commandBuffer->draw(6, 0);
+    commandBuffer->draw(3, 0);
     descriptorPoolBinding.reset();
 
     // Close the render pass for this temporary framebuffer.
