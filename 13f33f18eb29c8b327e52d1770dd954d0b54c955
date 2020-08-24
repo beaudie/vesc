@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45b6f5bb_eeee3782",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-24T21:51:45Z",
+      "side": 1,
+      "message": "PTAL\n\nAndroid failures are unrelated (chromium build failure, android infra failure).",
+      "revId": "13f33f18eb29c8b327e52d1770dd954d0b54c955",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
