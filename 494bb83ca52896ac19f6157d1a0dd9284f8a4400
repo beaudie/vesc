@@ -22,6 +22,30 @@
       "revId": "494bb83ca52896ac19f6157d1a0dd9284f8a4400",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51ccf4b8_ad60e4b1",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-24T14:58:01Z",
+      "side": 1,
+      "message": "hypothetical numbers -\n\nsay capacity() \u003d\u003d 512 and requested size (i.e new serial) \u003d\u003d 1020\nwith the current code, we will resize it to rx::roundup(2040, 64) but with proposed code we would resize it to std::max(1024, 1021) \u003d\u003d 1024\n\ngiven that serials monotonically increase we will end up performing an additional resize when we hit serial 1025",
+      "parentUuid": "ff33d6f0_fc967cf6",
+      "range": {
+        "startLine": 526,
+        "startChar": 20,
+        "endLine": 526,
+        "endChar": 28
+      },
+      "revId": "494bb83ca52896ac19f6157d1a0dd9284f8a4400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
