@@ -162,4 +162,24 @@ class Debug : angle::NonCopyable
     angle::PackedEnumBitSet<MessageType> mEnabledMessageTypes;
 };
 }  // namespace egl
+
+// Generate a perf warning.  Only output the same message a few times to avoid spamming the logs.
+#define DEBUG_PERF_WARNING(debug, severity, message)                                         \
+    do                                                                                       \
+    {                                                                                        \
+        constexpr uint32_t kMaxRepeat = 4;                                                   \
+        static uint32_t repeatCount   = 0;                                                   \
+        if (repeatCount < kMaxRepeat)                                                        \
+        {                                                                                    \
+            ++repeatCount;                                                                   \
+            std::string msg = message;                                                       \
+            if (repeatCount == kMaxRepeat)                                                   \
+            {                                                                                \
+                msg += " (this message will no longer repeat)";                              \
+            }                                                                                \
+            debug.insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_PERFORMANCE, 0, severity, \
+                                std::move(msg), gl::LOG_INFO);                               \
+        }                                                                                    \
+    } while (0)
+
 #endif  // LIBANGLE_DEBUG_H_

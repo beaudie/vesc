@@ -198,6 +198,8 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
         {
             return angle::Result::Continue;
         }
+        DEBUG_PERF_WARNING(contextVk->getState().getDebug(), GL_DEBUG_SEVERITY_HIGH,
+                           "GPU bubble due to waiting on uncompleted query");
         ANGLE_TRY(contextVk->finishToSerial(mQueryHelper.getStoredQueueSerial()));
     }
 
