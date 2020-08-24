@@ -14,6 +14,7 @@
 #include "common/Color.h"
 #include "common/platform.h"
 #include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
 #include "util/Timer.h"
@@ -293,8 +294,7 @@ TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDraw)
         "  gl_FragColor = vec4(v_data, 0, 1);\n"
         "}";
 
-    GLuint program = CompileProgram(kVS, kFS);
-    ASSERT_NE(0u, program);
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
     glUseProgram(program);
 
     GLint positionLocation = glGetAttribLocation(program, "position");
@@ -303,14 +303,9 @@ TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDraw)
     GLint redGreenLocation = glGetAttribLocation(program, "redGreen");
     ASSERT_NE(-1, redGreenLocation);
 
-    GLuint indexBuffer;
-    glGenBuffers(1, &indexBuffer);
-
-    GLuint vertexArray;
-    glGenVertexArrays(1, &vertexArray);
-
-    std::vector<GLuint> vertexBuffers(2);
-    glGenBuffers(2, &vertexBuffers[0]);
+    GLBuffer indexBuffer;
+    GLVertexArray vertexArray;
+    GLBuffer vertexBuffers[2];
 
     glBindVertexArray(vertexArray);
 
@@ -388,8 +383,7 @@ TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDerivativeDraw)
         "  FragColor = vec4(dFdx(v_data.x), dFdy(v_data.y), 0, 1);\n"
         "}";
 
-    GLuint program = CompileProgram(kVS, kFS);
-    ASSERT_NE(0u, program);
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
     glUseProgram(program);
 
     GLint positionLocation = glGetAttribLocation(program, "position");
@@ -398,14 +392,9 @@ TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDerivativeDraw)
     GLint redGreenLocation = glGetAttribLocation(program, "redGreen");
     ASSERT_NE(-1, redGreenLocation);
 
-    GLuint indexBuffer;
-    glGenBuffers(1, &indexBuffer);
-
-    GLuint vertexArray;
-    glGenVertexArrays(1, &vertexArray);
-
-    std::vector<GLuint> vertexBuffers(2);
-    glGenBuffers(2, &vertexBuffers[0]);
+    GLBuffer indexBuffer;
+    GLVertexArray vertexArray;
+    GLBuffer vertexBuffers[2];
 
     glBindVertexArray(vertexArray);
 
@@ -514,8 +503,7 @@ TEST_P(EGLPreRotationSurfaceTest, ChangeRotationWithDraw)
         "  gl_FragColor = vec4(v_data, 0, 1);\n"
         "}";
 
-    GLuint program = CompileProgram(kVS, kFS);
-    ASSERT_NE(0u, program);
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
     glUseProgram(program);
 
     GLint positionLocation = glGetAttribLocation(program, "position");
@@ -524,14 +512,9 @@ TEST_P(EGLPreRotationSurfaceTest, ChangeRotationWithDraw)
     GLint redGreenLocation = glGetAttribLocation(program, "redGreen");
     ASSERT_NE(-1, redGreenLocation);
 
-    GLuint indexBuffer;
-    glGenBuffers(1, &indexBuffer);
-
-    GLuint vertexArray;
-    glGenVertexArrays(1, &vertexArray);
-
-    std::vector<GLuint> vertexBuffers(2);
-    glGenBuffers(2, &vertexBuffers[0]);
+    GLBuffer indexBuffer;
+    GLVertexArray vertexArray;
+    GLBuffer vertexBuffers[2];
 
     glBindVertexArray(vertexArray);
 
@@ -666,21 +649,15 @@ TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithFragCoordDraw)
         "  gl_FragColor = vec4(gl_FragCoord.x / 256.0, gl_FragCoord.y / 256.0, 0.0, 1.0);\n"
         "}";
 
-    GLuint program = CompileProgram(kVS, kFS);
-    ASSERT_NE(0u, program);
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
     glUseProgram(program);
 
     GLint positionLocation = glGetAttribLocation(program, "position");
     ASSERT_NE(-1, positionLocation);
 
-    GLuint indexBuffer;
-    glGenBuffers(1, &indexBuffer);
-
-    GLuint vertexArray;
-    glGenVertexArrays(1, &vertexArray);
-
-    GLuint vertexBuffer;
-    glGenBuffers(1, &vertexBuffer);
+    GLBuffer indexBuffer;
+    GLVertexArray vertexArray;
+    GLBuffer vertexBuffer;
 
     glBindVertexArray(vertexArray);
 
@@ -759,6 +736,10 @@ class EGLPreRotationBlitFramebufferTest : public EGLPreRotationLargeSurfaceTest
         GLint redGreenLocation = glGetAttribLocation(program, "redGreen");
         ASSERT_NE(-1, redGreenLocation);
 
+// FIXME: For some reason, enabling the following RAII types causes test failures.  Just using RAII
+// for vertexBuffers (and not indexBuffer nor vertexArray) causes a nullptr crash (strange)
+#define OLD_CODE
+#ifdef OLD_CODE
         GLuint indexBuffer;
         glGenBuffers(1, &indexBuffer);
 
@@ -767,6 +748,11 @@ class EGLPreRotationBlitFramebufferTest : public EGLPreRotationLargeSurfaceTest
 
         std::vector<GLuint> vertexBuffers(2);
         glGenBuffers(2, &vertexBuffers[0]);
+#else   // OLD_CODE
+        GLBuffer indexBuffer;
+        GLVertexArray vertexArray;
+        GLBuffer vertexBuffers[2];
+#endif  // OLD_CODE
 
         glBindVertexArray(vertexArray);
 
@@ -798,10 +784,15 @@ class EGLPreRotationBlitFramebufferTest : public EGLPreRotationLargeSurfaceTest
 
     GLuint createFBO()
     {
+#ifdef OLD_CODE
         GLuint framebuffer = 0;
         GLuint texture     = 0;
         glGenFramebuffers(1, &framebuffer);
         glGenTextures(1, &texture);
+#else   // OLD_CODE
+        GLFramebuffer framebuffer;
+        GLTexture texture;
+#endif  // OLD_CODE
 
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
