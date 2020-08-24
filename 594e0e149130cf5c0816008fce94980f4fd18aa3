@@ -46,6 +46,30 @@
       "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "177a4da9_a8a9a0b8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-24T16:40:07Z",
+      "side": 1,
+      "message": "Right. But if you change to VS, I think you probably want to duplicate it into VS and FS so that if it is only used in FS, you don\u0027t block VS. I highly doubt anyone will get into feedback loop on VS given all the undefined behavior with feedback loop though.",
+      "parentUuid": "8cd5dcab_6a95eedc",
+      "range": {
+        "startLine": 357,
+        "startChar": 12,
+        "endLine": 357,
+        "endChar": 45
+      },
+      "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
