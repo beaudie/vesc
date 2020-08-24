@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff33d6f0_fc967cf6",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-24T14:13:49Z",
+      "side": 1,
+      "message": "Should this say std::max(capacity() * 2, size + 1)?",
+      "range": {
+        "startLine": 526,
+        "startChar": 20,
+        "endLine": 526,
+        "endChar": 28
+      },
+      "revId": "494bb83ca52896ac19f6157d1a0dd9284f8a4400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
