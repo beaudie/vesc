@@ -39,6 +39,30 @@
       "revId": "d08cde185479913d45ae30069b635e53f0e7210c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71fb604c_24e616f4",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-08-24T05:44:53Z",
+      "side": 1,
+      "message": "Hi Shahbaz.\n\nI wrapped the comment to 100 chars. Thanks for your review.\n\nI\u0027m aware of this envar, but didn\u0027t consider that before. Thanks. While it\u0027s possible to do that, angle is not ready for Wayland yet (we don\u0027t have impl for that now. I\u0027ve updated the comment reflecting how that check can be done.\n\nThere is also the problem with how vague the IsOzone is. Basically, it was only expected that IsOzone is for Ozone/Drm. But now, it can mean X11/Wayland/Drm. This\nassumption will be fixed in the future as well, but for now Chromium uses angle\nonly for non-Ozone/X11 case. And as we are going from compile time to runtime check if the Ozone is enabled, we still need to keep the same behavior - non-Ozone/X11 (--enable-features\u003dUseOzonePlatform is not set) use angle/x11.\n\nYou can also see the tests that failed in our linux-rel bot[1]. As you can see,\nthe expectations became broken. All of that will need to be reworked of course.\n\n[1]https://ci.chromium.org/p/chromium/builders/try/linux_optional_gpu_tests_rel/45526?",
+      "parentUuid": "3877f406_be440b43",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 45
+      },
+      "revId": "d08cde185479913d45ae30069b635e53f0e7210c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
