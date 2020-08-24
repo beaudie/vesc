@@ -16,6 +16,29 @@
       "revId": "ef3e92b052c04323c89ae274ee5904a692dce540",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac582c55_d3006b59",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-24T16:30:58Z",
+      "side": 1,
+      "message": "Instead of keep stats of \"count\", why not just a copy of the last renderpass\u0027 load/store op? That way you have less stats and more direct information, which could be useful for debugging as well",
+      "range": {
+        "startLine": 921,
+        "startChar": 4,
+        "endLine": 929,
+        "endChar": 91
+      },
+      "revId": "ef3e92b052c04323c89ae274ee5904a692dce540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
