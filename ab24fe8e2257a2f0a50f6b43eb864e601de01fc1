@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "899daa19_7659d8a3",
+        "filename": "src/libANGLE/renderer/metal/shaders/common.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-24T13:17:44Z",
+      "side": 1,
+      "message": "If I don\u0027t use static and multiple .metal files include this header, I will get duplicated symbols errors when linking metallib for some reasons.",
+      "parentUuid": "0c91aa91_2f351896",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 6
+      },
+      "revId": "ab24fe8e2257a2f0a50f6b43eb864e601de01fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b2e8c855_04480821",
         "filename": "src/libANGLE/renderer/metal/shaders/gen_mipmap.metal",
         "patchSetId": 9
@@ -62,6 +86,30 @@
       "revId": "ab24fe8e2257a2f0a50f6b43eb864e601de01fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8cf8d15_b780caf0",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mipmap.metal",
+        "patchSetId": 9
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-24T13:17:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b2e8c855_04480821",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "ab24fe8e2257a2f0a50f6b43eb864e601de01fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
