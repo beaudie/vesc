@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "981c0a46_15ab97a7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-24T19:37:50Z",
+      "side": 1,
+      "message": "Regarding this: Index range validation seems to be done only for glDrawRangeElementsBaseVertexEXT/OES but not the promoted version of the same function. Should we remove those and just rip the whole getIndexRange functionality?",
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
