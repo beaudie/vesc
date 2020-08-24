@@ -11,6 +11,7 @@
 #ifndef COMMON_FASTVECTOR_H_
 #define COMMON_FASTVECTOR_H_
 
+#include "bitset_utils.h"
 #include "common/debug.h"
 
 #include <algorithm>
@@ -504,6 +505,265 @@ class FastUnorderedSet final
 
   private:
     FastVector<T, N> mData;
+};
+
+class FastIntegerSetFixedSize final
+{
+  public:
+    static constexpr size_t kMaxKeySize             = 256;
+    static constexpr size_t kWindowSize             = 64;
+    static constexpr size_t kOneLessThanKWindowSize = kWindowSize - 1;
+    static constexpr size_t kShiftForDivision =
+        static_cast<size_t>(rx::Log2(static_cast<unsigned int>(kWindowSize)));
+    using KeyBitSet = angle::BitSet64<kWindowSize>;
+
+    ANGLE_INLINE FastIntegerSetFixedSize();
+    ANGLE_INLINE ~FastIntegerSetFixedSize() {}
+
+    ANGLE_INLINE void insert(size_t key)
+    {
+        size_t index  = key >> kShiftForDivision;
+        size_t offset = key & kOneLessThanKWindowSize;
+
+        mKeyData[index].set(offset, true);
+    }
+
+    ANGLE_INLINE bool contains(size_t key) const
+    {
+        size_t index  = key >> kShiftForDivision;
+        size_t offset = key & kOneLessThanKWindowSize;
+        return (mKeyData[index].test(offset));
+    }
+
+    ANGLE_INLINE void clear() { mKeyData.assign(mKeyData.capacity(), KeyBitSet::Zero()); }
+
+    ANGLE_INLINE bool empty() const
+    {
+        for (KeyBitSet it : mKeyData)
+        {
+            if (it.any())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    ANGLE_INLINE size_t size() const
+    {
+        size_t valid_entries = 0;
+        for (KeyBitSet it : mKeyData)
+        {
+            valid_entries += it.count();
+        }
+        return valid_entries;
+    }
+
+  private:
+    std::vector<KeyBitSet> mKeyData;
+};
+
+// This is needed to accommodate the chromium style guide error -
+//      [chromium-style] Complex constructor has an inlined body.
+ANGLE_INLINE FastIntegerSetFixedSize::FastIntegerSetFixedSize()
+{
+    mKeyData.resize(kMaxKeySize / kWindowSize, KeyBitSet::Zero());
+}
+
+template <typename Value>
+class FastIntegerMapFixedSize final
+{
+  public:
+    static constexpr size_t kMaxKeySize          = FastIntegerSetFixedSize::kMaxKeySize;
+    static constexpr uint32_t kIndexInvalidValue = -1;
+
+    FastIntegerMapFixedSize()
+    {
+        mValueIndexData.resize(kMaxKeySize, kIndexInvalidValue);
+        mMaxValueCount = 0;
+    }
+    ~FastIntegerMapFixedSize() {}
+
+    ANGLE_INLINE void insert(size_t key, Value value)
+    {
+        // Insert key
+        mKeySet.insert(key);
+
+        // Insert value
+        mValueIndexData[key] = mMaxValueCount++;
+        mValueData.emplace_back(value);
+    }
+
+    ANGLE_INLINE bool contains(size_t key) const { return mKeySet.contains(key); }
+
+    ANGLE_INLINE bool get(size_t key, Value *out) const
+    {
+        if (!mKeySet.contains(key))
+        {
+            return false;
+        }
+
+        ASSERT(mValueIndexData[key] != kIndexInvalidValue);
+        *out = mValueData[mValueIndexData[key]];
+        return true;
+    }
+
+    ANGLE_INLINE void clear()
+    {
+        mKeySet.clear();
+        mValueData.clear();
+        mMaxValueCount = 0;
+    }
+
+    ANGLE_INLINE bool empty() const { return (mMaxValueCount == 0); }
+
+    ANGLE_INLINE size_t size() const { return mMaxValueCount; }
+
+  private:
+    FastIntegerSetFixedSize mKeySet;
+    std::vector<size_t> mValueIndexData;
+    std::vector<Value> mValueData;
+    size_t mMaxValueCount;
+};
+
+template <typename Value>
+class FastAndSparseIntegerMap final
+{
+  public:
+    static constexpr size_t kMaxKeySize            = FastIntegerSetFixedSize::kMaxKeySize;
+    static constexpr size_t kInvalidBucketId       = -1;
+    static constexpr size_t kMaxBucketIdSize       = kMaxKeySize;
+    static constexpr size_t kOneLessThanMaxKeySize = kMaxKeySize - 1;
+    static constexpr size_t kShiftForBucketId =
+        static_cast<size_t>(rx::Log2(static_cast<unsigned int>(kMaxKeySize)));
+    using FixedMap = FastIntegerMapFixedSize<Value>;
+
+    FastAndSparseIntegerMap() {}
+    ~FastAndSparseIntegerMap()
+    {
+        for (FixedMap *map : mMaps)
+        {
+            delete map;
+        }
+    }
+
+    ANGLE_INLINE void insert(uint64_t key, Value value)
+    {
+        size_t sizedKey = static_cast<size_t>(key);
+        size_t bucketId = 0;
+        size_t offset   = 0;
+        getBucketIdAndOffset(sizedKey, &bucketId, &offset);
+
+        if (ensureCapacityImpl(bucketId))
+        {
+            getMap(bucketId)->insert(offset, value);
+        }
+    }
+
+    ANGLE_INLINE bool contains(uint64_t key) const
+    {
+        size_t sizedKey = static_cast<size_t>(key);
+        size_t bucketId = 0;
+        size_t offset   = 0;
+        getBucketIdAndOffset(sizedKey, &bucketId, &offset);
+
+        return containsImpl(bucketId, offset);
+    }
+
+    ANGLE_INLINE bool get(uint64_t key, Value *out) const
+    {
+        size_t sizedKey = static_cast<size_t>(key);
+        size_t bucketId = 0;
+        size_t offset   = 0;
+        getBucketIdAndOffset(sizedKey, &bucketId, &offset);
+
+        if (!containsImpl(bucketId, offset))
+        {
+            return false;
+        }
+
+        getMap(bucketId)->get(offset, out);
+        return true;
+    }
+
+    ANGLE_INLINE void clear()
+    {
+        for (FixedMap *map : mMaps)
+        {
+            map->clear();
+        }
+    }
+
+    ANGLE_INLINE bool empty() const
+    {
+        for (FixedMap *map : mMaps)
+        {
+            if (!map->empty())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    ANGLE_INLINE size_t size() const
+    {
+        size_t totalSize = 0;
+        for (FixedMap *map : mMaps)
+        {
+            totalSize += map->size();
+        }
+
+        return totalSize;
+    }
+
+  private:
+    ANGLE_INLINE void getBucketIdAndOffset(size_t sizedKey, size_t *bucketId, size_t *offset) const
+    {
+        *bucketId = sizedKey >> kShiftForBucketId;
+        // We only support kMaxBucketIdSize buckets. If it exceeds kMaxBucketIdSize,
+        // return kInvalidBucketId
+        *bucketId = (*bucketId >= kMaxBucketIdSize) ? kInvalidBucketId : *bucketId;
+        *offset   = sizedKey & kOneLessThanMaxKeySize;
+    }
+
+    ANGLE_INLINE FixedMap *getMap(size_t bucketId) const
+    {
+        FixedMap *map = nullptr;
+        mMapOfMaps.get(bucketId, &map);
+        return map;
+    }
+
+    ANGLE_INLINE bool ensureCapacityImpl(size_t bucketId)
+    {
+        if (bucketId == kInvalidBucketId)
+        {
+            return false;
+        }
+
+        if (mMapOfMaps.contains(bucketId) == false)
+        {
+            FixedMap *newMap = new FixedMap();
+            mMaps.push_back(newMap);
+            mMapOfMaps.insert(bucketId, newMap);
+        }
+        return true;
+    }
+
+    ANGLE_INLINE bool containsImpl(size_t bucketId, size_t offset) const
+    {
+        FixedMap *map = nullptr;
+        if ((bucketId != kInvalidBucketId) && mMapOfMaps.get(bucketId, &map))
+        {
+            return map->contains(offset);
+        }
+
+        return false;
+    }
+
+    FastIntegerMapFixedSize<FixedMap *> mMapOfMaps;
+    std::vector<FixedMap *> mMaps;
 };
 }  // namespace angle
 

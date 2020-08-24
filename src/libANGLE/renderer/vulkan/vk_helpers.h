@@ -1095,8 +1095,8 @@ class CommandBufferHelper : angle::NonCopyable
     // Tracks resources used in the command buffer.
     // For Buffers, we track the read/write access type so we can enable simuntaneous reads.
     // Images have unique layouts unlike buffers therefore we don't support multi-read.
+    angle::FastAndSparseIntegerMap<BufferAccess> mUsedBuffers;
     static constexpr uint32_t kFastMapSize = 16;
-    angle::FastUnorderedMap<BufferSerial, BufferAccess, kFastMapSize> mUsedBuffers;
     angle::FastUnorderedSet<ImageSerial, kFastMapSize> mRenderPassUsedImages;
 };
 
