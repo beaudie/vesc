@@ -104,6 +104,30 @@
       "revId": "b845adc4911ac381711527bb608128341ddb51a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "689734c4_1c13476d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-24T20:35:24Z",
+      "side": 1,
+      "message": "Removed it. It was redundant information for the ASSERT.",
+      "parentUuid": "02a9a4b6_f7e3b13b",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 0
+      },
+      "revId": "b845adc4911ac381711527bb608128341ddb51a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
