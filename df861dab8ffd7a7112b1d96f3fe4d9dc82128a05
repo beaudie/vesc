@@ -50,6 +50,23 @@
       "revId": "df861dab8ffd7a7112b1d96f3fe4d9dc82128a05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "efe5c102_5b15660d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-25T22:16:22Z",
+      "side": 1,
+      "message": "LGTM as well. just tested, fire is back!",
+      "revId": "df861dab8ffd7a7112b1d96f3fe4d9dc82128a05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
