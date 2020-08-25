@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0a189570_da95a843",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T22:48:48Z",
+      "side": 1,
+      "message": "How did you settle on 4K?",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7f654e3b_5e27607e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
