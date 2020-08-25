@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f654e3b_5e27607e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-25T21:38:00Z",
+      "side": 1,
+      "message": "PTAL - this reduces the CPU usage of the retain method from 2.2% -\u003e 1.6% with manhattan.\nonly contextvk has an instance of this and it is not a monotonically increasing value like\nserial so we are more unlikely to hit memory related issues",
+      "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
