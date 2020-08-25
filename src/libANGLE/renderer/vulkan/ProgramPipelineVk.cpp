@@ -86,7 +86,7 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext)
         }
     }
 
-    return mExecutable.createPipelineLayout(glContext);
+    return mExecutable.createPipelineLayout(glContext, nullptr);
 }
 
 size_t ProgramPipelineVk::calcUniformUpdateRequiredSpace(
