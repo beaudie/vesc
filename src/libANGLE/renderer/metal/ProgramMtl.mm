@@ -278,8 +278,8 @@ angle::Result ProgramMtl::linkImpl(const gl::Context *glContext,
         shaderSources, variableInfoMap, &shaderCodes));
 
     // Convert spirv code to MSL
-    ANGLE_TRY(mtl::SpirvCodeToMsl(contextMtl, mState, &shaderCodes, &mMslShaderTranslateInfo,
-                                  &mTranslatedMslShader));
+    ANGLE_TRY(mtl::SpirvCodeToMsl(contextMtl, mState, &infoLog, &shaderCodes,
+                                  &mMslShaderTranslateInfo, &mTranslatedMslShader));
 
     for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
     {
@@ -472,7 +472,7 @@ angle::Result ProgramMtl::createMslShaderLib(const gl::Context *glContext,
 
             infoLog << ss.str();
 
-            ANGLE_MTL_CHECK(contextMtl, false, GL_INVALID_OPERATION);
+            return angle::Result::Stop;
         }
 
         return angle::Result::Continue;
