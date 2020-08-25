@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19e310eb_d0f46d71",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T21:23:36Z",
+      "side": 1,
+      "message": "Second bug fix here. If !Active(), should still call this to bind empty buffers.",
+      "revId": "1ed832ad5ad13f84b1cf2ac9579efbd99723699f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f13249c_cf00a39f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T21:23:36Z",
+      "side": 1,
+      "message": "First bug fix. Redundant change with https://chromium-review.googlesource.com/c/angle/angle/+/2368016, I\u0027ll adapt that change instead.",
+      "revId": "1ed832ad5ad13f84b1cf2ac9579efbd99723699f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
