@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3a302e0e_737f28a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T23:39:50Z",
+      "side": 1,
+      "message": "Every app will be allocating 32KB (4K * 8B) by default now, but if \u0027most\u0027 are going to get there eventually anyway, it shouldn\u0027t be any difference.",
+      "parentUuid": "06c8d722_3883b603",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f654e3b_5e27607e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -77,6 +101,24 @@
       "writtenOn": "2020-08-25T23:29:54Z",
       "side": 1,
       "message": "LGTM",
+      "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b010829_b7e13ab0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T23:39:50Z",
+      "side": 1,
+      "message": "I\u0027m still learning the details of C++, but would inverting add() help?   The SharedResourceUse could be created directly in the vector and then updated, rather than being moved there:\n\nANGLE_INLINE void ResourceUseList::add(const SharedResourceUse \u0026resourceUse)\n{\n    mResourceUses.emplace_back(SharedResourceUse());\n    mResourceUses.back().set(resourceUse);\n}\n\nLooking at the disassembly it\u0027s only 2 instructions shorter, but I haven\u0027t profiled it to see if there\u0027s any actual noticeable difference.",
+      "parentUuid": "7f654e3b_5e27607e",
       "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
