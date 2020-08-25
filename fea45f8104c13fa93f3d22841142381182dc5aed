@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "d88e9b65_d106edab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-08-25T14:45:10Z",
+      "side": 1,
+      "message": "LGTM with a switch to references instead of pointers.",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62af18d5_74ae226e",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 3
