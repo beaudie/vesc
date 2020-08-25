@@ -4054,18 +4054,12 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk,
-                                                            size_t allocationSize,
+angle::Result ImageHelper::stageSubresourceUpdateAndGetData(BufferHelper *currentBuffer,
                                                             const gl::ImageIndex &imageIndex,
                                                             const gl::Extents &glExtents,
                                                             const gl::Offset &offset,
-                                                            uint8_t **destData)
+                                                            const VkDeviceSize stagingOffset)
 {
-    VkBuffer bufferHandle;
-    VkDeviceSize stagingOffset = 0;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, destData, &bufferHandle,
-                                      &stagingOffset, nullptr));
-
     VkBufferImageCopy copy               = {};
     copy.bufferOffset                    = stagingOffset;
     copy.bufferRowLength                 = glExtents.width;
@@ -4081,7 +4075,7 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     gl_vk::GetOffset(offset, &copy.imageOffset);
     gl_vk::GetExtent(glExtents, &copy.imageExtent);
 
-    appendSubresourceUpdate(SubresourceUpdate(mStagingBuffer.getCurrentBuffer(), copy));
+    appendSubresourceUpdate(SubresourceUpdate(currentBuffer, copy));
 
     return angle::Result::Continue;
 }

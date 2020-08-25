@@ -690,7 +690,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     uint32_t stagingBaseLayer =
         offsetImageIndex.hasLayer() ? offsetImageIndex.getLayerIndex() : destOffset.z;
     uint32_t stagingLayerCount = sourceBox.depth;
-    gl::Offset stagingOffset   = destOffset;
+    gl::Offset glOffset        = destOffset;
     gl::Extents stagingExtents(sourceBox.width, sourceBox.height, sourceBox.depth);
     bool is3D = gl_vk::GetImageType(mState.getType()) == VK_IMAGE_TYPE_3D;
 
@@ -701,17 +701,22 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     }
     else
     {
-        stagingOffset.z      = 0;
+        glOffset.z           = 0;
         stagingExtents.depth = 1;
     }
 
     const gl::ImageIndex stagingIndex = gl::ImageIndex::Make2DArrayRange(
         offsetImageIndex.getLevelIndex(), stagingBaseLayer, stagingLayerCount);
 
-    uint8_t *destData = nullptr;
-    ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(contextVk, destinationAllocationSize,
-                                                       stagingIndex, stagingExtents, stagingOffset,
-                                                       &destData));
+    uint8_t *destData          = nullptr;
+    VkDeviceSize stagingOffset = 0;
+    VkBuffer bufferHandle;
+    ANGLE_TRY(contextVk->getStagingBuffer()->allocate(
+        contextVk, destinationAllocationSize, &destData, &bufferHandle, &stagingOffset, nullptr));
+    vk::BufferHelper *currentBuffer = contextVk->getStagingBuffer()->getCurrentBuffer();
+
+    ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(currentBuffer, stagingIndex, stagingExtents,
+                                                       glOffset, stagingOffset));
 
     // Source and dest data is tightly packed
     GLuint sourceDataRowPitch = sourceBox.width * sourceTextureFormat.pixelBytes;
@@ -742,7 +747,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
                       sourceBox.height, sourceBox.depth, unpackFlipY, unpackPremultiplyAlpha,
                       unpackUnmultiplyAlpha);
 
-    return angle::Result::Continue;
+    return flushImageStagedUpdates(contextVk);
 }
 
 angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
@@ -2455,10 +2460,15 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
         gl::Extents mipLevelExtents(static_cast<int>(mipWidth), static_cast<int>(mipHeight),
                                     static_cast<int>(mipDepth));
 
+        VkDeviceSize stagingOffset = 0;
+        VkBuffer bufferHandle;
+        ANGLE_TRY(contextVk->getStagingBuffer()->allocate(contextVk, mipAllocationSize, &destData,
+                                                          &bufferHandle, &stagingOffset, nullptr));
+        vk::BufferHelper *currentBuffer = contextVk->getStagingBuffer()->getCurrentBuffer();
+
         ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
-            contextVk, mipAllocationSize,
-            gl::ImageIndex::MakeFromType(mState.getType(), currentMipLevel, layer), mipLevelExtents,
-            gl::Offset(), &destData));
+            currentBuffer, gl::ImageIndex::MakeFromType(mState.getType(), currentMipLevel, layer),
+            mipLevelExtents, gl::Offset(), stagingOffset));
 
         // Generate the mipmap into that new buffer
         sourceFormat.mipGenerationFunction(

@@ -1348,12 +1348,11 @@ class ImageHelper final : public Resource, public angle::Subject
                                          const uint8_t *pixels,
                                          const Format &vkFormat);
 
-    angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
-                                                   size_t allocationSize,
+    angle::Result stageSubresourceUpdateAndGetData(BufferHelper *currentBuffer,
                                                    const gl::ImageIndex &imageIndex,
                                                    const gl::Extents &glExtents,
                                                    const gl::Offset &offset,
-                                                   uint8_t **destData);
+                                                   const VkDeviceSize stagingOffset);
 
     angle::Result stageSubresourceUpdateFromBuffer(ContextVk *contextVk,
                                                    size_t allocationSize,
