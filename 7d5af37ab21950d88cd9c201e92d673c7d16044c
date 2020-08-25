@@ -249,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "9f0d9237_e387eaf6",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T17:59:40Z",
+      "side": 1,
+      "message": "I did get what you talk about, but I always thought the stack frame is adjusted on every scope, precisely to avoid necessarily increasing the stack frame size, like this technically only needs 100 ints:\n\n   if (maybe)\n   {\n       int array[100];\n       something(\u0026x, array);\n   }\n   if (maybe_)\n   {\n       int array2[100];\n       somethingelse(\u0026x, array);\n   }\n\nI\u0027ve never really checked, though. Anyway, this is already moved to a function.",
+      "parentUuid": "3b4699d3_2925f95e",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 17
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1815234_f0c283ae",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
