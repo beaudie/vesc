@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "d09c5b0f_47494d8c",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T17:55:07Z",
+      "side": 1,
+      "message": "Ack on copy, you\u0027re right we shouldn\u0027t copy. In the past, I used to pass the GLuint to functions (i.e. copy, but out of the RAII).\n\nRegarding const \u0026, what you can do is implement the const version of operator GLuint() in GLWrapper:\n\n    operator GLuint() { return get(); }\n    operator GLuint() const { ASSERT(mHandle); return mHandle; }",
+      "parentUuid": "40998a78_dcb7c0dd",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6556d2a_749caaea",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 3
