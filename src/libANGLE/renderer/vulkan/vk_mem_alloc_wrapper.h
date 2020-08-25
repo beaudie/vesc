@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_MEM_ALLOC_WRAPPER_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_MEM_ALLOC_WRAPPER_H_
 
+#include <string>
+
 #include "common/vulkan/vk_headers.h"
 
 VK_DEFINE_HANDLE(VmaAllocator)
@@ -60,6 +62,8 @@ void InvalidateAllocation(VmaAllocator allocator,
                           VmaAllocation allocation,
                           VkDeviceSize offset,
                           VkDeviceSize size);
+
+std::string GetStatsString(VmaAllocator allocator);
 
 }  // namespace vma
 

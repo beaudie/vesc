@@ -45,6 +45,7 @@ namespace rx
 {
 class DisplayVk;
 class FramebufferVk;
+struct WeakAllocator;
 
 namespace vk
 {
@@ -386,6 +387,7 @@ class RendererVk : angle::NonCopyable
     bool mGlslangInitialized;
 
     vk::Allocator mAllocator;
+    WeakAllocator *mWeakAllocator = nullptr;
     SamplerCache mSamplerCache;
     SamplerYcbcrConversionCache mYuvConversionCache;
     vk::ActiveHandleCounter mActiveHandleCounts;

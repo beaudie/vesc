@@ -45,6 +45,11 @@ constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormat
 namespace rx
 {
 
+struct WeakAllocator
+{
+    vk::Allocator *allocator;
+};
+
 namespace
 {
 constexpr uint32_t kMinDefaultUniformBufferSize = 16 * 1024u;
@@ -438,6 +443,22 @@ ANGLE_MAYBE_UNUSED bool SemaphorePropertiesCompatibleWithAndroid(
     return true;
 }
 
+void DumpAllocatorStats(void *user_data)
+{
+    WeakAllocator *weak_allocator = static_cast<WeakAllocator *>(user_data);
+    if (!weak_allocator->allocator)
+    {
+        delete weak_allocator;
+        return;
+    }
+
+    auto stats = weak_allocator->allocator->getStatsString();
+    fprintf(stdout, "ANGLE VMA Stats (%p):\n%s\n", user_data, stats.c_str());
+
+    auto *platform = ANGLEPlatformCurrent();
+    platform->postDelayedTask(platform, DumpAllocatorStats, user_data);
+}
+
 }  // namespace
 
 // RendererVk implementation.
@@ -520,6 +541,7 @@ void RendererVk::onDestroy()
     mYuvConversionCache.destroy(this);
 
     mAllocator.destroy();
+    mWeakAllocator->allocator = nullptr;
 
     if (mGlslangInitialized)
     {
@@ -855,6 +877,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Create VMA allocator
     ANGLE_VK_TRY(displayVk,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, applicationInfo.apiVersion));
+
+    mWeakAllocator            = new WeakAllocator;
+    mWeakAllocator->allocator = &mAllocator;
+    DumpAllocatorStats(mWeakAllocator);
 
     // Store the physical device memory properties so we can find the right memory pools.
     mMemoryProperties.init(mPhysicalDevice);

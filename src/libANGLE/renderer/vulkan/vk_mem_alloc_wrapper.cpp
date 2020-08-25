@@ -140,4 +140,13 @@ void InvalidateAllocation(VmaAllocator allocator,
 {
     vmaInvalidateAllocation(allocator, allocation, offset, size);
 }
+
+std::string GetStatsString(VmaAllocator allocator)
+{
+    char *stats_string = nullptr;
+    vmaBuildStatsString(allocator, &stats_string, true);
+    std::string result(stats_string);
+    vmaFreeStatsString(allocator, stats_string);
+    return result;
+}
 }  // namespace vma

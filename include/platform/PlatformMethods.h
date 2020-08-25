@@ -253,6 +253,8 @@ using PostWorkerTaskFunc                           = void (*)(PlatformMethods *p
                                     void *userData);
 constexpr PostWorkerTaskFunc DefaultPostWorkerTask = nullptr;
 
+constexpr PostWorkerTaskFunc DefaultPostDelayedTask = nullptr;
+
 // Platform methods are enumerated here once.
 #define ANGLE_PLATFORM_OP(OP)                                    \
     OP(currentTime, CurrentTime)                                 \
@@ -271,7 +273,8 @@ constexpr PostWorkerTaskFunc DefaultPostWorkerTask = nullptr;
     OP(overrideFeaturesVk, OverrideFeaturesVk)                   \
     OP(cacheProgram, CacheProgram)                               \
     OP(overrideFeaturesMtl, OverrideFeaturesMtl)                 \
-    OP(postWorkerTask, PostWorkerTask)
+    OP(postWorkerTask, PostWorkerTask)                           \
+    OP(postDelayedTask, PostWorkerTask)
 
 #define ANGLE_PLATFORM_METHOD_DEF(Name, CapsName) CapsName##Func Name = Default##CapsName;
 
