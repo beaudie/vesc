@@ -273,6 +273,30 @@
     },
     {
       "key": {
+        "uuid": "af1e9553_efb4b386",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T20:06:43Z",
+      "side": 1,
+      "message": "Thanks! It definitely is a compiler thing. From what I\u0027ve seen Clang/MSVC just push the scope of the function once.",
+      "parentUuid": "9f0d9237_e387eaf6",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 17
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1815234_f0c283ae",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
