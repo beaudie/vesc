@@ -33,6 +33,29 @@
       "revId": "1ed832ad5ad13f84b1cf2ac9579efbd99723699f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52787415_b98c071d",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2051,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T22:47:11Z",
+      "side": 1,
+      "message": "Is the point of this block to prove the dirty bits are working since each of these calls are done again in the next block?",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2051,
+        "endChar": 0
+      },
+      "revId": "1ed832ad5ad13f84b1cf2ac9579efbd99723699f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
