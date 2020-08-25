@@ -1395,7 +1395,9 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
     // Can probably use better dirty bits here.
 
     if (mDescriptorSets.empty())
+    {
         return angle::Result::Continue;
+    }
 
     // Find the maximum non-null descriptor set.  This is used in conjunction with a driver
     // workaround to bind empty descriptor sets only for gaps in between 0 and max and avoid

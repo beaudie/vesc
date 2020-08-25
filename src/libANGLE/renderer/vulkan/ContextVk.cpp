@@ -1524,23 +1524,27 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
-    if (!executable->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActive())
+    if (!executable->hasTransformFeedbackOutput())
     {
         return angle::Result::Continue;
     }
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
-    size_t bufferCount                       = executable->getTransformFeedbackBufferCount();
-    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
-        transformFeedbackVk->getBufferHelpers();
 
-    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    if (mState.isTransformFeedbackActive())
     {
-        vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
-        ASSERT(bufferHelper);
-        mRenderPassCommands->bufferWrite(&mResourceUseList, VK_ACCESS_SHADER_WRITE_BIT,
-                                         vk::PipelineStage::VertexShader,
-                                         vk::AliasingMode::Disallowed, bufferHelper);
+        size_t bufferCount = executable->getTransformFeedbackBufferCount();
+        const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
+            transformFeedbackVk->getBufferHelpers();
+
+        for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+        {
+            vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
+            ASSERT(bufferHelper);
+            mRenderPassCommands->bufferWrite(&mResourceUseList, VK_ACCESS_SHADER_WRITE_BIT,
+                                             vk::PipelineStage::VertexShader,
+                                             vk::AliasingMode::Disallowed, bufferHelper);
+        }
     }
 
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
@@ -1548,6 +1552,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     vk::UniformsAndXfbDesc xfbBufferDesc = transformFeedbackVk->getTransformFeedbackDesc();
     xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
                                                            : vk::kInvalidBufferSerial);
+
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(), uniformBuffer, this,
         xfbBufferDesc);
@@ -3428,6 +3433,14 @@ angle::Result ContextVk::onBeginTransformFeedback(
     const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers)
 {
     onTransformFeedbackStateChanged();
+
+    // Additionally make sure transform feedback buffers are processed when transform feedback has
+    // begun in the emulation path.
+    if (getFeatures().emulateTransformFeedback.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
+        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    }
 
     for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
