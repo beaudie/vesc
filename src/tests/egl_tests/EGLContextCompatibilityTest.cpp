@@ -489,7 +489,7 @@ void RegisterContextCompatibilityTests()
     for (EGLint renderer : renderers)
     {
         PlatformParameters params = FromRenderer(renderer);
-        if (IsPlatformAvailable(params))
+        if (!IsPlatformAvailable(params))
             continue;
 
         EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, renderer, EGL_NONE};
