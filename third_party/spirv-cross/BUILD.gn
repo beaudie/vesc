@@ -1,0 +1,89 @@
+# Copyright (C) 2019 Google, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+import("../../gni/angle.gni")
+
+config("spirv_cross_common_public") {
+  include_dirs = [ "${angle_spirv_cross_dir}" ]
+}
+
+config("spirv_cross_no_except_public") {
+  defines = [ "SPIRV_CROSS_EXCEPTIONS_TO_ASSERTIONS" ]
+}
+
+config("spirv_cross_common_priv") {
+  if (is_clang) {
+    cflags_cc = [
+      "-Wno-extra-semi",
+      "-Wno-ignored-qualifiers",
+      "-Wno-implicit-fallthrough",
+      "-Wno-inconsistent-missing-override",
+      "-Wno-missing-field-initializers",
+      "-Wno-newline-eof",
+      "-Wno-sign-compare",
+      "-Wno-unused-variable",
+    ]
+  }
+}
+
+config("spirv_cross_with_except_priv") {
+  cflags_cc = [ "-fexceptions" ]
+}
+
+spirv_cross_src_files = [
+  "${angle_spirv_cross_dir}/GLSL.std.450.h",
+  "${angle_spirv_cross_dir}/spirv.hpp",
+  "${angle_spirv_cross_dir}/spirv_cfg.cpp",
+  "${angle_spirv_cross_dir}/spirv_cfg.hpp",
+  "${angle_spirv_cross_dir}/spirv_common.hpp",
+  "${angle_spirv_cross_dir}/spirv_cross.cpp",
+  "${angle_spirv_cross_dir}/spirv_cross.hpp",
+  "${angle_spirv_cross_dir}/spirv_cross_containers.hpp",
+  "${angle_spirv_cross_dir}/spirv_cross_error_handling.hpp",
+  "${angle_spirv_cross_dir}/spirv_cross_parsed_ir.cpp",
+  "${angle_spirv_cross_dir}/spirv_cross_parsed_ir.hpp",
+  "${angle_spirv_cross_dir}/spirv_cross_util.cpp",
+  "${angle_spirv_cross_dir}/spirv_cross_util.hpp",
+  "${angle_spirv_cross_dir}/spirv_glsl.cpp",
+  "${angle_spirv_cross_dir}/spirv_glsl.hpp",
+  "${angle_spirv_cross_dir}/spirv_msl.cpp",
+  "${angle_spirv_cross_dir}/spirv_msl.hpp",
+  "${angle_spirv_cross_dir}/spirv_parser.cpp",
+  "${angle_spirv_cross_dir}/spirv_parser.hpp",
+  "${angle_spirv_cross_dir}/spirv_reflect.cpp",
+  "${angle_spirv_cross_dir}/spirv_reflect.hpp",
+]
+
+source_set("spirv_cross_with_except_sources") {
+  public_configs = [ ":spirv_cross_common_public" ]
+  configs += [
+    ":spirv_cross_common_priv",
+    ":spirv_cross_with_except_priv",
+  ]
+
+  sources = spirv_cross_src_files
+}
+
+source_set("spirv_cross_sources") {
+  public_configs = [
+    ":spirv_cross_common_public",
+    ":spirv_cross_no_except_public",
+  ]
+  configs += [ ":spirv_cross_common_priv" ]
+
+  cflags = [ "-fno-exceptions" ]
+
+  sources = spirv_cross_src_files
+}
