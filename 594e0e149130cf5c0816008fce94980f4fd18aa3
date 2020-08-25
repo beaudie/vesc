@@ -94,6 +94,30 @@
       "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93ff2f68_cee89c21",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:15:36Z",
+      "side": 1,
+      "message": "It\u0027s a weird corner case thing for sure. It\u0027s pretty uncommon for VS depth textures. Should still fix the barrier to be correct without worrying about perf implications.",
+      "parentUuid": "ced807a8_9c463b5e",
+      "range": {
+        "startLine": 357,
+        "startChar": 12,
+        "endLine": 357,
+        "endChar": 45
+      },
+      "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
