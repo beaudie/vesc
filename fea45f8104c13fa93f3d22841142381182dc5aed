@@ -16,6 +16,80 @@
       "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62af18d5_74ae226e",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-25T02:12:16Z",
+      "side": 1,
+      "message": "These can probably be const references since we aren\u0027t changing them.\nE.g. const GLBuffer\u0026 indexBuffer.\nAt least I think so.\nCan drop vertexBuffers, that\u0027s not even used here.",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6556d2a_749caaea",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-25T02:12:16Z",
+      "side": 1,
+      "message": "This can probably be const references as well.",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c45f052_e28799c7",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-25T02:12:16Z",
+      "side": 1,
+      "message": "Looks like these are used by most/all of the EGLPreRotationBlitFramebufferTest.* tests. Could put these into the class definition.\nI guess this begs the question, how much cleanup is required here?",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e605ac2_6da11a86",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-25T02:12:16Z",
+      "side": 1,
+      "message": "initializeFBO?\nNot really creating it anymore.",
+      "range": {
+        "startLine": 836,
+        "startChar": 4,
+        "endLine": 836,
+        "endChar": 13
+      },
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
