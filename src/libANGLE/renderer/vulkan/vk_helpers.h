@@ -287,7 +287,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // an individual set.  The pool size will be calculated accordingly.
     angle::Result init(ContextVk *contextVk,
                        const VkDescriptorPoolSize *setSizes,
-                       uint32_t setSizeCount);
+                       size_t setSizeCount);
     void destroy(VkDevice device);
     void release(ContextVk *contextVk);
 
