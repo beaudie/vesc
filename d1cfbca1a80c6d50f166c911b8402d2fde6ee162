@@ -63,6 +63,30 @@
       "revId": "d1cfbca1a80c6d50f166c911b8402d2fde6ee162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "138a9271_f4c62e1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T20:53:32Z",
+      "side": 1,
+      "message": "The other users of DescriptorSetLayoutArray expect array behavior rather than vector behavior (e.g., all items always exist, rather than being push_back\u0027ed).   In this particular case, the number of descriptor set indexes is always well known.\n\nWe could make a new DescriptorSetLayoutVector for ProgramExecutableVk::mDescriptorSets uses, which would allow it to behave the same, but I don\u0027t think that extra duplication is worth keeping the current behavior.",
+      "parentUuid": "47b2a41c_f5b66dc0",
+      "range": {
+        "startLine": 646,
+        "startChar": 33,
+        "endLine": 646,
+        "endChar": 44
+      },
+      "revId": "d1cfbca1a80c6d50f166c911b8402d2fde6ee162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
