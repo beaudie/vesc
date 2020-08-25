@@ -1327,13 +1327,16 @@ bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes,
     return true;
 }
 
-angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
-                                      size_t sizeInBytes,
-                                      uint8_t **ptrOut,
-                                      VkBuffer *bufferOut,
-                                      VkDeviceSize *offsetOut,
-                                      bool *newBufferAllocatedOut)
+angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
+                                                   size_t sizeInBytes,
+                                                   size_t alignment,
+                                                   uint8_t **ptrOut,
+                                                   VkBuffer *bufferOut,
+                                                   VkDeviceSize *offsetOut,
+                                                   bool *newBufferAllocatedOut)
 {
+    mNextAllocationOffset =
+        roundUp<uint32_t>(mNextAllocationOffset, static_cast<uint32_t>(alignment));
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
@@ -3912,8 +3915,10 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     VkDeviceSize stagingOffset = 0;
     // If caller has provided a staging buffer, use it.
     DynamicBuffer *stagingBuffer = stagingBufferOverride ? stagingBufferOverride : &mStagingBuffer;
-    ANGLE_TRY(stagingBuffer->allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
-                                      &stagingOffset, nullptr));
+    size_t alignment             = mStagingBuffer.getAlignment();
+    ANGLE_TRY(stagingBuffer->allocateWithAlignment(contextVk, allocationSize, alignment,
+                                                   &stagingPointer, &bufferHandle, &stagingOffset,
+                                                   nullptr));
     BufferHelper *currentBuffer = stagingBuffer->getCurrentBuffer();
 
     const uint8_t *source = pixels + static_cast<ptrdiff_t>(inputSkipBytes);
@@ -4059,12 +4064,20 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
                                                             const gl::ImageIndex &imageIndex,
                                                             const gl::Extents &glExtents,
                                                             const gl::Offset &offset,
-                                                            uint8_t **destData)
+                                                            uint8_t **destData,
+                                                            DynamicBuffer *stagingBufferOverride)
 {
     VkBuffer bufferHandle;
     VkDeviceSize stagingOffset = 0;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, destData, &bufferHandle,
-                                      &stagingOffset, nullptr));
+
+    DynamicBuffer *stagingBuffer = &mStagingBuffer;
+    if (stagingBufferOverride)
+    {
+        stagingBuffer = stagingBufferOverride;
+    }
+    size_t alignment = mStagingBuffer.getAlignment();
+    ANGLE_TRY(stagingBuffer->allocateWithAlignment(contextVk, allocationSize, alignment, destData,
+                                                   &bufferHandle, &stagingOffset, nullptr));
 
     VkBufferImageCopy copy               = {};
     copy.bufferOffset                    = stagingOffset;
@@ -4081,7 +4094,7 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     gl_vk::GetOffset(offset, &copy.imageOffset);
     gl_vk::GetExtent(glExtents, &copy.imageExtent);
 
-    appendSubresourceUpdate(SubresourceUpdate(mStagingBuffer.getCurrentBuffer(), copy));
+    appendSubresourceUpdate(SubresourceUpdate(stagingBuffer->getCurrentBuffer(), copy));
 
     return angle::Result::Continue;
 }
@@ -4794,8 +4807,10 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
 
     // Allocate staging buffer data from context
     VkBuffer bufferHandle;
-    ANGLE_TRY(contextVk->getStagingBuffer()->allocate(
-        contextVk, *bufferSize, outDataPtr, &bufferHandle, &(*bufferOffsetsOut)[0], nullptr));
+    size_t alignment = mStagingBuffer.getAlignment();
+    ANGLE_TRY(contextVk->getStagingBuffer()->allocateWithAlignment(
+        contextVk, *bufferSize, alignment, outDataPtr, &bufferHandle, &(*bufferOffsetsOut)[0],
+        nullptr));
     *bufferOut = contextVk->getStagingBuffer()->getCurrentBuffer();
 
     uint32_t sourceLevelVk = static_cast<uint32_t>(sourceLevelGL) - mBaseLevel;
