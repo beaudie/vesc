@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "96a2e310_3d66eff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-25T17:07:06Z",
+      "side": 1,
+      "message": "Sure.\n\nBTW, I signed up to convert the EGL tests.  I see that the \"gl_tests\" directory has a lot of these problems.  I\u0027ll prepare a different CL to work on that (probably later in the week, after mContentDefined CLs).",
+      "parentUuid": "dc248637_43ed7678",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62af18d5_74ae226e",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 3
@@ -88,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "40998a78_dcb7c0dd",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-25T17:07:06Z",
+      "side": 1,
+      "message": "I tried both approaches (const reference and pass-by-value).  Both have issues given the RAII types (e.g. which wrap the GLuint with a class, which is destructed at the end of the scope):\n\n- Const ref: compiler error when using the reference:\n    - no viable conversion from \u0027const angle::GLVertexArray\u0027 to \u0027GLuint\u0027 (aka \u0027unsigned int\u0027)\n\n- Pass-by-value: compiler error when calling function:\n    - call to implicitly-deleted copy constructor of \u0027angle::GLBuffer\u0027\n\nBackground: I actually did it this way (pointer-based) because that\u0027s what other RAII-based tests did (yes, I cloned, but I thought I was cloning \"properly-implemented\" source:-).  Given the issues I ran into, I proposed to keep it pointer-based.\n\nBTW/nit: vertexBuffers is used below (it\u0027s a 2-item array).",
+      "parentUuid": "bc293612_92ad754b",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6556d2a_749caaea",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 3
@@ -105,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "39a21ce8_7cd8305a",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-25T17:07:06Z",
+      "side": 1,
+      "message": "Unfortunately, no",
+      "parentUuid": "e6556d2a_749caaea",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c45f052_e28799c7",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 3
@@ -119,6 +173,24 @@
       "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b71fcbef_2cd8a644",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-25T17:07:06Z",
+      "side": 1,
+      "message": "I thought through this.  The RAII types are designed for inline use, and not for class variables.",
+      "parentUuid": "7c45f052_e28799c7",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +214,30 @@
       "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfdbdb62_cf7de387",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-25T17:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e605ac2_6da11a86",
+      "range": {
+        "startLine": 836,
+        "startChar": 4,
+        "endLine": 836,
+        "endChar": 13
+      },
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
