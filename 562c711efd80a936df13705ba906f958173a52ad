@@ -16,6 +16,40 @@
       "revId": "562c711efd80a936df13705ba906f958173a52ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "354c8dd6_6e7efea9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T03:51:50Z",
+      "side": 1,
+      "message": "Unfortunately I don\u0027t recall all the reasoning I used to write those comments. I\u0027ll let you address the one issue I noticed, then I\u0027ll try to dive deeper.",
+      "revId": "562c711efd80a936df13705ba906f958173a52ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d807461e_908360f6",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T03:51:50Z",
+      "side": 1,
+      "message": "I obviously don\u0027t remember at all what I had in mind a year ago! But reading back the comments, I don\u0027t think the intention was to store the alignment. The (or part of the) idea is to align the header at allocation time such that `data()` automatically becomes aligned. Does that make sense?\n\nFor example, say data needs to be 16-byte aligned, and the header is (for the purpose of this exercise) 12 bytes.  Then you would need to make an allocation at a 16k+4 offset, which means data() is at a 16k+16 offset (i.e. 16-byte aligned).",
+      "revId": "562c711efd80a936df13705ba906f958173a52ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
