@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "7e2377a0_e6d150f6",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T15:33:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4549594_cad9bfc7",
+      "range": {
+        "startLine": 274,
+        "startChar": 49,
+        "endLine": 274,
+        "endChar": 50
+      },
+      "revId": "3c27c62b67e70b1cbad401a15e332a7e7d92ed3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a8ce92f_11a9b8aa",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "9981f44a_3729092b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T15:33:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a8ce92f_11a9b8aa",
+      "range": {
+        "startLine": 1415,
+        "startChar": 8,
+        "endLine": 1415,
+        "endChar": 15
+      },
+      "revId": "3c27c62b67e70b1cbad401a15e332a7e7d92ed3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7b9a99b_e971dcc7",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
@@ -85,6 +133,30 @@
       "revId": "3c27c62b67e70b1cbad401a15e332a7e7d92ed3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da0b16ae_1ea09e21",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-25T15:33:52Z",
+      "side": 1,
+      "message": "Done.\n\nI wasn\u0027t able to use ToUnderlying() initially, since DescriptorSetIndex was signed (int) while mDescriptorSetLayouts.size() was unsigned, so the compiler complained.   However, declaring DescriptorSetIndex as unsigned (uint32_t), which it should be anyway, allows this to use ToUnderlying().",
+      "parentUuid": "e7b9a99b_e971dcc7",
+      "range": {
+        "startLine": 1724,
+        "startChar": 11,
+        "endLine": 1724,
+        "endChar": 30
+      },
+      "revId": "3c27c62b67e70b1cbad401a15e332a7e7d92ed3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
