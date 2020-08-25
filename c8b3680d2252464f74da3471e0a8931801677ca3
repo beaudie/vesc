@@ -69,6 +69,23 @@
       "revId": "c8b3680d2252464f74da3471e0a8931801677ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "550f82a9_e941890c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T19:43:46Z",
+      "side": 1,
+      "message": "Looks like this flushed a missing retain with transform feedback. I also happened to notice a missing retain resulting in a mis-synchronization with transform feedback emulation looking at anglebug.com/4660, so let\u0027s wait for me to fix that and we\u0027ll try this again.",
+      "revId": "c8b3680d2252464f74da3471e0a8931801677ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
