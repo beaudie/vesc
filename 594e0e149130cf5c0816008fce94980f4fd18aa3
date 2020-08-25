@@ -70,6 +70,30 @@
       "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ced807a8_9c463b5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T03:38:03Z",
+      "side": 1,
+      "message": "We can always make this layout use `VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT` instead of `kAllShadersPipelineStageFlags`, and only transition to this if the depth texture is solely used in FS (and end RP if used in other stages).\n\nThen we are correct for Manhattan, and the weird corner case is also correctly (though inefficiently) handled.",
+      "parentUuid": "177a4da9_a8a9a0b8",
+      "range": {
+        "startLine": 357,
+        "startChar": 12,
+        "endLine": 357,
+        "endChar": 45
+      },
+      "revId": "594e0e149130cf5c0816008fce94980f4fd18aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
