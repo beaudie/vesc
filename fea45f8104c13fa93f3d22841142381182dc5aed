@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "dc248637_43ed7678",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T03:01:53Z",
+      "side": 1,
+      "message": "Nice! RAII suggestions was becoming an every day thing!\n\nWhile you are doing this, please also change:\n\n    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(XX));\n\nto:\n\n    ASSERT_GL_FRAMEBUFFER_COMPLETE(XX);\n\nThat comes up a lot too.",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62af18d5_74ae226e",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 3
@@ -30,6 +47,24 @@
       "writtenOn": "2020-08-25T02:12:16Z",
       "side": 1,
       "message": "These can probably be const references since we aren\u0027t changing them.\nE.g. const GLBuffer\u0026 indexBuffer.\nAt least I think so.\nCan drop vertexBuffers, that\u0027s not even used here.",
+      "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc293612_92ad754b",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-25T03:01:53Z",
+      "side": 1,
+      "message": "Can also be passed by value. They encapsulate an int after all.",
+      "parentUuid": "62af18d5_74ae226e",
       "revId": "fea45f8104c13fa93f3d22841142381182dc5aed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
