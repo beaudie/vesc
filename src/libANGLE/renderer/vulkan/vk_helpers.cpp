@@ -1695,8 +1695,10 @@ DynamicDescriptorPool::~DynamicDescriptorPool() = default;
 
 angle::Result DynamicDescriptorPool::init(ContextVk *contextVk,
                                           const VkDescriptorPoolSize *setSizes,
-                                          uint32_t setSizeCount)
+                                          size_t setSizeCount)
 {
+    ASSERT(setSizes);
+    ASSERT(setSizeCount);
     ASSERT(mCurrentPoolIndex == 0);
     ASSERT(mDescriptorPools.empty() || (mDescriptorPools.size() == 1 &&
                                         mDescriptorPools[0]->get().hasCapacity(mMaxSetsPerPool)));
