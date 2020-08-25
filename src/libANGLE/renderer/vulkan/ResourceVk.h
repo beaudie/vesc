@@ -151,7 +151,7 @@ ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse &resourceUse)
 {
     SharedResourceUse newUse;
     newUse.set(resourceUse);
-    mResourceUses.emplace_back(std::move(newUse));
+    mResourceUses.push_back(std::move(newUse));
 }
 
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
