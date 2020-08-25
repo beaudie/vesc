@@ -14,7 +14,14 @@
 
 #include "common/apple_platform_utils.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
-#include "libANGLE/renderer/metal/DisplayMtl.h"
+
+#if defined(__cpp_exceptions)
+#    define ANGLE_MTL_TRY_EXCEPT try
+#    define ANGLE_MTL_CATCH_EXCEPT(...) catch (__VA_ARGS__)
+#else
+#    define ANGLE_MTL_TRY_EXCEPT
+#    define ANGLE_MTL_CATCH_EXCEPT(...)
+#endif
 
 namespace rx
 {
@@ -284,6 +291,7 @@ angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
 
 angle::Result SpirvCodeToMsl(Context *context,
                              const gl::ProgramState &programState,
+                             gl::InfoLog *infoLog,
                              gl::ShaderMap<std::vector<uint32_t>> *sprivShaderCode,
                              gl::ShaderMap<TranslatedShaderInfo> *mslShaderInfoOut,
                              gl::ShaderMap<std::string> *mslCodeOut)
@@ -309,13 +317,27 @@ angle::Result SpirvCodeToMsl(Context *context,
         std::vector<uint32_t> &sprivCode = sprivShaderCode->at(shaderType);
         SpirvToMslCompiler compilerMsl(std::move(sprivCode));
 
-        // NOTE(hqle): spirv-cross uses exceptions to report error, what should we do here
-        // in case of error?
-        std::string translatedMsl = compilerMsl.compileEx(shaderType, originalSamplerBindings,
-                                                          &mslShaderInfoOut->at(shaderType));
+        std::string translatedMsl;
+
+        ANGLE_MTL_TRY_EXCEPT
+        {
+            translatedMsl = compilerMsl.compileEx(shaderType, originalSamplerBindings,
+                                                  &mslShaderInfoOut->at(shaderType));
+        }
+#if defined(__cpp_exceptions)
+        ANGLE_MTL_CATCH_EXCEPT(const std::exception &ex)
+        {
+            ERR() << ex.what();
+
+            (*infoLog) << ex.what();
+
+            return angle::Result::Stop;
+        }
+#endif
+
         if (translatedMsl.size() == 0)
         {
-            ANGLE_MTL_CHECK(context, false, GL_INVALID_OPERATION);
+            return angle::Result::Stop;
         }
 
         mslCodeOut->at(shaderType) = std::move(translatedMsl);
