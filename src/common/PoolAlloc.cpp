@@ -229,7 +229,7 @@ void *PoolAllocator::allocate(size_t numBytes)
     // much memory the caller asked for.  allocationSize is the total
     // size including guard blocks.  In release build,
     // kGuardBlockSize=0 and this all gets optimized away.
-    size_t allocationSize = Allocation::AllocationSize(numBytes) + mAlignment;
+    size_t allocationSize = Allocation::AllocationSize(mCurrentPageOffset, numBytes, mAlignment);
     // Detect integer overflow.
     if (allocationSize < numBytes)
         return 0;
@@ -245,11 +245,13 @@ void *PoolAllocator::allocate(size_t numBytes)
         //
         unsigned char *memory = reinterpret_cast<unsigned char *>(mInUseList) + mCurrentPageOffset;
         mCurrentPageOffset += allocationSize;
-        mCurrentPageOffset = (mCurrentPageOffset + mAlignmentMask) & ~mAlignmentMask;
-
+#    if defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS)
+        mCurrentPageOffset = rx::roundUpPow2(mCurrentPageOffset, mAlignment);
+#    endif
         return initializeAllocation(mInUseList, memory, numBytes);
     }
-
+    // We must allocate a new page so offset will be mHeaderSkip
+    allocationSize = Allocation::AllocationSize(mHeaderSkip, numBytes, mAlignment);
     if (allocationSize > mPageSize - mHeaderSkip)
     {
         //
@@ -312,7 +314,7 @@ void *PoolAllocator::allocateNewPage(size_t numBytes, size_t allocationSize)
     mInUseList = memory;
 
     unsigned char *ret = reinterpret_cast<unsigned char *>(mInUseList) + mHeaderSkip;
-    mCurrentPageOffset = (mHeaderSkip + allocationSize + mAlignmentMask) & ~mAlignmentMask;
+    mCurrentPageOffset = rx::roundUpPow2(mHeaderSkip + allocationSize, mAlignment);
     return ret;
 }
 #endif

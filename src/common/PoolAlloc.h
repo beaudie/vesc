@@ -39,6 +39,7 @@
 
 #include "angleutils.h"
 #include "common/debug.h"
+#include "common/mathutil.h"
 
 namespace angle
 {
@@ -50,11 +51,11 @@ namespace angle
 class Allocation
 {
   public:
-    Allocation(size_t size, unsigned char *mem, Allocation *prev = 0)
-        : mSize(size), mMem(mem), mPrevAlloc(prev)
+    Allocation(size_t size, unsigned char *mem, size_t alignment = 0, Allocation *prev = 0)
+        : mSize(size), mMem(mem), mAlignment(alignment), mPrevAlloc(prev)
     {
 // Allocations are bracketed:
-//    [allocationHeader][initialGuardBlock][userData][finalGuardBlock]
+//    [allocationHeader][initialGuardBlock][align][userData][finalGuardBlock]
 // This would be cleaner with if (kGuardBlockSize)..., but that
 // makes the compiler print warnings about 0 length memsets,
 // even with the if() protecting them.
@@ -72,15 +73,24 @@ class Allocation
     }
 
     void checkAllocList() const;
-
-    // Return total size needed to accommodate user buffer of 'size',
-    // plus our tracking data.
-    static size_t AllocationSize(size_t size) { return size + 2 * kGuardBlockSize + HeaderSize(); }
+    static size_t AllocationSize(size_t offset, size_t size, size_t alignment)
+    {
+        // Calculate size leading up to user data
+        const size_t headerSize =
+            rx::roundUpPow2(offset + kGuardBlockSize + HeaderSize(), alignment) - offset;
+        // Return the total size including header and footer & extra alignment space.
+        return headerSize + size + kGuardBlockSize;
+    }
+    static size_t AllocationOffset(size_t offset, size_t alignment)
+    {
+        // Calculate offset from start of allocation to aligned user data.
+        return rx::roundUpPow2(offset + kGuardBlockSize + HeaderSize(), alignment) - offset;
+    }
 
     // Offset from surrounding buffer to get to user data buffer.
-    static unsigned char *OffsetAllocation(unsigned char *m)
+    static unsigned char *OffsetAllocation(unsigned char *m, size_t alignment)
     {
-        return m + kGuardBlockSize + HeaderSize();
+        return m + AllocationOffset(reinterpret_cast<size_t>(m), alignment);
     }
 
   private:
@@ -88,10 +98,15 @@ class Allocation
 
     // Find offsets to pre and post guard blocks, and user data buffer
     unsigned char *preGuard() const { return mMem + HeaderSize(); }
-    unsigned char *data() const { return preGuard() + kGuardBlockSize; }
+    unsigned char *data() const
+    {
+        return reinterpret_cast<unsigned char *>(
+            rx::roundUpPow2(reinterpret_cast<size_t>(preGuard() + kGuardBlockSize), mAlignment));
+    }
     unsigned char *postGuard() const { return data() + mSize; }
     size_t mSize;            // size of the user data area
     unsigned char *mMem;     // beginning of our allocation (pts to header)
+    size_t mAlignment;       // Alignment restriction for users data
     Allocation *mPrevAlloc;  // prior allocation in the chain
 
     static constexpr unsigned char kGuardBlockBeginVal = 0xfb;
@@ -248,13 +263,10 @@ class PoolAllocator : angle::NonCopyable
     void *initializeAllocation(Header *block, unsigned char *memory, size_t numBytes)
     {
 #    if defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS)
-        new (memory) Allocation(numBytes + mAlignment, memory, block->lastAllocation);
+        new (memory) Allocation(numBytes, memory, mAlignment, block->lastAllocation);
         block->lastAllocation = reinterpret_cast<Allocation *>(memory);
 #    endif
-        // The OffsetAllocation() call is optimized away if !defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS)
-        void *unalignedPtr  = Allocation::OffsetAllocation(memory);
-        size_t alignedBytes = numBytes + mAlignment;
-        return std::align(mAlignment, numBytes, unalignedPtr, alignedBytes);
+        return Allocation::OffsetAllocation(memory, mAlignment);
     }
 
     size_t mPageSize;           // granularity of allocation from the OS
