@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "34fa9e24_cd2daba2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-25T20:22:44Z",
+      "side": 1,
+      "message": "Discussion w/ Shabi",
+      "revId": "562c711efd80a936df13705ba906f958173a52ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d807461e_908360f6",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
@@ -47,6 +64,24 @@
       "writtenOn": "2020-08-25T03:51:50Z",
       "side": 1,
       "message": "I obviously don\u0027t remember at all what I had in mind a year ago! But reading back the comments, I don\u0027t think the intention was to store the alignment. The (or part of the) idea is to align the header at allocation time such that `data()` automatically becomes aligned. Does that make sense?\n\nFor example, say data needs to be 16-byte aligned, and the header is (for the purpose of this exercise) 12 bytes.  Then you would need to make an allocation at a 16k+4 offset, which means data() is at a 16k+16 offset (i.e. 16-byte aligned).",
+      "revId": "562c711efd80a936df13705ba906f958173a52ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17758450_c4f24d57",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-25T20:22:44Z",
+      "side": 1,
+      "message": "Yes, this all makes sense. I\u0027ve reworked this a few times now and the issue is that the guard-band checks live in the Allocation class (and originate from the private Header class). The current fails on 32-bit are due to this where the trailing guard-band is overwritten by data. The guard-band check has to be aware of the alignment, but it\u0027s quite ugly to try and pipe it in everywhere.\n\nI may clean up something else for a bit to chew on a better way to handle this but let me know if you have any particular ideas.",
+      "parentUuid": "d807461e_908360f6",
       "revId": "562c711efd80a936df13705ba906f958173a52ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
