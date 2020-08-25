@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "9674aaba_3f6ca551",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-25T23:52:07Z",
+      "side": 1,
+      "message": "perf related benchmarks get there, manhattan is 4.5k trex is ~3k and there are heavier ones than these. For those not sensitive to perf, given that they are usually single context apps, the trade-off of 32kB memory for no mem ops seemed reasonable.\n\nwe can revisit this when we have the SharedResourceUsePool logic",
+      "parentUuid": "3a302e0e_737f28a3",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f654e3b_5e27607e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -122,6 +146,24 @@
       "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "142b1019_552bec61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-25T23:52:07Z",
+      "side": 1,
+      "message": "interesting, i thought the compiler will in-place construct the temp one given the sequence of commands that follow. Will give this a try and update in a bit\n\nas a side note - we really should have a SharedResourceUsePool from which we acquire and release mUse objects instead of alloc\u0027ing in here and free\u0027ing in releaseAndUpdateSerial...()",
+      "parentUuid": "7b010829_b7e13ab0",
+      "revId": "126964ff6ab4977a6e00fc16f1fe5d7eeda9b34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
