@@ -225,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "3b4699d3_2925f95e",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T16:40:19Z",
+      "side": 1,
+      "message": "Thanks. FYI so you know what I\u0027m talking about. If have this:\n\nvoid func(bool maybe)\n{\n   int x \u003d 5;\n   if (maybe)\n   {\n       int array[10000];\n       somethingelse(\u0026x, array);\n   }\n   return x;\n}\n\nthe compiler will reserve stack space for \u0027array\u0027 even if maybe is false.",
+      "parentUuid": "5442375d_e7fe8ded",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 17
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1815234_f0c283ae",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
