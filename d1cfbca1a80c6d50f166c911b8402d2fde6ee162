@@ -39,6 +39,30 @@
       "revId": "d1cfbca1a80c6d50f166c911b8402d2fde6ee162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c71c0222_eb5dfcda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T20:46:38Z",
+      "side": 1,
+      "message": "FixedVector is for stuff that grows and shrinks, where you want to track a max value. If you don\u0027t need that \"counter\" then just arrays are preferable b/c they save on that state tracking.",
+      "parentUuid": "47b2a41c_f5b66dc0",
+      "range": {
+        "startLine": 646,
+        "startChar": 33,
+        "endLine": 646,
+        "endChar": 44
+      },
+      "revId": "d1cfbca1a80c6d50f166c911b8402d2fde6ee162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
