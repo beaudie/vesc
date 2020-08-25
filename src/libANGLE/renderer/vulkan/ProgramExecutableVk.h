@@ -138,9 +138,11 @@ class ProgramExecutableVk
 
     angle::Result getComputePipeline(ContextVk *contextVk, vk::PipelineAndSerial **pipelineOut);
 
+    angle::Result initDynamicDescriptorPools(ContextVk *contextVk,
+                                             vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+                                             DescriptorSetIndex descriptorSetIndex);
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
-    angle::Result createPipelineLayout(const gl::Context *glContext);
-    angle::Result updatePipelineLayout(const gl::Context *glContext,
+    angle::Result createPipelineLayout(const gl::Context *glContext,
                                        gl::ActiveTextureArray<vk::TextureUnit> *activeTextures);
 
     angle::Result updateTexturesDescriptorSet(ContextVk *contextVk);

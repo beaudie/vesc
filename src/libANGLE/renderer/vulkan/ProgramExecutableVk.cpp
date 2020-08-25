@@ -660,9 +660,72 @@ angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
     return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
 }
 
+angle::Result ProgramExecutableVk::initDynamicDescriptorPools(
+    ContextVk *contextVk,
+    vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    DescriptorSetIndex descriptorSetIndex)
+{
+    std::vector<VkDescriptorPoolSize> descriptorPoolSizes;
+    vk::DescriptorSetLayoutBindingVector bindingVector;
+    std::vector<VkSampler> immutableSamplers;
+
+    descriptorSetLayoutDesc.unpackBindings(&bindingVector, &immutableSamplers);
+
+    for (const VkDescriptorSetLayoutBinding &binding : bindingVector)
+    {
+        if (binding.descriptorCount > 0)
+        {
+            VkDescriptorPoolSize poolSize = {};
+
+            poolSize.type            = binding.descriptorType;
+            poolSize.descriptorCount = binding.descriptorCount;
+            descriptorPoolSizes.emplace_back(poolSize);
+        }
+    }
+
+    RendererVk *renderer = contextVk->getRenderer();
+    if (renderer->getFeatures().bindEmptyForUnusedDescriptorSets.enabled &&
+        descriptorPoolSizes.empty())
+    {
+        // For this workaround, we have to create an empty descriptor set for each descriptor set
+        // index, so make sure their pools are initialized.
+        switch (descriptorSetIndex)
+        {
+            case DescriptorSetIndex::ShaderResource:
+            {
+                VkDescriptorPoolSize poolSize = {};
+
+                poolSize.type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                poolSize.descriptorCount = 1;
+                descriptorPoolSizes.emplace_back(poolSize);
+                break;
+            }
+            case DescriptorSetIndex::Texture:
+            {
+                VkDescriptorPoolSize poolSize = {};
+
+                poolSize.type            = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                poolSize.descriptorCount = 1;
+                descriptorPoolSizes.emplace_back(poolSize);
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    if (!descriptorPoolSizes.empty())
+    {
+        ANGLE_TRY(mDynamicDescriptorPools[ToUnderlying(descriptorSetIndex)].init(
+            contextVk, descriptorPoolSizes.data(), descriptorPoolSizes.size()));
+    }
+
+    return angle::Result::Continue;
+}
+
 // updatePipelineLayout is used to create the DescriptorSetLayout(s) and PipelineLayout and update
 // them when we discover that an immutable sampler is in use.
-angle::Result ProgramExecutableVk::updatePipelineLayout(
+angle::Result ProgramExecutableVk::createPipelineLayout(
     const gl::Context *glContext,
     gl::ActiveTextureArray<vk::TextureUnit> *activeTextures)
 {
@@ -674,6 +737,11 @@ angle::Result ProgramExecutableVk::updatePipelineLayout(
     const gl::ShaderBitSet &linkedShaderStages = glExecutable.getLinkedShaderStages();
     gl::ShaderMap<const gl::ProgramState *> programStates;
     fillProgramStateMap(contextVk, &programStates);
+
+    if (activeTextures == nullptr)
+    {
+        reset(contextVk);
+    }
 
     // Store a reference to the pipeline and descriptor set layouts. This will create them if they
     // don't already exist in the cache.
@@ -776,90 +844,12 @@ angle::Result ProgramExecutableVk::updatePipelineLayout(
     ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, mDescriptorSetLayouts,
                                           &mPipelineLayout));
 
-    return angle::Result::Continue;
-}
-
-angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glContext)
-{
-    ContextVk *contextVk                       = vk::GetImpl(glContext);
-    RendererVk *renderer                       = contextVk->getRenderer();
-    const gl::ProgramExecutable &glExecutable  = getGlExecutable();
-    const gl::ShaderBitSet &linkedShaderStages = glExecutable.getLinkedShaderStages();
-    gl::ShaderMap<const gl::ProgramState *> programStates;
-    fillProgramStateMap(contextVk, &programStates);
-
-    reset(contextVk);
-
-    ANGLE_TRY(updatePipelineLayout(glContext, nullptr));
-
     // Initialize descriptor pools.
-    std::array<VkDescriptorPoolSize, 2> uniformAndXfbSetSize = {
-        {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
-          static_cast<uint32_t>(mNumDefaultUniformDescriptors)},
-         {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS}}};
-
-    uint32_t uniformBlockCount        = 0;
-    uint32_t storageBlockCount        = 0;
-    uint32_t atomicCounterBufferCount = 0;
-    uint32_t imageCount               = 0;
-    uint32_t textureCount             = 0;
-    for (const gl::ShaderType shaderType : linkedShaderStages)
-    {
-        const gl::ProgramState *programState = programStates[shaderType];
-        ASSERT(programState);
-        // TODO(timvp): http://anglebug.com/3570: These counts will be too high for monolithic
-        // programs, since it's the same ProgramState for each shader type.
-        uniformBlockCount += static_cast<uint32_t>(programState->getUniformBlocks().size());
-        storageBlockCount += static_cast<uint32_t>(programState->getShaderStorageBlocks().size());
-        atomicCounterBufferCount +=
-            static_cast<uint32_t>(programState->getAtomicCounterBuffers().size());
-        imageCount += static_cast<uint32_t>(programState->getImageBindings().size());
-        textureCount += static_cast<uint32_t>(programState->getSamplerBindings().size());
-    }
-
-    if (renderer->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
-    {
-        // For this workaround, we have to create an empty descriptor set for each descriptor set
-        // index, so make sure their pools are initialized.
-        uniformBlockCount = std::max(uniformBlockCount, 1u);
-        textureCount      = std::max(textureCount, 1u);
-    }
-
-    constexpr size_t kResourceTypesInResourcesSet = 3;
-    angle::FixedVector<VkDescriptorPoolSize, kResourceTypesInResourcesSet> resourceSetSize;
-    if (uniformBlockCount > 0)
-    {
-        resourceSetSize.emplace_back(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, uniformBlockCount);
-    }
-    if (storageBlockCount > 0 || atomicCounterBufferCount > 0)
-    {
-        // Note that we always use an array of IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS storage
-        // buffers for emulating atomic counters, so if there are any atomic counter buffers, we
-        // need to allocate IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS descriptors.
-        const uint32_t atomicCounterStorageBufferCount =
-            atomicCounterBufferCount > 0 ? gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS : 0;
-        const uint32_t storageBufferDescCount = storageBlockCount + atomicCounterStorageBufferCount;
-        resourceSetSize.emplace_back(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, storageBufferDescCount);
-    }
-    if (imageCount > 0)
-    {
-        resourceSetSize.emplace_back(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, imageCount);
-    }
-
-    VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, textureCount};
-
-    ANGLE_TRY(mDynamicDescriptorPools[ToUnderlying(DescriptorSetIndex::UniformsAndXfb)].init(
-        contextVk, uniformAndXfbSetSize.data(), uniformAndXfbSetSize.size()));
-    if (resourceSetSize.size() > 0)
-    {
-        ANGLE_TRY(mDynamicDescriptorPools[ToUnderlying(DescriptorSetIndex::ShaderResource)].init(
-            contextVk, resourceSetSize.data(), static_cast<uint32_t>(resourceSetSize.size())));
-    }
-    if (textureCount > 0)
-    {
-        ANGLE_TRY(mDynamicDescriptorPools[ToUnderlying(DescriptorSetIndex::Texture)].init(
-            contextVk, &textureSetSize, 1));
-    }
+    ANGLE_TRY(initDynamicDescriptorPools(contextVk, uniformsAndXfbSetDesc,
+                                         DescriptorSetIndex::UniformsAndXfb));
+    ANGLE_TRY(initDynamicDescriptorPools(contextVk, resourcesSetDesc,
+                                         DescriptorSetIndex::ShaderResource));
+    ANGLE_TRY(initDynamicDescriptorPools(contextVk, texturesSetDesc, DescriptorSetIndex::Texture));
 
     mDynamicBufferOffsets.resize(glExecutable.getLinkedShaderStageCount());
 

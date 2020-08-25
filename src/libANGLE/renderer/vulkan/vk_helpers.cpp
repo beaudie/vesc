@@ -45,7 +45,7 @@ constexpr VkBufferUsageFlags kLineLoopDynamicIndirectBufferUsage =
 constexpr int kLineLoopDynamicIndirectBufferInitialSize = sizeof(VkDrawIndirectCommand) * 16;
 
 // This is an arbitrary max. We can change this later if necessary.
-constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
+constexpr uint32_t kDefaultDescriptorPoolMaxSets = 1;
 
 constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> kPipelineStageFlagBitMap = {
     {PipelineStage::TopOfPipe, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
@@ -1695,8 +1695,10 @@ DynamicDescriptorPool::~DynamicDescriptorPool() = default;
 
 angle::Result DynamicDescriptorPool::init(ContextVk *contextVk,
                                           const VkDescriptorPoolSize *setSizes,
-                                          uint32_t setSizeCount)
+                                          size_t setSizeCount)
 {
+    ASSERT(setSizes);
+    ASSERT(setSizeCount);
     ASSERT(mCurrentPoolIndex == 0);
     ASSERT(mDescriptorPools.empty() || (mDescriptorPools.size() == 1 &&
                                         mDescriptorPools[0]->get().hasCapacity(mMaxSetsPerPool)));
