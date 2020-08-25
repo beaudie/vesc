@@ -2,6 +2,161 @@
   "comments": [
     {
       "key": {
+        "uuid": "dcf47818_c8c94bbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "I didn\u0027t see if you added it - having a warning on uint8_t conversion might be helpful as well. There\u0027s probably a bunch of other cases. LGTM with a few suggestions on some improvements.",
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71f14aca_01fc3a0f",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "nit: ANGLE_PERF_WARNING? We always prefix with ANGLE, and Debug is a bit redundant so we can keep it nice and short.",
+      "range": {
+        "startLine": 167,
+        "startChar": 8,
+        "endLine": 167,
+        "endChar": 26
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad1febab_50a078c6",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "maybe you could make this outside of the macro",
+      "range": {
+        "startLine": 170,
+        "startChar": 27,
+        "endLine": 170,
+        "endChar": 38
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a051901_81dd53a2",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "nit: sRepeatCount",
+      "range": {
+        "startLine": 171,
+        "startChar": 24,
+        "endLine": 171,
+        "endChar": 38
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e7b55b1_4fc050ec",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "I\u0027m a bit worried about std::string in the macro causing inflated stack space in some of these functions. Can you maybe do all this in a function call instead of a macro?",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 17
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1815234_f0c283ae",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "nit: bubble doesn\u0027t seem like a technical term - how about idle/stall/wait?",
+      "range": {
+        "startLine": 268,
+        "startChar": 17,
+        "endLine": 268,
+        "endChar": 24
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac63e8cf_a468c00c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "nit: can you make this a helper in ContextVk to shorten the strings? (contextVk-\u003egetDebug())",
+      "range": {
+        "startLine": 461,
+        "startChar": 27,
+        "endLine": 461,
+        "endChar": 59
+      },
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "981c0a46_15ab97a7",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -13,6 +168,47 @@
       "writtenOn": "2020-08-24T19:37:50Z",
       "side": 1,
       "message": "Regarding this: Index range validation seems to be done only for glDrawRangeElementsBaseVertexEXT/OES but not the promoted version of the same function. Should we remove those and just rip the whole getIndexRange functionality?",
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca6be910_02e167c3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "We also use the getIndexRange for some WebGL cases where robust access isn\u0027t supported. You\u0027re right we should take out the index range validation from these functions. I don\u0027t think it\u0027ll let us ditch getIndexRange entirely.",
+      "parentUuid": "981c0a46_15ab97a7",
+      "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97d67cf4_fd41c15d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-25T14:08:48Z",
+      "side": 1,
+      "message": "nit: performend (typo)\n\nIt would be better to just use the verb, e.g. \"Mipmaps _generated_ on CPU due to...\"\n\nSame for other cases",
+      "range": {
+        "startLine": 1612,
+        "startChar": 42,
+        "endLine": 1612,
+        "endChar": 52
+      },
       "revId": "7d5af37ab21950d88cd9c201e92d673c7d16044c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
