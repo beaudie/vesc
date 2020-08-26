@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "980942cd_92194095",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-26T01:10:35Z",
+      "side": 1,
+      "message": "I think you don\u0027t need to check this here. mDepthTestEnabled is tracking the current state of depth enablement. The mDepthInvalidatedState is tracking current aggregated state of invalidate or not. So mDepthInvalidatedState is already taking mDepthTestEnabled into consideration. Here is the TRex example: you enable depth test and draw, and then call discard and then endRP. By the time endRP is called, depth test is still enabled, and this will set storeOp to Store. But since discard is the last call, storeOP should be DontCare.",
+      "range": {
+        "startLine": 906,
+        "startChar": 46,
+        "endLine": 906,
+        "endChar": 63
+      },
+      "revId": "296d3bfd453d0ccdc9291294a02caf1b6f7e80dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
