@@ -1290,7 +1290,7 @@ bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes,
 {
     ASSERT(ptrOut);
     ASSERT(offsetOut);
-    size_t sizeToAllocate                                      = roundUp(sizeInBytes, mAlignment);
+    size_t sizeToAllocate = roundUpPow2(sizeInBytes, mAlignment);
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;
 
@@ -1317,7 +1317,7 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
                                       VkDeviceSize *offsetOut,
                                       bool *newBufferAllocatedOut)
 {
-    size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    size_t sizeToAllocate = roundUpPow2(sizeInBytes, mAlignment);
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;
