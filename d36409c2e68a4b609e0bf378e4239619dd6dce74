@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebab8285_0c3ebf37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T19:29:15Z",
+      "side": 1,
+      "message": "LGTM - would like to see a test, not a blocking requirement.",
+      "revId": "d36409c2e68a4b609e0bf378e4239619dd6dce74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

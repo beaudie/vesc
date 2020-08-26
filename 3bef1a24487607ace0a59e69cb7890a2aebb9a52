@@ -34,6 +34,24 @@
       "revId": "3bef1a24487607ace0a59e69cb7890a2aebb9a52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9bfef16_5531e760",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T19:29:15Z",
+      "side": 1,
+      "message": "We can\u0027t enable WebGL tests at the same time this CL lands, hence an end2end_test is nice to have. Right now the code path you\u0027re landing is likely untested on the CQ. It\u0027s not a hard requirement if there is some existing testing.",
+      "parentUuid": "681cc7de_fe9f113b",
+      "revId": "3bef1a24487607ace0a59e69cb7890a2aebb9a52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
