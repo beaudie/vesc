@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffefacba_7dfed73b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-26T23:34:59Z",
+      "side": 1,
+      "message": "This could probably use additional detail.\nWhy can\u0027t we use the contextStagingBuffer if isSelfCopy?\nWhat does !shouldUpdateBeStaged(index.getLevelIndex()) mean regarding use of context staging buffer vs. imageHelper\u0027s staging buffer?",
+      "range": {
+        "startLine": 627,
+        "startChar": 4,
+        "endLine": 627,
+        "endChar": 87
+      },
+      "revId": "f4b409791346faa1a9b4fc7b89d0ae9aedf36c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
