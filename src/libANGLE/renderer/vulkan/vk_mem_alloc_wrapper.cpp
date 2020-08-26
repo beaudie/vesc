@@ -61,6 +61,10 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
     allocatorInfo.instance               = instance;
     allocatorInfo.pVulkanFunctions       = &funcs;
     allocatorInfo.vulkanApiVersion       = apiVersion;
+    // This number match Chromium and was picked by looking at memory usage of
+    // Android apps. The allocator will start making blocks at 1/8 the max size
+    // and builds up block size as needed before capping at the max set here.
+    allocatorInfo.preferredLargeHeapBlockSize = 4 * 1024 * 1024;
 
     return vmaCreateAllocator(&allocatorInfo, pAllocator);
 }
