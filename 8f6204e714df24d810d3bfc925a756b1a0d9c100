@@ -16,6 +16,23 @@
       "revId": "8f6204e714df24d810d3bfc925a756b1a0d9c100",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "856c572a_78e350e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T13:59:03Z",
+      "side": 1,
+      "message": "LGTM\n\nShabi, can we selectively enable this feature based on driver capabilities?",
+      "revId": "8f6204e714df24d810d3bfc925a756b1a0d9c100",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
