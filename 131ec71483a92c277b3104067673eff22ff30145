@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "48ed25dd_fc9c15ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-26T03:59:30Z",
+      "side": 1,
+      "message": "I personally check what I have access to: release build on Linux. Take a look at libGLESv2.so.",
+      "parentUuid": "0995afd8_585f2249",
+      "revId": "131ec71483a92c277b3104067673eff22ff30145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ea496aa_0b6a94f1",
         "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
         "patchSetId": 3
@@ -81,6 +99,30 @@
       "revId": "131ec71483a92c277b3104067673eff22ff30145",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b432cf36_4606183f",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-26T03:59:30Z",
+      "side": 1,
+      "message": "SGTM.\n\nFYI, NDEBUG is as old as C: https://man7.org/linux/man-pages/man3/assert.3.html",
+      "parentUuid": "3430a959_d1efcf4f",
+      "range": {
+        "startLine": 202,
+        "startChar": 6,
+        "endLine": 202,
+        "endChar": 34
+      },
+      "revId": "131ec71483a92c277b3104067673eff22ff30145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
