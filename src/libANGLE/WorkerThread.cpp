@@ -161,7 +161,7 @@ std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(std::shared_ptr<C
         mTaskQueue.push(std::make_pair(waitable, task));
     }
     checkToRunPendingTasks();
-    return waitable;
+    return std::move(waitable);
 }
 
 void AsyncWorkerPool::setMaxThreads(size_t maxThreads)
