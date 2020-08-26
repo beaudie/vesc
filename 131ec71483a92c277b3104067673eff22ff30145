@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0995afd8_585f2249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-26T02:39:43Z",
+      "side": 1,
+      "message": "I haven\u0027t checked.   Is there a particular build you\u0027re interested in?",
+      "parentUuid": "a27dde96_62b6419b",
+      "revId": "131ec71483a92c277b3104067673eff22ff30145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ea496aa_0b6a94f1",
         "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
         "patchSetId": 3
@@ -30,6 +48,30 @@
       "writtenOn": "2020-08-26T02:07:34Z",
       "side": 1,
       "message": "I see the condition that defines ANGLE_ENABLE_ASSERTS is `!defined(NDEBUG) || defined(ANGLE_ENABLE_RELEASE_ASSERTS)`. The latter comes from `dcheck_always_on`, but I\u0027m not entirely sure if NDEBUG comes exactly from !is_debug (looks like chromium\u0027s build/config/BUILD.gn enables this in the \"release\" target, but I didn\u0027t look further into what exactly uses release).\n\nAll that rambling to say, I wish there was a gn way to dictate this and `ANGLE_ENABLE_ASSERTS` with the same expression. One option is to move ANGLE_ENABLE_ASSERTS\u0027s definition out of the header and move it to gn.\n\n---\n\nI\u0027m fine with this as is too, worst-case scenario someone will complain about a compile error and we\u0027ll fix it.",
+      "range": {
+        "startLine": 202,
+        "startChar": 6,
+        "endLine": 202,
+        "endChar": 34
+      },
+      "revId": "131ec71483a92c277b3104067673eff22ff30145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3430a959_d1efcf4f",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-26T02:39:43Z",
+      "side": 1,
+      "message": "I had initially thought asserts were only controlled by dcheck_always_on, but that\u0027s not the case (as you pointed out).   It took a little bit of trial and error to get these flags right for all of the various builds (plus the extra #ifdef\u0027ing that MSVC requires in the source code).\n\nAs far as I can tell, you\u0027re correct about NDEBUG only being enabled for \"release\" in build/config/BUILD.gn.   My first rant in this area starts with that definition relying on negative logic, so everything is constantly checking !defined(NDEBUG).\n\nRegardless, I think all of that stuff is outside of what we\u0027re trying to accomplish here.   I\u0027d support another fix-it bug to try and clean some of these debug flags up though.",
+      "parentUuid": "9ea496aa_0b6a94f1",
       "range": {
         "startLine": 202,
         "startChar": 6,
