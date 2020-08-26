@@ -22,6 +22,30 @@
       "revId": "54f04e9ea4d570443621b08617118813c02e65f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c361c731_afa17667",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-26T18:41:18Z",
+      "side": 1,
+      "message": "Nope, it\u0027s a different format unfortunately. R16UI vs R16",
+      "parentUuid": "578064af_3b867b9d",
+      "range": {
+        "startLine": 545,
+        "startChar": 4,
+        "endLine": 545,
+        "endChar": 40
+      },
+      "revId": "54f04e9ea4d570443621b08617118813c02e65f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
