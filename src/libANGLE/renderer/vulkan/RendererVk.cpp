@@ -2073,6 +2073,13 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
 }
 
+bool RendererVk::hasCachedImageFormatFeatureBits(VkFormat format,
+                                                 const VkFormatFeatureFlags featureBits) const
+{
+    return hasCachedFormatFeatureBits<&VkFormatProperties::optimalTilingFeatures>(format,
+                                                                                  featureBits);
+}
+
 angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       egl::ContextPriority priority,
                                       const VkSubmitInfo &submitInfo,
@@ -2225,9 +2232,29 @@ VkFormatFeatureFlags RendererVk::getFormatFeatureBits(VkFormat format,
 }
 
 template <VkFormatFeatureFlags VkFormatProperties::*features>
+VkFormatFeatureFlags RendererVk::getCachedFormatFeatureBits(
+    VkFormat format,
+    const VkFormatFeatureFlags featureBits) const
+{
+    ASSERT(static_cast<uint32_t>(format) < vk::kNumVkFormats);
+    const VkFormatProperties &deviceProperties = mFormatProperties[format];
+
+    ASSERT(deviceProperties.bufferFeatures != kInvalidFormatFeatureFlags);
+
+    return deviceProperties.*features & featureBits;
+}
+
+template <VkFormatFeatureFlags VkFormatProperties::*features>
 bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits)
 {
     return IsMaskFlagSet(getFormatFeatureBits<features>(format, featureBits), featureBits);
+}
+
+template <VkFormatFeatureFlags VkFormatProperties::*features>
+bool RendererVk::hasCachedFormatFeatureBits(VkFormat format,
+                                            const VkFormatFeatureFlags featureBits) const
+{
+    return IsMaskFlagSet(getCachedFormatFeatureBits<features>(format, featureBits), featureBits);
 }
 
 angle::Result RendererVk::cleanupGarbage(bool block)

@@ -246,6 +246,23 @@ void FormatTable::initialize(RendererVk *renderer,
         FillTextureFormatCaps(renderer, format.vkImageFormat, &textureCaps);
         outTextureCapsMap->set(formatID, textureCaps);
 
+        // Ensure sRGB reinterpretation formats are precached, regardless of frontend support
+        // These caps are immediately discarded, we only use them to ensure that the results are in
+        // the cache
+        gl::TextureCaps unusedCaps;
+
+        VkFormat linearColorspaceFormat = ConvertToLinear(format.vkImageFormat);
+        if (linearColorspaceFormat != VK_FORMAT_UNDEFINED)
+        {
+            FillTextureFormatCaps(renderer, linearColorspaceFormat, &unusedCaps);
+        }
+
+        VkFormat nonLinearColorspaceFormat = ConvertToNonLinear(format.vkImageFormat);
+        if (nonLinearColorspaceFormat != VK_FORMAT_UNDEFINED)
+        {
+            FillTextureFormatCaps(renderer, nonLinearColorspaceFormat, &unusedCaps);
+        }
+
         if (textureCaps.texturable)
         {
             format.textureLoadFunctions =

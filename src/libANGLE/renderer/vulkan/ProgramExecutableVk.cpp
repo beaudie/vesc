@@ -1342,13 +1342,17 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
             VkWriteDescriptorSet *writeInfos  = contextVk->allocWriteDescriptorSets(arraySize);
             for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
             {
-                GLuint textureUnit                 = samplerBinding.boundTextureUnits[arrayElement];
-                TextureVk *textureVk               = activeTextures[textureUnit].texture;
-                const vk::SamplerHelper &samplerVk = *activeTextures[textureUnit].sampler;
+                GLuint textureUnit   = samplerBinding.boundTextureUnits[arrayElement];
+                TextureVk *textureVk = activeTextures[textureUnit].texture;
+                const vk::SamplerHelper &samplerHelper = *activeTextures[textureUnit].sampler;
+                bool linearColorspaceWithSampler = activeTextures[textureUnit].useLinearImageview;
 
                 vk::ImageHelper &image = textureVk->getImage();
 
-                imageInfos[arrayElement].sampler     = samplerVk.get().getHandle();
+                bool shouldUseLinearColorspace = textureVk->shouldUseLinearColorspaceWithTexelFetch(
+                    linearColorspaceWithSampler, samplerUniform.texelFetchInvoked);
+
+                imageInfos[arrayElement].sampler     = samplerHelper.get().getHandle();
                 imageInfos[arrayElement].imageLayout = image.getCurrentLayout();
 
                 if (emulateSeamfulCubeMapSampling)
@@ -1357,12 +1361,18 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
                     // basically the same image view as read, except it's a 2DArray view for
                     // cube maps.
                     imageInfos[arrayElement].imageView =
-                        textureVk->getFetchImageViewAndRecordUse(contextVk).getHandle();
+                        textureVk
+                            ->getFetchImageViewAndRecordUseWithColorspaceOverride(
+                                contextVk, shouldUseLinearColorspace)
+                            .getHandle();
                 }
                 else
                 {
                     imageInfos[arrayElement].imageView =
-                        textureVk->getReadImageViewAndRecordUse(contextVk).getHandle();
+                        textureVk
+                            ->getReadImageViewAndRecordUseWithColorspaceOverride(
+                                contextVk, shouldUseLinearColorspace)
+                            .getHandle();
                 }
 
                 if (textureVk->getImage().hasImmutableSampler())

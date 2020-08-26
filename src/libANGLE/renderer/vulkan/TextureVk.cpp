@@ -1122,7 +1122,8 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
                    mState.getEffectiveBaseLevel(), false);
 
     ASSERT(type != gl::TextureType::CubeMap);
-    ANGLE_TRY(initImageViews(contextVk, format, image->getFormat().info->sized, 1, 1));
+    ANGLE_TRY(initImageViews(contextVk, imageVk->getImage()->getFormat(),
+                             image->getFormat().info->sized, 1, 1));
 
     // Transfer the image to this queue if needed
     uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
@@ -2084,6 +2085,13 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
     }
 
+    // If we're handling dirty srgb decode/override state, we may have to reallocate the image with
+    // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT
+    if (dirtyBits.test(gl::Texture::DIRTY_BIT_SRGB_DECODE))
+    {
+        mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        mRequiresSRGBViews = true;
+    }
     if (dirtyBits.test(gl::Texture::DIRTY_BIT_SRGB_OVERRIDE))
     {
         if (mState.getSRGBOverride() != gl::SrgbOverride::Default)
@@ -2173,7 +2181,8 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_GREEN) ||
         localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_BLUE) ||
         localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_ALPHA) ||
-        localBits.test(gl::Texture::DIRTY_BIT_SRGB_OVERRIDE))
+        localBits.test(gl::Texture::DIRTY_BIT_SRGB_OVERRIDE) ||
+        localBits.test(gl::Texture::DIRTY_BIT_SRGB_DECODE))
     {
         // We use a special layer count here to handle EGLImages. They might only be
         // looking at one layer of a cube or 2D array texture.
@@ -2219,7 +2228,113 @@ void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
     releaseAndDeleteImage(contextVk);
 }
 
+bool TextureVk::shouldUseLinearColorspaceWithSampler(const SamplerVk *samplerVk) const
+{
+    ASSERT(mImage->valid());
+
+    // True if GL_TEXTURE_SRGB_DECODE_EXT === GL_SKIP_DECODE_EXT in the texture state
+    bool textureSRGBDecodeDisabled =
+        (mState.getSamplerState().getSRGBDecode() == GL_SKIP_DECODE_EXT);
+
+    // True if GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT == GL_SRGB in the texture state
+    bool textureSRGBOverriddenToNonLinear =
+        (mState.getSRGBOverride() == gl::SrgbOverride::NonLinear);
+
+    gl::SrgbOverride samplerDecodeOverride = gl::SrgbOverride::Default;
+    if (samplerVk != nullptr)
+    {
+        samplerDecodeOverride =
+            (samplerVk->getSamplerSRGBSkipDecode() ? gl::SrgbOverride::Linear
+                                                   : gl::SrgbOverride::NonLinear);
+    }
+
+    switch (samplerDecodeOverride)
+    {
+        case gl::SrgbOverride::Linear:
+            // If the sampler state skips decoding, we must choose the linear imageview,
+            // regardless of the texture state. This takes precedence over sRGB_override
+            return true;
+        case gl::SrgbOverride::NonLinear:
+            // If the sampler state does not skip decoding, we should choose the imageview
+            // required by sRGB_override- we should not force a linear format to use a nonlinear
+            // imageview if sRGB_override has not forced that
+            if (textureSRGBOverriddenToNonLinear)
+            {
+                return false;
+            }
+            else
+            {
+                return formatShouldUseLinearColorspace();
+            }
+        default:
+            // sRGB_decode texture state takes precedence over sRGB_override texture state
+            if (textureSRGBDecodeDisabled)
+            {
+                return true;
+            }
+            else if (textureSRGBOverriddenToNonLinear)
+            {
+                return false;
+            }
+            else
+            {
+                return formatShouldUseLinearColorspace();
+            }
+    }
+}
+
+bool TextureVk::shouldUseLinearColorspaceWithTexelFetch(bool colorspaceWithSampler,
+                                                        bool texelFetchForcesDecodeOn) const
+{
+    ASSERT(mImage->valid());
+
+    // True if GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT == GL_SRGB in the texture state
+    bool textureSRGBOverriddenToNonLinear =
+        (mState.getSRGBOverride() == gl::SrgbOverride::NonLinear);
+
+    // Enable sRGB decoding regardless of getSamplerSRGBSkipDecode, due to an edge
+    // case in the EXT_texture_sRGB_decode spec:
+    //
+    // "The conversion of sRGB color space components to linear color space is
+    // always applied if the TEXTURE_SRGB_DECODE_EXT parameter is DECODE_EXT.
+    // Table X.1 describes whether the conversion is skipped if the
+    // TEXTURE_SRGB_DECODE_EXT parameter is SKIP_DECODE_EXT, depending on
+    // the function used for the access, whether the access occurs through a
+    // bindless sampler, and whether the texture is statically accessed
+    // elsewhere with a texelFetch function."
+    if (texelFetchForcesDecodeOn)
+    {
+        // This imageview is used with a texelFetch invocation, so we must ignore all sRGB_decode
+        // state. sRGB_override state should still be considered.
+        if (textureSRGBOverriddenToNonLinear)
+        {
+            return false;
+        }
+        else
+        {
+            return formatShouldUseLinearColorspace();
+        }
+    }
+    else
+    {
+        return colorspaceWithSampler;
+    }
+}
+
 const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextVk) const
+{
+    return getReadImageViewAndRecordUseImpl(contextVk, formatShouldUseLinearColorspace());
+}
+
+const vk::ImageView &TextureVk::getReadImageViewAndRecordUseWithColorspaceOverride(
+    ContextVk *contextVk,
+    bool useLinearColorspace) const
+{
+    return getReadImageViewAndRecordUseImpl(contextVk, useLinearColorspace);
+}
+
+const vk::ImageView &TextureVk::getReadImageViewAndRecordUseImpl(ContextVk *contextVk,
+                                                                 bool useLinearImageview) const
 {
     ASSERT(mImage->valid());
 
@@ -2231,16 +2346,33 @@ const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextV
         return imageViews.getStencilReadImageView();
     }
 
-    if (mState.getSRGBOverride() == gl::SrgbOverride::Enabled)
+    if (useLinearImageview)
+    {
+        ASSERT(imageViews.getLinearReadImageView().valid());
+        return imageViews.getLinearReadImageView();
+    }
+    else
     {
         ASSERT(imageViews.getNonLinearReadImageView().valid());
         return imageViews.getNonLinearReadImageView();
     }
-
-    return imageViews.getReadImageView();
 }
 
 const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *contextVk) const
+{
+    return getFetchImageViewAndRecordUseImpl(contextVk, formatShouldUseLinearColorspace());
+}
+
+const vk::ImageView &TextureVk::getFetchImageViewAndRecordUseWithColorspaceOverride(
+    ContextVk *contextVk,
+    bool useLinearColorspace) const
+{
+    return getFetchImageViewAndRecordUseImpl(contextVk, useLinearColorspace);
+}
+
+const vk::ImageView &TextureVk::getFetchImageViewAndRecordUseImpl(
+    ContextVk *contextVk,
+    bool shouldUseLinearColorspace) const
 {
     ASSERT(mImage->valid());
 
@@ -2250,14 +2382,16 @@ const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *context
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!imageViews.hasStencilReadImageView() || !imageViews.hasFetchImageView());
 
-    if (mState.getSRGBOverride() == gl::SrgbOverride::Enabled)
+    if (shouldUseLinearColorspace)
+    {
+        return (imageViews.hasFetchImageView() ? imageViews.getLinearFetchImageView()
+                                               : imageViews.getLinearReadImageView());
+    }
+    else
     {
         return (imageViews.hasFetchImageView() ? imageViews.getNonLinearFetchImageView()
                                                : imageViews.getNonLinearReadImageView());
     }
-
-    return (imageViews.hasFetchImageView() ? imageViews.getFetchImageView()
-                                           : imageViews.getReadImageView());
 }
 
 const vk::ImageView &TextureVk::getCopyImageViewAndRecordUse(ContextVk *contextVk) const
@@ -2267,12 +2401,14 @@ const vk::ImageView &TextureVk::getCopyImageViewAndRecordUse(ContextVk *contextV
     const vk::ImageViewHelper &imageViews = getImageViews();
     imageViews.retain(&contextVk->getResourceUseList());
 
-    if (mState.getSRGBOverride() == gl::SrgbOverride::Enabled)
+    if (formatShouldUseLinearColorspace())
+    {
+        return imageViews.getLinearCopyImageView();
+    }
+    else
     {
         return imageViews.getNonLinearCopyImageView();
     }
-
-    return imageViews.getCopyImageView();
 }
 
 angle::Result TextureVk::getLevelLayerImageView(ContextVk *contextVk,

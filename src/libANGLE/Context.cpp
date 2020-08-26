@@ -488,6 +488,7 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURE_UNITS);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
 
     mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_STATE);
@@ -539,6 +540,7 @@ void Context::initialize()
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURE_UNITS);
 
     mCopyImageDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
     mCopyImageDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
