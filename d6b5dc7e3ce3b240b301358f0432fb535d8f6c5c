@@ -16,6 +16,24 @@
       "revId": "d6b5dc7e3ce3b240b301358f0432fb535d8f6c5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "788e265e_fd00f190",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T02:41:18Z",
+      "side": 1,
+      "message": "Right, it fixes a very small regression with present. My findings pinpointed another change (ba1e04) as the culprit for the larger T-Rex regression. go/angle-perf-regression-walkthrough . I\u0027m not sure if you can revert ba1e04 cleanly any more, but if you could that should boost T-Rex up again.",
+      "parentUuid": "ae9f7688_ec889498",
+      "revId": "d6b5dc7e3ce3b240b301358f0432fb535d8f6c5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
