@@ -52,6 +52,24 @@
       "revId": "b2d2d9d11215da2bd44a21ba481eab238c69c66a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0263881_4445d9ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T15:41:32Z",
+      "side": 1,
+      "message": "Yes, the test can prevent this kind of performance regression by counting the invalidates/stores/etc.\n\nSounds good!",
+      "parentUuid": "35295266_e0f3bef1",
+      "revId": "b2d2d9d11215da2bd44a21ba481eab238c69c66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
