@@ -1777,7 +1777,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
                             IsAndroid() && isQualcomm);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, forceOldRewriteStructSamplers,
-                            IsAndroid() && !isSwiftShader);
+                            !mPhysicalDeviceFeatures.shaderSampledImageArrayDynamicIndexing);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, perFrameWindowSizeQuery,
                             isIntel || (IsWindows() && isAMD) || IsFuchsia() || isARM);
