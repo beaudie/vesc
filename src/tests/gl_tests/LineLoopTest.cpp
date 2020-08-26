@@ -15,8 +15,13 @@ class LineLoopTest : public ANGLETest
   protected:
     LineLoopTest()
     {
-        setWindowWidth(256);
-        setWindowHeight(256);
+        // TODO(angleproject:bug#): Use 256x256 instead of 512x512.
+        // Shared block with less than 1 MB of padding is failing on
+        // Adreno 630 for some reason. 512x512 results in the read back
+        // staging buffer using new allocation block and avoids the
+        // problem. This needs to be investigated more.
+        setWindowWidth(512);
+        setWindowHeight(512);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
