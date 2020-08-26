@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27bd08f7_abbd579c",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-26T17:50:10Z",
+      "side": 1,
+      "message": "nit: could make a libglesv1_cm_win_sources to contain this",
+      "range": {
+        "startLine": 972,
+        "startChar": 4,
+        "endLine": 972,
+        "endChar": 54
+      },
+      "revId": "731fb9bc4392b2a176926753e9a39236bfde40f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
