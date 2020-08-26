@@ -633,12 +633,12 @@ egl::Config GenerateDefaultConfig(const RendererVk *renderer,
 {
     const VkPhysicalDeviceProperties &physicalDeviceProperties =
         renderer->getPhysicalDeviceProperties();
-    gl::Version maxSupportedESVersion = renderer->getMaxSupportedESVersion();
+    gl::Version maxConformantESVersion = renderer->getMaxConformantESVersion();
 
     // ES3 features are required to emulate ES1
-    EGLint es1Support = (maxSupportedESVersion.major >= 3 ? EGL_OPENGL_ES_BIT : 0);
-    EGLint es2Support = (maxSupportedESVersion.major >= 2 ? EGL_OPENGL_ES2_BIT : 0);
-    EGLint es3Support = (maxSupportedESVersion.major >= 3 ? EGL_OPENGL_ES3_BIT : 0);
+    EGLint es1Support = (maxConformantESVersion.major >= 3 ? EGL_OPENGL_ES_BIT : 0);
+    EGLint es2Support = (maxConformantESVersion.major >= 2 ? EGL_OPENGL_ES2_BIT : 0);
+    EGLint es3Support = (maxConformantESVersion.major >= 3 ? EGL_OPENGL_ES3_BIT : 0);
 
     egl::Config config;
 

@@ -229,6 +229,7 @@ class Display final : public LabeledObject,
     Surface *getWGLSurface() const;
     EGLenum getPlatform() const { return mPlatform; }
 
+    gl::Version getMaxConformantESVersion() const;
     gl::Version getMaxSupportedESVersion() const;
 
     const DisplayState &getState() const { return mState; }

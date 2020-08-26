@@ -1520,6 +1520,11 @@ std::string RendererVk::getRendererDescription() const
 
 gl::Version RendererVk::getMaxSupportedESVersion() const
 {
+    return gl::Version(3, 1);
+}
+
+gl::Version RendererVk::getMaxConformantESVersion() const
+{
     // Current highest supported version
     gl::Version maxVersion = gl::Version(3, 1);
 
@@ -1617,11 +1622,6 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     }
 
     return maxVersion;
-}
-
-gl::Version RendererVk::getMaxConformantESVersion() const
-{
-    return LimitVersionTo(getMaxSupportedESVersion(), {3, 1});
 }
 
 void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &deviceExtensionNames)

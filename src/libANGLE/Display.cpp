@@ -1766,6 +1766,11 @@ Surface *Display::getWGLSurface() const
     return mSurface;
 }
 
+gl::Version Display::getMaxConformantESVersion() const
+{
+    return mImplementation->getMaxConformantESVersion();
+}
+
 gl::Version Display::getMaxSupportedESVersion() const
 {
     return mImplementation->getMaxSupportedESVersion();

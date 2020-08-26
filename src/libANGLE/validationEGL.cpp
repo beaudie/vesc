@@ -1158,6 +1158,7 @@ Error ValidateCreateContext(Display *display,
     // Get the requested client version (default is 1) and check it is 2 or 3.
     EGLAttrib clientMajorVersion = 1;
     EGLAttrib clientMinorVersion = 0;
+    EGLAttrib conformantMask     = 0;
     EGLAttrib contextFlags       = 0;
     bool resetNotification       = false;
     for (AttributeMap::const_iterator attributeIter = attributes.begin();
@@ -1178,6 +1179,10 @@ Error ValidateCreateContext(Display *display,
 
             case EGL_CONTEXT_FLAGS_KHR:
                 contextFlags = value;
+                break;
+
+            case EGL_CONFORMANT:
+                conformantMask = value;
                 break;
 
             case EGL_CONTEXT_OPENGL_DEBUG:
@@ -1449,11 +1454,18 @@ Error ValidateCreateContext(Display *display,
             {
                 return EglBadMatch();
             }
-            if (display->getMaxSupportedESVersion() <
-                gl::Version(static_cast<GLuint>(clientMajorVersion),
-                            static_cast<GLuint>(clientMinorVersion)))
             {
-                return EglBadAttribute() << "Requested GLES version is not supported.";
+                gl::Version version = ((conformantMask & EGL_OPENGL_ES3_BIT) != 0)
+                                          ? display->getMaxConformantESVersion()
+                                          : gl::Version(3, 1);
+
+                if (version < gl::Version(static_cast<GLuint>(clientMajorVersion),
+                                          static_cast<GLuint>(clientMinorVersion)))
+                {
+                    return EglBadAttribute()
+                           << "Requested GLES version is not supported. EGL_CONFORMANT = "
+                           << conformantMask;
+                }
             }
             break;
         default:
