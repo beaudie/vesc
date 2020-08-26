@@ -56,6 +56,30 @@
       "revId": "1ed832ad5ad13f84b1cf2ac9579efbd99723699f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4716f85_f7221c93",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2051,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-26T02:07:47Z",
+      "side": 1,
+      "message": "This was in the webgl test I took this from, so I kept it as-is. It\u0027s testing to make sure the implementation is not mistakenly thinking the xfb buffer is simultaneously used as xfb and vao buffer.",
+      "parentUuid": "52787415_b98c071d",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2051,
+        "endChar": 0
+      },
+      "revId": "1ed832ad5ad13f84b1cf2ac9579efbd99723699f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
