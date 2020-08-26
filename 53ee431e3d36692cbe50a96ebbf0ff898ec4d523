@@ -22,6 +22,30 @@
       "revId": "53ee431e3d36692cbe50a96ebbf0ff898ec4d523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "922c3562_2ee23c32",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-26T14:57:43Z",
+      "side": 0,
+      "message": "Yes.  To clarify: when depth is re-enabled, it changes to NoLongerInvalid.\n\nThe problem with the current implementation is that if the render pass ends with depth still enabled, the code doesn\u0027t know if the application did drawing (which would also make it no longer invalid).  There was a 50-50 chance, and I went with a conservative approach (assume drawing took place).\n\nThe approach that Jamie proposed in the design doc (now that I understand it) will solve this problem since I can see whether any drawing took place.  This is just a stop-gap to restore TRex performance.",
+      "parentUuid": "f0705b44_17976526",
+      "range": {
+        "startLine": 881,
+        "startChar": 45,
+        "endLine": 881,
+        "endChar": 63
+      },
+      "revId": "53ee431e3d36692cbe50a96ebbf0ff898ec4d523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
