@@ -1263,7 +1263,7 @@ bool InternalFormat::computeRowPitch(GLenum formatType,
 
     ASSERT(alignment > 0 && isPow2(alignment));
     CheckedNumeric<GLuint> checkedAlignment(alignment);
-    auto aligned = rx::roundUp(checkedRowBytes, checkedAlignment);
+    auto aligned = rx::roundUpPow2(checkedRowBytes, checkedAlignment);
     return CheckedMathResult(aligned, resultOut);
 }
 

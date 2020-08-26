@@ -214,9 +214,9 @@ TEST(MathUtilTest, CountLeadingZeros)
 // Some basic tests. Tests that rounding up zero produces zero.
 TEST(MathUtilTest, BasicRoundUp)
 {
-    EXPECT_EQ(0u, rx::roundUp(0u, 4u));
-    EXPECT_EQ(4u, rx::roundUp(1u, 4u));
-    EXPECT_EQ(4u, rx::roundUp(4u, 4u));
+    EXPECT_EQ(0u, rx::roundUpPow2(0u, 4u));
+    EXPECT_EQ(4u, rx::roundUpPow2(1u, 4u));
+    EXPECT_EQ(4u, rx::roundUpPow2(4u, 4u));
 }
 
 // Test that rounding up zero produces zero for checked ints.
