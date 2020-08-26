@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ef827c0_52e09654",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-26T23:01:23Z",
+      "side": 1,
+      "message": "Fixed some logic errors.  I still want to simplify this some more.",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
