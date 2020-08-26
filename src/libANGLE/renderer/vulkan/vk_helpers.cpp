@@ -4587,6 +4587,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     if (mSubresourceUpdates.empty())
     {
         mStagingBuffer.releaseInFlightBuffers(contextVk);
+        mStagingBuffer.release(contextVk->getRenderer());
     }
 
     return angle::Result::Continue;
