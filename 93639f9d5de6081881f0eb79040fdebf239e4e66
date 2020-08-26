@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b20dd709_1ab79b98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:03:07Z",
+      "side": 1,
+      "message": "LGTM, but a mac failure that maybe needs to be suppressed.",
+      "revId": "93639f9d5de6081881f0eb79040fdebf239e4e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9042278e_318faf23",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3417,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:03:07Z",
+      "side": 1,
+      "message": "nit: what happens here if XFB is not enabled or available through the extension? Can you either rearrange this to ASSERT or move the invalidate back into the conditionals?\n\ni.e.\n\nif (extension)\n{\n}\nelse\n{\n   ASSERT(emulation);\n}",
+      "range": {
+        "startLine": 3417,
+        "startChar": 16,
+        "endLine": 3417,
+        "endChar": 47
+      },
+      "revId": "93639f9d5de6081881f0eb79040fdebf239e4e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b49bc8a_d1663c4a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:03:07Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 3419,
+        "startChar": 4,
+        "endLine": 3419,
+        "endChar": 45
+      },
+      "revId": "93639f9d5de6081881f0eb79040fdebf239e4e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
