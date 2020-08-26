@@ -4154,7 +4154,8 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     const gl::Offset &dstOffset,
     const gl::Extents &dstExtent,
     const gl::InternalFormat &formatInfo,
-    FramebufferVk *framebufferVk)
+    FramebufferVk *framebufferVk,
+    DynamicBuffer *stagingBufferOverride)
 {
     ContextVk *contextVk = GetImpl(context);
 
@@ -4190,9 +4191,17 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     VkDeviceSize stagingOffset = 0;
 
     // The destination is only one layer deep.
-    size_t allocationSize = outputDepthPitch;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
-                                      &stagingOffset, nullptr));
+    size_t allocationSize        = outputDepthPitch;
+    DynamicBuffer *stagingBuffer = &mStagingBuffer;
+    if (stagingBufferOverride)
+    {
+        stagingBuffer = stagingBufferOverride;
+    }
+    size_t alignment = mStagingBuffer.getAlignment();
+    ANGLE_TRY(stagingBuffer->allocateWithAlignment(contextVk, allocationSize, alignment,
+                                                   &stagingPointer, &bufferHandle, &stagingOffset,
+                                                   nullptr));
+    BufferHelper *currentBuffer = stagingBuffer->getCurrentBuffer();
 
     const angle::Format &copyFormat =
         GetFormatFromFormatType(formatInfo.internalFormat, formatInfo.type);
@@ -4242,7 +4251,7 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     gl_vk::GetExtent(dstExtent, &copyToImage.imageExtent);
 
     // 3- enqueue the destination image subresource update
-    appendSubresourceUpdate(SubresourceUpdate(mStagingBuffer.getCurrentBuffer(), copyToImage));
+    appendSubresourceUpdate(SubresourceUpdate(currentBuffer, copyToImage));
     return angle::Result::Continue;
 }
 
