@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fd763429_ac325109",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000539
+      },
+      "writtenOn": "2020-08-26T15:21:12Z",
+      "side": 1,
+      "message": "https://source.chromium.org/chromium/chromium/src/+/master:third_party/vulkan_memory_allocator/src/vk_mem_alloc.h;l\u003d4340",
+      "parentUuid": "9d075bf8_000a05da",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "90cf90a555f262752a11b6770936f6bab1ddeb62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b83481a4_d99e0ee6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -57,6 +81,24 @@
       "revId": "90cf90a555f262752a11b6770936f6bab1ddeb62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5404e7c4_269362a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000539
+      },
+      "writtenOn": "2020-08-26T15:21:12Z",
+      "side": 1,
+      "message": "Ok, any chance you could apply https://paste.googleplex.com/5987458682454016 to the vk_mem_alloc.h used in this build to potentially get more details about what\u0027s going wrong in those tests?",
+      "parentUuid": "0db86e34_2421507f",
+      "revId": "90cf90a555f262752a11b6770936f6bab1ddeb62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
