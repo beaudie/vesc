@@ -87,6 +87,23 @@
       "revId": "b2d2d9d11215da2bd44a21ba481eab238c69c66a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22dc46da_b8b6e9dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-26T16:37:51Z",
+      "side": 1,
+      "message": "I think there might be another bug as well, let me ping you offline, you can double check and fix in your next rework CL.",
+      "revId": "b2d2d9d11215da2bd44a21ba481eab238c69c66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
