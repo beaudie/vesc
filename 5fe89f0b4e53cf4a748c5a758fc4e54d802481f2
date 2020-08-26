@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6145863c_9f47df87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T15:46:06Z",
+      "side": 1,
+      "message": "Yuly, this mac asan bot seems to be failing with an ANGLE test. I couldn\u0027t find the failure on gpu.fyi. Does this bot run on gpu.fyi?",
+      "revId": "5fe89f0b4e53cf4a748c5a758fc4e54d802481f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
