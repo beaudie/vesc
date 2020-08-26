@@ -11,6 +11,8 @@
 
 #include <vk_mem_alloc.h>
 
+#include "libANGLE/renderer/driver_utils.h"
+
 namespace vma
 {
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
@@ -61,6 +63,18 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
     allocatorInfo.instance               = instance;
     allocatorInfo.pVulkanFunctions       = &funcs;
     allocatorInfo.vulkanApiVersion       = apiVersion;
+
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
+    // TODO(angleproject:4995): dEQP and LineLoop tests are failing on Qualcomm
+    // with a reduced preferred block size.
+    if (!rx::IsQualcomm(deviceProperties.vendorID))
+    {
+        // This number match Chromium and was picked by looking at memory usage of
+        // Android apps. The allocator will start making blocks at 1/8 the max size
+        // and builds up block size as needed before capping at the max set here.
+        allocatorInfo.preferredLargeHeapBlockSize = 4 * 1024 * 1024;
+    }
 
     return vmaCreateAllocator(&allocatorInfo, pAllocator);
 }

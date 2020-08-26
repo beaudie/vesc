@@ -171,6 +171,7 @@ config("angle_vulkan_backend_config") {
 
 angle_source_set("angle_vk_mem_alloc_wrapper") {
   deps = [
+    "$angle_root:libANGLE_headers",
     "$angle_root/src/common/vulkan:angle_vulkan_headers",
     "$angle_vulkan_memory_allocator_dir",
   ]
