@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ce6bea3_24447e89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-26T16:48:32Z",
+      "side": 1,
+      "message": "I also fixed the potential alignment bug with previous CL. Let me know if people want me to split that into a separate CL.",
+      "revId": "5fc37961ceaed1c5b95e882236bc39e99331f588",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
