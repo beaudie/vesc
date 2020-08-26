@@ -1029,7 +1029,10 @@ class ContextVk : public ContextImpl, public vk::Context
     // We have a queue of CommandBufferHelpers (CBHs) that is drawn from for the two active command
     //  buffers in the main thread. The two active command buffers are the inside and outside
     //  RenderPass command buffers.
-    constexpr static size_t kNumCommandBuffers = 2;
+    // TODO: Using "8" below allows the CPU to offload work to separate thread in parallel.
+    //  This has previously worked for Manhattan up to 8, but is currently
+    //  crashing early in manhattan with the latest code.
+    constexpr static size_t kNumCommandBuffers = 8;
     std::array<vk::CommandBufferHelper, kNumCommandBuffers> mCommandBuffers;
 
     // Lock access to the command buffer queue
