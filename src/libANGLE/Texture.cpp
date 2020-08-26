@@ -1188,9 +1188,13 @@ angle::Result Texture::copyImage(Context *context,
     // the copy lies entirely off the source framebuffer, initialize as though a zero-size box is
     // going to be set during the copy operation.
     Box destBox;
+    bool sourceIsOutOfBounds = false;
     if (context->isRobustResourceInitEnabled())
     {
-        Extents fbSize = source->getReadColorAttachment()->getSize();
+        Extents fbSize      = source->getReadColorAttachment()->getSize();
+        sourceIsOutOfBounds = (sourceArea.x < 0) || (sourceArea.y < 0) ||
+                              ((sourceArea.x + sourceArea.width) > fbSize.width) ||
+                              ((sourceArea.y + sourceArea.height) > fbSize.height);
         Rectangle clippedArea;
         if (ClipRectangle(sourceArea, Rectangle(0, 0, fbSize.width, fbSize.height), &clippedArea))
         {
@@ -1205,14 +1209,14 @@ angle::Result Texture::copyImage(Context *context,
     // an initializeContents call, and then a copySubImage call. This ensures the destination
     // texture exists before we try to clear it.
     Extents size(sourceArea.width, sourceArea.height, 1);
-    if (doesSubImageNeedInit(context, index, destBox))
+    if (sourceIsOutOfBounds || doesSubImageNeedInit(context, index, destBox))
     {
         ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size,
                                      internalFormatInfo.format, internalFormatInfo.type,
                                      PixelUnpackState(), nullptr, nullptr));
         mState.setImageDesc(target, level,
                             ImageDesc(size, Format(internalFormatInfo), InitState::MayNeedInit));
-        ANGLE_TRY(ensureSubImageInitialized(context, index, destBox));
+        ANGLE_TRY(ensureSubImageInitialized(context, index, destBox, sourceIsOutOfBounds));
         ANGLE_TRY(mTexture->copySubImage(context, index, Offset(), sourceArea, source));
     }
     else
@@ -1938,9 +1942,10 @@ bool Texture::doesSubImageNeedInit(const Context *context,
 
 angle::Result Texture::ensureSubImageInitialized(const Context *context,
                                                  const ImageIndex &imageIndex,
-                                                 const Box &area)
+                                                 const Box &area,
+                                                 bool forceInitializeContents)
 {
-    if (doesSubImageNeedInit(context, imageIndex, area))
+    if (forceInitializeContents || doesSubImageNeedInit(context, imageIndex, area))
     {
         // NOTE: do not optimize this to only initialize the passed area of the texture, or the
         // initialization logic in copySubImage will be incorrect.

@@ -582,7 +582,8 @@ class Texture final : public RefCountObject<TextureID>,
                               const Box &area) const;
     angle::Result ensureSubImageInitialized(const Context *context,
                                             const ImageIndex &imageIndex,
-                                            const Box &area);
+                                            const Box &area,
+                                            bool forceInitializeContents = false);
 
     angle::Result handleMipmapGenerationHint(Context *context, int level);
 
