@@ -16,6 +16,24 @@
       "revId": "5fe89f0b4e53cf4a748c5a758fc4e54d802481f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1790154_ef1fbebf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-08-26T15:56:19Z",
+      "side": 1,
+      "message": "The failure seems to be fixed in this CL https://chromium-review.googlesource.com/c/angle/angle/+/2375305.\nMy CL was uploaded before the fix and hasn\u0027t been rebased yet.",
+      "parentUuid": "6145863c_9f47df87",
+      "revId": "5fe89f0b4e53cf4a748c5a758fc4e54d802481f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
