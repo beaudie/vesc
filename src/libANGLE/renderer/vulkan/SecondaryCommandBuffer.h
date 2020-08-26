@@ -693,6 +693,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
 
     static bool CanKnowIfEmpty() { return true; }
     bool empty() const { return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid; }
+    size_t getCommandCount() const { return mCommands.size(); }
 
   private:
     void commonDebugUtilsLabel(CommandID cmd, const VkDebugUtilsLabelEXT &label);
