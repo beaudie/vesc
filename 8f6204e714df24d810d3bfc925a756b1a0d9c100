@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "247c4806_f6f08a0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-08-26T08:26:12Z",
+      "side": 1,
+      "message": "Hi Jamie,Shahbaz.\nI disable forceOldRewriteStructSamplers on Mali since the tests can pass on Mali android.\nPlease review.",
+      "revId": "8f6204e714df24d810d3bfc925a756b1a0d9c100",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
