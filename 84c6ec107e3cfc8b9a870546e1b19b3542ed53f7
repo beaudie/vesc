@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0440e393_6f85a6dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-26T15:48:46Z",
+      "side": 1,
+      "message": "Woo hoo, green run!\nPTAL",
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
