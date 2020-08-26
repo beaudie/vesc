@@ -415,7 +415,7 @@ void CommandProcessor::queueCommand(vk::CommandProcessorTask *command)
         return;
     }
 
-    // parallel command processing disable so wait for work to complete.
+    // parallel command processing disabled so wait for work to complete.
     waitForWorkComplete();
 }
 
