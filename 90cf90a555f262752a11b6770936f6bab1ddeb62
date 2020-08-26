@@ -16,6 +16,24 @@
       "revId": "90cf90a555f262752a11b6770936f6bab1ddeb62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0db86e34_2421507f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-26T15:07:24Z",
+      "side": 1,
+      "message": "The dEQP.KHR_GLES3/core_internalformat_copy_tex_image_* aren\u0027t failing on my pixel 4, but the LineLoopTest.*/ES2_Vulkan tests are:\n\nC   34.395s Main  [  FAILED  ] LineLoopTest.LineLoopUByteIndexBuffer/ES2_Vulkan\nC   34.395s Main  [  FAILED  ] LineLoopTest.LineLoopUByteIndices/ES2_Vulkan\nC   34.395s Main  [  FAILED  ] LineLoopTest.LineLoopUIntIndexBuffer/ES2_Vulkan\nC   34.395s Main  [  FAILED  ] LineLoopTest.LineLoopUIntIndices/ES2_Vulkan\nC   34.395s Main  [  FAILED  ] LineLoopTest.LineLoopUShortIndexBuffer/ES2_Vulkan\nC   34.395s Main  [  FAILED  ] LineLoopTest.LineLoopUShortIndices/ES2_Vulkan",
+      "parentUuid": "b83481a4_d99e0ee6",
+      "revId": "90cf90a555f262752a11b6770936f6bab1ddeb62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
