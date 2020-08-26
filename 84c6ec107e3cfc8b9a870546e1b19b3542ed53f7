@@ -16,6 +16,138 @@
       "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba96b220_1c0caebb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:00:39Z",
+      "side": 1,
+      "message": "Added Shabi for the SPIR-V review. It would take me a lot longer to figure out what the code is doing.",
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "edc5df5c_c9abcfa1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:00:39Z",
+      "side": 1,
+      "message": "how does OpFunction relate to main() ? can\u0027t you have other non-main functions?",
+      "range": {
+        "startLine": 1179,
+        "startChar": 31,
+        "endLine": 1179,
+        "endChar": 42
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bca6152e_6720f4e9",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:00:39Z",
+      "side": 1,
+      "message": "this is a pretty extensive edit- maybe split into a helper function to isolate and reduce the indentation.",
+      "range": {
+        "startLine": 1183,
+        "startChar": 12,
+        "endLine": 1183,
+        "endChar": 37
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "574c594f_8ff5194a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:00:39Z",
+      "side": 1,
+      "message": "maybe at some point we\u0027d want to downcast the consuming shader instead?",
+      "range": {
+        "startLine": 1213,
+        "startChar": 24,
+        "endLine": 1214,
+        "endChar": 98
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49603647_47cb3881",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:00:39Z",
+      "side": 1,
+      "message": "nit: \u0027fixPrecision\u0027 is a bit generic - maybe \u0027castPrecision\u0027 or \u0027matchConsumerPrecision\u0027  ?",
+      "range": {
+        "startLine": 85,
+        "startChar": 9,
+        "endLine": 85,
+        "endChar": 22
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9fdc158_03ab8917",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T16:00:39Z",
+      "side": 1,
+      "message": "can you do this with the already stored varying info instead of the merged varyings?",
+      "range": {
+        "startLine": 878,
+        "startChar": 61,
+        "endLine": 878,
+        "endChar": 83
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
