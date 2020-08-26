@@ -67,6 +67,23 @@
       "revId": "df861dab8ffd7a7112b1d96f3fe4d9dc82128a05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d20d65d3_14e68d0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T00:16:46Z",
+      "side": 1,
+      "message": "Shabi, this has significant overlap with your fix. Sorry, didn\u0027t realize that we were working on the same thing!",
+      "revId": "df861dab8ffd7a7112b1d96f3fe4d9dc82128a05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
