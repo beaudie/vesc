@@ -861,9 +861,16 @@ enum class AliasingMode
     Disallowed,
 };
 
+// The following are used to help track the state of an invalidated attachment.
+constexpr size_t kValidCmdCount = 0xffffffff;
+
 enum InvalidatedState
 {
-    // The attachment has been invalidated and is currently still invalid.
+    // The attachment has been invalidated and is still invalid.  This state is entered from
+    // CommandBufferHelper::invalidateRenderPass{Depth|Stencil}Attachment().  If drawing occurs to
+    // the attachment while it is:
+    // - Disabled, the attachment remains invalidated and the storeOp should be DONT_CARE.
+    // - Enabled, the attachment becomes NoLongerInvalidated (see below).
     Invalidated,
     // The attachment was previously invalidated, but has since been used while enabled for
     // drawing, meaning that it has valid contents (and therefore this render pass should STORE it,
@@ -972,15 +979,21 @@ class CommandBufferHelper : angle::NonCopyable
     void invalidateRenderPassDepthAttachment(RenderTargetVk *depthStencilRenderTarget)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        mDepthInvalidatedState    = Invalidated;
-        mDepthStencilRenderTarget = depthStencilRenderTarget;
+        mDepthInvalidatedState = Invalidated;
+        // Keep track of the number of commands in the command buffer.  If the number of commands
+        // is greater in the future, that implies that drawing occured since invalidated.
+        mDepthNumCmdsWhenInvalidated = mCommandBuffer.getCommandCount();
+        mDepthStencilRenderTarget    = depthStencilRenderTarget;
     }
 
     void invalidateRenderPassStencilAttachment(RenderTargetVk *depthStencilRenderTarget)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        mStencilInvalidatedState  = Invalidated;
-        mDepthStencilRenderTarget = depthStencilRenderTarget;
+        mStencilInvalidatedState = Invalidated;
+        // Keep track of the number of commands in the command buffer.  If the number of commands
+        // is greater in the future, that implies that drawing occured since invalidated.
+        mStencilNumCmdsWhenInvalidated = mCommandBuffer.getCommandCount();
+        mDepthStencilRenderTarget      = depthStencilRenderTarget;
     }
 
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
@@ -1072,8 +1085,10 @@ class CommandBufferHelper : angle::NonCopyable
     // State tracking for whether to optimize the storeOp to DONT_CARE
     bool mDepthEnabled;
     InvalidatedState mDepthInvalidatedState;
+    size_t mDepthNumCmdsWhenInvalidated;
     bool mStencilEnabled;
     InvalidatedState mStencilInvalidatedState;
+    size_t mStencilNumCmdsWhenInvalidated;
     // Used the update RenderTargetVk::mContentDefined at the end of the render pass
     RenderTargetVk *mDepthStencilRenderTarget;
 
