@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "3575fa24_efe7d395",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3417,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-26T19:17:45Z",
+      "side": 1,
+      "message": "We should technically drop to ES2 if neither path is possible. http://anglebug.com/4993\n\nMoved it back to where it was, it\u0027s an unrelated change to this CL.",
+      "parentUuid": "9042278e_318faf23",
+      "range": {
+        "startLine": 3417,
+        "startChar": 16,
+        "endLine": 3417,
+        "endChar": 47
+      },
+      "revId": "93639f9d5de6081881f0eb79040fdebf239e4e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b49bc8a_d1663c4a",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -62,6 +86,30 @@
       "revId": "93639f9d5de6081881f0eb79040fdebf239e4e66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9a13577_8618dbf4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-26T19:17:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b49bc8a_d1663c4a",
+      "range": {
+        "startLine": 3419,
+        "startChar": 4,
+        "endLine": 3419,
+        "endChar": 45
+      },
+      "revId": "93639f9d5de6081881f0eb79040fdebf239e4e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
