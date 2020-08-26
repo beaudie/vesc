@@ -563,8 +563,10 @@ CommandBufferHelper::CommandBufferHelper()
       mStencilStartAccess(ResourceAccess::Unused),
       mDepthEnabled(false),
       mDepthInvalidatedState(NeverInvalidated),
+      mDepthNumCmdsWhenInvalidated(kValidCmdCount),
       mStencilEnabled(false),
       mStencilInvalidatedState(NeverInvalidated),
+      mStencilNumCmdsWhenInvalidated(kValidCmdCount),
       mDepthStencilRenderTarget(nullptr),
       mDepthStencilAttachmentIndex(kInvalidAttachmentIndex)
 {}
@@ -720,7 +722,10 @@ void CommandBufferHelper::onDepthAccess(ResourceAccess access)
         // once again valid content in the attachment (i.e. that should not be discarded).  Since
         // we don't track draws, we must be conservative and assume that a draw may have occured
         // since invalidation unless the functionality has also been disabled and the re-enabled.
-        invalidatedState = (!mDepthEnabled) ? NoLongerInvalidated : Invalidated;
+        invalidatedState =
+            (!mDepthEnabled && (mDepthNumCmdsWhenInvalidated == mCommandBuffer.getCommandCount()))
+                ? NoLongerInvalidated
+                : Invalidated;
         // Keep track of whether depth functionality is enabled
         mDepthEnabled = true;
     }
@@ -754,7 +759,10 @@ void CommandBufferHelper::onStencilAccess(ResourceAccess access)
         // once again valid content in the attachment (i.e. that should not be discarded).  Since
         // we don't track draws, we must be conservative and assume that a draw may have occured
         // since invalidation unless the functionality has also been disabled and the re-enabled.
-        invalidatedState = (!mStencilEnabled) ? NoLongerInvalidated : Invalidated;
+        invalidatedState = (!mStencilEnabled &&
+                            (mStencilNumCmdsWhenInvalidated == mCommandBuffer.getCommandCount()))
+                               ? NoLongerInvalidated
+                               : Invalidated;
         // Keep track of whether stencil functionality is enabled
         mStencilEnabled = true;
     }
@@ -865,18 +873,24 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
 
     // Address invalidated depth/stencil attachments
-    if (mDepthInvalidatedState == Invalidated && !mDepthEnabled)
+    if (mDepthInvalidatedState == Invalidated &&
+        (!mDepthEnabled || (mDepthNumCmdsWhenInvalidated == mCommandBuffer.getCommandCount())))
     {
         // The depth attachment is invalid, so don't store it
         dsOps.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
-    if (mStencilInvalidatedState == Invalidated && !mStencilEnabled)
+    if (mStencilInvalidatedState == Invalidated &&
+        (!mStencilEnabled || (mStencilNumCmdsWhenInvalidated == mCommandBuffer.getCommandCount())))
     {
         // The stencil attachment is invalid, so don't store it
         dsOps.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
     if (mDepthInvalidatedState == NoLongerInvalidated ||
-        mStencilInvalidatedState == NoLongerInvalidated)
+        mStencilInvalidatedState == NoLongerInvalidated ||
+        (mDepthInvalidatedState == Invalidated && mDepthEnabled &&
+         (mDepthNumCmdsWhenInvalidated < mCommandBuffer.getCommandCount())) ||
+        (mStencilInvalidatedState == Invalidated && mStencilEnabled &&
+         (mStencilNumCmdsWhenInvalidated < mCommandBuffer.getCommandCount())))
     {
         // The depth and stencil attachment were both invalidated, but at least one of them is now
         // valid.  When they were invalidated, RenderTargetVk::mContentDefined was set to false,
@@ -1115,8 +1129,10 @@ void CommandBufferHelper::reset()
         mStencilStartAccess                = ResourceAccess::Unused;
         mDepthEnabled                      = false;
         mDepthInvalidatedState             = NeverInvalidated;
+        mDepthNumCmdsWhenInvalidated       = kValidCmdCount;
         mStencilEnabled                    = false;
         mStencilInvalidatedState           = NeverInvalidated;
+        mStencilNumCmdsWhenInvalidated     = kValidCmdCount;
         mDepthStencilRenderTarget          = nullptr;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
         mRenderPassUsedImages.clear();

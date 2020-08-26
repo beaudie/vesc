@@ -861,6 +861,7 @@ enum class AliasingMode
     Disallowed,
 };
 
+constexpr size_t kValidCmdCount = 0xffffffff;
 enum InvalidatedState
 {
     // The attachment has been invalidated and is currently still invalid.
@@ -972,15 +973,17 @@ class CommandBufferHelper : angle::NonCopyable
     void invalidateRenderPassDepthAttachment(RenderTargetVk *depthStencilRenderTarget)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        mDepthInvalidatedState    = Invalidated;
-        mDepthStencilRenderTarget = depthStencilRenderTarget;
+        mDepthInvalidatedState       = Invalidated;
+        mDepthNumCmdsWhenInvalidated = mCommandBuffer.getCommandCount();
+        mDepthStencilRenderTarget    = depthStencilRenderTarget;
     }
 
     void invalidateRenderPassStencilAttachment(RenderTargetVk *depthStencilRenderTarget)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        mStencilInvalidatedState  = Invalidated;
-        mDepthStencilRenderTarget = depthStencilRenderTarget;
+        mStencilInvalidatedState       = Invalidated;
+        mStencilNumCmdsWhenInvalidated = mCommandBuffer.getCommandCount();
+        mDepthStencilRenderTarget      = depthStencilRenderTarget;
     }
 
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
@@ -1072,8 +1075,10 @@ class CommandBufferHelper : angle::NonCopyable
     // State tracking for whether to optimize the storeOp to DONT_CARE
     bool mDepthEnabled;
     InvalidatedState mDepthInvalidatedState;
+    size_t mDepthNumCmdsWhenInvalidated;
     bool mStencilEnabled;
     InvalidatedState mStencilInvalidatedState;
+    size_t mStencilNumCmdsWhenInvalidated;
     // Used the update RenderTargetVk::mContentDefined at the end of the render pass
     RenderTargetVk *mDepthStencilRenderTarget;
 
