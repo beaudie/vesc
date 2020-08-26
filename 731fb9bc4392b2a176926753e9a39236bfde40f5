@@ -22,6 +22,30 @@
       "revId": "731fb9bc4392b2a176926753e9a39236bfde40f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d66907c_7b1d756d",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T18:34:17Z",
+      "side": 1,
+      "message": "Ack.. I had it this way to match the other libs and also b/c I\u0027m partially trying to get rid of the way we have the gni structured into all these variables.",
+      "parentUuid": "27bd08f7_abbd579c",
+      "range": {
+        "startLine": 972,
+        "startChar": 4,
+        "endLine": 972,
+        "endChar": 54
+      },
+      "revId": "731fb9bc4392b2a176926753e9a39236bfde40f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
