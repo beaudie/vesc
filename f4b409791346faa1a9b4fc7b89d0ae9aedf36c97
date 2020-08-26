@@ -22,6 +22,30 @@
       "revId": "f4b409791346faa1a9b4fc7b89d0ae9aedf36c97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a67d6fd7_dd08f2b4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-26T23:48:26Z",
+      "side": 1,
+      "message": "I copied this entire line from TextureVk.cpp line 835. Looking closely now I think I should remove !isSelfCopy check here. SelfCopy should still work here.\n\nshouldUpdateBeStaged() returns true if this update can not flush out immediately (i.e, will get into updateToKeep part of code in ImageHelper::flushStagedUpdates()). In order for you to use context stage buffer, the update has to flush out, otherwise you will have a buffer in context\u0027s staging buffer that hold onto by someone and break the FIFO assumption in dynamic buffer.",
+      "parentUuid": "ffefacba_7dfed73b",
+      "range": {
+        "startLine": 627,
+        "startChar": 4,
+        "endLine": 627,
+        "endChar": 87
+      },
+      "revId": "f4b409791346faa1a9b4fc7b89d0ae9aedf36c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
