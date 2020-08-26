@@ -16,6 +16,24 @@
       "revId": "b2d2d9d11215da2bd44a21ba481eab238c69c66a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2258ead_c464608f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-26T13:52:23Z",
+      "side": 1,
+      "message": "Hey Ian, what fix did you have in mind? My idea with the two timestamps would not suffer from this bug. Can we implement that seeing as the problem I was worried about actually turned out to affect T-Rex?",
+      "parentUuid": "db4b9102_0b4443d0",
+      "revId": "b2d2d9d11215da2bd44a21ba481eab238c69c66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
