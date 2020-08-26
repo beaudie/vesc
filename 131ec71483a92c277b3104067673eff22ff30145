@@ -16,6 +16,29 @@
       "revId": "131ec71483a92c277b3104067673eff22ff30145",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ea496aa_0b6a94f1",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-26T02:07:34Z",
+      "side": 1,
+      "message": "I see the condition that defines ANGLE_ENABLE_ASSERTS is `!defined(NDEBUG) || defined(ANGLE_ENABLE_RELEASE_ASSERTS)`. The latter comes from `dcheck_always_on`, but I\u0027m not entirely sure if NDEBUG comes exactly from !is_debug (looks like chromium\u0027s build/config/BUILD.gn enables this in the \"release\" target, but I didn\u0027t look further into what exactly uses release).\n\nAll that rambling to say, I wish there was a gn way to dictate this and `ANGLE_ENABLE_ASSERTS` with the same expression. One option is to move ANGLE_ENABLE_ASSERTS\u0027s definition out of the header and move it to gn.\n\n---\n\nI\u0027m fine with this as is too, worst-case scenario someone will complain about a compile error and we\u0027ll fix it.",
+      "range": {
+        "startLine": 202,
+        "startChar": 6,
+        "endLine": 202,
+        "endChar": 34
+      },
+      "revId": "131ec71483a92c277b3104067673eff22ff30145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
