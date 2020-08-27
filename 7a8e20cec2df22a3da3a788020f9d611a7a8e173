@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "ed6f039a_769e2481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "There\u0027s definitely a lot here and I don\u0027t understand all of it.\n\nThis has probably come up before, but I\u0027m a little surprised to see there aren\u0027t any new dEQP tests that can be enabled.",
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25d894f1_83268ebc",
         "filename": "src/common/utilities.h",
         "patchSetId": 2
@@ -59,6 +76,29 @@
         "startChar": 1,
         "endLine": 232,
         "endChar": 13
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36297242_1ac72e17",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "nit: texelFetch[Offset]",
+      "range": {
+        "startLine": 38,
+        "startChar": 43,
+        "endLine": 38,
+        "endChar": 61
       },
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -230,6 +270,63 @@
     },
     {
       "key": {
+        "uuid": "5386101e_4db4004b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2235,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "nit: \u003d\u003d",
+      "range": {
+        "startLine": 2235,
+        "startChar": 42,
+        "endLine": 2235,
+        "endChar": 45
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "824e34a0_f9ecf15d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "Why do you need this wrapper function?",
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e4d96b4_7fdd73d1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2366,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "Similar to the above, why do we need 2 wrapper functions?   getFetchImageViewAndRecordUse() was only used in 1 place, so updating it with bool shouldn\u0027t be an issue.\n\nMy concern with these function names is that they are really long and wordy.   This one is 52 characters long (more than half of our 100 char limit), which is causing formatting issues.   The \"WithColorspaceOverride\" is already implied by the parameter named \"useLinearColorspace\".",
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b08f5a4f_7dfd8877",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 2
@@ -246,6 +343,29 @@
         "startChar": 0,
         "endLine": 241,
         "endChar": 9
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "681d7857_bc930d4a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "Can you just pass in std::vector to avoid this template syntax?   That also lets you use a range for loop in formatReinterpretationSupported().",
+      "range": {
+        "startLine": 608,
+        "startChar": 54,
+        "endLine": 608,
+        "endChar": 89
       },
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -362,6 +482,52 @@
         "startChar": 23,
         "endLine": 47,
         "endChar": 24
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baeba2d8_bd604016",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "Typo?",
+      "range": {
+        "startLine": 761,
+        "startChar": 23,
+        "endLine": 761,
+        "endChar": 47
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5168a23f_ec22e30d",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T23:27:51Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be linearColor with GL_SKIP_DECODE_EXT?",
+      "range": {
+        "startLine": 819,
+        "startChar": 34,
+        "endLine": 819,
+        "endChar": 43
       },
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
