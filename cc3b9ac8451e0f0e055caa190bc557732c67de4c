@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff8304d2_2ec6349a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T21:34:41Z",
+      "side": 1,
+      "message": "nit: http://anglebug.com/4995",
+      "range": {
+        "startLine": 69,
+        "startChar": 12,
+        "endLine": 69,
+        "endChar": 29
+      },
+      "revId": "cc3b9ac8451e0f0e055caa190bc557732c67de4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dbd7cd9_364a2724",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T21:34:41Z",
+      "side": 1,
+      "message": "The LineLoopTest.*/ES2_Vulkan tests pass on my ARM device, so it\u0027s entirely possible it\u0027s just a QC bug.",
+      "revId": "cc3b9ac8451e0f0e055caa190bc557732c67de4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
