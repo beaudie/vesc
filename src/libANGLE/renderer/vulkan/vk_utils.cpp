@@ -1296,6 +1296,12 @@ void GetExtentsAndLayerCount(gl::TextureType textureType,
             break;
     }
 }
+
+vk::LevelIndex ToImageLevelIndex(gl::LevelIndex levelGL, gl::LevelIndex baseLevel)
+{
+    ASSERT(baseLevel <= levelGL);
+    return levelGL.get() - baseLevel.get();
+}
 }  // namespace gl_vk
 
 namespace vk_gl
@@ -1333,6 +1339,11 @@ GLuint GetSampleCount(VkSampleCountFlags supportedCounts, GLuint requestedCount)
 
     UNREACHABLE();
     return 0;
+}
+
+gl::LevelIndex ToGLLevelIndex(vk::LevelIndex levelVK, gl::LevelIndex baseLevel)
+{
+    return levelVK.get() + baseLevel.get();
 }
 }  // namespace vk_gl
 }  // namespace rx
