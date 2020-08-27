@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f61a2b49_b89e30a7",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-27T17:35:36Z",
+      "side": 1,
+      "message": "You could improve this test by making the rest of the elements non-zero, then instead of using `EXPECT_EQ(data, mappedData);`, write a for-loop to verify all 18 xfb elements",
+      "revId": "728cb5060cc7302d015cd155b205193d3a59c05a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
