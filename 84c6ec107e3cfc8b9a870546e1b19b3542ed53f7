@@ -292,6 +292,30 @@
       "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00cfb717_d028d89b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:23:54Z",
+      "side": 1,
+      "message": "Can\u0027t you just iterate the list and find the same name? Are there additional complications? Storing the merged varyings is problematic. You at the very least need to serialize them and this inflates our binary size. Just would like a clear answer on what\u0027s required to avoid storing the merged varyings.",
+      "parentUuid": "9811d021_fea1c887",
+      "range": {
+        "startLine": 878,
+        "startChar": 61,
+        "endLine": 878,
+        "endChar": 83
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
