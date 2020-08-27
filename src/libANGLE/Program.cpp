@@ -3704,6 +3704,9 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
     std::vector<ImageBinding> &imageBindings = hasComputeShader
                                                    ? mState.mExecutable->mComputeImageBindings
                                                    : mState.mExecutable->mGraphicsImageBindings;
+    // The arrays of arrays are flatten to arrays, it needs to record the array offset
+    // for the correct binding image unit.
+    uint32_t arrayOffset = 0;
     // If uniform is a image type, insert it into the mImageBindings array.
     for (unsigned int imageIndex : mState.mExecutable->getImageUniformRange())
     {
@@ -3718,12 +3721,21 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         }
         else
         {
-            imageBindings.emplace_back(
-                ImageBinding(imageUniform.binding, imageUniform.getBasicTypeElementCount(), false));
+            imageBindings.emplace_back(ImageBinding(imageUniform.binding + arrayOffset,
+                                                    imageUniform.getBasicTypeElementCount(),
+                                                    false));
         }
 
         GLuint arraySize = imageUniform.isArray() ? imageUniform.arraySizes[0] : 1u;
         *combinedImageUniforms += imageUniform.activeShaderCount() * arraySize;
+        if (imageUniform.hasParentArrayIndex() && imageUniform.isArray())
+        {
+            arrayOffset = imageUniform.arraySizes[0];
+        }
+        else
+        {
+            arrayOffset = 0;
+        }
     }
 
     highIter = lowIter;

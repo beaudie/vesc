@@ -201,7 +201,7 @@ class ShaderVariableVisitor
     virtual void enterArrayElement(const ShaderVariable &arrayVar, unsigned int arrayElement) {}
     virtual void exitArrayElement(const ShaderVariable &arrayVar, unsigned int arrayElement) {}
 
-    virtual void visitSampler(const sh::ShaderVariable &sampler) {}
+    virtual void visitOpaqueVariable(const sh::ShaderVariable &variable) {}
 
     virtual void visitVariable(const ShaderVariable &variable, bool isRowMajor) = 0;
 
@@ -240,7 +240,7 @@ class VariableNameVisitor : public ShaderVariableVisitor
     std::string collapseMappedNameStack() const;
 
   private:
-    void visitSampler(const sh::ShaderVariable &sampler) final;
+    void visitOpaqueVariable(const sh::ShaderVariable &variable) final;
     void visitVariable(const ShaderVariable &variable, bool isRowMajor) final;
 
     std::vector<std::string> mNameStack;
