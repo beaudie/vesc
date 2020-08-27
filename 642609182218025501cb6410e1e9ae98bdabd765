@@ -16,6 +16,24 @@
       "revId": "642609182218025501cb6410e1e9ae98bdabd765",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f7dca06_faaa4e58",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T14:22:15Z",
+      "side": 1,
+      "message": "I\u0027d be fine with that.",
+      "parentUuid": "96fbaf82_5a87da06",
+      "revId": "642609182218025501cb6410e1e9ae98bdabd765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
