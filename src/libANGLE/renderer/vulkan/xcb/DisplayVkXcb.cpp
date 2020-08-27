@@ -12,6 +12,7 @@
 #include <X11/Xutil.h>
 #include <xcb/xcb.h>
 
+#include "common/system_utils.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.h"
@@ -92,6 +93,13 @@ egl::ConfigSet DisplayVkXcb::generateConfigs()
 
 bool DisplayVkXcb::checkConfigSupport(egl::Config *config)
 {
+    // If no window system, cannot support windows.
+    static bool sNoX11Display = angle::GetEnvironmentVar("DISPLAY").empty();
+    if (sNoX11Display)
+    {
+        return false;
+    }
+
     // TODO(geofflang): Test for native support and modify the config accordingly.
     // http://anglebug.com/2692
 

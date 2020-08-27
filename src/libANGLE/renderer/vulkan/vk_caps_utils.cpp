@@ -626,11 +626,13 @@ EGLint ComputeMaximumPBufferPixels(const VkPhysicalDeviceProperties &physicalDev
 
 // Generates a basic config for a combination of color format, depth stencil format and sample
 // count.
-egl::Config GenerateDefaultConfig(const RendererVk *renderer,
+egl::Config GenerateDefaultConfig(DisplayVk *display,
                                   const gl::InternalFormat &colorFormat,
                                   const gl::InternalFormat &depthStencilFormat,
                                   EGLint sampleCount)
 {
+    const RendererVk *renderer = display->getRenderer();
+
     const VkPhysicalDeviceProperties &physicalDeviceProperties =
         renderer->getPhysicalDeviceProperties();
     gl::Version maxSupportedESVersion = renderer->getMaxSupportedESVersion();
@@ -680,6 +682,13 @@ egl::Config GenerateDefaultConfig(const RendererVk *renderer,
     config.transparentBlueValue  = 0;
     config.colorComponentType =
         gl_egl::GLComponentTypeToEGLColorComponentType(colorFormat.componentType);
+
+    // Vulkan always supports off-screen rendering, so if there is no support for this config in the
+    // display, allows it as pbuffer only.
+    if (!display->checkConfigSupport(&config))
+    {
+        config.surfaceType &= ~EGL_WINDOW_BIT;
+    }
 
     return config;
 }
@@ -747,12 +756,9 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
 
             for (EGLint sampleCount : *configSampleCounts)
             {
-                egl::Config config = GenerateDefaultConfig(display->getRenderer(), colorFormatInfo,
+                egl::Config config = GenerateDefaultConfig(display, colorFormatInfo,
                                                            depthStencilFormatInfo, sampleCount);
-                if (display->checkConfigSupport(&config))
-                {
-                    configSet.add(config);
-                }
+                configSet.add(config);
             }
         }
     }
