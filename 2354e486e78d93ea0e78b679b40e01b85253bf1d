@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d95012bc_aa384aed",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-27T18:36:59Z",
+      "side": 1,
+      "message": "FYI, you can add `\u003c\u003c i` or something, so that if there\u0027s a failure, you can easily get information on which iteration of the loop failed.",
+      "range": {
+        "startLine": 1488,
+        "startChar": 35,
+        "endLine": 1488,
+        "endChar": 36
+      },
+      "revId": "2354e486e78d93ea0e78b679b40e01b85253bf1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
