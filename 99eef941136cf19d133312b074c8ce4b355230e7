@@ -86,6 +86,24 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "196df8fa_fa5f292d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-27T18:57:36Z",
+      "side": 1,
+      "message": "\u003e If you re-enable depth, you clear the command count at time of depth disable. (e.g. set it to infinite)\n\nYou\u0027d make the \"invalidate count\" infinite?\n\n\u003e I didn\u0027t quite follow what you were saying after this so maybe we could catch up offline. I think this scheme works, just not sure if I missed some detail.\n\nI\u0027d like to chat with you, when convenient for you.  I updated the design doc (removed lots of old/obsolete stuff) with what I think your design is, and what mine is.  I tried to comment on where I think there are details that you are missing (if I understand correctly) because of not keeping track of the state.  Look below the paragraph with \"Regardless of whether the code tracks the state\" in it.\n\nSome example scenarios:\n\ndraw-invalidate-draw-disable-enable-endRP (correctly handled)\n\ndraw-invalidate-disable-enable-endRP (wrong if I understand you)",
+      "parentUuid": "bd64f1bc_df6a0c90",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
