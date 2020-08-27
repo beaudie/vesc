@@ -843,7 +843,7 @@ angle::Result TextureMtl::copyTexture(const gl::Context *context,
                                       const gl::ImageIndex &index,
                                       GLenum internalFormat,
                                       GLenum type,
-                                      size_t sourceLevel,
+                                      GLint sourceLevel,
                                       bool unpackFlipY,
                                       bool unpackPremultiplyAlpha,
                                       bool unpackUnmultiplyAlpha,
@@ -872,7 +872,7 @@ angle::Result TextureMtl::copyTexture(const gl::Context *context,
 angle::Result TextureMtl::copySubTexture(const gl::Context *context,
                                          const gl::ImageIndex &index,
                                          const gl::Offset &destOffset,
-                                         size_t sourceLevel,
+                                         GLint sourceLevel,
                                          const gl::Box &sourceBox,
                                          bool unpackFlipY,
                                          bool unpackPremultiplyAlpha,
@@ -1638,7 +1638,7 @@ angle::Result TextureMtl::copySubTextureImpl(const gl::Context *context,
                                              const gl::ImageIndex &index,
                                              const gl::Offset &destOffset,
                                              const gl::InternalFormat &internalFormat,
-                                             size_t sourceLevel,
+                                             GLint sourceLevel,
                                              const gl::Box &sourceBox,
                                              bool unpackFlipY,
                                              bool unpackPremultiplyAlpha,
@@ -1648,7 +1648,7 @@ angle::Result TextureMtl::copySubTextureImpl(const gl::Context *context,
     // Only 2D textures are supported.
     ASSERT(sourceBox.depth == 1);
     ASSERT(source->getType() == gl::TextureType::_2D);
-    gl::ImageIndex sourceIndex = gl::ImageIndex::Make2D(static_cast<GLint>(sourceLevel));
+    gl::ImageIndex sourceIndex = gl::ImageIndex::Make2D(sourceLevel);
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
     TextureMtl *sourceMtl  = mtl::GetImpl(source);
