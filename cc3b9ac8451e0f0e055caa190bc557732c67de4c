@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6ae2d55d_90652a45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T21:47:25Z",
+      "side": 1,
+      "message": "That is, expose the allocator size as a parameter, then implement the workaround in RendererVk.",
+      "parentUuid": "d86ad079_e5873577",
+      "range": {
+        "startLine": 18,
+        "startChar": 9,
+        "endLine": 18,
+        "endChar": 22
+      },
+      "revId": "cc3b9ac8451e0f0e055caa190bc557732c67de4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff8304d2_2ec6349a",
         "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
         "patchSetId": 3
