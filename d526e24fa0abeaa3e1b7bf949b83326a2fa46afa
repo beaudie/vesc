@@ -16,6 +16,24 @@
       "revId": "d526e24fa0abeaa3e1b7bf949b83326a2fa46afa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "608542a1_f015d24e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T20:10:24Z",
+      "side": 1,
+      "message": "ASAN is hitting write-after-free errors due to change.",
+      "parentUuid": "642132a0_be28029d",
+      "revId": "d526e24fa0abeaa3e1b7bf949b83326a2fa46afa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
