@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96fbaf82_5a87da06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-27T04:52:27Z",
+      "side": 1,
+      "message": "allocateWithAlignment is kind of redundant with requireAlignment. You could perhaps rework things such that there\u0027s no default-aligned `allocate` anymore, and `allocateWithAlignment` becomes the new `allocate`. You can then remove requireAlignment.",
+      "revId": "642609182218025501cb6410e1e9ae98bdabd765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
