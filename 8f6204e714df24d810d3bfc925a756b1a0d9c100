@@ -98,6 +98,30 @@
       "revId": "8f6204e714df24d810d3bfc925a756b1a0d9c100",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d55a2c85_87223d8b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1780,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-27T14:17:50Z",
+      "side": 1,
+      "message": "That\u0027s odd, maybe that means Pixel 2 also supports this feature?\n\nCould you do a quick experiment by simply setting the condition to `false`? If we see the same failures, it means Pixel 2 supports the feature. At that point, we need to investigate why it\u0027s rejecting the generated SPIR-V.\n\nNote: you can click on CHOOSE TRYJOBS and only select android_angle_vk64_deqp_rel_ng and android_angle_vk64_rel_ng to avoid unnecessarily running the other bots.",
+      "parentUuid": "f03334a1_c65d2c47",
+      "range": {
+        "startLine": 1780,
+        "startChar": 28,
+        "endLine": 1780,
+        "endChar": 67
+      },
+      "revId": "8f6204e714df24d810d3bfc925a756b1a0d9c100",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
