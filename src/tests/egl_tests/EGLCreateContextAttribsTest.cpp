@@ -18,7 +18,7 @@ using namespace angle;
 class EGLCreateContextAttribsTest : public ANGLETest
 {
   public:
-    EGLCreateContextAttribsTest() : mDisplay(EGL_NO_DISPLAY) {}
+    EGLCreateContextAttribsTest() : mDisplay(EGL_NO_DISPLAY), mInitialized(false) {}
 
     void testSetUp() override
     {
@@ -26,16 +26,20 @@ class EGLCreateContextAttribsTest : public ANGLETest
         mDisplay           = eglGetPlatformDisplayEXT(
             EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
         EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
-        EXPECT_EGL_TRUE(eglInitialize(mDisplay, nullptr, nullptr) != EGL_FALSE);
+        mInitialized = eglInitialize(mDisplay, nullptr, nullptr) != EGL_FALSE;
+        EXPECT_EGL_TRUE(mInitialized);
     }
 
     EGLDisplay mDisplay;
+    bool mInitialized;
 };
 
 // Specify invalid client version in the attributes to eglCreateContext
 // and verify EGL_BAD_ATTRIBUTE
 TEST_P(EGLCreateContextAttribsTest, InvalidClientVersion)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     EGLContext context = EGL_NO_CONTEXT;
 
     // Pick config
@@ -88,10 +92,13 @@ TEST_P(EGLCreateContextAttribsTest, InvalidClientVersion)
 // sets EGL_BAD_MATCH
 TEST_P(EGLCreateContextAttribsTest, IncompatibleConfig)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // Get all the configs
     EGLint count;
     EXPECT_EGL_TRUE(eglGetConfigs(mDisplay, nullptr, 0, &count) != EGL_FALSE);
     EXPECT_TRUE(count > 0);
+    fprintf(stderr, "\n\n%d\n\n\n", count);
     std::vector<EGLConfig> configs(count);
     EXPECT_EGL_TRUE(eglGetConfigs(mDisplay, configs.data(), count, &count) != EGL_FALSE);
 

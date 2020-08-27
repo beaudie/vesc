@@ -102,6 +102,7 @@ class EGLBlobCacheTest : public ANGLETest
 
     void testSetUp() override
     {
+        ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
         EGLDisplay display = getEGLWindow()->getDisplay();
         mHasBlobCache      = IsEGLDisplayExtensionEnabled(display, kEGLExtName);
     }
@@ -116,6 +117,7 @@ class EGLBlobCacheTest : public ANGLETest
 // Makes sure the extension exists and works
 TEST_P(EGLBlobCacheTest, Functional)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLDisplay display = getEGLWindow()->getDisplay();
 
     EXPECT_TRUE(mHasBlobCache);
@@ -186,6 +188,8 @@ void main()
 // Tests error conditions of the APIs.
 TEST_P(EGLBlobCacheTest, NegativeAPI)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
+
     EXPECT_TRUE(mHasBlobCache);
 
     // Test bad display
@@ -232,6 +236,7 @@ TEST_P(EGLBlobCacheTest, NegativeAPI)
 // http://anglebug.com/4535
 TEST_P(EGLBlobCacheTest, FragmentOutputLocationKey)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_blend_func_extended") ||
                        getClientMajorVersion() < 3);
 

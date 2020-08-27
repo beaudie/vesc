@@ -151,6 +151,7 @@ TEST_P(EGLDebugTest, CorrectCallbackParameters)
 // Test that labels can be set and that errors are generated if the wrong object type is used
 TEST_P(EGLDebugTest, SetLabel)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasExtension());
 
     EXPECT_EQ(static_cast<EGLint>(EGL_SUCCESS), eglDebugMessageControlKHR(nullptr, nullptr));

@@ -30,7 +30,8 @@ class EGLNoConfigContextTest : public ANGLETest
         mDisplay           = eglGetPlatformDisplayEXT(
             EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
         EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
-        EXPECT_EGL_TRUE(eglInitialize(mDisplay, nullptr, nullptr));
+        mInitialized = eglInitialize(mDisplay, nullptr, nullptr);
+        ANGLE_SKIP_TEST_IF(!mInitialized);
 
         mExtensionSupported = IsEGLDisplayExtensionEnabled(mDisplay, "EGL_KHR_no_config_context");
         if (!mExtensionSupported)
@@ -60,12 +61,14 @@ class EGLNoConfigContextTest : public ANGLETest
 
     EGLDisplay mDisplay      = EGL_NO_DISPLAY;
     EGLContext mContext      = EGL_NO_CONTEXT;
+    bool mInitialized        = false;
     bool mExtensionSupported = false;
 };
 
 // Check that context has no config.
 TEST_P(EGLNoConfigContextTest, QueryConfigID)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
     ANGLE_SKIP_TEST_IF(!mExtensionSupported);
     EXPECT_TRUE(mDisplay);
     EXPECT_TRUE(mContext);
@@ -80,6 +83,7 @@ TEST_P(EGLNoConfigContextTest, QueryConfigID)
 // Do a glClear and glReadPixel to verify rendering.
 TEST_P(EGLNoConfigContextTest, RenderCheck)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
     ANGLE_SKIP_TEST_IF(!mExtensionSupported);
 
     // Get all the configs

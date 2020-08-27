@@ -25,6 +25,7 @@ class EGLRecordableTest : public ANGLETest
 // Test that the extension is always available (it is implemented in ANGLE's frontend).
 TEST_P(EGLRecordableTest, ExtensionAlwaysAvailable)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLDisplay display = getEGLWindow()->getDisplay();
     ASSERT_TRUE(IsEGLDisplayExtensionEnabled(display, "EGL_ANDROID_recordable"));
 }
@@ -32,6 +33,7 @@ TEST_P(EGLRecordableTest, ExtensionAlwaysAvailable)
 // Check that the default message filters and callbacks are correct
 TEST_P(EGLRecordableTest, CheckAllContexts)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLDisplay display = getEGLWindow()->getDisplay();
     ANGLE_SKIP_TEST_IF(!IsEGLDisplayExtensionEnabled(display, "EGL_ANDROID_recordable"));
 

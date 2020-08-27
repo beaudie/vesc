@@ -61,7 +61,8 @@ class EGLPreRotationSurfaceTest : public ANGLETestWithParam<EGLPreRotationSurfac
           mWindowSurface(EGL_NO_SURFACE),
           mContext(EGL_NO_CONTEXT),
           mOSWindow(nullptr),
-          mSize(256)
+          mSize(256),
+          mInitialized(false)
     {}
 
     // Release any resources created in the test body
@@ -139,7 +140,8 @@ class EGLPreRotationSurfaceTest : public ANGLETestWithParam<EGLPreRotationSurfac
         ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
 
         EGLint majorVersion, minorVersion;
-        ASSERT_TRUE(eglInitialize(mDisplay, &majorVersion, &minorVersion) == EGL_TRUE);
+        mInitialized = eglInitialize(mDisplay, &majorVersion, &minorVersion) == EGL_TRUE;
+        ANGLE_SKIP_TEST_IF(!mInitialized);
 
         eglBindAPI(EGL_OPENGL_ES_API);
         ASSERT_EGL_SUCCESS();
@@ -156,9 +158,23 @@ class EGLPreRotationSurfaceTest : public ANGLETestWithParam<EGLPreRotationSurfac
 
     void initializeSurfaceWithRGBA8888Config()
     {
-        const EGLint configAttributes[] = {
-            EGL_RED_SIZE,   8, EGL_GREEN_SIZE,   8, EGL_BLUE_SIZE,      8, EGL_ALPHA_SIZE, 8,
-            EGL_DEPTH_SIZE, 0, EGL_STENCIL_SIZE, 0, EGL_SAMPLE_BUFFERS, 0, EGL_NONE};
+        const EGLint configAttributes[] = {EGL_SURFACE_TYPE,
+                                           EGL_WINDOW_BIT,
+                                           EGL_RED_SIZE,
+                                           8,
+                                           EGL_GREEN_SIZE,
+                                           8,
+                                           EGL_BLUE_SIZE,
+                                           8,
+                                           EGL_ALPHA_SIZE,
+                                           8,
+                                           EGL_DEPTH_SIZE,
+                                           0,
+                                           EGL_STENCIL_SIZE,
+                                           0,
+                                           EGL_SAMPLE_BUFFERS,
+                                           0,
+                                           EGL_NONE};
 
         EGLint configCount;
         EGLConfig config;
@@ -173,13 +189,10 @@ class EGLPreRotationSurfaceTest : public ANGLETestWithParam<EGLPreRotationSurfac
         std::vector<EGLint> windowAttributes;
         windowAttributes.push_back(EGL_NONE);
 
-        if (surfaceType & EGL_WINDOW_BIT)
-        {
-            // Create first window surface
-            mWindowSurface = eglCreateWindowSurface(mDisplay, mConfig, mOSWindow->getNativeWindow(),
-                                                    windowAttributes.data());
-            ASSERT_EGL_SUCCESS();
-        }
+        // Create first window surface
+        mWindowSurface = eglCreateWindowSurface(mDisplay, mConfig, mOSWindow->getNativeWindow(),
+                                                windowAttributes.data());
+        ASSERT_EGL_SUCCESS();
 
         initializeContext();
     }
@@ -258,11 +271,14 @@ class EGLPreRotationSurfaceTest : public ANGLETestWithParam<EGLPreRotationSurfac
     EGLConfig mConfig;
     OSWindow *mOSWindow;
     int mSize;
+    bool mInitialized;
 };
 
 // Provide a predictable pattern for testing pre-rotation
 TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDraw)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -349,6 +365,8 @@ TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDraw)
 //  +------------+------------+      +--------+--------+
 TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDerivativeDraw)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -475,6 +493,8 @@ TEST_P(EGLPreRotationSurfaceTest, OrientedWindowWithDerivativeDraw)
 // handle the new rotation
 TEST_P(EGLPreRotationSurfaceTest, ChangeRotationWithDraw)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // This test uses functionality that is only available on Android
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && !IsAndroid());
 
@@ -622,6 +642,8 @@ class EGLPreRotationLargeSurfaceTest : public EGLPreRotationSurfaceTest
 // Provide a predictable pattern for testing pre-rotation
 TEST_P(EGLPreRotationLargeSurfaceTest, OrientedWindowWithFragCoordDraw)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -804,6 +826,8 @@ class EGLPreRotationBlitFramebufferTest : public EGLPreRotationLargeSurfaceTest
 // to blit that pattern into various places within the 400x300 window
 TEST_P(EGLPreRotationBlitFramebufferTest, BasicBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -896,6 +920,8 @@ TEST_P(EGLPreRotationBlitFramebufferTest, BasicBlitFramebuffer)
 // to blit the left and right halves of that pattern into various places within the 400x300 window
 TEST_P(EGLPreRotationBlitFramebufferTest, LeftAndRightBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -1014,6 +1040,8 @@ TEST_P(EGLPreRotationBlitFramebufferTest, LeftAndRightBlitFramebuffer)
 // to blit the top and bottom halves of that pattern into various places within the 400x300 window
 TEST_P(EGLPreRotationBlitFramebufferTest, TopAndBottomBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -1133,6 +1161,8 @@ TEST_P(EGLPreRotationBlitFramebufferTest, TopAndBottomBlitFramebuffer)
 // size
 TEST_P(EGLPreRotationBlitFramebufferTest, ScaledBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -1256,6 +1286,8 @@ TEST_P(EGLPreRotationBlitFramebufferTest, ScaledBlitFramebuffer)
 // window, and then use glBlitFramebuffer to blit that pattern into an FBO
 TEST_P(EGLPreRotationBlitFramebufferTest, FboDestBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -1347,6 +1379,8 @@ TEST_P(EGLPreRotationBlitFramebufferTest, FboDestBlitFramebuffer)
 // that are partially out-of-bounds of the source
 TEST_P(EGLPreRotationBlitFramebufferTest, FboDestOutOfBoundsSourceBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -1504,6 +1538,8 @@ TEST_P(EGLPreRotationBlitFramebufferTest, FboDestOutOfBoundsSourceBlitFramebuffe
 // that are partially out-of-bounds of the source, and cause a "stretch" to occur
 TEST_P(EGLPreRotationBlitFramebufferTest, FboDestOutOfBoundsSourceWithStretchBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
@@ -1628,6 +1664,8 @@ TEST_P(EGLPreRotationBlitFramebufferTest, FboDestOutOfBoundsSourceWithStretchBli
 // coordinates that are partially out-of-bounds of the source
 TEST_P(EGLPreRotationBlitFramebufferTest, FboDestOutOfBoundsSourceAndDestBlitFramebuffer)
 {
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
