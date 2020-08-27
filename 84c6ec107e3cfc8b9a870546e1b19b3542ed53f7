@@ -268,6 +268,30 @@
       "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9811d021_fea1c887",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T15:20:36Z",
+      "side": 1,
+      "message": "Those lists of varyings don\u0027t have any correlation between shader stages.   I agree it would be nice not to have to store the merged varyings, but I prefer that over two versions of resolvePrecisionMismatch() to reimplement getMergedVaryings() again with the various rules related to shader interface matching.\n\nMaybe we can get better about how long we store the merged varyings by clearing out the list if there are no mismatched precisions.   I haven\u0027t looked close enough to see what happens if we clear that list at this point though.",
+      "parentUuid": "13373b03_8776e7c9",
+      "range": {
+        "startLine": 878,
+        "startChar": 61,
+        "endLine": 878,
+        "endChar": 83
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
