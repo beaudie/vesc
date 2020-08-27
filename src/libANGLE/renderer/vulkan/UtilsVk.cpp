@@ -1652,12 +1652,14 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                   0, nullptr);
 
     // Copy the resulting buffer into dest.
-    VkBufferImageCopy region               = {};
-    region.bufferOffset                    = 0;
-    region.bufferRowLength                 = bufferRowLengthInUints * sizeof(uint32_t);
-    region.bufferImageHeight               = params.blitArea.height;
-    region.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
-    region.imageSubresource.mipLevel       = depthStencilRenderTarget->getLevelIndex();
+    VkBufferImageCopy region           = {};
+    region.bufferOffset                = 0;
+    region.bufferRowLength             = bufferRowLengthInUints * sizeof(uint32_t);
+    region.bufferImageHeight           = params.blitArea.height;
+    region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+    // TODO: fixed a bug here, write regression test
+    region.imageSubresource.mipLevel =
+        depthStencilImage->toImageLevel(depthStencilRenderTarget->getLevelIndex()).get();
     region.imageSubresource.baseArrayLayer = depthStencilRenderTarget->getLayerIndex();
     region.imageSubresource.layerCount     = 1;
     region.imageOffset.x                   = params.blitArea.x;
