@@ -165,7 +165,7 @@ class EGLSurfaceTest : public ANGLETest
         initializeContext();
     }
 
-    void initializeSurfaceWithDefaultConfig()
+    void initializeSurfaceWithDefaultConfig(bool requireWindowSurface)
     {
         const EGLint configAttributes[] = {EGL_RED_SIZE,
                                            EGL_DONT_CARE,
@@ -182,7 +182,7 @@ class EGLSurfaceTest : public ANGLETest
                                            EGL_SAMPLE_BUFFERS,
                                            0,
                                            EGL_SURFACE_TYPE,
-                                           EGL_DONT_CARE,
+                                           requireWindowSurface ? EGL_WINDOW_BIT : EGL_DONT_CARE,
                                            EGL_NONE};
 
         EGLint configCount;
@@ -297,7 +297,9 @@ class EGLFloatSurfaceTest : public EGLSurfaceTest
 
     bool initializeSurfaceWithFloatConfig()
     {
-        const EGLint configAttributes[] = {EGL_RED_SIZE,
+        const EGLint configAttributes[] = {EGL_SURFACE_TYPE,
+                                           EGL_WINDOW_BIT,
+                                           EGL_RED_SIZE,
                                            16,
                                            EGL_GREEN_SIZE,
                                            16,
@@ -366,14 +368,14 @@ class EGLSurfaceTest3 : public EGLSurfaceTest
 // at one time, blocking message loops. See http://crbug.com/475085
 TEST_P(EGLSurfaceTest, MessageLoopBug)
 {
-    // TODO(syoussefi): http://anglebug.com/3123
+    // http://anglebug.com/3123
     ANGLE_SKIP_TEST_IF(IsAndroid());
 
     // http://anglebug.com/3138
     ANGLE_SKIP_TEST_IF(IsOzone());
 
     initializeDisplay();
-    initializeSurfaceWithDefaultConfig();
+    initializeSurfaceWithDefaultConfig(true);
 
     runMessageLoopTest(EGL_NO_SURFACE, EGL_NO_CONTEXT);
 }
@@ -382,14 +384,14 @@ TEST_P(EGLSurfaceTest, MessageLoopBug)
 // instead of null.
 TEST_P(EGLSurfaceTest, MessageLoopBugContext)
 {
-    // TODO(syoussefi): http://anglebug.com/3123
+    // http://anglebug.com/3123
     ANGLE_SKIP_TEST_IF(IsAndroid());
 
     // http://anglebug.com/3138
     ANGLE_SKIP_TEST_IF(IsOzone());
 
     initializeDisplay();
-    initializeSurfaceWithDefaultConfig();
+    initializeSurfaceWithDefaultConfig(true);
 
     ANGLE_SKIP_TEST_IF(!mPbufferSurface);
     runMessageLoopTest(mPbufferSurface, mSecondContext);
@@ -399,7 +401,7 @@ TEST_P(EGLSurfaceTest, MessageLoopBugContext)
 TEST_P(EGLSurfaceTest, MakeCurrentTwice)
 {
     initializeDisplay();
-    initializeSurfaceWithDefaultConfig();
+    initializeSurfaceWithDefaultConfig(false);
 
     eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
     ASSERT_EGL_SUCCESS();
@@ -428,9 +430,9 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     int minSize = platformSupportsZeroSize ? 0 : 1;
 
     initializeDisplay();
-    initializeSurfaceWithDefaultConfig();
+    initializeSurfaceWithDefaultConfig(true);
     initializeContext();
-    ANGLE_SKIP_TEST_IF(!mWindowSurface);
+    ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
 
     eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
     eglSwapBuffers(mDisplay, mWindowSurface);
@@ -479,9 +481,9 @@ TEST_P(EGLSurfaceTest, ResizeWindowWithDraw)
     setWindowVisible(mOSWindow, true);
 
     initializeDisplay();
-    initializeSurfaceWithDefaultConfig();
+    initializeSurfaceWithDefaultConfig(true);
     initializeContext();
-    ANGLE_SKIP_TEST_IF(!mWindowSurface);
+    ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
 
     int size      = 64;
     EGLint height = 0;
@@ -569,9 +571,9 @@ TEST_P(EGLSurfaceTest, ResetNativeWindow)
         mOSWindow->resetNativeWindow();
     }
 
-    initializeSurfaceWithDefaultConfig();
+    initializeSurfaceWithDefaultConfig(true);
     initializeContext();
-    ANGLE_SKIP_TEST_IF(!mWindowSurface);
+    ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
 
     eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
 
