@@ -16,6 +16,236 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25d894f1_83268ebc",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "is this actually a state of the extension or is this derived from the format?",
+      "range": {
+        "startLine": 231,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 13
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ba21ca4_88c63336",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "what about indirect uses?\n\ne.g. var \u003d uniform + 1;\n\ntexelFetch(var)\n\nTrying to understand what changes if you use a uniform with fetch and why you need to care about this. It seems a bit risky to use this method.",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24eb3c31_8a4fa861",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "What problem is this design solving? Maybe we could find an existing mechanism to fit it into.",
+      "range": {
+        "startLine": 3191,
+        "startChar": 0,
+        "endLine": 3216,
+        "endChar": 1
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33fdbc4e_b68b38b9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "nit: maybe you could do something to try and help the formatter with these lines.",
+      "range": {
+        "startLine": 1371,
+        "startChar": 23,
+        "endLine": 1375,
+        "endChar": 41
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aed51ed8_f75ad6dc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "nit: seems like this isn\u0027t necessary to swap",
+      "range": {
+        "startLine": 1125,
+        "startChar": 41,
+        "endLine": 1125,
+        "endChar": 71
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b08f5a4f_7dfd8877",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "nit: return !vk::ConvertToLinear...\n\nAlso you should assert that mImage is valid.",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 9
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30b6f870_04189eee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "nit: Caps for static methods. Also you can put them in the namespace {} block instead of using static.",
+      "range": {
+        "startLine": 614,
+        "startChar": 12,
+        "endLine": 614,
+        "endChar": 43
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93f098e7_0add475a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "nit: doesn\u0027t need to be a member of Renderer ,can be a static method. Ideally private to this file.",
+      "range": {
+        "startLine": 620,
+        "startChar": 17,
+        "endLine": 620,
+        "endChar": 44
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b2bf19c_80db8d95",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "I don\u0027t quite follow this either. What cache are you populating?",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 0
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79617d49_80432d37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T15:11:09Z",
+      "side": 1,
+      "message": "nit: \"ImageView\"",
+      "range": {
+        "startLine": 47,
+        "startChar": 23,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
