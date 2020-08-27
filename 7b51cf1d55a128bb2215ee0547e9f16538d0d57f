@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cd748bd_a0e6cf69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T14:20:25Z",
+      "side": 1,
+      "message": "I think this might have messed up the swangle configs but not sure. Maybe it doesn\u0027t play nice with XVFB.",
+      "revId": "7b51cf1d55a128bb2215ee0547e9f16538d0d57f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
