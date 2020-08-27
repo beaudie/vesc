@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "eae0374c_faf60382",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-27T20:50:37Z",
+      "side": 1,
+      "message": "copySubImageImplWith* is not using staging buffer, they are using staging image",
+      "parentUuid": "aaaecef9_66df6a17",
+      "revId": "db843d80dc0c96d85182411a1f0ae8cad3b140d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e9d9fa7_f257f397",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -39,6 +57,30 @@
       "revId": "db843d80dc0c96d85182411a1f0ae8cad3b140d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c42a1324_bada3c22",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4172,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-27T20:50:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e9d9fa7_f257f397",
+      "range": {
+        "startLine": 4168,
+        "startChar": 35,
+        "endLine": 4172,
+        "endChar": 5
+      },
+      "revId": "db843d80dc0c96d85182411a1f0ae8cad3b140d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
