@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "3e2e9c21_93b59488",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000158
+      },
+      "writtenOn": "2020-08-27T22:23:07Z",
+      "side": 1,
+      "message": "You might mention https://anglebug.com/4995 here too.",
+      "revId": "cc3b9ac8451e0f0e055caa190bc557732c67de4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af1a632d_99b4702a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000158
+      },
+      "writtenOn": "2020-08-27T22:23:07Z",
+      "side": 1,
+      "message": "I suggest opening a Chromium or ANGLE bug that describes the generic issue and using that here. We\u0027ll need a crbug to merge this in Chromium.",
+      "revId": "cc3b9ac8451e0f0e055caa190bc557732c67de4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d86ad079_e5873577",
         "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
         "patchSetId": 3
@@ -83,6 +117,29 @@
       "writtenOn": "2020-08-27T21:34:41Z",
       "side": 1,
       "message": "The LineLoopTest.*/ES2_Vulkan tests pass on my ARM device, so it\u0027s entirely possible it\u0027s just a QC bug.",
+      "revId": "cc3b9ac8451e0f0e055caa190bc557732c67de4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06a7a672_7c745e5a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000158
+      },
+      "writtenOn": "2020-08-27T22:23:07Z",
+      "side": 1,
+      "message": "nit: matches",
+      "range": {
+        "startLine": 73,
+        "startChar": 23,
+        "endLine": 73,
+        "endChar": 28
+      },
       "revId": "cc3b9ac8451e0f0e055caa190bc557732c67de4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
