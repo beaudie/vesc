@@ -196,6 +196,30 @@
     },
     {
       "key": {
+        "uuid": "a992f915_c4d71461",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T06:20:48Z",
+      "side": 1,
+      "message": "Ah, wait, got mixed up.   This change is converting the internally-highp value to a mediump in the output shader so it matches the mediump in the input shader, so it should all be happy.",
+      "parentUuid": "561e6c79_2c403dea",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 5
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7edf7e10_0b8608db",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 26
