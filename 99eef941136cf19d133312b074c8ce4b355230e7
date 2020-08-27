@@ -33,6 +33,23 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4af4e9c5_6720d367",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T14:27:55Z",
+      "side": 1,
+      "message": "Hey Ian, this shares some commonality with my idea but it has a lot more state tracking than I was imagining. I was thinking you record the command count at time of invalidate and at time of depth disabled. No tracking of if the depth is enabled or the invalidated state.",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
