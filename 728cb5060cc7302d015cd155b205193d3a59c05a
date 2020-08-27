@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9b1e1fbc_aac06fcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-27T17:55:28Z",
+      "side": 1,
+      "message": "LGTM\nI\u0027ll let you work with Shabi on his comment to get the +2",
+      "revId": "728cb5060cc7302d015cd155b205193d3a59c05a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f61a2b49_b89e30a7",
         "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
         "patchSetId": 1
