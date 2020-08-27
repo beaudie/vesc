@@ -16,6 +16,24 @@
       "revId": "7b51cf1d55a128bb2215ee0547e9f16538d0d57f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c6f9919_de47ec50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T14:21:19Z",
+      "side": 1,
+      "message": "N/M, wouldn\u0027t be XVFB. Maybe the checkConfig function doesn\u0027t work well on SwANGLE Windows.",
+      "parentUuid": "2cd748bd_a0e6cf69",
+      "revId": "7b51cf1d55a128bb2215ee0547e9f16538d0d57f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
