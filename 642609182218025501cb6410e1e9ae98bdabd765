@@ -34,6 +34,24 @@
       "revId": "642609182218025501cb6410e1e9ae98bdabd765",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c801182_652dae39",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-27T16:34:42Z",
+      "side": 1,
+      "message": "I totally agree. There are many allocate call usage, I am trying to move them as I touch them.   Since you guys all agreed on this, I can convert the remaining in a separate CL.",
+      "parentUuid": "4f7dca06_faaa4e58",
+      "revId": "642609182218025501cb6410e1e9ae98bdabd765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
