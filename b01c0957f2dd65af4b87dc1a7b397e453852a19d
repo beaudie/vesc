@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0ec0946_2dd1a033",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4613,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-27T05:04:40Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right. Say an application does:\n\n1. Cause setSubImage to define a texture\n2. Draw with it\n3. glCopyTexSubImage into a level of the texture\n4. Draw with it again\n\nAt step 2, all levels are flushed and mStagingBuffer gets released here. At step 3, a new update is attempted to be staged, but the staging buffer is not there anymore. Note that currently, copySubImage doesn\u0027t use the context\u0027s staging buffer. Note that also that copyImage could reinitialize the staging buffer (if it redefines the level), but not copySubImage.\n\nYou could write a regression test for this.",
+      "revId": "b01c0957f2dd65af4b87dc1a7b397e453852a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
