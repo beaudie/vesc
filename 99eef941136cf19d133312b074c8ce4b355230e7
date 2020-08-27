@@ -50,6 +50,24 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ff01d67_a2d32f8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-27T15:50:33Z",
+      "side": 1,
+      "message": "Hi Jamie.  I started implementing your idea, including both counts.  I ran into scenarios that I couldn\u0027t handle (cases with multiple permutations of enables, disables, invalidates, and draws).  \n\nFor example, your approach works well for the PUBG case of draw-invalidate-disable-draw-endRP.  At endRP, the second counter differentiates between whether the attachment was drawn to after invalidate and before disable.  \n\nWhat happens if the app enables the attachment again (like dEQP does), and either does or doesn\u0027t draw after enabling?  If I did endRP processing for that transition, I could see whether it had been drawn to while it was previously enabled (STORE no matter what future drawing occurs).  If not, I really needed to get the command count again in order to see if any draws occurred after being re-enabled.  The different scenarios continue.\n\nI started drawing state diagrams to articulate and handle every GLES-valid scenario.  After a while, I saw patterns that simplified it.  There are:\n\n- 6 states (not counting endRP)\n- 4 transitions from each state (enable, disable, invalidate, endRP).\n- Command counts are only essential when entering/leaving 1 state.\n- For endRP, I need to decide on:\n  - STORE vs. DONT_CARE for the current RP\n  - LOAD vs. DONT_CARE for a future RP\n\nI re-used my old states and m*Enabled values, but I can encode 5 of the states as special \"command count\" values, if you want.",
+      "parentUuid": "4af4e9c5_6720d367",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
