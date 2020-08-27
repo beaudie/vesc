@@ -316,6 +316,30 @@
       "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc0232bc_32b071e2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T15:57:30Z",
+      "side": 1,
+      "message": "Serialize?\nI don\u0027t understand why that\u0027s necessary. We just computed the mergedVaryings at linkImpl, we are still processing the link operation and reusing that data.\nWhat am I missing?",
+      "parentUuid": "00cfb717_d028d89b",
+      "range": {
+        "startLine": 878,
+        "startChar": 61,
+        "endLine": 878,
+        "endChar": 83
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
