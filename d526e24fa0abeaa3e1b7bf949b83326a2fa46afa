@@ -34,6 +34,69 @@
       "revId": "d526e24fa0abeaa3e1b7bf949b83326a2fa46afa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faa3e140_9e55bc15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-27T20:35:40Z",
+      "side": 1,
+      "message": "On closer look, I see a couple of problems.",
+      "revId": "d526e24fa0abeaa3e1b7bf949b83326a2fa46afa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3eaa46be_407f72e6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-27T20:35:40Z",
+      "side": 1,
+      "message": "I think this is supposed to stay dsOps.storeOp",
+      "range": {
+        "startLine": 869,
+        "startChar": 8,
+        "endLine": 869,
+        "endChar": 60
+      },
+      "revId": "d526e24fa0abeaa3e1b7bf949b83326a2fa46afa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07701ac8_3dbc04de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-27T20:35:40Z",
+      "side": 1,
+      "message": "I think this is supposed to stay dsOps.stencilStoreOp",
+      "range": {
+        "startLine": 873,
+        "startChar": 8,
+        "endLine": 873,
+        "endChar": 67
+      },
+      "revId": "d526e24fa0abeaa3e1b7bf949b83326a2fa46afa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
