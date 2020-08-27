@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "622d9b4d_27f5d8d0",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-27T19:00:02Z",
+      "side": 1,
+      "message": "We use this to determine which imageview should be used - it will differ from the texture\u0027s format if the texture has sRGB_decode state set.\n\nDefault corresponds to \"the texture should use the imageview that corresponds to its format\"\nLinear corresponds to \"the texture has sRGB decoding disabled by extension, and should use a linear imageview even if it is in a nonlinear format\"\nNonLinear corresponds to \"the texture has sRGB override enabled by extension, and should use a nonlinear imageview even if it is in a linear format\"",
+      "parentUuid": "25d894f1_83268ebc",
+      "range": {
+        "startLine": 231,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 13
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ba21ca4_88c63336",
         "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
         "patchSetId": 2
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "24ccdf20_e35235a4",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-27T19:00:02Z",
+      "side": 1,
+      "message": "from spec - \"The conversion of sRGB color space components to linear color space is\nalways applied if the TEXTURE_SRGB_DECODE_EXT parameter is DECODE_EXT.\nTable X.1 describes whether the conversion is skipped if the\nTEXTURE_SRGB_DECODE_EXT parameter is SKIP_DECODE_EXT, depending on\nthe function used for the access, whether the access occurs through a\nbindless sampler, and whether the texture is statically accessed\nelsewhere with a texelFetch function.\"\n\nThis exception applies specifically to \"static accesses\" with texelFetch. The interpretation of static access was so deqp is happy and is a stricter interpretation beneficial to us in terms of code complexity, so we ignore indirect access",
+      "parentUuid": "6ba21ca4_88c63336",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24eb3c31_8a4fa861",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 2
@@ -76,6 +124,30 @@
       "writtenOn": "2020-08-27T15:11:09Z",
       "side": 1,
       "message": "What problem is this design solving? Maybe we could find an existing mechanism to fit it into.",
+      "range": {
+        "startLine": 3191,
+        "startChar": 0,
+        "endLine": 3216,
+        "endChar": 1
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cf3fa69_108cf4e3",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-27T19:00:02Z",
+      "side": 1,
+      "message": "EXT_texture_sRGB_decode allows for a sampler object to override the colorspace state.\nThis means that a texture which has never had any colorspace state modified (completely default), may still end up having an overridden colorspace if it\u0027s used with a sampler object with that state set.\n\nA default-state texture though will never have had the srgb imageviews set up, which means, if it\u0027s used with this sampler object, it needs to reallocate with the VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT.\n\nWe can\u0027t detect this at the time when the sampler is dirtied because the texture bound to that slot may change at any time before draw.\nThe thing that actually determines this state is the texture-sampler combination, and we won\u0027t know that for sure until draw time.",
+      "parentUuid": "24eb3c31_8a4fa861",
       "range": {
         "startLine": 3191,
         "startChar": 0,
@@ -122,6 +194,30 @@
       "writtenOn": "2020-08-27T15:11:09Z",
       "side": 1,
       "message": "nit: seems like this isn\u0027t necessary to swap",
+      "range": {
+        "startLine": 1125,
+        "startChar": 41,
+        "endLine": 1125,
+        "endChar": 71
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fc31db4_9c96a4e0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-27T19:00:02Z",
+      "side": 1,
+      "message": "This actually is necessary, due to an interaction with EGL_EXT_image_gl_colorspace\nWith this extension, it\u0027s possible to create an image where the angle frontend format is different from the backend VK format, which was causing failures.\nThis swap ensures that, when we create imageviews, we will create the correct imageviews for the backend VK format, even if the frontend format is different.",
+      "parentUuid": "aed51ed8_f75ad6dc",
       "range": {
         "startLine": 1125,
         "startChar": 41,
@@ -214,6 +310,30 @@
       "writtenOn": "2020-08-27T15:11:09Z",
       "side": 1,
       "message": "I don\u0027t quite follow this either. What cache are you populating?",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 0
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3207163d_e82714ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-27T19:00:02Z",
+      "side": 1,
+      "message": "RendererVk::getFormatFeatureBits will query the ICD and update mFormatProperties (the cache talked about in the comment), so querying for feature flags is non-const.\nBecause of this, when we\u0027re determining support for the extension, we\u0027re currently in a const function, and can\u0027t do this. We can only query format features from our cache, not from the ICD.\n\nSee vk_caps_utils.cpp formatReinterpretationSupported.\n\nWe need to perform this precaching step because formatReinterpretationSupported checks support for VK formats, not angle formats, meaning that we could check a format that was never initialized in our cache because angle may not have a corresponding frontend format.\n\nPreviously, we only initialized feature flags for formats which have an angle frontend format, ignoring all formats that we could not use directly.\nThis change forces us to additionally initialize formats which could be used as reinterpretation targets for other formats, so we know whether or not we can support exposing srgb_decode (and srgb_override).",
+      "parentUuid": "1b2bf19c_80db8d95",
       "range": {
         "startLine": 253,
         "startChar": 0,
