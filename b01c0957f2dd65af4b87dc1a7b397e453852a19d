@@ -16,6 +16,24 @@
       "revId": "b01c0957f2dd65af4b87dc1a7b397e453852a19d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e814ac5a_5bdb4489",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4613,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-27T17:10:19Z",
+      "side": 1,
+      "message": "copySubTextureImpl goes into  \n1) copySubImageImplWithTransfer.\n2) copySubImageImplWithDraw\nBoth 1) and 2) do not use staging buffer. It uses staging image.\n\n3) stageSubresourceUpdateAndGetData\nThis is handled in https://chromium-review.googlesource.com/c/angle/angle/+/2377121\n\nI probably could add a new function DynamicBuffer::releaseAllBuffers to ensure that all buffers are released but state is still kept so that if we have to call allocate again  it still works, just to be safe",
+      "parentUuid": "b0ec0946_2dd1a033",
+      "revId": "b01c0957f2dd65af4b87dc1a7b397e453852a19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
