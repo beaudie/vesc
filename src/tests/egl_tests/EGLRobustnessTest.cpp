@@ -23,6 +23,7 @@ class EGLRobustnessTest : public ANGLETest
     {
         mOSWindow = OSWindow::New();
         mOSWindow->initialize("EGLRobustnessTest", 500, 500);
+        ANGLE_SKIP_TEST_IF(!mOSWindow->valid());
         setWindowVisible(mOSWindow, true);
 
         const auto &platform = GetParam().eglParameters;
@@ -62,14 +63,29 @@ class EGLRobustnessTest : public ANGLETest
         ASSERT_TRUE(eglGetConfigs(mDisplay, nullptr, 0, &nConfigs) == EGL_TRUE);
         ASSERT_LE(1, nConfigs);
 
+        std::vector<EGLConfig> allConfigs(nConfigs);
         int nReturnedConfigs = 0;
-        ASSERT_TRUE(eglGetConfigs(mDisplay, &mConfig, 1, &nReturnedConfigs) == EGL_TRUE);
-        ASSERT_EQ(1, nReturnedConfigs);
+        ASSERT_TRUE(eglGetConfigs(mDisplay, allConfigs.data(), nConfigs, &nReturnedConfigs) ==
+                    EGL_TRUE);
+        ASSERT_EQ(nConfigs, nReturnedConfigs);
+
+        for (const EGLConfig &config : allConfigs)
+        {
+            EGLint surfaceType;
+            eglGetConfigAttrib(mDisplay, config, EGL_SURFACE_TYPE, &surfaceType);
+
+            if ((surfaceType & EGL_WINDOW_BIT) != 0)
+            {
+                mConfig      = config;
+                mInitialized = true;
+                break;
+            }
+        }
+
+        ANGLE_SKIP_TEST_IF(!mInitialized);
 
         mWindow = eglCreateWindowSurface(mDisplay, mConfig, mOSWindow->getNativeWindow(), nullptr);
         ASSERT_EGL_SUCCESS();
-
-        mInitialized = true;
     }
 
     void testTearDown() override

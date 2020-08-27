@@ -38,6 +38,7 @@ class EGLSyncTest : public ANGLETest
 // Test error cases for all EGL_KHR_fence_sync functions
 TEST_P(EGLSyncTest, FenceSyncErrors)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension());
 
     EGLDisplay display = getEGLWindow()->getDisplay();
@@ -126,6 +127,7 @@ TEST_P(EGLSyncTest, FenceSyncErrors)
 // Test error cases for all EGL_KHR_wait_sync functions
 TEST_P(EGLSyncTest, WaitSyncErrors)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     // The client API that shows support for eglWaitSyncKHR is the same as the one required for
     // eglCreateSyncKHR.  As such, there is no way to create a sync and not be able to wait on it.
     // This would have created an EGL_BAD_MATCH error.
@@ -163,6 +165,7 @@ TEST_P(EGLSyncTest, WaitSyncErrors)
 // Test usage of eglGetSyncAttribKHR
 TEST_P(EGLSyncTest, GetSyncAttrib)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension() || !hasGLSyncExtension());
 
     EGLDisplay display = getEGLWindow()->getDisplay();
@@ -200,6 +203,7 @@ TEST_P(EGLSyncTest, GetSyncAttrib)
 // Test that basic usage works and doesn't generate errors or crash
 TEST_P(EGLSyncTest, BasicOperations)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension() || !hasGLSyncExtension());
 
     EGLDisplay display = getEGLWindow()->getDisplay();
@@ -253,6 +257,7 @@ TEST_P(EGLSyncTest, WaitNative)
 // Verify eglDupNativeFence for EGL_ANDROID_native_fence_sync
 TEST_P(EGLSyncTest, AndroidNativeFence_DupNativeFenceFD)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension() || !hasGLSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasAndroidNativeFenceSyncExtension());
@@ -279,6 +284,7 @@ TEST_P(EGLSyncTest, AndroidNativeFence_DupNativeFenceFD)
 // Verify CreateSync and ClientWait for EGL_ANDROID_native_fence_sync
 TEST_P(EGLSyncTest, AndroidNativeFence_ClientWait)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension() || !hasGLSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasAndroidNativeFenceSyncExtension());
@@ -311,6 +317,7 @@ TEST_P(EGLSyncTest, AndroidNativeFence_ClientWait)
 // Simulate passing FDs across processes by passing across Contexts.
 TEST_P(EGLSyncTest, AndroidNativeFence_WaitSync)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasWaitSyncExtension() || !hasGLSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasAndroidNativeFenceSyncExtension());
@@ -388,6 +395,7 @@ TEST_P(EGLSyncTest, AndroidNativeFence_WaitSync)
 // Simulate passing FDs across processes by passing across Contexts.
 TEST_P(EGLSyncTest, AndroidNativeFence_withFences)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasWaitSyncExtension() || !hasGLSyncExtension());
     ANGLE_SKIP_TEST_IF(!hasAndroidNativeFenceSyncExtension());

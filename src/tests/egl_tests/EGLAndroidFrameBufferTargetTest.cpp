@@ -23,6 +23,7 @@ class EGLAndroidFrameBufferTargetTest : public ANGLETest
 
     void testSetUp() override
     {
+        ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
         mDisplay = getEGLWindow()->getDisplay();
         ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
     }

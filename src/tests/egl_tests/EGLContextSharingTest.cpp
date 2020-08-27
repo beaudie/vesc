@@ -40,6 +40,7 @@ class EGLContextSharingTest : public ANGLETest
 
     void testTearDown() override
     {
+        ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
         glDeleteTextures(1, &mTexture);
 
         EGLDisplay display = getEGLWindow()->getDisplay();
@@ -63,6 +64,7 @@ class EGLContextSharingTest : public ANGLETest
 // Tests that creating resources works after freeing the share context.
 TEST_P(EGLContextSharingTest, BindTextureAfterShareContextFree)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLDisplay display = getEGLWindow()->getDisplay();
     EGLConfig config   = getEGLWindow()->getConfig();
     EGLSurface surface = getEGLWindow()->getSurface();
@@ -89,6 +91,7 @@ TEST_P(EGLContextSharingTest, BindTextureAfterShareContextFree)
 // Tests the creation of contexts using EGL_ANGLE_display_texture_share_group
 TEST_P(EGLContextSharingTest, DisplayShareGroupContextCreation)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLDisplay display = getEGLWindow()->getDisplay();
     EGLConfig config   = getEGLWindow()->getConfig();
 
@@ -125,6 +128,7 @@ TEST_P(EGLContextSharingTest, DisplayShareGroupContextCreation)
 // Tests the sharing of textures using EGL_ANGLE_display_texture_share_group
 TEST_P(EGLContextSharingTest, DisplayShareGroupObjectSharing)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLDisplay display = getEGLWindow()->getDisplay();
     if (!IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_display_texture_share_group"))
     {
@@ -193,6 +197,7 @@ TEST_P(EGLContextSharingTest, DisplayShareGroupObjectSharing)
 // context is destroyed
 TEST_P(EGLContextSharingTest, DisplayShareGroupReleasedWithLastContext)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLDisplay display = getEGLWindow()->getDisplay();
     if (!IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_display_texture_share_group"))
     {
@@ -237,6 +242,7 @@ TEST_P(EGLContextSharingTest, DisplayShareGroupReleasedWithLastContext)
 // on the Vulkan back-end where we manage object lifetime manually.
 TEST_P(EGLContextSharingTest, TextureLifetime)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLWindow *eglWindow = getEGLWindow();
     EGLConfig config     = getEGLWindow()->getConfig();
     EGLDisplay display   = getEGLWindow()->getDisplay();
@@ -291,6 +297,7 @@ TEST_P(EGLContextSharingTest, TextureLifetime)
 // on the Vulkan back-end where we manage object lifetime manually.
 TEST_P(EGLContextSharingTest, SamplerLifetime)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     EGLWindow *eglWindow = getEGLWindow();
     EGLConfig config     = getEGLWindow()->getConfig();
     EGLDisplay display   = getEGLWindow()->getDisplay();
@@ -359,6 +366,7 @@ TEST_P(EGLContextSharingTest, SamplerLifetime)
 // a graph.
 TEST_P(EGLContextSharingTest, DeleteReaderOfSharedTexture)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
 
     // Initialize contexts
