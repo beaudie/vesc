@@ -364,6 +364,30 @@
       "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f28f6f2_49c514ec",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T16:15:49Z",
+      "side": 1,
+      "message": "The mergedVaryings gives me a list of all varyings and indicates the producer and consumer of the varying (mergedVarying.frontShader \u0026 mergedVarying.backShader). I can then check if the precision matches and generate the appropriate notation in the mVariableInfoMap[stage][mappedName] to fix up any mismatches.\nThe process of matching up the varyings is somewhat complicated and done for me in getMergedVaryings, I didn\u0027t want to have to duplicate that logic.",
+      "parentUuid": "1b039ff5_fd171002",
+      "range": {
+        "startLine": 878,
+        "startChar": 61,
+        "endLine": 878,
+        "endChar": 83
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
