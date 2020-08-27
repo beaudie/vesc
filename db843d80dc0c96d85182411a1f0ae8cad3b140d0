@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aaaecef9_66df6a17",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-27T04:57:12Z",
+      "side": 1,
+      "message": "We probably never hit this path in real-world applications (and if we do, we should fix that), so I\u0027m not sure how much value there is in this change.\n\nDoing this for the copySubImageImplWith* functions is worthwhile though.",
+      "revId": "db843d80dc0c96d85182411a1f0ae8cad3b140d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e9d9fa7_f257f397",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-27T04:57:12Z",
+      "side": 1,
+      "message": "Can shorten with ?: similar to other places in this file.",
+      "range": {
+        "startLine": 4168,
+        "startChar": 35,
+        "endLine": 4172,
+        "endChar": 5
+      },
+      "revId": "db843d80dc0c96d85182411a1f0ae8cad3b140d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
