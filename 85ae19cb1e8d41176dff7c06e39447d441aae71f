@@ -1,0 +1,198 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab110656_a8ca9dfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "It looks like enabling the feature is missing from this CL, so a lot of the code isn\u0027t being tested.\n\nCan you enable that here too?",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "785231a7_2b24407a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1587,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "programPipeline-\u003egetMergedVaryings",
+      "range": {
+        "startLine": 1587,
+        "startChar": 12,
+        "endLine": 1587,
+        "endChar": 52
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a8e1960_0e1002e4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "gfxbench does this the other way, where the VS uses highp (output) and the FS uses mediump (input):\n\n  [INFO ]: Using highp in vs.\n  [INFO ]: Using mediump in fs.\n\nRegardless, we shouldn\u0027t be assuming in these comments what the programs are doing and just indicate that we are updating the types to match what\u0027s specified in the shaders.",
+      "range": {
+        "startLine": 1309,
+        "startChar": 0,
+        "endLine": 1310,
+        "endChar": 86
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91793912_04323222",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "Why is it safe to assume they are only down-casting values?   What happens if a program uses mediump in the VS and outputs to the FS as highp (assuming that\u0027s possible, of course)?",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "303a3d65_24a145b4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "How do we know what to cast it to?   Should this be an enum with something like:\n\n  enum Precision\n  {\n    NoChange,\n    High,\n    Medium,\n    Low,\n    ...\n  }\n\nSomething like that may even already exist somewhere.",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1e66aca_b40b503f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "Is this a technical restriction or just to help keep things simple for the initial implementation?",
+      "range": {
+        "startLine": 894,
+        "startChar": 0,
+        "endLine": 895,
+        "endChar": 38
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8eb33f66_b1fc2913",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "Looks like this is where it would be better to store what we are casting to.",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7875e4b_59e2d26e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "Unfortunately, I don\u0027t quite understand the SPIR-V changes well enough, but...\n\nWhy does the input varying need to know it\u0027s being cast?   Isn\u0027t the output varying being cast to the type this input expects?",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "561e6c79_2c403dea",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "This appears to violate the spec:\n\n7.4. PROGRAM PIPELINE OBJECTS\nAt an interface between program objects, the set of inputs and outputs are considered to match exactly if and only if:\n• Every declared input variable has a matching output, as described above.\n• There are no user-defined output variables declared without a matching input\nvariable declaration.\n• All matched input and output variables have identical precision qualification.\nWhen the set of inputs and outputs on an interface between programs matches\nexactly, all inputs are well-defined except when the corresponding outputs were not\nwritten in the previous shader. However, any mismatch between inputs and outputs\nwill result in a validation failure.\n\nI\u0027m pretty sure dEQP tests this.   Is the feature enabled to test all of this new code?",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 5
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7edf7e10_0b8608db",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 5935,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:01:15Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like the feature is enabled, so I\u0027m not sure this is actually validating the new code yet.",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
