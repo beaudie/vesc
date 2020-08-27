@@ -33,6 +33,24 @@
       "revId": "9b64d67a4fed10c6f246e27fe4117370bc8de1bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ad9ba37_8df0cfdb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-27T16:38:29Z",
+      "side": 1,
+      "message": "There is value if this path will still possibly reached, right? I am looking all per object staging buffer usage and trying to reduce them as much as I can. Remove this will make the ones that is still using the per object staging buffer obvious.",
+      "parentUuid": "550c7404_2302fd58",
+      "revId": "9b64d67a4fed10c6f246e27fe4117370bc8de1bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
