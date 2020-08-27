@@ -16,6 +16,23 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d78c1605_9509b02f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-27T03:57:00Z",
+      "side": 1,
+      "message": "This CL is NOT READY for a thorough review yet, but I have a question ...\n\nThere are 6 states (my original 3 x 2 for m*Enabled) that can enter endRP.  Patchset 3 uses both m*InvalidatedState and m*Enabled (where * is either Depth or Stencil).\n\nQUESTION: Would you rather I keep it as is OR use 6 states and eliminate m*Enabled?\n\nFYI ... A thorough state diagram allowed me to handle all states and transitions.  The Invalidated+Enabled state is key:\n\n- Any time entering Invalidated+Enabled, the number of draw commands must be recorded/saved\n\n- Any time leaving Invalidated+Enabled, the recorded \u0026 current number of draw commands must be compared to determine whether the attachment becomes NoLongerInvalidated.\n\nIn the morning, I\u0027ll address your answer(s), simplify the code (e.g. create 1/more helper(s)), and  thoroughly test this.",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
