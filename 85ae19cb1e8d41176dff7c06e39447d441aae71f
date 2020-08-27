@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "9ec13168_05de8a6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-27T05:42:12Z",
+      "side": 1,
+      "message": "This may give us some other ways to tackle mediump stuff if we\u0027re finding the precision qualifier stuff isn\u0027t behaving exactly how we\u0027d like:\n\nhttps://www.lunarg.com/wp-content/uploads/2020/05/Automatic-RelaxedPrecision-Decoration-and-Conversion-in-Spirv-Opt_r1.pdf\n\nThe stuff about spirv-opt --convert-relaxed-to-half and when to use it seems relevant:\n\nUnfortunately, some Vulkan drivers such as MoltenVK ignore the RelaxedPrecision directive,\nusually because the underlying implementation (in the case of MoltenVK, Metal), does not\nsupport the RelaxedPrecision semantics. If it is the situation, however, that the underlying\nimplementation does support a true 16-bit floating point type (as it is with Metal), benefits of\nRelaxedPrecision semantics can be achieved by converting RelaxedPrecision instructions to\ntrue 16-bit-type instructions using the VK_KHR_shader_float16_int8 extension.\n\nTo this end, the --convert-relaxed-to-half pass has been added to spirv-opt. This\npass translates all arithmetic float32 instructions decorated with RelaxedPrecision to 16-bit\nfloating point (float16 aka half) instructions, adding additional conversion instructions for\noperands and results where needed.",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "785231a7_2b24407a",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 26
