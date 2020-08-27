@@ -74,6 +74,30 @@
       "revId": "8f6204e714df24d810d3bfc925a756b1a0d9c100",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f03334a1_c65d2c47",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1780,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-08-27T08:09:58Z",
+      "side": 1,
+      "message": "Thanks Shahbaz,Jamie. Some tests failed on Android device Pixel 2 when I changed the condition to !shaderSampledImageArrayDynamicIndexing. Should I change it back to (IsAndroid() \u0026\u0026 !isSwiftShader \u0026\u0026 !isARM) or create a new issue for Android device Pixel 2?",
+      "parentUuid": "e90fd9d4_9c5ae20d",
+      "range": {
+        "startLine": 1780,
+        "startChar": 28,
+        "endLine": 1780,
+        "endChar": 67
+      },
+      "revId": "8f6204e714df24d810d3bfc925a756b1a0d9c100",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
