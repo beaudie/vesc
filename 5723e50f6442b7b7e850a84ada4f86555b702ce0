@@ -39,6 +39,30 @@
       "revId": "5723e50f6442b7b7e850a84ada4f86555b702ce0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f24ef2ef_3d5fbadf",
+        "filename": "src/common/mathutil_unittest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-27T16:15:15Z",
+      "side": 1,
+      "message": "Good catch, Shabi! Done.",
+      "parentUuid": "1e2334cf_2fe1d183",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 0
+      },
+      "revId": "5723e50f6442b7b7e850a84ada4f86555b702ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
