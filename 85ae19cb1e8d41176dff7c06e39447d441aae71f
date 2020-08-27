@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "ce51006c_2513c86f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1587,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T14:11:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "785231a7_2b24407a",
+      "range": {
+        "startLine": 1587,
+        "startChar": 12,
+        "endLine": 1587,
+        "endChar": 52
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a8e1960_0e1002e4",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 26
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "81382ae0_e76a936c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T14:11:15Z",
+      "side": 1,
+      "message": "This is an input (!info-\u003evaryingIsOutput) and info-\u003ecastPrecision is true, therefore the incoming precision is mediump and the shader\u0027s precision is highp. Those conditions are required to get to this spot.",
+      "parentUuid": "9a8e1960_0e1002e4",
+      "range": {
+        "startLine": 1309,
+        "startChar": 0,
+        "endLine": 1310,
+        "endChar": 86
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91793912_04323222",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 26
@@ -99,6 +147,24 @@
     },
     {
       "key": {
+        "uuid": "51b6a772_0b37839d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T14:11:15Z",
+      "side": 1,
+      "message": "In that case, info-\u003ecastPrecision for VS will be false and info-\u003ecastPrecision for FS will be true (for this varying). The varying will be marked as an input so we know it\u0027s coming in as mediump and the FS shader wants it to be highp.",
+      "parentUuid": "91793912_04323222",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "303a3d65_24a145b4",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 26
@@ -113,6 +179,24 @@
       "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17121d28_5238173e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T14:11:15Z",
+      "side": 1,
+      "message": "When there is a mismatch we always transfer mediump.\nWe only set castPrecision to true for varyings that are highp that need to output/input mediump.",
+      "parentUuid": "303a3d65_24a145b4",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -234,6 +318,24 @@
       "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "959b6856_b71c4ef6",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 5935,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-27T14:11:15Z",
+      "side": 1,
+      "message": "Yes, I\u0027ve enabled in a follow-on patch per Jamie\u0027s request.",
+      "parentUuid": "7edf7e10_0b8608db",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
