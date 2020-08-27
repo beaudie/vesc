@@ -244,6 +244,30 @@
       "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13373b03_8776e7c9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T14:17:58Z",
+      "side": 1,
+      "message": "You have these:\n\n    ShaderMap\u003cstd::vector\u003csh::ShaderVariable\u003e\u003e mLinkedOutputVaryings;\n    ShaderMap\u003cstd::vector\u003csh::ShaderVariable\u003e\u003e mLinkedInputVaryings;\n\nCan you use those with a double for loop?",
+      "parentUuid": "67a3eb0a_8d9b9d10",
+      "range": {
+        "startLine": 878,
+        "startChar": 61,
+        "endLine": 878,
+        "endChar": 83
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
