@@ -68,6 +68,24 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd64f1bc_df6a0c90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-27T16:17:44Z",
+      "side": 1,
+      "message": "\u003e What happens if the app enables the attachment again (like dEQP does), and either does or doesn\u0027t draw after enabling?\n\nIf you re-enable depth, you clear the command count at time of depth disable. (e.g. set it to infinite)\n\nThen on endRP you check min(depth disable command count, rp command count) against invalidateCommandCount -\u003e if they match you invalidate.\n\nif there were no draws, min(disable, rp count) \u003d\u003d invalidate count\nif there were draws, min(disable, rp count) !\u003d invalidate count\n\nI didn\u0027t quite follow what you were saying after this so maybe we could catch up offline. I think this scheme works, just not sure if I missed some detail.",
+      "parentUuid": "4ff01d67_a2d32f8e",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
