@@ -42,6 +42,7 @@ class EGLContextASANTest : public ANGLETest
 // Tests that creating resources works after freeing the share context.
 TEST_P(EGLContextASANTest, DestroyContextInUse)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
 
     EGLDisplay display = getEGLWindow()->getDisplay();

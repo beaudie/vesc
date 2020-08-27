@@ -21,6 +21,7 @@ class EGLPrintEGLinfoTest : public ANGLETest
 
     void testSetUp() override
     {
+        ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
         mDisplay = getEGLWindow()->getDisplay();
         ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
     }
@@ -70,6 +71,7 @@ const char *GetGLString(EGLint name)
 // Print the EGL strings and extensions
 TEST_P(EGLPrintEGLinfoTest, PrintEGLInfo)
 {
+    ANGLE_SKIP_TEST_IF(mDisplay == EGL_NO_DISPLAY);
     std::cout << "    EGL Information:" << std::endl;
     std::cout << "\tVendor: " << GetEGLString(mDisplay, EGL_VENDOR) << std::endl;
     std::cout << "\tVersion: " << GetEGLString(mDisplay, EGL_VENDOR) << std::endl;
@@ -93,6 +95,7 @@ TEST_P(EGLPrintEGLinfoTest, PrintEGLInfo)
 // Print the GL strings and extensions
 TEST_P(EGLPrintEGLinfoTest, PrintGLInfo)
 {
+    ANGLE_SKIP_TEST_IF(mDisplay == EGL_NO_DISPLAY);
     std::cout << "    GLES Information:" << std::endl;
     std::cout << "\tVendor: " << GetGLString(GL_VENDOR) << std::endl;
     std::cout << "\tVersion: " << GetGLString(GL_VERSION) << std::endl;
@@ -308,6 +311,7 @@ static void LogGles32Capabilities(std::ostream &stream)
 // in CSV format
 TEST_P(EGLPrintEGLinfoTest, PrintGLESCapabilities)
 {
+    ANGLE_SKIP_TEST_IF(mDisplay == EGL_NO_DISPLAY);
     std::cout << std::endl << "Capability name, value" << std::endl << std::endl;
 
     std::ostream &stream = std::cout;
@@ -343,6 +347,8 @@ TEST_P(EGLPrintEGLinfoTest, PrintGLESCapabilities)
 // Print the EGL configs with attributes
 TEST_P(EGLPrintEGLinfoTest, PrintConfigInfo)
 {
+    ANGLE_SKIP_TEST_IF(mDisplay == EGL_NO_DISPLAY);
+
     // Get all the configs
     EGLint count;
     EXPECT_EGL_TRUE(eglGetConfigs(mDisplay, nullptr, 0, &count));

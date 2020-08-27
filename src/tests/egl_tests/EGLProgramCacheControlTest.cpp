@@ -42,6 +42,7 @@ class EGLProgramCacheControlTest : public ANGLETest
 
     void testSetUp() override
     {
+        ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
         if (extensionAvailable())
         {
             EGLDisplay display = getEGLWindow()->getDisplay();
@@ -83,6 +84,7 @@ void TestCacheProgram(PlatformMethods *platform,
 // Tests error conditions of the APIs.
 TEST_P(EGLProgramCacheControlTest, NegativeAPI)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!extensionAvailable());
 
     constexpr char kDefaultKey[]        = "defaultMakeItLongEnough";
@@ -178,6 +180,7 @@ TEST_P(EGLProgramCacheControlTest, NegativeAPI)
 // Tests a basic use case.
 TEST_P(EGLProgramCacheControlTest, SaveAndReload)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!extensionAvailable() || !programBinaryAvailable());
 
     constexpr char kVS[] = "attribute vec4 position; void main() { gl_Position = position; }";
@@ -244,6 +247,7 @@ TEST_P(EGLProgramCacheControlTest, SaveAndReload)
 // Tests that trying to link a program without correct shaders doesn't buggily call the cache.
 TEST_P(EGLProgramCacheControlTest, LinkProgramWithBadShaders)
 {
+    ANGLE_SKIP_TEST_IF(getEGLWindow() == nullptr);
     ANGLE_SKIP_TEST_IF(!extensionAvailable());
 
     GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
