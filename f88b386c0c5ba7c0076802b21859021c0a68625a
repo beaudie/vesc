@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54f9ebb3_4a8afacb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-28T18:23:33Z",
+      "side": 1,
+      "message": "Saving state and responding.  No need to review this version\n\nI\u0027m going to try to implement Jamie\u0027s 2-counter approach.",
+      "revId": "f88b386c0c5ba7c0076802b21859021c0a68625a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

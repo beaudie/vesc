@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "40f6a592_27f4b835",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-28T18:23:33Z",
+      "side": 1,
+      "message": "I\u0027m afraid it\u0027s more complicated than that.  I\u0027ve put it in the design doc.",
+      "parentUuid": "d17155e2_07165b6c",
+      "revId": "d35305683a32e94566fcbafd7b7a61ed04a87333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02d40523_b5427f03",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 4
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "3e71fba2_ede0279f",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-28T18:23:33Z",
+      "side": 1,
+      "message": "That\u0027s what I initially did, but it returns the number of allocated blocks of memory.  Multiple commands get put into each block of memory (i.e. it mostly doesn\u0027t increment when a new command is recorded)",
+      "parentUuid": "02d40523_b5427f03",
+      "range": {
+        "startLine": 696,
+        "startChar": 11,
+        "endLine": 696,
+        "endChar": 26
+      },
+      "revId": "d35305683a32e94566fcbafd7b7a61ed04a87333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce74fc52_88cc3e4b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 4
@@ -62,6 +104,30 @@
       "revId": "d35305683a32e94566fcbafd7b7a61ed04a87333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca56b585_6a4040c4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-28T18:23:33Z",
+      "side": 1,
+      "message": "This can be called \"mid-stream\".  This is checking for the case where drawing was recorded while the attachment is enabled, and no other code noticed it yet.",
+      "parentUuid": "ce74fc52_88cc3e4b",
+      "range": {
+        "startLine": 1010,
+        "startChar": 16,
+        "endLine": 1010,
+        "endChar": 71
+      },
+      "revId": "d35305683a32e94566fcbafd7b7a61ed04a87333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

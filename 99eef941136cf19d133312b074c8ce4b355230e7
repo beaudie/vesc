@@ -193,6 +193,24 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30168c6b_93a8edc0",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-28T18:23:33Z",
+      "side": 1,
+      "message": "We chatted offline, and decided to keep using count (since there wasn\u0027t a great alternative).",
+      "parentUuid": "b0a76f06_293ecee5",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
