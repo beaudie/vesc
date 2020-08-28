@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a41dbfb0_bfcc8559",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T17:33:51Z",
+      "side": 1,
+      "message": "Why not `\u003d default`? The class is POD.",
+      "range": {
+        "startLine": 5115,
+        "startChar": 34,
+        "endLine": 5115,
+        "endChar": 35
+      },
+      "revId": "790b5c74eb783b0adc92fd396585e487a5537fd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
