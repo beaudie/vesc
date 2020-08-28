@@ -671,6 +671,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mRenderPassCommands(nullptr),
       mHasPrimaryCommands(false),
       mGpuEventsEnabled(false),
+      mDeferredFlushCount(0),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mPerfCounters{},
@@ -971,8 +972,24 @@ angle::Result ContextVk::startPrimaryCommandBuffer()
     return angle::Result::Continue;
 }
 
+bool ContextVk::hasGPUPendingCommands()
+{
+    return isSerialInUse(mRenderer->getLastSubmittedQueueSerial());
+}
+
 angle::Result ContextVk::flush(const gl::Context *context)
 {
+    ANGLE_TRY(checkCompletedCommands());
+
+    // If we are in middle of renderpass and GPU is still busy, then we will defer the glFlush call
+    // here until the renderpass ends.
+    if (mRenderer->getFeatures().enableDeferredFlush.enabled && !context->isShared() &&
+        hasGPUPendingCommands() && hasStartedRenderPass())
+    {
+        mDeferredFlushCount++;
+        return angle::Result::Continue;
+    }
+
     return flushImpl(nullptr);
 }
 
@@ -4078,10 +4095,15 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     bool hasPendingSemaphore = signalSemaphore || !mWaitSemaphores.empty();
     if (!hasRecordedCommands() && !hasPendingSemaphore && !mGpuEventsEnabled)
     {
+        ASSERT(!mDeferredFlushCount);
         return angle::Result::Continue;
     }
 
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
+
+    // We must set this to zero before calling flushCommandsAndEndRenderPass to prevent it from
+    // calling back to flushImpl.
+    mDeferredFlushCount = 0;
 
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
@@ -4589,6 +4611,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     if (!mRenderPassCommands->started())
     {
+        ASSERT(!mDeferredFlushCount);
         onRenderPassFinished();
         return angle::Result::Continue;
     }
@@ -4655,6 +4678,12 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
         ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
                                 TRACE_EVENT_PHASE_END, eventName));
         ANGLE_TRY(flushOutsideRenderPassCommands());
+    }
+
+    if (mDeferredFlushCount)
+    {
+        // If we have deferred glFlush call in the middle of renderpass, flush them now.
+        ANGLE_TRY(flushImpl(nullptr));
     }
 
     return angle::Result::Continue;

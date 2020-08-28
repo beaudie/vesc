@@ -426,6 +426,8 @@ class ContextVk : public ContextImpl, public vk::Context
     // Wait for completion of batches until (at least) batch with given serial is finished.
     angle::Result finishToSerial(Serial serial);
 
+    bool hasGPUPendingCommands();
+
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                           vk::RenderPass **renderPassOut);
     angle::Result getRenderPassWithOps(const vk::RenderPassDesc &desc,
@@ -1076,6 +1078,8 @@ class ContextVk : public ContextImpl, public vk::Context
     std::vector<GpuEventQuery> mInFlightGpuEventQueries;
     // A list of gpu events since the last clock sync.
     std::vector<GpuEvent> mGpuEvents;
+
+    size_t mDeferredFlushCount;
 
     // Semaphores that must be waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;

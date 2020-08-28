@@ -1864,6 +1864,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
 
     ANGLE_FEATURE_CONDITION(&mFeatures, preferredLargeHeapBlockSize4MB, !isQualcomm);
 
+    // Enable glFlush deferall for android only for now. Needs testing data for other platforms to
+    // enable it
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableDeferredFlush, /*IsAndroid()*/ true);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
