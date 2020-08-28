@@ -70,6 +70,24 @@
       "revId": "642609182218025501cb6410e1e9ae98bdabd765",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "148ac065_6bcee59c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T18:05:36Z",
+      "side": 1,
+      "message": "Yes definitely, that\u0027s what I meant too. Sorry I wasn\u0027t clear.",
+      "parentUuid": "70c92165_91e98462",
+      "revId": "642609182218025501cb6410e1e9ae98bdabd765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
