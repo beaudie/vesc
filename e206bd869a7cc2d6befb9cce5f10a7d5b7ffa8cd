@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32e2a141_a5751feb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2020-08-28T07:28:42Z",
+      "side": 1,
+      "message": "Hi Shabi and Jamie,\n\nI have added an end2end test for the array of array image as an uniform. It can all pass on Vulkan, but fail with OpenGL/OpenGLES. The correct result is 800, Android is 0, Intel/AMD is 400 and NV is 600.  I try it on a local NV linux platform, and the latest array element(image[1][1]) is not added to the outbuf.image_value. So the output value is 600 instead of 800. I checked some related functions such as the TranslateGLSL::translate() but no more finding. It seems strange, because the shader is an original GLSL.  Could you give some advice and hints? \n\nThank you very much!",
+      "revId": "e206bd869a7cc2d6befb9cce5f10a7d5b7ffa8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
