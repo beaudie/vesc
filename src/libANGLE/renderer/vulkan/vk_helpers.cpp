@@ -3430,6 +3430,82 @@ ANGLE_INLINE void ImageHelper::initImageMemoryBarrierStruct(
     imageMemoryBarrier->subresourceRange.layerCount     = mLayerCount;
 }
 
+// static
+ANGLE_INLINE bool ImageHelper::FormatHasNecessaryFeature(RendererVk *renderer,
+                                                         VkFormat format,
+                                                         VkImageTiling tilingMode,
+                                                         VkFormatFeatureFlags featureBits)
+{
+    return (tilingMode == VK_IMAGE_TILING_OPTIMAL)
+               ? renderer->hasImageFormatFeatureBits(format, featureBits)
+               : renderer->hasLinearImageFormatFeatureBits(format, featureBits);
+}
+
+// static
+bool ImageHelper::CanCopyWithTransferCommon(RendererVk *renderer,
+                                            const vk::Format &srcFormat,
+                                            VkImageTiling srcTilingMode,
+                                            const vk::Format &destFormat,
+                                            VkImageTiling destTilingMode)
+{
+    // Checks that the formats in the copy transfer have the appropriate tiling and transfer bits
+    bool isTilingCompatible           = srcTilingMode == destTilingMode;
+    bool srcFormatHasNecessaryFeature = FormatHasNecessaryFeature(
+        renderer, srcFormat.vkImageFormat, srcTilingMode, VK_FORMAT_FEATURE_TRANSFER_SRC_BIT);
+    bool dstFormatHasNecessaryFeature = FormatHasNecessaryFeature(
+        renderer, destFormat.vkImageFormat, destTilingMode, VK_FORMAT_FEATURE_TRANSFER_DST_BIT);
+
+    return isTilingCompatible && srcFormatHasNecessaryFeature && dstFormatHasNecessaryFeature;
+}
+
+// static
+bool ImageHelper::CanCopyWithTransferForCopyTexture(RendererVk *renderer,
+                                                    const vk::Format &srcFormat,
+                                                    VkImageTiling srcTilingMode,
+                                                    const vk::Format &destFormat,
+                                                    VkImageTiling destTilingMode)
+{
+    // NOTE(syoussefi): technically, you can transfer between formats as long as they have the same
+    // size and are compatible, but for now, let's just support same-format copies with transfer.
+    bool isFormatCompatible = srcFormat.internalFormat == destFormat.internalFormat;
+
+    return isFormatCompatible && CanCopyWithTransferCommon(renderer, srcFormat, srcTilingMode,
+                                                           destFormat, destTilingMode);
+}
+
+// static
+bool ImageHelper::CanCopyWithTransferForCopyImage(RendererVk *renderer,
+                                                  const vk::Format &srcFormat,
+                                                  VkImageTiling srcTilingMode,
+                                                  const vk::Format &destFormat,
+                                                  VkImageTiling destTilingMode)
+{
+    // Transfers for copy image must have the source and destination formats be size compatible
+    const angle::Format &srcFormatActual  = srcFormat.actualImageFormat();
+    const angle::Format &destFormatActual = destFormat.actualImageFormat();
+
+    bool isFormatCompatible = srcFormatActual.pixelBytes == destFormatActual.pixelBytes;
+
+    return isFormatCompatible && CanCopyWithTransferCommon(renderer, srcFormat, srcTilingMode,
+                                                           destFormat, destTilingMode);
+}
+
+// static
+bool ImageHelper::CanCopyWithDraw(RendererVk *renderer,
+                                  const vk::Format &srcFormat,
+                                  VkImageTiling srcTilingMode,
+                                  const vk::Format &destFormat,
+                                  VkImageTiling destTilingMode)
+{
+    // Checks that the formats in copy by drawing have the appropriate feature bits
+    bool srcFormatHasNecessaryFeature = FormatHasNecessaryFeature(
+        renderer, srcFormat.vkImageFormat, srcTilingMode, VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT);
+    bool dstFormatHasNecessaryFeature = FormatHasNecessaryFeature(
+        renderer, destFormat.vkImageFormat, destTilingMode, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
+
+    return srcFormatHasNecessaryFeature && dstFormatHasNecessaryFeature;
+}
+
 // Generalized to accept both "primary" and "secondary" command buffers.
 template <typename CommandBufferT>
 void ImageHelper::barrierImpl(VkImageAspectFlags aspectMask,
@@ -3627,6 +3703,89 @@ void ImageHelper::Copy(ImageHelper *srcImage,
 
     commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(),
                              dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
+}
+
+// static
+angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
+                                            vk::ImageHelper *srcImage,
+                                            GLint srcLevel,
+                                            GLint srcX,
+                                            GLint srcY,
+                                            GLint srcZ,
+                                            vk::ImageHelper *dstImage,
+                                            GLint dstLevel,
+                                            GLint dstX,
+                                            GLint dstY,
+                                            GLint dstZ,
+                                            GLsizei srcWidth,
+                                            GLsizei srcHeight,
+                                            GLsizei srcDepth)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    const vk::Format &sourceVkFormat = srcImage->getFormat();
+    VkImageTiling srcTilingMode      = srcImage->getTilingMode();
+    const vk::Format &destVkFormat   = dstImage->getFormat();
+    VkImageTiling destTilingMode     = dstImage->getTilingMode();
+
+    if (CanCopyWithTransferForCopyImage(contextVk->getRenderer(), sourceVkFormat, srcTilingMode,
+                                        destVkFormat, destTilingMode))
+    {
+        bool isSrc3D = (srcImage->getType() == VK_IMAGE_TYPE_3D);
+        bool isDst3D = (dstImage->getType() == VK_IMAGE_TYPE_3D);
+        bool isSrcLayered =
+            (srcImage->getType() == VK_IMAGE_TYPE_3D || srcImage->getLayerCount() > 1);
+        bool isDstLayered =
+            (dstImage->getType() == VK_IMAGE_TYPE_3D || dstImage->getLayerCount() > 1);
+
+        ANGLE_TRY(contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage));
+        ANGLE_TRY(contextVk->onImageTransferWrite(VK_IMAGE_ASPECT_COLOR_BIT, dstImage));
+
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+
+        srcImage->retain(&contextVk->getResourceUseList());
+        dstImage->retain(&contextVk->getResourceUseList());
+
+        VkImageCopy region = {};
+
+        region.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.srcSubresource.mipLevel       = srcLevel;
+        region.srcSubresource.baseArrayLayer = (isSrcLayered && !isSrc3D) ? srcZ : 0;
+        region.srcSubresource.layerCount     = (isSrcLayered && !isSrc3D) ? srcDepth : 1;
+
+        region.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.dstSubresource.mipLevel       = dstLevel;
+        region.dstSubresource.baseArrayLayer = (isDstLayered && !isDst3D) ? dstZ : 0;
+        region.dstSubresource.layerCount     = (isDstLayered && !isDst3D) ? srcDepth : 1;
+
+        region.srcOffset.x   = srcX;
+        region.srcOffset.y   = srcY;
+        region.srcOffset.z   = (isSrcLayered && !isSrc3D) ? 0 : srcZ;
+        region.dstOffset.x   = dstX;
+        region.dstOffset.y   = dstY;
+        region.dstOffset.z   = (isDstLayered && !isDst3D) ? 0 : dstZ;
+        region.extent.width  = srcWidth;
+        region.extent.height = srcHeight;
+        region.extent.depth  = (isSrc3D || isDst3D) ? srcDepth : 1;
+
+        ASSERT(commandBuffer.valid() && srcImage->valid() && dstImage->valid());
+        ASSERT(srcImage->getCurrentLayout() == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        ASSERT(dstImage->getCurrentLayout() == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+        commandBuffer.copyImage(srcImage->getImage(), srcImage->getCurrentLayout(),
+                                dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
+    }
+    else
+    {
+        // TODO (anglebug.com/3593) - implement fallback path
+        // There is a possiblity for the underlying source and destination VK image formats to be
+        // incompatible. An example scenario would be if the source image (RGB8UI) falls back
+        // to an emulated format(RGBA8UI) but the destination image is natively supported(RGB8I).
+        UNIMPLEMENTED();
+        return angle::Result::Stop;
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, LevelIndex maxLevel)

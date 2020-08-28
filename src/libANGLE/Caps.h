@@ -330,6 +330,9 @@ struct Extensions
     // GL_NV_fence
     bool fenceNV = false;
 
+    // GL_EXT_copy_image
+    bool copyImage = false;
+
     // GL_EXT_disjoint_timer_query
     bool disjointTimerQuery            = false;
     GLuint queryCounterBitsTimeElapsed = 0;

@@ -47,6 +47,34 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
     virtual angle::Result setStorageEGLImageTarget(const gl::Context *context,
                                                    egl::Image *image) = 0;
 
+    virtual angle::Result copyImageSubData(const gl::Context *context,
+                                           const gl::Renderbuffer *srcBuffer,
+                                           GLint srcLevel,
+                                           GLint srcX,
+                                           GLint srcY,
+                                           GLint srcZ,
+                                           GLint dstLevel,
+                                           GLint dstX,
+                                           GLint dstY,
+                                           GLint dstZ,
+                                           GLsizei srcWidth,
+                                           GLsizei srcHeight,
+                                           GLsizei srcDepth);
+
+    virtual angle::Result copyImageSubData(const gl::Context *context,
+                                           const gl::Texture *srcTexture,
+                                           GLint srcLevel,
+                                           GLint srcX,
+                                           GLint srcY,
+                                           GLint srcZ,
+                                           GLint dstLevel,
+                                           GLint dstX,
+                                           GLint dstY,
+                                           GLint dstZ,
+                                           GLsizei srcWidth,
+                                           GLsizei srcHeight,
+                                           GLsizei srcDepth);
+
     virtual GLenum getColorReadFormat(const gl::Context *context);
     virtual GLenum getColorReadType(const gl::Context *context);
 
@@ -63,6 +91,42 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
   protected:
     const gl::RenderbufferState &mState;
 };
+
+inline angle::Result RenderbufferImpl::copyImageSubData(const gl::Context *context,
+                                                        const gl::Renderbuffer *srcBuffer,
+                                                        GLint srcLevel,
+                                                        GLint srcX,
+                                                        GLint srcY,
+                                                        GLint srcZ,
+                                                        GLint dstLevel,
+                                                        GLint dstX,
+                                                        GLint dstY,
+                                                        GLint dstZ,
+                                                        GLsizei srcWidth,
+                                                        GLsizei srcHeight,
+                                                        GLsizei srcDepth)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
+inline angle::Result RenderbufferImpl::copyImageSubData(const gl::Context *context,
+                                                        const gl::Texture *srcTexture,
+                                                        GLint srcLevel,
+                                                        GLint srcX,
+                                                        GLint srcY,
+                                                        GLint srcZ,
+                                                        GLint dstLevel,
+                                                        GLint dstX,
+                                                        GLint dstY,
+                                                        GLint dstZ,
+                                                        GLsizei srcWidth,
+                                                        GLsizei srcHeight,
+                                                        GLsizei srcDepth)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
 
 inline GLint RenderbufferImpl::getMemorySize() const
 {

@@ -1278,6 +1278,56 @@ angle::Result Texture::copySubImage(Context *context,
     return angle::Result::Continue;
 }
 
+template <typename T>
+angle::Result Texture::copyImageSubData(Context *context,
+                                        const T *srcTexture,
+                                        GLint srcLevel,
+                                        GLint srcX,
+                                        GLint srcY,
+                                        GLint srcZ,
+                                        GLint dstLevel,
+                                        GLint dstX,
+                                        GLint dstY,
+                                        GLint dstZ,
+                                        GLsizei srcWidth,
+                                        GLsizei srcHeight,
+                                        GLsizei srcDepth)
+{
+    ANGLE_TRY(mTexture->copyImageSubData(context, srcTexture, srcLevel, srcX, srcY, srcZ, dstLevel,
+                                         dstX, dstY, dstZ, srcWidth, srcHeight, srcDepth));
+
+    return angle::Result::Continue;
+}
+
+template angle::Result Texture::copyImageSubData<gl::Renderbuffer>(
+    Context *context,
+    const gl::Renderbuffer *srcTexture,
+    GLint srcLevel,
+    GLint srcX,
+    GLint srcY,
+    GLint srcZ,
+    GLint dstLevel,
+    GLint dstX,
+    GLint dstY,
+    GLint dstZ,
+    GLsizei srcWidth,
+    GLsizei srcHeight,
+    GLsizei srcDepth);
+
+template angle::Result Texture::copyImageSubData<gl::Texture>(Context *context,
+                                                              const gl::Texture *srcTexture,
+                                                              GLint srcLevel,
+                                                              GLint srcX,
+                                                              GLint srcY,
+                                                              GLint srcZ,
+                                                              GLint dstLevel,
+                                                              GLint dstX,
+                                                              GLint dstY,
+                                                              GLint dstZ,
+                                                              GLsizei srcWidth,
+                                                              GLsizei srcHeight,
+                                                              GLsizei srcDepth);
+
 angle::Result Texture::copyTexture(Context *context,
                                    TextureTarget target,
                                    GLint level,

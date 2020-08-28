@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/MemoryObjectVk.h"
+#include "libANGLE/renderer/vulkan/RenderbufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
@@ -76,49 +77,6 @@ bool IsTextureLevelDefinitionCompatibleWithImage(const vk::ImageHelper &image,
 
     vk::LevelIndex imageLevelIndexVK = image.toVKLevel(textureLevelIndexGL);
     return size == image.getLevelExtents(imageLevelIndexVK) && format == image.getFormat();
-}
-
-ANGLE_INLINE bool FormatHasNecessaryFeature(RendererVk *renderer,
-                                            VkFormat format,
-                                            VkImageTiling tilingMode,
-                                            VkFormatFeatureFlags featureBits)
-{
-    return (tilingMode == VK_IMAGE_TILING_OPTIMAL)
-               ? renderer->hasImageFormatFeatureBits(format, featureBits)
-               : renderer->hasLinearImageFormatFeatureBits(format, featureBits);
-}
-
-bool CanCopyWithTransfer(RendererVk *renderer,
-                         const vk::Format &srcFormat,
-                         VkImageTiling srcTilingMode,
-                         const vk::Format &destFormat,
-                         VkImageTiling destTilingMode)
-{
-    // NOTE(syoussefi): technically, you can transfer between formats as long as they have the same
-    // size and are compatible, but for now, let's just support same-format copies with transfer.
-    bool isFormatCompatible           = srcFormat.internalFormat == destFormat.internalFormat;
-    bool isTilingCompatible           = srcTilingMode == destTilingMode;
-    bool srcFormatHasNecessaryFeature = FormatHasNecessaryFeature(
-        renderer, srcFormat.vkImageFormat, srcTilingMode, VK_FORMAT_FEATURE_TRANSFER_SRC_BIT);
-    bool dstFormatHasNecessaryFeature = FormatHasNecessaryFeature(
-        renderer, destFormat.vkImageFormat, destTilingMode, VK_FORMAT_FEATURE_TRANSFER_DST_BIT);
-
-    return isFormatCompatible && isTilingCompatible && srcFormatHasNecessaryFeature &&
-           dstFormatHasNecessaryFeature;
-}
-
-bool CanCopyWithDraw(RendererVk *renderer,
-                     const vk::Format &srcFormat,
-                     VkImageTiling srcTilingMode,
-                     const vk::Format &destFormat,
-                     VkImageTiling destTilingMode)
-{
-    bool srcFormatHasNecessaryFeature = FormatHasNecessaryFeature(
-        renderer, srcFormat.vkImageFormat, srcTilingMode, VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT);
-    bool dstFormatHasNecessaryFeature = FormatHasNecessaryFeature(
-        renderer, destFormat.vkImageFormat, destTilingMode, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
-
-    return srcFormatHasNecessaryFeature && dstFormatHasNecessaryFeature;
 }
 
 bool ForceCPUPathForCopy(RendererVk *renderer, const vk::ImageHelper &image)
@@ -528,6 +486,58 @@ angle::Result TextureVk::copySubTexture(const gl::Context *context,
                               unpackPremultiplyAlpha, unpackUnmultiplyAlpha, vk::GetImpl(source));
 }
 
+angle::Result TextureVk::copyImageSubData(const gl::Context *context,
+                                          const gl::Renderbuffer *srcBuffer,
+                                          GLint srcLevel,
+                                          GLint srcX,
+                                          GLint srcY,
+                                          GLint srcZ,
+                                          GLint dstLevel,
+                                          GLint dstX,
+                                          GLint dstY,
+                                          GLint dstZ,
+                                          GLsizei srcWidth,
+                                          GLsizei srcHeight,
+                                          GLsizei srcDepth)
+{
+    ContextVk *contextVk     = vk::GetImpl(context);
+    RenderbufferVk *sourceVk = vk::GetImpl(srcBuffer);
+
+    // Make sure the source/destination targets are initialized and all staged updates are flushed.
+    ANGLE_TRY(sourceVk->ensureImageInitialized(context));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+
+    return vk::ImageHelper::CopyImageSubData(context, sourceVk->getImage(), srcLevel, srcX, srcY,
+                                             srcZ, mImage, dstLevel, dstX, dstY, dstZ, srcWidth,
+                                             srcHeight, srcDepth);
+}
+
+angle::Result TextureVk::copyImageSubData(const gl::Context *context,
+                                          const gl::Texture *srcTexture,
+                                          GLint srcLevel,
+                                          GLint srcX,
+                                          GLint srcY,
+                                          GLint srcZ,
+                                          GLint dstLevel,
+                                          GLint dstX,
+                                          GLint dstY,
+                                          GLint dstZ,
+                                          GLsizei srcWidth,
+                                          GLsizei srcHeight,
+                                          GLsizei srcDepth)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    TextureVk *sourceVk  = vk::GetImpl(srcTexture);
+
+    // Make sure the source/destination targets are initialized and all staged updates are flushed.
+    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+
+    return vk::ImageHelper::CopyImageSubData(context, &sourceVk->getImage(), srcLevel, srcX, srcY,
+                                             srcZ, mImage, dstLevel, dstX, dstY, dstZ, srcWidth,
+                                             srcHeight, srcDepth);
+}
+
 angle::Result TextureVk::copyCompressedTexture(const gl::Context *context,
                                                const gl::Texture *source)
 {
@@ -597,8 +607,8 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                              clippedSourceArea.width, clippedSourceArea.height, 1);
 
     // If it's possible to perform the copy with a transfer, that's the best option.
-    if (!isViewportFlipY &&
-        CanCopyWithTransfer(renderer, srcFormat, srcTilingMode, destFormat, destTilingMode))
+    if (!isViewportFlipY && vk::ImageHelper::CanCopyWithTransferForCopyTexture(
+                                renderer, srcFormat, srcTilingMode, destFormat, destTilingMode))
     {
         return copySubImageImplWithTransfer(contextVk, offsetImageIndex, modifiedDestOffset,
                                             destFormat, colorReadRT->getLevelIndex(),
@@ -609,7 +619,8 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
     bool forceCPUPath = ForceCPUPathForCopy(renderer, *mImage);
 
     // If it's possible to perform the copy with a draw call, do that.
-    if (CanCopyWithDraw(renderer, srcFormat, srcTilingMode, destFormat, destTilingMode) &&
+    if (vk::ImageHelper::CanCopyWithDraw(renderer, srcFormat, srcTilingMode, destFormat,
+                                         destTilingMode) &&
         !forceCPUPath)
     {
         // Layer count can only be 1 as the source is a framebuffer.
@@ -673,7 +684,8 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 
     // If it's possible to perform the copy with a transfer, that's the best option.
     if (!unpackFlipY && !unpackPremultiplyAlpha && !unpackUnmultiplyAlpha &&
-        CanCopyWithTransfer(renderer, sourceVkFormat, srcTilingMode, destVkFormat, destTilingMode))
+        vk::ImageHelper::CanCopyWithTransferForCopyTexture(renderer, sourceVkFormat, srcTilingMode,
+                                                           destVkFormat, destTilingMode))
     {
         return copySubImageImplWithTransfer(contextVk, offsetImageIndex, destOffset, destVkFormat,
                                             sourceLevelGL, sourceBox.z, sourceBox,
@@ -683,7 +695,8 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     bool forceCPUPath = ForceCPUPathForCopy(renderer, *mImage);
 
     // If it's possible to perform the copy with a draw call, do that.
-    if (CanCopyWithDraw(renderer, sourceVkFormat, srcTilingMode, destVkFormat, destTilingMode) &&
+    if (vk::ImageHelper::CanCopyWithDraw(renderer, sourceVkFormat, srcTilingMode, destVkFormat,
+                                         destTilingMode) &&
         !forceCPUPath)
     {
         return copySubImageImplWithDraw(

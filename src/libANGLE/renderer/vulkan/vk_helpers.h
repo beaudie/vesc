@@ -1305,6 +1305,35 @@ class ImageHelper final : public Resource, public angle::Subject
     gl::Extents getLevelExtents2D(LevelIndex levelVK) const;
     bool isDepthOrStencil() const;
 
+    static bool FormatHasNecessaryFeature(RendererVk *renderer,
+                                          VkFormat format,
+                                          VkImageTiling tilingMode,
+                                          VkFormatFeatureFlags featureBits);
+
+    static bool CanCopyWithTransferCommon(RendererVk *renderer,
+                                          const vk::Format &srcFormat,
+                                          VkImageTiling srcTilingMode,
+                                          const vk::Format &destFormat,
+                                          VkImageTiling destTilingMode);
+
+    static bool CanCopyWithTransferForCopyTexture(RendererVk *renderer,
+                                                  const vk::Format &srcFormat,
+                                                  VkImageTiling srcTilingMode,
+                                                  const vk::Format &destFormat,
+                                                  VkImageTiling destTilingMode);
+
+    static bool CanCopyWithTransferForCopyImage(RendererVk *renderer,
+                                                const vk::Format &srcFormat,
+                                                VkImageTiling srcTilingMode,
+                                                const vk::Format &destFormat,
+                                                VkImageTiling destTilingMode);
+
+    static bool CanCopyWithDraw(RendererVk *renderer,
+                                const vk::Format &srcFormat,
+                                VkImageTiling srcTilingMode,
+                                const vk::Format &destFormat,
+                                VkImageTiling destTilingMode);
+
     // Clear either color or depth/stencil based on image format.
     void clear(VkImageAspectFlags aspectFlags,
                const VkClearValue &value,
@@ -1321,6 +1350,21 @@ class ImageHelper final : public Resource, public angle::Subject
                      const VkImageSubresourceLayers &srcSubresources,
                      const VkImageSubresourceLayers &dstSubresources,
                      CommandBuffer *commandBuffer);
+
+    static angle::Result CopyImageSubData(const gl::Context *context,
+                                          vk::ImageHelper *srcImage,
+                                          GLint srcLevel,
+                                          GLint srcX,
+                                          GLint srcY,
+                                          GLint srcZ,
+                                          vk::ImageHelper *dstImage,
+                                          GLint dstLevel,
+                                          GLint dstX,
+                                          GLint dstY,
+                                          GLint dstZ,
+                                          GLsizei srcWidth,
+                                          GLsizei srcHeight,
+                                          GLsizei srcDepth);
 
     // Generate mipmap from level 0 into the rest of the levels with blit.
     angle::Result generateMipmapsWithBlit(ContextVk *contextVk, LevelIndex maxLevel);

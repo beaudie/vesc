@@ -890,6 +890,25 @@ angle::CallCapture CaptureGetProgramResourceLocationIndexEXT(const State &glStat
                                                              const GLchar *name,
                                                              GLint returnValue);
 
+// GL_EXT_copy_image
+angle::CallCapture CaptureCopyImageSubDataEXT(const State &glState,
+                                              bool isCallValid,
+                                              GLuint srcName,
+                                              GLenum srcTarget,
+                                              GLint srcLevel,
+                                              GLint srcX,
+                                              GLint srcY,
+                                              GLint srcZ,
+                                              GLuint dstName,
+                                              GLenum dstTarget,
+                                              GLint dstLevel,
+                                              GLint dstX,
+                                              GLint dstY,
+                                              GLint dstZ,
+                                              GLsizei srcWidth,
+                                              GLsizei srcHeight,
+                                              GLsizei srcDepth);
+
 // GL_EXT_debug_marker
 angle::CallCapture CaptureInsertEventMarkerEXT(const State &glState,
                                                bool isCallValid,
@@ -1439,6 +1458,25 @@ angle::CallCapture CaptureEGLImageTargetTexture2DOES(const State &glState,
                                                      GLeglImageOES image);
 
 // GL_OES_compressed_ETC1_RGB8_texture
+
+// GL_OES_copy_image
+angle::CallCapture CaptureCopyImageSubDataOES(const State &glState,
+                                              bool isCallValid,
+                                              GLuint srcName,
+                                              GLenum srcTarget,
+                                              GLint srcLevel,
+                                              GLint srcX,
+                                              GLint srcY,
+                                              GLint srcZ,
+                                              GLuint dstName,
+                                              GLenum dstTarget,
+                                              GLint dstLevel,
+                                              GLint dstX,
+                                              GLint dstY,
+                                              GLint dstZ,
+                                              GLsizei srcWidth,
+                                              GLsizei srcHeight,
+                                              GLsizei srcDepth);
 
 // GL_OES_depth32
 

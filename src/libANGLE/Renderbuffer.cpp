@@ -156,6 +156,57 @@ angle::Result Renderbuffer::setStorageEGLImageTarget(const Context *context, egl
     return angle::Result::Continue;
 }
 
+template <typename T>
+angle::Result Renderbuffer::copyImageSubData(Context *context,
+                                             const T *srcBuffer,
+                                             GLint srcLevel,
+                                             GLint srcX,
+                                             GLint srcY,
+                                             GLint srcZ,
+                                             GLint dstLevel,
+                                             GLint dstX,
+                                             GLint dstY,
+                                             GLint dstZ,
+                                             GLsizei srcWidth,
+                                             GLsizei srcHeight,
+                                             GLsizei srcDepth)
+{
+    ANGLE_TRY(mImplementation->copyImageSubData(context, srcBuffer, srcLevel, srcX, srcY, srcZ,
+                                                dstLevel, dstX, dstY, dstZ, srcWidth, srcHeight,
+                                                srcDepth));
+
+    return angle::Result::Continue;
+}
+
+template angle::Result Renderbuffer::copyImageSubData<gl::Renderbuffer>(
+    Context *context,
+    const gl::Renderbuffer *srcBuffer,
+    GLint srcLevel,
+    GLint srcX,
+    GLint srcY,
+    GLint srcZ,
+    GLint dstLevel,
+    GLint dstX,
+    GLint dstY,
+    GLint dstZ,
+    GLsizei srcWidth,
+    GLsizei srcHeight,
+    GLsizei srcDepth);
+
+template angle::Result Renderbuffer::copyImageSubData<gl::Texture>(Context *context,
+                                                                   const gl::Texture *srcBuffer,
+                                                                   GLint srcLevel,
+                                                                   GLint srcX,
+                                                                   GLint srcY,
+                                                                   GLint srcZ,
+                                                                   GLint dstLevel,
+                                                                   GLint dstX,
+                                                                   GLint dstY,
+                                                                   GLint dstZ,
+                                                                   GLsizei srcWidth,
+                                                                   GLsizei srcHeight,
+                                                                   GLsizei srcDepth);
+
 rx::RenderbufferImpl *Renderbuffer::getImplementation() const
 {
     ASSERT(mImplementation);

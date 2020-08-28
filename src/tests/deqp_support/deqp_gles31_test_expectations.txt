@@ -243,3 +243,16 @@
 4371 VULKAN ANDROID : dEQP-GLES31.functional.shaders.implicit_conversions.es31.arithmetic.input_before_literal.add.int_to_vec3_vertex = FAIL
 4371 VULKAN ANDROID : dEQP-GLES31.functional.shaders.implicit_conversions.es31.arithmetic.input_before_literal.add.int_to_uvec3_vertex = FAIL
 4371 SWIFTSHADER : dEQP-GLES31.functional.shaders.implicit_conversions.* = FAIL
+
+// Swiftshader fails to create a correct source/destination srgb8_alpha8_astc image before copy, however 5x4 is correct
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.compressed.viewclass_astc*srgb8_alpha8_astc* = FAIL
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32*_srgb8_alpha8_astc_*_khr.* = FAIL
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.srgb8_alpha8_astc_*_khr_rgba32*.* = FAIL
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.compressed.viewclass_astc_5x4_rgba* = PASS
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32*_srgb8_alpha8_astc_5x4_khr.* = PASS
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.srgb8_alpha8_astc_5x4_khr_rgba32*.* = PASS
+
+// TEXTURE_3D target requires HDR astc support
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.compressed.viewclass_astc*texture3d* = SKIP
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32*_astc_*_khr.*texture3d = SKIP
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.*astc_*_khr_rgba32*.texture3d* = SKIP
