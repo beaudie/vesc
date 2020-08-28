@@ -563,8 +563,10 @@ CommandBufferHelper::CommandBufferHelper()
       mStencilStartAccess(ResourceAccess::Unused),
       mDepthEnabled(false),
       mDepthInvalidatedState(NeverInvalidated),
+      mDepthNumCmdsWhenInvalidated(kValidCmdCount),
       mStencilEnabled(false),
       mStencilInvalidatedState(NeverInvalidated),
+      mStencilNumCmdsWhenInvalidated(kValidCmdCount),
       mDepthStencilAttachmentIndex(kInvalidAttachmentIndex)
 {}
 
@@ -706,26 +708,34 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
 
 void CommandBufferHelper::onDepthAccess(ResourceAccess access)
 {
-    // TODO(ianelliott): Rework the handling of invalidated attachments in a follow-up CL, using
-    // the count of commands in the SecondaryCommandBuffer.
-    // See https://issuetracker.google.com/issues/163854287
     InvalidatedState invalidatedState;
 
     if (access == vk::ResourceAccess::Write)
     {
-        // This handles various scenarios that an app/test can do with valid GLES usage.  For
-        // example, consider an app that invalidates, doesn't disable the functionality, and draws
-        // again.  In that case, the drawing that occurs after the invalidate means that there is
-        // once again valid content in the attachment (i.e. that should not be discarded).  Since
-        // we don't track draws, we must be conservative and assume that a draw may have occured
-        // since invalidation unless the functionality has also been disabled and the re-enabled.
-        invalidatedState = (!mDepthEnabled) ? NoLongerInvalidated : Invalidated;
+        // Drawing to this attachment being enabled.  Remain invalidated.
+        if (mDepthInvalidatedState == Invalidated && !mDepthEnabled)
+        {
+            // Invalid and going from disabled to enabled.  Update mDepthNumCmdsWhenInvalidated.
+            // If the render pass ends and additional commands are recorded after this time, the
+            // attachment was drawn to and will be NoLongerInvalidated.
+            mDepthNumCmdsWhenInvalidated = mCommandBuffer.getCommandCount();
+        }
+        invalidatedState = Invalidated;
         // Keep track of whether depth functionality is enabled
         mDepthEnabled = true;
     }
     else
     {
-        invalidatedState = Invalidated;
+        // Drawing to this attachment being disabled.  The attachment becomes NoLongerInvalidated
+        // if all of the following are true:
+        //
+        // - Invalidated
+        // - Going from enabled to disabled
+        // - Was drawn to while enabled
+        invalidatedState = (mDepthInvalidatedState == Invalidated && mDepthEnabled &&
+                            mDepthNumCmdsWhenInvalidated != mCommandBuffer.getCommandCount())
+                               ? NoLongerInvalidated
+                               : Invalidated;
         // Keep track of whether depth functionality is enabled
         mDepthEnabled = false;
     }
@@ -740,26 +750,34 @@ void CommandBufferHelper::onDepthAccess(ResourceAccess access)
 
 void CommandBufferHelper::onStencilAccess(ResourceAccess access)
 {
-    // TODO(ianelliott): Rework the handling of invalidated attachments in a follow-up CL, using
-    // the count of commands in the SecondaryCommandBuffer.
-    // See https://issuetracker.google.com/issues/163854287
     InvalidatedState invalidatedState;
 
     if (access == vk::ResourceAccess::Write)
     {
-        // This handles various scenarios that an app/test can do with valid GLES usage.  For
-        // example, consider an app that invalidates, doesn't disable the functionality, and draws
-        // again.  In that case, the drawing that occurs after the invalidate means that there is
-        // once again valid content in the attachment (i.e. that should not be discarded).  Since
-        // we don't track draws, we must be conservative and assume that a draw may have occured
-        // since invalidation unless the functionality has also been disabled and the re-enabled.
-        invalidatedState = (!mStencilEnabled) ? NoLongerInvalidated : Invalidated;
+        // Drawing to this attachment being enabled.  Remain invalidated.
+        if (mStencilInvalidatedState == Invalidated && !mStencilEnabled)
+        {
+            // Invalid and going from disabled to enabled.  Update mStencilNumCmdsWhenInvalidated.
+            // If the render pass ends and additional commands are recorded after this time, the
+            // attachment was drawn to and will be NoLongerInvalidated.
+            mStencilNumCmdsWhenInvalidated = mCommandBuffer.getCommandCount();
+        }
+        invalidatedState = Invalidated;
         // Keep track of whether stencil functionality is enabled
         mStencilEnabled = true;
     }
     else
     {
-        invalidatedState = Invalidated;
+        // Drawing to this attachment being disabled.  The attachment becomes NoLongerInvalidated
+        // if all of the following are true:
+        //
+        // - Invalidated
+        // - Going from enabled to disabled
+        // - Was drawn to while enabled
+        invalidatedState = (mStencilInvalidatedState == Invalidated && mStencilEnabled &&
+                            mStencilNumCmdsWhenInvalidated != mCommandBuffer.getCommandCount())
+                               ? NoLongerInvalidated
+                               : Invalidated;
         // Keep track of whether stencil functionality is enabled
         mStencilEnabled = false;
     }
@@ -864,12 +882,16 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
 
     // Address invalidated depth/stencil attachments
-    if (mDepthInvalidatedState == Invalidated)
+    if (mDepthInvalidatedState == Invalidated &&
+        (!mDepthEnabled || (mDepthNumCmdsWhenInvalidated == mCommandBuffer.getCommandCount())))
     {
+        // The depth attachment is invalid, so don't store it
         dsOps.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
-    if (mStencilInvalidatedState == Invalidated)
+    if (mStencilInvalidatedState == Invalidated &&
+        (!mStencilEnabled || (mStencilNumCmdsWhenInvalidated == mCommandBuffer.getCommandCount())))
     {
+        // The stencil attachment is invalid, so don't store it
         dsOps.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
 
@@ -1099,10 +1121,12 @@ void CommandBufferHelper::reset()
         mRebindTransformFeedbackBuffers    = false;
         mDepthStartAccess                  = ResourceAccess::Unused;
         mStencilStartAccess                = ResourceAccess::Unused;
-        mDepthInvalidatedState             = NeverInvalidated;
         mDepthEnabled                      = false;
-        mStencilInvalidatedState           = NeverInvalidated;
+        mDepthInvalidatedState             = NeverInvalidated;
+        mDepthNumCmdsWhenInvalidated       = kValidCmdCount;
         mStencilEnabled                    = false;
+        mStencilInvalidatedState           = NeverInvalidated;
+        mStencilNumCmdsWhenInvalidated     = kValidCmdCount;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
         mRenderPassUsedImages.clear();
     }

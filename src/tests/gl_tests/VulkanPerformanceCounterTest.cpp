@@ -450,18 +450,31 @@ TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRender
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
-    // Second, invalidate the depth buffer and draw with depth buffer disabled
+    // Second, invalidate and disable the depth and stencil buffers and draw with them disabled
     const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
     // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
     ASSERT_GL_NO_ERROR();
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
     // Third, re-enable the depth buffer and draw again
     ASSERT_GL_NO_ERROR();
     glEnable(GL_DEPTH_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fourth, enable again (duplicate--ignored by dirty bits) the depth buffer and draw again
+    ASSERT_GL_NO_ERROR();
+    glEnable(GL_DEPTH_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fifth, disable the depth buffer and draw again
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
