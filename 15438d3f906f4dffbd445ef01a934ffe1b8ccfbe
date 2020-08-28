@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f70dd8fc_01017caf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T03:07:49Z",
+      "side": 1,
+      "message": "Still getting this: Search for UNASSIGNED-BestPractices-vkCreateCommandPool-command-buffer-reset in https://chromium-swarm.appspot.com/task?id\u003d4e4baadf0f4b9a10\n\nIt\u0027s a failing test, so maybe our bug is that we don\u0027t reset properly on error.",
+      "revId": "15438d3f906f4dffbd445ef01a934ffe1b8ccfbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
