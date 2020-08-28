@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "a45559e0_1582e1c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-28T15:31:18Z",
+      "side": 1,
+      "message": "FYI I\u0027m running some perf numbers w/ this CL and noticed that Aztec ruins has some major corruption with colors being way off and/or washed out.",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22d9f484_b22d4f9d",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 32
