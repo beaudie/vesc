@@ -479,10 +479,25 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         if (contextVk->hasStartedRenderPassWithCommands() &&
             contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer))
         {
-            clearWithCommand(&contextVk->getStartedRenderPassCommands().getCommandBuffer(),
-                             scissoredRenderArea, clearColorDrawBuffersMask,
-                             clearDepthWithRenderPassLoadOp, clearStencilWithRenderPassLoadOp,
-                             clearColorValue, clearDepthStencilValue);
+            RendererVk *renderer     = contextVk->getRenderer();
+            bool clearAnyWithCommand = clearAnyWithRenderPassLoadOp;
+
+            // On buggy hardware, prefer to clear color with a draw call instead of
+            // vkCmdClearAttachments.
+            if (renderer->getFeatures().preferDrawClearOverVkCmdClearAttachments.enabled)
+            {
+                clearColorDrawBuffersMask.reset();
+                clearAnyWithCommand =
+                    clearDepthWithRenderPassLoadOp || clearStencilWithRenderPassLoadOp;
+            }
+
+            if (clearAnyWithCommand)
+            {
+                clearWithCommand(&contextVk->getStartedRenderPassCommands().getCommandBuffer(),
+                                 scissoredRenderArea, clearColorDrawBuffersMask,
+                                 clearDepthWithRenderPassLoadOp, clearStencilWithRenderPassLoadOp,
+                                 clearColorValue, clearDepthStencilValue);
+            }
         }
         else
         {
@@ -492,7 +507,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         }
 
         // Fallback to other methods for whatever isn't cleared here.
-        if (clearColorWithRenderPassLoadOp)
+        if (clearColorDrawBuffersMask.any())
         {
             clearColorBuffers.reset();
             clearColor = false;

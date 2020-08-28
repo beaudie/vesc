@@ -361,6 +361,14 @@ struct FeaturesVk : FeatureSetBase
         "preferred_large_heap_block_size_4M", FeatureCategory::VulkanWorkarounds,
         "Use 4 MB preferred large heap block size with AMD allocator", &members,
         "http://anglebug.com/4995"};
+
+    // Qualcomm missynchronizes vkCmdClearAttachments in the middle of render pass.
+    // https://issuetracker.google.com/166809097
+    Feature preferDrawClearOverVkCmdClearAttachments = {
+        "prefer_draw_clear_over_vkCmdClearAttachments", FeatureCategory::VulkanWorkarounds,
+        "On some hardware, clear using a draw call instead of vkCmdClearAttachments in the middle "
+        "of render pass due to bugs",
+        &members, "https://issuetracker.google.com/166809097"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
