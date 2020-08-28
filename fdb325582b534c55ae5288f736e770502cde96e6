@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "82f39507_43913101",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "No, I tried that but the spirv validator complains that the types don\u0027t match.\nUsing an untyped temporary works around that issue.",
+      "parentUuid": "22d9f484_b22d4f9d",
+      "range": {
+        "startLine": 1286,
+        "startChar": 72,
+        "endLine": 1286,
+        "endChar": 79
+      },
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46d8298e_c6208529",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 32
@@ -73,6 +97,24 @@
       "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc832cec_f1541bb4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "The location decoration has other mods that apply and is done at the end of the function.",
+      "parentUuid": "46d8298e_c6208529",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +135,24 @@
     },
     {
       "key": {
+        "uuid": "6e6a1e0a_01820ba3",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "The fixedVaryingId is always \"mediump\"/ relaxed precision so have to add that decoration.\nUpdated the comment.",
+      "parentUuid": "482630ce_bf83e771",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5831e20d_b3721172",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 32
@@ -110,6 +170,24 @@
     },
     {
       "key": {
+        "uuid": "ccacd58a_f1a33112",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "I don\u0027t think this applies here. We only care about varyings between shader stages.\nlayout qualifiers are used for inputs \u0026 outputs to the shader (e.g. uniforms, primitives (e.g. position, color, etc.).\nWhen I tried a test that used the layout location I got:\nERROR: 0:4: \u0027location\u0027 : invalid layout qualifier: only valid on program inputs and outputs\nAssuming that was the type of layout component you meant.",
+      "parentUuid": "5831e20d_b3721172",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3802a2ee_3a06284e",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 32
@@ -124,6 +202,24 @@
       "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e017ced_48704d21",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3802a2ee_3a06284e",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +246,30 @@
     },
     {
       "key": {
+        "uuid": "aca8ac9a_22e4ae09",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "As above, no the types don\u0027t match. Have to use a temp to get things to work.",
+      "parentUuid": "0519ca03_80e2d635",
+      "range": {
+        "startLine": 1750,
+        "startChar": 54,
+        "endLine": 1750,
+        "endChar": 61
+      },
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1dbdad12_24f761ca",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 32
@@ -164,6 +284,24 @@
       "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6c67976_61752fa8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "I\u0027ll need to update the doc based on my learnings.\nWhen I was experimenting I tried various changes to the GLSL such as changing the variable from an input/output to a global and that caused a bunch of stuff to be generated in the spirv output, thus my comment about complexity.\nStudying the spirv doc it appears that spirv does allow a variable to be global (spv::StorageClassPrivate) without adding other complexities. So, it appears that I can simply change the storage class to private and the variable becomes a global.",
+      "parentUuid": "1dbdad12_24f761ca",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +325,30 @@
       "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a07bf0a8_1120e24d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9b255ed_718f407c",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 43
+      },
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

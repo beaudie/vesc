@@ -241,6 +241,30 @@
     },
     {
       "key": {
+        "uuid": "ed7c596d_95373f3a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "SPIRV only supports a relaxed precision qualifier, so GLSL\u0027s mediump and lowp both become a \"spv::DecorationRelaxedPrecision\" decoration to the variable. Thus there is only two kinds of mismatch highp vs. mediump and vice versa.",
+      "parentUuid": "f1e66aca_b40b503f",
+      "range": {
+        "startLine": 894,
+        "startChar": 0,
+        "endLine": 895,
+        "endChar": 38
+      },
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8eb33f66_b1fc2913",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 26
@@ -258,6 +282,24 @@
     },
     {
       "key": {
+        "uuid": "ec72ae5e_5b9c0353",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "As above, there is only one choice so boolean is sufficient.",
+      "parentUuid": "8eb33f66_b1fc2913",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7875e4b_59e2d26e",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 26
@@ -272,6 +314,24 @@
       "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "277d1f4d_bdd03e3d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-08-28T17:48:31Z",
+      "side": 1,
+      "message": "When there is a mismatch we always transfer mediump and thus need to cast whichever side is the highp side. In this case, the front shader is saving the value as mediump and we then add code on the other side that loads the mediump and casts it to highp for the shader to use.",
+      "parentUuid": "c7875e4b_59e2d26e",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
