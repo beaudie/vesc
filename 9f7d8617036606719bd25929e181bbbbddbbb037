@@ -33,6 +33,29 @@
       "revId": "9f7d8617036606719bd25929e181bbbbddbbb037",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a48f7ccd_6a284bb4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T14:27:04Z",
+      "side": 1,
+      "message": "just confirming - 0 here means no preference?",
+      "range": {
+        "startLine": 65,
+        "startChar": 48,
+        "endLine": 65,
+        "endChar": 75
+      },
+      "revId": "9f7d8617036606719bd25929e181bbbbddbbb037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
