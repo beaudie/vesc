@@ -22,6 +22,30 @@
       "revId": "c3adfae6d3b596530d3ab1ad24c1f36f1ab8b235",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86a68732_9bdd583e",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-28T23:25:24Z",
+      "side": 1,
+      "message": "Since this CL has just about passed CQ and there will likely be another round of these updates, I\u0027ll try and sneak that into one of those CLs.",
+      "parentUuid": "867dfa26_2915c68e",
+      "range": {
+        "startLine": 190,
+        "startChar": 28,
+        "endLine": 190,
+        "endChar": 69
+      },
+      "revId": "c3adfae6d3b596530d3ab1ad24c1f36f1ab8b235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
