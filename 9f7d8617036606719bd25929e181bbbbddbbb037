@@ -56,6 +56,30 @@
       "revId": "9f7d8617036606719bd25929e181bbbbddbbb037",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14a5ee32_159815c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000539
+      },
+      "writtenOn": "2020-08-28T16:14:45Z",
+      "side": 1,
+      "message": "Correct. See: https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git/+/master/src/vk_mem_alloc.h#2279",
+      "parentUuid": "a48f7ccd_6a284bb4",
+      "range": {
+        "startLine": 65,
+        "startChar": 48,
+        "endLine": 65,
+        "endChar": 75
+      },
+      "revId": "9f7d8617036606719bd25929e181bbbbddbbb037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
