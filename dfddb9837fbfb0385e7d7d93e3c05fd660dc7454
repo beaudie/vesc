@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5f2f6ff_9801329e",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T03:03:12Z",
+      "side": 1,
+      "message": "You could instead do `int data[];`. Neither `int data[0]` nor `int data[]` are valid C++, but at least the latter is valid C, so maybe no need for some warning suppressions!",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 6
+      },
+      "revId": "dfddb9837fbfb0385e7d7d93e3c05fd660dc7454",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
