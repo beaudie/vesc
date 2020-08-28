@@ -104,6 +104,41 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6b4865b_246ad385",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-28T00:54:50Z",
+      "side": 1,
+      "message": "Jamie and I videoconferenced.  He was referring to setting the disable count infinity.  We talked through a number of cases, and modified things so that they will hopefully handle all cases (I need to work through the details).\n\nAfter discussing the revert of the one mContentDefined CL, there\u0027s a bias to land this CL using the state-based approach, and try to move mConentDefined to ImageHandler sooner.  After rebasing this CL on top of the revert, I am reminded that there are cases where mContentDefined can only be accurate at endRP.  If I have time, I want to try the count-only-based approach.  But getting mContentDefined first seems best.",
+      "parentUuid": "196df8fa_fa5f292d",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "04351cca_184e2018",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-28T00:54:50Z",
+      "side": 1,
+      "message": "Jamie\u0027s counsel was to use mCommands.size().  In my testing, mCommands.size() stays constant most of the time, since larger blocks are allocated, and multiple commands fit within an allocated block.",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
