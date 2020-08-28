@@ -275,6 +275,30 @@
       "revId": "181e73ab7956036533fa1677a7298614c05d1c11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "185dc8de_65608be6",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T18:08:23Z",
+      "side": 1,
+      "message": "Should say:\n\n    using StructMap \u003d std::unordered_map\u003cconst TStructure *, StructConversionData\u003e;",
+      "parentUuid": "6cb20e6f_21b68790",
+      "range": {
+        "startLine": 537,
+        "startChar": 4,
+        "endLine": 537,
+        "endChar": 12
+      },
+      "revId": "181e73ab7956036533fa1677a7298614c05d1c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
