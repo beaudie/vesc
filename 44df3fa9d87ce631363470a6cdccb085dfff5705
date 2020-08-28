@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b10fd0f_6b7dabfc",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:53:48Z",
+      "side": 1,
+      "message": "This sounds like a bug in the Vulkan backend. The application is perfectly allowed to render with a renderbuffer, delete it, then flush. The `retain()` calls should have made sure everything is ok.\n\nYou should be able to write a separate regression test exactly to do that: use renderbuffer to draw, delete it, then EXPECT_PIXEL_COLOR_EQ.\n\n+Jamie",
+      "revId": "44df3fa9d87ce631363470a6cdccb085dfff5705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
