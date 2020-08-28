@@ -1,0 +1,344 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b784a63_19ac23c5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #1",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2276e247_b5093d02",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #2",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2235fc91_139488d0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #3",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f9cc864_b559d2a9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #4",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9de4d3b_5a637c86",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #5",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "765efb01_a30141e2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #6",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12d3391d_f74739a5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #7",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84c1150e_01ee15c4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Bug #8",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a911b6e2_e3be0366",
+        "filename": "src/tests/gl_tests/BPTCCompressedTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #5",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "076c1457_fb23ce91",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #1",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f40ce69_48a2aa3b",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #2",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db043444_d7780062",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #3",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e642d38_610cf1a1",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #2",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0c0dc45_982696c9",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #7",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ff61e32_c37f63f6",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Exercises a path that was already correct.",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8cc7bbd5_88743f93",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1273,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #6",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41204b04_6b9ff787",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Exercises a path that was already correct.",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9086497a_cc897ad7",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #4",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7581fbe8_f2b95150",
+        "filename": "src/tests/gl_tests/DXT1CompressedTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "(will remove, duplicated but didn\u0027t modify this test)",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68e09951_fda92e32",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:01:11Z",
+      "side": 1,
+      "message": "Test for Bug #8",
+      "revId": "74f10a7cff91643ddb79eb194b014a106352dbde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
