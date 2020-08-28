@@ -49,6 +49,7 @@ namespace rx
 
 namespace
 {
+constexpr size_t kDeferredFlushMaxCount = 4;
 // For DesciptorSetUpdates
 constexpr size_t kDescriptorBufferInfosInitialSize = 8;
 constexpr size_t kDescriptorImageInfosInitialSize  = 4;
@@ -671,6 +672,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mRenderPassCommands(nullptr),
       mHasPrimaryCommands(false),
       mGpuEventsEnabled(false),
+      mDeferredFlushAllowed(true),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mPerfCounters{},
@@ -954,6 +956,8 @@ angle::Result ContextVk::initialize()
     mStagingBuffer.init(mRenderer, kStagingBufferUsageFlags, stagingBufferAlignment,
                         kStagingBufferSize, true);
 
+    resetDeferredFlush();
+
     return angle::Result::Continue;
 }
 
@@ -971,8 +975,27 @@ angle::Result ContextVk::startPrimaryCommandBuffer()
     return angle::Result::Continue;
 }
 
+bool ContextVk::hasGPUPendingCommands()
+{
+    return isSerialInUse(mRenderer->getLastSubmittedQueueSerial());
+}
+
 angle::Result ContextVk::flush(const gl::Context *context)
 {
+    ANGLE_TRY(checkCompletedCommands());
+
+    // ToDo(http://b/167269999): We need finer grain check of GPU progress within a command buffer
+    // so that we don't starve GPU If glFlush deferral is allowed (feature is enabled and no sync
+    // objects are used), and we have not deferred too many submissions, then we will skip the
+    // glFlush call here.
+    if (!context->isShared() && mDeferredFlushAllowed &&
+        mDeferredFlushCount < kDeferredFlushMaxCount && hasGPUPendingCommands())
+    {
+        WARN() << "Skipped" << std::endl;
+        mDeferredFlushCount++;
+        return angle::Result::Continue;
+    }
+
     return flushImpl(nullptr);
 }
 
@@ -1802,6 +1825,9 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
     ANGLE_VK_TRY(this, cpuReady.get().init(device, eventCreateInfo));
     ANGLE_VK_TRY(this, gpuReady.get().init(device, eventCreateInfo));
     ANGLE_VK_TRY(this, gpuDone.get().init(device, eventCreateInfo));
+
+    // We must respect glFlush call if we ever insert synchronization events
+    disableDeferredFlush();
 
     constexpr uint32_t kRetries = 10;
 
@@ -4159,6 +4185,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
                                 TRACE_EVENT_PHASE_BEGIN, eventName));
     }
 
+    resetDeferredFlush();
+
     return angle::Result::Continue;
 }
 
@@ -4942,4 +4970,11 @@ bool ContextVk::shouldSwitchToDepthReadOnlyMode(const gl::Context *context,
            texture->isBoundToFramebuffer(mDrawFramebuffer->getState().getFramebufferSerial()) &&
            !mDrawFramebuffer->isReadOnlyDepthMode();
 }
+
+void ContextVk::resetDeferredFlush()
+{
+    mDeferredFlushAllowed = mRenderer->getFeatures().enableDeferredFlush.enabled;
+    mDeferredFlushCount   = 0;
+}
+
 }  // namespace rx

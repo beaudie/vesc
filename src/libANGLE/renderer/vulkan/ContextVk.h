@@ -426,6 +426,8 @@ class ContextVk : public ContextImpl, public vk::Context
     // Wait for completion of batches until (at least) batch with given serial is finished.
     angle::Result finishToSerial(Serial serial);
 
+    bool hasGPUPendingCommands();
+
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                           vk::RenderPass **renderPassOut);
     angle::Result getRenderPassWithOps(const vk::RenderPassDesc &desc,
@@ -633,6 +635,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     const vk::PerfCounters &getPerfCounters() const { return mPerfCounters; }
     vk::PerfCounters &getPerfCounters() { return mPerfCounters; }
+
+    void disableDeferredFlush() { mDeferredFlushAllowed = false; }
 
   private:
     // Dirty bits.
@@ -930,6 +934,8 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result updateRenderPassDepthAccess();
     bool shouldSwitchToDepthReadOnlyMode(const gl::Context *context, gl::Texture *texture) const;
 
+    void resetDeferredFlush();
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
@@ -1076,6 +1082,9 @@ class ContextVk : public ContextImpl, public vk::Context
     std::vector<GpuEventQuery> mInFlightGpuEventQueries;
     // A list of gpu events since the last clock sync.
     std::vector<GpuEvent> mGpuEvents;
+
+    bool mDeferredFlushAllowed;
+    size_t mDeferredFlushCount;
 
     // Semaphores that must be waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;
