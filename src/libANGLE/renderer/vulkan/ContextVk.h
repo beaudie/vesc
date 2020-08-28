@@ -634,6 +634,8 @@ class ContextVk : public ContextImpl, public vk::Context
     const vk::PerfCounters &getPerfCounters() const { return mPerfCounters; }
     vk::PerfCounters &getPerfCounters() { return mPerfCounters; }
 
+    void disableDeferredFlush() { mDeferredFlushAllowed = false; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -930,6 +932,8 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result updateRenderPassDepthAccess();
     bool shouldSwitchToDepthReadOnlyMode(const gl::Context *context, gl::Texture *texture) const;
 
+    void resetDeferredFlush();
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
@@ -1076,6 +1080,9 @@ class ContextVk : public ContextImpl, public vk::Context
     std::vector<GpuEventQuery> mInFlightGpuEventQueries;
     // A list of gpu events since the last clock sync.
     std::vector<GpuEvent> mGpuEvents;
+
+    bool mDeferredFlushAllowed;
+    int32_t mDeferredFlushCount;
 
     // Semaphores that must be waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;
