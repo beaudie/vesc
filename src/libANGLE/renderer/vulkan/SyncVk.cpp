@@ -56,6 +56,9 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
     commandBuffer.setEvent(mEvent.getHandle(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
     retain(&contextVk->getResourceUseList());
 
+    // We must respect glFlush call if we ever insert synchronization events
+    contextVk->disableDeferredFlush();
+
     return angle::Result::Continue;
 }
 
@@ -219,6 +222,9 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     ANGLE_VK_TRY(contextVk, fence.get().importFd(device, importFenceFdInfo));
     mFenceWithFd = fence.release();
     retain(&contextVk->getResourceUseList());
+
+    // We must respect glFlush call if we ever insert synchronization events
+    contextVk->disableDeferredFlush();
 
     return angle::Result::Continue;
 }
