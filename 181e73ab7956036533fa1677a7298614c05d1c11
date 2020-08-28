@@ -251,6 +251,30 @@
       "revId": "181e73ab7956036533fa1677a7298614c05d1c11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cb20e6f_21b68790",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-28T18:04:55Z",
+      "side": 1,
+      "message": "The compiler:\n\n../../third_party/llvm-build/Release+Asserts/bin/clang++ -MMD -MF obj/translator/RewriteRowMajorMatrices.o.d -DANGLE_ENABLE_ESSL -DANGLE_ENABLE_GLSL -DANGLE_ENABLE_VULKAN -DANGLE_ENABLE_SWIFTSHADER -DDCHECK_ALWAYS_ON\u003d1 -DUSE_UDEV -DUSE_AURA\u003d1 -DUSE_GLIB\u003d1 -DUSE_NSS_CERTS\u003d1 -DUSE_X11\u003d1 -D_FILE_OFFSET_BITS\u003d64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_GNU_SOURCE -DCR_CLANG_REVISION\u003d\\\"llvmorg-12-init-1771-g1bd7046e-5\\\" -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DCOMPONENT_BUILD -DCR_SYSROOT_HASH\u003dcc396d2ee91286924b377c2124b1efbcad7df8f2 -D_DEBUG -DDYNAMIC_ANNOTATIONS_ENABLED\u003d1 -D_GLIBCXX_DEBUG\u003d1 -DANGLE_ENABLE_RELEASE_ASSERTS -DANGLE_IS_64_BIT_CPU -DANGLE_IS_LINUX -I../../include -I../../src -I../../include -I../../src/common/third_party/base -Igen/angle -I../../include -fno-strict-aliasing --param\u003dssp-buffer-size\u003d4 -fstack-protector -funwind-tables -fPIC -pthread -fcolor-diagnostics -fmerge-all-constants -fcrash-diagnostics-dir\u003d../../tools/clang/crashreports -mllvm -instcombine-lower-dbg-declare\u003d0 -m64 -march\u003dx86-64 -Wno-builtin-macro-redefined -D__DATE__\u003d -D__TIME__\u003d -D__TIMESTAMP__\u003d -Xclang -fdebug-compilation-dir -Xclang . -no-canonical-prefixes -Wall -Werror -Wextra -Wimplicit-fallthrough -Wunreachable-code -Wthread-safety -Wextra-semi -Wno-missing-field-initializers -Wno-unused-parameter -Wno-c++11-narrowing -Wno-unneeded-internal-declaration -Wno-undefined-var-template -Wno-psabi -Wno-ignored-pragma-optimize -Wno-implicit-int-float-conversion -Wno-final-dtor-non-final-class -Wno-builtin-assume-aligned-alignment -Wno-deprecated-copy -Wno-non-c-typedef-for-linkage -Wmax-tokens -O0 -fno-omit-frame-pointer -g2 -Xclang -debug-info-kind\u003dconstructor -gsplit-dwarf -ggnu-pubnames -ftrivial-auto-var-init\u003dpattern -fvisibility\u003dhidden -Wheader-hygiene -Wstring-conversion -Wtautological-overlap-compare -Wexit-time-destructors -Wglobal-constructors -Wconditional-uninitialized -Wextra-semi-stmt -Wfloat-conversion -Winconsistent-missing-destructor-override -Wmissing-field-initializers -Wnewline-eof -Wnon-virtual-dtor -Wredundant-parens -Wshadow-field -Wtautological-type-limit-compare -Wundefined-reinterpret-cast -Wunneeded-internal-declaration -Wparentheses -Wrange-loop-analysis -Wstrict-prototypes -Wunreachable-code -Wshorten-64-to-32 -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std\u003dc++14 -fno-trigraphs -Wno-trigraphs -fno-exceptions -fno-rtti --sysroot\u003d../../build/linux/debian_sid_amd64-sysroot -fvisibility-inlines-hidden -c ../../src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp -o obj/translator/RewriteRowMajorMatrices.o\n../../src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp:535:16: error: using declaration cannot refer to a template specialization\n    using std::unordered_map\u003cconst TStructure *, StructConversionData\u003e StructMap;\n               ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "parentUuid": "9250af21_98064c0a",
+      "range": {
+        "startLine": 537,
+        "startChar": 4,
+        "endLine": 537,
+        "endChar": 12
+      },
+      "revId": "181e73ab7956036533fa1677a7298614c05d1c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
