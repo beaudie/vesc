@@ -16,6 +16,29 @@
       "revId": "44aff5b7e33b140f21782c1e74b43f7d5bb3bb1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92e71e5e_7a6367c4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2947,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-28T19:44:06Z",
+      "side": 1,
+      "message": "nit: Could use gl::bitCast",
+      "range": {
+        "startLine": 2947,
+        "startChar": 8,
+        "endLine": 2947,
+        "endChar": 57
+      },
+      "revId": "44aff5b7e33b140f21782c1e74b43f7d5bb3bb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
