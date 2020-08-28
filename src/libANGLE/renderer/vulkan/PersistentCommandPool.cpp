@@ -29,8 +29,14 @@ angle::Result PersistentCommandPool::init(vk::Context *context, uint32_t queueFa
     // Initialize the command pool now that we know the queue family index.
     VkCommandPoolCreateInfo commandPoolInfo = {};
     commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    commandPoolInfo.queueFamilyIndex        = queueFamilyIndex;
+    // TODO https://issuetracker.google.com/issues/
+    // We currently reset individual command buffers (CBs) from this pool. Alternatively we could
+    // reset the
+    //  entire command pool if we had a design that allowed us to wait until all CBs from a pool
+    //  were idle.
+    commandPoolInfo.flags =
+        VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    commandPoolInfo.queueFamilyIndex = queueFamilyIndex;
 
     ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), commandPoolInfo));
 
