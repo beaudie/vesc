@@ -460,6 +460,30 @@
       "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e805ce0_3143aef3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T19:12:52Z",
+      "side": 1,
+      "message": "Instead of storing these as members, pass them via ProgramLinkedResources (to Program::link) or as an additional argument to ProgramPiplineImpl::link (make a separate CL to update this API).\n\nI did confirm you\u0027re missing serialization for the merged varyings. And it\u0027s unnecessary so we shouldn\u0027t store it.",
+      "parentUuid": "4f28f6f2_49c514ec",
+      "range": {
+        "startLine": 878,
+        "startChar": 61,
+        "endLine": 878,
+        "endChar": 83
+      },
+      "revId": "84c6ec107e3cfc8b9a870546e1b19b3542ed53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

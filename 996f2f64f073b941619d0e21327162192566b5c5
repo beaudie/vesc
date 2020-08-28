@@ -16,6 +16,24 @@
       "revId": "996f2f64f073b941619d0e21327162192566b5c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32fe24b6_b6faeaba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T19:12:52Z",
+      "side": 1,
+      "message": "Please add a regression test for this bug before landing.",
+      "parentUuid": "df1a1251_16fae036",
+      "revId": "996f2f64f073b941619d0e21327162192566b5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
