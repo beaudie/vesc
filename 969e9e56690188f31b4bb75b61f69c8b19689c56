@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dbf8738_8c712fcf",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2947,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T17:31:33Z",
+      "side": 1,
+      "message": "sizeof(GLsync)?",
+      "range": {
+        "startLine": 2947,
+        "startChar": 48,
+        "endLine": 2947,
+        "endChar": 54
+      },
+      "revId": "969e9e56690188f31b4bb75b61f69c8b19689c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
