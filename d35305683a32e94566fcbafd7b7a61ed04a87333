@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d17155e2_07165b6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-28T17:08:58Z",
+      "side": 1,
+      "message": "If you are tracking number of commands when invalidated, then I don\u0027t think you still need track invalidateState. All you really care is the number of commands when the very last invalidate call, and number of commands when very last mDepthEnabled set to true. You only need to restore if enable is occurred after invalidate and there are drawing after enable. I think logic can be simpler.\n",
+      "revId": "d35305683a32e94566fcbafd7b7a61ed04a87333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02d40523_b5427f03",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-28T17:08:58Z",
+      "side": 1,
+      "message": "Instead of getCommandCount, can\u0027t you just check mCommand.size()?",
+      "range": {
+        "startLine": 696,
+        "startChar": 11,
+        "endLine": 696,
+        "endChar": 26
+      },
+      "revId": "d35305683a32e94566fcbafd7b7a61ed04a87333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce74fc52_88cc3e4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-28T17:08:58Z",
+      "side": 1,
+      "message": "I may have lost track of this. My understanding is that whenever mDepthEnabled is updated, we also update mDepthInvalidatedState, so why we have check of both again?",
+      "range": {
+        "startLine": 1010,
+        "startChar": 16,
+        "endLine": 1010,
+        "endChar": 71
+      },
+      "revId": "d35305683a32e94566fcbafd7b7a61ed04a87333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
