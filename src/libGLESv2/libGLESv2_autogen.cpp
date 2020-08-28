@@ -3798,6 +3798,28 @@ GLint GL_APIENTRY glGetProgramResourceLocationIndexEXT(GLuint program,
     return gl::GetProgramResourceLocationIndexEXT(program, programInterface, name);
 }
 
+// GL_EXT_copy_image
+void GL_APIENTRY glCopyImageSubDataEXT(GLuint srcName,
+                                       GLenum srcTarget,
+                                       GLint srcLevel,
+                                       GLint srcX,
+                                       GLint srcY,
+                                       GLint srcZ,
+                                       GLuint dstName,
+                                       GLenum dstTarget,
+                                       GLint dstLevel,
+                                       GLint dstX,
+                                       GLint dstY,
+                                       GLint dstZ,
+                                       GLsizei srcWidth,
+                                       GLsizei srcHeight,
+                                       GLsizei srcDepth)
+{
+    return gl::CopyImageSubDataEXT(srcName, srcTarget, srcLevel, srcX, srcY, srcZ, dstName,
+                                   dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth, srcHeight,
+                                   srcDepth);
+}
+
 // GL_EXT_debug_marker
 void GL_APIENTRY glInsertEventMarkerEXT(GLsizei length, const GLchar *marker)
 {
@@ -4435,6 +4457,28 @@ void GL_APIENTRY glEGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image
 }
 
 // GL_OES_compressed_ETC1_RGB8_texture
+
+// GL_OES_copy_image
+void GL_APIENTRY glCopyImageSubDataOES(GLuint srcName,
+                                       GLenum srcTarget,
+                                       GLint srcLevel,
+                                       GLint srcX,
+                                       GLint srcY,
+                                       GLint srcZ,
+                                       GLuint dstName,
+                                       GLenum dstTarget,
+                                       GLint dstLevel,
+                                       GLint dstX,
+                                       GLint dstY,
+                                       GLint dstZ,
+                                       GLsizei srcWidth,
+                                       GLsizei srcHeight,
+                                       GLsizei srcDepth)
+{
+    return gl::CopyImageSubDataOES(srcName, srcTarget, srcLevel, srcX, srcY, srcZ, dstName,
+                                   dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth, srcHeight,
+                                   srcDepth);
+}
 
 // GL_OES_depth32
 
@@ -5595,6 +5639,50 @@ void GL_APIENTRY glCopyImageSubDataContextANGLE(GLeglContext ctx,
     return gl::CopyImageSubDataContextANGLE(ctx, srcName, srcTarget, srcLevel, srcX, srcY, srcZ,
                                             dstName, dstTarget, dstLevel, dstX, dstY, dstZ,
                                             srcWidth, srcHeight, srcDepth);
+}
+
+void GL_APIENTRY glCopyImageSubDataEXTContextANGLE(GLeglContext ctx,
+                                                   GLuint srcName,
+                                                   GLenum srcTarget,
+                                                   GLint srcLevel,
+                                                   GLint srcX,
+                                                   GLint srcY,
+                                                   GLint srcZ,
+                                                   GLuint dstName,
+                                                   GLenum dstTarget,
+                                                   GLint dstLevel,
+                                                   GLint dstX,
+                                                   GLint dstY,
+                                                   GLint dstZ,
+                                                   GLsizei srcWidth,
+                                                   GLsizei srcHeight,
+                                                   GLsizei srcDepth)
+{
+    return gl::CopyImageSubDataEXTContextANGLE(ctx, srcName, srcTarget, srcLevel, srcX, srcY, srcZ,
+                                               dstName, dstTarget, dstLevel, dstX, dstY, dstZ,
+                                               srcWidth, srcHeight, srcDepth);
+}
+
+void GL_APIENTRY glCopyImageSubDataOESContextANGLE(GLeglContext ctx,
+                                                   GLuint srcName,
+                                                   GLenum srcTarget,
+                                                   GLint srcLevel,
+                                                   GLint srcX,
+                                                   GLint srcY,
+                                                   GLint srcZ,
+                                                   GLuint dstName,
+                                                   GLenum dstTarget,
+                                                   GLint dstLevel,
+                                                   GLint dstX,
+                                                   GLint dstY,
+                                                   GLint dstZ,
+                                                   GLsizei srcWidth,
+                                                   GLsizei srcHeight,
+                                                   GLsizei srcDepth)
+{
+    return gl::CopyImageSubDataOESContextANGLE(ctx, srcName, srcTarget, srcLevel, srcX, srcY, srcZ,
+                                               dstName, dstTarget, dstLevel, dstX, dstY, dstZ,
+                                               srcWidth, srcHeight, srcDepth);
 }
 
 void GL_APIENTRY glCopyTexImage2DContextANGLE(GLeglContext ctx,

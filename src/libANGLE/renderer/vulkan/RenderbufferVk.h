@@ -36,6 +36,34 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
                                         size_t height) override;
     angle::Result setStorageEGLImageTarget(const gl::Context *context, egl::Image *image) override;
 
+    angle::Result copyImageSubData(const gl::Context *context,
+                                   const gl::Renderbuffer *srcBuffer,
+                                   GLint srcLevel,
+                                   GLint srcX,
+                                   GLint srcY,
+                                   GLint srcZ,
+                                   GLint dstLevel,
+                                   GLint dstX,
+                                   GLint dstY,
+                                   GLint dstZ,
+                                   GLsizei srcWidth,
+                                   GLsizei srcHeight,
+                                   GLsizei srcDepth) override;
+
+    angle::Result copyImageSubData(const gl::Context *context,
+                                   const gl::Texture *srcTexture,
+                                   GLint srcLevel,
+                                   GLint srcX,
+                                   GLint srcY,
+                                   GLint srcZ,
+                                   GLint dstLevel,
+                                   GLint dstX,
+                                   GLint dstY,
+                                   GLint dstZ,
+                                   GLsizei srcWidth,
+                                   GLsizei srcHeight,
+                                   GLsizei srcDepth) override;
+
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
                                             GLenum binding,
                                             const gl::ImageIndex &imageIndex,
@@ -57,6 +85,8 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
                                        GLenum format,
                                        GLenum type,
                                        void *pixels) override;
+
+    angle::Result ensureImageInitialized(const gl::Context *context);
 
   private:
     void releaseAndDeleteImage(ContextVk *contextVk);

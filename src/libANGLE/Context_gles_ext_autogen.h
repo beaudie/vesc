@@ -299,6 +299,7 @@
     GLint getProgramResourceLocationIndex(ShaderProgramID programPacked, GLenum programInterface,  \
                                           const GLchar *name);                                     \
     /* GL_EXT_compressed_ETC1_RGB8_sub_texture */                                                  \
+    /* GL_EXT_copy_image */                                                                        \
     /* GL_EXT_debug_marker */                                                                      \
     void insertEventMarker(GLsizei length, const GLchar *marker);                                  \
     void popGroupMarker();                                                                         \
@@ -399,6 +400,7 @@
     void eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES image);                    \
     void eGLImageTargetTexture2D(TextureType targetPacked, GLeglImageOES image);                   \
     /* GL_OES_compressed_ETC1_RGB8_texture */                                                      \
+    /* GL_OES_copy_image */                                                                        \
     /* GL_OES_depth32 */                                                                           \
     /* GL_OES_draw_buffers_indexed */                                                              \
     /* GL_OES_draw_elements_base_vertex */                                                         \

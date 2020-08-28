@@ -2537,6 +2537,297 @@ bool ValidateRobustStateQuery(const Context *context,
     return true;
 }
 
+bool CheckValidCopyImageSubDataTarget(const Context *context, GLuint name, GLenum target)
+{
+    // INVALID_ENUM is generated
+    // * if either <srcTarget> or <dstTarget>
+    // -is not RENDERBUFFER or a valid non - proxy texture target
+    // - is TEXTURE_BUFFER, or
+    // -is one of the cubemap face selectors described in table 3.17,
+    // * if the target does not match the type of the object.
+    // INVALID_VALUE is generated
+    // * if either <srcName> or <dstName> does not correspond to a valid
+    // renderbuffer or texture object according to the corresponding
+    // target parameter
+    switch (target)
+    {
+        case GL_RENDERBUFFER:
+        {
+            RenderbufferID renderbuffer = FromGL<RenderbufferID>(name);
+            if (!context->getState().isBindGeneratesResourceEnabled() &&
+                !context->isRenderbufferGenerated(renderbuffer))
+            {
+                context->validationError(GL_INVALID_VALUE, kObjectNotGenerated);
+                return false;
+            }
+            break;
+        }
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_3D:
+        case GL_TEXTURE_2D_ARRAY:
+        case GL_TEXTURE_CUBE_MAP:
+        {
+            Texture *textureObject = context->getTexture(FromGL<TextureID>(name));
+            if (textureObject && textureObject->getType() != FromGL<TextureType>(target))
+            {
+                context->validationError(GL_INVALID_VALUE, err::kTextureTypeMismatch);
+                return false;
+            }
+            break;
+        }
+        default:
+            context->validationError(GL_INVALID_ENUM, kInvalidTarget);
+            return false;
+    }
+
+    return true;
+}
+
+bool CheckValidCopyImageSubDataTargetRegion(const Context *context,
+                                            GLuint name,
+                                            GLenum target,
+                                            GLint level,
+                                            GLint offsetX,
+                                            GLint offsetY,
+                                            GLint offsetZ,
+                                            GLsizei width,
+                                            GLsizei height,
+                                            GLsizei *samples)
+{
+    // INVALID_VALUE is generated
+    // * if the dimensions of the either subregion exceeds the boundaries
+    // of the corresponding image object
+    if (offsetX < 0 || offsetY < 0 || offsetZ < 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kNegativeOffset);
+        return false;
+    }
+
+    if (target == GL_RENDERBUFFER)
+    {
+        // For renderbuffers, this value must be zero. INVALID_VALUE is generated if the specified
+        // level is not a valid level for the image.
+        if (level != 0)
+        {
+            context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+            return false;
+        }
+
+        // INVALID_VALUE is generated
+        // * if the dimensions of the either subregion exceeds the boundaries
+        // of the corresponding image object
+        Renderbuffer *buffer = context->getRenderbuffer(FromGL<RenderbufferID>(name));
+        if ((buffer->getWidth() - offsetX < width) || (buffer->getHeight() - offsetY < height))
+        {
+            context->validationError(GL_INVALID_VALUE, kSourceTextureTooSmall);
+            return false;
+        }
+    }
+    else
+    {
+        // INVALID_VALUE is generated
+        // *if the specified level is not a valid level for the image
+        if (!ValidMipLevel(context, FromGL<TextureType>(target), level))
+        {
+            context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+            return false;
+        }
+
+        Texture *texture          = context->getTexture(FromGL<TextureID>(name));
+        GLenum textureTargetToUse = target;
+        if (target == GL_TEXTURE_CUBE_MAP)
+        {
+            // Use GL_TEXTURE_CUBE_MAP_POSITIVE_X to properly gather the textureWidth/textureHeight
+            textureTargetToUse = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+        }
+
+        const GLsizei textureWidth = static_cast<GLsizei>(
+            texture->getWidth(FromGL<TextureTarget>(textureTargetToUse), level));
+        const GLsizei textureHeight = static_cast<GLsizei>(
+            texture->getHeight(FromGL<TextureTarget>(textureTargetToUse), level));
+
+        // INVALID_VALUE is generated
+        // * if the dimensions of the either subregion exceeds the boundaries
+        // of the corresponding image object
+        if ((textureWidth - offsetX < width) || (textureHeight - offsetY < height))
+        {
+            context->validationError(GL_INVALID_VALUE, kSourceTextureTooSmall);
+            return false;
+        }
+
+        // INVALID_OPERATION is generated
+        // * if either object is a texture and the texture is not complete
+        if (!texture->isMipmapComplete())
+        {
+            context->validationError(GL_INVALID_OPERATION, kNotMipmapComplete);
+            return false;
+        }
+
+        if ((target == GL_TEXTURE_CUBE_MAP) && (!texture->getTextureState().isCubeComplete()))
+        {
+            context->validationError(GL_INVALID_OPERATION, kCubemapIncomplete);
+            return false;
+        }
+
+        *samples = texture->getSamples(FromGL<TextureTarget>(textureTargetToUse), level);
+        *samples = (*samples == 0) ? 1 : *samples;
+    }
+
+    return true;
+}
+
+bool CheckValidCompressedRegion(const Context *context,
+                                const InternalFormat *formatInfo,
+                                GLsizei width,
+                                GLsizei height)
+{
+    if (formatInfo && formatInfo->compressed)
+    {
+        // INVALID_VALUE is generated
+        // * if the image format is compressed and the dimensions of the
+        // subregion fail to meet the alignment constraints of the format.
+        if ((width % formatInfo->compressedBlockWidth != 0) ||
+            (height % formatInfo->compressedBlockHeight != 0))
+        {
+            context->validationError(GL_INVALID_VALUE, kInvalidCompressedRegionSize);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+const InternalFormat *GetFormatInfo(const Context *context, GLuint name, GLenum target, GLint level)
+{
+    if (target != GL_RENDERBUFFER)
+    {
+        Texture *texture          = context->getTexture(FromGL<TextureID>(name));
+        GLenum textureTargetToUse = target;
+
+        if (target == GL_TEXTURE_CUBE_MAP)
+        {
+            // Use GL_TEXTURE_CUBE_MAP_POSITIVE_X to properly gather the textureWidth/textureHeight
+            textureTargetToUse = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+        }
+        return texture->getFormat(FromGL<TextureTarget>(textureTargetToUse), level).info;
+    }
+    else
+    {
+        Renderbuffer *buffer = context->getRenderbuffer(FromGL<RenderbufferID>(name));
+        return buffer->getFormat().info;
+    }
+
+    return nullptr;
+}
+
+bool ValidateCopyImageSubDataBase(const Context *context,
+                                  GLuint srcName,
+                                  GLenum srcTarget,
+                                  GLint srcLevel,
+                                  GLint srcX,
+                                  GLint srcY,
+                                  GLint srcZ,
+                                  GLuint dstName,
+                                  GLenum dstTarget,
+                                  GLint dstLevel,
+                                  GLint dstX,
+                                  GLint dstY,
+                                  GLint dstZ,
+                                  GLsizei srcWidth,
+                                  GLsizei srcHeight,
+                                  GLsizei srcDepth)
+{
+    // INVALID_VALUE is generated
+    // * if the dimensions of the either subregion exceeds the boundaries
+    // of the corresponding image object
+    if ((srcWidth < 0) || (srcHeight < 0) || (srcDepth < 0))
+    {
+        context->validationError(GL_INVALID_VALUE, kNegativeSize);
+        return false;
+    }
+
+    if (CheckValidCopyImageSubDataTarget(context, srcName, srcTarget) == false)
+    {
+        return false;
+    }
+    if (CheckValidCopyImageSubDataTarget(context, dstName, dstTarget) == false)
+    {
+        return false;
+    }
+
+    const InternalFormat *srcFormatInfo = GetFormatInfo(context, srcName, srcTarget, srcLevel);
+    const InternalFormat *dstFormatInfo = GetFormatInfo(context, dstName, dstTarget, dstLevel);
+    GLsizei dstWidth                    = srcWidth;
+    GLsizei dstHeight                   = srcHeight;
+    GLsizei srcSamples                  = 1;
+    GLsizei dstSamples                  = 1;
+
+    if (CheckValidCopyImageSubDataTargetRegion(context, srcName, srcTarget, srcLevel, srcX, srcY,
+                                               srcZ, srcWidth, srcHeight, &srcSamples) == false)
+    {
+        return false;
+    }
+
+    // When copying from a compressed image to an uncompressed image the image texel dimensions
+    // written to the uncompressed image will be source extent divided by the compressed texel block
+    // dimensions.
+    if ((srcFormatInfo && srcFormatInfo->compressed) &&
+        (dstFormatInfo && !dstFormatInfo->compressed))
+    {
+        ASSERT(srcFormatInfo->compressedBlockWidth != 0);
+        ASSERT(srcFormatInfo->compressedBlockHeight != 0);
+
+        dstWidth /= srcFormatInfo->compressedBlockWidth;
+        dstHeight /= srcFormatInfo->compressedBlockHeight;
+    }
+    // When copying from an uncompressed image to a compressed image the image texel dimensions
+    // written to the compressed image will be the source extent multiplied by the compressed texel
+    // block dimensions.
+    else if ((srcFormatInfo && !srcFormatInfo->compressed) &&
+             (dstFormatInfo && dstFormatInfo->compressed))
+    {
+        dstWidth *= dstFormatInfo->compressedBlockWidth;
+        dstHeight *= dstFormatInfo->compressedBlockHeight;
+    }
+
+    if (CheckValidCopyImageSubDataTargetRegion(context, dstName, dstTarget, dstLevel, dstX, dstY,
+                                               dstZ, dstWidth, dstHeight, &dstSamples) == false)
+    {
+        return false;
+    }
+
+    if (CheckValidCompressedRegion(context, srcFormatInfo, srcWidth, srcHeight) == false)
+    {
+        return false;
+    }
+
+    if (CheckValidCompressedRegion(context, dstFormatInfo, dstWidth, dstHeight) == false)
+    {
+        return false;
+    }
+
+    // INVALID_OPERATION is generated
+    // * if the source and destination formats are not compatible,
+    // * if one image is compressed and the other is uncompressed and the
+    // block size of compressed image is not equal to the texel size
+    // of the compressed image.
+    if (srcFormatInfo && dstFormatInfo && (srcFormatInfo->pixelBytes != dstFormatInfo->pixelBytes))
+    {
+        context->validationError(GL_INVALID_OPERATION, kIncompatibleTextures);
+        return false;
+    }
+
+    // INVALID_OPERATION is generated
+    // * if the source and destination number of samples do not match
+    if (srcSamples != dstSamples)
+    {
+        context->validationError(GL_INVALID_OPERATION, kSamplesOutOfRange);
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateCopyTexImageParametersBase(const Context *context,
                                         TextureTarget target,
                                         GLint level,

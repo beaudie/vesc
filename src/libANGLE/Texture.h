@@ -384,6 +384,21 @@ class Texture final : public RefCountObject<TextureID>,
                                const Rectangle &sourceArea,
                                Framebuffer *source);
 
+    template <typename T>
+    angle::Result copyImageSubData(Context *context,
+                                   const T *srcTexture,
+                                   GLint srcLevel,
+                                   GLint srcX,
+                                   GLint srcY,
+                                   GLint srcZ,
+                                   GLint dstLevel,
+                                   GLint dstX,
+                                   GLint dstY,
+                                   GLint dstZ,
+                                   GLsizei srcWidth,
+                                   GLsizei srcHeight,
+                                   GLsizei srcDepth);
+
     angle::Result copyTexture(Context *context,
                               TextureTarget target,
                               GLint level,

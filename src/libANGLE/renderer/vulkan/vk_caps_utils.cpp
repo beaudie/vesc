@@ -546,6 +546,9 @@ void RendererVk::ensureCapsInitialized() const
     // Enable GL_NV_fence extension.
     mNativeExtensions.fenceNV = true;
 
+    // Enable GL_EXT_copy_image
+    mNativeExtensions.copyImage = true;
+
     // Geometry shader is optional.
     if (mPhysicalDeviceFeatures.geometryShader)
     {
