@@ -9,6 +9,8 @@
 
 #include "util/fuchsia/ScenicWindow.h"
 
+ANGLE_DISABLE_DESTRUCTOR_OVERRIDE_WARNING
+
 #include <fuchsia/images/cpp/fidl.h>
 #include <fuchsia/ui/views/cpp/fidl.h>
 #include <lib/async-loop/cpp/loop.h>
@@ -20,7 +22,7 @@
 #include <lib/zx/channel.h>
 #include <zircon/status.h>
 
-#include "common/debug.h"
+ANGLE_REENABLE_DESTRUCTOR_OVERRIDE_WARNING
 
 namespace
 {
