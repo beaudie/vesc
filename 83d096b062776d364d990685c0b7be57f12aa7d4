@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6ef51298_1c721c79",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-28T15:54:29Z",
+      "side": 1,
+      "message": "nit:\nonOcclusionQueryBegin\nonOcclusionQueryEnd\nonOcclusionQueryDestroy\n\nbecause that matches the the functions that call these hooks",
+      "range": {
+        "startLine": 277,
+        "startChar": 4,
+        "endLine": 279,
+        "endChar": 80
+      },
+      "revId": "83d096b062776d364d990685c0b7be57f12aa7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18107b74_9b6b18a4",
         "filename": "src/libANGLE/renderer/metal/doc/OcclusionQueries.md",
         "patchSetId": 11
