@@ -416,7 +416,7 @@ TEST_P(VulkanPerformanceCounterTest, ReadOnlyDepthStencilFeedbackLoopUsesSingleR
     ASSERT_GL_NO_ERROR();
 }
 
-// Tests that RGB texture should not break renderpass (similar to PUBG MOBILE).
+// Tests that invalidating the depth and/or should not break renderpass (similar to PUBG MOBILE).
 TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRenderPass)
 {
     const rx::vk::PerfCounters &counters = hackANGLE();
@@ -450,7 +450,7 @@ TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRender
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
-    // Second, invalidate the depth buffer and draw with depth buffer disabled
+    // Second, invalidate and disable the depth buffer and draw with it disabled
     const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
     // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
@@ -459,19 +459,32 @@ TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRender
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
-    // Third, re-enable the depth buffer and draw again
+    // Third, disable the stencil buffer and draw with it disabled
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fourth, re-enable the depth buffer and draw again
     ASSERT_GL_NO_ERROR();
     glEnable(GL_DEPTH_TEST);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
+    // Fifth, disable the depth buffer and draw again
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Sixth, with both buffers disabled, invalidate again and draw with them disabled
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
     uint32_t actualRenderPassCount = counters.renderPasses;
     EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
-
-    // Make sure the render pass is ended by reading back a pixel.  Otherwise, the render pass will
-    // end when the test infrastructure calls eglSwapBuffers(), after the RAII-based GLRenderbuffer
-    // has been deleted.
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
 // Tests that even if the app clears depth, it should be invalidated if there is no read.
