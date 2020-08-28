@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "305294e6_ef99ece6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-28T18:38:34Z",
+      "side": 1,
+      "message": "Minor tweak of adding transient bit to command pool creation in case it helps on implementations.\nUpdated tracking bugs for best practice skips.",
+      "revId": "bb9c05d0a6e7abf94b4542810c6874ec06df2412",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
