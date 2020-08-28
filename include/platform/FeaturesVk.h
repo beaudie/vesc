@@ -378,6 +378,14 @@ struct FeaturesVk : FeatureSetBase
         "Before passing an oldSwapchain to VkSwapchainCreateInfoKHR, wait for queue to be idle. "
         "Works around a bug on platforms which destroy oldSwapchain in vkCreateSwapchainKHR.",
         &members, "http://anglebug.com/5061"};
+
+    // Qualcomm missynchronizes vkCmdClearAttachments in the middle of render pass.
+    // https://issuetracker.google.com/166809097
+    Feature preferDrawClearOverVkCmdClearAttachments = {
+        "prefer_draw_clear_over_vkCmdClearAttachments", FeatureCategory::VulkanWorkarounds,
+        "On some hardware, clear using a draw call instead of vkCmdClearAttachments in the middle "
+        "of render pass due to bugs",
+        &members, "https://issuetracker.google.com/166809097"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
