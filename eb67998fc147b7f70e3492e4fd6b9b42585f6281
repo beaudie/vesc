@@ -94,6 +94,30 @@
       "revId": "eb67998fc147b7f70e3492e4fd6b9b42585f6281",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "86c4f75c_c6f5e223",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4613,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-28T16:39:49Z",
+      "side": 1,
+      "message": "\"TexImage to an invalid mip level\" will still use the ImageHelper\u0027s staging buffer. Even if you do what you siad with a flag in the ImageHelper, you will still have to allocate a new buffer here when first time we switch mipmap filter and becomes invalid levels. What you try to optimize here is if some one constantly switching mipmap filter, the level become invalid level every time we switch mipmap filter. I don\u0027t think any real app will use it this way, so no need to optimize for this. The situation that we end up release it more than twice is going to be  rare. Do you have a specific usage case in mind that want me to try out?\n\nWhat this does right now is the first TexImage call and invalid mip levels etc will still use per object buffer. But if we see the case that we can use context staging buffer, we use it.",
+      "parentUuid": "3ed75d4a_88111fe2",
+      "range": {
+        "startLine": 4613,
+        "startChar": 23,
+        "endLine": 4613,
+        "endChar": 30
+      },
+      "revId": "eb67998fc147b7f70e3492e4fd6b9b42585f6281",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
