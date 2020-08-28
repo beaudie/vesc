@@ -200,6 +200,24 @@
     },
     {
       "key": {
+        "uuid": "8e916861_bf658f15",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "I agree with Tim that the above enum is better (minus High). Why do we always transfer mediump? If the VS outputs highp and FS inputs lowp, we should transform VS to output lowp, instead of casting both to mediump!",
+      "parentUuid": "17121d28_5238173e",
+      "revId": "85ae19cb1e8d41176dff7c06e39447d441aae71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1e66aca_b40b503f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 26

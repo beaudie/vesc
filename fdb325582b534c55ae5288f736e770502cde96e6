@@ -1,0 +1,192 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bb630b1_ca7fa9f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Not as complicated as I feared! Error-prone though.",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22d9f484_b22d4f9d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Couldn\u0027t this directly be `id`?",
+      "range": {
+        "startLine": 1286,
+        "startChar": 72,
+        "endLine": 1286,
+        "endChar": 79
+      },
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46d8298e_c6208529",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Shouldn\u0027t DecorationLocation also get this treatment?\n\nYou could make this case similar to the others, then do this below automatically for every decoration of the varying:\n\n    // Copy the decoration declaration and modify it.\n    const size_t instructionOffset \u003d copyInstruction(instruction, wordCount);\n    (*mSpirvBlobOut)[instructionOffset + kDecorationValueIndex] \u003d newDecorationValue;\n    if (info-\u003ecastPrecision)\n    {\n        // Change the id to replacement variable\n        ASSERT(info-\u003efixedVaryingId !\u003d ShaderInterfaceVariableInfo::kInvalid);\n        (*mSpirvBlobOut)[instructionOffset + kIdIndex] \u003d info-\u003efixedVaryingId;\n    }",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "482630ce_bf83e771",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Am I right to understand this is only here so that load/store automatically cast the precision? A comment would be good.",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5831e20d_b3721172",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Need to modify the id here too.\n\nPlease write a test that uses a component layout qualifier to catch this bug.",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3802a2ee_3a06284e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Please update this comment.",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0519ca03_80e2d635",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Same here. Can it directly load into info-\u003efixedVaryingId?",
+      "range": {
+        "startLine": 1750,
+        "startChar": 54,
+        "endLine": 1750,
+        "endChar": 61
+      },
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dbdad12_24f761ca",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Your Doc says you had issues with making the variable global. Is that outdated?",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9b255ed_718f407c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Please avoid storing SPIR-V ids here. Make a (std::vector) map in SpirvTransformer (like the other m*ById maps there) for these things.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 43
+      },
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f640d66_943f05b0",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 6092,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T02:44:25Z",
+      "side": 1,
+      "message": "Thanks for the tests. Please add lowp-highp and lowp-mediump variants too!",
+      "revId": "fdb325582b534c55ae5288f736e770502cde96e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
