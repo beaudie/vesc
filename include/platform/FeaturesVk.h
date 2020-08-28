@@ -361,6 +361,17 @@ struct FeaturesVk : FeatureSetBase
         "preferred_large_heap_block_size_4M", FeatureCategory::VulkanWorkarounds,
         "Use 4 MB preferred large heap block size with AMD allocator", &members,
         "http://anglebug.com/4995"};
+
+    // Manhattan is calling glFlush in the middle of renderpass which breaks renderpass and hurts
+    // performance on tile based GPU. On tiled based GPU there is also advantage to hold off
+    // submission so that we we see a glClear call we can can go back to the renderpass that does
+    // the store and change it to DontCare. But defer glFlush call might hurt performance in some
+    // cases that we can't keep GPU busy enough. And for debugging purpose we may also want to
+    // disabled. This feature flag is here to allow easy turn on/off this feature as needed.
+    // https://issuetracker.google.com/issues/166475273
+    Feature enableDeferredFlush = {"enable_glFlush_deferral", FeatureCategory::VulkanWorkarounds,
+                                   "Allow glFlush to deferred when possible", &members,
+                                   "https://issuetracker.google.com/issues/166475273"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
