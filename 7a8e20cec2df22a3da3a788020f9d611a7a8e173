@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "14ac1f1f_50c062ae",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "include the static keyword\n\nalso update ShaderLang counter\n\nalso update SerializeShaderVariable",
+      "range": {
+        "startLine": 204,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 26
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25d894f1_83268ebc",
         "filename": "src/common/utilities.h",
         "patchSetId": 2
@@ -76,6 +99,53 @@
         "startChar": 1,
         "endLine": 232,
         "endChar": 13
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc33112e_ae50a5d8",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "Ideally the front-end just mirrors the GL state and does not have back-end details. Maybe a slight cleanup would be to just use the GLenum in the front-end and just use this guy in the back-end, moving him to renderer_utils.",
+      "parentUuid": "622d9b4d_27f5d8d0",
+      "range": {
+        "startLine": 231,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 13
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96f6c45f_89ecc586",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "update SerializeShaderVariable",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 23
       },
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -153,6 +223,53 @@
     },
     {
       "key": {
+        "uuid": "3abb2173_3b9f1239",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "Can you document that somewhere? Might have missed it.",
+      "parentUuid": "24ccdf20_e35235a4",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac9808a3_d1a4751f",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "probably should mention static use in here",
+      "range": {
+        "startLine": 22,
+        "startChar": 22,
+        "endLine": 22,
+        "endChar": 47
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24eb3c31_8a4fa861",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 2
@@ -188,6 +305,30 @@
       "side": 1,
       "message": "EXT_texture_sRGB_decode allows for a sampler object to override the colorspace state.\nThis means that a texture which has never had any colorspace state modified (completely default), may still end up having an overridden colorspace if it\u0027s used with a sampler object with that state set.\n\nA default-state texture though will never have had the srgb imageviews set up, which means, if it\u0027s used with this sampler object, it needs to reallocate with the VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT.\n\nWe can\u0027t detect this at the time when the sampler is dirtied because the texture bound to that slot may change at any time before draw.\nThe thing that actually determines this state is the texture-sampler combination, and we won\u0027t know that for sure until draw time.",
       "parentUuid": "24eb3c31_8a4fa861",
+      "range": {
+        "startLine": 3191,
+        "startChar": 0,
+        "endLine": 3216,
+        "endChar": 1
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5eee166_d2f3944d",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "I see. Try moving this logic into ContextVk::updateActiveTextures . We call updateActiveTextures whenever a sampler or texture changes and you can override the imageviews and even recreate the VkImage itself there. You will have to live with potentially creating the VkImage twice in some cases. I think your existing code path has that anyway so it\u0027s not a regression from your current CL.",
+      "parentUuid": "1cf3fa69_108cf4e3",
       "range": {
         "startLine": 3191,
         "startChar": 0,
@@ -263,6 +404,53 @@
         "startChar": 41,
         "endLine": 1125,
         "endChar": 71
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecd014d3_9b208268",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "Can you point me to the code which changes the format? vk::Format is a back-end format, not a front-end format. So what you seem to be saying is that the back-end format changes twice.",
+      "parentUuid": "7fc31db4_9c96a4e0",
+      "range": {
+        "startLine": 1125,
+        "startChar": 41,
+        "endLine": 1125,
+        "endChar": 71
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d031f77d_8500a5b9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2089,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "can you please document \"why\" you need the mutable bit?",
+      "range": {
+        "startLine": 2089,
+        "startChar": 7,
+        "endLine": 2089,
+        "endChar": 41
       },
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -454,6 +642,30 @@
       "side": 1,
       "message": "RendererVk::getFormatFeatureBits will query the ICD and update mFormatProperties (the cache talked about in the comment), so querying for feature flags is non-const.\nBecause of this, when we\u0027re determining support for the extension, we\u0027re currently in a const function, and can\u0027t do this. We can only query format features from our cache, not from the ICD.\n\nSee vk_caps_utils.cpp formatReinterpretationSupported.\n\nWe need to perform this precaching step because formatReinterpretationSupported checks support for VK formats, not angle formats, meaning that we could check a format that was never initialized in our cache because angle may not have a corresponding frontend format.\n\nPreviously, we only initialized feature flags for formats which have an angle frontend format, ignoring all formats that we could not use directly.\nThis change forces us to additionally initialize formats which could be used as reinterpretation targets for other formats, so we know whether or not we can support exposing srgb_decode (and srgb_override).",
       "parentUuid": "1b2bf19c_80db8d95",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 0
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39a8a2c7_f0b68a3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T15:16:08Z",
+      "side": 1,
+      "message": "Just make the cache mutable. Does that solve the const problem?",
+      "parentUuid": "3207163d_e82714ec",
       "range": {
         "startLine": 253,
         "startChar": 0,
