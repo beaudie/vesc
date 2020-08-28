@@ -139,6 +139,24 @@
       "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9660b5c5_fde142a8",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-28T14:54:18Z",
+      "side": 1,
+      "message": "Ah, of course. We don\u0027t have an actual command count. I think mCommands.size() is just the number of blocks rather than the number of commands. We\u0027d either need to add a command count or use the pair of {mCommands.size(), write offset}",
+      "parentUuid": "04351cca_184e2018",
+      "revId": "99eef941136cf19d133312b074c8ce4b355230e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
