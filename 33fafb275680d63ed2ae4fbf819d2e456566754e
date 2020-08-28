@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "3a5baa98_23cc5950",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T16:29:00Z",
+      "side": 1,
+      "message": "Done. I was using taking advantage of the auto-cast for brevity, but explicit is probably better.",
+      "parentUuid": "9dcd054d_da427f7f",
+      "range": {
+        "startLine": 822,
+        "startChar": 4,
+        "endLine": 822,
+        "endChar": 14
+      },
+      "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "328b49ef_cafbc197",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 3
@@ -79,6 +103,30 @@
       "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ad0a54a_222691c6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T16:29:00Z",
+      "side": 1,
+      "message": "Nack. This is passed around by value, explicit makes it quite annoying.",
+      "parentUuid": "328b49ef_cafbc197",
+      "range": {
+        "startLine": 823,
+        "startChar": 4,
+        "endLine": 823,
+        "endChar": 14
+      },
+      "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "79b9f362_41e0ba36",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T16:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af5309dd_7da186a8",
+      "range": {
+        "startLine": 833,
+        "startChar": 9,
+        "endLine": 833,
+        "endChar": 17
+      },
+      "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaaec41_0a6fafc6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
@@ -125,6 +197,47 @@
       "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13199af9_4f903314",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T16:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaaec41_0a6fafc6",
+      "range": {
+        "startLine": 3396,
+        "startChar": 24,
+        "endLine": 3396,
+        "endChar": 36
+      },
+      "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "00fcad79_e62e8e96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T16:29:00Z",
+      "side": 1,
+      "message": "The explicit constructor change caught a bug here!",
+      "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -151,6 +264,30 @@
     },
     {
       "key": {
+        "uuid": "e738885b_02c7277b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T16:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6be5a47d_de097270",
+      "range": {
+        "startLine": 852,
+        "startChar": 15,
+        "endLine": 852,
+        "endChar": 32
+      },
+      "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7517c496_3d8d3761",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 3
@@ -171,6 +308,30 @@
       "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6004806_d1e07cb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-08-28T16:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7517c496_3d8d3761",
+      "range": {
+        "startLine": 878,
+        "startChar": 15,
+        "endLine": 878,
+        "endChar": 29
+      },
+      "revId": "33fafb275680d63ed2ae4fbf819d2e456566754e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
