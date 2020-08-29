@@ -8,6 +8,7 @@
 //
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "absl/container/flat_hash_map.h"
 
 #include "common/bitset_utils.h"
 #include "common/debug.h"
@@ -3635,32 +3636,42 @@ void ContextVk::writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOu
 
     ASSERT(atomicCounterBufferCount <= offsetsSize * 4);
 
+    using constAtomicBufPtr = const gl::OffsetBindingPointer<gl::Buffer> *;
+    absl::flat_hash_map<uint32_t, constAtomicBufPtr> validBufferMap;
     for (uint32_t bufferIndex = 0; bufferIndex < atomicCounterBufferCount; ++bufferIndex)
     {
-        uint32_t offsetDiff = 0;
-
-        const gl::OffsetBindingPointer<gl::Buffer> *atomicCounterBuffer =
-            &mState.getIndexedAtomicCounterBuffer(bufferIndex);
-        if (atomicCounterBuffer->get())
+        constAtomicBufPtr buffer = &mState.getIndexedAtomicCounterBuffer(bufferIndex);
+        if (buffer->get())
         {
-            VkDeviceSize offset        = atomicCounterBuffer->getOffset();
-            VkDeviceSize alignedOffset = (offset / offsetAlignment) * offsetAlignment;
-
-            // GL requires the atomic counter buffer offset to be aligned with uint.
-            ASSERT((offset - alignedOffset) % sizeof(uint32_t) == 0);
-            offsetDiff = static_cast<uint32_t>((offset - alignedOffset) / sizeof(uint32_t));
-
-            // We expect offsetDiff to fit in an 8-bit value.  The maximum difference is
-            // minStorageBufferOffsetAlignment / 4, where minStorageBufferOffsetAlignment
-            // currently has a maximum value of 256 on any device.
-            ASSERT(offsetDiff < (1 << 8));
+            validBufferMap[bufferIndex] = buffer;
         }
+    }
+
+    for (const std::pair<uint32_t, constAtomicBufPtr> it : validBufferMap)
+    {
+        uint32_t offsetDiff                                             = 0;
+        uint32_t bufferIndex                                            = it.first;
+        const gl::OffsetBindingPointer<gl::Buffer> *atomicCounterBuffer = it.second;
+
+        VkDeviceSize offset        = atomicCounterBuffer->getOffset();
+        VkDeviceSize alignedOffset = (offset / offsetAlignment) * offsetAlignment;
+
+        // GL requires the atomic counter buffer offset to be aligned with uint.
+        ASSERT((offset - alignedOffset) % sizeof(uint32_t) == 0);
+        offsetDiff = static_cast<uint32_t>((offset - alignedOffset) / sizeof(uint32_t));
+
+        // We expect offsetDiff to fit in an 8-bit value.  The maximum difference is
+        // minStorageBufferOffsetAlignment / 4, where minStorageBufferOffsetAlignment
+        // currently has a maximum value of 256 on any device.
+        ASSERT(offsetDiff < (1 << 8));
 
         // The output array is already cleared prior to this call.
         ASSERT(bufferIndex % 4 != 0 || offsetsOut[bufferIndex / 4] == 0);
 
         offsetsOut[bufferIndex / 4] |= static_cast<uint8_t>(offsetDiff) << ((bufferIndex % 4) * 8);
     }
+
+    validBufferMap.clear();
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *context,
