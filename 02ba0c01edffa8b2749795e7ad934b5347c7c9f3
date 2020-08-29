@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "9cf1daf5_37d4f1bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-29T21:29:48Z",
+      "side": 1,
+      "message": "kEnabledCmdCount is \"infinity\" for mDepthCmdCountDisabled.  I used a different name than kNeverInvalidatedCmdCount because I thought it would make the code clearer.  I used a different value to make it clearer in the debugger.  I can eliminate it if you want.\n\n\nI created kNoLongerInvalidatedCmdCount to differentiate the following 2 cases:\n\n- invalidate-disable-draw-enable  (i.e. draw-while-disabled)\n\n- invalidate-draw-disable-enable  (i.e. draw-while-enabled)\n\nScenario 1:\nAction  mDepthCmdCountInvalidated   mDepthCmdCountDisabled   rpCount\n--------------------------------------------------------------------\nDraw        infinity                     infinity               1\nInvalidate  1                            infinity               1\nDisable     1                            1                      1\nDraw        1                            1                      2\nEnable      1                            infinity               2\n\nScenario 2:\nAction  mDepthCmdCountInvalidated   mDepthCmdCountDisabled   rpCount\n--------------------------------------------------------------------\nDraw        infinity                     infinity               1\nInvalidate  1                            infinity               1\nDraw        1                            infinity               2\nDisable     1                            2                      2\nEnable      1                            infinity               2\n\nIn the 1st scenario, the original algorithm thinks draw-while-enabled happened, when really a draw-while-disabled (PUBG case) happened.  My state-based approach taught me the fix: update mDepthCmdCountInvalidated when going from disabled to enabled.  That changes it to:\n\nScenario 1 with first fix:\nAction  mDepthCmdCountInvalidated   mDepthCmdCountDisabled   rpCount\n--------------------------------------------------------------------\nDraw        infinity                     infinity               1\nInvalidate  1                            infinity               1\nDisable     1                            1                      1\nDraw        1                            1                      2\nEnable      1 --\u003e 2                      infinity               2\n\nThat makes it clear that a draw-while-enabled didn\u0027t happen.  If a draw is done after this point, then we know that a draw-while-enabled happened.  However, this fix hurts the 2nd scenario, since it becomes:\n\nScenario 2 with first fix:\nAction  mDepthCmdCountInvalidated   mDepthCmdCountDisabled   rpCount\n--------------------------------------------------------------------\nDraw        infinity                     infinity               1\nInvalidate  1                            infinity               1\nDraw        1                            infinity               2\nDisable     1                            2                      2\nEnable      1 --\u003e 2                      infinity               2\n\nkNoLongerInvalidatedCmdCount ensures that once we catch a draw-while-enabled, we never uncatch it:\n\nScenario 2 with kNoLongerInvalidatedCmdCount fix:\nAction  mDepthCmdCountInvalidated   mDepthCmdCountDisabled   rpCount\n--------------------------------------------------------------------\nDraw        infinity                     infinity               1\nInvalidate  1                            infinity               1\nDraw        1                            infinity               2\nDisable     kNoLongerInvalidatedCmdCount infinity               2\nEnable      kNoLongerInvalidatedCmdCount infinity               2\n\nNo matter how many enables, disables, or draws happen after this point, we know that a draw-while-enabled happened, and that the attachment is no longer invalidated.\n\nDoes that make sense?",
+      "parentUuid": "586b845e_058b8e94",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "5064d041_f22240a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-29T21:29:48Z",
+      "side": 1,
+      "message": "Oops, that\u0027s actually a typo (didn\u0027t mean to capitalize that).  Fixed.",
+      "parentUuid": "d6d3aaef_5cdc2df5",
+      "range": {
+        "startLine": 1072,
+        "startChar": 9,
+        "endLine": 1072,
+        "endChar": 29
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66eb4193_010d752f",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 7
@@ -76,6 +124,30 @@
       "writtenOn": "2020-08-29T14:00:51Z",
       "side": 1,
       "message": "can you condense these new tests into some way to share code?",
+      "range": {
+        "startLine": 1052,
+        "startChar": 37,
+        "endLine": 1052,
+        "endChar": 64
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4dcd76d_81d729a7",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-29T21:29:48Z",
+      "side": 1,
+      "message": "Sure, I\u0027ll do that on Monday.  I was so excited that I could test all of these combinations that I got carried away:-).",
+      "parentUuid": "66eb4193_010d752f",
       "range": {
         "startLine": 1052,
         "startChar": 37,
