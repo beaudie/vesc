@@ -2489,8 +2489,9 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
     if (depthStencilRenderTarget)
     {
         // Change depthstencil attachment storeOp to DONT_CARE
-        mRenderPassCommands->invalidateRenderPassStencilAttachment();
-        mRenderPassCommands->invalidateRenderPassDepthAttachment();
+        const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+        mRenderPassCommands->invalidateRenderPassStencilAttachment(dsState);
+        mRenderPassCommands->invalidateRenderPassDepthAttachment(dsState);
         // Mark content as invalid so that we will not load them in next renderpass
         depthStencilRenderTarget->invalidateEntireContent();
     }
