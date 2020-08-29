@@ -16,6 +16,75 @@
       "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "586b845e_058b8e94",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-29T14:00:51Z",
+      "side": 1,
+      "message": "I don\u0027t know why these sentinel values are necessary - can you sketch out the scenarios you were thinking? I\u0027ll be out so it\u0027s possible we can land this and fix later. I was pretty sure you could determine noLongerInvalidated / etc without needing any more than one sentinel value.",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d3aaef_5cdc2df5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-29T14:00:51Z",
+      "side": 1,
+      "message": "nit: static methods are caps, regular lower case, please see the ANGLE style guide.",
+      "range": {
+        "startLine": 1072,
+        "startChar": 9,
+        "endLine": 1072,
+        "endChar": 29
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66eb4193_010d752f",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-29T14:00:51Z",
+      "side": 1,
+      "message": "can you condense these new tests into some way to share code?",
+      "range": {
+        "startLine": 1052,
+        "startChar": 37,
+        "endLine": 1052,
+        "endChar": 64
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
