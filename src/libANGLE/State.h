@@ -430,6 +430,7 @@ class State : angle::NonCopyable
                                           GLsizeiptr size);
 
     size_t getAtomicCounterBufferCount() const { return mAtomicCounterBuffers.size(); }
+    bool hasValidAtomicCounterBuffer() const;
 
     const OffsetBindingPointer<Buffer> &getIndexedUniformBuffer(size_t index) const;
     const OffsetBindingPointer<Buffer> &getIndexedAtomicCounterBuffer(size_t index) const;

@@ -1992,6 +1992,19 @@ const OffsetBindingPointer<Buffer> &State::getIndexedUniformBuffer(size_t index)
     return mUniformBuffers[index];
 }
 
+bool State::hasValidAtomicCounterBuffer() const
+{
+    // TODO(http://anglebug.com/3566): Have a cached bitset for valid buffers
+    for (OffsetBindingPointer<Buffer> buf : mAtomicCounterBuffers)
+    {
+        if (buf.get())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 const OffsetBindingPointer<Buffer> &State::getIndexedAtomicCounterBuffer(size_t index) const
 {
     ASSERT(index < mAtomicCounterBuffers.size());
