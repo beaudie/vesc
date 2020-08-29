@@ -33,6 +33,52 @@
       "revId": "bac91f70c65f0b14d01acc0362aa2a195d61c541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e878149_675885d8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3769,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-29T22:35:27Z",
+      "side": 1,
+      "message": "better fix - don\u0027t enter these guys if no atomic counter buffers",
+      "range": {
+        "startLine": 3769,
+        "startChar": 4,
+        "endLine": 3769,
+        "endChar": 48
+      },
+      "revId": "bac91f70c65f0b14d01acc0362aa2a195d61c541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7648fe87_dc5a317a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3789,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-29T22:35:27Z",
+      "side": 1,
+      "message": "better fix - don\u0027t enter these guys if no atomic counter buffers",
+      "range": {
+        "startLine": 3789,
+        "startChar": 4,
+        "endLine": 3789,
+        "endChar": 48
+      },
+      "revId": "bac91f70c65f0b14d01acc0362aa2a195d61c541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
