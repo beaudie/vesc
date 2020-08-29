@@ -431,6 +431,20 @@ class State : angle::NonCopyable
 
     size_t getAtomicCounterBufferCount() const { return mAtomicCounterBuffers.size(); }
 
+    ANGLE_INLINE bool hasValidAtomicCounterBuffer() const
+    {
+        // TODO(http://anglebug.com/4873): Convert mAtomicCounterBuffers into a map of
+        // indices and buffers and then use the map's size() to make this decision
+        for (const OffsetBindingPointer<Buffer> &buf : mAtomicCounterBuffers)
+        {
+            if (buf.get())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     const OffsetBindingPointer<Buffer> &getIndexedUniformBuffer(size_t index) const;
     const OffsetBindingPointer<Buffer> &getIndexedAtomicCounterBuffer(size_t index) const;
     const OffsetBindingPointer<Buffer> &getIndexedShaderStorageBuffer(size_t index) const;
