@@ -416,8 +416,10 @@ TEST_P(VulkanPerformanceCounterTest, ReadOnlyDepthStencilFeedbackLoopUsesSingleR
     ASSERT_GL_NO_ERROR();
 }
 
-// Tests that RGB texture should not break renderpass (similar to PUBG MOBILE).
-TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRenderPass)
+// Tests that common PUBG MOBILE case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, disable, draw
+TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDraw)
 {
     const rx::vk::PerfCounters &counters = hackANGLE();
 
@@ -439,6 +441,12 @@ TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRender
     ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
 
     uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores;
 
     // First, clear and draw with depth buffer enabled
     glEnable(GL_DEPTH_TEST);
@@ -450,28 +458,674 @@ TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRender
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
-    // Second, invalidate the depth buffer and draw with depth buffer disabled
+    // Second, invalidate and disable the depth/stencil buffers and draw with them disabled
     const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
     // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
     glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
     ASSERT_GL_NO_ERROR();
     glDisable(GL_DEPTH_TEST);
-    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
-    ASSERT_GL_NO_ERROR();
-
-    // Third, re-enable the depth buffer and draw again
-    ASSERT_GL_NO_ERROR();
-    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
     uint32_t actualRenderPassCount = counters.renderPasses;
     EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
 
-    // Make sure the render pass is ended by reading back a pixel.  Otherwise, the render pass will
-    // end when the test infrastructure calls eglSwapBuffers(), after the RAII-based GLRenderbuffer
-    // has been deleted.
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that alternative PUBG MOBILE case does not break render pass, and that counts are correct:
+//
+// - Scenario: disable, invalidate, draw
+TEST_P(VulkanPerformanceCounterTest, DisableInvalidateDraw)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, disable the depth/stencil buffers, then invalidate them, and draw with them disabled
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that common TRex case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate
+TEST_P(VulkanPerformanceCounterTest, Invalidate)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, invalidate the depth/stencil buffers
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw
+TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores + 1;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores + 1;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, invalidate the depth/stencil buffers and draw with them enabled
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisable)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores + 1;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores + 1;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, invalidate the depth/stencil buffers and draw with them enabled
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Third, disable the depth/stencil buffers and draw with them disabled
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable, enable
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnable)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores + 1;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores + 1;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, invalidate the depth/stencil buffers and draw with them enabled
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Third, disable the depth/stencil buffers and draw with them disabled
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fourth, re-enable the depth/stencil buffers and draw with them enabled
+    ASSERT_GL_NO_ERROR();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable, enable, invalidate
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableInvalidate)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores + 1;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores + 1;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, invalidate the depth/stencil buffers and draw with them enabled
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Third, disable the depth/stencil buffers and draw with them disabled
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fourth, re-enable the depth/stencil buffers and draw with them enabled
+    ASSERT_GL_NO_ERROR();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fifth, with both buffers enabled, invalidate again and draw with them enabled
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable, enable, disable, invalidate
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableDisableInvalidate)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, invalidate the depth/stencil buffers and draw with them enabled
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Third, disable the depth/stencil buffers and draw with them disabled
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fourth, re-enable the depth/stencil buffers and draw with them enabled
+    ASSERT_GL_NO_ERROR();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fifth, disable the depth/stencil buffers and draw with them disabled
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Sixth, with both buffers disabled, invalidate again and draw with them disabled
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+}
+
+// Tests that another common (dEQP) case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, disable, enable, draw
+TEST_P(VulkanPerformanceCounterTest, InvalidateDisableEnableDraw)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+
+    // Setup to draw to color and depth
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    uint32_t expectedDepthClears     = counters.depthClears + 1;
+    uint32_t expectedDepthLoads      = counters.depthLoads;
+    uint32_t expectedDepthStores     = counters.depthStores + 1;
+    uint32_t expectedStencilClears   = counters.stencilClears;
+    uint32_t expectedStencilLoads    = counters.stencilLoads + 1;
+    uint32_t expectedStencilStores   = counters.stencilStores + 1;
+
+    // First, clear and draw with depth buffer enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_GEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Second, invalidate the depth/stencil buffers
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+
+    // Third, disable the depth/stencil buffers and draw with them disabled
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Fourth, re-enable the depth/stencil buffers and draw with them enabled
+    ASSERT_GL_NO_ERROR();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers to check how many loads and stores were done
+    swapBuffers();
+
+    uint32_t actualDepthClears   = counters.depthClears;
+    uint32_t actualDepthLoads    = counters.depthLoads;
+    uint32_t actualDepthStores   = counters.depthStores;
+    uint32_t actualStencilClears = counters.stencilClears;
+    uint32_t actualStencilLoads  = counters.stencilLoads;
+    uint32_t actualStencilStores = counters.stencilStores;
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);
+    EXPECT_EQ(expectedStencilClears, actualStencilClears);
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
 }
 
 // Tests that even if the app clears depth, it should be invalidated if there is no read.
