@@ -121,6 +121,30 @@
       "revId": "9e0c913ef47eef5e83979a478306d491b3972c6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4653b793_2680b57c",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-30T17:47:04Z",
+      "side": 1,
+      "message": "Done, thanks Shabi",
+      "parentUuid": "5178c683_06e36d61",
+      "range": {
+        "startLine": 437,
+        "startChar": 41,
+        "endLine": 437,
+        "endChar": 42
+      },
+      "revId": "9e0c913ef47eef5e83979a478306d491b3972c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
