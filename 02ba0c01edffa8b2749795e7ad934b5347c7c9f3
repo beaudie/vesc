@@ -90,6 +90,30 @@
     },
     {
       "key": {
+        "uuid": "47da023c_24501a3d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-30T01:49:09Z",
+      "side": 1,
+      "message": "Sure.\n\nGet Patchset 9 and look for InvalidateDisableDrawEnable and InvalidateDrawDisableEnable.  Within those tests, look at the 4 lines under the comment that starts \"// Execute the scenario\"",
+      "parentUuid": "1121bf6e_71023e24",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
@@ -181,6 +205,30 @@
       "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca486acf_f3e5528d",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-30T01:49:09Z",
+      "side": 1,
+      "message": "Done (I did it now to make it easier for your review)",
+      "parentUuid": "e4dcd76d_81d729a7",
+      "range": {
+        "startLine": 1052,
+        "startChar": 37,
+        "endLine": 1052,
+        "endChar": 64
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

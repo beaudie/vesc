@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53683f12_3ee1f55e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-30T01:49:09Z",
+      "side": 1,
+      "message": "I condensed the test code \u0026 pointed to the two tests you asked for ...",
+      "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
