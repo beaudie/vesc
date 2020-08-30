@@ -45,6 +45,61 @@ class VulkanPerformanceCounterTest : public ANGLETest
         const gl::Context *context = static_cast<const gl::Context *>(getEGLWindow()->getContext());
         return rx::GetImplAs<const rx::ContextVk>(context)->getPerfCounters();
     }
+
+    void setupClearAndDrawForInvalidateTest(GLProgram *program,
+                                            GLFramebuffer *framebuffer,
+                                            GLTexture *texture,
+                                            GLRenderbuffer *renderbuffer)
+    {
+        glUseProgram(*program);
+
+        // Setup to draw to color, depth, and stencil
+        glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
+        glBindTexture(GL_TEXTURE_2D, *texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *texture, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, *renderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                  *renderbuffer);
+        ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        // Clear and draw with depth and stencil buffer enabled
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_GEQUAL);
+        glClearDepthf(0.99f);
+        glEnable(GL_STENCIL_TEST);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        drawQuad(*program, essl1_shaders::PositionAttrib(), 0.5f);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void invalidateForInvalidateTest()
+    {
+        const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+        // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
+        glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void enableForInvalidateTest()
+    {
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_STENCIL_TEST);
+    }
+
+    void disableForInvalidateTest()
+    {
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_STENCIL_TEST);
+    }
+
+    void drawForInvalidateTest(GLProgram *program)
+    {
+        drawQuad(*program, essl1_shaders::PositionAttrib(), 0.5f);
+        ASSERT_GL_NO_ERROR();
+    }
 };
 
 class VulkanPerformanceCounterTest_ES31 : public VulkanPerformanceCounterTest
@@ -416,62 +471,376 @@ TEST_P(VulkanPerformanceCounterTest, ReadOnlyDepthStencilFeedbackLoopUsesSingleR
     ASSERT_GL_NO_ERROR();
 }
 
-// Tests that RGB texture should not break renderpass (similar to PUBG MOBILE).
-TEST_P(VulkanPerformanceCounterTest, InvalidatingAndUsingDepthDoesNotBreakRenderPass)
+// The following macros allow most of the "invalidate" tests to share a lot of code, including
+// local-variable declarations and uses
+#define DECLARE_INVALIDATE_EXPECTED_INCS(rpCount, dClear, dLoad, dStore, sClear, sLoad, sStore) \
+    uint32_t expectedRenderPassCount = counters.renderPasses + rpCount;                         \
+    uint32_t expectedDepthClears     = counters.depthClears + dClear;                           \
+    uint32_t expectedDepthLoads      = counters.depthLoads + dLoad;                             \
+    uint32_t expectedDepthStores     = counters.depthStores + dStore;                           \
+    uint32_t expectedStencilClears   = counters.stencilClears + sClear;                         \
+    uint32_t expectedStencilLoads    = counters.stencilLoads + sLoad;                           \
+    uint32_t expectedStencilStores   = counters.stencilStores + sStore;
+
+#define DECLARE_INVALIDATE_ACTUAL() \
+    uint32_t actualDepthClears;     \
+    uint32_t actualDepthLoads;      \
+    uint32_t actualDepthStores;     \
+    uint32_t actualStencilClears;   \
+    uint32_t actualStencilLoads;    \
+    uint32_t actualStencilStores;
+
+#define SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL()          \
+    swapBuffers();                                         \
+    actualDepthClears   = counters.depthClears;            \
+    actualDepthLoads    = counters.depthLoads;             \
+    actualDepthStores   = counters.depthStores;            \
+    actualStencilClears = counters.stencilClears;          \
+    actualStencilLoads  = counters.stencilLoads;           \
+    actualStencilStores = counters.stencilStores;          \
+    EXPECT_EQ(expectedDepthClears, actualDepthClears);     \
+    EXPECT_EQ(expectedDepthLoads, actualDepthLoads);       \
+    EXPECT_EQ(expectedDepthStores, actualDepthStores);     \
+    EXPECT_EQ(expectedStencilClears, actualStencilClears); \
+    EXPECT_EQ(expectedStencilLoads, actualStencilLoads);   \
+    EXPECT_EQ(expectedStencilStores, actualStencilStores);
+
+// Tests that common PUBG MOBILE case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, disable, draw
+TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDraw)
 {
     const rx::vk::PerfCounters &counters = hackANGLE();
 
-    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
-    glUseProgram(program);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 0, 0, 1, 0);
+    DECLARE_INVALIDATE_ACTUAL();
 
-    // Setup to draw to color and depth
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
     GLTexture texture;
     GLRenderbuffer renderbuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                              renderbuffer);
-    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
 
-    uint32_t expectedRenderPassCount = counters.renderPasses + 1;
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    disableForInvalidateTest();
+    drawForInvalidateTest(&program);
 
-    // First, clear and draw with depth buffer enabled
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
-    glDepthFunc(GL_GEQUAL);
-    glClearDepthf(0.99f);
-    glEnable(GL_STENCIL_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
-    ASSERT_GL_NO_ERROR();
-
-    // Second, invalidate the depth buffer and draw with depth buffer disabled
-    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
-    // Note: PUBG uses glDiscardFramebufferEXT() instead of glInvalidateFramebuffer()
-    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
-    ASSERT_GL_NO_ERROR();
-    glDisable(GL_DEPTH_TEST);
-    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
-    ASSERT_GL_NO_ERROR();
-
-    // Third, re-enable the depth buffer and draw again
-    ASSERT_GL_NO_ERROR();
-    glEnable(GL_DEPTH_TEST);
-    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
-    ASSERT_GL_NO_ERROR();
-
+    // Ensure that the render pass wasn't broken
     uint32_t actualRenderPassCount = counters.renderPasses;
     EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
 
-    // Make sure the render pass is ended by reading back a pixel.  Otherwise, the render pass will
-    // end when the test infrastructure calls eglSwapBuffers(), after the RAII-based GLRenderbuffer
-    // has been deleted.
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that alternative PUBG MOBILE case does not break render pass, and that counts are correct:
+//
+// - Scenario: disable, invalidate, draw
+TEST_P(VulkanPerformanceCounterTest, DisableInvalidateDraw)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 0, 0, 1, 0);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    disableForInvalidateTest();
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that common TRex case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate
+TEST_P(VulkanPerformanceCounterTest, Invalidate)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 0, 0, 1, 0);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw
+TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 1, 0, 1, 1);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisable)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 1, 0, 1, 1);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+    disableForInvalidateTest();
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, disable, draw, enable
+TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDrawEnable)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 0, 0, 1, 0);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    disableForInvalidateTest();
+    drawForInvalidateTest(&program);
+    enableForInvalidateTest();
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable, enable
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnable)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 1, 0, 1, 1);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+    disableForInvalidateTest();
+    enableForInvalidateTest();
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable, enable, invalidate
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableInvalidate)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 0, 0, 1, 0);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+    disableForInvalidateTest();
+    enableForInvalidateTest();
+    invalidateForInvalidateTest();
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable, enable, invalidate, draw
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableInvalidateDraw)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 1, 0, 1, 1);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+    disableForInvalidateTest();
+    enableForInvalidateTest();
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, draw, disable, enable, disable, invalidate
+TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableDisableInvalidate)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 0, 0, 1, 0);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    drawForInvalidateTest(&program);
+    disableForInvalidateTest();
+    enableForInvalidateTest();
+    disableForInvalidateTest();
+    invalidateForInvalidateTest();
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
+}
+
+// Tests that another common (dEQP) case does not break render pass, and that counts are correct:
+//
+// - Scenario: invalidate, disable, enable, draw
+TEST_P(VulkanPerformanceCounterTest, InvalidateDisableEnableDraw)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    DECLARE_INVALIDATE_EXPECTED_INCS(1, 1, 0, 1, 0, 1, 1);
+    DECLARE_INVALIDATE_ACTUAL();
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupClearAndDrawForInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Execute the scenario that this test is for
+    invalidateForInvalidateTest();
+    disableForInvalidateTest();
+    enableForInvalidateTest();
+    drawForInvalidateTest(&program);
+
+    // Ensure that the render pass wasn't broken
+    uint32_t actualRenderPassCount = counters.renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
 }
 
 // Tests that even if the app clears depth, it should be invalidated if there is no read.
