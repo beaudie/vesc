@@ -114,6 +114,30 @@
     },
     {
       "key": {
+        "uuid": "6e05d165_207c070b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-30T14:01:25Z",
+      "side": 1,
+      "message": "Right right. The trick to solving InvalidateDisableDrawEnable/InvalidateDrawDisableEnable is to clear the \"invalidate\" counter on \"enable\". Once you \"enable\" you no longer have a DONT_CARE situation. So we set \"invalidate count\" to infinity.\n\nI don\u0027t recall the details of our conversation Friday or if we came to another conclusion.",
+      "parentUuid": "47da023c_24501a3d",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7

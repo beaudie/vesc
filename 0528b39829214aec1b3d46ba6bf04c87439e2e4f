@@ -16,6 +16,29 @@
       "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e11adc2_38f0d261",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-30T14:01:25Z",
+      "side": 1,
+      "message": "here you should set this to infinite. potentially the disabled count to infinite as well (though it might not matter)",
+      "range": {
+        "startLine": 744,
+        "startChar": 7,
+        "endLine": 744,
+        "endChar": 64
+      },
+      "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
