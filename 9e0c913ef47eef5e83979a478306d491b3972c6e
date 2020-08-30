@@ -97,6 +97,30 @@
       "revId": "9e0c913ef47eef5e83979a478306d491b3972c6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecace086_6e858dae",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-08-30T16:40:20Z",
+      "side": 1,
+      "message": "mAtmomicCounterBuffers is \"resized\" to \"caps.maxAtomicCounterBufferBindings\" in context initialization so the \"size()\" will never be 0. i thought of converting it into \"reserve\" but that wont work since it looks like the vector can be sparse and needs to be tied to an index. We should be able to convert this into a map of [index, buffers] when abseil is back and then we can simply use the \"size()\" in \"hasValidAtomicCounterBuffer()\"",
+      "parentUuid": "9b13e817_d1173af3",
+      "range": {
+        "startLine": 437,
+        "startChar": 8,
+        "endLine": 437,
+        "endChar": 70
+      },
+      "revId": "9e0c913ef47eef5e83979a478306d491b3972c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
