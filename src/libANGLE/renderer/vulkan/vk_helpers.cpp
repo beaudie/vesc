@@ -739,10 +739,8 @@ void CommandBufferHelper::onDepthStencilAccess(ResourceAccess access,
             // If never invalidated or no longer invalidated, return early.
             return;
         }
-        // Get the latest CmdCount.  Later, compare this count with what it is at that time to
-        // determine if draws occured while the invalidated attachment was enabled (which will make
-        // it no longer invalidated.
-        *cmdCountInvalidated = mCommandBuffer.getCommandCount();
+        // Forget that the attachment was ever invalidated.
+        *cmdCountInvalidated = kNeverInvalidatedCmdCount;
         // Record that the attachment is enabled
         *cmdCountDisabled = kEnabledCmdCount;
     }
