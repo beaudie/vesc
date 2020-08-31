@@ -186,6 +186,30 @@
     },
     {
       "key": {
+        "uuid": "ee63a28b_87ebb2d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-31T22:55:09Z",
+      "side": 1,
+      "message": "If there was a depth enabled draw, we *should* undo all knowledge that the attachment was invalidated. That\u0027s correct and necessary because depth values are now defined. So the RP should LOAD and not DONT_CARE for the load op.\n\nIs there a counterexample situation you are worried about?",
+      "parentUuid": "39c970fb_8043063a",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
