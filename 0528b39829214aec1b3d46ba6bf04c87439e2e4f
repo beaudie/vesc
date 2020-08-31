@@ -62,6 +62,70 @@
       "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8af6e16_f143530c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T18:24:08Z",
+      "side": 1,
+      "message": "Only when the attachment (depth or stencil) is enabled, and we explicitly set it to infinity (kEnabledCmdCount).  Thus, when enabled, we compare mCommandBuffer.getCommandCount() with cmdCountInvalidated.",
+      "parentUuid": "c3546e56_32ac67a7",
+      "range": {
+        "startLine": 997,
+        "startChar": 15,
+        "endLine": 997,
+        "endChar": 75
+      },
+      "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aca1c613_d93002b9",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T18:24:08Z",
+      "side": 1,
+      "message": "I see that neither of these calls make any difference because there\u0027s nothing causing the enable/disable dirty bits to be processed.  I\u0027m going to fix this where I can.",
+      "range": {
+        "startLine": 706,
+        "startChar": 4,
+        "endLine": 708,
+        "endChar": 0
+      },
+      "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7ec143b_ea6bf711",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T18:24:08Z",
+      "side": 1,
+      "message": "I need to add another render pass and check that the load ops appropriately increment.",
+      "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

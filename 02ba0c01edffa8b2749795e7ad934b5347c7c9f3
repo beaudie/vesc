@@ -162,6 +162,30 @@
     },
     {
       "key": {
+        "uuid": "39c970fb_8043063a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T18:24:08Z",
+      "side": 1,
+      "message": "\u003e The trick to solving InvalidateDisableDrawEnable/InvalidateDrawDisableEnable is to clear the \"invalidate\" counter on \"enable\".\n\nThat undoes all knowledge that the attachment was invalidated, and thus we won\u0027t restore mContentDefined to true (i.e. the next RP won\u0027t LOAD the attachment).\n\n\u003e It looks like this is getting complicated enough that some version of Ian\u0027s comment should probably go into a .md in doc/ so it can be referenced here.\n\nI\u0027ve been putting things in the design doc.  A .md file probably makes sense (or a pointer to the design doc).",
+      "parentUuid": "f6609f81_69c45c8f",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
