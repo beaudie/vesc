@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 
 namespace rx
 {
@@ -62,7 +63,7 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessa
 void Resource::retain(ContextVk *contextVk)
 {
     // Store reference in resource list.
-    contextVk->getResourceUseList().add(mUse);
+    contextVk->getResourceUseList().add(mUse, contextVk->getShareGroup());
 }
 
 // SharedGarbage implementation.
@@ -113,23 +114,30 @@ ResourceUseList::~ResourceUseList()
     ASSERT(mResourceUses.empty());
 }
 
-void ResourceUseList::releaseResourceUses()
+void ResourceUseList::add(const SharedResourceUse &resourceUse, ShareGroupVk *shareGroupVk)
 {
-    for (SharedResourceUse &use : mResourceUses)
-    {
-        use.release();
-    }
+    SharedResourceUse *newUse = shareGroupVk->acquireSharedResouceUse();
+    newUse->set(resourceUse);
+    mResourceUses.emplace_back(newUse);
+}
 
+void ResourceUseList::releaseResourceUses(ShareGroupVk *shareGroupVk)
+{
+    for (SharedResourceUse *use : mResourceUses)
+    {
+        use->release();
+        shareGroupVk->releaseSharedResouceUse(use);
+    }
     mResourceUses.clear();
 }
 
-void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial)
+void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial, ShareGroupVk *shareGroupVk)
 {
-    for (SharedResourceUse &use : mResourceUses)
+    for (SharedResourceUse *use : mResourceUses)
     {
-        use.releaseAndUpdateSerial(serial);
+        use->releaseAndUpdateSerial(serial);
+        shareGroupVk->releaseSharedResouceUse(use);
     }
-
     mResourceUses.clear();
 }
 }  // namespace vk

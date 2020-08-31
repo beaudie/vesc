@@ -809,7 +809,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mCommandQueue.destroy(device);
 
-    mResourceUseList.releaseResourceUses();
+    mResourceUseList.releaseResourceUses(mShareGroupVk);
 
     mUtils.destroy(mRenderer);
 
@@ -4128,7 +4128,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     ANGLE_VK_TRY(this, mPrimaryCommands.end());
 
     Serial serial = getCurrentQueueSerial();
-    mResourceUseList.releaseResourceUsesAndUpdateSerials(serial);
+    mResourceUseList.releaseResourceUsesAndUpdateSerials(serial, mShareGroupVk);
 
     waitForSwapchainImageIfNecessary();
 
