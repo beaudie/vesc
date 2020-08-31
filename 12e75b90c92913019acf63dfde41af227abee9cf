@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a66e72cd_0dd53491",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/DisplayVkXcb.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-08-31T16:49:34Z",
+      "side": 1,
+      "message": "checkConfigSupport passes mutable configs so I think we should just remove the EGL_WINDOW_BIT here instead of assuming the config is not supported because it doesn\u0027t support windowing at the higher level.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "12e75b90c92913019acf63dfde41af227abee9cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
