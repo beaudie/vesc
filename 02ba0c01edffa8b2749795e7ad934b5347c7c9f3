@@ -138,6 +138,30 @@
     },
     {
       "key": {
+        "uuid": "f6609f81_69c45c8f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-31T14:31:36Z",
+      "side": 1,
+      "message": "It looks like this is getting complicated enough that some version of Ian\u0027s comment should probably go into a .md in doc/ so it can be referenced here.",
+      "parentUuid": "6e05d165_207c070b",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
