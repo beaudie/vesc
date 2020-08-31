@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2098f90_66712dba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-08-31T17:24:02Z",
+      "side": 1,
+      "message": "CL to rename chromium-built ANGLE apk to org.chromium.angle if we want to do that.\nCan discuss in the linked issue.",
+      "revId": "d9337dd5795584088b20f918ad5442a3870082bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
