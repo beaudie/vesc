@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b687655_1ff6496b",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-31T13:27:42Z",
+      "side": 1,
+      "message": "Does this line skip the test, or do the lines below in each individual test skip them?\nWhy is it repeated?",
+      "revId": "815b5ae97eb6e3d9cbd8456d115cbcb4317b97ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59bb52ed_feff1521",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-31T13:27:42Z",
+      "side": 1,
+      "message": "A bit strange to use \"SKIP_TEST\" in a tear down function. Maybe just return?",
+      "revId": "815b5ae97eb6e3d9cbd8456d115cbcb4317b97ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3f0ef15_5c572a86",
+        "filename": "src/tests/egl_tests/EGLCreateContextAttribsTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-31T13:27:42Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "815b5ae97eb6e3d9cbd8456d115cbcb4317b97ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f8d6ae9_ab7db27f",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-31T13:27:42Z",
+      "side": 1,
+      "message": "same comment as earlier",
+      "revId": "815b5ae97eb6e3d9cbd8456d115cbcb4317b97ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81c976c0_82056d1f",
+        "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-08-31T13:27:42Z",
+      "side": 1,
+      "message": "same comment",
+      "revId": "815b5ae97eb6e3d9cbd8456d115cbcb4317b97ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
