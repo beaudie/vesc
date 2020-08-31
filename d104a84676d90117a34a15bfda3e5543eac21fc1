@@ -16,6 +16,23 @@
       "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ff02f21_23ca9c6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T23:54:30Z",
+      "side": 1,
+      "message": "Shabi, PTAL at how I \"moved\" mContentDefined for depth and stencil, but not for color.\n\nThis definitely fixes bugs (I enabled parts of tests from the previous CL that can now work correctly), and so I want to land this soon.",
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
