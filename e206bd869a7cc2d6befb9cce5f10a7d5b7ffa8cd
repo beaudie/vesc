@@ -16,6 +16,23 @@
       "revId": "e206bd869a7cc2d6befb9cce5f10a7d5b7ffa8cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84fb2ce6_acd0978c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424723
+      },
+      "writtenOn": "2020-08-31T08:54:03Z",
+      "side": 1,
+      "message": "BTW, Xinyi\u0027s code also can make CTS3.1 array.array.*image* pass.\n\nHi @Shahbaz @Jamie,\nIf we can make this change work, then Mali is very close to pass cts3.1.",
+      "revId": "e206bd869a7cc2d6befb9cce5f10a7d5b7ffa8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
