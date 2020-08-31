@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61c7f996_48ea7f7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T18:32:37Z",
+      "side": 1,
+      "message": "I watched the new tests in the debugger.  I think this CL is ready to land, and I\u0027ll port/restart my CL that moves mContentDefined from RenderTargetVk to ImageHelper.",
+      "revId": "4c7dc0fa85dec325eb486f01d246fb6922f5c014",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

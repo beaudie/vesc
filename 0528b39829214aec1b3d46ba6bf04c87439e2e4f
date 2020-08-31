@@ -112,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "ff34db53_b4368f29",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T18:32:37Z",
+      "side": 1,
+      "message": "Where appropriate, I inserted a draw.  Where I couldn\u0027t, I added a TODO.  I either need a non-drawing way to trigger syncState or I need to change the test.",
+      "parentUuid": "aca1c613_d93002b9",
+      "range": {
+        "startLine": 706,
+        "startChar": 4,
+        "endLine": 708,
+        "endChar": 0
+      },
+      "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7ec143b_ea6bf711",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 9
@@ -126,6 +150,24 @@
       "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1242b77a_8d7041a3",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T18:32:37Z",
+      "side": 1,
+      "message": "I added.  In some cases, I needed to comment-out the test until we handle mContentDefined at endRP time.",
+      "parentUuid": "f7ec143b_ea6bf711",
+      "revId": "0528b39829214aec1b3d46ba6bf04c87439e2e4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
