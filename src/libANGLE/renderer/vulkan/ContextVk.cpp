@@ -770,6 +770,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mDescriptorBufferInfos.reserve(kDescriptorBufferInfosInitialSize);
     mDescriptorImageInfos.reserve(kDescriptorImageInfosInitialSize);
     mWriteDescriptorSets.reserve(kDescriptorWriteInfosInitialSize);
+
+    mShareGroupVk->initialize();
+    mResourceUseList.setShareGroup(mShareGroupVk);
 }
 
 ContextVk::~ContextVk() = default;
