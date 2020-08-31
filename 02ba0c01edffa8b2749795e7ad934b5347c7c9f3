@@ -234,6 +234,30 @@
     },
     {
       "key": {
+        "uuid": "f5edf976_1a883ac0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T23:47:02Z",
+      "side": 1,
+      "message": "\u003e So the RP should LOAD and not DONT_CARE for the load op.\n\u003e \n\u003e Is there a counterexample situation you are worried about?\n\nYes.  In addition to setting this RP\u0027s store ops, I also need to correctly set mContentDefined so that the next RP uses the correct load ops.",
+      "parentUuid": "8caea642_674be912",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
