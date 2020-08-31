@@ -645,7 +645,6 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
     invalidateForInvalidateTest();
     // Draw (since enabled, should result: in storeOp = STORE; mContentDefined = true)
     drawForInvalidateTest(&program);
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct
 
     // Ensure that the render pass wasn't broken
     uint32_t actualRenderPassCount = counters.renderPasses;
@@ -655,9 +654,7 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
     SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
 
     // Start and end another render pass, to check that the load ops are as expected
-    //
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct; then uncomment:
-    // TEST_FUTURE_RP_LOADOP(1, 1);
+    TEST_FUTURE_RP_LOADOP(1, 1);
 }
 
 // Tests that another case does not break render pass, and that counts are correct:
@@ -768,7 +765,6 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDrawEnableDraw)
     enableForInvalidateTest();
     // Draw (since enabled, should result: in storeOp = STORE; mContentDefined = true)
     drawForInvalidateTest(&program);
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct
 
     // Ensure that the render pass wasn't broken
     uint32_t actualRenderPassCount = counters.renderPasses;
@@ -778,9 +774,7 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDrawEnableDraw)
     SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
 
     // Start and end another render pass, to check that the load ops are as expected
-    //
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct; then uncomment:
-    // TEST_FUTURE_RP_LOADOP(1, 1);
+    TEST_FUTURE_RP_LOADOP(1, 1);
 }
 
 // Tests that another case does not break render pass, and that counts are correct:
@@ -910,9 +904,7 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableInvalidateDraw)
     SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
 
     // Start and end another render pass, to check that the load ops are as expected
-    //
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct; then uncomment:
-    // TEST_FUTURE_RP_LOADOP(1, 1);
+    TEST_FUTURE_RP_LOADOP(1, 1);
 }
 
 // Tests that another common (dEQP) case does not break render pass, and that counts are correct:
@@ -944,7 +936,6 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableEnableDraw)
     enableForInvalidateTest();
     // Draw (since enabled, should result: in storeOp = STORE; mContentDefined = true)
     drawForInvalidateTest(&program);
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct
 
     // Ensure that the render pass wasn't broken
     uint32_t actualRenderPassCount = counters.renderPasses;
@@ -954,9 +945,7 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableEnableDraw)
     SWAP_UPDATE_AND_CHECK_INVALIDATE_ACTUAL();
 
     // Start and end another render pass, to check that the load ops are as expected
-    //
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct; then uncomment:
-    // TEST_FUTURE_RP_LOADOP(1, 1);
+    TEST_FUTURE_RP_LOADOP(1, 1);
 }
 
 // Tests that even if the app clears depth, it should be invalidated if there is no read.
