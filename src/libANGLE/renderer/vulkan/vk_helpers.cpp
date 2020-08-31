@@ -5400,7 +5400,7 @@ void ImageViewHelper::destroy(VkDevice device)
 
 void ImageViewHelper::retain(ContextVk *contextVk) const
 {
-    contextVk->getResourceUseList().add(mUse);
+    contextVk->getResourceUseList().add(mUse, contextVk->getShareGroup());
 }
 
 angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,

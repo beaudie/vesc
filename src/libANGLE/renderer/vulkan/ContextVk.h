@@ -338,6 +338,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     ANGLE_INLINE const angle::FeaturesVk &getFeatures() const { return mRenderer->getFeatures(); }
 
+    ANGLE_INLINE ShareGroupVk *getShareGroup() { return mShareGroupVk; }
+
     ANGLE_INLINE void invalidateVertexAndIndexBuffers()
     {
         invalidateCurrentGraphicsPipeline();
