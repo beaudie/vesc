@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2d55470_f514e160",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-08-31T14:48:25Z",
+      "side": 1,
+      "message": "Passes Dry Run. PTAL.\n\nI tried quickly converting the WebGL test into a new test end2end test, but something\u0027s not quite equivalent and my end2end test wasn\u0027t behaving like the WebGL test. I can spend more time on this if you want. If re-enabling the WebGL test is good enough, then this is ready to go. Thanks.",
+      "revId": "5d929a1409d1e5393ba48c4277f64df98ed44d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
