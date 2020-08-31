@@ -145,6 +145,30 @@
       "revId": "9e0c913ef47eef5e83979a478306d491b3972c6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "43f39c57_ed5b6dbc",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-31T13:04:25Z",
+      "side": 1,
+      "message": "Alternately we could just keep a counter of the number of buffers bound to this indexed binding point. You could implement that in this CL to completely eliminate this hotspot.",
+      "parentUuid": "ecace086_6e858dae",
+      "range": {
+        "startLine": 437,
+        "startChar": 8,
+        "endLine": 437,
+        "endChar": 70
+      },
+      "revId": "9e0c913ef47eef5e83979a478306d491b3972c6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

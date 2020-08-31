@@ -16,6 +16,23 @@
       "revId": "7c96aa847940d935df1520207d3188d2a5cd28ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8c39ac8_68c53012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-31T13:04:25Z",
+      "side": 1,
+      "message": "LGTM, I think this could be optimized out further.",
+      "revId": "7c96aa847940d935df1520207d3188d2a5cd28ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
