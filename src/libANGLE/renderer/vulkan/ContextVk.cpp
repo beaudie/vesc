@@ -2491,8 +2491,10 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
     {
         // Change depthstencil attachment storeOp to DONT_CARE
         const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-        mRenderPassCommands->invalidateRenderPassStencilAttachment(dsState);
-        mRenderPassCommands->invalidateRenderPassDepthAttachment(dsState);
+        mRenderPassCommands->invalidateRenderPassStencilAttachment(
+            dsState, &depthStencilRenderTarget->getImageForRenderPass());
+        mRenderPassCommands->invalidateRenderPassDepthAttachment(
+            dsState, &depthStencilRenderTarget->getImageForRenderPass());
         // Mark content as invalid so that we will not load them in next renderpass
         depthStencilRenderTarget->invalidateEntireContent();
     }
@@ -2910,12 +2912,6 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 {
                     vk::ResourceAccess access = GetStencilAccess(mState.getDepthStencilState());
                     mRenderPassCommands->onStencilAccess(access);
-                    // Did this depth-state change undo a previous invalidation of the depth-stencil
-                    // attachment?
-                    if (mRenderPassCommands->shouldRestoreDepthStencilAttachment())
-                    {
-                        mDrawFramebuffer->restoreDepthStencilDefinedContents();
-                    }
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
@@ -4916,12 +4912,6 @@ angle::Result ContextVk::updateRenderPassDepthAccess()
         else
         {
             mRenderPassCommands->onDepthAccess(access);
-            // Did this depth-state change undo a previous invalidation of the depth-stencil
-            // attachment?
-            if (mRenderPassCommands->shouldRestoreDepthStencilAttachment())
-            {
-                mDrawFramebuffer->restoreDepthStencilDefinedContents();
-            }
         }
     }
 
