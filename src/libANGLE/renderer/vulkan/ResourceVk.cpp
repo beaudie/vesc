@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 
 namespace rx
 {
@@ -107,23 +108,30 @@ ResourceUseList::~ResourceUseList()
     ASSERT(mResourceUses.empty());
 }
 
+void ResourceUseList::add(const SharedResourceUse &resourceUse)
+{
+    SharedResourceUse *newUse = mShareGroup->acquireSharedResouceUse();
+    newUse->set(resourceUse);
+    mResourceUses.emplace_back(newUse);
+}
+
 void ResourceUseList::releaseResourceUses()
 {
-    for (SharedResourceUse &use : mResourceUses)
+    for (SharedResourceUse *use : mResourceUses)
     {
-        use.release();
+        use->release();
+        mShareGroup->releaseSharedResouceUse(use);
     }
-
     mResourceUses.clear();
 }
 
 void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial)
 {
-    for (SharedResourceUse &use : mResourceUses)
+    for (SharedResourceUse *use : mResourceUses)
     {
-        use.releaseAndUpdateSerial(serial);
+        use->releaseAndUpdateSerial(serial);
+        mShareGroup->releaseSharedResouceUse(use);
     }
-
     mResourceUses.clear();
 }
 }  // namespace vk
