@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 
 namespace rx
 {
@@ -96,22 +97,19 @@ bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSeri
 }
 
 // ResourceUseList implementation.
-ResourceUseList::ResourceUseList()
+void ResourceUseList::add(const SharedResourceUse &resourceUse)
 {
-    constexpr size_t kDefaultResourceUseCount = 4096;
-    mResourceUses.reserve(kDefaultResourceUseCount);
-}
-
-ResourceUseList::~ResourceUseList()
-{
-    ASSERT(mResourceUses.empty());
+    SharedResourceUse *newUse = mShareGroup->acquireSharedResouceUse();
+    newUse->set(resourceUse);
+    mResourceUses.push_front(newUse);
 }
 
 void ResourceUseList::releaseResourceUses()
 {
-    for (SharedResourceUse &use : mResourceUses)
+    for (SharedResourceUse *use : mResourceUses)
     {
-        use.release();
+        use->release();
+        mShareGroup->releaseSharedResouceUse(use);
     }
 
     mResourceUses.clear();
@@ -119,9 +117,10 @@ void ResourceUseList::releaseResourceUses()
 
 void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial)
 {
-    for (SharedResourceUse &use : mResourceUses)
+    for (SharedResourceUse *use : mResourceUses)
     {
-        use.releaseAndUpdateSerial(serial);
+        use->releaseAndUpdateSerial(serial);
+        mShareGroup->releaseSharedResouceUse(use);
     }
 
     mResourceUses.clear();

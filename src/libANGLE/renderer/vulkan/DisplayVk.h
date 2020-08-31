@@ -10,8 +10,11 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_DISPLAYVK_H_
 #define LIBANGLE_RENDERER_VULKAN_DISPLAYVK_H_
 
+#include <forward_list>
+
 #include "common/MemoryBuffer.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -20,8 +23,70 @@ class RendererVk;
 
 class ShareGroupVk : public ShareGroupImpl
 {
+  private:
+    using SharedResourceUseBlock = std::vector<vk::SharedResourceUse>;
+
   public:
     ShareGroupVk() {}
+
+    ANGLE_INLINE ~ShareGroupVk() override { releaseSharedResouceUsePool(); }
+
+    ANGLE_INLINE void initialize() { initializeSharedResourceUsePool(); }
+
+    ANGLE_INLINE vk::SharedResourceUse *acquireSharedResouceUse()
+    {
+        if (mSharedResourceUseFreeList.empty())
+        {
+            ensureCapacity();
+        }
+
+        vk::SharedResourceUse *sharedResourceUse = mSharedResourceUseFreeList.front();
+        mSharedResourceUseFreeList.pop_front();
+        return sharedResourceUse;
+    }
+
+    ANGLE_INLINE void releaseSharedResouceUse(vk::SharedResourceUse *sharedResourceUse)
+    {
+        mSharedResourceUseFreeList.push_front(sharedResourceUse);
+    }
+
+  private:
+    ANGLE_INLINE void initializeSharedResourceUsePool() { ensureCapacity(); }
+
+    ANGLE_INLINE void releaseSharedResouceUsePool()
+    {
+        mSharedResourceUseFreeList.clear();
+        for (SharedResourceUseBlock &block : mSharedResourceUsePool)
+        {
+            block.clear();
+        }
+        mSharedResourceUsePool.clear();
+    }
+
+    ANGLE_INLINE void ensureCapacity()
+    {
+        // Allocate a SharedResourceUse block
+        constexpr size_t kSharedResourceUseBlockSize = 4096;
+        SharedResourceUseBlock sharedResourceUseBlock;
+        sharedResourceUseBlock.reserve(kSharedResourceUseBlockSize);
+        for (size_t i = 0; i < kSharedResourceUseBlockSize; i++)
+        {
+            sharedResourceUseBlock.emplace_back(vk::SharedResourceUse());
+        }
+
+        // Append it to the SharedResourceUse pool
+        mSharedResourceUsePool.emplace_back(std::move(sharedResourceUseBlock));
+
+        // Add the newly allocated SharedResourceUse to the free list
+        SharedResourceUseBlock &newSharedResourceUseBlock = mSharedResourceUsePool.back();
+        for (vk::SharedResourceUse &use : newSharedResourceUseBlock)
+        {
+            mSharedResourceUseFreeList.push_front(&use);
+        }
+    }
+
+    std::vector<SharedResourceUseBlock> mSharedResourceUsePool;
+    std::forward_list<vk::SharedResourceUse *> mSharedResourceUseFreeList;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context

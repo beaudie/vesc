@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 
+#include <forward_list>
+
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -135,24 +137,19 @@ using SharedGarbageList = std::vector<SharedGarbage>;
 class ResourceUseList final : angle::NonCopyable
 {
   public:
-    ResourceUseList();
-    virtual ~ResourceUseList();
+    ResourceUseList() {}
+    virtual ~ResourceUseList() { ASSERT(mResourceUses.empty()); }
 
+    ANGLE_INLINE void setShareGroup(ShareGroupVk *shareGroup) { mShareGroup = shareGroup; }
     void add(const SharedResourceUse &resourceUse);
 
     void releaseResourceUses();
     void releaseResourceUsesAndUpdateSerials(Serial serial);
 
   private:
-    std::vector<SharedResourceUse> mResourceUses;
+    ShareGroupVk *mShareGroup;
+    std::forward_list<SharedResourceUse *> mResourceUses;
 };
-
-ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse &resourceUse)
-{
-    SharedResourceUse newUse;
-    newUse.set(resourceUse);
-    mResourceUses.emplace_back(std::move(newUse));
-}
 
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
 // of their use in ANGLE and VkQueues via SharedResourceUse.

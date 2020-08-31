@@ -621,11 +621,13 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mFramebufferManager->release(this);
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
-    mState.mShareGroup->release(this);
 
     mThreadPool.reset();
 
     mImplementation->onDestroy(this);
+    // After the addition of a resource pool to ShareGroup make sure to
+    // release ShareGroup ONLY AFTER destroying implementation context.
+    mState.mShareGroup->release(this);
 
     mOverlay.destroy(this);
 
