@@ -565,6 +565,7 @@ CommandBufferHelper::CommandBufferHelper()
       mDepthCmdCountDisabled(kEnabledCmdCount),
       mStencilCmdCountInvalidated(kNeverInvalidatedCmdCount),
       mStencilCmdCountDisabled(kEnabledCmdCount),
+      mDepthStencilImage(nullptr),
       mDepthStencilAttachmentIndex(kInvalidAttachmentIndex)
 {}
 
@@ -873,6 +874,17 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     {
         dsOps.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
+    if (shouldRestoreDepthStencilAttachment())
+    {
+        // The depth and stencil attachment were both invalidated, but at least one of them is now
+        // valid.  When they were invalidated, RenderTargetVk::mContentDefined was set to false,
+        // which tells a future render pass to use DONT_CARE for the loadOp and stencilLoadOp.
+        // Since at least one of the attachments is now valid, tell RenderTargetVk that LOAD should
+        // be used.
+        ASSERT(mDepthStencilImage && mDepthStencilImage->valid());
+        mDepthStencilImage->setDefinedDepthContent(true);
+        mDepthStencilImage->setDefinedStencilContent(true);
+    }
 
     // Second, if we are loading or clearing the attachment, but the attachment has not been used,
     // and the data has also not been stored back into attachment, then just skip the load/clear op.
@@ -1103,6 +1115,7 @@ void CommandBufferHelper::reset()
         mDepthCmdCountDisabled             = kEnabledCmdCount;
         mStencilCmdCountInvalidated        = kNeverInvalidatedCmdCount;
         mStencilCmdCountDisabled           = kEnabledCmdCount;
+        mDepthStencilImage                 = nullptr;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
         mRenderPassUsedImages.clear();
     }
@@ -2821,6 +2834,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
+      mDepthContentDefined(std::move(other.mDepthContentDefined)),
+      mStencilContentDefined(std::move(other.mStencilContentDefined)),
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates)),
       mCurrentSingleClearValue(std::move(other.mCurrentSingleClearValue))
@@ -2851,7 +2866,10 @@ void ImageHelper::resetCachedProperties()
     mMaxLevel                    = gl::LevelIndex(0);
     mLayerCount                  = 0;
     mLevelCount                  = 0;
-    mExternalFormat              = 0;
+    // Conservatively assume the content is defined.
+    mDepthContentDefined   = true;
+    mStencilContentDefined = true;
+    mExternalFormat        = 0;
     mCurrentSingleClearValue.reset();
 }
 
