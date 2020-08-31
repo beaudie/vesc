@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "5ddeb9af_04c5674c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-31T22:25:33Z",
+      "side": 1,
+      "message": "I think VMA\u0027s statistics is different though, it tracks all allocations, not differentiate if it is dynamic buffer or regular buffer etc. Depends on what we want to track, this has value if we want to know dynamic buffer allocations. That been said, I am totally fine to put it back to WIP if people unsure about what we want yet.",
+      "parentUuid": "a8a9da76_1eb8ca3c",
+      "revId": "0e6d1bf753eaa65dadb2fd415bc02fa3a62aac63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45f378cf_50c45c46",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
