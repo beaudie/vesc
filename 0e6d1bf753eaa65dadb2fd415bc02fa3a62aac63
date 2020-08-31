@@ -68,6 +68,70 @@
       "revId": "0e6d1bf753eaa65dadb2fd415bc02fa3a62aac63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f82ef695_1507bb6d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-31T23:03:25Z",
+      "side": 1,
+      "message": "The command graph output stuff was underneath a constexpr conditional, which should let the compiler optimize out the branching/storing.\n\nHowever, this should all be part of the performance counters stuff.   Then, it could be graphed as a histogram or something as an overlay.",
+      "parentUuid": "45f378cf_50c45c46",
+      "revId": "0e6d1bf753eaa65dadb2fd415bc02fa3a62aac63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddbaf304_dd970243",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-31T23:03:25Z",
+      "side": 1,
+      "message": "These should be added to PerfCounters.",
+      "range": {
+        "startLine": 407,
+        "startChar": 0,
+        "endLine": 408,
+        "endChar": 53
+      },
+      "revId": "0e6d1bf753eaa65dadb2fd415bc02fa3a62aac63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2cec12b_d6e7eb51",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-08-31T23:03:25Z",
+      "side": 1,
+      "message": "This looks prone to breaking, since it\u0027s very likely any new release() or allocate() call will not have a matching onDynamicBufferRelease()/onDynamicBufferAllocate() call with it since there\u0027s no way to enforce it with the compiler or a test.\n\nInstead, I think BufferHelper should handle this work by having a ContextVk passed to init()/release().   That would help with maintenance in the future and remove all of the onDynamicBufferRelease() calls sprinkled around.",
+      "range": {
+        "startLine": 1332,
+        "startChar": 0,
+        "endLine": 1333,
+        "endChar": 58
+      },
+      "revId": "0e6d1bf753eaa65dadb2fd415bc02fa3a62aac63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
