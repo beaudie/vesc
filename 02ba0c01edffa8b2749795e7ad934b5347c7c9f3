@@ -210,6 +210,30 @@
     },
     {
       "key": {
+        "uuid": "8caea642_674be912",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-08-31T23:41:43Z",
+      "side": 1,
+      "message": "I\u0027d like to make sure we\u0027re talking about the same thing ... I uploaded a CL (crrev/c/2386576) that does what I think you are asking for.  Did I understand and implement your suggestion correctly?\n\nThe CL breaks 3 tests, as I would expect.  This is because mContentDefined isn\u0027t set to true at endRP.  The CL builds on top of two CLs:\n\n- This CL.  I fixed some test issues this morning and added code to test the load ops of the following RP\n\n- crrev/c/2386478.  That CL moves mContentDefined to ImageHelper and  sets mContentDefined  at endRP).",
+      "parentUuid": "ee63a28b_87ebb2d3",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
