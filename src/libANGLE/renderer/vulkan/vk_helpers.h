@@ -875,26 +875,15 @@ enum class AliasingMode
     Disallowed,
 };
 
-enum InvalidatedState
-{
-    // The attachment has been invalidated and is currently still invalid.
-    Invalidated,
-    // The attachment was previously invalidated, but has since been used while enabled for
-    // drawing, meaning that it has valid contents (and therefore this render pass should STORE it,
-    // and a future render pass should LOAD it).
-    NoLongerInvalidated,
-    // The attachment has never been invalidated.  Since this is the highest value, it should never
-    // be given to UpdateInvalidatedState().  Instead, it should only be set starting a render pass.
-    NeverInvalidated,
-};
+// The following are used to help track the state of an invalidated attachment.
 
-inline void UpdateInvalidatedState(InvalidatedState *oldState, InvalidatedState newState)
-{
-    if (newState > *oldState)
-    {
-        *oldState = newState;
-    }
-}
+// This value indicates that the attachment has never been invalidated.
+constexpr uint32_t kNeverInvalidatedCmdCount = 0xffffffff;
+// This value indicates that the attachment was once invalidated, but now has valid contents.
+constexpr uint32_t kNoLongerInvalidatedCmdCount = 0xfffffffe;
+
+// If the attachment has been invalidated, this value indicates that it is currently enabled.
+constexpr uint32_t kEnabledCmdCount = 0xfffffffd;
 
 // CommandBufferHelper (CBH) class wraps ANGLE's custom command buffer
 //  class, SecondaryCommandBuffer. This provides a way to temporarily
@@ -983,29 +972,58 @@ class CommandBufferHelper : angle::NonCopyable
         SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
     }
 
-    void invalidateRenderPassDepthAttachment()
+    void invalidateRenderPassDepthAttachment(const gl::DepthStencilState &dsState)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        mDepthInvalidatedState = Invalidated;
+        // Keep track of the size of commands in the command buffer.  If the size grows in the
+        // future, that implies that drawing occured since invalidated.
+        mDepthCmdCountInvalidated = mCommandBuffer.getCommandCount();
+        // Also track the size if the attachment is currently disabled.
+        mDepthCmdCountDisabled =
+            (dsState.depthTest && dsState.depthMask) ? kEnabledCmdCount : mDepthCmdCountInvalidated;
     }
 
-    void invalidateRenderPassStencilAttachment()
+    void invalidateRenderPassStencilAttachment(const gl::DepthStencilState &dsState)
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        mStencilInvalidatedState = Invalidated;
+        // Keep track of the size of commands in the command buffer.  If the size grows in the
+        // future, that implies that drawing occured since invalidated.
+        mStencilCmdCountInvalidated = mCommandBuffer.getCommandCount();
+        // Also track the size if the attachment is currently disabled.
+        mStencilCmdCountDisabled =
+            dsState.stencilTest ? kEnabledCmdCount : mStencilCmdCountInvalidated;
+    }
+
+    bool isNoLongerInvalidated(uint32_t cmdCountInvalidated, uint32_t cmdCountDisabled)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        return cmdCountInvalidated == kNoLongerInvalidatedCmdCount ||
+               (cmdCountInvalidated != kNeverInvalidatedCmdCount &&
+                std::min(cmdCountDisabled, mCommandBuffer.getCommandCount()) !=
+                    cmdCountInvalidated);
+    }
+
+    bool isInvalidated(uint32_t cmdCountInvalidated, uint32_t cmdCountDisabled)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        return cmdCountInvalidated != kNeverInvalidatedCmdCount &&
+               cmdCountInvalidated != kNoLongerInvalidatedCmdCount &&
+               std::min(cmdCountDisabled, mCommandBuffer.getCommandCount()) == cmdCountInvalidated;
     }
 
     bool shouldRestoreDepthStencilAttachment()
     {
         ASSERT(mIsRenderPassCommandBuffer);
-        // Return true when both depth and stencil attachments were previously-invalidated, and at
-        // least one of those attachments are no longer invalidated.  When invalidated,
-        // RenderTargetVk::mContentDefined is set to false, which will result in the loadOp and
-        // stencilLoadOp of a future render pass being set to DONT_CARE.  ContextVk::syncState()
-        // will call this method to determine if RenderTargetVk::mContentDefined should be set back
-        // to true (i.e. use LOAD).
-        return mDepthInvalidatedState == NoLongerInvalidated ||
-               mStencilInvalidatedState == NoLongerInvalidated;
+        // Return true when at least one of the depth and stencil attachments is no longer
+        // invalidated.  If both were previously invalidated, RenderTargetVk::mContentDefined is
+        // set to false (which results in the loadOp and stencilLoadOp of a future render pass
+        // being set to DONT_CARE).  This method will determine if, at this time,
+        // RenderTargetVk::mContentDefined should be set back to true (i.e. use LOAD).
+        //
+        // TODO(ianelliott): move mContentDefined to ImageHelper, so that mContentDefined can be
+        // set to true at endRenderPass time, which is more accurate (since all draws be known).
+        return isNoLongerInvalidated(mDepthCmdCountInvalidated, mDepthCmdCountDisabled) ||
+               isNoLongerInvalidated(mStencilCmdCountInvalidated, mStencilCmdCountDisabled);
     }
 
     void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, ImageLayout finalLayout)
@@ -1064,6 +1082,11 @@ class CommandBufferHelper : angle::NonCopyable
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
+
+    void onDepthStencilAccess(ResourceAccess access,
+                              uint32_t *cmdCountInvalidated,
+                              uint32_t *cmdCountDisabled);
+
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
     //  that occur w/ shared allocator between multiple CBHs.
     angle::PoolAllocator mAllocator;
@@ -1095,10 +1118,10 @@ class CommandBufferHelper : angle::NonCopyable
     ResourceAccess mStencilStartAccess;
 
     // State tracking for whether to optimize the storeOp to DONT_CARE
-    bool mDepthEnabled;
-    InvalidatedState mDepthInvalidatedState;
-    bool mStencilEnabled;
-    InvalidatedState mStencilInvalidatedState;
+    uint32_t mDepthCmdCountInvalidated;
+    uint32_t mDepthCmdCountDisabled;
+    uint32_t mStencilCmdCountInvalidated;
+    uint32_t mStencilCmdCountDisabled;
 
     // Keep track of the depth/stencil attachment index
     uint32_t mDepthStencilAttachmentIndex;
