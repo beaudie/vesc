@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "254fa647_3ce51aa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-08-31T19:33:55Z",
+      "side": 1,
+      "message": "Since this has been asked a few times, I figured maybe I should just check it in. Even though it is not perfect (we probably should have a more systematic accounting for various types of allocations), its better than nothing.",
+      "revId": "0e6d1bf753eaa65dadb2fd415bc02fa3a62aac63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
