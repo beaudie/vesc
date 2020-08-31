@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2e5228d1_12e571ed",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-31T15:48:51Z",
+      "side": 1,
+      "message": "it doesn\u0027t skip the test if it\u0027s not in the test body, it will print an error message and return from this function. because it\u0027s deceptive i wouldn\u0027t use it like that here.",
+      "parentUuid": "5b687655_1ff6496b",
+      "revId": "815b5ae97eb6e3d9cbd8456d115cbcb4317b97ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59bb52ed_feff1521",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 5
