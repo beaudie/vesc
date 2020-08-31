@@ -138,21 +138,16 @@ class ResourceUseList final : angle::NonCopyable
     ResourceUseList();
     virtual ~ResourceUseList();
 
+    ANGLE_INLINE void setShareGroup(ShareGroupVk *shareGroup) { mShareGroup = shareGroup; }
     void add(const SharedResourceUse &resourceUse);
 
     void releaseResourceUses();
     void releaseResourceUsesAndUpdateSerials(Serial serial);
 
   private:
-    std::vector<SharedResourceUse> mResourceUses;
+    ShareGroupVk *mShareGroup;
+    std::vector<SharedResourceUse *> mResourceUses;
 };
-
-ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse &resourceUse)
-{
-    SharedResourceUse newUse;
-    newUse.set(resourceUse);
-    mResourceUses.emplace_back(std::move(newUse));
-}
 
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
 // of their use in ANGLE and VkQueues via SharedResourceUse.
