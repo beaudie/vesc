@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20cb331f_9d4edbcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-31T15:55:21Z",
+      "side": 1,
+      "message": "Unfortunately going on vacation - however I think the best approach is to ensure the staging buffer is recreated only once.",
+      "revId": "8ef6d5c3c66197dfbbf9ce093ef1d6392bbfee2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4162531b_a7aefb2c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4590,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-08-31T15:55:21Z",
+      "side": 1,
+      "message": "What I\u0027m not sure about, is what happens here:\n\nuploads 2x2 level 0 (valid)\ndraws with the texture\nuploads 2x2 level 1 and 1x1 level 2 (invalid)\ndraws with the texture\nmakes level 0 4x4 (now all levels valid)\ndraws mipped\n\nWhere do the updates at levels 1 and 2 get staged? Does mStagingBuffer get re-inititalized properly? It\u0027s possible our regression testing doesn\u0027t cover this case.",
+      "range": {
+        "startLine": 4590,
+        "startChar": 8,
+        "endLine": 4590,
+        "endChar": 57
+      },
+      "revId": "8ef6d5c3c66197dfbbf9ce093ef1d6392bbfee2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
