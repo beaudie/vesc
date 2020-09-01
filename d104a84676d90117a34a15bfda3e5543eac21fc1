@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "b6314002_073ae983",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T19:05:08Z",
+      "side": 1,
+      "message": "That\u0027s what I initially did:\n\n  mIsDepthStencil \u003d mImage-\u003egetFormat().actualImageFormat().hasDepthOrStencilBits();\n\nIt actually crashes sometimes because mImage-\u003egetFormat() sometimes returns a reference to nullptr.  That\u0027s when I added mKnowWhetherIsDepthStencil.  Is there another alternative, because I\u0027d love to delete mKnowWhetherIsDepthStencil?",
+      "parentUuid": "f8735e37_468e4533",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46eadfa6_6f71f7e5",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "d8fae482_4d04ff36",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T19:05:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46eadfa6_6f71f7e5",
+      "range": {
+        "startLine": 167,
+        "startChar": 33,
+        "endLine": 167,
+        "endChar": 40
+      },
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "358717bf_cb80f28b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -93,6 +141,24 @@
       "writtenOn": "2020-09-01T18:18:51Z",
       "side": 1,
       "message": "Odd statement right next to mCurrentLayout \u003d Undefined!\n\nWouldn\u0027t something like this work instead?\n\n- Set to undefined here\n- When transitioning to a writable layout, conservatively set defined \u003d true.",
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43a1ec55_dd2590aa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T19:05:08Z",
+      "side": 1,
+      "message": "I changed it to false here, but some tests broke.  This does change ANGLE behavior (for the better I think, but I want both you and Charlie to be okay with it).\n\nCurrently, RenderTargetVk::mContentDefined is always initialized (\"conservatively\") to true, which results in a load op of LOAD for the first time the render target/image is used by a render pass.  That seems correct/optimal.  Therefore, I\u0027ll change the tests.  Seems like we should change it for color render target\u0027s as well.\n\nDo you agree?",
+      "parentUuid": "358717bf_cb80f28b",
       "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
