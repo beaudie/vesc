@@ -262,6 +262,15 @@ egl::Error WindowSurfaceGLX::getMscRate(EGLint *numerator, EGLint *denominator)
     {
         return egl::EglBadSurface() << "glXGetMscRateOML failed.";
     }
+    // http://crbug.com/1042393
+    // XWayland defaults to a 1hz refresh rate when the "surface is not visible", which sometimes
+    // causes issues in Chrome. To get around this, default to a sane refresh rate if we see bogus
+    // from the driver.
+    if (*numerator / *denominator < 2)
+    {
+        *numerator   = 30;
+        *denominator = 1;
+    }
     return egl::NoError();
 }
 
