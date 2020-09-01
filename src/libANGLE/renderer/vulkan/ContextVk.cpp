@@ -2620,11 +2620,20 @@ SurfaceRotation ContextVk::getRotationReadFramebuffer() const
 
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
 {
-    mClearColorMask =
-        gl_vk::GetColorComponentFlags(blendState.colorMaskRed, blendState.colorMaskGreen,
-                                      blendState.colorMaskBlue, blendState.colorMaskAlpha);
-
     FramebufferVk *framebufferVk = vk::GetImpl(mState.getDrawFramebuffer());
+    if (framebufferVk->isColorMaskForNoDrawBufferOptimizationEnabled())
+    {
+        // We uses color mask to handle all draw buffers are disabled situation to avoid breaking
+        // the renderpass
+        mClearColorMask = 0;
+    }
+    else
+    {
+        mClearColorMask =
+            gl_vk::GetColorComponentFlags(blendState.colorMaskRed, blendState.colorMaskGreen,
+                                          blendState.colorMaskBlue, blendState.colorMaskAlpha);
+    }
+
     mGraphicsPipelineDesc->updateColorWriteMask(&mGraphicsPipelineTransition, mClearColorMask,
                                                 framebufferVk->getEmulatedAlphaAttachmentMask());
 }

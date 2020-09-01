@@ -126,10 +126,7 @@ class FramebufferVk : public FramebufferImpl
 
     // We only support depth/stencil packed format and depthstencil attachment always follow all
     // color attachments
-    size_t getDepthStencilAttachmentIndexVk() const
-    {
-        return getState().getEnabledDrawBuffers().count();
-    }
+    size_t getDepthStencilAttachmentIndexVk() const { return mCurrentEnabledDrawBuffers.count(); }
 
     angle::Result getFramebuffer(ContextVk *contextVk,
                                  vk::Framebuffer **framebufferOut,
@@ -142,6 +139,13 @@ class FramebufferVk : public FramebufferImpl
     void setReadOnlyDepthMode(bool readOnlyDepthEnabled);
     angle::Result restartRenderPassInReadOnlyDepthMode(ContextVk *contextVk,
                                                        vk::CommandBufferHelper *renderPass);
+
+    void enableColorMaskForNoDrawBufferOptimization(const gl::Context *context);
+    void disableColorMaskForNoDrawBufferOptimization(const gl::Context *context);
+    bool isColorMaskForNoDrawBufferOptimizationEnabled() const
+    {
+        return mColorMaskForNoDrawBufferOptimizationEnabled;
+    }
 
   private:
     FramebufferVk(RendererVk *renderer,
@@ -258,6 +262,16 @@ class FramebufferVk : public FramebufferImpl
     std::unordered_map<vk::FramebufferDesc, vk::FramebufferHelper> mFramebufferCache;
 
     vk::ClearValuesArray mDeferredClears;
+
+    // When application sets all draw buffers to GL_NONE, the usual handling of draw buffer change
+    // requires we end renderpass. The optimization we did here is instead of detach all draw
+    // buffers, we keep the draw buffers but set color mask to false, thus avoid the renderpass
+    // breakage. When we get into this optimization mode, we set
+    // mUseColorMaskForNoDrawBufferOptimization to true. When this optimization is active, the color
+    // mask Vulkan backend uses is different from the front end. We keep our own copy of
+    // mEnabledDrawBuffers here to reflect the exact color mask that backend is currently using.
+    bool mColorMaskForNoDrawBufferOptimizationEnabled;
+    gl::DrawBufferMask mCurrentEnabledDrawBuffers;
 };
 }  // namespace rx
 
