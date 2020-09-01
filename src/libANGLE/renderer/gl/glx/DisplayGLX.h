@@ -97,6 +97,8 @@ class DisplayGLX : public DisplayGL
 
     void populateFeatureList(angle::FeatureList *features) override;
 
+    RendererGL *getRenderer() const { return mRenderer; }
+
   private:
     egl::Error initializeContext(glx::FBConfig config,
                                  const egl::AttributeMap &eglAttributes,
