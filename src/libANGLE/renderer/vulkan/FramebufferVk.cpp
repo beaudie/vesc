@@ -1644,19 +1644,28 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
                 break;
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
-                // Force update of serial for enabled draw buffers
-                mCurrentFramebufferDesc.reset();
-                for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+                if (mState.getEnabledDrawBuffers().none())
                 {
-                    uint32_t colorIndex32 = static_cast<uint32_t>(colorIndexGL);
-
-                    RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-                    mCurrentFramebufferDesc.updateColor(colorIndex32,
-                                                        renderTarget->getDrawSubresourceSerial());
-                    if (renderTarget->hasResolveAttachment())
+                    // If all draw buffers are disabled, lets use color mask to handle this to avoid
+                    // breaking renderpass
+                    contextVk->updateColorMask(context->getState().getBlendState());
+                }
+                else
+                {
+                    // Force update of serial for enabled draw buffers
+                    mCurrentFramebufferDesc.reset();
+                    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
                     {
-                        mCurrentFramebufferDesc.updateColorResolve(
-                            colorIndex32, renderTarget->getResolveSubresourceSerial());
+                        uint32_t colorIndex32 = static_cast<uint32_t>(colorIndexGL);
+
+                        RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+                        mCurrentFramebufferDesc.updateColor(
+                            colorIndex32, renderTarget->getDrawSubresourceSerial());
+                        if (renderTarget->hasResolveAttachment())
+                        {
+                            mCurrentFramebufferDesc.updateColorResolve(
+                                colorIndex32, renderTarget->getResolveSubresourceSerial());
+                        }
                     }
                 }
                 updateDepthStencilAttachmentSerial(contextVk);
