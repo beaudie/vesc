@@ -185,6 +185,126 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterRead)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
 }
 
+// Updating atomic counter buffer's offsets was optimized based on a count of valid bindings.
+// This test will fail if there are bugs in how we count valid bindings.
+TEST_P(AtomicCounterBufferTest31, AtomicCounterBufferRangeRead)
+{
+    // Skipping due to a bug on the Qualcomm driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsNexus5X());
+
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
+    // Skipping test while we work on enabling atomic counter buffer support in th D3D renderer.
+    // http://anglebug.com/1729
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "layout(binding = 0, offset = 4) uniform atomic_uint ac;\n"
+        "out highp vec4 my_color;\n"
+        "void main()\n"
+        "{\n"
+        "    my_color = vec4(0.0);\n"
+        "    uint a1 = atomicCounter(ac);\n"
+        "    if (a1 == 3u) my_color = vec4(1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+
+    glUseProgram(program.get());
+
+    // The initial value of counter 'ac' is 3u.
+    unsigned int bufferData[]     = {0u, 0u, 0u, 0u, 0u, 11u, 3u, 1u};
+    constexpr GLintptr kOffset    = 20;
+    GLint maxAtomicCounterBuffers = 0;
+    GLBuffer atomicCounterBuffer;
+
+    glGetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS, &maxAtomicCounterBuffers);
+    // Repeatedly bind the same buffer (GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS + 1) times
+    // A bug in counting valid atomic counter buffers will cause a crash when we
+    // exceed GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS
+    for (int32_t i = 0; i < maxAtomicCounterBuffers + 1; i++)
+    {
+        glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+        glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
+        glBindBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, atomicCounterBuffer, kOffset,
+                          sizeof(bufferData) - kOffset);
+    }
+
+    drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+}
+
+// Updating atomic counter buffer's offsets was optimized based on a count of valid bindings.
+// Repeatedly bind/unbind buffers across available binding points. The test will fail if
+// there are bugs in how we count valid bindings.
+TEST_P(AtomicCounterBufferTest31, AtomicCounterBufferRepeatedBindUnbind)
+{
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
+    // Skipping test while we work on enabling atomic counter buffer support in th D3D renderer.
+    // http://anglebug.com/1729
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "layout(binding = 0, offset = 4) uniform atomic_uint ac;\n"
+        "out highp vec4 my_color;\n"
+        "void main()\n"
+        "{\n"
+        "    my_color = vec4(0.0);\n"
+        "    uint a1 = atomicCounter(ac);\n"
+        "    if (a1 == 3u) my_color = vec4(1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+
+    glUseProgram(program.get());
+
+    constexpr int32_t kBufferCount = 8;
+    // The initial value of counter 'ac' is 3u.
+    unsigned int bufferData[3] = {11u, 3u, 1u};
+    GLBuffer atomicCounterBuffer[kBufferCount];
+    // Populate atomicCounterBuffer[0] with valid data and the rest with nullptr
+    for (int32_t bufferIndex = 0; bufferIndex < kBufferCount; bufferIndex++)
+    {
+        glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer[bufferIndex]);
+        glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(bufferData),
+                     (bufferIndex == 0) ? bufferData : nullptr, GL_STATIC_DRAW);
+    }
+
+    GLint maxAtomicCounterBuffers = 0;
+    glGetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS, &maxAtomicCounterBuffers);
+
+    // Cycle through multiple buffers
+    for (int32_t bufferIndex = 0; bufferIndex < kBufferCount; bufferIndex++)
+    {
+        // Randomly bind/unbind buffers to/from different binding points,
+        // capped by GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS
+        for (int32_t iterations = 0; iterations < maxAtomicCounterBuffers; iterations++)
+        {
+            uint32_t binding_slot = std::rand() % maxAtomicCounterBuffers;
+            bool even             = (std::rand() % 2 == 0);
+            int32_t bufferId      = (even) ? 0 : atomicCounterBuffer[bufferIndex];
+            glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, binding_slot, bufferId);
+        }
+    }
+
+    // Bind atomicCounterBuffer[0] to slot 0 and verify result
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, atomicCounterBuffer[0]);
+    drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+}
+
 // Test atomic counter increment and decrement.
 TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
 {
