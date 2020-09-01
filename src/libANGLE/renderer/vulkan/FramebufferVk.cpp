@@ -1675,20 +1675,36 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
                 break;
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
-                // Force update of serial for enabled draw buffers
-                mCurrentFramebufferDesc.reset();
-                for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+                if ((mState.getEnabledDrawBuffers() &
+                     mCurrentFramebufferDesc.getColorBufferMask()) ==
+                    mState.getEnabledDrawBuffers())
                 {
-                    uint32_t colorIndex32 = static_cast<uint32_t>(colorIndexGL);
-
-                    RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-                    mCurrentFramebufferDesc.updateColor(colorIndex32,
-                                                        renderTarget->getDrawSubresourceSerial());
-                    if (renderTarget->hasResolveAttachment())
+                    // When application sets draw buffer to GL_NONE, the usual handling of draw
+                    // buffer change requires we end renderpass. The optimization we did here is
+                    // instead of detach the draw buffer, we keep the draw buffers but set per
+                    // buffer vulkan color mask to false, thus avoiding the renderpass breakage and
+                    // helps performance on tiled renderer. We can only do so if the new draw
+                    // buffers are a subset of current framebufferDesc.
+                    contextVk->updateColorMask(context->getState().getBlendState());
+                }
+                else
+                {
+                    // Force update of serial for enabled draw buffers
+                    mCurrentFramebufferDesc.reset();
+                    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
                     {
-                        mCurrentFramebufferDesc.updateColorResolve(
-                            colorIndex32, renderTarget->getResolveSubresourceSerial());
+                        uint32_t colorIndex32 = static_cast<uint32_t>(colorIndexGL);
+
+                        RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+                        mCurrentFramebufferDesc.updateColor(
+                            colorIndex32, renderTarget->getDrawSubresourceSerial());
+                        if (renderTarget->hasResolveAttachment())
+                        {
+                            mCurrentFramebufferDesc.updateColorResolve(
+                                colorIndex32, renderTarget->getResolveSubresourceSerial());
+                        }
                     }
+                    contextVk->updateColorMask(context->getState().getBlendState());
                 }
                 updateDepthStencilAttachmentSerial(contextVk);
                 break;
@@ -1718,8 +1734,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 }
 
                 ASSERT(!previousDeferredClears.test(colorIndexGL));
-
                 ANGLE_TRY(updateColorAttachment(context, deferClears, colorIndexGL));
+                contextVk->updateColorMask(context->getState().getBlendState());
                 break;
             }
         }
@@ -1796,11 +1812,11 @@ void FramebufferVk::updateRenderPassDesc()
     mRenderPassDesc.setSamples(getSamples());
 
     // Color attachments.
-    const auto &colorRenderTargets              = mRenderTargetCache.getColors();
-    const gl::DrawBufferMask enabledDrawBuffers = mState.getEnabledDrawBuffers();
-    for (size_t colorIndexGL = 0; colorIndexGL < enabledDrawBuffers.size(); ++colorIndexGL)
+    const auto &colorRenderTargets           = mRenderTargetCache.getColors();
+    const gl::DrawBufferMask colorBufferMask = mCurrentFramebufferDesc.getColorBufferMask();
+    for (size_t colorIndexGL = 0; colorIndexGL < colorBufferMask.size(); ++colorIndexGL)
     {
-        if (enabledDrawBuffers[colorIndexGL])
+        if (colorBufferMask[colorIndexGL])
         {
             RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
             ASSERT(colorRenderTarget);
@@ -1873,8 +1889,9 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     gl::Extents attachmentsSize;
 
     // Color attachments.
-    const auto &colorRenderTargets = mRenderTargetCache.getColors();
-    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    const auto &colorRenderTargets           = mRenderTargetCache.getColors();
+    const gl::DrawBufferMask colorBufferMask = mCurrentFramebufferDesc.getColorBufferMask();
+    for (size_t colorIndexGL : colorBufferMask)
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
@@ -1914,7 +1931,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     else
     {
         // This Framebuffer owns all of the ImageViews, including its own resolve ImageViews.
-        for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+        for (size_t colorIndexGL : colorBufferMask)
         {
             RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
             ASSERT(colorRenderTarget);
@@ -2236,7 +2253,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     uint32_t colorAttachmentCount  = 0;
-    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    for (size_t colorIndexGL : mCurrentFramebufferDesc.getColorBufferMask())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
@@ -2380,7 +2397,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     // Transition the images to the correct layout (through onColorDraw) after the
     // resolve-to-multisampled copies are done.
-    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    for (size_t colorIndexGL : mCurrentFramebufferDesc.getColorBufferMask())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         colorRenderTarget->onColorDraw(contextVk);

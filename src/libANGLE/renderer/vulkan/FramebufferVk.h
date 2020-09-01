@@ -128,7 +128,7 @@ class FramebufferVk : public FramebufferImpl
     // color attachments
     size_t getDepthStencilAttachmentIndexVk() const
     {
-        return getState().getEnabledDrawBuffers().count();
+        return mCurrentFramebufferDesc.getColorBufferMask().count();
     }
 
     angle::Result getFramebuffer(ContextVk *contextVk,
