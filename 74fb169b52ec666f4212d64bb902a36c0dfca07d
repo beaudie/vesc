@@ -56,6 +56,30 @@
       "revId": "74fb169b52ec666f4212d64bb902a36c0dfca07d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92b59410_0ac194e4",
+        "filename": "include/platform/FrontendFeatures.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-01T19:18:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9284be26_53fd6c87",
+      "range": {
+        "startLine": 56,
+        "startChar": 9,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "74fb169b52ec666f4212d64bb902a36c0dfca07d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
