@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "8c10baf1_0d6a0f4c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T19:45:52Z",
+      "side": 1,
+      "message": "I think it was a swapchain render target.  I\u0027ll look.",
+      "parentUuid": "75cd7d87_0eac5014",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46eadfa6_6f71f7e5",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
@@ -178,6 +202,30 @@
     },
     {
       "key": {
+        "uuid": "74821233_c18769c8",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T19:45:52Z",
+      "side": 1,
+      "message": "My new tests used to vary the depth and stencil independently, but that got lost with some other requests ...",
+      "parentUuid": "a9150147_7935f146",
+      "range": {
+        "startLine": 167,
+        "startChar": 33,
+        "endLine": 167,
+        "endChar": 40
+      },
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "358717bf_cb80f28b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -225,6 +273,24 @@
       "side": 1,
       "message": "That\u0027s something I\u0027ve been meaning to fix. Since this change doesn\u0027t touch color, let\u0027s just focus on depth/stencil for now.\n\nIf by \"change the tests\" you mean figure out why they break so we can see what\u0027s missing, that sounds good. I did mention setting this them to true when transitioning to a writable layout, but thinking again, RenderTargetVk::flushStagedUpdates should already correctly take care of this. If it doesn\u0027t, it\u0027s a bug that wouldn\u0027t just affect depth/stencil.",
       "parentUuid": "43a1ec55_dd2590aa",
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e8f9587_691561e6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T19:45:52Z",
+      "side": 1,
+      "message": "\u003e let\u0027s just focus on depth/stencil for now.\n\nSGTM\n\n\u003e If by \"change the tests\" you mean figure out why they break\n\nI wrote the tests, and they are looking at that initial load op.",
+      "parentUuid": "32512758_693641fb",
       "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
