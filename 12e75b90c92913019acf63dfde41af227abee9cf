@@ -46,6 +46,30 @@
       "revId": "12e75b90c92913019acf63dfde41af227abee9cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caaa4e3f_5b808a28",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/DisplayVkXcb.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-01T15:48:35Z",
+      "side": 1,
+      "message": "Yea I\u0027m a bit torn on the code duplication but I think it\u0027s risky to have a backend say it does not support a config but still expose that config. We may want to mark a config as unsupported for other reasons.\n\nAlso each backend will need to detect that there it should not support the config anyways (like the lack of DISPLAY on linux) so we still need to put the detection code in each display.",
+      "parentUuid": "07ec3e3b_17ea7839",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "12e75b90c92913019acf63dfde41af227abee9cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
