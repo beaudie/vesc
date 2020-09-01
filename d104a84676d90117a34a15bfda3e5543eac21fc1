@@ -294,6 +294,24 @@
       "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ea07421_2e62a757",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T21:00:05Z",
+      "side": 1,
+      "message": "Which test is that? If the texture was truly never initialized, then the tests shouldn\u0027t care about the initial loadOp, so fixing the test makes sense.",
+      "parentUuid": "0e8f9587_691561e6",
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
