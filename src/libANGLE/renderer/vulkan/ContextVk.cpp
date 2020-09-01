@@ -760,7 +760,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBits = mNewGraphicsCommandBufferDirtyBits;
     mComputeDirtyBits  = mNewComputeCommandBufferDirtyBits;
 
-    mActiveTextures.fill({nullptr, nullptr});
+    mActiveTextures.fill({nullptr, nullptr, true});
     mActiveImages.fill(nullptr);
 
     mPipelineDirtyBitsMask.set();
@@ -3137,6 +3137,21 @@ angle::Result ContextVk::syncState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::syncTextureUnit(const gl::Context *context,
+                                         gl::Texture *texture,
+                                         gl::Sampler *sampler)
+{
+    TextureVk *textureVk = vk::GetImpl(texture);
+    // Don't update srgb imageviews if the texture doesn't have them and doesn't need them
+    if ((sampler->getSRGBDecode() != GL_DECODE_EXT) || (textureVk->hasSRGBViews()))
+    {
+        gl::Texture::DirtyBits decodeBit;
+        decodeBit.set(gl::Texture::DIRTY_BIT_SRGB_DECODE);
+        ANGLE_TRY(textureVk->syncState(context, decodeBit, gl::Command::Other));
+    }
+    return angle::Result::Continue;
+}
+
 GLint ContextVk::getGPUDisjoint()
 {
     // No extension seems to be available to query this information.
@@ -3970,14 +3985,17 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         TextureVk *textureVk = vk::GetImpl(texture);
         ASSERT(textureVk != nullptr);
 
-        const vk::SamplerHelper &samplerVk =
-            sampler ? vk::GetImpl(sampler)->getSampler() : textureVk->getSampler();
+        const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
 
+        const vk::SamplerHelper &samplerHelper =
+            samplerVk ? samplerVk->getSampler() : textureVk->getSampler();
         activeTexture.texture = textureVk;
-        activeTexture.sampler = &samplerVk;
+        activeTexture.sampler = &samplerHelper;
+        activeTexture.useLinearImageView =
+            textureVk->shouldUseLinearColorspaceWithSampler(samplerVk);
 
         vk::ImageViewSubresourceSerial imageViewSerial = textureVk->getImageViewSubresourceSerial();
-        mActiveTexturesDesc.update(textureUnit, imageViewSerial, samplerVk.getSamplerSerial());
+        mActiveTexturesDesc.update(textureUnit, imageViewSerial, samplerHelper.getSamplerSerial());
 
         if (textureVk->getImage().hasImmutableSampler())
         {

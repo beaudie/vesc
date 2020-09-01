@@ -45,6 +45,13 @@ void ContextImpl::handleError(GLenum errorCode,
     mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
 }
 
+angle::Result ContextImpl::syncTextureUnit(const gl::Context *context,
+                                           gl::Texture *texture,
+                                           gl::Sampler *sampler)
+{
+    return angle::Result::Continue;
+}
+
 egl::ContextPriority ContextImpl::getContextPriority() const
 {
     return egl::ContextPriority::Medium;
