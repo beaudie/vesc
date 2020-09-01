@@ -312,6 +312,24 @@
       "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d179ac06_ec4d6730",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:29:46Z",
+      "side": 1,
+      "message": "The tests in this CL:-).",
+      "parentUuid": "7ea07421_2e62a757",
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
