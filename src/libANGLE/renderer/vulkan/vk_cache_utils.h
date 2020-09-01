@@ -505,11 +505,13 @@ class GraphicsPipelineDesc final
     void updateBlendEquations(GraphicsPipelineTransitionBits *transition,
                               const gl::BlendState &blendState);
     void setColorWriteMask(VkColorComponentFlags colorComponentFlags,
-                           const gl::DrawBufferMask &alphaMask);
+                           const gl::DrawBufferMask &alphaMask,
+                           const gl::DrawBufferMask &enabledDrawBuffers);
     void setSingleColorWriteMask(uint32_t colorIndexGL, VkColorComponentFlags colorComponentFlags);
     void updateColorWriteMask(GraphicsPipelineTransitionBits *transition,
                               VkColorComponentFlags colorComponentFlags,
-                              const gl::DrawBufferMask &alphaMask);
+                              const gl::DrawBufferMask &alphaMask,
+                              const gl::DrawBufferMask &enabledDrawBuffers);
 
     // Depth/stencil states.
     void setDepthTestEnabled(bool enabled);
@@ -979,6 +981,7 @@ class FramebufferDesc
         ASSERT(kFramebufferDescColorIndexOffset + index < mSerials.size());
         return mSerials[kFramebufferDescColorIndexOffset + index];
     }
+    gl::DrawBufferMask getColorBufferMask() const { return mColorBufferMask; }
 
   private:
     void update(uint32_t index, ImageViewSubresourceSerial serial);
@@ -987,6 +990,9 @@ class FramebufferDesc
     uint16_t mMaxIndex;
     uint16_t mReadOnlyDepth;
     FramebufferAttachmentArray<ImageViewSubresourceSerial> mSerials;
+
+    // Tracks all the color draw buffers attached to this FramebufferDesc
+    gl::DrawBufferMask mColorBufferMask;
 };
 
 // The SamplerHelper allows a Sampler to be coupled with a serial.
