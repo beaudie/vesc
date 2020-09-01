@@ -16,6 +16,64 @@
       "revId": "1275e825b8e6c393bc1d92679277c38cee3c8d25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68352552_24e75baa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T21:06:56Z",
+      "side": 1,
+      "message": "LGTM as is. Short of someone claiming they have a 1Hz monitor and this change is breaking chrome on that, it should be ok!",
+      "parentUuid": "ac1ae558_c9b36408",
+      "revId": "1275e825b8e6c393bc1d92679277c38cee3c8d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ded91dc6_f8a3d82b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T21:06:56Z",
+      "side": 1,
+      "message": "Thanks for the change Jonah. If the affected users report the issue is gone, we could cherry-pick it for stable.",
+      "revId": "1275e825b8e6c393bc1d92679277c38cee3c8d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a01d9a0_b30c6d02",
+        "filename": "src/libANGLE/renderer/gl/glx/WindowSurfaceGLX.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T21:06:56Z",
+      "side": 1,
+      "message": "Suggest: *numerator \u003c 2 * *denominator\n\nThis would include refresh rates between 1Hz and 2Hz too. I don\u0027t recall if XWayland is returning an exact 1Hz value or not, but * is cheaper than / too, so why not.\n\n---\n\nIf it\u0027s possible to restrict this to XWayland, that would be nice too, but I suspect real X never reports such numbers.",
+      "range": {
+        "startLine": 269,
+        "startChar": 8,
+        "endLine": 269,
+        "endChar": 37
+      },
+      "revId": "1275e825b8e6c393bc1d92679277c38cee3c8d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
