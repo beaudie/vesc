@@ -330,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "cdcfad69_24e3dc2e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-01T20:09:58Z",
+      "side": 1,
+      "message": "Ian - suggest you land the mContentDefined after this patch lands cleanly. You shouldn\u0027t need separate states and special 0xFFFFE/D, etc values. Once you enable depth, content is 100% defined again and you can revert to the same state as if invalidate was never called.",
+      "parentUuid": "c9b3ffd0_c4539125",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
