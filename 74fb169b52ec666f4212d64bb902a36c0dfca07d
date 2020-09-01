@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "c6643a86_24960b19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T03:57:48Z",
+      "side": 1,
+      "message": "Looks like this wasn\u0027t the issue: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1122224#c23",
+      "revId": "74fb169b52ec666f4212d64bb902a36c0dfca07d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9284be26_53fd6c87",
         "filename": "include/platform/FrontendFeatures.h",
         "patchSetId": 1
