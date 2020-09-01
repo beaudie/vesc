@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "438b2bea_ad452f99",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T14:41:53Z",
+      "side": 1,
+      "message": "The guard-band check doesn\u0027t need to be aware of the alignment, if `mMem` is allocated such that data() is already aligned. Let me expand on the example I gave above:\n\nSay data() needs to be 64-byte aligned. Say the header size is 12 bytes and the guard band size is 16 bytes. Say the next free space is at address 1024. Now if we make the next allocation at 1024, data() would be 1024+12+16, which is not 64-byte aligned. In your current solution, you add a hole between mMem and data() so that the latter is correctly aligned. My proposal is to place the whole before mMem. In other words, make the allocation at 1024+64-12-16. Then data() becomes 1024+64 and 64-byte aligned automatically without a need to remember what the original alignment requirement was.",
+      "parentUuid": "17758450_c4f24d57",
+      "revId": "562c711efd80a936df13705ba906f958173a52ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f7a8b30_09d0bc43",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
