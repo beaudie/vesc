@@ -578,6 +578,30 @@
     },
     {
       "key": {
+        "uuid": "4a2748a5_d556f518",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T16:13:33Z",
+      "side": 1,
+      "message": "Or send a pointer + size, if you don\u0027t want the constexpr array to turn into vector.",
+      "parentUuid": "681d7857_bc930d4a",
+      "range": {
+        "startLine": 608,
+        "startChar": 54,
+        "endLine": 608,
+        "endChar": 89
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30b6f870_04189eee",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 2
