@@ -14,6 +14,7 @@
 
 #include "common/mathutil.h"
 #include "common/platform.h"
+#include "common/system_utils.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Caps.h"
@@ -115,6 +116,30 @@ bool IsMesa(const FunctionsGL *functions, std::array<int, 3> *version)
     std::sscanf(nativeVersionString.c_str() + pos, "Mesa %d.%d.%d", data, data + 1, data + 2);
 
     return true;
+}
+
+// There are multiple environment variables that may or may not be set during Wayland
+// sessions, including WAYLAND_DISPLAY, XDG_SESSION_TYPE, and DESKTOP_SESSION
+bool IsWayland()
+{
+    bool isWayland      = false;
+    static bool checked = false;
+    if (!checked)
+    {
+        if (!angle::GetEnvironmentVar("WAYLAND_DISPLAY").empty())
+        {
+            isWayland = true;
+        }
+        else if (angle::GetEnvironmentVar("XDG_SESSION_TYPE") == "wayland")
+        {
+            isWayland = true;
+        }
+        else if (angle::GetEnvironmentVar("DESKTOP_SESSION").find("wayland") != std::string::npos)
+        {
+            isWayland = true;
+        }
+    }
+    return isWayland;
 }
 
 namespace nativegl_gl
@@ -1796,6 +1821,12 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // workaround's being restricted to existing desktop GPUs.
     ANGLE_FEATURE_CONDITION(features, emulatePackSkipRowsAndPackSkipPixels,
                             IsApple() && (isAMD || isIntel || isNvidia));
+
+    // http://crbug.com/1042393
+    // XWayland defaults to a 1hz refresh rate when the "surface is not visible", which sometimes
+    // causes issues in Chrome. To get around this, default to a sane refresh rate if we see bogus
+    // from the driver.
+    ANGLE_FEATURE_CONDITION(features, clampMscRate, IsLinux() && IsWayland());
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
