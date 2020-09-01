@@ -345,6 +345,7 @@ State::State(const State *shareContextState,
       mVertexArray(nullptr),
       mActiveSampler(0),
       mTexturesIncompatibleWithSamplers(0),
+      mValidAtomicCounterBufferCount(0),
       mPrimitiveRestart(false),
       mDebug(debug),
       mMultiSampling(false),
@@ -1975,9 +1976,15 @@ angle::Result State::setIndexedBufferBinding(const Context *context,
         case BufferBinding::AtomicCounter:
             UpdateIndexedBufferBinding(context, &mAtomicCounterBuffers[index], buffer, target,
                                        offset, size);
-            if (buffer)
+            if (!mAtomicCounterBuffers[index].get() && buffer)
             {
+                // going from an invalid binding to a valid one, increment the count
                 mValidAtomicCounterBufferCount++;
+            }
+            else if (mAtomicCounterBuffers[index].get() && !buffer)
+            {
+                // going from a valid binding to an invalid one, decrement the count
+                mValidAtomicCounterBufferCount--;
             }
             break;
         case BufferBinding::ShaderStorage:
