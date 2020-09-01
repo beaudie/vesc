@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "563a80ff_72ea9a79",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-01T14:45:21Z",
+      "side": 1,
+      "message": "for extra safety and for consistency please default init the new member variable in the constructor initialization list as well.",
+      "range": {
+        "startLine": 283,
+        "startChar": 7,
+        "endLine": 283,
+        "endChar": 12
+      },
+      "revId": "f7b607c63cbafef72b952fe75115ff5af232bf9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06949e8e_2aa4b40a",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1981,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-01T14:45:21Z",
+      "side": 1,
+      "message": "this can be incorrect - if the previous buffer binding is non-null, the count should remain the same. if the previous binding is non-null and the new binding is null, the count should decrement.",
+      "range": {
+        "startLine": 1978,
+        "startChar": 0,
+        "endLine": 1981,
+        "endChar": 13
+      },
+      "revId": "f7b607c63cbafef72b952fe75115ff5af232bf9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c033cba0_d5941f47",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-01T14:45:21Z",
+      "side": 1,
+      "message": "nit: prefer int, uint32_t or uint64_t (as per style guide)",
+      "range": {
+        "startLine": 1037,
+        "startChar": 4,
+        "endLine": 1037,
+        "endChar": 11
+      },
+      "revId": "f7b607c63cbafef72b952fe75115ff5af232bf9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
