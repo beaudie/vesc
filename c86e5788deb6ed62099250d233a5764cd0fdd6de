@@ -16,6 +16,52 @@
       "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0fdad152_2c4936a4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-01T14:38:45Z",
+      "side": 1,
+      "message": "instead of restoring when \"CommandBufferHelper::shouldRestoreDepthStencilAttachment\", restore when access \u003d\u003d Write. This will remove the need to track some of the state.",
+      "range": {
+        "startLine": 2914,
+        "startChar": 19,
+        "endLine": 2918,
+        "endChar": 21
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce8a233d_0bd744c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4923,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-01T14:38:45Z",
+      "side": 1,
+      "message": "instead of restoring when \"CommandBufferHelper::shouldRestoreDepthStencilAttachment\", restore when access \u003d\u003d Write. This will remove the need to track some of the state.",
+      "range": {
+        "startLine": 4921,
+        "startChar": 0,
+        "endLine": 4923,
+        "endChar": 20
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
