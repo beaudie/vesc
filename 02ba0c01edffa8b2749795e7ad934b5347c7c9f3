@@ -258,6 +258,30 @@
     },
     {
       "key": {
+        "uuid": "764c9ea2_a25273f8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-01T14:27:26Z",
+      "side": 1,
+      "message": "Which scenario breaks ? e.g. in terms of invalidate/draw/enable/disable?",
+      "parentUuid": "f5edf976_1a883ac0",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
