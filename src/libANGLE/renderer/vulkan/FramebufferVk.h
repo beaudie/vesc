@@ -126,10 +126,7 @@ class FramebufferVk : public FramebufferImpl
 
     // We only support depth/stencil packed format and depthstencil attachment always follow all
     // color attachments
-    size_t getDepthStencilAttachmentIndexVk() const
-    {
-        return getState().getEnabledDrawBuffers().count();
-    }
+    size_t getDepthStencilAttachmentIndexVk() const { return mCurrentEnabledDrawBuffers.count(); }
 
     angle::Result getFramebuffer(ContextVk *contextVk,
                                  vk::Framebuffer **framebufferOut,
@@ -258,6 +255,15 @@ class FramebufferVk : public FramebufferImpl
     std::unordered_map<vk::FramebufferDesc, vk::FramebufferHelper> mFramebufferCache;
 
     vk::ClearValuesArray mDeferredClears;
+
+    // When application sets draw buffer to GL_NONE, the usual handling of draw buffer change
+    // requires we end renderpass. The optimization we did here is instead of detach the draw
+    // buffer, we keep the draw buffers but set per buffer vulkan color mask to false, thus
+    // avoiding the renderpass breakage. This means the enabled buffer Vulkan backend uses is
+    // different from the front end enabled buffer mask. This is enabled buffer mask that the
+    // current renderpass was created. We should still use the front end state for any draw commands
+    // (i.e, draw/clear/blit etc).
+    gl::DrawBufferMask mCurrentEnabledDrawBuffers;
 };
 }  // namespace rx
 
