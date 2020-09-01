@@ -110,6 +110,161 @@
       "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0cd8dc5_c1821156",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T18:53:44Z",
+      "side": 1,
+      "message": "Not a semi-quantitative indication of how many *commands* there are, but rather how many *bytes* of commands have been recorded.\n\nMaybe call it getApproximateCommandBufferSize()?\n\nI\u0027d honestly just call it `getCommandBufferSize()` and use `* kBlockSize` instead of the shift to get accurate results. We could use that for statistics later too.",
+      "range": {
+        "startLine": 697,
+        "startChar": 13,
+        "endLine": 697,
+        "endChar": 28
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dd75d31_62a0a169",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T18:53:44Z",
+      "side": 1,
+      "message": "Can be static_assert. Also technically \u003e\u003d is ok too.",
+      "range": {
+        "startLine": 700,
+        "startChar": 8,
+        "endLine": 700,
+        "endChar": 14
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aec3c9e_e2b9de85",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T18:53:44Z",
+      "side": 1,
+      "message": "You should be able to just do `- mCurrentBytesRemaining`. Either mCurrentBytesRemaining is 0, or mCommands.size() \u003e 0. You can ASSERT that.",
+      "range": {
+        "startLine": 701,
+        "startChar": 80,
+        "endLine": 702,
+        "endChar": 81
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87e5c4d7_a9ad13b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T18:53:44Z",
+      "side": 1,
+      "message": "Maybe kInvalidatedButEnabledCmdCount?\n\nAlso per the other comment, CmdSize would be more accurate.",
+      "range": {
+        "startLine": 886,
+        "startChar": 19,
+        "endLine": 886,
+        "endChar": 35
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c8064f3_90c134bf",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T18:53:44Z",
+      "side": 1,
+      "message": "nit: Could you please double check that internally the two functions do the same thing? Then switch to glInvalidateFramebuffer(). One app using the more ancient entry point shouldn\u0027t define our test framework.",
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a00d873_02c0411b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T18:53:44Z",
+      "side": 1,
+      "message": "nit: I would make them inline in the test. Their names are not descriptive, and they are just two lines each.",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 5
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cab0e63_ddb5687b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T18:53:44Z",
+      "side": 1,
+      "message": "Use one or two structs with helper functions instead.",
+      "range": {
+        "startLine": 474,
+        "startChar": 0,
+        "endLine": 516,
+        "endChar": 56
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
