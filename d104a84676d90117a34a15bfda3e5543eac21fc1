@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "75cd7d87_0eac5014",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T19:11:15Z",
+      "side": 1,
+      "message": "That\u0027s odd, could be good to figure out why that happens and fix that if possible.\n\nOtherwise, if that\u0027s in some corner cases, like swapchain render targets or something, you can probably pass that information to the init function instead.",
+      "parentUuid": "b6314002_073ae983",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46eadfa6_6f71f7e5",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
@@ -130,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "a9150147_7935f146",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T19:11:15Z",
+      "side": 1,
+      "message": "Regression test would be nice!",
+      "parentUuid": "46eadfa6_6f71f7e5",
+      "range": {
+        "startLine": 167,
+        "startChar": 33,
+        "endLine": 167,
+        "endChar": 40
+      },
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "358717bf_cb80f28b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -159,6 +207,24 @@
       "side": 1,
       "message": "I changed it to false here, but some tests broke.  This does change ANGLE behavior (for the better I think, but I want both you and Charlie to be okay with it).\n\nCurrently, RenderTargetVk::mContentDefined is always initialized (\"conservatively\") to true, which results in a load op of LOAD for the first time the render target/image is used by a render pass.  That seems correct/optimal.  Therefore, I\u0027ll change the tests.  Seems like we should change it for color render target\u0027s as well.\n\nDo you agree?",
       "parentUuid": "358717bf_cb80f28b",
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32512758_693641fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T19:11:15Z",
+      "side": 1,
+      "message": "That\u0027s something I\u0027ve been meaning to fix. Since this change doesn\u0027t touch color, let\u0027s just focus on depth/stencil for now.\n\nIf by \"change the tests\" you mean figure out why they break so we can see what\u0027s missing, that sounds good. I did mention setting this them to true when transitioning to a writable layout, but thinking again, RenderTargetVk::flushStagedUpdates should already correctly take care of this. If it doesn\u0027t, it\u0027s a bug that wouldn\u0027t just affect depth/stencil.",
+      "parentUuid": "43a1ec55_dd2590aa",
       "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
