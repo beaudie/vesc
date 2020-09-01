@@ -136,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "eb98a69a_6a4b7603",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:53:30Z",
+      "side": 1,
+      "message": "\u003e I\u0027d honestly just call it `getCommandBufferSize()` and use `* kBlockSize` instead of the shift to get accurate results.\n\nDone",
+      "parentUuid": "a0cd8dc5_c1821156",
+      "range": {
+        "startLine": 697,
+        "startChar": 13,
+        "endLine": 697,
+        "endChar": 28
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0dd75d31_62a0a169",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 11
@@ -156,6 +180,30 @@
       "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45638d2d_84a92b64",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:53:30Z",
+      "side": 1,
+      "message": "Obsolete now",
+      "parentUuid": "0dd75d31_62a0a169",
+      "range": {
+        "startLine": 700,
+        "startChar": 8,
+        "endLine": 700,
+        "endChar": 14
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -182,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "fd7aa59d_b3aaeccb",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2aec3c9e_e2b9de85",
+      "range": {
+        "startLine": 701,
+        "startChar": 80,
+        "endLine": 702,
+        "endChar": 81
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87e5c4d7_a9ad13b6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
@@ -193,6 +265,30 @@
       "writtenOn": "2020-09-01T18:53:44Z",
       "side": 1,
       "message": "Maybe kInvalidatedButEnabledCmdCount?\n\nAlso per the other comment, CmdSize would be more accurate.",
+      "range": {
+        "startLine": 886,
+        "startChar": 19,
+        "endLine": 886,
+        "endChar": 35
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd01349_81f721b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:53:30Z",
+      "side": 1,
+      "message": "\u003e Maybe kInvalidatedButEnabledCmdCount?\n\nGiven it\u0027s usage (per Jamie), it\u0027s actually kNeverInvalidatedOrInvalidatedAndEnabledCmdCount, but that was a mouthful.\n\nDo you want to change it still:-)?\n\n\n\u003e Also per the other comment, CmdSize would be more accurate.\n\nDone",
+      "parentUuid": "87e5c4d7_a9ad13b6",
       "range": {
         "startLine": 886,
         "startChar": 19,
@@ -222,6 +318,24 @@
     },
     {
       "key": {
+        "uuid": "226876b1_33ae1ad5",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:53:30Z",
+      "side": 1,
+      "message": "Done\n\nI checked again, and yes they are the same.",
+      "parentUuid": "5c8064f3_90c134bf",
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a00d873_02c0411b",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 11
@@ -245,6 +359,30 @@
     },
     {
       "key": {
+        "uuid": "eda8d08a_b069cae3",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:53:30Z",
+      "side": 1,
+      "message": "Sigh.  That\u0027s what I originally did, but was asked to make the tests small and to share code.  I\u0027ll re-inline them.",
+      "parentUuid": "6a00d873_02c0411b",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 5
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cab0e63_ddb5687b",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 11
@@ -265,6 +403,30 @@
       "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeca8c37_aed89532",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T21:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cab0e63_ddb5687b",
+      "range": {
+        "startLine": 474,
+        "startChar": 0,
+        "endLine": 516,
+        "endChar": 56
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
