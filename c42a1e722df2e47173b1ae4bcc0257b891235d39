@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "457be1d6_2be9a3f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-01T21:08:28Z",
+      "side": 1,
+      "message": "I ended up reverting most of the EGL test changes. Fact of the matter is that most of our tests fail without a window, so we won\u0027t be doing tests without window support. I just hardened the few tests that are affected by the next change in the chain.",
+      "revId": "c42a1e722df2e47173b1ae4bcc0257b891235d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
