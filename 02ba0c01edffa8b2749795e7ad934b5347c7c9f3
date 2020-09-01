@@ -306,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "c9b3ffd0_c4539125",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T17:39:45Z",
+      "side": 1,
+      "message": "\u003e Which scenario breaks ? e.g. in terms of invalidate/draw/enable/disable?\n\nThe following:\n\n- invalidate, disable, draw, enable, draw\n\n- invalidate, draw, disable, enable, invalidate, draw\n\nIn both scenarios, a different answer should occur if the draw isn\u0027t done at the end.  The follow-on CL moves mContentDefined to ImageHelper, and moves the decision back to endRP (see: https://chromium-review.googlesource.com/c/angle/angle/+/2386478).\n\nDo you have time to look at this in detail?  I\u0027d hate to hurt your vacation!  I\u0027m wondering if Shabi can take over the reviews this CL and the follow-on CL?  We can follow-up when you\u0027re back and have time.\n\n\n\u003e Also, are you setting content defined \u003d true on enable?\n\nNo.  Just because the attachment is enabled, you don\u0027t know whether it will be drawn to.  That\u0027s why the follow-on CL is needed.",
+      "parentUuid": "3e7dd297_b17151a6",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 872,
+        "endChar": 49
+      },
+      "revId": "02ba0c01edffa8b2749795e7ad934b5347c7c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d3aaef_5cdc2df5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7

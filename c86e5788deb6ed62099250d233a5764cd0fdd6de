@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "0d6a3aa7_33fd840c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T17:39:45Z",
+      "side": 1,
+      "message": "These lines are deleted by the follow-on CL, that moves mContentDefined to ImageHelper, and the mContentDefined decision to endRP (see: https://chromium-review.googlesource.com/c/angle/angle/+/2386478).  IIRC you helped me see that endRP is the only time when mContentDefined can be properly set for all scenarios (so that the load op of the next RP matches the store op of this RP, based on the command count).\n\nBTW, these lines got put back when the one CL was reverted (that stored a pointer to the RenderTargetVk in CommandBufferHelper).",
+      "parentUuid": "0fdad152_2c4936a4",
+      "range": {
+        "startLine": 2914,
+        "startChar": 19,
+        "endLine": 2918,
+        "endChar": 21
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce8a233d_0bd744c9",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -62,6 +86,30 @@
       "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41e37e97_ffbffee5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4923,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-01T17:39:45Z",
+      "side": 1,
+      "message": "Ditto from above.",
+      "parentUuid": "ce8a233d_0bd744c9",
+      "range": {
+        "startLine": 4921,
+        "startChar": 0,
+        "endLine": 4923,
+        "endChar": 20
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
