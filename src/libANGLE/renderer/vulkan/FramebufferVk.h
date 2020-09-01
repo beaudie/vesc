@@ -126,10 +126,7 @@ class FramebufferVk : public FramebufferImpl
 
     // We only support depth/stencil packed format and depthstencil attachment always follow all
     // color attachments
-    size_t getDepthStencilAttachmentIndexVk() const
-    {
-        return getState().getEnabledDrawBuffers().count();
-    }
+    size_t getDepthStencilAttachmentIndexVk() const { return mCurrentEnabledDrawBuffers.count(); }
 
     angle::Result getFramebuffer(ContextVk *contextVk,
                                  vk::Framebuffer **framebufferOut,
@@ -258,6 +255,12 @@ class FramebufferVk : public FramebufferImpl
     std::unordered_map<vk::FramebufferDesc, vk::FramebufferHelper> mFramebufferCache;
 
     vk::ClearValuesArray mDeferredClears;
+
+    // We keep a copy of mEnabledDrawBuffers here. This usually exactly matches front end state. But
+    // when we enable the color mask hack (We use color mask to handle all draw buffers disabled
+    // case), our enabled draw buffer state will be different from front end state.
+    gl::DrawBufferMask mCurrentEnabledDrawBuffers;
+    bool mAllDrawableDisabledColorMaskHackEnabled;
 };
 }  // namespace rx
 
