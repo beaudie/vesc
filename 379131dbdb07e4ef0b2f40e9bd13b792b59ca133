@@ -33,6 +33,46 @@
       "revId": "379131dbdb07e4ef0b2f40e9bd13b792b59ca133",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d74ccd45_22b405fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-02T18:45:46Z",
+      "side": 1,
+      "message": "Overall looking better. Will take another look once bot failure is fixed. Have you tried to track mDepthCmdSizeEnabled instead of mDepthCmdSizeDisabled? In my mental model, tracking enabled is more straightforward and simpler. Ignore this if you already tried.",
+      "revId": "379131dbdb07e4ef0b2f40e9bd13b792b59ca133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58acb7e0_cc7eb412",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-02T18:45:46Z",
+      "side": 1,
+      "message": "This looks like no longer been used.",
+      "range": {
+        "startLine": 1008,
+        "startChar": 9,
+        "endLine": 1008,
+        "endChar": 44
+      },
+      "revId": "379131dbdb07e4ef0b2f40e9bd13b792b59ca133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
