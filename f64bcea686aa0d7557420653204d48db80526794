@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4bf25639_b90ec4d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-02T17:46:13Z",
+      "side": 1,
+      "message": "They are controlled through https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/extensions/EGL_ANGLE_feature_control.txt which is done at display creation in the android platform. Working on a prototype to expose a UI for it.\n\nThey can also be overriden with environment variables: https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/renderer_utils.cpp;l\u003d910;drc\u003d44ec83efb9b8031ffb20325c3f4d170b756100bf",
+      "parentUuid": "63e046c4_ec386af7",
+      "revId": "f64bcea686aa0d7557420653204d48db80526794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "602d7b78_020dcc06",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 2
