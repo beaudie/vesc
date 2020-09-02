@@ -39,6 +39,30 @@
       "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "945e9e30_f7254641",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-02T18:53:05Z",
+      "side": 1,
+      "message": "the new test is a catch all for any bug in counting mechanism, not specifically tailored to this corner case. The fix here was about 2 things -\n\n1. to not increment when a slot is bound with a new buffer replacing an old one. with the old code the count would have been 2 but with this change the count will be 1. either way the offset calculation will be performed.\n\n2. to decrement when we rebind a slot with null buffer. with old code the count would be 1 but with new code the count will be 0. Though there is a difference, it will not affect anything since when we go into \"writeAtomicCounterBufferDriverUniformOffsets\" all we do is see that the bindings are invalid and silently exit the function.\n\ndo you have a specific bind/unbind pattern that can trigger the bug this patch fixes?",
+      "parentUuid": "f6a9eb3e_ba99d6e9",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1989,
+        "endChar": 13
+      },
+      "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
