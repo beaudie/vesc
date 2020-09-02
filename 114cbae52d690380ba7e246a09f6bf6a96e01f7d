@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cf4e246_cffe6d86",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T10:19:38Z",
+      "side": 1,
+      "message": "Comment needs update:\n\n\u003e // Return the number of bytes used by the command buffer so far.",
+      "revId": "114cbae52d690380ba7e246a09f6bf6a96e01f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -301,6 +301,30 @@
     },
     {
       "key": {
+        "uuid": "ab2e157c_87b3e4b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T10:19:38Z",
+      "side": 1,
+      "message": "No that\u0027s fine.",
+      "parentUuid": "edd01349_81f721b9",
+      "range": {
+        "startLine": 886,
+        "startChar": 19,
+        "endLine": 886,
+        "endChar": 35
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c8064f3_90c134bf",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 11
@@ -371,6 +395,30 @@
       "side": 1,
       "message": "Sigh.  That\u0027s what I originally did, but was asked to make the tests small and to share code.  I\u0027ll re-inline them.",
       "parentUuid": "6a00d873_02c0411b",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 5
+      },
+      "revId": "c86e5788deb6ed62099250d233a5764cd0fdd6de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f7d117f0_230bac8f",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T10:19:38Z",
+      "side": 1,
+      "message": "Thanks, looks better IMO. Refactoring setupClearAndDrawForInvalidateTest and the command counter set/compare was a good call.",
+      "parentUuid": "eda8d08a_b069cae3",
       "range": {
         "startLine": 78,
         "startChar": 0,
