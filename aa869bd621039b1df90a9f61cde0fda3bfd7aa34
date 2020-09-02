@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee8e74dc_611d6206",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-02T19:45:09Z",
+      "side": 1,
+      "message": "nit: This condition becomes a string and is presented in places like about:gpu in Chrome so we can understand what triggered the workaround. If this can be something like: \n\n   !(isPixel2 \u0026\u0026 driverVersion \u003e mPhysicalDeviceProperties.driverVersion \u003c kPixel2DriverWithRelaxedPrecision)\n\nThat is more meaningful to the user.",
+      "range": {
+        "startLine": 1829,
+        "startChar": 67,
+        "endLine": 1829,
+        "endChar": 86
+      },
+      "revId": "aa869bd621039b1df90a9f61cde0fda3bfd7aa34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
