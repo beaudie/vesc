@@ -582,14 +582,16 @@ void GenerateCaps(const FunctionsGL *functions,
     }
 
     if (functions->isAtLeastGL(gl::Version(2, 0)) ||
-        functions->hasGLExtension("ARB_draw_buffers") ||
+        functions->hasGLExtension("GL_ARB_draw_buffers") ||
         functions->isAtLeastGLES(gl::Version(3, 0)) ||
         functions->hasGLESExtension("GL_EXT_draw_buffers"))
     {
         caps->maxDrawBuffers = QuerySingleGLInt(functions, GL_MAX_DRAW_BUFFERS);
+        ASSERT(caps->maxDrawBuffers >= 4);
     }
     else
     {
+        fprintf(stderr, "******* No draw buffers support!n");
         // Framebuffer is required to have at least one drawbuffer even if the extension is not
         // supported
         caps->maxDrawBuffers = 1;
