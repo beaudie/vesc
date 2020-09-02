@@ -32,7 +32,8 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
       mResolveImageViews(other.mResolveImageViews),
       mLevelIndexGL(other.mLevelIndexGL),
       mLayerIndex(other.mLayerIndex),
-      mContentDefined(other.mContentDefined)
+      mContentDefined(other.mContentDefined),
+      mIsDepthStencil(other.mIsDepthStencil)
 {
     other.reset();
 }
@@ -45,6 +46,20 @@ void RenderTargetVk::init(vk::ImageHelper *image,
                           uint32_t layerIndex,
                           bool isImageTransient)
 {
+    ASSERT(image->validFormat());
+    init(image, imageViews, resolveImage, resolveImageViews, levelIndexGL, layerIndex,
+         isImageTransient, image->getFormat().actualImageFormat().hasDepthOrStencilBits());
+}
+
+void RenderTargetVk::init(vk::ImageHelper *image,
+                          vk::ImageViewHelper *imageViews,
+                          vk::ImageHelper *resolveImage,
+                          vk::ImageViewHelper *resolveImageViews,
+                          gl::LevelIndex levelIndexGL,
+                          uint32_t layerIndex,
+                          bool isImageTransient,
+                          bool isDepthStencil)
+{
     mImage             = image;
     mImageViews        = imageViews;
     mResolveImage      = resolveImage;
@@ -54,6 +69,7 @@ void RenderTargetVk::init(vk::ImageHelper *image,
 
     // Conservatively assume the content is defined.
     mContentDefined = true;
+    mIsDepthStencil = isDepthStencil;
 
     mIsImageTransient = isImageTransient;
 }
@@ -67,6 +83,7 @@ void RenderTargetVk::reset()
     mLevelIndexGL      = gl::LevelIndex(0);
     mLayerIndex        = 0;
     mContentDefined    = false;
+    mIsDepthStencil    = false;
 }
 
 vk::ImageViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
@@ -105,6 +122,7 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk)
     retainImageViews(contextVk);
 
     mContentDefined = true;
+    mIsDepthStencil = false;
 }
 
 void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, bool isReadOnly)
@@ -133,6 +151,52 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, bool isReadOnly)
     retainImageViews(contextVk);
 
     mContentDefined = true;
+    mIsDepthStencil = true;
+    mImage->setDefinedDepthContent(true);
+    mImage->setDefinedStencilContent(true);
+}
+
+bool RenderTargetVk::hasDefinedContent() const
+{
+    if (mIsDepthStencil)
+    {
+        ASSERT(mImage->valid());
+        return mImage->hasDefinedDepthContent() || mImage->hasDefinedStencilContent();
+    }
+    else
+    {
+        return mContentDefined;
+    }
+}
+
+void RenderTargetVk::invalidateEntireContent()
+{
+    // Mark content as undefined so that certain optimizations are possible such as using DONT_CARE
+    // as loadOp of the render target in the next renderpass.
+    if (mIsDepthStencil)
+    {
+        ASSERT(mImage->valid());
+        mImage->setDefinedDepthContent(false);
+        mImage->setDefinedStencilContent(false);
+    }
+    else
+    {
+        mContentDefined = false;
+    }
+}
+
+void RenderTargetVk::restoreEntireContent()
+{
+    if (mIsDepthStencil)
+    {
+        ASSERT(mImage->valid());
+        mImage->setDefinedDepthContent(true);
+        mImage->setDefinedStencilContent(true);
+    }
+    else
+    {
+        mContentDefined = true;
+    }
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
@@ -256,11 +320,18 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
                                                  vk::ClearValuesArray *deferredClears,
                                                  uint32_t deferredClearIndex)
 {
+    ASSERT(mImage->valid() && (!isResolveImageOwnerOfData() || mResolveImage->valid()));
+
     // This function is called when the framebuffer is notified of an update to the attachment's
     // contents.  Therefore, set mContentDefined so that the next render pass will have loadOp=LOAD.
     mContentDefined = true;
-
-    ASSERT(mImage->valid() && (!isResolveImageOwnerOfData() || mResolveImage->valid()));
+#if 0  // We don't want a newly-created/never-used depth/stencil render target to use LOAD
+    if (mIsDepthStencil)
+    {
+        mImage->setDefinedDepthContent(true);
+        mImage->setDefinedStencilContent(true);
+    }
+#endif
 
     // Note that the layer index for 3D textures is always zero according to Vulkan.
     uint32_t layerIndex = mLayerIndex;
