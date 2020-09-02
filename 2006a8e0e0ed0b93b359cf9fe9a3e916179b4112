@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "9fc49ff4_e3dfc797",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2914,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T17:34:52Z",
+      "side": 1,
+      "message": "Thanks, that\u0027s what I was figuring you intended, but wanted to make sure.\n\nDone",
+      "parentUuid": "81378373_f64b86b1",
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "398dcc4b_34c69a7e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -195,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "e486bd14_57fed1f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T17:34:52Z",
+      "side": 1,
+      "message": "Done\n\n\u003e To be sure, this is not called from invalidate directly, is it?\n\nNo",
+      "parentUuid": "075ec59b_da6707dc",
+      "range": {
+        "startLine": 733,
+        "startChar": 54,
+        "endLine": 734,
+        "endChar": 65
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bf7d335_84fa58bd",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -218,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "340ed6fc_7b64d806",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T17:34:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bf7d335_84fa58bd",
+      "range": {
+        "startLine": 735,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 9
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5de37984_2e752340",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -232,6 +298,24 @@
       "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f66a3e4c_3b7a1d01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T17:34:52Z",
+      "side": 1,
+      "message": "Not that I see.  cmdCountDisabled is integral to Jamie\u0027s design ... so that a draw-while-disabled can be distinguished from a draw-while-enabled.  Just to be sure, I commented out this line and tests failed (as I would expect).\n\nDo you have another idea?",
+      "parentUuid": "5de37984_2e752340",
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -258,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "9f76d039_c4e15435",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T17:34:52Z",
+      "side": 1,
+      "message": "Unfortunately, no.  It causes shouldRestoreDepthStencilAttachment() to return true for never-invalidated attachments.",
+      "parentUuid": "7f0afce2_08464080",
+      "range": {
+        "startLine": 992,
+        "startChar": 0,
+        "endLine": 998,
+        "endChar": 5
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04a92593_1aac44ed",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 13
@@ -278,6 +386,30 @@
       "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61dc7a55_c55e0225",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T17:34:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04a92593_1aac44ed",
+      "range": {
+        "startLine": 1018,
+        "startChar": 86,
+        "endLine": 1018,
+        "endChar": 88
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
