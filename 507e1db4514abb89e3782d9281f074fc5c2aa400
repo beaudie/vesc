@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "965b8e55_3967f8f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-09-02T19:30:14Z",
+      "side": 1,
+      "message": "I\u0027m not overly familiar with this code but it made the mac-swangle-chromium bot green so LGTM if no objections from others!",
+      "revId": "507e1db4514abb89e3782d9281f074fc5c2aa400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
