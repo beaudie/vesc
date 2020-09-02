@@ -582,7 +582,7 @@ void GenerateCaps(const FunctionsGL *functions,
     }
 
     if (functions->isAtLeastGL(gl::Version(2, 0)) ||
-        functions->hasGLExtension("ARB_draw_buffers") ||
+        functions->hasGLExtension("GL_ARB_draw_buffers") ||
         functions->isAtLeastGLES(gl::Version(3, 0)) ||
         functions->hasGLESExtension("GL_EXT_draw_buffers"))
     {
@@ -1182,7 +1182,8 @@ void GenerateCaps(const FunctionsGL *functions,
                                  functions->hasGLESExtension("GL_OES_texture_npot");
     // TODO(jmadill): Investigate emulating EXT_draw_buffers on ES 3.0's core functionality.
     extensions->drawBuffers = functions->isAtLeastGL(gl::Version(2, 0)) ||
-                              functions->hasGLExtension("ARB_draw_buffers") ||
+                              functions->hasGLExtension("GL_ARB_draw_buffers") ||
+                              functions->isAtLeastGLES(gl::Version(3, 0)) ||
                               functions->hasGLESExtension("GL_EXT_draw_buffers");
     extensions->drawBuffersIndexedEXT =
         !features.disableDrawBuffersIndexed.enabled &&
