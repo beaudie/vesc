@@ -565,6 +565,7 @@ CommandBufferHelper::CommandBufferHelper()
       mDepthCmdSizeDisabled(kInfiniteCmdSize),
       mStencilCmdSizeInvalidated(kInfiniteCmdSize),
       mStencilCmdSizeDisabled(kInfiniteCmdSize),
+      mDepthStencilImage(nullptr),
       mDepthStencilAttachmentIndex(kInvalidAttachmentIndex)
 {}
 
@@ -704,7 +705,7 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
     }
 }
 
-bool CommandBufferHelper::onDepthAccess(ResourceAccess access)
+void CommandBufferHelper::onDepthAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
     UpdateAccess(&mDepthStartAccess, access);
@@ -712,16 +713,26 @@ bool CommandBufferHelper::onDepthAccess(ResourceAccess access)
            mDepthStartAccess != ResourceAccess::Write);
 
     // Update the invalidate state for optimizing this render pass's storeOp
-    return onDepthStencilAccess(access, &mDepthCmdSizeInvalidated, &mDepthCmdSizeDisabled);
+    if (onDepthStencilAccess(access, &mDepthCmdSizeInvalidated, &mDepthCmdSizeDisabled))
+    {
+        // The attachment is no longer valid, so set mContentDefined to true
+        ASSERT(mDepthStencilImage && mDepthStencilImage->valid());
+        mDepthStencilImage->setDefinedDepthContent(true);
+    }
 }
 
-bool CommandBufferHelper::onStencilAccess(ResourceAccess access)
+void CommandBufferHelper::onStencilAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
     UpdateAccess(&mStencilStartAccess, access);
 
     // Update the invalidate state for optimizing this render pass's stencilStoreOp
-    return onDepthStencilAccess(access, &mStencilCmdSizeInvalidated, &mStencilCmdSizeDisabled);
+    if (onDepthStencilAccess(access, &mStencilCmdSizeInvalidated, &mStencilCmdSizeDisabled))
+    {
+        // The attachment is no longer valid, so set mContentDefined to true
+        ASSERT(mDepthStencilImage && mDepthStencilImage->valid());
+        mDepthStencilImage->setDefinedStencilContent(true);
+    }
 }
 
 bool CommandBufferHelper::onDepthStencilAccess(ResourceAccess access,
@@ -877,6 +888,17 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled))
     {
         dsOps.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    }
+    if (shouldRestoreDepthStencilAttachment())
+    {
+        // The depth and stencil attachment were both invalidated, but at least one of them is now
+        // valid.  When they were invalidated, RenderTargetVk::mContentDefined was set to false,
+        // which tells a future render pass to use DONT_CARE for the loadOp and stencilLoadOp.
+        // Since at least one of the attachments is now valid, tell RenderTargetVk that LOAD should
+        // be used.
+        ASSERT(mDepthStencilImage && mDepthStencilImage->valid());
+        mDepthStencilImage->setDefinedDepthContent(true);
+        mDepthStencilImage->setDefinedStencilContent(true);
     }
 
     // Second, if we are loading or clearing the attachment, but the attachment has not been used,
@@ -1108,6 +1130,7 @@ void CommandBufferHelper::reset()
         mDepthCmdSizeDisabled              = kInfiniteCmdSize;
         mStencilCmdSizeInvalidated         = kInfiniteCmdSize;
         mStencilCmdSizeDisabled            = kInfiniteCmdSize;
+        mDepthStencilImage                 = nullptr;
         mDepthStencilAttachmentIndex       = kInvalidAttachmentIndex;
         mRenderPassUsedImages.clear();
     }
@@ -2826,6 +2849,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
+      mDepthContentDefined(std::move(other.mDepthContentDefined)),
+      mStencilContentDefined(std::move(other.mStencilContentDefined)),
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates)),
       mCurrentSingleClearValue(std::move(other.mCurrentSingleClearValue))
@@ -2856,6 +2881,8 @@ void ImageHelper::resetCachedProperties()
     mMaxLevel                    = gl::LevelIndex(0);
     mLayerCount                  = 0;
     mLevelCount                  = 0;
+    mDepthContentDefined         = false;
+    mStencilContentDefined       = false;
     mExternalFormat              = 0;
     mCurrentSingleClearValue.reset();
 }
