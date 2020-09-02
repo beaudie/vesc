@@ -63,6 +63,30 @@
       "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "889cf16c_794196a8",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T19:09:12Z",
+      "side": 1,
+      "message": "My point exactly is that the new test is not exercising either of the above scenarios!",
+      "parentUuid": "945e9e30_f7254641",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1989,
+        "endChar": 13
+      },
+      "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
