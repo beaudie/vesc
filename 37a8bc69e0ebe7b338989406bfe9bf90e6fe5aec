@@ -111,6 +111,30 @@
       "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56ed207d_c0136c92",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-02T21:15:41Z",
+      "side": 1,
+      "message": "i think i am going to leverage this assert -\n\nASSERT(mValidAtomicCounterBufferCount \u003c\u003d static_cast\u003cuint32_t\u003e(getCaps().maxAtomicCounterBufferBindings));\n\nwith the old code, in a debug build, this assert will hit if i call bind \u003e 8 times",
+      "parentUuid": "90310b2b_a3ce9977",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1989,
+        "endChar": 13
+      },
+      "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
