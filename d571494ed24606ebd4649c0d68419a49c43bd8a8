@@ -33,6 +33,24 @@
       "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad7631dc_663a4cd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-02T14:57:19Z",
+      "side": 1,
+      "message": "shabi, i was looking at when the \"writeAtomicCounterBufferDriverUniformOffsets\" would produce meaningful updates and it comes down to this line -\n\n\u003e offsetDiff \u003d static_cast\u003cuint32_t\u003e((offset - alignedOffset) / sizeof(uint32_t));\n\ngiven that almost all hardware has \"minStorageBufferOffsetAlignment\" as multiples of 4, and given the requirement that \"offset\" needs to be a multiple of 4, can you provide a scenario under which \"offsetDiff\" will not be 0?",
+      "parentUuid": "d7248777_cf90e463",
+      "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
