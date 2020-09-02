@@ -319,6 +319,24 @@
     },
     {
       "key": {
+        "uuid": "a2255916_1439b782",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T18:32:58Z",
+      "side": 1,
+      "message": "No that\u0027s fine. It was just a thought. Probably the wording of the comment could be improved to say something like \"while writes to the invalidated attachment was enabled\" (note added \"writes to\").\n\nWhile we\u0027re here, nit: missing )",
+      "parentUuid": "f66a3e4c_3b7a1d01",
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f0afce2_08464080",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 13
@@ -354,6 +372,30 @@
       "side": 1,
       "message": "Unfortunately, no.  It causes shouldRestoreDepthStencilAttachment() to return true for never-invalidated attachments.",
       "parentUuid": "7f0afce2_08464080",
+      "range": {
+        "startLine": 992,
+        "startChar": 0,
+        "endLine": 998,
+        "endChar": 5
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0d28c17_9438e537",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T18:32:58Z",
+      "side": 1,
+      "message": "Ack. I noticed that the first check (!\u003d infinite) was redundant in `isInvalidated` (1) and mistakenly assumed it\u0027s also redundant here.\n\n(1) I would still keep it though as a micro-optimization.",
+      "parentUuid": "9f76d039_c4e15435",
       "range": {
         "startLine": 992,
         "startChar": 0,

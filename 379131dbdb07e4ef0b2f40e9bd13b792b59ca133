@@ -16,6 +16,23 @@
       "revId": "379131dbdb07e4ef0b2f40e9bd13b792b59ca133",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0b3023_88610536",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T18:32:58Z",
+      "side": 1,
+      "message": "Looks like the new test is failing in some configurations.\n\nAlso, on next uploads, please try manually running the failing bots only (instead of CQ+1) at first, especially during peak hours like now.",
+      "revId": "379131dbdb07e4ef0b2f40e9bd13b792b59ca133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
