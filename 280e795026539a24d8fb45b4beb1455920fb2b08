@@ -16,6 +16,23 @@
       "revId": "280e795026539a24d8fb45b4beb1455920fb2b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27b87004_a0f46223",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-02T18:54:11Z",
+      "side": 1,
+      "message": "Looks like this guy needs to check for GL_EXT_draw_buffers now?\n\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  [ RUN      ] FramebufferTest_ES31.MultisampleResolveWithBlitThenDrawAttachment1/ES3_1_OpenGLES\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  Warning: resolveCompile(393): \nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  WARNING: 0:1: \u0027GL_EXT_draw_buffers\u0027 : extension is not supported\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  ERROR: 0:6: \u0027[]\u0027 : array index for gl_FragData must be zero when GL_EXT_draw_buffers is disabled\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  \nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  shader compilation failed: WARNING: 0:1: \u0027GL_EXT_draw_buffers\u0027 : extension is not supported\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  ERROR: 0:6: \u0027[]\u0027 : array index for gl_FragData must be zero when GL_EXT_draw_buffers is disabled\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  \nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  ../../third_party/angle/src/tests/gl_tests/FramebufferTest.cpp:1622: Failure\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)  Value of: program.valid()\nI   83.902s run_tests_on_device(01e6e7eca2b5d293)    Actual: false\nI   83.903s run_tests_on_device(01e6e7eca2b5d293)  Expected: true\nI   83.903s run_tests_on_device(01e6e7eca2b5d293)  Stack trace:\nI   83.903s run_tests_on_device(01e6e7eca2b5d293)  #00 pc 0x000000000086aeef /data/app/org.chromium.native_test-1/lib/arm64/libangle_end2end_tests__library.so\nI   83.903s run_tests_on_device(01e6e7eca2b5d293)  #01 pc 0x0000000000575853 /data/app/org.chromium.native_test-1/lib/arm64/libangle_end2end_tests__library.so\nI   83.903s run_tests_on_device(01e6e7eca2b5d293)  \nI   83.903s run_tests_on_device(01e6e7eca2b5d293)  [  FAILED  ] FramebufferTest_ES31.MultisampleResolveWithBlitThenDrawAttachment1/ES3_1_OpenGLES, where GetParam() \u003d ES3_1_OpenGLES (65 ms)",
+      "revId": "280e795026539a24d8fb45b4beb1455920fb2b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
