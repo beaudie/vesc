@@ -69,6 +69,24 @@
       "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6f4b2b2_2562a79c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-02T16:00:21Z",
+      "side": 1,
+      "message": "\u003e is this comment a reply to the regression test request?\n\nyes\n\nthanks shabi, will look for repro env and write a test for this",
+      "parentUuid": "4854b2f0_80c8807b",
+      "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
