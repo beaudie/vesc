@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b113e3fa_0cff2ed7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-02T20:20:04Z",
+      "side": 1,
+      "message": "I was running into assertion at line 424 bellow, that is why I added this.",
+      "parentUuid": "236ace4b_15332ae5",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "541d1f51_d3db0aa9",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Color write masks are per draw buffer.\n\nGraphicsPipelineDesc::updateColorWriteMask is taking one mask and applying it to all buffers, but that can be fixed by passing in an \"enabled draw buffers\" mask to either apply the given mask or override it with 0.",
       "parentUuid": "ac206c24_2213ee5b",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdf48990_9b5a2ff6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-02T20:20:04Z",
+      "side": 1,
+      "message": "I see, Vulkan\u0027s color mask is per color buffer.",
+      "parentUuid": "82437113_865bc1a7",
       "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
