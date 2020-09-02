@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f41ba2dc_faeab328",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-02T18:12:02Z",
+      "side": 1,
+      "message": "PTAL - test added and verified on nvidia 950m with \"minStorageBufferOffsetAlignment\" \u003d\u003d 16",
+      "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
