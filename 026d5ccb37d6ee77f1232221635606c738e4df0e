@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f574f8f_bd6bf07b",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T19:06:27Z",
+      "side": 1,
+      "message": "nit: The excessive parentheses made it hard for me at first to notice that the ||ed group is parenthesized. This works fine FYI:\n\n     a \u003d (b \u003e 0 || c \u003e 0 || d+e \u003e f || g+h \u003c i) \u0026\u0026 j !\u003d k;",
+      "range": {
+        "startLine": 1198,
+        "startChar": 28,
+        "endLine": 1201,
+        "endChar": 72
+      },
+      "revId": "026d5ccb37d6ee77f1232221635606c738e4df0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
