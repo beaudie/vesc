@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "55a6688c_6884b8ac",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T22:48:38Z",
+      "side": 1,
+      "message": "Yes, it was swapchain render targets.  Please take a look at how I handled passing info to the init function.",
+      "parentUuid": "8c10baf1_0d6a0f4c",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "d104a84676d90117a34a15bfda3e5543eac21fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46eadfa6_6f71f7e5",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2

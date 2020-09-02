@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df3907c7_e3e01388",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T22:48:38Z",
+      "side": 1,
+      "message": "I think I have eliminated the need for this method (if you like what I did in CommandBuffer::endRenderPass(), where I restore depth and stencil differently.",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 0
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "142e50f3_725fab9e",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T22:48:38Z",
+      "side": 1,
+      "message": "I left this to point out that it is one of the places that causes the load op to be LOAD for newly-created/used depth-stencil render targets.  I would hope that most apps will do a clear of a new color attachment, but I\u0027ve definitely seen LOAD of stencil.",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 6
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ae57361_b534b041",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T22:48:38Z",
+      "side": 1,
+      "message": "I\u0027m now restoring depth\u0027s ContentDefined separately from stencil\u0027s (a benefit of moving mContentDefined from RenderTargetVk to ImageHelper for depth/stencil.  Is this still desired?",
+      "range": {
+        "startLine": 881,
+        "startChar": 0,
+        "endLine": 888,
+        "endChar": 5
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
