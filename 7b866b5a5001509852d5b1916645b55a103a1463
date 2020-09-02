@@ -33,6 +33,24 @@
       "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9829ad7b_df8c547a",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T18:57:00Z",
+      "side": 1,
+      "message": "Also, the change switches to `mCurrentEnabledDrawBuffers` in quite a few places, all of which are prone to be future bugs. glDrawBuffers is not fantastically tested, especially in a way that triggers this optimization, so it\u0027s imperative that tests be written for *all* of those cases.\n\nOnce you write the test for one case, you should be able to copy-paste the same test and change the operation after glDrawBuffer for each one (like blit, blit that resolves, clear, masked clear, scissored clear etc).",
+      "parentUuid": "dcec0487_20607276",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
