@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a0bafba_620b0886",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T21:13:22Z",
+      "side": 1,
+      "message": "Fixed the test and addressed Charlie\u0027s feedback.\n\nThe bots are quiet, so I\u0027ll CQ+1",
+      "revId": "8838dbae990f6e93ebfde8bce100406dd3531fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
