@@ -16,6 +16,29 @@
       "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6a9eb3e_ba99d6e9",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T18:40:39Z",
+      "side": 1,
+      "message": "Based on the change here, I would have expected the bug to trigger when there are multiple atomic counter buffer bindings (which would excessively increment mValidAtomicCounterBufferCount)\n\nIs the new test really exercising the bug that\u0027s fixed here?",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1989,
+        "endChar": 13
+      },
+      "revId": "37a8bc69e0ebe7b338989406bfe9bf90e6fe5aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
