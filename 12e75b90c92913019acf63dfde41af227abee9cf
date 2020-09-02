@@ -70,6 +70,30 @@
       "revId": "12e75b90c92913019acf63dfde41af227abee9cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3d73ccb_102d9775",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/DisplayVkXcb.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T17:02:38Z",
+      "side": 1,
+      "message": "Whether we should mark the config unsupported for pbuffer is totally irrelevant to the window system by design in Vulkan.\n\nDone nevertheless, it reads better if the display itself removes the WINDOW bit.",
+      "parentUuid": "caaa4e3f_5b808a28",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "12e75b90c92913019acf63dfde41af227abee9cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
