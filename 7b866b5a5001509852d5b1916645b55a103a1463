@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ac17d8b0_7dec2d44",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-02T20:34:34Z",
+      "side": 1,
+      "message": "Sounds like a bug in keeping mCurrentEnabledDrawBuffers and mColorMaskForNoDrawBufferOptimizationEnabled in sync, if mColorMaskForNoDrawBufferOptimizationEnabled \u003d true only when mCurrentEnabledDrawBuffers \u003d 0.\n\nI could be missing something else though.",
+      "parentUuid": "b113e3fa_0cff2ed7",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "541d1f51_d3db0aa9",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
