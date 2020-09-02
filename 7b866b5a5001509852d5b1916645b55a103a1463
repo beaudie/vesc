@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ac206c24_2213ee5b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-02T19:37:17Z",
+      "side": 1,
+      "message": "Sorry that I am not getting this. If one of draw buffer is still enabled, the color should still write into that buffer. But color mask is global, it will stop all buffers from been written if set to false. My understanding is that we can only enable this if we know that we are not writing to any buffer.",
+      "parentUuid": "541d1f51_d3db0aa9",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dcec0487_20607276",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 3
