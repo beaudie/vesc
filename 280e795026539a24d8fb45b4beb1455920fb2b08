@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "270e86a9_7104a71f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-02T19:44:10Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "280e795026539a24d8fb45b4beb1455920fb2b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27b87004_a0f46223",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 1
