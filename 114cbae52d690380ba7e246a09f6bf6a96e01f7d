@@ -16,6 +16,24 @@
       "revId": "114cbae52d690380ba7e246a09f6bf6a96e01f7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44190fbd_55213fd9",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-02T11:16:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cf4e246_cffe6d86",
+      "revId": "114cbae52d690380ba7e246a09f6bf6a96e01f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
