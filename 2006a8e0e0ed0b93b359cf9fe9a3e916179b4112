@@ -16,6 +16,149 @@
       "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05dfae45_1bb20a27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T14:28:45Z",
+      "side": 1,
+      "message": "Looks much better!",
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c067746_79c95033",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2914,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T14:28:45Z",
+      "side": 1,
+      "message": "Could you please add another test based on this scenario?\n\n- Draw\n- Invalidate\n- Enable depth/stencil\n- Some non-draw command that breaks the renderpass\n\nThe invalidate should remain in effect. I checked and it seems that the front-end correctly never syncs this dirty bit except for draw calls, so the assumption that a draw call will follow should hold.",
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "398dcc4b_34c69a7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T14:28:45Z",
+      "side": 1,
+      "message": "This part of the comment is a little bit confusing. If glEnable() is called right before glInvalidate(), that\u0027s still the same as \"is being enabled\".",
+      "range": {
+        "startLine": 733,
+        "startChar": 54,
+        "endLine": 734,
+        "endChar": 65
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bf7d335_84fa58bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T14:28:45Z",
+      "side": 1,
+      "message": "Can move out of the if, as it\u0027s both here and in `else`.",
+      "range": {
+        "startLine": 735,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 9
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5de37984_2e752340",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T14:28:45Z",
+      "side": 1,
+      "message": "If you reach this function, a draw will necessarily happen AFAICT. If you can confirm that\u0027s the case, can things be further simplified?",
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f0afce2_08464080",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T14:28:45Z",
+      "side": 1,
+      "message": "Looks like you can remove this and use !isInvalidated() instead",
+      "range": {
+        "startLine": 992,
+        "startChar": 0,
+        "endLine": 998,
+        "endChar": 5
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04a92593_1aac44ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T14:28:45Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1018,
+        "startChar": 86,
+        "endLine": 1018,
+        "endChar": 88
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
