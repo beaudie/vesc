@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "236ace4b_15332ae5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-02T19:46:37Z",
+      "side": 1,
+      "message": "If mColorMaskForNoDrawBufferOptimizationEnabled is only enabled when there are no enabled color buffers, is checking mColorMaskForNoDrawBufferOptimizationEnabled necessary here?   We\u0027ve already ensured clearColorBuffers would also be empty based on the assert above.",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "541d1f51_d3db0aa9",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -31,6 +48,57 @@
       "side": 1,
       "message": "Sorry that I am not getting this. If one of draw buffer is still enabled, the color should still write into that buffer. But color mask is global, it will stop all buffers from been written if set to false. My understanding is that we can only enable this if we know that we are not writing to any buffer.",
       "parentUuid": "541d1f51_d3db0aa9",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b254961_83a06340",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-02T19:46:37Z",
+      "side": 1,
+      "message": "Are we guaranteed to always have at least 1 enabled color attachment?   Or should you do something like:\n\n    if (mCurrentEnabledDrawBuffers.any())\n    {\n        disableColorMaskForNoDrawBufferOptimization(context);\n    }",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9faa33dd_52068904",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2525,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-02T19:46:37Z",
+      "side": 1,
+      "message": "Are these conditionals necessary, or can you always do this work?   It\u0027s only done during syncState handling, so it should be fine if there are extra CPU cycles spent on it.",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6ac2171_43983e41",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-02T19:46:37Z",
+      "side": 1,
+      "message": "Is this bool necessary, or can you just check mCurrentEnabledDrawBuffers.none()?",
       "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
