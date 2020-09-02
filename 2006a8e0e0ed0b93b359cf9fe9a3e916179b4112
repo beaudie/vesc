@@ -106,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "81378373_f64b86b1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2914,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T16:32:10Z",
+      "side": 1,
+      "message": "Yes, otherwise the Enable would be noop. Might be good to do something like:\n\n- Enable D/S\n- Draw\n- Disable D/S\n- Draw\n- Invalidate\n- Enable D/S\n- Break the render pass through a non-draw command\n\nThere\u0027s no draw call after Invalidate in my scenario, and some other command is breaking the render pass. The test just ensures that the invalidate is not undone just because there\u0027s an unrelated D/S enable before it.\n\n(The first Enable-Draw-Disable-Draw dance is to avoid triggering optimizations that think the depth buffer was never written to in the render pass to begin with)",
+      "parentUuid": "c4bc462e_922361e0",
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "398dcc4b_34c69a7e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -141,6 +159,30 @@
       "side": 1,
       "message": "Here\u0027s the back story: At one point, I had an ASSERT here (and below) that ensured we were transitioning from disabled to enabled (or vice versa below).  That ASSERT was triggered if I did glEnable() just before glInvalidateFramebuffer().  That\u0027s because the invalidate looks at and records the front-end state at the time of invalidate.  Then, the dirty bit gets processed later, and so it appears that we\u0027re going from enabled to enabled.\n\nShould I just delete this?",
       "parentUuid": "398dcc4b_34c69a7e",
+      "range": {
+        "startLine": 733,
+        "startChar": 54,
+        "endLine": 734,
+        "endChar": 65
+      },
+      "revId": "2006a8e0e0ed0b93b359cf9fe9a3e916179b4112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "075ec59b_da6707dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T16:32:10Z",
+      "side": 1,
+      "message": "Yes I think it\u0027s best to just delete it.\n\nTo be sure, this is not called from invalidate directly, is it?",
+      "parentUuid": "46ada0e1_0e6a1462",
       "range": {
         "startLine": 733,
         "startChar": 54,
