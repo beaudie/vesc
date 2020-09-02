@@ -51,6 +51,24 @@
       "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4854b2f0_80c8807b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-02T15:24:46Z",
+      "side": 1,
+      "message": "Sorry, is this comment a reply to the regression test request?\n\n---\n\nLet\u0027s say minStorageBufferOffsetAlignment is 64. GL requires offset to be a multiple of 4 (fixed, and not queriable from the implementation), so say the user provides an offset of 76. We can\u0027t pass 76 to Vulkan because it\u0027s not a multiple of minStorageBufferOffsetAlignment. We pass 64 to Vulkan, and pass 12 by a driver uniform to be added in the shader.",
+      "parentUuid": "ad7631dc_663a4cd5",
+      "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
