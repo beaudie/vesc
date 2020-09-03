@@ -51,6 +51,24 @@
       "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2161f3f3_9424abff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-03T11:46:22Z",
+      "side": 1,
+      "message": "fix comment: \nWhen gl_GlobalInvocationID.x/gl_GlobalInvocationID.y is 0, the sample position will be wrong.",
+      "parentUuid": "b5c18462_909d7348",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
