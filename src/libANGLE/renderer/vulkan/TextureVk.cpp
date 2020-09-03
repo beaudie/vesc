@@ -2052,10 +2052,11 @@ angle::Result TextureVk::initRenderTargets(ContextVk *contextVk,
             }
         }
 
-        renderTargets[layerIndex].init(drawImage, drawImageViews, resolveImage, resolveImageViews,
-                                       getNativeImageLevel(levelIndex),
-                                       getNativeImageLayer(layerIndex),
-                                       isMultisampledRenderToTexture);
+        renderTargets[layerIndex].init(
+            drawImage, drawImageViews, resolveImage, resolveImageViews,
+            getNativeImageLevel(levelIndex), getNativeImageLayer(layerIndex),
+            isMultisampledRenderToTexture,
+            drawImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
     }
     return angle::Result::Continue;
 }
