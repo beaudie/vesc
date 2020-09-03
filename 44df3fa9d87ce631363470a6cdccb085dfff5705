@@ -34,6 +34,24 @@
       "revId": "44df3fa9d87ce631363470a6cdccb085dfff5705",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64fac4bf_ffdc48e8",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T14:59:28Z",
+      "side": 1,
+      "message": "Hi Shabi.  Sorry, I should have responded here too.  I/Courtney did the following:\n\n- I removed this test code in the follow-on CL (https://chromium-review.googlesource.com/c/angle/angle/+/2378670) that you +1\u0027d.\n\n- Courtney reverted the change (https://chromium-review.googlesource.com/c/angle/angle/+/2368194) that was the underlying problem (revert: https://chromium-review.googlesource.com/c/angle/angle/+/2380610)\n\n- I have a better change than the above is in the CL that moves mContentDefined to ImageHelper for depth/stencil (https://chromium-review.googlesource.com/c/angle/angle/+/2386478)",
+      "parentUuid": "c096df3b_44c4b447",
+      "revId": "44df3fa9d87ce631363470a6cdccb085dfff5705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
