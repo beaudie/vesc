@@ -27,7 +27,7 @@ VkImageTiling AhbDescUsageToVkImageTiling(const AHardwareBuffer_Desc &ahbDescrip
     if ((ahbDescription.usage & AHARDWAREBUFFER_USAGE_CPU_READ_MASK) != 0 ||
         (ahbDescription.usage & AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK) != 0)
     {
-        return VK_IMAGE_TILING_LINEAR;
+        return VK_IMAGE_TILING_OPTIMAL;
     }
 
     return VK_IMAGE_TILING_OPTIMAL;
@@ -111,7 +111,7 @@ VkImageUsageFlags AhbDescUsageToVkImageUsage(const AHardwareBuffer_Desc &ahbDesc
 
     if ((ahbDescription.usage & AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE) != 0)
     {
-        usage |= VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+        usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
     }
 
     if ((ahbDescription.usage & AHARDWAREBUFFER_USAGE_GPU_FRAMEBUFFER) != 0)
