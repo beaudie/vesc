@@ -304,6 +304,69 @@ TEST_P(SRGBTextureTest, SRGBOverrideTextureParameter)
     EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
 }
 
+// Test that all supported formats can be overridden
+TEST_P(SRGBTextureTest, SRGBOverrideRequiredFormats)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_sRGB_override"));
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+
+    constexpr GLenum possibleFormats[] = {GL_RGB8,
+                                          GL_RGBA8,
+                                          GL_COMPRESSED_RGB8_ETC2,
+                                          GL_COMPRESSED_RGBA8_ETC2_EAC,
+                                          GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+                                          GL_COMPRESSED_RGBA_ASTC_4x4,
+                                          GL_COMPRESSED_RGBA_ASTC_5x4,
+                                          GL_COMPRESSED_RGBA_ASTC_5x5,
+                                          GL_COMPRESSED_RGBA_ASTC_6x5,
+                                          GL_COMPRESSED_RGBA_ASTC_6x6,
+                                          GL_COMPRESSED_RGBA_ASTC_8x5,
+                                          GL_COMPRESSED_RGBA_ASTC_8x6,
+                                          GL_COMPRESSED_RGBA_ASTC_8x8,
+                                          GL_COMPRESSED_RGBA_ASTC_10x5,
+                                          GL_COMPRESSED_RGBA_ASTC_10x6,
+                                          GL_COMPRESSED_RGBA_ASTC_10x8,
+                                          GL_COMPRESSED_RGBA_ASTC_10x10,
+                                          GL_COMPRESSED_RGBA_ASTC_12x10,
+                                          GL_COMPRESSED_RGBA_ASTC_12x12,
+                                          GL_COMPRESSED_RGB_S3TC_DXT1_EXT,
+                                          GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+                                          GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,
+                                          GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,
+                                          GL_R8,
+                                          GL_RG8,
+                                          GL_COMPRESSED_RGBA_BPTC_UNORM_EXT};
+
+    for (GLenum format : possibleFormats)
+    {
+        GLTexture tex;
+        glBindTexture(GL_TEXTURE_2D, tex.get());
+        glTexStorage2D(GL_TEXTURE_2D, 1, format, 1, 1);
+        GLenum error = glGetError();
+        if (error == GL_INVALID_ENUM)
+        {
+            // Format is not supported, we don't require the sRGB counterpart to be supported either
+            continue;
+        }
+        else
+        {
+            ASSERT_EQ(static_cast<GLenum>(GL_NO_ERROR), error);
+        }
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_NONE);
+        ASSERT_GL_NO_ERROR();
+
+        glUseProgram(mProgram);
+        glUniform1i(mTextureLocation, 0);
+
+        glDisable(GL_DEPTH_TEST);
+        drawQuad(mProgram, "position", 0.5f);
+        ASSERT_GL_NO_ERROR();
+        // Discard result, we are only checking that we don't try to reinterpret to an unsupported
+        // format
+    }
+}
+
 // Test interaction between sRGB_override and sampler objects
 TEST_P(SRGBTextureTest, SRGBOverrideTextureParameterWithSampler)
 {
