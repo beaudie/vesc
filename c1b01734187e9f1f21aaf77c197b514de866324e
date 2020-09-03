@@ -254,6 +254,24 @@
     },
     {
       "key": {
+        "uuid": "4f3e2afa_7f6be350",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T22:30:57Z",
+      "side": 1,
+      "message": "I added it to the perf-counters test, so that I could verify the load/store ops in addition to verifying drawing behavior.  PTAL",
+      "parentUuid": "269edcfb_b0dd44dd",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae849016_9d127486",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 10
