@@ -16,6 +16,29 @@
       "revId": "571b08f3eedf26c610f1787747f24c099f13992d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2a693b0_08e3dc27",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-03T22:47:10Z",
+      "side": 1,
+      "message": "Since you are tracking depth and stencil individually in the RenderTargetVK now, maybe you can just make this API also query depth and stencil individually so that if only depth has defined content we don\u0027t force stencil to use loadOp. I think right now it does not distinguish them because previously we are not tracking D/S individually.",
+      "range": {
+        "startLine": 144,
+        "startChar": 5,
+        "endLine": 144,
+        "endChar": 46
+      },
+      "revId": "571b08f3eedf26c610f1787747f24c099f13992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
