@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "e2700c14_f68e93fc",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T03:09:27Z",
+      "side": 1,
+      "message": "I know. I saw a similar annoyance with multisampled-render-to-texture.\n\nI thought about adding a hack to set this to defined only if the layout is not Undefined, and then also unconditionally set them to true if flushSingleSubresourceStagedUpdates is going to be called (i.e. there\u0027s something to flush).\n\nIt was too hacky to be honest, so I decided I\u0027d tackle it when mContentDefined moves to ImageHelper (also for color).\n\nThe problem is that the image could be modified through the texture instead of the framebuffer, and we didn\u0027t have a way of notifying the RenderTarget about the change in a way that doesn\u0027t overnotify! With mContentDefined in ImageHelper, we should be able to fix this.\n\nThat said, I\u0027m not sure I understood your comment, are you saying \"with this commented out, you managed to successfully avoid LOAD for newly created D/S render targets\"? If so, great!",
+      "parentUuid": "142e50f3_725fab9e",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 6
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ae57361_b534b041",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -59,6 +83,30 @@
       "writtenOn": "2020-09-02T22:48:38Z",
       "side": 1,
       "message": "I\u0027m now restoring depth\u0027s ContentDefined separately from stencil\u0027s (a benefit of moving mContentDefined from RenderTargetVk to ImageHelper for depth/stencil.  Is this still desired?",
+      "range": {
+        "startLine": 881,
+        "startChar": 0,
+        "endLine": 888,
+        "endChar": 5
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8a9d5c4_3e8489ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T03:09:27Z",
+      "side": 1,
+      "message": "Are you asking me?",
+      "parentUuid": "2ae57361_b534b041",
       "range": {
         "startLine": 881,
         "startChar": 0,
