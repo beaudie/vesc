@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "f526e450_088592e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Added tests to the commit message. expectations file doesn\u0027t need modification  since they weren\u0027t failing earlier, they were just reported as unsupported.",
+      "parentUuid": "ed6f039a_769e2481",
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14ac1f1f_50c062ae",
         "filename": "include/GLSLANG/ShaderVars.h",
         "patchSetId": 2
@@ -73,6 +91,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884e4ee0_0c585a03",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14ac1f1f_50c062ae",
+      "range": {
+        "startLine": 204,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 26
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -147,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "c7fdabb3_7fdd3092",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "so something like -\n\nenum class\n{\nDefault;\nGlNone \u003d Default;\nGLDecodeExt \u003d Default;\nGLSkipDecodeExt;\nGlSrgb;\n};\n\nWDYT?",
+      "parentUuid": "bc33112e_ae50a5d8",
+      "range": {
+        "startLine": 231,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 13
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96f6c45f_89ecc586",
         "filename": "src/compiler/translator/ShaderVars.cpp",
         "patchSetId": 2
@@ -170,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "f3dcfc52_72f6ce2f",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96f6c45f_89ecc586",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 23
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36297242_1ac72e17",
         "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
         "patchSetId": 2
@@ -190,6 +280,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1437284_57fe6bc4",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36297242_1ac72e17",
+      "range": {
+        "startLine": 38,
+        "startChar": 43,
+        "endLine": 38,
+        "endChar": 61
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -264,6 +378,54 @@
     },
     {
       "key": {
+        "uuid": "97206972_0d8a9a16",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3abb2173_3b9f1239",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aeb32f7d_30b4e4bb",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3abb2173_3b9f1239",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac9808a3_d1a4751f",
         "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.h",
         "patchSetId": 2
@@ -284,6 +446,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cf4f975_aa13c596",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac9808a3_d1a4751f",
+      "range": {
+        "startLine": 22,
+        "startChar": 22,
+        "endLine": 22,
+        "endChar": 47
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -358,6 +544,30 @@
     },
     {
       "key": {
+        "uuid": "3a1ac9cd_8a52e612",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "dont think that is a good idea, because it could result in textures being reallocated with VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT more than necessary. we may have a situation where a texture is reallocated as mutable and then swapped out for a different texture before draw time, resulting in a texture being made mutable which did not have to be.\n\nVK_IMAGE_CREATE_MUTABLE_FORMAT_BIT comes with a substantial performance penalty for us, so we want to ensure that we don\u0027t use this except on the absolute minimal set of textures that we are required to.",
+      "parentUuid": "a5eee166_d2f3944d",
+      "range": {
+        "startLine": 3191,
+        "startChar": 0,
+        "endLine": 3216,
+        "endChar": 1
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33fdbc4e_b68b38b9",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
@@ -378,6 +588,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a49fc52b_9312b2b2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33fdbc4e_b68b38b9",
+      "range": {
+        "startLine": 1371,
+        "startChar": 23,
+        "endLine": 1375,
+        "endChar": 41
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -452,6 +686,30 @@
     },
     {
       "key": {
+        "uuid": "5323c746_64fc231b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Image.cpp:423\n\nThe case that causes problems is if the application creates a GL texture with a linear colorspace, then does EGLCreateImage with a nonlinear colorspace override.\nThis mutates the frontend Texture\u0027s format to be nonlinear, but the backing TextureVk keeps its original format without being reallocated.\nThis happens in ImageTest.cpp:186 createEGLImage2DTextureSource\n\nWhen this changes introduces colorspace-specific imageviews, that caused this case to create imageviews for the frontend format (nonlinear), but later we would attempt (and fail) to retrieve imageviews for the backend format (linear).\n\nThis swap is necessary so that we generate the correct imageviews for the backend format.\n\n\u003e So what you seem to be saying is that the back-end format changes twice.\n\nNo, the problem is that the frontend format changes while the backend format stays the same. Either way though, we end up with a texture where the frontend and backend formats do not match.",
+      "parentUuid": "ecd014d3_9b208268",
+      "range": {
+        "startLine": 1125,
+        "startChar": 41,
+        "endLine": 1125,
+        "endChar": 71
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d031f77d_8500a5b9",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -472,6 +730,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a55df1a_ae1b1fb7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2089,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "We need this bit in order to use imageviews with a format that is not the same as the actual internal format of the texture. This is how we emulate the functionality required by the extension.\n\nVulkan requires that we may only use imageviews that have a matching format as the image unless that bit is set.",
+      "parentUuid": "d031f77d_8500a5b9",
+      "range": {
+        "startLine": 2089,
+        "startChar": 7,
+        "endLine": 2089,
+        "endChar": 41
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -498,6 +780,30 @@
     },
     {
       "key": {
+        "uuid": "56f29c0b_fc95230b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2235,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5386101e_4db4004b",
+      "range": {
+        "startLine": 2235,
+        "startChar": 42,
+        "endLine": 2235,
+        "endChar": 45
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "824e34a0_f9ecf15d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -515,6 +821,24 @@
     },
     {
       "key": {
+        "uuid": "969f9990_54b288bd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "We could just call the Impl function instead of using this wrapper, but ended up just following convention/pattern of similar code that already existed.",
+      "parentUuid": "824e34a0_f9ecf15d",
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e4d96b4_7fdd73d1",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -529,6 +853,24 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef164727_2c11a117",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2366,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Actually, this design was informed by older ANGLE code in which these functions were actually called with the default value.\nAt this point though, they are only used in one place where we set that parameter explicitly.\nGiven that, we can go ahead with a bool without a default case.",
+      "parentUuid": "7e4d96b4_7fdd73d1",
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -552,6 +894,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03d74c77_dd3547f7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b08f5a4f_7dfd8877",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 9
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -602,6 +968,30 @@
     },
     {
       "key": {
+        "uuid": "d4a95de4_dcd70f9d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "This is the same style used for GetFormatSupport in Caps.cpp:200\nMaking it std::vector based means we can\u0027t constexpr the format lists.",
+      "parentUuid": "681d7857_bc930d4a",
+      "range": {
+        "startLine": 608,
+        "startChar": 54,
+        "endLine": 608,
+        "endChar": 89
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30b6f870_04189eee",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 2
@@ -625,6 +1015,30 @@
     },
     {
       "key": {
+        "uuid": "6784ba6a_b5d94a41",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30b6f870_04189eee",
+      "range": {
+        "startLine": 614,
+        "startChar": 12,
+        "endLine": 614,
+        "endChar": 43
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93f098e7_0add475a",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 2
@@ -645,6 +1059,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4a6e2c0_c45f3245",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f098e7_0add475a",
+      "range": {
+        "startLine": 620,
+        "startChar": 17,
+        "endLine": 620,
+        "endChar": 44
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -719,6 +1157,30 @@
     },
     {
       "key": {
+        "uuid": "9278a9a3_7bd5c093",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "We could make the cache mutable and flag getFormatFeatureBits as const. That would allow us to ignore initializing these formats upfront and just check format support the conventional way here.",
+      "parentUuid": "39a8a2c7_f0b68a3e",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 0
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79617d49_80432d37",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -739,6 +1201,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c89c3ad0_36af23e2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79617d49_80432d37",
+      "range": {
+        "startLine": 47,
+        "startChar": 23,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -765,6 +1251,30 @@
     },
     {
       "key": {
+        "uuid": "3e4ef191_0c71fb61",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "Test skips seem to have disappeared during patch update, will re-add in next patch",
+      "parentUuid": "baeba2d8_bd604016",
+      "range": {
+        "startLine": 761,
+        "startChar": 23,
+        "endLine": 761,
+        "endChar": 47
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5168a23f_ec22e30d",
         "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
         "patchSetId": 2
@@ -785,6 +1295,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa5d6c16_2e05212e",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-03T23:37:52Z",
+      "side": 1,
+      "message": "No, this test expects the result to be identical, regardless of whether GL_SKIP_DECODE_EXT is enabled.\nThis is because we are testing for the texelFetch exception - if the shader invokes texelFetch, we should always use a nonlinear colorspace, even if GL_SKIP_DECODE_EXT is set.",
+      "parentUuid": "5168a23f_ec22e30d",
+      "range": {
+        "startLine": 819,
+        "startChar": 34,
+        "endLine": 819,
+        "endChar": 43
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
