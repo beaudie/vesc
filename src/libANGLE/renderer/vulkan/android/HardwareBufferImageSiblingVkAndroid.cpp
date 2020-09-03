@@ -27,7 +27,7 @@ VkImageTiling AhbDescUsageToVkImageTiling(const AHardwareBuffer_Desc &ahbDescrip
     if ((ahbDescription.usage & AHARDWAREBUFFER_USAGE_CPU_READ_MASK) != 0 ||
         (ahbDescription.usage & AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK) != 0)
     {
-        return VK_IMAGE_TILING_LINEAR;
+        return VK_IMAGE_TILING_OPTIMAL;
     }
 
     return VK_IMAGE_TILING_OPTIMAL;
