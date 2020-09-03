@@ -1690,11 +1690,16 @@ angle::Result TextureVk::copyAndStageImageSubresource(ContextVk *contextVk,
         gl::GetSizedInternalFormatInfo(mImage->getFormat().internalFormat);
     if (formatInfo.compressed)
     {
-        // In the case of a compressed texture, bufferRowLength can never be smaller than the
-        // compressed format's compressed block width, and bufferImageHeight can never be smaller
-        // than the compressed block height.
-        bufferRowLength   = std::max(bufferRowLength, formatInfo.compressedBlockWidth);
-        bufferImageHeight = std::max(bufferImageHeight, formatInfo.compressedBlockHeight);
+        angle::CheckedNumeric<uint32_t> checkedRowLength =
+            rx::CheckedRoundUp<uint32_t>(updatedExtents.width, formatInfo.compressedBlockWidth);
+        angle::CheckedNumeric<uint32_t> checkedImageHeight =
+            rx::CheckedRoundUp<uint32_t>(updatedExtents.height, formatInfo.compressedBlockHeight);
+
+        ANGLE_VK_CHECK_MATH(contextVk, checkedRowLength.IsValid());
+        ANGLE_VK_CHECK_MATH(contextVk, checkedImageHeight.IsValid());
+
+        bufferRowLength   = checkedRowLength.ValueOrDie();
+        bufferImageHeight = checkedImageHeight.ValueOrDie();
     }
     ANGLE_TRY(mImage->stageSubresourceUpdateFromBuffer(
         contextVk, bufferSize, dstLevelGL, currentLayer, layerCount, bufferRowLength,
