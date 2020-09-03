@@ -16,6 +16,23 @@
       "revId": "20f96c47c33264fc7365f1d0e7110ef01ed8e105",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eacc844e_12f09bb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T01:42:20Z",
+      "side": 1,
+      "message": "Tbr, simple change.",
+      "revId": "20f96c47c33264fc7365f1d0e7110ef01ed8e105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
