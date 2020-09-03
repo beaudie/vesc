@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "339a0aef_2de31540",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-03T15:48:49Z",
+      "side": 1,
+      "message": "Perf impact?\nThere are a number of apps that go through that code path.\nWould it make sense to put the workaround in the change that exposed this issue? ",
+      "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
