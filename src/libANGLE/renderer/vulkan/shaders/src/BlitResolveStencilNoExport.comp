@@ -96,9 +96,16 @@ void main()
 
     // If flipping, negate the coordinates.
     if (params.flipX)
+    {
         srcImageCoords.x = -srcImageCoords.x;
+        // The input coordinates start from 0, to align it for TEXEL_FETCH if flipped.
+        srcImageCoords.x -= 1;
+    }
     if (params.flipY)
+    {
         srcImageCoords.y = -srcImageCoords.y;
+        srcImageCoords.y -= 1;
+    }
     if (params.rotateXY)
         srcImageCoords.xy = srcImageCoords.yx;
 
