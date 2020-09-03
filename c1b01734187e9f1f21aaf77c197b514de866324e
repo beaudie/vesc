@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3bbb9bcc_45f4860b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2493,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b41bc470_28644f60",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5fb82bc8_8e190036",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d15b740e_443127a4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fb82bc8_8e190036",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79b9b10a_c266a46e",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 10
@@ -50,6 +86,24 @@
       "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3228c15e_da3aacd2",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79b9b10a_c266a46e",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "784aa864_2bff4426",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3b2e317_7bbcaf3a",
+      "range": {
+        "startLine": 154,
+        "startChar": 4,
+        "endLine": 154,
+        "endChar": 27
+      },
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6720fc7b_72957159",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 10
@@ -87,6 +165,30 @@
       "writtenOn": "2020-09-03T03:09:27Z",
       "side": 1,
       "message": "At least should be conditional to `!isReadOnly`, don\u0027t you think?",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 43
+      },
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94b42ed6_66269420",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "I wondered about that.  I agree, and here\u0027s why.  At this point, I believe the render pass has been started (at least enough) so that the load op for this RP is determined, and this will determine the load op for a future RP.\n\nSeems like it should apply to color (mContentDefined) as well as depth \u0026 stencil.  I\u0027ll move all of them.  Please object if I\u0027m missing something.",
+      "parentUuid": "6720fc7b_72957159",
       "range": {
         "startLine": 155,
         "startChar": 0,
@@ -116,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "3e2be834_3e7972a7",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Ah yes.  Should I put the test in \"VulkanPerformanceCounteres.cpp\", or in a different file?",
+      "parentUuid": "10a57bdc_e249f57b",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae849016_9d127486",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 10
@@ -130,6 +250,24 @@
       "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b18222bc_86a45496",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae849016_9d127486",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

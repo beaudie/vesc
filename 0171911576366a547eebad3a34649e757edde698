@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9d95682c_fc5bff8c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "df3907c7_e3e01388",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 0
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "142e50f3_725fab9e",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 9
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c837c581_d18ac04c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not sure I understood your comment, are you saying \"with this commented out, you managed to successfully avoid LOAD for newly created D/S render targets\"? If so, great!\n\nYes.  However, given your other comments, I\u0027ll undo this until we can handle the other cases.",
+      "parentUuid": "e2700c14_f68e93fc",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 6
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ae57361_b534b041",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -116,6 +164,30 @@
       "revId": "0171911576366a547eebad3a34649e757edde698",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6b09b63_4b46263a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T16:21:05Z",
+      "side": 1,
+      "message": "Yes, I was.  Sorry, this was discussed before and the answer is obvious (it\u0027s better to handle them separately when possible).",
+      "parentUuid": "f8a9d5c4_3e8489ca",
+      "range": {
+        "startLine": 881,
+        "startChar": 0,
+        "endLine": 888,
+        "endChar": 5
+      },
+      "revId": "0171911576366a547eebad3a34649e757edde698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
