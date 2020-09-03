@@ -967,7 +967,8 @@ class CommandBufferHelper : angle::NonCopyable
         SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
     }
 
-    void invalidateRenderPassDepthAttachment(const gl::DepthStencilState &dsState)
+    void invalidateRenderPassDepthAttachment(const gl::DepthStencilState &dsState,
+                                             ImageHelper *image)
     {
         ASSERT(mIsRenderPassCommandBuffer);
         // Keep track of the size of commands in the command buffer.  If the size grows in the
@@ -976,9 +977,12 @@ class CommandBufferHelper : angle::NonCopyable
         // Also track the size if the attachment is currently disabled.
         mDepthCmdSizeDisabled =
             (dsState.depthTest && dsState.depthMask) ? kInfiniteCmdSize : mDepthCmdSizeInvalidated;
+        ASSERT(image);
+        mDepthStencilImage = image;
     }
 
-    void invalidateRenderPassStencilAttachment(const gl::DepthStencilState &dsState)
+    void invalidateRenderPassStencilAttachment(const gl::DepthStencilState &dsState,
+                                               ImageHelper *image)
     {
         ASSERT(mIsRenderPassCommandBuffer);
         // Keep track of the size of commands in the command buffer.  If the size grows in the
@@ -987,6 +991,8 @@ class CommandBufferHelper : angle::NonCopyable
         // Also track the size if the attachment is currently disabled.
         mStencilCmdSizeDisabled =
             dsState.stencilTest ? kInfiniteCmdSize : mStencilCmdSizeInvalidated;
+        ASSERT(image);
+        mDepthStencilImage = image;
     }
 
     bool isNoLongerInvalidated(uint32_t cmdCountInvalidated, uint32_t cmdCountDisabled)
@@ -1046,8 +1052,8 @@ class CommandBufferHelper : angle::NonCopyable
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
-    bool onDepthAccess(ResourceAccess access);
-    bool onStencilAccess(ResourceAccess access);
+    void onDepthAccess(ResourceAccess access);
+    void onStencilAccess(ResourceAccess access);
 
     void updateRenderPassForResolve(vk::Framebuffer *newFramebuffer,
                                     const vk::RenderPassDesc &renderPassDesc);
@@ -1101,6 +1107,8 @@ class CommandBufferHelper : angle::NonCopyable
     uint32_t mDepthCmdSizeDisabled;
     uint32_t mStencilCmdSizeInvalidated;
     uint32_t mStencilCmdSizeDisabled;
+    // Used the update ImageHelper::m*ContentDefined at the end of the render pass
+    ImageHelper *mDepthStencilImage;
 
     // Keep track of the depth/stencil attachment index
     uint32_t mDepthStencilAttachmentIndex;
@@ -1287,6 +1295,7 @@ class ImageHelper final : public Resource, public angle::Subject
     uint32_t getLayerCount() const { return mLayerCount; }
     uint32_t getLevelCount() const { return mLevelCount; }
     const Format &getFormat() const { return *mFormat; }
+    bool validFormat() const { return mFormat != nullptr; }
     GLint getSamples() const { return mSamples; }
 
     ImageSerial getImageSerial() const
@@ -1304,6 +1313,10 @@ class ImageHelper final : public Resource, public angle::Subject
     // image.
     gl::Extents getLevelExtents2D(LevelIndex levelVK) const;
     bool isDepthOrStencil() const;
+    void setDefinedDepthContent(bool contentDefined) { mDepthContentDefined = contentDefined; }
+    void setDefinedStencilContent(bool contentDefined) { mStencilContentDefined = contentDefined; }
+    bool hasDefinedDepthContent() const { return mDepthContentDefined; }
+    bool hasDefinedStencilContent() const { return mStencilContentDefined; }
 
     // Clear either color or depth/stencil based on image format.
     void clear(VkImageAspectFlags aspectFlags,
@@ -1704,6 +1717,8 @@ class ImageHelper final : public Resource, public angle::Subject
     gl::LevelIndex mMaxLevel;
     uint32_t mLayerCount;
     uint32_t mLevelCount;
+    bool mDepthContentDefined;
+    bool mStencilContentDefined;
 
     // Staging buffer
     DynamicBuffer mStagingBuffer;
