@@ -236,6 +236,24 @@
     },
     {
       "key": {
+        "uuid": "269edcfb_b0dd44dd",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T17:25:45Z",
+      "side": 1,
+      "message": "You could put it in a normal test, which I expect would fail on Android.\n\nIt never hurts to add a duplicate in the perf-counters test to verify the ops directly.",
+      "parentUuid": "3e2be834_3e7972a7",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae849016_9d127486",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 10
