@@ -69,6 +69,23 @@
       "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03b2cf2e_2a1cbe8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T13:20:39Z",
+      "side": 1,
+      "message": "Thank you for the fix!\n\nI wonder though, can you figure out why the calls to AdjustBlitResolveParametersForResolve in FramebufferVk::blit are not sufficient for this? That function was meant to do exactly this, but on the CPU.",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
