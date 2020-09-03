@@ -105,6 +105,24 @@
       "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "38649f8c_62c91131",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T02:48:44Z",
+      "side": 1,
+      "message": "Excellent thank you.\n\nIf you can, another test that goes a bit more crazy would also be nice. Like, bind the same buffer to multiple atomic counter buffer bindings, bind null multiple times etc. Basically making sure that all the possible paths are exercised (to the extreme so that assertions would fire in case of error).",
+      "parentUuid": "28a3a213_62b7b42d",
+      "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
