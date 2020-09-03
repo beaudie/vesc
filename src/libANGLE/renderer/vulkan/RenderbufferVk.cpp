@@ -94,7 +94,8 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
 
-        mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, gl::LevelIndex(0), 0, false);
+        mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, gl::LevelIndex(0), 0, false,
+                           isDepthOrStencilFormat);
     }
 
     return angle::Result::Continue;
@@ -154,7 +155,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     }
 
     mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, imageVk->getImageLevel(),
-                       imageVk->getImageLayer(), false);
+                       imageVk->getImageLayer(), false,
+                       mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
 
     return angle::Result::Continue;
 }

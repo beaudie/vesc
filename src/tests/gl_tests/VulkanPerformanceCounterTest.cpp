@@ -709,7 +709,6 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
     // Draw (since enabled, should result: in storeOp = STORE; mContentDefined = true)
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct
 
     // Ensure that the render pass wasn't broken
     EXPECT_EQ(expected.renderPasses, counters.renderPasses);
@@ -723,11 +722,7 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
     swapBuffers();
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct; then uncomment:
-    // compareLoadCountersForInvalidateTest(counters, expected);
-    //
-    // TODO(ianelliott): have mContentDefined set at endRP(), so that it's correct; then uncomment:
-    // TEST_FUTURE_RP_LOADOP(1, 1);
+    compareLoadCountersForInvalidateTest(counters, expected);
 }
 
 // Tests that another case does not break render pass, and that counts are correct:
@@ -1116,6 +1111,95 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableEnableDraw)
     ASSERT_GL_NO_ERROR();
     swapBuffers();
     compareLoadCountersForInvalidateTest(counters, expected);
+}
+
+// Tests whether depth-stencil ContentDefined will be correct when:
+//
+// - Scenario: invalidate, detach D/S texture and modify it, attach D/S texture, draw with blend
+TEST_P(VulkanPerformanceCounterTest, InvalidateDetachModifyTexAttachDrawWithBlend)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+    rx::vk::PerfCounters expected;
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+
+    ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    ANGLE_GL_PROGRAM(greenProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    GLTexture colorTexture;
+    glBindTexture(GL_TEXTURE_2D, colorTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+
+    GLTexture depthStencilTexture;
+    glBindTexture(GL_TEXTURE_2D, depthStencilTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 2, 2, 0, GL_DEPTH_STENCIL,
+                 GL_UNSIGNED_INT_24_8, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
+                           depthStencilTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Clear and draw with depth-stencil enabled
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+    glClearDepthf(0.99f);
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Invalidate depth & stencil (should result: in storeOp = DONT_CARE; mContentDefined = false)
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT};
+    glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+
+    // Check for the expected number of render passes, expected color, and other expected counters
+    EXPECT_EQ(expected.renderPasses, counters.renderPasses);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    compareDepthStencilCountersForInvalidateTest(counters, expected);
+
+    // Detach depth-stencil attachment
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Modify depth-stencil
+    constexpr uint32_t kDepthStencilInitialValue = 0xafffff00;
+    uint32_t depthStencilData[4] = {kDepthStencilInitialValue, kDepthStencilInitialValue,
+                                    kDepthStencilInitialValue, kDepthStencilInitialValue};
+    glBindTexture(GL_TEXTURE_2D, depthStencilTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 2, 2, 0, GL_DEPTH_STENCIL,
+                 GL_UNSIGNED_INT_24_8, depthStencilData);
+
+    // Re-attach depth-stencil
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
+                           depthStencilTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Draw again, showing that the modified depth-stencil value prevents a new color value
+    //
+    // Expect rpCount+1, depth(Clears+0, Loads+1, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 0, 1, 1, 0, 1, 1, &expected);
+    drawQuad(greenProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+    // Check for the expected number of render passes, expected color, and other expected counters
+    EXPECT_EQ(expected.renderPasses, counters.renderPasses);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    compareDepthStencilCountersForInvalidateTest(counters, expected);
+
+    // Draw again, using a different depth value, so that the drawing takes place
+    //
+    // Expect rpCount+1, depth(Clears+0, Loads+1, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 0, 1, 1, 0, 1, 1, &expected);
+    drawQuad(greenProgram, essl1_shaders::PositionAttrib(), 0.2f);
+    ASSERT_GL_NO_ERROR();
+    // Check for the expected number of render passes, expected color, and other expected counters
+    EXPECT_EQ(expected.renderPasses, counters.renderPasses);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    compareDepthStencilCountersForInvalidateTest(counters, expected);
 }
 
 // Tests that even if the app clears depth, it should be invalidated if there is no read.

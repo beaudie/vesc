@@ -1483,17 +1483,18 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
 
         if (depthStencilRenderTarget)
         {
+            ASSERT(!depthStencilRenderTarget->hasResolveAttachment());
             const gl::DepthStencilState &dsState = contextVk->getState().getDepthStencilState();
             if (invalidateDepthBuffer)
             {
                 contextVk->getStartedRenderPassCommands().invalidateRenderPassDepthAttachment(
-                    dsState);
+                    dsState, &depthStencilRenderTarget->getImageForRenderPass());
             }
 
             if (invalidateStencilBuffer)
             {
                 contextVk->getStartedRenderPassCommands().invalidateRenderPassStencilAttachment(
-                    dsState);
+                    dsState, &depthStencilRenderTarget->getImageForRenderPass());
             }
         }
         if (invalidateColorBuffers.any())
@@ -1523,11 +1524,19 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
             }
         }
 
-        // If we have a depth / stencil render target AND we invalidate both we'll mark it as
-        // invalid. Maybe in the future add separate depth & stencil invalid flags.
-        if (depthStencilRenderTarget && invalidateDepthBuffer && invalidateStencilBuffer)
+        // If we have a depth / stencil render target AND we invalidate either or both, we'll mark
+        // the invalidated attachment as not having valid contents.
+        if (depthStencilRenderTarget)
         {
-            depthStencilRenderTarget->invalidateEntireContent();
+            vk::ImageHelper &dsImage = depthStencilRenderTarget->getImageForRenderPass();
+            if (invalidateDepthBuffer)
+            {
+                dsImage.setDefinedDepthContent(false);
+            }
+            if (invalidateStencilBuffer)
+            {
+                dsImage.setDefinedStencilContent(false);
+            }
         }
     }
 
@@ -2308,12 +2317,23 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // load the image.  Additionally, if the multisampled image data is transient and there is
         // no resolve attachment, there's no data to load.  The latter is the case with
         // depth/stencil texture attachments per GL_EXT_multisampled_render_to_texture2.
-        if (!depthStencilRenderTarget->hasDefinedContent() ||
-            (depthStencilRenderTarget->isImageTransient() &&
-             !depthStencilRenderTarget->hasResolveAttachment()))
+        if (depthStencilRenderTarget->isImageTransient() &&
+            !depthStencilRenderTarget->hasResolveAttachment())
         {
             depthLoadOp   = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        }
+        else
+        {
+            const vk::ImageHelper &dsImage = depthStencilRenderTarget->getImageForRenderPass();
+            if (!dsImage.hasDefinedDepthContent())
+            {
+                depthLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            }
+            if (!dsImage.hasDefinedStencilContent())
+            {
+                stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            }
         }
 
         if (depthStencilRenderTarget->isImageTransient())
@@ -2396,18 +2416,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
-}
-
-void FramebufferVk::restoreDepthStencilDefinedContents()
-{
-    // If the depthStencilRenderTarget does not have "defined content" (i.e. meaning that a future
-    // render pass should use a loadOp of DONT_CARE), we should restore it (i.e. so that a future
-    // render pass uses a loadOp of LOAD).
-    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
-    if (depthStencilRenderTarget)
-    {
-        depthStencilRenderTarget->restoreEntireContent();
-    }
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)
