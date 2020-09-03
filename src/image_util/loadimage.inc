@@ -112,6 +112,79 @@ inline void Load32FTo16F(size_t width, size_t height, size_t depth,
     }
 }
 
+template <size_t srcComponentCount, size_t dstComponentCount>
+inline void Load16UTo16F(size_t width, size_t height, size_t depth,
+                         const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
+                         uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
+{
+    static_assert(srcComponentCount == dstComponentCount ||
+        (srcComponentCount == 3 && dstComponentCount == 4),
+        "Load16UTo16F hardcodes extra components to 1.0, and is intended for 3-to-4 channel "
+        "conversions if the number of channels differ");
+
+    constexpr float k16UMax = std::numeric_limits<uint16_t>::max();
+
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint16_t *source = priv::OffsetDataPointer<uint16_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint16_t *dest = priv::OffsetDataPointer<uint16_t>(output, y, z, outputRowPitch, outputDepthPitch);
+
+            for (size_t x = 0; x < width; x++)
+            {
+                for (size_t c = 0; c < srcComponentCount; ++c)
+                {
+                    dest[x * dstComponentCount + c] =
+                        gl::float32ToFloat16(source[x * srcComponentCount + c] / k16UMax);
+                }
+                for (size_t c = srcComponentCount; c < dstComponentCount; ++c)
+                {
+                    dest[x * dstComponentCount + c] = gl::Float16One;
+                }
+            }
+        }
+    }
+}
+
+template <size_t srcComponentCount, size_t dstComponentCount>
+inline void Load16STo16F(size_t width, size_t height, size_t depth,
+                         const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
+                         uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
+{
+    static_assert(srcComponentCount == dstComponentCount ||
+        (srcComponentCount == 3 && dstComponentCount == 4),
+        "Load16STo16F hardcodes extra components to 1.0, and is intended for 3-to-4 channel "
+        "conversions if the number of channels differ");
+
+    constexpr float k16SMax = std::numeric_limits<int16_t>::max();
+    constexpr float k16SMin = std::numeric_limits<int16_t>::min();
+
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const int16_t *source = priv::OffsetDataPointer<int16_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint16_t *dest = priv::OffsetDataPointer<uint16_t>(output, y, z, outputRowPitch, outputDepthPitch);
+
+            for (size_t x = 0; x < width; x++)
+            {
+                for (size_t c = 0; c < srcComponentCount; ++c)
+                {
+                    // Snorm maps [-0x7FFF, 0x7FFF] to [-1, 1]. 0x8000 also maps to -1.
+                    int16_t sourceValue = source[x * srcComponentCount + c];
+                    dest[x * dstComponentCount + c] =
+                        gl::float32ToFloat16(sourceValue == k16SMin ? -1.0f : sourceValue / k16SMax);
+                }
+                for (size_t c = srcComponentCount; c < dstComponentCount; ++c)
+                {
+                    dest[x * dstComponentCount + c] = gl::Float16One;
+                }
+            }
+        }
+    }
+}
+
 template <size_t blockWidth, size_t blockHeight, size_t blockDepth, size_t blockSize>
 inline void LoadCompressedToNative(size_t width, size_t height, size_t depth,
                                    const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,

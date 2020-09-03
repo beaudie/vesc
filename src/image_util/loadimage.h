@@ -588,6 +588,28 @@ inline void Load32FTo16F(size_t width,
                          size_t outputRowPitch,
                          size_t outputDepthPitch);
 
+template <size_t srcComponentCount, size_t dstComponentCount>
+inline void Load16UTo16F(size_t width,
+                         size_t height,
+                         size_t depth,
+                         const uint8_t *input,
+                         size_t inputRowPitch,
+                         size_t inputDepthPitch,
+                         uint8_t *output,
+                         size_t outputRowPitch,
+                         size_t outputDepthPitch);
+
+template <size_t srcComponentCount, size_t dstComponentCount>
+inline void Load16STo16F(size_t width,
+                         size_t height,
+                         size_t depth,
+                         const uint8_t *input,
+                         size_t inputRowPitch,
+                         size_t inputDepthPitch,
+                         uint8_t *output,
+                         size_t outputRowPitch,
+                         size_t outputDepthPitch);
+
 void LoadRGB32FToRGBA16F(size_t width,
                          size_t height,
                          size_t depth,

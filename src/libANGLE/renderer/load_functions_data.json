@@ -825,11 +825,17 @@
   "GL_R16_EXT": {
     "R16_UNORM": {
       "GL_UNSIGNED_SHORT": "LoadToNative<GLushort, 1>"
+    },
+    "R16_FLOAT": {
+      "GL_UNSIGNED_SHORT": "Load16UTo16F<1, 1>"
     }
   },
   "GL_RG16_EXT": {
     "R16G16_UNORM": {
       "GL_UNSIGNED_SHORT": "LoadToNative<GLushort, 2>"
+    },
+    "R16G16_FLOAT": {
+      "GL_UNSIGNED_SHORT": "Load16UTo16F<2, 2>"
     }
   },
   "GL_RGB16_EXT": {
@@ -838,21 +844,36 @@
     },
     "R16G16B16_UNORM": {
       "GL_UNSIGNED_SHORT": "LoadToNative<GLushort, 3>"
+    },
+    "R16G16B16_FLOAT": {
+      "GL_UNSIGNED_SHORT": "Load16UTo16F<3, 3>"
+    },
+    "R16G16B16A16_FLOAT": {
+      "GL_UNSIGNED_SHORT": "Load16UTo16F<3, 4>"
     }
   },
   "GL_RGBA16_EXT": {
     "R16G16B16A16_UNORM": {
       "GL_UNSIGNED_SHORT": "LoadToNative<GLushort, 4>"
+    },
+    "R16G16B16A16_FLOAT": {
+      "GL_UNSIGNED_SHORT": "Load16UTo16F<4, 4>"
     }
   },
   "GL_R16_SNORM_EXT": {
     "R16_SNORM": {
       "GL_SHORT": "LoadToNative<GLushort, 1>"
+    },
+    "R16_FLOAT": {
+      "GL_SHORT": "Load16STo16F<1, 1>"
     }
   },
   "GL_RG16_SNORM_EXT": {
     "R16G16_SNORM": {
       "GL_SHORT": "LoadToNative<GLushort, 2>"
+    },
+    "R16G16_FLOAT": {
+      "GL_SHORT": "Load16STo16F<2, 2>"
     }
   },
   "GL_RGB16_SNORM_EXT": {
@@ -861,11 +882,20 @@
     },
     "R16G16B16_SNORM": {
       "GL_SHORT": "LoadToNative<GLushort, 3>"
+    },
+    "R16G16B16_FLOAT": {
+      "GL_SHORT": "Load16STo16F<3, 3>"
+    },
+    "R16G16B16A16_FLOAT": {
+      "GL_SHORT": "Load16STo16F<3, 4>"
     }
   },
   "GL_RGBA16_SNORM_EXT": {
     "R16G16B16A16_SNORM": {
       "GL_SHORT": "LoadToNative<GLushort, 4>"
+    },
+    "R16G16B16A16_FLOAT": {
+      "GL_SHORT": "Load16STo16F<4, 4>"
     }
   },
   "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT": {
