@@ -16,6 +16,24 @@
       "revId": "44df3fa9d87ce631363470a6cdccb085dfff5705",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c096df3b_44c4b447",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T03:31:01Z",
+      "side": 1,
+      "message": "Ian, do you intend to follow up on this? I think this is masking a bug that needs to be fixed.",
+      "parentUuid": "0b10fd0f_6b7dabfc",
+      "revId": "44df3fa9d87ce631363470a6cdccb085dfff5705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
