@@ -39,6 +39,30 @@
       "revId": "571b08f3eedf26c610f1787747f24c099f13992d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3bb16d5_c3aa5932",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-03T23:45:44Z",
+      "side": 1,
+      "message": "Excellent suggestion!  Done.\n\nI also changed invalidateEntireConent() and removed restoreEntireContent() (because I track depth and stencil independently).  Thanks!",
+      "parentUuid": "f2a693b0_08e3dc27",
+      "range": {
+        "startLine": 144,
+        "startChar": 5,
+        "endLine": 144,
+        "endChar": 46
+      },
+      "revId": "571b08f3eedf26c610f1787747f24c099f13992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
