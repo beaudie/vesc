@@ -48,7 +48,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
               vk::ImageViewHelper *resolveImageViews,
               gl::LevelIndex levelIndexGL,
               uint32_t layerIndex,
-              bool isImageTransient);
+              bool isImageTransient,
+              bool isDepthStencil);
     void reset();
 
     vk::ImageViewSubresourceSerial getDrawSubresourceSerial() const;
@@ -97,11 +98,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     void retainImageViews(ContextVk *contextVk) const;
 
-    bool hasDefinedContent() const { return mContentDefined; }
-    // Mark content as undefined so that certain optimizations are possible such as using DONT_CARE
-    // as loadOp of the render target in the next renderpass.
-    void invalidateEntireContent() { mContentDefined = false; }
-    void restoreEntireContent() { mContentDefined = true; }
+    bool hasDefinedContent() const;
+    void invalidateEntireContent();
 
     // See the description of mIsImageTransient for details of how the following two can
     // interact.
@@ -139,6 +137,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // Whether the render target has been invalidated.  If so, DONT_CARE is used instead of LOAD for
     // loadOp of this attachment.
     bool mContentDefined;
+    // Convenience value, to make it faster to get to the correct mContentDefined
+    bool mIsDepthStencil;
 
     // If resolve attachment exists, |mIsImageTransient| is true if the multisampled results need to
     // be discarded.
