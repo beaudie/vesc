@@ -2490,9 +2490,12 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
     if (depthStencilRenderTarget)
     {
         // Change depthstencil attachment storeOp to DONT_CARE
+        ASSERT(!depthStencilRenderTarget->hasResolveAttachment());
         const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-        mRenderPassCommands->invalidateRenderPassStencilAttachment(dsState);
-        mRenderPassCommands->invalidateRenderPassDepthAttachment(dsState);
+        mRenderPassCommands->invalidateRenderPassStencilAttachment(
+            dsState, &depthStencilRenderTarget->getImageForRenderPass());
+        mRenderPassCommands->invalidateRenderPassDepthAttachment(
+            dsState, &depthStencilRenderTarget->getImageForRenderPass());
         // Mark content as invalid so that we will not load them in next renderpass
         depthStencilRenderTarget->invalidateEntireContent();
     }
@@ -2909,11 +2912,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 if (mRenderPassCommands->started())
                 {
                     vk::ResourceAccess access = GetStencilAccess(mState.getDepthStencilState());
-                    if (mRenderPassCommands->onStencilAccess(access))
-                    {
-                        // The attachment is no longer invalidated, so set mContentDefined to true
-                        mDrawFramebuffer->restoreDepthStencilDefinedContents();
-                    }
+                    mRenderPassCommands->onStencilAccess(access);
                 }
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
@@ -4913,11 +4912,7 @@ angle::Result ContextVk::updateRenderPassDepthAccess()
         }
         else
         {
-            if (mRenderPassCommands->onDepthAccess(access))
-            {
-                // The attachment is no longer invalidated, so set mContentDefined to true
-                mDrawFramebuffer->restoreDepthStencilDefinedContents();
-            }
+            mRenderPassCommands->onDepthAccess(access);
         }
     }
 
