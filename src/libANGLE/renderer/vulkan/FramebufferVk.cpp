@@ -251,6 +251,10 @@ void AdjustBlitResolveParametersForPreRotation(SurfaceRotation framebufferAngle,
             ASSERT(!params->flipX && !params->flipY);
             params->flipX = true;
             params->flipY = true;
+
+            // Align the offset, or the sample position near the edge will be wrong.
+            --params->srcOffset[0];
+            --params->srcOffset[1];
             break;
         default:
             UNREACHABLE();
