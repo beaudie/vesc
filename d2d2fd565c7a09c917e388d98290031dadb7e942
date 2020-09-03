@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5c18462_909d7348",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-03T09:48:52Z",
+      "side": 1,
+      "message": "Hi Jamie,Shahbaz.\nThis patch is releated to the issue https://issuetracker.google.com/issues/159995959.\n\"srcImageCoords\" needs to be aligned before being used in TEXEL_FETCH.\n\nFor example,in cts dEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_color. The input coordinates gl_GlobalInvocationID.x changes from 0 to 31, gl_GlobalInvocationID.y changes from 0 to 127. We can get the sample position srcImageCoords:(128-y,128-4x) after calculation for flipping and rotation. So the sample position srcImageCoords.x (128-y) changes between [1,128], srcImageCoords.y (128-4x) changes between [4,128] (after adding xDir).",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
