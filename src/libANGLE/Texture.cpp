@@ -1000,7 +1000,14 @@ GLuint Texture::getMipmapMaxLevel() const
 
 bool Texture::isMipmapComplete() const
 {
-    return mState.computeMipmapCompleteness();
+    // Mipmap completion only applies if the minification filtering parameters use mipmaps.
+    // If it does not, then the texture is always mipmap complete
+    bool isComplete = true;
+    if (IsMipmapFiltered(mState.mSamplerState))
+    {
+        isComplete = mState.computeMipmapCompleteness();
+    }
+    return isComplete;
 }
 
 egl::Surface *Texture::getBoundSurface() const
