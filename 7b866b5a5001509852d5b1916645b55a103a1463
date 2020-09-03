@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "82170a62_49194d15",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-03T23:24:12Z",
+      "side": 1,
+      "message": "Reworked, this is now removed.",
+      "parentUuid": "ac17d8b0_7dec2d44",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "541d1f51_d3db0aa9",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -126,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "f923be30_2373eb73",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-03T23:24:12Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "fdf48990_9b5a2ff6",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b254961_83a06340",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -140,6 +176,24 @@
       "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46be982c_b6adcf72",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-03T23:24:12Z",
+      "side": 1,
+      "message": "Reworked, now removed.",
+      "parentUuid": "9b254961_83a06340",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -160,6 +214,24 @@
     },
     {
       "key": {
+        "uuid": "278377f3_e3b2bccf",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2525,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-03T23:24:12Z",
+      "side": 1,
+      "message": "Reworked, these are now removed.",
+      "parentUuid": "9faa33dd_52068904",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6ac2171_43983e41",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 3
@@ -174,6 +246,24 @@
       "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fed21abb_ec015145",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-03T23:24:12Z",
+      "side": 1,
+      "message": "Reworked, this is now removed.",
+      "parentUuid": "b6ac2171_43983e41",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +299,24 @@
       "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9e24362_c2c0689f",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-03T23:24:12Z",
+      "side": 1,
+      "message": "Added some test cases for blit/clear/draw. Also with reworked change, this is now much smaller changes affecting less code.",
+      "parentUuid": "9829ad7b_df8c547a",
+      "revId": "7b866b5a5001509852d5b1916645b55a103a1463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
