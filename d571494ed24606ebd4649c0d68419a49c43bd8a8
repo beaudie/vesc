@@ -141,6 +141,24 @@
       "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10455439_8e5aaa03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-03T17:27:00Z",
+      "side": 1,
+      "message": "According to `State::detachBuffer`, it looks like it should count as 8:\n\n    for (auto \u0026buf : mAtomicCounterBuffers)\n    {\n        if (buf.id() \u003d\u003d bufferID)\n        {\n            UpdateIndexedBufferBinding(context, \u0026buf, nullptr, BufferBinding::AtomicCounter, 0, 0);\n            mValidAtomicCounterBufferCount--;\n            ASSERT(mValidAtomicCounterBufferCount \u003e\u003d 0);\n        }\n    }",
+      "parentUuid": "73f25540_69363584",
+      "revId": "d571494ed24606ebd4649c0d68419a49c43bd8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
