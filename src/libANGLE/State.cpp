@@ -3196,6 +3196,32 @@ angle::Result State::syncSamplers(const Context *context, Command command)
     return angle::Result::Continue;
 }
 
+// This is a special sync function, it handles texture-sampler relations.
+// There is no corresponding "texture unit" object to synchronize, since
+// texture and sampler bindings are owned by the context.
+angle::Result State::syncTextureUnits(const Context *context, Command command)
+{
+    if (mDirtyTextureUnits.none())
+    {
+        return angle::Result::Continue;
+    }
+
+    for (size_t textureUnitIndex : mDirtyTextureUnits)
+    {
+        Sampler *sampler = mSamplers[textureUnitIndex].get();
+        Texture *texture = mActiveTexturesCache[textureUnitIndex];
+
+        if (texture && sampler)
+        {
+            ANGLE_TRY(context->getImplementation()->syncTextureUnit(context, texture, sampler));
+        }
+    }
+
+    mDirtyTextureUnits.reset();
+
+    return angle::Result::Continue;
+}
+
 angle::Result State::syncVertexArray(const Context *context, Command command)
 {
     ASSERT(mVertexArray);
@@ -3386,12 +3412,16 @@ void State::setTextureDirty(size_t textureUnitIndex)
 {
     mDirtyObjects.set(DIRTY_OBJECT_TEXTURES);
     mDirtyTextures.set(textureUnitIndex);
+    mDirtyObjects.set(DIRTY_OBJECT_TEXTURE_UNITS);
+    mDirtyTextureUnits.set(textureUnitIndex);
 }
 
 void State::setSamplerDirty(size_t samplerIndex)
 {
     mDirtyObjects.set(DIRTY_OBJECT_SAMPLERS);
     mDirtySamplers.set(samplerIndex);
+    mDirtyObjects.set(DIRTY_OBJECT_TEXTURE_UNITS);
+    mDirtyTextureUnits.set(samplerIndex);
 }
 
 void State::setImageUnit(const Context *context,

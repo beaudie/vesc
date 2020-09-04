@@ -266,6 +266,11 @@ class ContextVk : public ContextImpl, public vk::Context
                             const gl::State::DirtyBits &dirtyBits,
                             const gl::State::DirtyBits &bitMask) override;
 
+    // Synchronize state for a texture unit with a bound texture-sampler pair
+    angle::Result syncTextureUnit(const gl::Context *context,
+                                  gl::Texture *texture,
+                                  gl::Sampler *sampler) override;
+
     // Disjoint timer queries
     GLint getGPUDisjoint() override;
     GLint64 getTimestamp() override;

@@ -304,6 +304,41 @@ TEST_P(SRGBTextureTest, SRGBOverrideTextureParameter)
     EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
 }
 
+// Test interaction between sRGB_override and sampler objects
+TEST_P(SRGBTextureTest, SRGBOverrideTextureParameterWithSampler)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_sRGB_override") ||
+                       getClientMajorVersion() < 3);
+
+    GLColor linearColor = kLinearColor;
+    GLColor srgbColor   = kNonlinearColor;
+
+    GLenum internalFormat = getClientMajorVersion() >= 3 ? GL_RGBA8 : GL_RGBA;
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 &linearColor);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_NONE);
+    ASSERT_GL_NO_ERROR();
+
+    GLSampler sampler;
+    glBindSampler(0, sampler.get());
+
+    glUseProgram(mProgram);
+    glUniform1i(mTextureLocation, 0);
+
+    glDisable(GL_DEPTH_TEST);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_SRGB);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+}
+
 // Test that SRGB override is a noop when used on a nonlinear texture format
 // EXT_texture_format_sRGB_override spec says:
 // "If the internal format is not one of the above formats, then
