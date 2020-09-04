@@ -16,6 +16,23 @@
       "revId": "1cd9d589a2d9159cbb27fd222251187b1db5eedc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f0687_cb1a2ad1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-04T16:33:35Z",
+      "side": 1,
+      "message": "Yes, running this with fix precision mismatch CL still has corruption issues on Aztec Ruins.",
+      "revId": "1cd9d589a2d9159cbb27fd222251187b1db5eedc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
