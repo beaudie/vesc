@@ -120,6 +120,24 @@
       "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "abfc3b84_c8cc6d8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1424723
+      },
+      "writtenOn": "2020-09-04T02:50:38Z",
+      "side": 1,
+      "message": "Quote some comment from the function:\n\n// On the other hand, when resolving, the source and destination areas are used as fragment\n// coordinates to fetch from.  In that case, when flipped, the texture in the above example must\n// have an offset of 63.\n\nI think the calculation is correct, but it only work for fragment coordinate.\nIn this stencil export compute shader, it\u0027s mixing the concept.\nIt\u0027s using texel index(for texel_fetch) not fragment coordinate(for texture) which usually has 0.5 offset of index.",
+      "parentUuid": "03b2cf2e_2a1cbe8e",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
