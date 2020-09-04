@@ -72,27 +72,6 @@ VendorID GetVendorID(const FunctionsGL *functions)
     }
 }
 
-uint32_t GetDeviceID(const FunctionsGL *functions)
-{
-    std::string nativeRendererString(
-        reinterpret_cast<const char *>(functions->getString(GL_RENDERER)));
-    constexpr std::pair<const char *, uint32_t> kKnownDeviceIDs[] = {
-        {"Adreno (TM) 418", ANDROID_DEVICE_ID_NEXUS5X},
-        {"Adreno (TM) 530", ANDROID_DEVICE_ID_PIXEL1XL},
-        {"Adreno (TM) 540", ANDROID_DEVICE_ID_PIXEL2},
-    };
-
-    for (const auto &knownDeviceID : kKnownDeviceIDs)
-    {
-        if (nativeRendererString.find(knownDeviceID.first) != std::string::npos)
-        {
-            return knownDeviceID.second;
-        }
-    }
-
-    return 0;
-}
-
 bool IsMesa(const FunctionsGL *functions, std::array<int, 3> *version)
 {
     ASSERT(version);
@@ -1555,8 +1534,17 @@ void GenerateCaps(const FunctionsGL *functions,
 
 void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *features)
 {
-    VendorID vendor = GetVendorID(functions);
-    uint32_t device = GetDeviceID(functions);
+    angle::VendorID vendor = 0;
+    angle::DeviceID device = 0;
+
+    angle::SystemInfo systemInfo;
+    bool isGetSystemInfoSuccess = angle::GetSystemInfo(&systemInfo);
+    if (isGetSystemInfoSuccess)
+    {
+        vendor = systemInfo.gpus[systemInfo.activeGPUIndex].vendorId;
+        device = systemInfo.gpus[systemInfo.activeGPUIndex].deviceId;
+    }
+
     bool isAMD      = IsAMD(vendor);
     bool isIntel    = IsIntel(vendor);
     bool isNvidia   = IsNvidia(vendor);
@@ -1770,13 +1758,12 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     bool isDualGPUMacWithNVIDIA = false;
     if (IsApple() && functions->standard == STANDARD_GL_DESKTOP)
     {
-        angle::SystemInfo info;
-        if (angle::GetSystemInfo(&info))
+        if (isGetSystemInfoSuccess)
         {
             // The full system information must be queried to see whether it's a dual-GPU
             // NVIDIA MacBook Pro since it's likely that the integrated GPU will be active
             // when these features are initialized.
-            isDualGPUMacWithNVIDIA = info.isMacSwitchable && info.hasNVIDIAGPU();
+            isDualGPUMacWithNVIDIA = systemInfo.isMacSwitchable && systemInfo.hasNVIDIAGPU();
         }
     }
     ANGLE_FEATURE_CONDITION(features, disableGPUSwitchingSupport, isDualGPUMacWithNVIDIA);
