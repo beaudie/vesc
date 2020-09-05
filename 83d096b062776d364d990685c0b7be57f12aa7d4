@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ec74dcea_3931ba9b",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-05T12:59:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "767be783_6174f5d7",
+      "range": {
+        "startLine": 277,
+        "startChar": 4,
+        "endLine": 279,
+        "endChar": 80
+      },
+      "revId": "83d096b062776d364d990685c0b7be57f12aa7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18107b74_9b6b18a4",
         "filename": "src/libANGLE/renderer/metal/doc/OcclusionQueries.md",
         "patchSetId": 11
@@ -110,6 +134,30 @@
       "revId": "83d096b062776d364d990685c0b7be57f12aa7d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8251a7e_ad19ef52",
+        "filename": "src/libANGLE/renderer/metal/mtl_occlusion_query_pool.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-05T12:59:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8761e9e8_647ec0ac",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "83d096b062776d364d990685c0b7be57f12aa7d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
