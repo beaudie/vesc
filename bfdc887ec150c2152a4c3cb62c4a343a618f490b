@@ -16,6 +16,23 @@
       "revId": "bfdc887ec150c2152a4c3cb62c4a343a618f490b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6784900a_c68406b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-05T04:50:05Z",
+      "side": 1,
+      "message": "Thanks for the fix. For what it\u0027s worth, I intend to remove this function altogether as part of anglebug.com/4835\n\nCould you please add a regression test for this?",
+      "revId": "bfdc887ec150c2152a4c3cb62c4a343a618f490b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
