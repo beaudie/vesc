@@ -156,6 +156,24 @@
       "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682bc428_84d11a8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-05T05:40:51Z",
+      "side": 1,
+      "message": "I took a look and here\u0027s what I see:\n\n- If blitting, the coordinates are vec2 and texture() is used to read from src\n- If resolving, the coordinates are ivec2 and texelFetch() is used to read from src\n\n---\n\nWith blit, I agree there\u0027s a difference between BlitResolve.frag and BlitResolveStencilNoExport.comp and that must be a bug. In the FS, the coordinates are NNN.5 but in the CS they would be NNN. With the point sampler that might be fine, but definitely an issue with the linear sampler (if that even makes sense for a stencil image?)\n\nThe solution is probably a simple param-\u003eoffset.xy -\u003d 0.5 (on the CPU) if blitting (and not resolving), or maybe +\u003d 0.5 if flipped. If you are interested in fixing this, a regression test to verify the change against would be a necessary first step.\n\n---\n\nWith resolve, I don\u0027t see a difference. The FS coordinates are 0.5 higher yes, but cast to ivec2 they should produce the same values.\n\nSee the comment in BlitResolve.frag. When flipped, the source coordinates correspond to the opposite side of the blit rectangle. When resolving, these are integer coordinates and AdjustBlitResolveParametersForResolve should have made sure they are -1ed. I still don\u0027t understand why there\u0027s a different between the FS and CS shaders in this regard.\n\nIt\u0027s possible that AdjustBlitResolveParametersForResolve is not doing the right thing. Maybe params-\u003eoffset needs to be modified based on flip too (which would have the same effect as the change in this CL), but that would affect the FS and CS similarly.\n\n---\n\nTo better understand/debug the issue, could you please write a few tests that reproduce the bug (with the +\u003d 2 hack removed) and don\u0027t rely on prerotation to fail? It might be possible that we already have tests that are affected by this, but the test is using a uniform value for stencil, masking the problem. It would be ok to modify those tests to have unique stencil values per pixel.",
+      "parentUuid": "070acda6_6899d0e0",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
