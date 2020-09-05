@@ -16,6 +16,23 @@
       "revId": "90d6c7e21465ecc87b5213b232f12a34026d0640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0bdbb8b3_4e6990a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-05T04:45:44Z",
+      "side": 1,
+      "message": "Swapping reviewers as Jamie is out.\n\nI don\u0027t think this is correct. Added a comment to the issue.",
+      "revId": "90d6c7e21465ecc87b5213b232f12a34026d0640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
