@@ -33,6 +33,23 @@
       "revId": "f91aec7c6b760d8d43179a1f8225c219ba6930ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ede9639_5e9548fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-05T04:58:14Z",
+      "side": 1,
+      "message": "Switching review to Jonah.\n\nI don\u0027t really know if GetSystemInfo works correctly for Nexus5X for example for which GetDeviceID was originally written. If that function is not expected to fail for the 3 devices listed in GetDeviceID, then maybe success should be assumed for those, at which point GetDeviceID can be removed.",
+      "revId": "f91aec7c6b760d8d43179a1f8225c219ba6930ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
