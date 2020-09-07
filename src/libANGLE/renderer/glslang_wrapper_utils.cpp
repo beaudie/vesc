@@ -118,10 +118,10 @@ void GlslangWarmup()
     )";
     const int kShaderLength   = static_cast<int>(strlen(kShaderString));
 
-    dummyShader.setStringsWithLengths(&kShaderString, &kShaderLength, 1);
-    dummyShader.setEntryPoint("main");
+    warmUpShader.setStringsWithLengths(&kShaderString, &kShaderLength, 1);
+    warmUpShader.setEntryPoint("main");
 
-    bool result = dummyShader.parse(&builtInResources, 450, ECoreProfile, false, false, messages);
+    bool result = warmUpShader.parse(&builtInResources, 450, ECoreProfile, false, false, messages);
     ASSERT(result);
 }
 

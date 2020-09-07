@@ -179,8 +179,8 @@ void MultisampledRenderToTextureBenchmark::drawBenchmark()
 {
     const auto &params = GetParam();
 
-    GLTexture mDummyTexture;
-    glBindTexture(GL_TEXTURE_2D, mDummyTexture);
+    GLTexture mMockTexture;
+    glBindTexture(GL_TEXTURE_2D, mMockTexture);
 
     startGpuTimer();
 
