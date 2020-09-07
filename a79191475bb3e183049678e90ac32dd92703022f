@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b385387a_9b28f000",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-09-07T22:32:42Z",
+      "side": 1,
+      "message": "This CL includes about 70% of the inclusivity changes required.\n\nThere were a lot of things left out due to infamiliarity with the scripting metaprogramming",
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
