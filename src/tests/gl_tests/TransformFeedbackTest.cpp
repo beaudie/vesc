@@ -2094,9 +2094,9 @@ void main() {
     constexpr char kFS[] =
         R"(#version 300 es
 precision mediump float;
-out vec4 dummy;
+out vec4 unused;
 void main() {
-  dummy = vec4(0.5);
+  unused = vec4(0.5);
 })";
 
     std::vector<std::string> tfVaryings;

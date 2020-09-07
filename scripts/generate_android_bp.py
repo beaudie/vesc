@@ -145,7 +145,7 @@ def gn_paths_to_blueprint_paths(paths):
 def gn_sources_to_blueprint_sources(sources):
     # Blueprints only list source files in the sources list. Headers are only referenced though
     # include paths.
-    file_extension_whitelist = [
+    file_extension_allowlist = [
         '.c',
         '.cc',
         '.cpp',
@@ -153,7 +153,7 @@ def gn_sources_to_blueprint_sources(sources):
 
     rebased_sources = []
     for source in sources:
-        if os.path.splitext(source)[1] in file_extension_whitelist:
+        if os.path.splitext(source)[1] in file_extension_allowlist:
             rebased_sources.append(gn_path_to_blueprint_path(source))
     return rebased_sources
 
@@ -163,7 +163,7 @@ target_blackist = [
     '//third_party/vulkan-validation-layers/src:vulkan_clean_old_validation_layer_objects',
 ]
 
-include_blacklist = [
+include_blocklist = [
     '//out/Android/gen/third_party/glslang/src/include/',
 ]
 
@@ -227,7 +227,7 @@ def gn_include_dirs_to_blueprint_include_dirs(target_info):
     result = []
     if 'include_dirs' in target_info:
         for include_dir in target_info['include_dirs']:
-            if len(include_dir) > 0 and include_dir not in include_blacklist:
+            if len(include_dir) > 0 and include_dir not in include_blocklist:
                 result.append(gn_path_to_blueprint_path(include_dir))
     return result
 
@@ -242,8 +242,8 @@ angle_cpu_bits_define = r'^ANGLE_IS_[0-9]+_BIT_CPU$'
 def gn_cflags_to_blueprint_cflags(target_info):
     result = []
 
-    # regexs of whitelisted cflags
-    cflag_whitelist = [
+    # regexs of allowlisted cflags
+    cflag_allowlist = [
         r'^-Wno-.*$',  # forward cflags that disable warnings
         r'-mpclmul'  # forward "-mpclmul" (used by zlib)
     ]
@@ -251,8 +251,8 @@ def gn_cflags_to_blueprint_cflags(target_info):
     for cflag_type in ['cflags', 'cflags_c', 'cflags_cc']:
         if cflag_type in target_info:
             for cflag in target_info[cflag_type]:
-                for whitelisted_cflag in cflag_whitelist:
-                    if re.search(whitelisted_cflag, cflag):
+                for allowlisted_cflag in cflag_allowlist:
+                    if re.search(allowlisted_cflag, cflag):
                         result.append(cflag)
 
     # Chrome and Android use different versions of Clang which support differnt warning options.
@@ -381,7 +381,7 @@ blueprint_gen_types = {
 }
 
 
-inputs_blacklist = [
+inputs_blocklist = [
     '//.git/HEAD',
 ]
 
@@ -404,7 +404,7 @@ def action_target_to_blueprint(target, build_info):
     gn_inputs = []
     if 'inputs' in target_info:
         for input in target_info['inputs']:
-            if input not in inputs_blacklist:
+            if input not in inputs_blocklist:
                 gn_inputs.append(input)
     if 'sources' in target_info:
         gn_inputs += target_info['sources']
@@ -459,7 +459,7 @@ def get_gn_target_dependencies(output_dependencies, build_info, target):
 
     for dep in build_info[target]['deps']:
         if dep in target_blackist:
-            # Blacklisted dep
+            # Blocklisted dep
             continue
         if dep not in build_info:
             # No info for this dep, skip it
