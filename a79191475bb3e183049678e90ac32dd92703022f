@@ -16,6 +16,52 @@
       "revId": "a79191475bb3e183049678e90ac32dd92703022f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cfebee56_f959b813",
+        "filename": "dotfile_settings.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T03:23:50Z",
+      "side": 1,
+      "message": "Is this a different variable from the one in .gn? That one is not changed.",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e32f46d_7794bf6f",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T03:23:50Z",
+      "side": 1,
+      "message": "Can\u0027t change?",
+      "range": {
+        "startLine": 161,
+        "startChar": 7,
+        "endLine": 161,
+        "endChar": 16
+      },
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
