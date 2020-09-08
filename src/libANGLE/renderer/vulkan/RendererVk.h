@@ -266,6 +266,7 @@ class RendererVk : angle::NonCopyable
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
+    bool getTextureSRGBOverrideSupport() const;
 
     void queryDeviceExtensionFeatures(const ExtensionNameList &deviceExtensionNames);
 
