@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d5fadc8_0a6771b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-08T20:09:58Z",
+      "side": 1,
+      "message": "I end up flushing the deferred glFlsuh at the boundary of Draw FBO switch. Otherwise I am seeing perf regression on TRex and Manhattan. Without a more sophsicated GPU progress checking and proactively do implicit submission as soon as we see GOU runs low on work, I think this is the right balance to fix the manhattan\u0027s in-FBO glFlush without triggering offline perf regression. This essentially limit the glFlush noop for the glFlush calls that are called within the same draw FBO. ",
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
