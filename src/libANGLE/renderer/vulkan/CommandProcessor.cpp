@@ -117,6 +117,8 @@ angle::Result CommandWorkQueue::checkCompletedCommands(RendererVk *renderer)
         renderer->onCompletedSerial(batch.serial);
 
         renderer->resetSharedFence(&batch.fence);
+        // We can't recycle the buffers here, this is in main thread. Need to schedule a job
+        // to do this in the worker.
         ANGLE_TRACE_EVENT0("gpu.angle", "command buffer recycling");
         batch.commandPool.destroy(device);
         ANGLE_TRY(releasePrimaryCommandBuffer(std::move(batch.primaryCommands)));
