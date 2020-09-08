@@ -130,6 +130,10 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 
+// Returns whether SPIR-V is valid.  Useful for ASSERTs.  Automatically generates a warning if
+// SPIR-V is not valid.
+bool ValidateSpirv(const SpirvBlob &spirvBlob);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_GLSLANG_WRAPPER_UTILS_H_

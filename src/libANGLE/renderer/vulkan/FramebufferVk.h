@@ -126,7 +126,7 @@ class FramebufferVk : public FramebufferImpl
 
     // We only support depth/stencil packed format and depthstencil attachment always follow all
     // color attachments
-    size_t getDepthStencilAttachmentIndexVk() const
+    size_t getDepthStencilAttachmentIndexVK() const
     {
         return getState().getEnabledDrawBuffers().count();
     }
@@ -169,11 +169,6 @@ class FramebufferVk : public FramebufferImpl
     angle::Result resolveColorWithCommand(ContextVk *contextVk,
                                           const UtilsVk::BlitResolveParameters &params,
                                           vk::ImageHelper *srcImage);
-
-    // If resolve attachments are used, some use cases require that the multisampled image (whose
-    // data is normally discarded) take its data from the resolve attachment.
-    angle::Result copyResolveToMultisampedAttachment(ContextVk *contextVk,
-                                                     RenderTargetVk *colorRenderTarget);
 
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,
