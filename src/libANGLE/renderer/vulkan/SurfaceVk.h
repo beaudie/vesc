@@ -239,6 +239,12 @@ class WindowSurfaceVk : public SurfaceVk
     vk::Semaphore getAcquireImageSemaphore();
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() { return mPreTransform; }
+#ifdef OLD_CODE
+#else   // OLD_CODE
+
+    // FIXME/TODO(ianelliott): Can I pass ContextVk to this method?
+    angle::Result acquireNextImage();
+#endif  // OLD_CODE
 
   protected:
     angle::Result swapImpl(const gl::Context *context,
@@ -268,6 +274,10 @@ class WindowSurfaceVk : public SurfaceVk
     void releaseSwapchainImages(ContextVk *contextVk);
     void destroySwapChainImages(DisplayVk *displayVk);
     VkResult nextSwapchainImage(vk::Context *context);
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    void deferNextSwapchainImage(ContextVk *context);
+#endif  // OLD_CODE
     angle::Result present(ContextVk *contextVk,
                           EGLint *rects,
                           EGLint n_rects,
@@ -323,6 +333,17 @@ class WindowSurfaceVk : public SurfaceVk
     vk::ImageViewHelper mColorImageMSViews;
     angle::ObserverBinding mColorImageMSBinding;
     vk::Framebuffer mFramebufferMS;
+#ifdef OLD_CODE
+#else   // OLD_CODE
+
+    // Cache info needed to return quickly from vkQueuePresentKHR() and defer swapchain resizes and
+    // vkAcquireNextImageKHR()
+    bool mAcquireDeferred;
+    bool mPresentOutOfDate;
+    uint32_t mSavedSwapHistoryIndex;
+    ContextVk *mContextForDeferredAcquire;
+    DisplayVk *mDisplayVkForDeferredAcquire;
+#endif  // OLD_CODE
 };
 
 }  // namespace rx
