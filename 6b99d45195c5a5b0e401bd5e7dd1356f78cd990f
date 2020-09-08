@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "78a64bc4_b1dbcf5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-08T15:52:41Z",
+      "side": 1,
+      "message": "nit: Use a git commit hash: f7b607c63c",
+      "range": {
+        "startLine": 11,
+        "startChar": 41,
+        "endLine": 11,
+        "endChar": 54
+      },
+      "revId": "6b99d45195c5a5b0e401bd5e7dd1356f78cd990f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "105a39ab_00235eba",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
@@ -16,6 +39,69 @@
       "revId": "6b99d45195c5a5b0e401bd5e7dd1356f78cd990f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b49c80b0_ebc34958",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-08T15:52:41Z",
+      "side": 1,
+      "message": "Should be able to remove this now since it\u0027s already init\u0027ed in the constructor.",
+      "revId": "6b99d45195c5a5b0e401bd5e7dd1356f78cd990f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0150543_2caac89e",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-08T15:52:41Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 302,
+        "startChar": 21,
+        "endLine": 302,
+        "endChar": 36
+      },
+      "revId": "6b99d45195c5a5b0e401bd5e7dd1356f78cd990f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "693ad5b4_63095263",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-08T15:52:41Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 303,
+        "startChar": 21,
+        "endLine": 303,
+        "endChar": 31
+      },
+      "revId": "6b99d45195c5a5b0e401bd5e7dd1356f78cd990f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
