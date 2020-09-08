@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "01c24823_93e89e74",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-08T19:45:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22631bb5_6189dd9f",
+      "range": {
+        "startLine": 101,
+        "startChar": 9,
+        "endLine": 101,
+        "endChar": 26
+      },
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49935a3b_7e5b5e48",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 16
@@ -70,6 +94,24 @@
       "writtenOn": "2020-09-08T18:22:40Z",
       "side": 1,
       "message": "There may be an issue here. Take this scenario:\n\n- Create depth/stencil renderbuffer R and attach it to a framebuffer\n- Draw into framebuffer\n- Invalidate depth/stencil\n- Delete R\n- Cause render pass to break\n\nWhat happens when R is deleted? If the render pass is closed automatically before R is deleted, it\u0027s ok, but if it happens after, then mDepthStencilImage would be a dangling pointer.\n\nCould you write a test for it and verify (with printf?) that end RP is being done before the ImageHelper is deleted?",
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e975d30_65741d88",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-08T19:45:25Z",
+      "side": 1,
+      "message": "I wrote the test, but ...\n\nInteresting! ... This was the scenario that motivated you and/or Jamie (forget who) to move mContentDefined to ImageHelper (it\u0027s not supposed to go away before the render pass ends:-).  However, it does look like the ImageHelper is deleted before the render pass ends.  Not sure why yet, but that sounds like an ANGLE bug.",
+      "parentUuid": "49935a3b_7e5b5e48",
       "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "52626f16_e2c9b2b3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-08T19:45:25Z",
+      "side": 1,
+      "message": "Done\n\nThanks for catching this ... I stopped using it and didn\u0027t delete it.",
+      "parentUuid": "b7243f50_fed7c2f5",
+      "range": {
+        "startLine": 1298,
+        "startChar": 9,
+        "endLine": 1298,
+        "endChar": 20
+      },
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b93dcd08_52970902",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 16
@@ -119,6 +185,30 @@
       "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f4391df_28052365",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-08T19:45:25Z",
+      "side": 1,
+      "message": "Hmm.  The \"set*\" method is used in a variety of places, to set the value true or false (including trying to deal with invalidation, and rendering to the default framebuffer the value is set to false just before the swap).",
+      "parentUuid": "b93dcd08_52970902",
+      "range": {
+        "startLine": 1316,
+        "startChar": 4,
+        "endLine": 1317,
+        "endChar": 99
+      },
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
