@@ -209,6 +209,30 @@
       "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8880e741_db5467cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-08T20:22:39Z",
+      "side": 1,
+      "message": "Maybe for now just keep it this way. When I see this, it jumps into my head that this is basically not been encapsulated well, which sounds like another clean up opportunity.",
+      "parentUuid": "3f4391df_28052365",
+      "range": {
+        "startLine": 1316,
+        "startChar": 4,
+        "endLine": 1317,
+        "endChar": 99
+      },
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
