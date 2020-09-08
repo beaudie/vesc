@@ -16,6 +16,29 @@
       "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "35be811b_53c6b6a2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-08T21:42:36Z",
+      "side": 1,
+      "message": "Note: This will change to IsAndroid() before push to repository. I forced to true just try to get full bots coverage.",
+      "range": {
+        "startLine": 1867,
+        "startChar": 61,
+        "endLine": 1867,
+        "endChar": 81
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
