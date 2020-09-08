@@ -164,6 +164,11 @@ class UtilsVk : angle::NonCopyable
         uint32_t destLevelCount;
     };
 
+    struct UnresolveParameters
+    {
+        uint32_t attachmentIndex;
+    };
+
     // Based on the maximum number of levels in GenerateMipmap.comp.
     static constexpr uint32_t kGenerateMipmapMaxLevels = 6;
     static uint32_t GetGenerateMipmapMaxLevels(ContextVk *contextVk);
@@ -237,6 +242,12 @@ class UtilsVk : angle::NonCopyable
                                  const GenerateMipmapDestLevelViews &destLevelViews,
                                  const vk::Sampler &sampler,
                                  const GenerateMipmapParameters &params);
+
+    angle::Result unresolve(ContextVk *contextVk,
+                            FramebufferVk *framebuffer,
+                            vk::ImageHelper *src,
+                            const vk::ImageView *srcView,
+                            const UnresolveParameters &params);
 
     // Overlay utilities.
     angle::Result cullOverlayWidgets(ContextVk *contextVk,
@@ -397,21 +408,22 @@ class UtilsVk : angle::NonCopyable
         ImageClear  = 0,
         ImageCopy   = 1,
         BlitResolve = 2,
+        Unresolve   = 3,
 
         // Functions implemented in compute
-        ComputeStartIndex          = 3,  // Special value to separate draw and dispatch functions.
-        ConvertIndexBuffer         = 3,
-        ConvertVertexBuffer        = 4,
-        BlitResolveStencilNoExport = 5,
-        OverlayCull                = 6,
-        OverlayDraw                = 7,
-        ConvertIndexIndirectBuffer = 8,
-        ConvertIndexIndirectLineLoopBuffer = 9,
-        ConvertIndirectLineLoopBuffer      = 10,
-        GenerateMipmap                     = 11,
+        ComputeStartIndex          = 4,  // Special value to separate draw and dispatch functions.
+        ConvertIndexBuffer         = 4,
+        ConvertVertexBuffer        = 5,
+        BlitResolveStencilNoExport = 6,
+        OverlayCull                = 7,
+        OverlayDraw                = 8,
+        ConvertIndexIndirectBuffer = 9,
+        ConvertIndexIndirectLineLoopBuffer = 10,
+        ConvertIndirectLineLoopBuffer      = 11,
+        GenerateMipmap                     = 12,
 
-        InvalidEnum = 12,
-        EnumCount   = 12,
+        InvalidEnum = 13,
+        EnumCount   = 13,
     };
 
     // Common function that creates the pipeline for the specified function, binds it and prepares
@@ -455,6 +467,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureOverlayCullResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureOverlayDrawResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureGenerateMipmapResourcesInitialized(ContextVk *contextVk);
+    angle::Result ensureUnresolveResourcesInitialized(ContextVk *contextVk);
 
     angle::Result ensureSamplersInitialized(ContextVk *context);
 
@@ -501,6 +514,7 @@ class UtilsVk : angle::NonCopyable
     vk::ShaderProgramHelper mOverlayDrawPrograms[vk::InternalShader::OverlayDraw_comp::kArrayLen];
     vk::ShaderProgramHelper
         mGenerateMipmapPrograms[vk::InternalShader::GenerateMipmap_comp::kArrayLen];
+    vk::ShaderProgramHelper mUnresolvePrograms[vk::InternalShader::Unresolve_frag::kArrayLen];
 
     vk::Sampler mPointSampler;
     vk::Sampler mLinearSampler;
