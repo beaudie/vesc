@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "fbdc0ff2_b907856c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-08T23:22:29Z",
+      "side": 1,
+      "message": "Drive by: Can something like the new SecondaryCommandBuffer::getCommandBufferSize() method help you create that finer-grain check?",
+      "range": {
+        "startLine": 987,
+        "startChar": 33,
+        "endLine": 987,
+        "endChar": 98
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55a7aef5_f5243efd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
