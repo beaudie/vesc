@@ -33,6 +33,23 @@
       "revId": "bfdc887ec150c2152a4c3cb62c4a343a618f490b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39d35c6a_6c80f357",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-08T15:25:30Z",
+      "side": 1,
+      "message": "LGM, since it matches ImageHelper::stageSubresourceUpdateImpl().",
+      "revId": "bfdc887ec150c2152a4c3cb62c4a343a618f490b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
