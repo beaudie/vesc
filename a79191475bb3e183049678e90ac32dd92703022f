@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2527ba24_b8e860eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-08T14:36:33Z",
+      "side": 1,
+      "message": "This should be b/162834212 to resolve to the public buganizer entry.",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 27
+      },
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b385387a_9b28f000",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -13,6 +36,23 @@
       "writtenOn": "2020-09-07T22:32:42Z",
       "side": 1,
       "message": "This CL includes about 70% of the inclusivity changes required.\n\nThere were a lot of things left out due to infamiliarity with the scripting metaprogramming",
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98e833e7_0154747c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-08T14:36:33Z",
+      "side": 1,
+      "message": "Android XML and Java changes LGTM and match the platform changes.  Thanks!",
       "revId": "a79191475bb3e183049678e90ac32dd92703022f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
