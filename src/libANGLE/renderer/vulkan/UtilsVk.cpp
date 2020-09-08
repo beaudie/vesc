@@ -26,6 +26,7 @@ namespace OverlayCull_comp                  = vk::InternalShader::OverlayCull_co
 namespace OverlayDraw_comp                  = vk::InternalShader::OverlayDraw_comp;
 namespace ConvertIndexIndirectLineLoop_comp = vk::InternalShader::ConvertIndexIndirectLineLoop_comp;
 namespace GenerateMipmap_comp               = vk::InternalShader::GenerateMipmap_comp;
+namespace Unresolve_frag                    = vk::InternalShader::Unresolve_frag;
 
 namespace
 {
@@ -48,6 +49,7 @@ constexpr uint32_t kOverlayDrawCulledWidgetsBinding          = 3;
 constexpr uint32_t kOverlayDrawFontBinding                   = 4;
 constexpr uint32_t kGenerateMipmapDestinationBinding         = 0;
 constexpr uint32_t kGenerateMipmapSourceBinding              = 1;
+constexpr uint32_t kUnresolveInputBinding                    = 0;
 
 uint32_t GetConvertVertexFlags(const UtilsVk::ConvertVertexParameters &params)
 {
@@ -268,6 +270,35 @@ uint32_t GetGenerateMipmapFlags(ContextVk *contextVk, const vk::Format &format)
     return flags;
 }
 
+uint32_t GetUnresolveFlags(const angle::Format &format, uint32_t attachmentIndex)
+{
+    constexpr uint32_t kAttachmentFlagStep =
+        Unresolve_frag::kAttachment1 - Unresolve_frag::kAttachment0;
+
+    static_assert(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS == 8,
+                  "Unresolve shader assumes maximum 8 draw buffers");
+    static_assert(
+        Unresolve_frag::kAttachment0 + 7 * kAttachmentFlagStep == Unresolve_frag::kAttachment7,
+        "Unresolve AttachmentN flag calculation needs correction");
+
+    uint32_t flags = Unresolve_frag::kAttachment0 + attachmentIndex * kAttachmentFlagStep;
+
+    if (format.isSint())
+    {
+        flags |= Unresolve_frag::kIsSint;
+    }
+    else if (format.isUint())
+    {
+        flags |= Unresolve_frag::kIsUint;
+    }
+    else
+    {
+        flags |= Unresolve_frag::kIsFloat;
+    }
+
+    return flags;
+}
+
 uint32_t GetFormatDefaultChannelMask(const vk::Format &format)
 {
     uint32_t mask = 0;
@@ -391,6 +422,10 @@ void UtilsVk::destroy(RendererVk *renderer)
         program.destroy(device);
     }
     for (vk::ShaderProgramHelper &program : mGenerateMipmapPrograms)
+    {
+        program.destroy(device);
+    }
+    for (vk::ShaderProgramHelper &program : mUnresolvePrograms)
     {
         program.destroy(device);
     }
@@ -648,6 +683,21 @@ angle::Result UtilsVk::ensureGenerateMipmapResourcesInitialized(ContextVk *conte
 
     return ensureResourcesInitialized(contextVk, Function::GenerateMipmap, setSizes,
                                       ArraySize(setSizes), sizeof(GenerateMipmapShaderParams));
+}
+
+angle::Result UtilsVk::ensureUnresolveResourcesInitialized(ContextVk *contextVk)
+{
+    if (mPipelineLayouts[Function::Unresolve].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[1] = {
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+    };
+
+    return ensureResourcesInitialized(contextVk, Function::Unresolve, setSizes, ArraySize(setSizes),
+                                      0);
 }
 
 angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
@@ -1943,6 +1993,74 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     commandBuffer.dispatch(workGroupX, workGroupY, 1);
     descriptorPoolBinding.reset();
 
+    return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::unresolve(ContextVk *contextVk,
+                                 FramebufferVk *framebuffer,
+                                 vk::ImageHelper *src,
+                                 const vk::ImageView *srcView,
+                                 const UnresolveParameters &params)
+{
+    ANGLE_TRY(ensureUnresolveResourcesInitialized(contextVk));
+
+    vk::GraphicsPipelineDesc pipelineDesc;
+    pipelineDesc.initDefaults();
+    pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
+    pipelineDesc.setColorWriteMask(0, gl::DrawBufferMask());
+    pipelineDesc.setSingleColorWriteMask(params.attachmentIndex,
+                                         VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                                             VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
+    pipelineDesc.setRasterizationSamples(framebuffer->getSamples());
+    pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
+    // Note: depth test is disabled by default so this should be unnecessary, but works around an
+    // Intel bug on windows.  http://anglebug.com/3348
+    pipelineDesc.setDepthWriteEnabled(false);
+
+    VkViewport viewport;
+    gl::Rectangle completeRenderArea = framebuffer->getRotatedCompleteRenderArea(contextVk);
+    bool invertViewport              = contextVk->isViewportFlipEnabledForDrawFBO();
+    gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, invertViewport, completeRenderArea.height,
+                       &viewport);
+    pipelineDesc.setViewport(viewport);
+
+    pipelineDesc.setScissor(gl_vk::GetRect(completeRenderArea));
+
+    uint32_t flags = GetUnresolveFlags(src->getFormat().intendedFormat(), params.attachmentIndex);
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::Unresolve, &descriptorPoolBinding,
+                                    &descriptorSet));
+
+    VkDescriptorImageInfo inputImageInfo = {};
+    inputImageInfo.imageView             = srcView->getHandle();
+    inputImageInfo.imageLayout           = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+    VkWriteDescriptorSet writeInfo = {};
+    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet               = descriptorSet;
+    writeInfo.dstBinding           = kUnresolveInputBinding;
+    writeInfo.descriptorCount      = 1;
+    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+    writeInfo.pImageInfo           = &inputImageInfo;
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+
+    vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
+    vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
+    vk::RefCounted<vk::ShaderAndSerial> *fragmentShader = nullptr;
+    ANGLE_TRY(shaderLibrary.getFullScreenQuad_vert(contextVk, 0, &vertexShader));
+    ANGLE_TRY(shaderLibrary.getUnresolve_frag(contextVk, flags, &fragmentShader));
+
+    ASSERT(contextVk->hasStartedRenderPass());
+    vk::CommandBuffer *commandBuffer =
+        &contextVk->getStartedRenderPassCommands().getCommandBuffer();
+
+    ANGLE_TRY(setupProgram(contextVk, Function::Unresolve, fragmentShader, vertexShader,
+                           &mUnresolvePrograms[flags], &pipelineDesc, descriptorSet, nullptr, 0,
+                           commandBuffer));
+    commandBuffer->draw(6, 0);
     return angle::Result::Continue;
 }
 
