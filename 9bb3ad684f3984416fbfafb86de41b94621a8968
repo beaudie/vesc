@@ -16,6 +16,69 @@
       "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "446d2133_05c8349e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-08T17:15:22Z",
+      "side": 1,
+      "message": "Overall looks good to me.",
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b7243f50_fed7c2f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-08T17:15:22Z",
+      "side": 1,
+      "message": "This looks like not been used. Or if you do need it, maybe call it hasValidFormat or isValidFormat?",
+      "range": {
+        "startLine": 1298,
+        "startChar": 9,
+        "endLine": 1298,
+        "endChar": 20
+      },
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b93dcd08_52970902",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-08T17:15:22Z",
+      "side": 1,
+      "message": "Is it possible to maintain mDepthContentDefined in ImageHelper::onWrite()? That will have better encapsulation than a \"set*\" and \"has*\" APIs. Maybe you need to change onWrite to onDepthWrite and onStencilWrite or take an argument to indicate it is depth or stencil.",
+      "range": {
+        "startLine": 1316,
+        "startChar": 4,
+        "endLine": 1317,
+        "endChar": 99
+      },
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
