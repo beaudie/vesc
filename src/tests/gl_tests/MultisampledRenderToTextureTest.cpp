@@ -805,8 +805,91 @@ TEST_P(MultisampledRenderToTextureTest, DrawCopyThenBlend)
 
     // For completeness, verify that the texture used as copy target is red.
     ASSERT_GL_NO_ERROR();
-    const GLColor expectedCopyResult(255, 0, 0, 255);
-    verifyResults(texture, expectedCopyResult, kSize, 0, 0, kSize, kSize);
+    const GLColor kExpectedCopyResult(255, 0, 0, 255);
+    verifyResults(texture, kExpectedCopyResult, kSize, 0, 0, kSize, kSize);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Clear&Draw, copy, then blend with same program.  The copy will make sure an implicit resolve
+// happens.  The second draw should retain the data written by the first draw command ("unresolve"
+// operation).  The same program is used for the first and second draw calls, and the fact that the
+// attachment is cleared or unresolved should not cause issues.  In the Vulkan backend, the program
+// will be used in different subpass indices, so two graphics pipelines should be created for it.
+TEST_P(MultisampledRenderToTextureTest, ClearDrawCopyThenBlendSameProgram)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    constexpr GLsizei kSize = 64;
+
+    setupCopyTexProgram();
+
+    // Create multisampled framebuffer to draw into
+    GLTexture colorMS;
+    glBindTexture(GL_TEXTURE_2D, colorMS);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fboMS;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboMS);
+    glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                         colorMS, 0, 4);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw red into the multisampled color buffer.
+    ANGLE_GL_PROGRAM(drawColor, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(drawColor);
+    GLint colorUniformLocation =
+        glGetUniformLocation(drawColor, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(colorUniformLocation, -1);
+
+    // Clear the framebuffer.
+    glClearColor(0.1f, 0.9f, 0.2f, 0.8f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Then draw into it.
+    glUniform4f(colorUniformLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a texture and copy into it.
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, kSize, kSize, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Draw again into the framebuffer, this time blending.  This tests that the framebuffer's data,
+    // residing in the single-sampled texture, is available to the multisampled intermediate image
+    // for blending.
+
+    // Blend half-transparent green into the multisampled color buffer.
+    glUniform4f(colorUniformLocation, 0.0f, 1.0f, 0.0f, 0.5f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Verify that the texture is now yellow
+    const GLColor kExpected(127, 127, 0, 191);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kExpected, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, 0, kExpected, 1);
+    EXPECT_PIXEL_COLOR_NEAR(0, kSize - 1, kExpected, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, kExpected, 1);
+
+    // Once again, clear and draw so the program is used again in the way it was first used.
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_BLEND);
+    glUniform4f(colorUniformLocation, 0.0f, 0.0f, 1.0f, 1.0f);
+    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.5f);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor::blue, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, 0, GLColor::blue, 1);
+    EXPECT_PIXEL_COLOR_NEAR(0, kSize - 1, GLColor::blue, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, GLColor::blue, 1);
+
+    // For completeness, verify that the texture used as copy target is red.
+    ASSERT_GL_NO_ERROR();
+    const GLColor kExpectedCopyResult(255, 0, 0, 255);
+    verifyResults(texture, kExpectedCopyResult, kSize, 0, 0, kSize, kSize);
 
     ASSERT_GL_NO_ERROR();
 }
@@ -884,8 +967,8 @@ TEST_P(MultisampledRenderToTextureES3Test, ColorAttachment1)
     EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, kExpected, 1);
 
     // For completeness, verify that the texture used as copy target is red.
-    const GLColor expectedCopyResult(255, 0, 0, 255);
-    verifyResults(texture, expectedCopyResult, kSize, 0, 0, kSize, kSize);
+    const GLColor kExpectedCopyResult(255, 0, 0, 255);
+    verifyResults(texture, kExpectedCopyResult, kSize, 0, 0, kSize, kSize);
 
     ASSERT_GL_NO_ERROR();
 
@@ -975,8 +1058,8 @@ TEST_P(MultisampledRenderToTextureES3Test, ColorAttachments0And3)
     EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, kExpected, 1);
 
     // For completeness, verify that the texture used as copy target is red.
-    const GLColor expectedCopyResult(255, 0, 0, 255);
-    verifyResults(texture, expectedCopyResult, kSize, 0, 0, kSize, kSize);
+    const GLColor kExpectedCopyResult(255, 0, 0, 255);
+    verifyResults(texture, kExpectedCopyResult, kSize, 0, 0, kSize, kSize);
 
     ASSERT_GL_NO_ERROR();
 
@@ -1129,8 +1212,8 @@ TEST_P(MultisampledRenderToTextureES31Test, MixedMultisampledAndMultisampledRend
     EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, kExpected, 1);
 
     // For completeness, verify that the texture used as copy target is red.
-    const GLColor expectedCopyResult(255, 0, 0, 255);
-    verifyResults(texture, expectedCopyResult, kSize, 0, 0, kSize, kSize);
+    const GLColor kExpectedCopyResult(255, 0, 0, 255);
+    verifyResults(texture, kExpectedCopyResult, kSize, 0, 0, kSize, kSize);
 
     ASSERT_GL_NO_ERROR();
 
@@ -1443,6 +1526,176 @@ TEST_P(MultisampledRenderToTextureTest, DrawMultisampledDifferentSamples)
     EXPECT_PIXEL_COLOR_EQ(3 * kSize / 8, 5 * kSize / 8, GLColor::blue);
     EXPECT_PIXEL_COLOR_EQ(5 * kSize / 8, 5 * kSize / 8, GLColor::blue);
     EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, GLColor::blue);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Draw, copy, then blend with 8 mixed format attachments.  The copy will make sure an implicit
+// resolve happens.  Regardless, the following draw should retain the data written by the first draw
+// command.
+TEST_P(MultisampledRenderToTextureES31Test, DrawCopyThenBlendAllAttachmentsMixed)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+
+    // The Vulkan backend doesn't appropriately disable blend for integer attachments.  This causes
+    // an assertion failure within swiftshader.  http://anglebug.com/4583
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
+
+    GLint maxDrawBuffers = 0;
+    glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
+
+    // At least 4 draw buffers per GLES3.0 spec.
+    ASSERT_GE(maxDrawBuffers, 4);
+
+    // Maximum 8 draw buffers exposed by ANGLE.
+    constexpr GLint kImplMaxDrawBuffers = 8;
+    maxDrawBuffers                      = std::min(maxDrawBuffers, kImplMaxDrawBuffers);
+
+    constexpr const char *kDecl[kImplMaxDrawBuffers] = {
+        "layout(location = 0) out vec4 out0;",  "layout(location = 1) out ivec4 out1;",
+        "layout(location = 2) out uvec4 out2;", "layout(location = 3) out vec4 out3;",
+        "layout(location = 4) out uvec4 out4;", "layout(location = 5) out ivec4 out5;",
+        "layout(location = 6) out ivec4 out6;", "layout(location = 7) out vec4 out7;",
+    };
+
+    constexpr struct
+    {
+        GLint internalFormat;
+        GLenum format;
+        GLenum type;
+    } kGLType[kImplMaxDrawBuffers] = {
+        {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE},           {GL_RGBA32I, GL_RGBA_INTEGER, GL_INT},
+        {GL_RGBA32UI, GL_RGBA_INTEGER, GL_UNSIGNED_INT}, {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE},
+        {GL_RGBA32UI, GL_RGBA_INTEGER, GL_UNSIGNED_INT}, {GL_RGBA32I, GL_RGBA_INTEGER, GL_INT},
+        {GL_RGBA32I, GL_RGBA_INTEGER, GL_INT},           {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE},
+    };
+
+    constexpr const char *kAssign1[kImplMaxDrawBuffers] = {
+        "out0 = vec4(1.0f, 0.0f, 0.0f, 1.0f);",
+        "out1 = ivec4(-19, 13, 123456, -654321);",
+        "out2 = uvec4(98765, 43210, 2, 0);",
+        "out3 = vec4(0.0f, 1.0f, 0.0f, 1.0f);",
+        "out4 = uvec4(10101010, 2345, 0, 991);",
+        "out5 = ivec4(615243, -948576, -222, 111);",
+        "out6 = ivec4(-8127931, -1392781, 246810, 1214161820);",
+        "out7 = vec4(0.0f, 0.0f, 1.0f, 1.0f);",
+    };
+
+    constexpr const char *kAssign2[kImplMaxDrawBuffers] = {
+        "out0 = vec4(0.0f, 1.0f, 0.0f, 0.5f);",
+        "out1 = ivec4(0, 0, 0, 0);",
+        "out2 = uvec4(0, 0, 0, 0);",
+        "out3 = vec4(0.0f, 0.0f, 1.0f, 0.5f);",
+        "out4 = uvec4(0, 0, 0, 0);",
+        "out5 = ivec4(0, 0, 0, 0);",
+        "out6 = ivec4(0, 0, 0, 0);",
+        "out7 = vec4(1.0f, 0.0f, 0.0f, 0.5f);",
+    };
+
+    // Generate the shaders, [0] for first draw and [1] for second.
+    std::stringstream fsstr[2];
+    for (unsigned int index = 0; index < 2; ++index)
+    {
+        fsstr[index] << R"(#version 300 es
+precision highp float;
+)";
+
+        for (GLint drawBuffer = 0; drawBuffer < maxDrawBuffers; ++drawBuffer)
+        {
+            fsstr[index] << kDecl[drawBuffer] << "\n";
+        }
+
+        fsstr[index] << R"(void main()
+{
+)";
+
+        const char *const *assign = index == 0 ? kAssign1 : kAssign2;
+        for (GLint drawBuffer = 0; drawBuffer < maxDrawBuffers; ++drawBuffer)
+        {
+            fsstr[index] << assign[drawBuffer] << "\n";
+        }
+
+        fsstr[index] << "}\n";
+    }
+
+    constexpr GLsizei kSize = 64;
+
+    setupCopyTexProgram();
+
+    // Create multisampled framebuffer to draw into
+    GLFramebuffer fboMS;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboMS);
+
+    GLTexture colorMS[kImplMaxDrawBuffers];
+    for (GLint drawBuffer = 0; drawBuffer < maxDrawBuffers; ++drawBuffer)
+    {
+        glBindTexture(GL_TEXTURE_2D, colorMS[drawBuffer]);
+        glTexImage2D(GL_TEXTURE_2D, 0, kGLType[drawBuffer].internalFormat, kSize, kSize, 0,
+                     kGLType[drawBuffer].format, kGLType[drawBuffer].type, nullptr);
+        glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + drawBuffer,
+                                             GL_TEXTURE_2D, colorMS[drawBuffer], 0, 4);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    // Setup programs
+    ANGLE_GL_PROGRAM(drawProg, essl3_shaders::vs::Simple(), fsstr[0].str().c_str());
+    ANGLE_GL_PROGRAM(blendProg, essl3_shaders::vs::Simple(), fsstr[1].str().c_str());
+
+    constexpr GLenum kDrawBuffers[] = {
+        GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
+        GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7};
+    glDrawBuffers(maxDrawBuffers, kDrawBuffers);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw into the multisampled color buffers.
+    glUseProgram(drawProg);
+    drawQuad(drawProg, essl3_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a texture and copy from one of them.
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, kSize, kSize, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // Blend color buffers.
+    glUseProgram(blendProg);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    drawQuad(blendProg, essl3_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Verify texture colors.
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    const GLColor kExpected0(127, 127, 0, 191);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kExpected0, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, 0, kExpected0, 1);
+    EXPECT_PIXEL_COLOR_NEAR(0, kSize - 1, kExpected0, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, kExpected0, 1);
+
+    glReadBuffer(GL_COLOR_ATTACHMENT3);
+    const GLColor kExpected3(0, 127, 127, 191);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kExpected3, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, 0, kExpected3, 1);
+    EXPECT_PIXEL_COLOR_NEAR(0, kSize - 1, kExpected3, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, kExpected3, 1);
+
+    if (maxDrawBuffers > 7)
+    {
+        glReadBuffer(GL_COLOR_ATTACHMENT7);
+        const GLColor kExpected7(127, 0, 127, 191);
+        EXPECT_PIXEL_COLOR_NEAR(0, 0, kExpected7, 1);
+        EXPECT_PIXEL_COLOR_NEAR(kSize - 1, 0, kExpected7, 1);
+        EXPECT_PIXEL_COLOR_NEAR(0, kSize - 1, kExpected7, 1);
+        EXPECT_PIXEL_COLOR_NEAR(kSize - 1, kSize - 1, kExpected7, 1);
+    }
+
+    // For completeness, verify that the texture used as copy target is red.
+    const GLColor kExpectedCopyResult(255, 0, 0, 255);
+    verifyResults(texture, kExpectedCopyResult, kSize, 0, 0, kSize, kSize);
 
     ASSERT_GL_NO_ERROR();
 }
