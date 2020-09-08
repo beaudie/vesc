@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5807d19_288f41bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-08T00:14:00Z",
+      "side": 1,
+      "message": "seeing a significant drop in manhattan offscreen score with this change, on-hold while i debug",
+      "revId": "9fbde50fb4e6accc77cf18a2384d8395b00400c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
