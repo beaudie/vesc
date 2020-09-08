@@ -1260,7 +1260,8 @@ angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Fo
     else if (contextVk->getRenderer()->hasImageFormatFeatureBits(
                  format.vkImageFormat, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT))
     {
-        mImageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        mImageUsageFlags |=
+            VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
 
     return angle::Result::Continue;

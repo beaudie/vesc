@@ -199,6 +199,7 @@ angle_source_set("angle_vulkan_backend") {
     "$angle_root:angle_compression",
     "$angle_root:angle_gpu_info_util",
     "$angle_root:angle_image_util",
+    "$angle_spirv_headers_dir:spv_headers",
   ]
 
   if (dcheck_always_on || is_debug) {
