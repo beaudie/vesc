@@ -192,6 +192,24 @@
       "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "942de89e_a8369699",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T15:03:33Z",
+      "side": 1,
+      "message": "Thank you so much Amy for adding the test. I suspect as you look into it more closely, you\u0027ll find more trickiness that\u0027s not well tested, so any tests that can flush out bugs are very welcome.\n\nThanks for the information too, the prerotation code effectively nullifying AdjustBlitResolveParametersForResolve was certainly unintended. I agree that making sure those two play nice together would be a good path forward.\n\n---\n\nAs a side note, I have also been considering whether we should use texture() with a point sampler instead of texelFetch() for the resolve path. Then we don\u0027t need to have different coordinates for blit or resolve as both paths would use samplers. However, I suspect using a point sampler over texelFetch may incur a GPU performance penalty.",
+      "parentUuid": "1eab4ce7_5d0d7aba",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
