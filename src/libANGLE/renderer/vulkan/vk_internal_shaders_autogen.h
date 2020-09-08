@@ -184,6 +184,28 @@ enum SubgroupSize
 constexpr size_t kArrayLen = 0x00000002;
 }  // namespace OverlayDraw_comp
 
+namespace Unresolve_frag
+{
+enum AttachmentIndex
+{
+    kAttachment0 = 0x00000000,
+    kAttachment1 = 0x00000001,
+    kAttachment2 = 0x00000002,
+    kAttachment3 = 0x00000003,
+    kAttachment4 = 0x00000004,
+    kAttachment5 = 0x00000005,
+    kAttachment6 = 0x00000006,
+    kAttachment7 = 0x00000007,
+};
+enum Format
+{
+    kIsFloat = 0x00000000,
+    kIsSint  = 0x00000008,
+    kIsUint  = 0x00000010,
+};
+constexpr size_t kArrayLen = 0x00000018;
+}  // namespace Unresolve_frag
+
 }  // namespace InternalShader
 
 class ShaderLibrary final : angle::NonCopyable
@@ -230,6 +252,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getOverlayDraw_comp(Context *context,
                                       uint32_t shaderFlags,
                                       RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getUnresolve_frag(Context *context,
+                                    uint32_t shaderFlags,
+                                    RefCounted<ShaderAndSerial> **shaderOut);
 
   private:
     RefCounted<ShaderAndSerial>
@@ -255,6 +280,7 @@ class ShaderLibrary final : angle::NonCopyable
         mOverlayCull_comp_shaders[InternalShader::OverlayCull_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mOverlayDraw_comp_shaders[InternalShader::OverlayDraw_comp::kArrayLen];
+    RefCounted<ShaderAndSerial> mUnresolve_frag_shaders[InternalShader::Unresolve_frag::kArrayLen];
 };
 }  // namespace vk
 }  // namespace rx

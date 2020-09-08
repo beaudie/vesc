@@ -133,6 +133,30 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000005.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.comp.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000002.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000003.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000004.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000005.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000006.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000007.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000008.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000009.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.0000000A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.0000000B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.0000000C.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.0000000D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.0000000E.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.0000000F.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000010.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000011.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000012.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000013.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000014.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000015.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000016.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/Unresolve.frag.00000017.inc"
 
 // This is compressed SPIR-V binary blob and size
 struct CompressedShaderBlob
@@ -298,6 +322,32 @@ constexpr CompressedShaderBlob kOverlayDraw_comp_shaders[] = {
     {kOverlayDraw_comp_00000000, sizeof(kOverlayDraw_comp_00000000)},
     {kOverlayDraw_comp_00000001, sizeof(kOverlayDraw_comp_00000001)},
 };
+constexpr CompressedShaderBlob kUnresolve_frag_shaders[] = {
+    {kUnresolve_frag_00000000, sizeof(kUnresolve_frag_00000000)},
+    {kUnresolve_frag_00000001, sizeof(kUnresolve_frag_00000001)},
+    {kUnresolve_frag_00000002, sizeof(kUnresolve_frag_00000002)},
+    {kUnresolve_frag_00000003, sizeof(kUnresolve_frag_00000003)},
+    {kUnresolve_frag_00000004, sizeof(kUnresolve_frag_00000004)},
+    {kUnresolve_frag_00000005, sizeof(kUnresolve_frag_00000005)},
+    {kUnresolve_frag_00000006, sizeof(kUnresolve_frag_00000006)},
+    {kUnresolve_frag_00000007, sizeof(kUnresolve_frag_00000007)},
+    {kUnresolve_frag_00000008, sizeof(kUnresolve_frag_00000008)},
+    {kUnresolve_frag_00000009, sizeof(kUnresolve_frag_00000009)},
+    {kUnresolve_frag_0000000A, sizeof(kUnresolve_frag_0000000A)},
+    {kUnresolve_frag_0000000B, sizeof(kUnresolve_frag_0000000B)},
+    {kUnresolve_frag_0000000C, sizeof(kUnresolve_frag_0000000C)},
+    {kUnresolve_frag_0000000D, sizeof(kUnresolve_frag_0000000D)},
+    {kUnresolve_frag_0000000E, sizeof(kUnresolve_frag_0000000E)},
+    {kUnresolve_frag_0000000F, sizeof(kUnresolve_frag_0000000F)},
+    {kUnresolve_frag_00000010, sizeof(kUnresolve_frag_00000010)},
+    {kUnresolve_frag_00000011, sizeof(kUnresolve_frag_00000011)},
+    {kUnresolve_frag_00000012, sizeof(kUnresolve_frag_00000012)},
+    {kUnresolve_frag_00000013, sizeof(kUnresolve_frag_00000013)},
+    {kUnresolve_frag_00000014, sizeof(kUnresolve_frag_00000014)},
+    {kUnresolve_frag_00000015, sizeof(kUnresolve_frag_00000015)},
+    {kUnresolve_frag_00000016, sizeof(kUnresolve_frag_00000016)},
+    {kUnresolve_frag_00000017, sizeof(kUnresolve_frag_00000017)},
+};
 
 angle::Result GetShader(Context *context,
                         RefCounted<ShaderAndSerial> *shaders,
@@ -389,6 +439,10 @@ void ShaderLibrary::destroy(VkDevice device)
         shader.get().destroy(device);
     }
     for (RefCounted<ShaderAndSerial> &shader : mOverlayDraw_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
+    for (RefCounted<ShaderAndSerial> &shader : mUnresolve_frag_shaders)
     {
         shader.get().destroy(device);
     }
@@ -494,6 +548,14 @@ angle::Result ShaderLibrary::getOverlayDraw_comp(Context *context,
 {
     return GetShader(context, mOverlayDraw_comp_shaders, kOverlayDraw_comp_shaders,
                      ArraySize(kOverlayDraw_comp_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getUnresolve_frag(Context *context,
+                                               uint32_t shaderFlags,
+                                               RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mUnresolve_frag_shaders, kUnresolve_frag_shaders,
+                     ArraySize(kUnresolve_frag_shaders), shaderFlags, shaderOut);
 }
 
 }  // namespace vk
