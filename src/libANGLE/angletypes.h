@@ -405,7 +405,7 @@ using AttributesMask = angle::BitSet<MAX_VERTEX_ATTRIBS>;
 using UniformBlockBindingMask = angle::BitSet<IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
 
 // Used in Framebuffer / Program
-using DrawBufferMask = angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
+using DrawBufferMask = angle::BitSet8<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 
 class BlendStateExt final
 {
