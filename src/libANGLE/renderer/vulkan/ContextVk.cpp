@@ -4268,7 +4268,7 @@ angle::Result ContextVk::checkCompletedCommands()
 {
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
-        return mRenderer->checkCompletedCommands();
+        return angle::Result::Continue;
     }
     return mCommandQueue.checkCompletedCommands(this);
 }
