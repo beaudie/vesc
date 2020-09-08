@@ -174,6 +174,24 @@
       "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eab4ce7_5d0d7aba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-08T14:28:32Z",
+      "side": 1,
+      "message": "Thanks Shahbaz. We finished the office moving and started working on this CL again. \n\nSome test results to update:\n1）AdjustBlitResolveParametersForResolve\ndEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_color.\nOn Linux, AdjustBlitResolveParametersForResolve funcition can work because multisample stencil buffer is blitted to default framebuffer. So destFramebufferRotation is true, and filpY is enabled. The shaderParams.offset decreases from 300 to 299 and srcImageCoords.y in shader could be (127-gl_GlobalInvocationID.y).\nOn android, EarlyAdjustFlipYForPreRotation function will disable destFramebufferRotation. In AdjustBlitResolveParametersForResolve function, the four xxx.isReversedY() conditions are all false.\nSo I think AdjustBlitResolveParametersForResolve may only handle the filp operation in Linux but can\u0027t deal with prerotation correctly.\n\n2) added test\nAs mentioned in 1), it\u0027s wrong to add \"-1\" in compute shader, for linux, it would become (126-gl_GlobalInvocationID.y). There wasn\u0027t end2end to cover it and the CTS tests could accept mismatch in two rows, so the dry run passed. If you test the added end2end in patchset 2, you can get failures when y\u003d0.\nExpected equality of these values:\n  GLColor::blue\n    Which is: Blue\n  angle::ReadColor(0, 0)\n    Which is: Green\n......\nSo, maybe it\u0027s better to add -1/0.5 in CPU and change the offset in prerotaion path.\nIf needed, I\u0027ll add more end2end tests later.\n\n3)msaa\nOn Linux,msaa0 will enable canBlitWithCommand.\nI\u0027ll get more information on android tomorrow.",
+      "parentUuid": "682bc428_84d11a8f",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
