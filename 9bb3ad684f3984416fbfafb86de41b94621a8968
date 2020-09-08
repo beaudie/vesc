@@ -36,6 +36,46 @@
     },
     {
       "key": {
+        "uuid": "22631bb5_6189dd9f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T18:22:40Z",
+      "side": 1,
+      "message": "These now only respond with whether *Color* content is defined or not, right? I would make that explicit in the name:\n\n     hasDefinedColorContent()\n    invalidateEntireColorContent()",
+      "range": {
+        "startLine": 101,
+        "startChar": 9,
+        "endLine": 101,
+        "endChar": 26
+      },
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49935a3b_7e5b5e48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T18:22:40Z",
+      "side": 1,
+      "message": "There may be an issue here. Take this scenario:\n\n- Create depth/stencil renderbuffer R and attach it to a framebuffer\n- Draw into framebuffer\n- Invalidate depth/stencil\n- Delete R\n- Cause render pass to break\n\nWhat happens when R is deleted? If the render pass is closed automatically before R is deleted, it\u0027s ok, but if it happens after, then mDepthStencilImage would be a dangling pointer.\n\nCould you write a test for it and verify (with printf?) that end RP is being done before the ImageHelper is deleted?",
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7243f50_fed7c2f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 16

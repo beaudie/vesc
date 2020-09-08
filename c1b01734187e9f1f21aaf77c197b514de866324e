@@ -272,6 +272,24 @@
     },
     {
       "key": {
+        "uuid": "87026b52_bd82408f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T18:22:40Z",
+      "side": 1,
+      "message": "The good thing about adding a test outside VulkanPerformanceCounterTests is that other backends would run it too :)",
+      "parentUuid": "4f3e2afa_7f6be350",
+      "revId": "c1b01734187e9f1f21aaf77c197b514de866324e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae849016_9d127486",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 10
