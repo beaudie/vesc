@@ -9,6 +9,10 @@
 
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 
+// SPIR-V headers include for AST transformation.
+#include <spirv/unified1/spirv.hpp>
+
+#include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
@@ -268,6 +272,35 @@ uint32_t GetGenerateMipmapFlags(ContextVk *contextVk, const vk::Format &format)
     return flags;
 }
 
+enum UnresolveAttachmentType
+{
+    kUnresolveTypeUnused = 0,
+    kUnresolveTypeFloat  = 1,
+    kUnresolveTypeSint   = 2,
+    kUnresolveTypeUint   = 3,
+};
+
+uint32_t GetUnresolveFlags(uint32_t attachmentCount,
+                           const gl::DrawBuffersArray<vk::ImageHelper *> &src,
+                           gl::DrawBuffersArray<UnresolveAttachmentType> *attachmentTypesOut)
+{
+    uint32_t flags = 0;
+
+    for (uint32_t attachmentIndex = 0; attachmentIndex < attachmentCount; ++attachmentIndex)
+    {
+        const angle::Format &format = src[attachmentIndex]->getFormat().intendedFormat();
+
+        const UnresolveAttachmentType type =
+            format.isSint() ? kUnresolveTypeSint
+                            : format.isUint() ? kUnresolveTypeUint : kUnresolveTypeFloat;
+
+        (*attachmentTypesOut)[attachmentIndex] = type;
+        flags |= type << (2 * attachmentIndex);
+    }
+
+    return flags;
+}
+
 uint32_t GetFormatDefaultChannelMask(const vk::Format &format)
 {
     uint32_t mask = 0;
@@ -305,6 +338,648 @@ void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_
     offset[0] = params.destOffset[0] - params.srcOffset[0] * srcOffsetFactorX;
     offset[1] = params.destOffset[1] - params.srcOffset[1] * srcOffsetFactorY;
 }
+
+// Pieces of SPIR-V used to create the unresolve shader.  Taken from what glslang generated for the
+// following shader, adapted by GetUnresolveFrag for the combination of which of the 8 attachments
+// need resolve and what format they have.
+//
+//     #version 450 core
+//
+//     layout(location = 0) out vec4 colorOut0;
+//     layout(location = 1) out ivec4 colorOut1;
+//     layout(location = 2) out uvec4 colorOut2;
+//     layout(input_attachment_index = 0, set = 0, binding = 0) uniform subpassInput colorIn0;
+//     layout(input_attachment_index = 1, set = 0, binding = 1) uniform isubpassInput colorIn1;
+//     layout(input_attachment_index = 2, set = 0, binding = 2) uniform usubpassInput colorIn2;
+//
+//     void main()
+//     {
+//         colorOut0 = subpassLoad(colorIn0);
+//         colorOut1 = subpassLoad(colorIn1);
+//         colorOut2 = subpassLoad(colorIn2);
+//     }
+//
+constexpr uint32_t kUnresolvePreamble1[] = {
+    // OpCapability Shader
+    0x00020011,
+    0x00000001,
+    // OpCapability InputAttachment
+    0x00020011,
+    0x00000028,
+    // %1 = OpExtInstImport "GLSL.std.450"
+    0x0006000b,
+    0x00000001,
+    0x4c534c47,
+    0x6474732e,
+    0x3035342e,
+    0x00000000,
+    // OpMemoryModel Logical GLSL450
+    0x0003000e,
+    0x00000000,
+    0x00000001,
+};
+
+// The following template is used to generate the OpEntryPoint instruction.  The length of the
+// instruction and the OUT_* ids need to be modified.
+constexpr uint32_t kUnresolveEntryPoint[] = {
+    // OpEntryPoint Fragment %4 "main" OUT_0 OUT_1 ...
+    0x0000000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000,
+};
+
+// SPIR-V 1.0 Table 2: Instruction Physical Layout
+uint32_t GetSpirvInstructionLength(const uint32_t *instruction)
+{
+    return instruction[0] >> 16;
+}
+
+uint32_t GetSpirvInstructionOp(const uint32_t *instruction)
+{
+    constexpr uint32_t kOpMask = 0xFFFFu;
+    return instruction[0] & kOpMask;
+}
+
+void SetSpirvInstructionLength(uint32_t *instruction, size_t length)
+{
+    ASSERT(length < 0xFFFFu);
+    ASSERT(GetSpirvInstructionLength(instruction) == 0);
+    instruction[0] |= length << 16;
+}
+
+void InsertUnresolveEntryPoint(uint32_t attachmentCount,
+                               uint32_t idOut0,
+                               std::vector<uint32_t> *code)
+{
+    // Needs to modify:
+    //
+    //  - the instruction length to 4 + attachmentCount
+    //  - append the %OUT_N ids
+    const size_t entryPointOffset = code->size();
+    code->insert(code->end(), kUnresolveEntryPoint,
+                 kUnresolveEntryPoint + sizeof(kUnresolveEntryPoint) / 4);
+
+    ASSERT(GetSpirvInstructionOp(&(*code)[entryPointOffset]) == spv::OpEntryPoint);
+    SetSpirvInstructionLength(&(*code)[entryPointOffset], 5 + attachmentCount);
+
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        code->push_back(idOut0 + n);
+    }
+}
+
+constexpr uint32_t kUnresolvePreamble2[] = {
+    // OpExecutionMode %4 OriginUpperLeft
+    0x00030010,
+    0x00000004,
+    0x00000007,
+    // OpSource GLSL 450
+    0x00030003,
+    0x00000002,
+    0x000001c2,
+};
+
+// The following template is used to decorate each attachment.  The OUT_N and IN_N ids need to be
+// modified (0 in this template) as well as the index N (also 0).
+constexpr uint32_t kUnresolveDecorate[] = {
+    // OpDecorate %OUT_N Location N
+    0x00040047,
+    0x00000000,
+    0x0000001e,
+    0x00000000,
+    // OpDecorate %IN_N DescriptorSet 0
+    0x00040047,
+    0x00000000,
+    0x00000022,
+    0x00000000,
+    // OpDecorate %IN_N Binding N
+    0x00040047,
+    0x00000000,
+    0x00000021,
+    0x00000000,
+    // OpDecorate %IN_N InputAttachmentIndex N
+    0x00040047,
+    0x00000000,
+    0x0000002b,
+    0x00000000,
+};
+
+void InsertUnresolveDecorations(uint32_t attachmentIndex,
+                                uint32_t idOut,
+                                uint32_t idIn,
+                                std::vector<uint32_t> *code)
+{
+    // Needs to modify:
+    //
+    //  - %OUT_N and %IN_N ids
+    //  - Location, Binding and InputAttachmentIndex (all N)
+    size_t decorationOffset = code->size();
+    code->insert(code->end(), kUnresolveDecorate,
+                 kUnresolveDecorate + sizeof(kUnresolveDecorate) / 4);
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpDecorate
+    constexpr uint32_t kDecorateInstructionLength = 4;
+    constexpr size_t kIdIndex                     = 1;
+    constexpr size_t kDecorationIndex             = 2;
+    constexpr size_t kDecorationValueIndex        = 3;
+
+    // OpDecorate %OUT_N Location N
+    ASSERT(GetSpirvInstructionOp(&(*code)[decorationOffset]) == spv::OpDecorate);
+    ASSERT((*code)[decorationOffset + kDecorationIndex] == spv::DecorationLocation);
+    (*code)[decorationOffset + kIdIndex]              = idOut;
+    (*code)[decorationOffset + kDecorationValueIndex] = attachmentIndex;
+
+    // OpDecorate %IN_N DescriptorSet 0
+    decorationOffset += kDecorateInstructionLength;
+    ASSERT(GetSpirvInstructionOp(&(*code)[decorationOffset]) == spv::OpDecorate);
+    ASSERT((*code)[decorationOffset + kDecorationIndex] == spv::DecorationDescriptorSet);
+    (*code)[decorationOffset + kIdIndex] = idIn;
+
+    // OpDecorate %IN_N Binding N
+    decorationOffset += kDecorateInstructionLength;
+    ASSERT(GetSpirvInstructionOp(&(*code)[decorationOffset]) == spv::OpDecorate);
+    ASSERT((*code)[decorationOffset + kDecorationIndex] == spv::DecorationBinding);
+    (*code)[decorationOffset + kIdIndex]              = idIn;
+    (*code)[decorationOffset + kDecorationValueIndex] = attachmentIndex;
+
+    // OpDecorate %IN_N InputAttachmentIndex N
+    decorationOffset += kDecorateInstructionLength;
+    ASSERT(GetSpirvInstructionOp(&(*code)[decorationOffset]) == spv::OpDecorate);
+    ASSERT((*code)[decorationOffset + kDecorationIndex] == spv::DecorationInputAttachmentIndex);
+    (*code)[decorationOffset + kIdIndex]              = idIn;
+    (*code)[decorationOffset + kDecorationValueIndex] = attachmentIndex;
+}
+
+// Types used throughout the shader
+constexpr uint32_t kUnresolveCommonTypes[] = {
+    // %2 = OpTypeVoid
+    0x00020013,
+    0x00000002,
+    // %3 = OpTypeFunction %2
+    0x00030021,
+    0x00000003,
+    0x00000002,
+    // %6 = OpTypeFloat 32
+    0x00030016,
+    0x00000006,
+    0x00000020,
+    // %7 = OpTypeVector %6 4
+    0x00040017,
+    0x00000007,
+    0x00000006,
+    0x00000004,
+    // %8 = OpTypePointer Output %7
+    0x00040020,
+    0x00000008,
+    0x00000003,
+    0x00000007,
+    // %9 = OpTypeImage %6 SubpassData 0 0 0 2 Unknown
+    0x00090019,
+    0x00000009,
+    0x00000006,
+    0x00000006,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000002,
+    0x00000000,
+    // %10 = OpTypePointer UniformConstant %9
+    0x00040020,
+    0x0000000a,
+    0x00000000,
+    0x00000009,
+    // %11 = OpTypeInt 32 1
+    0x00040015,
+    0x0000000b,
+    0x00000020,
+    0x00000001,
+    // %12 = OpTypeVector %11 4
+    0x00040017,
+    0x0000000c,
+    0x0000000b,
+    0x00000004,
+    // %13 = OpTypePointer Output %12
+    0x00040020,
+    0x0000000d,
+    0x00000003,
+    0x0000000c,
+    // %14 = OpTypeImage %11 SubpassData 0 0 0 2 Unknown
+    0x00090019,
+    0x0000000e,
+    0x0000000b,
+    0x00000006,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000002,
+    0x00000000,
+    // %15 = OpTypePointer UniformConstant %14
+    0x00040020,
+    0x0000000f,
+    0x00000000,
+    0x0000000e,
+    // %16 = OpTypeInt 32 0
+    0x00040015,
+    0x00000010,
+    0x00000020,
+    0x00000000,
+    // %17 = OpTypeVector %16 4
+    0x00040017,
+    0x00000011,
+    0x00000010,
+    0x00000004,
+    // %18 = OpTypePointer Output %17
+    0x00040020,
+    0x00000012,
+    0x00000003,
+    0x00000011,
+    // %19 = OpTypeImage %16 SubpassData 0 0 0 2 Unknown
+    0x00090019,
+    0x00000013,
+    0x00000010,
+    0x00000006,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000002,
+    0x00000000,
+    // %20 = OpTypePointer UniformConstant %19
+    0x00040020,
+    0x00000014,
+    0x00000000,
+    0x00000013,
+    // %21 = OpConstant %11 0
+    0x0004002b,
+    0x0000000b,
+    0x00000015,
+    0x00000000,
+    // %22 = OpTypeVector %11 2
+    0x00040017,
+    0x00000016,
+    0x0000000b,
+    0x00000002,
+    // %23 = OpConstantComposite %22 %21 %21
+    0x0005002c,
+    0x00000016,
+    0x00000017,
+    0x00000015,
+    0x00000015,
+};
+
+// The following templates are used to generate the output and input attachment declarations.  The
+// OUT_N and IN_N ids need to be modified (0 in this template).
+constexpr uint32_t kUnresolveFloatAttachmentDecl[] = {
+    // %OUT_N = OpVariable %8 Output
+    0x0004003b,
+    0x00000008,
+    0x00000000,
+    0x00000003,
+    // %IN_N = OpVariable %10 UniformConstant
+    0x0004003b,
+    0x0000000a,
+    0x00000000,
+    0x00000000,
+};
+
+constexpr uint32_t kUnresolveSintAttachmentDecl[] = {
+    // %OUT_N = OpVariable %13 Output
+    0x0004003b,
+    0x0000000d,
+    0x00000000,
+    0x00000003,
+    // %IN_N = OpVariable %15 UniformConstant
+    0x0004003b,
+    0x0000000f,
+    0x00000000,
+    0x00000000,
+};
+
+constexpr uint32_t kUnresolveUintAttachmentDecl[] = {
+    // %OUT_N = OpVariable %18 Output
+    0x0004003b,
+    0x00000012,
+    0x00000000,
+    0x00000003,
+    // %IN_N = OpVariable %20 UniformConstant
+    0x0004003b,
+    0x00000014,
+    0x00000000,
+    0x00000000,
+};
+
+void InsertUnresolveAttachmentDecl(uint32_t idOut,
+                                   uint32_t idIn,
+                                   UnresolveAttachmentType attachmentType,
+                                   std::vector<uint32_t> *code)
+{
+    // Needs to modify:
+    //
+    //  - %OUT_N and %IN_N ids
+    size_t variableOffset = code->size();
+    switch (attachmentType)
+    {
+        case kUnresolveTypeFloat:
+            code->insert(code->end(), kUnresolveFloatAttachmentDecl,
+                         kUnresolveFloatAttachmentDecl + sizeof(kUnresolveFloatAttachmentDecl) / 4);
+            break;
+        case kUnresolveTypeSint:
+            code->insert(code->end(), kUnresolveSintAttachmentDecl,
+                         kUnresolveSintAttachmentDecl + sizeof(kUnresolveSintAttachmentDecl) / 4);
+            break;
+        case kUnresolveTypeUint:
+            code->insert(code->end(), kUnresolveUintAttachmentDecl,
+                         kUnresolveUintAttachmentDecl + sizeof(kUnresolveUintAttachmentDecl) / 4);
+            break;
+        default:
+            UNREACHABLE();
+    }
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpVariable
+    constexpr uint32_t kVariableInstructionLength = 4;
+    constexpr size_t kIdIndex                     = 2;
+    constexpr size_t kStorageClassIndex           = 3;
+
+    // %OUT_N = OpVariable %... Output
+    ASSERT(GetSpirvInstructionOp(&(*code)[variableOffset]) == spv::OpVariable);
+    ASSERT((*code)[variableOffset + kStorageClassIndex] == spv::StorageClassOutput);
+    (*code)[variableOffset + kIdIndex] = idOut;
+
+    // %IN_N = OpVariable %... UniformConstant
+    variableOffset += kVariableInstructionLength;
+    ASSERT(GetSpirvInstructionOp(&(*code)[variableOffset]) == spv::OpVariable);
+    ASSERT((*code)[variableOffset + kStorageClassIndex] == spv::StorageClassUniformConstant);
+    (*code)[variableOffset + kIdIndex] = idIn;
+}
+
+// Top of the main function.
+constexpr uint32_t kUnresolveMainTop[] = {
+    // %4 = OpFunction %2 None %3
+    0x00050036,
+    0x00000002,
+    0x00000004,
+    0x00000000,
+    0x00000003,
+    // %5 = OpLabel
+    0x000200f8,
+    0x00000005,
+};
+
+// Bottom of the main function.
+constexpr uint32_t kUnresolveMainBottom[] = {
+    // OpReturn
+    0x000100fd,
+    // OpFunctionEnd
+    0x00010038,
+};
+
+// The following templates are used to generate the load/store operations.  The OUT_N and IN_N ids
+// need to be modified (0 in this template) as well as the intermediate ids (also 0 in this
+// template).
+constexpr uint32_t kUnresolveFloatLoadStore[] = {
+    // %TEMP_1 = OpLoad %9 %IN_N
+    0x0004003d,
+    0x00000009,
+    0x00000000,
+    0x00000000,
+    // %TEMP_2 = OpImageRead %7 %TEMP_1 %23
+    0x00050062,
+    0x00000007,
+    0x00000000,
+    0x00000000,
+    0x00000017,
+    // OpStore %OUT_N %TEMP_2
+    0x0003003e,
+    0x00000000,
+    0x00000000,
+};
+
+constexpr uint32_t kUnresolveSintLoadStore[] = {
+    // %TEMP_1 = OpLoad %14 %IN_N
+    0x0004003d,
+    0x0000000e,
+    0x00000000,
+    0x00000000,
+    // %TEMP_2 = OpImageRead %12 %TEMP_1 %23
+    0x00050062,
+    0x0000000c,
+    0x00000000,
+    0x00000000,
+    0x00000017,
+    // OpStore %OUT_N %TEMP_2
+    0x0003003e,
+    0x00000000,
+    0x00000000,
+};
+
+constexpr uint32_t kUnresolveUintLoadStore[] = {
+    // %TEMP_1 = OpLoad %19 %IN_N
+    0x0004003d,
+    0x00000013,
+    0x00000000,
+    0x00000000,
+    // %TEMP_2 = OpImageRead %17 %TEMP_1 %23
+    0x00050062,
+    0x00000011,
+    0x00000000,
+    0x00000000,
+    0x00000017,
+    // OpStore %OUT_N %TEMP_2
+    0x0003003e,
+    0x00000000,
+    0x00000000,
+};
+
+void InsertUnresolveLoadStore(uint32_t idOut,
+                              uint32_t idIn,
+                              uint32_t idTemp1,
+                              uint32_t idTemp2,
+                              UnresolveAttachmentType attachmentType,
+                              std::vector<uint32_t> *code)
+{
+    // Needs to modify:
+    //
+    //  - %OUT_N and %IN_N ids
+    //  - %TEMP_1 and %TEMP_2 ids
+    size_t instructionOffset = code->size();
+    switch (attachmentType)
+    {
+        case kUnresolveTypeFloat:
+            code->insert(code->end(), kUnresolveFloatLoadStore,
+                         kUnresolveFloatLoadStore + sizeof(kUnresolveFloatLoadStore) / 4);
+            break;
+        case kUnresolveTypeSint:
+            code->insert(code->end(), kUnresolveSintLoadStore,
+                         kUnresolveSintLoadStore + sizeof(kUnresolveSintLoadStore) / 4);
+            break;
+        case kUnresolveTypeUint:
+            code->insert(code->end(), kUnresolveUintLoadStore,
+                         kUnresolveUintLoadStore + sizeof(kUnresolveUintLoadStore) / 4);
+            break;
+        default:
+            UNREACHABLE();
+    }
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpLoad
+    constexpr uint32_t kLoadInstructionLength = 4;
+    constexpr size_t kLoadIdIndex             = 2;
+    constexpr size_t kLoadPointerIndex        = 3;
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpImageRead
+    constexpr uint32_t kImageReadInstructionLength = 5;
+    constexpr size_t kImageReadIdIndex             = 2;
+    constexpr size_t kImageReadImageIndex          = 3;
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpStore
+    constexpr size_t kStorePointerIndex = 1;
+    constexpr size_t kStoreObjectIndex  = 2;
+
+    // %TEMP_1 = OpLoad %... %IN_N
+    ASSERT(GetSpirvInstructionOp(&(*code)[instructionOffset]) == spv::OpLoad);
+    (*code)[instructionOffset + kLoadIdIndex]      = idTemp1;
+    (*code)[instructionOffset + kLoadPointerIndex] = idIn;
+
+    // %TEMP_2 = OpImageRead %... %TEMP_1 %...
+    instructionOffset += kLoadInstructionLength;
+    ASSERT(GetSpirvInstructionOp(&(*code)[instructionOffset]) == spv::OpImageRead);
+    (*code)[instructionOffset + kImageReadIdIndex]    = idTemp2;
+    (*code)[instructionOffset + kImageReadImageIndex] = idTemp1;
+
+    // OpStore %OUT_N %TEMP_2
+    instructionOffset += kImageReadInstructionLength;
+    ASSERT(GetSpirvInstructionOp(&(*code)[instructionOffset]) == spv::OpStore);
+    (*code)[instructionOffset + kStorePointerIndex] = idOut;
+    (*code)[instructionOffset + kStoreObjectIndex]  = idTemp2;
+}
+
+constexpr uint32_t kUnresolveFirstUnusedId = 24;
+
+std::vector<uint32_t> MakeUnresolveFragShader(
+    uint32_t attachmentCount,
+    gl::DrawBuffersArray<UnresolveAttachmentType> &attachmentTypes)
+{
+    std::vector<uint32_t> code;
+
+    // Reserve a sensible amount of memory.  A single-attachment shader is 167 words.
+    code.reserve(167);
+
+    // Generate ids for %OUT_N, %IN_N, each needing |attachmentCount| ids and %TEMP* needing
+    // 2x|attachmentCount| ids.
+    const uint32_t kIdOut0  = kUnresolveFirstUnusedId;
+    const uint32_t kIdIn0   = kIdOut0 + attachmentCount;
+    const uint32_t kIdTemp0 = kIdIn0 + attachmentCount;
+    const uint32_t kIdCount = kIdTemp0 + 2 * attachmentCount;
+
+    // Header:
+    //
+    //  - Magic number
+    //  - Version (1.0)
+    //  - Generator (0, no generator id for ANGLE yet)
+    //  - Bound (kIdCount)
+    //  - 0 (reserved)
+    code.push_back(spv::MagicNumber);
+    code.push_back(0x00010000);
+    code.push_back(0x00000000);
+    code.push_back(kIdCount);
+    code.push_back(0x00000000);
+
+    // What goes before OpEntryPoint
+    code.insert(code.end(), kUnresolvePreamble1,
+                kUnresolvePreamble1 + sizeof(kUnresolvePreamble1) / 4);
+
+    // The entry point
+    InsertUnresolveEntryPoint(attachmentCount, kIdOut0, &code);
+
+    // What goes after OpEntryPoint
+    code.insert(code.end(), kUnresolvePreamble2,
+                kUnresolvePreamble2 + sizeof(kUnresolvePreamble2) / 4);
+
+    // Attachment decorations
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        InsertUnresolveDecorations(n, kIdOut0 + n, kIdIn0 + n, &code);
+    }
+
+    // Common types
+    code.insert(code.end(), kUnresolveCommonTypes,
+                kUnresolveCommonTypes + sizeof(kUnresolveCommonTypes) / 4);
+
+    // Attachment declarations
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        InsertUnresolveAttachmentDecl(kIdOut0 + n, kIdIn0 + n, attachmentTypes[n], &code);
+    }
+
+    // Top of main
+    code.insert(code.end(), kUnresolveMainTop, kUnresolveMainTop + sizeof(kUnresolveMainTop) / 4);
+
+    // Load and store for each attachment
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        const uint32_t idTemp1 = kIdTemp0 + 2 * n;
+        const uint32_t idTemp2 = idTemp1 + 1;
+        InsertUnresolveLoadStore(kIdOut0 + n, kIdIn0 + n, idTemp1, idTemp2, attachmentTypes[n],
+                                 &code);
+    }
+
+    // Bottom of main
+    code.insert(code.end(), kUnresolveMainBottom,
+                kUnresolveMainBottom + sizeof(kUnresolveMainBottom) / 4);
+
+    return code;
+}
+
+angle::Result GetUnresolveFrag(vk::Context *context,
+                               uint32_t attachmentCount,
+                               gl::DrawBuffersArray<UnresolveAttachmentType> &attachmentTypes,
+                               vk::RefCounted<vk::ShaderAndSerial> *shader)
+{
+    if (shader->get().valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    std::vector<uint32_t> shaderCode = MakeUnresolveFragShader(attachmentCount, attachmentTypes);
+
+    ASSERT(ValidateSpirv(shaderCode));
+
+    // Create shader lazily. Access will need to be locked for multi-threading.
+    return vk::InitShaderAndSerial(context, &shader->get(), shaderCode.data(),
+                                   shaderCode.size() * 4);
+}
+
+#if defined(ANGLE_ENABLE_ASSERTS)
+void GetUnresolveFrag_unittest()
+{
+    gl::DrawBuffersArray<UnresolveAttachmentType> attachmentTypes;
+
+    attachmentTypes[0]               = kUnresolveTypeFloat;
+    std::vector<uint32_t> shaderCode = MakeUnresolveFragShader(1, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeSint;
+    shaderCode         = MakeUnresolveFragShader(1, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeUint;
+    shaderCode         = MakeUnresolveFragShader(1, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeFloat;
+    attachmentTypes[1] = kUnresolveTypeSint;
+    attachmentTypes[2] = kUnresolveTypeUint;
+    shaderCode         = MakeUnresolveFragShader(3, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeFloat;
+    attachmentTypes[1] = kUnresolveTypeSint;
+    attachmentTypes[2] = kUnresolveTypeUint;
+    attachmentTypes[3] = kUnresolveTypeFloat;
+    attachmentTypes[4] = kUnresolveTypeSint;
+    attachmentTypes[5] = kUnresolveTypeUint;
+    attachmentTypes[6] = kUnresolveTypeFloat;
+    attachmentTypes[7] = kUnresolveTypeSint;
+    shaderCode         = MakeUnresolveFragShader(8, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+}
+#endif
 }  // namespace
 
 const uint32_t UtilsVk::kGenerateMipmapMaxLevels;
@@ -331,7 +1006,12 @@ uint32_t UtilsVk::GetGenerateMipmapMaxLevels(ContextVk *contextVk)
                : kGenerateMipmapMaxLevels;
 }
 
-UtilsVk::UtilsVk() = default;
+UtilsVk::UtilsVk()
+{
+#if defined(ANGLE_ENABLE_ASSERTS)
+    GetUnresolveFrag_unittest();
+#endif
+}
 
 UtilsVk::~UtilsVk() = default;
 
@@ -394,6 +1074,18 @@ void UtilsVk::destroy(RendererVk *renderer)
     {
         program.destroy(device);
     }
+
+    for (auto &program : mUnresolvePrograms)
+    {
+        program.second.destroy(device);
+    }
+    mUnresolvePrograms.clear();
+
+    for (auto &shader : mUnresolveFragShaders)
+    {
+        shader.second.get().destroy(device);
+    }
+    mUnresolveFragShaders.clear();
 
     mPointSampler.destroy(device);
     mLinearSampler.destroy(device);
@@ -648,6 +1340,32 @@ angle::Result UtilsVk::ensureGenerateMipmapResourcesInitialized(ContextVk *conte
 
     return ensureResourcesInitialized(contextVk, Function::GenerateMipmap, setSizes,
                                       ArraySize(setSizes), sizeof(GenerateMipmapShaderParams));
+}
+
+angle::Result UtilsVk::ensureUnresolveResourcesInitialized(ContextVk *contextVk,
+                                                           Function function,
+                                                           uint32_t attachmentCount)
+{
+    ASSERT(static_cast<uint32_t>(function) - static_cast<uint32_t>(Function::Unresolve1) ==
+           attachmentCount - 1);
+
+    if (mPipelineLayouts[function].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    gl::DrawBuffersArray<VkDescriptorPoolSize> setSizes = {{
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+        {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1},
+    }};
+
+    return ensureResourcesInitialized(contextVk, function, setSizes.data(), attachmentCount, 0);
 }
 
 angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
@@ -1943,6 +2661,97 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     commandBuffer.dispatch(workGroupX, workGroupY, 1);
     descriptorPoolBinding.reset();
 
+    return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::unresolve(ContextVk *contextVk,
+                                 const FramebufferVk *framebuffer,
+                                 const UnresolveParameters &params)
+{
+    // Get attachment count and pointers to resolve images and views.
+    gl::DrawBuffersArray<vk::ImageHelper *> src;
+    gl::DrawBuffersArray<const vk::ImageView *> srcView;
+
+    ASSERT(params.unresolveMask.any());
+
+    // The subpass that initializes the multisampled-render-to-texture attachments packs the
+    // attachments that need to be unresolved, so the attachment indices of this subpass are not the
+    // same.  See InitializeUnresolveSubpass for details.
+    uint32_t colorIndexVK = 0;
+    for (size_t colorIndexGL : params.unresolveMask)
+    {
+        RenderTargetVk *colorRenderTarget = framebuffer->getColorDrawRenderTarget(colorIndexGL);
+
+        ASSERT(colorRenderTarget->hasResolveAttachment());
+        ASSERT(colorRenderTarget->isImageTransient());
+
+        src[colorIndexVK] = &colorRenderTarget->getResolveImageForRenderPass();
+        ANGLE_TRY(colorRenderTarget->getResolveImageView(contextVk, &srcView[colorIndexVK]));
+
+        ++colorIndexVK;
+    }
+
+    const uint32_t attachmentCount = colorIndexVK;
+    const Function function =
+        static_cast<Function>(static_cast<uint32_t>(Function::Unresolve1) + attachmentCount - 1);
+    ANGLE_TRY(ensureUnresolveResourcesInitialized(contextVk, function, attachmentCount));
+
+    vk::GraphicsPipelineDesc pipelineDesc;
+    pipelineDesc.initDefaults();
+    pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
+    pipelineDesc.setRasterizationSamples(framebuffer->getSamples());
+    pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
+    // Note: depth test is disabled by default so this should be unnecessary, but works around an
+    // Intel bug on windows.  http://anglebug.com/3348
+    pipelineDesc.setDepthWriteEnabled(false);
+
+    VkViewport viewport;
+    gl::Rectangle completeRenderArea = framebuffer->getRotatedCompleteRenderArea(contextVk);
+    bool invertViewport              = contextVk->isViewportFlipEnabledForDrawFBO();
+    gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, invertViewport, completeRenderArea.height,
+                       &viewport);
+    pipelineDesc.setViewport(viewport);
+
+    pipelineDesc.setScissor(gl_vk::GetRect(completeRenderArea));
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, function, &descriptorPoolBinding, &descriptorSet));
+
+    gl::DrawBuffersArray<VkDescriptorImageInfo> inputImageInfo = {};
+    for (uint32_t attachmentIndex = 0; attachmentIndex < attachmentCount; ++attachmentIndex)
+    {
+        inputImageInfo[attachmentIndex].imageView   = srcView[attachmentIndex]->getHandle();
+        inputImageInfo[attachmentIndex].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    }
+
+    VkWriteDescriptorSet writeInfo = {};
+    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet               = descriptorSet;
+    writeInfo.dstBinding           = 0;
+    writeInfo.descriptorCount      = attachmentCount;
+    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+    writeInfo.pImageInfo           = inputImageInfo.data();
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+
+    gl::DrawBuffersArray<UnresolveAttachmentType> attachmentTypes;
+    uint32_t flags = GetUnresolveFlags(attachmentCount, src, &attachmentTypes);
+
+    vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
+    vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
+    vk::RefCounted<vk::ShaderAndSerial> *fragmentShader = &mUnresolveFragShaders[flags];
+    ANGLE_TRY(shaderLibrary.getFullScreenQuad_vert(contextVk, 0, &vertexShader));
+    ANGLE_TRY(GetUnresolveFrag(contextVk, attachmentCount, attachmentTypes, fragmentShader));
+
+    ASSERT(contextVk->hasStartedRenderPass());
+    vk::CommandBuffer *commandBuffer =
+        &contextVk->getStartedRenderPassCommands().getCommandBuffer();
+
+    ANGLE_TRY(setupProgram(contextVk, function, fragmentShader, vertexShader,
+                           &mUnresolvePrograms[flags], &pipelineDesc, descriptorSet, nullptr, 0,
+                           commandBuffer));
+    commandBuffer->draw(6, 0);
     return angle::Result::Continue;
 }
 
