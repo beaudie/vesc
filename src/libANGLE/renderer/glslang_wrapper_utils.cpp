@@ -910,23 +910,6 @@ void ValidateSpirvMessage(spv_message_level_t level,
     WARN() << "Level" << level << ": " << message;
 }
 
-bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob)
-{
-    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
-
-    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
-    bool result = spirvTools.Validate(spirvBlob);
-
-    if (!result)
-    {
-        std::string readableSpirv;
-        spirvTools.Disassemble(spirvBlob, &readableSpirv, SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
-        WARN() << "Invalid SPIR-V:\n" << readableSpirv;
-    }
-
-    return result;
-}
-
 // A SPIR-V transformer.  It walks the instructions and modifies them as necessary, for example to
 // assign bindings or locations.
 class SpirvTransformer final : angle::NonCopyable
@@ -2005,6 +1988,23 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     }
 
     return angle::Result::Continue;
+}
+
+bool ValidateSpirv(const SpirvBlob &spirvBlob)
+{
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+
+    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
+    bool result = spirvTools.Validate(spirvBlob);
+
+    if (!result)
+    {
+        std::string readableSpirv;
+        spirvTools.Disassemble(spirvBlob, &readableSpirv, 0);
+        WARN() << "Invalid SPIR-V:\n" << readableSpirv;
+    }
+
+    return result;
 }
 
 }  // namespace rx

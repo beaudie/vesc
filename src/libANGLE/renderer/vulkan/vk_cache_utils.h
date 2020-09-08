@@ -136,6 +136,9 @@ class alignas(4) RenderPassDesc final
     // Remove the resolve attachment.  Used when optimizing blit through resolve attachment to
     // temporarily pack a resolve attachment and then remove it.
     void removeColorResolveAttachment(size_t colorIndexGL);
+    // Indicate that a color attachment should take its data from the resolve attachment initially.
+    void packColorUnresolveAttachment(size_t colorIndexGL);
+    void removeColorUnresolveAttachment(size_t colorIndexGL);
 
     size_t hash() const;
 
@@ -152,6 +155,14 @@ class alignas(4) RenderPassDesc final
     bool hasColorResolveAttachment(size_t colorIndexGL) const
     {
         return mColorResolveAttachmentMask.test(colorIndexGL);
+    }
+    gl::DrawBufferMask getColorUnresolveAttachmentMask() const
+    {
+        return mColorUnresolveAttachmentMask;
+    }
+    bool hasColorUnresolveAttachment(size_t colorIndexGL) const
+    {
+        return mColorUnresolveAttachmentMask.test(colorIndexGL);
     }
 
     // Get the number of attachments in the Vulkan render pass, i.e. after removing disabled
@@ -187,9 +198,11 @@ class alignas(4) RenderPassDesc final
     // (mAttachmentFormats is one element too large, so there are 8 bits there to take).
     gl::DrawBufferMask mColorResolveAttachmentMask;
 
-    // TODO(syoussefi): to be used to determine which attachments are multisampled-render-to-texture
-    // that need load.  http://anglebug.com/4881
-    ANGLE_MAYBE_UNUSED uint8_t padding;
+    // Whether each color attachment with a corresponding resolve attachment should be initialized
+    // with said resolve attachment in an initial subpass.  This is an optimization to avoid
+    // loadOp=LOAD on the implicit multisampled image used with multisampled-render-to-texture
+    // render targets.  This operation is referred to as "unresolve".
+    gl::DrawBufferMask mColorUnresolveAttachmentMask;
 
     // Color attachment formats are stored with their GL attachment indices.  The depth/stencil
     // attachment formats follow the last enabled color attachment.  When creating a render pass,
@@ -198,7 +211,7 @@ class alignas(4) RenderPassDesc final
     // The attachment indices provided as input to various functions in this file are thus GL
     // attachment indices.  These indices are marked as such, e.g. colorIndexGL.  The render pass
     // (and corresponding framebuffer object) lists the packed attachments, with the corresponding
-    // indices marked with Vk, e.g. colorIndexVk.  The subpass attachment references create the
+    // indices marked with VK, e.g. colorIndexVK.  The subpass attachment references create the
     // link between the two index spaces.  The subpass declares attachment references with GL
     // indices (which corresponds to the location decoration of shader outputs).  The attachment
     // references then contain the Vulkan indices or VK_ATTACHMENT_UNUSED.
@@ -295,8 +308,9 @@ static_assert(kVertexInputAttributesSize == 96, "Size mismatch");
 
 struct RasterizationStateBits final
 {
-    uint32_t depthClampEnable : 4;
-    uint32_t rasterizationDiscardEnable : 4;
+    uint32_t subpass : 6;
+    uint32_t depthClampEnable : 1;
+    uint32_t rasterizationDiscardEnable : 1;
     uint32_t polygonMode : 4;
     uint32_t cullMode : 4;
     uint32_t frontFace : 4;
@@ -581,6 +595,10 @@ class GraphicsPipelineDesc final
                           float farPlane);
     void setScissor(const VkRect2D &scissor);
     void updateScissor(GraphicsPipelineTransitionBits *transition, const VkRect2D &scissor);
+
+    // Subpass
+    void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
+    void nextSubpass(GraphicsPipelineTransitionBits *transition);
 
   private:
     VertexInputAttributes mVertexInputAttribs;
@@ -976,6 +994,7 @@ class FramebufferDesc
 
     void updateColor(uint32_t index, ImageViewSubresourceSerial serial);
     void updateColorResolve(uint32_t index, ImageViewSubresourceSerial serial);
+    void updateColorUnresolveMask(gl::DrawBufferMask colorUnresolveMask);
     void updateDepthStencil(ImageViewSubresourceSerial serial);
     void updateReadOnlyDepth(bool readOnlyDepth);
     size_t hash() const;
@@ -997,7 +1016,13 @@ class FramebufferDesc
 
     // Note: this is an exclusive index. If there is one index it will be "1".
     uint16_t mMaxIndex;
-    uint16_t mReadOnlyDepth;
+    uint8_t mReadOnlyDepth;
+
+    // If the render pass contains an initial subpass to unresolve a number of attachments, the
+    // subpass description is derived from the following mask, specifying which attachments need
+    // to be unresolved.
+    gl::DrawBufferMask mColorUnresolveAttachmentMask;
+
     FramebufferAttachmentArray<ImageViewSubresourceSerial> mSerials;
 };
 
