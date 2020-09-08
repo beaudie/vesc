@@ -16,6 +16,69 @@
       "revId": "ebabc86d73e9291028f2791c734f1a6065fc5e3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "247da8a7_b68e2364",
+        "filename": "src/libANGLE/renderer/gl/glx/WindowSurfaceGLX.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T15:56:06Z",
+      "side": 1,
+      "message": "nit: all parentheses are unnecessary.",
+      "range": {
+        "startLine": 268,
+        "startChar": 12,
+        "endLine": 268,
+        "endChar": 47
+      },
+      "revId": "ebabc86d73e9291028f2791c734f1a6065fc5e3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67ffb7c0_3dece6ca",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T15:56:06Z",
+      "side": 1,
+      "message": "I\u0027m sure this will end up being useful in the future, so could be good to move it somewhere more common.\n\n+Maksim who may have suggestions and feedback.",
+      "revId": "ebabc86d73e9291028f2791c734f1a6065fc5e3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fcc359e_e1902d5c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-08T15:56:06Z",
+      "side": 1,
+      "message": "I noticed in Trevor\u0027s inclusivity change that \"sane\" was replaced.",
+      "range": {
+        "startLine": 1832,
+        "startChar": 65,
+        "endLine": 1832,
+        "endChar": 69
+      },
+      "revId": "ebabc86d73e9291028f2791c734f1a6065fc5e3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
