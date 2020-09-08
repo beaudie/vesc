@@ -118,6 +118,24 @@
     },
     {
       "key": {
+        "uuid": "1aaadbe5_24000dfc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-08T21:32:57Z",
+      "side": 1,
+      "message": "After looking into this more (and chatting with Shabi), I can see that the ImageHelper, RenderTargetVk, etc. can all go away without the CommandBufferHelper finding out.  That violates the point of this CL and why I was asked to move mContentDefined to ImageHelper (i.e. that ImageHelper won\u0027t go away until after the render pass is ended).",
+      "parentUuid": "8e975d30_65741d88",
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7243f50_fed7c2f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 16
