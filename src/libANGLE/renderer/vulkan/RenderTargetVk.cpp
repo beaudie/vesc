@@ -32,7 +32,8 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
       mResolveImageViews(other.mResolveImageViews),
       mLevelIndexGL(other.mLevelIndexGL),
       mLayerIndex(other.mLayerIndex),
-      mContentDefined(other.mContentDefined)
+      mColorContentDefined(other.mColorContentDefined),
+      mIsDepthStencil(other.mIsDepthStencil)
 {
     other.reset();
 }
@@ -43,7 +44,8 @@ void RenderTargetVk::init(vk::ImageHelper *image,
                           vk::ImageViewHelper *resolveImageViews,
                           gl::LevelIndex levelIndexGL,
                           uint32_t layerIndex,
-                          bool isImageTransient)
+                          bool isImageTransient,
+                          bool isDepthStencil)
 {
     mImage             = image;
     mImageViews        = imageViews;
@@ -52,21 +54,26 @@ void RenderTargetVk::init(vk::ImageHelper *image,
     mLevelIndexGL      = levelIndexGL;
     mLayerIndex        = layerIndex;
 
-    // Conservatively assume the content is defined.
-    mContentDefined = true;
+    mIsDepthStencil = isDepthStencil;
+    if (!mIsDepthStencil)
+    {
+        // Conservatively assume the color content is defined.
+        mColorContentDefined = true;
+    }
 
     mIsImageTransient = isImageTransient;
 }
 
 void RenderTargetVk::reset()
 {
-    mImage             = nullptr;
-    mImageViews        = nullptr;
-    mResolveImage      = nullptr;
-    mResolveImageViews = nullptr;
-    mLevelIndexGL      = gl::LevelIndex(0);
-    mLayerIndex        = 0;
-    mContentDefined    = false;
+    mImage               = nullptr;
+    mImageViews          = nullptr;
+    mResolveImage        = nullptr;
+    mResolveImageViews   = nullptr;
+    mLevelIndexGL        = gl::LevelIndex(0);
+    mLayerIndex          = 0;
+    mColorContentDefined = false;
+    mIsDepthStencil      = false;
 }
 
 vk::ImageViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
@@ -104,7 +111,7 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk)
     }
     retainImageViews(contextVk);
 
-    mContentDefined = true;
+    mColorContentDefined = true;
 }
 
 void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, bool isReadOnly)
@@ -128,11 +135,26 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, bool isReadOnly)
             contextVk->onImageRenderPassWrite(aspectFlags, vk::ImageLayout::DepthStencilAttachment,
                                               mResolveImage);
         }
+
+        mImage->setDefinedDepthContent(true);
+        mImage->setDefinedStencilContent(true);
     }
 
     retainImageViews(contextVk);
+}
 
-    mContentDefined = true;
+bool RenderTargetVk::hasDefinedColorContent() const
+{
+    ASSERT(!mIsDepthStencil);
+    return mColorContentDefined;
+}
+
+void RenderTargetVk::invalidateEntireColorContent()
+{
+    // Mark color content as undefined so that certain optimizations are possible such as using
+    // DONT_CARE as loadOp of the render target in the next renderpass.
+    ASSERT(!mIsDepthStencil);
+    mColorContentDefined = false;
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
@@ -256,11 +278,20 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
                                                  vk::ClearValuesArray *deferredClears,
                                                  uint32_t deferredClearIndex)
 {
-    // This function is called when the framebuffer is notified of an update to the attachment's
-    // contents.  Therefore, set mContentDefined so that the next render pass will have loadOp=LOAD.
-    mContentDefined = true;
-
     ASSERT(mImage->valid() && (!isResolveImageOwnerOfData() || mResolveImage->valid()));
+
+    // This function is called when the framebuffer is notified of an update to the attachment's
+    // contents.  Therefore, set m*ContentDefined so that the next render pass will have
+    // loadOp=LOAD.
+    if (mIsDepthStencil)
+    {
+        mImage->setDefinedDepthContent(true);
+        mImage->setDefinedStencilContent(true);
+    }
+    else
+    {
+        mColorContentDefined = true;
+    }
 
     // Note that the layer index for 3D textures is always zero according to Vulkan.
     uint32_t layerIndex = mLayerIndex;

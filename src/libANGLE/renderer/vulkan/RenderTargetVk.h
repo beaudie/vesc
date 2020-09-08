@@ -48,7 +48,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
               vk::ImageViewHelper *resolveImageViews,
               gl::LevelIndex levelIndexGL,
               uint32_t layerIndex,
-              bool isImageTransient);
+              bool isImageTransient,
+              bool isDepthStencil);
     void reset();
 
     vk::ImageViewSubresourceSerial getDrawSubresourceSerial() const;
@@ -97,11 +98,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     void retainImageViews(ContextVk *contextVk) const;
 
-    bool hasDefinedContent() const { return mContentDefined; }
-    // Mark content as undefined so that certain optimizations are possible such as using DONT_CARE
-    // as loadOp of the render target in the next renderpass.
-    void invalidateEntireContent() { mContentDefined = false; }
-    void restoreEntireContent() { mContentDefined = true; }
+    bool hasDefinedColorContent() const;
+    void invalidateEntireColorContent();
 
     // See the description of mIsImageTransient for details of how the following two can
     // interact.
@@ -126,7 +124,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // implement GL_EXT_multisampled_render_to_texture, so while the rendering is done on mImage
     // during the renderpass, the resolved image is the one that actually holds the data.  This
     // means that data uploads and blit are done on this image, copies are done out of this image
-    // etc.  This means that if there is no clear, and hasDefinedContent(), the contents of
+    // etc.  This means that if there is no clear, and hasDefinedColorContent(), the contents of
     // mResolveImage must be copied to mImage since the loadOp of the attachment must be set to
     // LOAD.
     vk::ImageHelper *mResolveImage;
@@ -138,7 +136,9 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     // Whether the render target has been invalidated.  If so, DONT_CARE is used instead of LOAD for
     // loadOp of this attachment.
-    bool mContentDefined;
+    bool mColorContentDefined;
+    // Convenience value, to make it faster to get to the correct m*ContentDefined
+    bool mIsDepthStencil;
 
     // If resolve attachment exists, |mIsImageTransient| is true if the multisampled results need to
     // be discarded.
