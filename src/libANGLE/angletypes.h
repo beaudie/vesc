@@ -405,7 +405,7 @@ using AttributesMask = angle::BitSet<MAX_VERTEX_ATTRIBS>;
 using UniformBlockBindingMask = angle::BitSet<IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS>;
 
 // Used in Framebuffer / Program
-using DrawBufferMask = angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
+using DrawBufferMask = angle::BitSet8<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 
 class BlendStateExt final
 {
@@ -530,7 +530,7 @@ class BlendStateExt final
             // This operation could be replaced with a single PEXT instruction from BMI2 set.
             diff = 0x0002040810204081 * diff >> 56;
 
-            return DrawBufferMask(static_cast<uint32_t>(diff));
+            return DrawBufferMask(static_cast<uint8_t>(diff));
         }
     };
 
