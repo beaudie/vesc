@@ -434,9 +434,11 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
             break;
         case GL_TEXTURE_SRGB_DECODE_EXT:
             texture->setSRGBDecode(context, ConvertToGLenum(pname, params[0]));
+            context->setTextureUnitsDirty();
             break;
         case GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT:
             texture->setSRGBOverride(context, ConvertToGLenum(pname, params[0]));
+            context->setTextureUnitsDirty();
             break;
         case GL_TEXTURE_CROP_RECT_OES:
             texture->setCrop(gl::Rectangle(ConvertTexParam<isGLfixed, GLint>(pname, params[0]),
