@@ -54,6 +54,23 @@
     },
     {
       "key": {
+        "uuid": "0b5cc753_c8de1396",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-09T16:12:40Z",
+      "side": 1,
+      "message": "I was thinking about it more and I actually have a question. Take this scenario:\n\n- Create 2D texture T0 and T1\n- Attach FBO to T0 (as draw buffer 0) and T1 (as draw buffer 1)\n- Draw (so RP starts)\n- Disable draw buffer 1\n- Bind T1 as texture\n- Draw with a program that samples from the texture\n\nDoes the second draw in the above program constitute a feedback loop? If not (and that\u0027s legal OpenGL), then we have a problem in that we are using the image of T1 as both color attachment and sampled image. It would be great if you added a test based on this.\n\nIf the above is not legal OpenGL, then what\u0027s stopping us from always starting the RP with all draw buffers (so, the loop below wouldn\u0027t go over mState.getEnabledDrawBuffers(), but rather all draw buffers with some attachment, enabled or not)?",
+      "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c99c2d84_db58e18c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -70,6 +87,29 @@
         "startChar": 24,
         "endLine": 1803,
         "endChar": 66
+      },
+      "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a563b9e_05f81d35",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-09T16:12:40Z",
+      "side": 1,
+      "message": "Please use `if` instead. We generally use ?: for value expression rather than to achieve if-else.",
+      "range": {
+        "startLine": 1867,
+        "startChar": 4,
+        "endLine": 1867,
+        "endChar": 34
       },
       "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
