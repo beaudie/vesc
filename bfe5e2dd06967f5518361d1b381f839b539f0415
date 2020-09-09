@@ -207,6 +207,24 @@
     },
     {
       "key": {
+        "uuid": "41260b8e_c60ac86a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T20:09:31Z",
+      "side": 1,
+      "message": "If this is used to create renderpass, you use getColorBufferMask().\nIf you try to see if this colorIndex is enabled or not, use getEnabledDrawBuffers().\n\nBasically think about getColorBufferMask as all attachments.",
+      "parentUuid": "a2ac4678_916b2a16",
+      "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a563b9e_05f81d35",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 6
