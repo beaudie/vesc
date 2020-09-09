@@ -259,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "bc3f3646_423aeb68",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T14:55:51Z",
+      "side": 1,
+      "message": "Sounds good.\n\nCan you mark this with the same TODO as in ContextVk::flush() since it sounds like we should be able to clean them both up with the same fix?",
+      "parentUuid": "d93bcf1d_c09e73a0",
+      "range": {
+        "startLine": 3044,
+        "startChar": 0,
+        "endLine": 3046,
+        "endChar": 50
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88a1e8e9_fc91cbb3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
