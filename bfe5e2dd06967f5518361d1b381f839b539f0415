@@ -219,6 +219,24 @@
       "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8973985b_e6a68c0c",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T00:36:39Z",
+      "side": 1,
+      "message": "Ah, right.   I ask, because you have this above:\n\n        if (getClientMajorVersion() \u003d\u003d 3)\n        {\n            program \u003d CompileProgram(essl3_shaders::vs::Simple(), kFS_ESSL3);\n        }\n        else\n        {\n            program \u003d CompileProgram(essl1_shaders::vs::Simple(), kFS_ESSL1);\n        }\n\nThese tests will (currently) always be run with a 3.x context.   If you want to execute both shaders, you\u0027ll need to use ANGLE_INSTANTIATE_TEST_ES2_AND_ES3().\n\nOtherwise, you can remove the check and the extra \u003c3.x shader.",
+      "parentUuid": "1524d49a_451b2dee",
+      "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
