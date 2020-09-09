@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0fa955f_d1a69d57",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-09T19:30:02Z",
+      "side": 1,
+      "message": "For the sake of completeness, could you please enhance these tests by adding another piece (before the verify calls) that re-enable the attachments and draw again? For that last draw, you can blend the colors, so that you can verify both draw calls with one final verify call.\n\nSee MultisampledRenderToTextureTest.DrawCopyThenBlend for an example of how you can blend the draw calls.",
+      "revId": "c3e2822c497fc98f7a17cf3c3d48c2644b3c7d3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

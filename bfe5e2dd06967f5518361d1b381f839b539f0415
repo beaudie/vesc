@@ -189,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "a2ac4678_916b2a16",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-09T19:30:02Z",
+      "side": 1,
+      "message": "A grep of `getEnabledDrawBuffers` shows that it\u0027s used in more places than changed here. How can we verify that all places that need modification (to `getColorBufferMask`) are correctly modified? How can we prevent future mistakes?\n\nI\u0027m genuinely asking because I\u0027m not sure myself which to choose given that both are used in this file.",
+      "parentUuid": "86e4c68d_4fa0eae9",
+      "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a563b9e_05f81d35",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 6
