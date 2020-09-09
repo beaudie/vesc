@@ -16,6 +16,24 @@
       "revId": "c3e2822c497fc98f7a17cf3c3d48c2644b3c7d3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5379edb8_9442114e",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T22:05:45Z",
+      "side": 1,
+      "message": "Done. also added scissored clear test.",
+      "parentUuid": "f0fa955f_d1a69d57",
+      "revId": "c3e2822c497fc98f7a17cf3c3d48c2644b3c7d3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
