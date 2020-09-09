@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0142451_cadce5be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "This link doesn\u0027t work for me.   It just says:\n\n\u003e You must enter a valid bug number!",
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec019eb3_029f8f75",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "nit: a",
+      "range": {
+        "startLine": 11,
+        "startChar": 25,
+        "endLine": 11,
+        "endChar": 27
+      },
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eb47601_4579334f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "There may be a word or two missing here.",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 51
+      },
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd5a797_ccd9e5ae",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4917,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "Can you add braces here too, since you\u0027re nearby?",
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa457a1c_9ec1e9be",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "Is it possible for there to be used and unused texture units interleaved in the list?   Or is it guaranteed somehow that the first unbound texture unit means all texture units afterward must also be unused (maybe with how textures are bound using GL commands)?",
+      "range": {
+        "startLine": 1091,
+        "startChar": 0,
+        "endLine": 1096,
+        "endChar": 17
+      },
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a03c6f8_b267741e",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "Why are you pinging someone at Intel about an AMD issue?",
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "987c94cf_786447cd",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "nit: remove the \u0027m\u0027 prefix.",
+      "range": {
+        "startLine": 826,
+        "startChar": 18,
+        "endLine": 826,
+        "endChar": 30
+      },
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cb9ee11_e49aa09d",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 843,
+        "startChar": 14,
+        "endLine": 843,
+        "endChar": 17
+      },
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5b4ed6e_737e00f0",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T15:37:51Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 852,
+        "startChar": 14,
+        "endLine": 852,
+        "endChar": 18
+      },
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
