@@ -477,7 +477,16 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mCurrentSwapHistoryIndex(0),
       mCurrentSwapchainImageIndex(0),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
+#ifdef OLD_CODE
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex)
+#else   // OLD_CODE
+      mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
+      mAcquireDeferred(false),
+      mPresentOutOfDate(false),
+      mSavedSwapHistoryIndex(0),
+      mContextForDeferredAcquire(nullptr),
+      mDisplayVkForDeferredAcquire(nullptr)
+#endif  // OLD_CODE
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -529,9 +538,13 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         vkDestroySurfaceKHR(instance, mSurface, nullptr);
         mSurface = VK_NULL_HANDLE;
     }
+#ifdef OLD_CODE
+#else   // OLD_CODE
 
     mAcquireImageSemaphore.destroy(device);
     mPresentSemaphoreRecycler.destroy(device);
+    mContextForDeferredAcquire   = nullptr;
+#endif  // OLD_CODE
 }
 
 egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
@@ -920,6 +933,12 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    mAcquireDeferred             = false;
+    mPresentOutOfDate            = false;
+    mSavedSwapHistoryIndex       = 0;
+#endif  // OLD_CODE
 
     // Intialize the swapchain image views.
     uint32_t imageCount = 0;
@@ -1316,6 +1335,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::swapImpl");
 
     ContextVk *contextVk = vk::GetImpl(context);
+#ifdef OLD_CODE
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
     bool presentOutOfDate = false;
@@ -1346,9 +1366,73 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
     RendererVk *renderer = contextVk->getRenderer();
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk));
+#else   // OLD_CODE
+    mDisplayVkForDeferredAcquire = vk::GetImpl(context->getDisplay());
+
+    mPresentOutOfDate = false;
+    // Save this now, since present() will increment the value.
+    mSavedSwapHistoryIndex = static_cast<uint32_t>(mCurrentSwapHistoryIndex);
+
+    ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &mPresentOutOfDate));
+
+    deferNextSwapchainImage(contextVk);
+#endif  // OLD_CODE
 
     return angle::Result::Continue;
 }
+#ifdef OLD_CODE
+#else   // OLD_CODE
+
+void WindowSurfaceVk::deferNextSwapchainImage(ContextVk *context)
+{
+    mAcquireDeferred           = true;
+    mContextForDeferredAcquire = context;
+
+    // Update RenderTarget pointers to know that we don't know the next swapchain image (if not
+    // multisampling).
+    if (!mColorImageMS.valid())
+    {
+        mColorRenderTarget.deferNextSwapchainImage(this);
+    }
+}
+
+angle::Result WindowSurfaceVk::acquireNextImage()
+{
+    ContextVk *contextVk = mContextForDeferredAcquire;
+    DisplayVk *displayVk = mDisplayVkForDeferredAcquire;
+
+    ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, mSavedSwapHistoryIndex, mPresentOutOfDate));
+
+    {
+        // Note: TRACE_EVENT0 is put here instead of inside the function to workaround this issue:
+        // http://anglebug.com/2927
+        ANGLE_TRACE_EVENT0("gpu.angle", "nextSwapchainImage");
+        // Get the next available swapchain image.
+
+        VkResult result = nextSwapchainImage(contextVk);
+        // If SUBOPTIMAL/OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain
+        // before continuing.
+        if (ANGLE_UNLIKELY((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR)))
+        {
+            ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, mSavedSwapHistoryIndex, true));
+            // Try one more time and bail if we fail
+            result = nextSwapchainImage(contextVk);
+        }
+        ANGLE_VK_TRY(contextVk, result);
+    }
+
+    RendererVk *renderer = contextVk->getRenderer();
+    ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk));
+
+    // Clean up the deferral
+    mAcquireDeferred             = false;
+    mPresentOutOfDate            = false;
+    mContextForDeferredAcquire   = nullptr;
+    mDisplayVkForDeferredAcquire = nullptr;
+
+    return angle::Result::Continue;
+}
+#endif  // OLD_CODE
 
 VkResult WindowSurfaceVk::nextSwapchainImage(vk::Context *context)
 {
@@ -1547,6 +1631,13 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                                                      const vk::RenderPass &compatibleRenderPass,
                                                      vk::Framebuffer **framebufferOut)
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    if (mAcquireDeferred && !isMultiSampled())
+    {
+        ANGLE_TRY(acquireNextImage());
+    }
+#endif  // OLD_CODE
     vk::Framebuffer &currentFramebuffer =
         isMultiSampled() ? mFramebufferMS
                          : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
