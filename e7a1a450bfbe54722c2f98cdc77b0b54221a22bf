@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ea632152_5320bde2",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-09T13:56:22Z",
+      "side": 1,
+      "message": "It would require a map or another vector to track in this case, since the number of samplers allowed in a shader is fairly low I\u0027d say it\u0027s worth eating the cost of the extra allocations for now.",
+      "parentUuid": "f835f25e_babafef0",
+      "revId": "e7a1a450bfbe54722c2f98cdc77b0b54221a22bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3760324_ca722c96",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 3
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "520130ca_b7d0cfb3",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-09T13:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3760324_ca722c96",
+      "range": {
+        "startLine": 811,
+        "startChar": 8,
+        "endLine": 811,
+        "endChar": 17
+      },
+      "revId": "e7a1a450bfbe54722c2f98cdc77b0b54221a22bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a1ed9a7_9dc44008",
         "filename": "src/tests/gl_tests/UniformTest.cpp",
         "patchSetId": 3
@@ -56,6 +98,24 @@
       "revId": "e7a1a450bfbe54722c2f98cdc77b0b54221a22bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bef5d067_cb745a5c",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-09T13:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a1ed9a7_9dc44008",
+      "revId": "e7a1a450bfbe54722c2f98cdc77b0b54221a22bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
