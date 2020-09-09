@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f2fb0875_94daee85",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-09T18:01:15Z",
+      "side": 1,
+      "message": "My point was rather, what if first you see a higher arrayIndex and then a lower one? If that\u0027s possible at all that is. If not, you could `ASSERT(samplerBinding.boundTextureUnits.size() \u003c\u003d locationRef.arrayIndex);`",
+      "parentUuid": "ea632152_5320bde2",
+      "revId": "e7a1a450bfbe54722c2f98cdc77b0b54221a22bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3760324_ca722c96",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 3
