@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "01ef6ebb_6e1d6ebf",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T21:06:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d5ec692_5182e76f",
+      "range": {
+        "startLine": 371,
+        "startChar": 14,
+        "endLine": 371,
+        "endChar": 15
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e97bd976_096450ec",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -56,6 +80,24 @@
       "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29dae2df_1ec08ee8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T21:06:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e97bd976_096450ec",
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +203,24 @@
       "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "237fb675_6c793a23",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T21:06:40Z",
+      "side": 1,
+      "message": "Because of the removal of kDeferredFlushMaxCount, we have to keep a separate boolean for this now.",
+      "parentUuid": "dae85379_eaba2232",
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -307,6 +367,30 @@
     },
     {
       "key": {
+        "uuid": "3507082d_15338565",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T21:06:40Z",
+      "side": 1,
+      "message": "Sounds reasonable to me as well. One of the reason I did it this way is that I try to do it at top level as I can to have better API layering (prevent lower API cal back to higher level API and form a call loop). Until we have a better idea how to do more sophisticated submission, I like the idea to limited glFlush deferral to renderpass.\n\nI have kept the mDeferredFlushCount instead of a boolean to keep a bit more information for debugging/informational purpose. But I have removed mDeferredFlushAllowed since sync objects won\u0027t get inserted in the middle of renderpass, so that is the plus side of flush at endRP time.",
+      "parentUuid": "63730984_08df1fb7",
+      "range": {
+        "startLine": 3044,
+        "startChar": 0,
+        "endLine": 3046,
+        "endChar": 50
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88a1e8e9_fc91cbb3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -321,6 +405,24 @@
       "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fad2b7ac_896bdf32",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4982,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T21:06:40Z",
+      "side": 1,
+      "message": "This has now removed.",
+      "parentUuid": "88a1e8e9_fc91cbb3",
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -367,6 +469,30 @@
       "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52386667_d99e616a",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T21:06:40Z",
+      "side": 1,
+      "message": "This has now removed",
+      "parentUuid": "20607e3f_0ff7610c",
+      "range": {
+        "startLine": 60,
+        "startChar": 15,
+        "endLine": 60,
+        "endChar": 35
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
