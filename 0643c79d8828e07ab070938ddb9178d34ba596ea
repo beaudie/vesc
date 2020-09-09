@@ -211,6 +211,30 @@
     },
     {
       "key": {
+        "uuid": "8f30e5a7_59b15058",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-09T00:51:32Z",
+      "side": 1,
+      "message": "Do you have data for each value 1-4 that led you to settle on 4 as the best, with the caveat that we\u0027d need a workaround here?   Or is there a good compromise value for kDeferredFlushMaxCount instead of 4 then (would 2 defer enough flushes to help onscreen without delaying too much work to hurt offscreen)?\n\nIt just seems a bit odd to me to correlate changing the draw FBO with frame boundaries, as far as offscreen benchmarks are concerned.   This seems like a place that will make things difficult to work around when optimizing other apps in the future, if glFlush() is something real apps do.   I\u0027ll have to defer to your guys\u0027 experience on that though.\n\nThis also feels like something that has come up a few times now where we don\u0027t have a good way to delineate frame boundaries in offscreen benchmarks.",
+      "parentUuid": "55a39cd1_ffcda3b0",
+      "range": {
+        "startLine": 3044,
+        "startChar": 0,
+        "endLine": 3046,
+        "endChar": 50
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88a1e8e9_fc91cbb3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
