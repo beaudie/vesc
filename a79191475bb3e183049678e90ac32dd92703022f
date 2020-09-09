@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e03c2bd6_ef0bf6a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-09-09T21:25:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2527ba24_b8e860eb",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 27
+      },
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b385387a_9b28f000",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "88413b32_6291bba3",
+        "filename": "dotfile_settings.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-09-09T21:25:13Z",
+      "side": 1,
+      "message": "It is.\n\nin .gn:\n```\nexec_script_whitelist \u003d angle_dotfile_settings.exec_script_allowlist +\n                        build_dotfile_settings.exec_script_allowlist +\n                        ...\n```\n\nthis variable is concatenated. I tried to change .gn\u0027s variable to allowlist, but I was getting the presubmit to fail. So I changed it back to `whitelist`. .gn is an example where someone else should step up to finish.\n\nThe exact error:\n```\n** Presubmit ERRORS **\nUnable to run gn gen for export_targets.py: ERROR at //.gn:25:25: Assignment had no effect.\nexec_script_allowlist \u003d angle_dotfile_settings.exec_script_allowlist +\n                        ^---------------------------------------------\nYou set the variable \"exec_script_allowlist\" here and it was unused before it went\nout of scope.\n```",
+      "parentUuid": "cfebee56_f959b813",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e32f46d_7794bf6f",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 1
@@ -102,6 +150,30 @@
       "revId": "a79191475bb3e183049678e90ac32dd92703022f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd145534_eede4791",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-09-09T21:25:13Z",
+      "side": 1,
+      "message": "Yikes. I just missed that.",
+      "parentUuid": "2e32f46d_7794bf6f",
+      "range": {
+        "startLine": 161,
+        "startChar": 7,
+        "endLine": 161,
+        "endChar": 16
+      },
+      "revId": "a79191475bb3e183049678e90ac32dd92703022f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
