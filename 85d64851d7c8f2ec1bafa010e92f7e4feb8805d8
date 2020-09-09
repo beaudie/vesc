@@ -22,6 +22,30 @@
       "revId": "85d64851d7c8f2ec1bafa010e92f7e4feb8805d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "721ae10d_d49f680c",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-09T19:46:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e84a3252_5f52f319",
+      "range": {
+        "startLine": 479,
+        "startChar": 2,
+        "endLine": 479,
+        "endChar": 22
+      },
+      "revId": "85d64851d7c8f2ec1bafa010e92f7e4feb8805d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
