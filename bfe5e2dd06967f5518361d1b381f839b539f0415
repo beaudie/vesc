@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "d57b015d_e99d2c0d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T17:30:30Z",
+      "side": 1,
+      "message": "From reading of GL spec says that this constitutes a feedback loop, and should produce undefined behavior. The feedback loop condition says as long as it is attached, it creates the loop. draw buffer state should not affect the loop. This is orthogonal to how we implement this via a new RP or use color mask. I am not sure we should add a test for the undefined behavior though.\n\nNothing stops us always starts RP with all attached buffers. I think that is the right thing to do. I just avoiding the bigger change here to get it going. Maybe we  can do it as a follow up CL. (I was looking at exact this, but not seeing a bit mask for all attachments, and opt for a smaller change that solves the problem I am looking).",
+      "parentUuid": "0b5cc753_c8de1396",
+      "revId": "bfe5e2dd06967f5518361d1b381f839b539f0415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c99c2d84_db58e18c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
