@@ -137,6 +137,7 @@ class CommandProcessorTask
     ContextVk *mContextVk;
     CommandBufferHelper *mCommandBuffer;
     CustomTask mWorkerCommand;
+    uint64_t mCommandId;
 
     // Flush data
     std::vector<VkSemaphore> mWaitSemaphores;
@@ -274,10 +275,15 @@ class CommandProcessor : angle::NonCopyable
     vk::Context *getContextPointer() { return &mCommandWorkQueue; }
 
   private:
+    void waitTurn(uint64_t commandId);
     std::queue<vk::CommandProcessorTask> mCommandsQueue;
+    uint64_t mCommandId;
+    uint64_t mOutputCommandId;
     std::mutex mWorkerMutex;
     // Signal worker thread when work is available
     std::condition_variable mWorkAvailableCondition;
+    // Synchronize work tasks
+    std::condition_variable mTaskTurnCondition;
     // Signal main thread when all work completed
     std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes

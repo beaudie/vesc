@@ -401,7 +401,11 @@ vk::ErrorDetails CommandWorkQueue::getAndClearError()
 }
 
 CommandProcessor::CommandProcessor(RendererVk *renderer)
-    : mWorkerThreadIdle(true), mRenderer(renderer), mCommandWorkQueue(renderer)
+    : mCommandId(0),
+      mOutputCommandId(0),
+      mWorkerThreadIdle(true),
+      mRenderer(renderer),
+      mCommandWorkQueue(renderer)
 {}
 
 void CommandProcessor::queueCommand(vk::CommandProcessorTask *command)
@@ -467,6 +471,7 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
         mWorkerThreadIdle = false;
         vk::CommandProcessorTask task(std::move(mCommandsQueue.front()));
         mCommandsQueue.pop();
+        task.mCommandId = ++mCommandId;
         lock.unlock();
         switch (task.mWorkerCommand)
         {
@@ -477,6 +482,13 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
                 mCommandWorkQueue.destroy(mRenderer->getDevice());
                 mCommandPool.destroy(mRenderer->getDevice());
                 mPrimaryCommandBuffer.destroy(mRenderer->getDevice());
+                lock.lock();
+                if (mOutputCommandId != (task.mCommandId - 1))
+                {
+                    WARN() << "CustomTask::Exit out of order";
+                }
+                mOutputCommandId = task.mCommandId;
+                lock.unlock();
                 mWorkerThreadIdle = true;
                 mWorkerIdleCondition.notify_one();
                 return angle::Result::Continue;
@@ -491,6 +503,13 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
                                      &task.mWaitSemaphoreStageMasks, task.mSemaphore);
                 // 2. Call submitFrame()
                 ANGLE_TRY(mRenderer->getNextSubmitFence(&mFence));
+                lock.lock();
+                if (mOutputCommandId != (task.mCommandId - 1))
+                {
+                    WARN() << "CustomTask::Flush out of order";
+                }
+                mOutputCommandId = task.mCommandId;
+                lock.unlock();
                 ANGLE_TRY(mCommandWorkQueue.submitFrame(
                     mRenderer, task.mPriority, submitInfo, mFence, &task.mCurrentGarbage,
                     &mCommandPool, std::move(mPrimaryCommandBuffer)));
@@ -508,10 +527,24 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
             case vk::CustomTask::FinishToSerial:
             {
                 ANGLE_TRY(mCommandWorkQueue.finishToSerial(mRenderer, task.mSerial));
+                lock.lock();
+                if (mOutputCommandId != (task.mCommandId - 1))
+                {
+                    WARN() << "CustomTask::FinishToSerial out of order";
+                }
+                mOutputCommandId = task.mCommandId;
+                lock.unlock();
                 break;
             }
             case vk::CustomTask::Present:
             {
+                lock.lock();
+                if (mOutputCommandId != (task.mCommandId - 1))
+                {
+                    WARN() << "CustomTask::Present out of order";
+                }
+                mOutputCommandId = task.mCommandId;
+                lock.unlock();
                 VkResult result = mCommandWorkQueue.present(task.mPriority, task.mPresentInfo);
                 if (ANGLE_UNLIKELY(result != VK_SUCCESS))
                 {
@@ -525,16 +558,37 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
             }
             case vk::CustomTask::DeviceWaitIdle:
             {
+                lock.lock();
+                if (mOutputCommandId != (task.mCommandId - 1))
+                {
+                    WARN() << "CustomTask::DeviceWaitIdle out of order";
+                }
+                mOutputCommandId = task.mCommandId;
+                lock.unlock();
                 ANGLE_TRY(mCommandWorkQueue.deviceWaitIdle());
                 break;
             }
             case vk::CustomTask::QueueWaitIdle:
             {
+                lock.lock();
+                if (mOutputCommandId != (task.mCommandId - 1))
+                {
+                    WARN() << "CustomTask::QueueWaitIdle out of order";
+                }
+                mOutputCommandId = task.mCommandId;
+                lock.unlock();
                 ANGLE_TRY(mCommandWorkQueue.queueWaitIdle(task.mPriority));
                 break;
             }
             case vk::CustomTask::FlushToPrimary:
             {
+                lock.lock();
+                if (mOutputCommandId != (task.mCommandId - 1))
+                {
+                    WARN() << "CustomTask::FlushToPrimary out of order";
+                }
+                mOutputCommandId = task.mCommandId;
+                lock.unlock();
                 ASSERT(!task.mCommandBuffer->empty());
                 ANGLE_TRY(
                     task.mCommandBuffer->flushToPrimary(task.mContextVk, &mPrimaryCommandBuffer));
@@ -552,6 +606,7 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
     return angle::Result::Stop;
 }
 
+void CommandProcessor::waitTurn(uint64_t commandId) {}
 void CommandProcessor::waitForWorkComplete()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForWorkerThreadIdle");
