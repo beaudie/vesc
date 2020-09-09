@@ -59,6 +59,24 @@
     },
     {
       "key": {
+        "uuid": "47e5a5e9_ce969fca",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-09-09T07:31:11Z",
+      "side": 1,
+      "message": "Yes, this will be very useful. For example, Display.cpp should be able to access that in the future.",
+      "parentUuid": "67ffb7c0_3dece6ca",
+      "revId": "ebabc86d73e9291028f2791c734f1a6065fc5e3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5fcc359e_e1902d5c",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 5
