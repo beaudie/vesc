@@ -283,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "63730984_08df1fb7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-09T18:24:28Z",
+      "side": 1,
+      "message": "I have two suggestions here:\n\n- The only application we know is Manhattan, and we only want to defer one flush, right? My suggestion is to not base the work on guess work and keep it simpler: A bool that says whether there\u0027s flush that\u0027s been deferred. When there\u0027s a flush, don\u0027t try to be clever, and always defer (see next suggestion)\n\n- Flush on endRP instead of FBO change. That\u0027s exactly the purpose of the change (don\u0027t break RP because of flush), and respects the application\u0027s flush call more precisely. In flushImpl(), instead of deferring up to 4 times, do this: \"if RP started and not empty, defer the flush, otherwise do the flush\".\n\nWith the above suggestions, the change should become simpler too.",
+      "parentUuid": "bc3f3646_423aeb68",
+      "range": {
+        "startLine": 3044,
+        "startChar": 0,
+        "endLine": 3046,
+        "endChar": 50
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88a1e8e9_fc91cbb3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
