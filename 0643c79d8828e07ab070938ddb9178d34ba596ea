@@ -82,6 +82,30 @@
     },
     {
       "key": {
+        "uuid": "05277928_8045e516",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T00:35:51Z",
+      "side": 1,
+      "message": "No, that only know how many commands we accumulate. What I need to do is how many commands is pending GPU execution. Basically we need to know where in the command buffer GPU has been finished, and how much left for execution.",
+      "parentUuid": "fbdc0ff2_b907856c",
+      "range": {
+        "startLine": 987,
+        "startChar": 33,
+        "endLine": 987,
+        "endChar": 98
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55a7aef5_f5243efd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -122,6 +146,24 @@
     },
     {
       "key": {
+        "uuid": "dae85379_eaba2232",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T00:35:51Z",
+      "side": 1,
+      "message": "We can. The only concern is that it may create some confusion when people debug it.\nMaybe I can set it to UINT32_MAX in this case.",
+      "parentUuid": "a16ceb88_b1362ea0",
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63c63213_92fc71b7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -133,6 +175,30 @@
       "writtenOn": "2020-09-08T23:26:31Z",
       "side": 1,
       "message": "Is this something you\u0027re seeing in apps now, or can we wait to include this block of code until we actually see a problem?   I\u0027d prefer to just rely on the normal command submission as much as possible if we can.",
+      "range": {
+        "startLine": 3044,
+        "startChar": 0,
+        "endLine": 3046,
+        "endChar": 50
+      },
+      "revId": "0643c79d8828e07ab070938ddb9178d34ba596ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55a39cd1_ffcda3b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T00:35:51Z",
+      "side": 1,
+      "message": "Without this line, you see (quite big) performance regression on TRex and Manhattan offscreen scores, since offscreen benchmark uses glFlush for frame boundary. This essentially make sure that offscreen behavior remains the same.",
+      "parentUuid": "63c63213_92fc71b7",
       "range": {
         "startLine": 3044,
         "startChar": 0,
