@@ -137,6 +137,7 @@ class CommandProcessorTask
     ContextVk *mContextVk;
     CommandBufferHelper *mCommandBuffer;
     CustomTask mWorkerCommand;
+    uint64_t mCommandId;
 
     // Flush data
     std::vector<VkSemaphore> mWaitSemaphores;
@@ -275,6 +276,8 @@ class CommandProcessor : angle::NonCopyable
 
   private:
     std::queue<vk::CommandProcessorTask> mCommandsQueue;
+    uint64_t mCommandId;
+    uint64_t mOutputCommandId;
     std::mutex mWorkerMutex;
     // Signal worker thread when work is available
     std::condition_variable mWorkAvailableCondition;
