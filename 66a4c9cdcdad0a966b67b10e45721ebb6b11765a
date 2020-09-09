@@ -16,6 +16,24 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5e6eea8_e9b50520",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-09T23:30:17Z",
+      "side": 1,
+      "message": "We can. For Manhattan this probably no difference. But IMO this check is worth while. If GPU is idle, and app is asking us to submit, why we hold off from submission, right?",
+      "parentUuid": "cafd83cb_3123fa57",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
