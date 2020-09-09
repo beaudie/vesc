@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "af90224a_4b980d42",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2020-09-09T18:31:38Z",
+      "side": 1,
+      "message": "\u003eShould these calculate the max `arrayIndex` in the loop and resize to that after the loop?\n\nmin arrayIndex\n\nI think remembering the min for arbitrary sampler bindings is quite complex compared to just cropping few times..",
+      "parentUuid": "f2fb0875_94daee85",
+      "revId": "e7a1a450bfbe54722c2f98cdc77b0b54221a22bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3760324_ca722c96",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 3

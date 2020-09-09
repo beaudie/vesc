@@ -105,6 +105,30 @@
     },
     {
       "key": {
+        "uuid": "c4c1dd6c_32ad59be",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2020-09-09T18:31:38Z",
+      "side": 1,
+      "message": "Yes, as far as I understand the spec. First -1 means the rest will be unused too. As in, the driver will return -1 for all the rest, too. As in, if the drivers are not buggy.\n\nMy guess is that otherwise it would not be possible to mark array[0] as unused, as that would leave the full array setter syntax not working, when there would be array elements later that would be used. (not very well explained but I hope you get the point)",
+      "parentUuid": "fa457a1c_9ec1e9be",
+      "range": {
+        "startLine": 1091,
+        "startChar": 0,
+        "endLine": 1096,
+        "endChar": 17
+      },
+      "revId": "329598c903b6935780db6494a40b404ceb024192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a03c6f8_b267741e",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 4
