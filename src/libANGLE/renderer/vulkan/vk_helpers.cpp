@@ -4383,7 +4383,6 @@ void ImageHelper::stageSelfForBaseLevel()
 angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contextVk,
                                                                gl::LevelIndex levelGL,
                                                                uint32_t layer,
-                                                               CommandBuffer *commandBuffer,
                                                                ClearValuesArray *deferredClears,
                                                                uint32_t deferredClearIndex)
 {
@@ -4430,7 +4429,7 @@ angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contex
     }
 
     LevelIndex levelVK = toVKLevel(levelGL);
-    return flushStagedUpdates(contextVk, levelVK, levelVK + 1, layer, layer + 1, {}, commandBuffer);
+    return flushStagedUpdates(contextVk, levelVK, levelVK + 1, layer, layer + 1, {});
 }
 
 angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
@@ -4438,8 +4437,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                               LevelIndex levelVKEnd,
                                               uint32_t layerStart,
                                               uint32_t layerEnd,
-                                              gl::TexLevelMask skipLevelsMask,
-                                              CommandBuffer *commandBuffer)
+                                              gl::TexLevelMask skipLevelsMask)
 {
     if (mSubresourceUpdates.empty())
     {
@@ -4536,7 +4534,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         if (updateLayerCount >= kMaxParallelSubresourceUpload)
         {
             // If there are more subresources than bits we can track, always insert a barrier.
-            recordWriteBarrier(aspectFlags, ImageLayout::TransferDst, commandBuffer);
+            recordWriteBarrier(aspectFlags, ImageLayout::TransferDst,
+                               &contextVk->getOutsideRenderPassCommandBuffer());
             subresourceUploadsInProgress = std::numeric_limits<uint64_t>::max();
         }
         else
@@ -4551,7 +4550,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             if ((subresourceUploadsInProgress & subresourceHash) != 0)
             {
                 // If there's overlap in subresource upload, issue a barrier.
-                recordWriteBarrier(aspectFlags, ImageLayout::TransferDst, commandBuffer);
+                recordWriteBarrier(aspectFlags, ImageLayout::TransferDst,
+                                   &contextVk->getOutsideRenderPassCommandBuffer());
                 subresourceUploadsInProgress = 0;
             }
             subresourceUploadsInProgress |= subresourceHash;
@@ -4560,7 +4560,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         if (update.updateSource == UpdateSource::Clear)
         {
             clear(update.clear.aspectFlags, update.clear.value, updateMipLevelVK, updateBaseLayer,
-                  updateLayerCount, commandBuffer);
+                  updateLayerCount, &contextVk->getOutsideRenderPassCommandBuffer());
             // Remember the latest operation is a clear call
             mCurrentSingleClearValue = update.clear;
         }
@@ -4573,17 +4573,18 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             ANGLE_TRY(contextVk->onBufferTransferRead(currentBuffer));
 
-            commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
-                                             getCurrentLayout(), 1, &update.buffer.copyRegion);
+            contextVk->getOutsideRenderPassCommandBuffer().copyBufferToImage(
+                currentBuffer->getBuffer().getHandle(), mImage, getCurrentLayout(), 1,
+                &update.buffer.copyRegion);
             onWrite();
         }
         else
         {
             ANGLE_TRY(contextVk->onImageTransferRead(aspectFlags, update.image.image));
 
-            commandBuffer->copyImage(update.image.image->getImage(),
-                                     update.image.image->getCurrentLayout(), mImage,
-                                     getCurrentLayout(), 1, &update.image.copyRegion);
+            contextVk->getOutsideRenderPassCommandBuffer().copyImage(
+                update.image.image->getImage(), update.image.image->getCurrentLayout(), mImage,
+                getCurrentLayout(), 1, &update.image.copyRegion);
             onWrite();
         }
 
@@ -4605,9 +4606,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
     // Clear the image.
-    CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
-    return flushStagedUpdates(contextVk, LevelIndex(0), LevelIndex(mLevelCount), 0, mLayerCount, {},
-                              &commandBuffer);
+    return flushStagedUpdates(contextVk, LevelIndex(0), LevelIndex(mLevelCount), 0, mLayerCount,
+                              {});
 }
 
 bool ImageHelper::isUpdateStaged(gl::LevelIndex levelGL, uint32_t layer)
