@@ -157,6 +157,24 @@
       "revId": "6b31ad9cbf4b1f283fe565758f88885111eaa469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff296b3b_cffb0c0d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4481,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-10T21:08:34Z",
+      "side": 1,
+      "message": "I did the \"minimal\" version and I hit the same validation error I was seeing before. Would appear somewhere things are getting out of whack.\nI like the idea of having an assert fire when trying to add to a \"closed\" command buffer.",
+      "parentUuid": "85745f11_476f0feb",
+      "revId": "6b31ad9cbf4b1f283fe565758f88885111eaa469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
