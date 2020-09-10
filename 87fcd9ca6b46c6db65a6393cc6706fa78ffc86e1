@@ -51,6 +51,24 @@
       "revId": "87fcd9ca6b46c6db65a6393cc6706fa78ffc86e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfd6b2f9_e52e2306",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T20:34:09Z",
+      "side": 1,
+      "message": "I see. Thanks for explanation.",
+      "parentUuid": "161416dc_a444eabd",
+      "revId": "87fcd9ca6b46c6db65a6393cc6706fa78ffc86e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
