@@ -16,6 +16,144 @@
       "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ea347dc_a3f8a06f",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-10T18:42:35Z",
+      "side": 1,
+      "message": "Given that allocation can fail, lets have this return an Error object and return the buffer with an out parameter.",
+      "range": {
+        "startLine": 202,
+        "startChar": 4,
+        "endLine": 202,
+        "endChar": 79
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "043b7026_75cd7642",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-10T18:42:35Z",
+      "side": 1,
+      "message": "I\u0027d do this all in a helper in android_util, pass the attribute map and have the known list of supported formats there too.\n\nAs is, there are a couple issues:\n  - This doesn\u0027t check componentType so float formats could be returned if they match the componentSize\n  - same for colorEncoding, sRGB formats could be returned",
+      "range": {
+        "startLine": 1141,
+        "startChar": 0,
+        "endLine": 1165,
+        "endChar": 0
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7878e2a6_70b54346",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4537,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-10T18:42:35Z",
+      "side": 1,
+      "message": "nit: camelcase",
+      "range": {
+        "startLine": 4537,
+        "startChar": 8,
+        "endLine": 4537,
+        "endChar": 16
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "851b748d_efe329fa",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-10T18:42:35Z",
+      "side": 1,
+      "message": "This doesn\u0027t cover if the width and height are unspecified. Maybe validate that they are \u003e0 by querying them from the attribute map after this validation.",
+      "range": {
+        "startLine": 4551,
+        "startChar": 0,
+        "endLine": 4554,
+        "endChar": 17
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7ba6b3c_46e59b83",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4563,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-10T18:42:35Z",
+      "side": 1,
+      "message": "Same for these.",
+      "range": {
+        "startLine": 4560,
+        "startChar": 0,
+        "endLine": 4563,
+        "endChar": 17
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70bd8f0c_9e4eab44",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-10T18:42:35Z",
+      "side": 1,
+      "message": "Pass the egl::AttributeMap to this directly (and also do Display::CreateNativeClientBuffer)",
+      "range": {
+        "startLine": 340,
+        "startChar": 46,
+        "endLine": 340,
+        "endChar": 71
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
