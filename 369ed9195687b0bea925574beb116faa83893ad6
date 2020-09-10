@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "3437736a_4dfa5a1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "The changes in vk_helpers.cpp look unrelated? Maybe something can be split off this change?",
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e306d98f_90b9c057",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -65,6 +82,132 @@
     },
     {
       "key": {
+        "uuid": "a28bf170_027b7c7b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "nit: I would say \"lazily\" instead. The code is not \"delay\"ing the allocation, it\u0027s actually doing the allocation, but lazily.",
+      "range": {
+        "startLine": 968,
+        "startChar": 11,
+        "endLine": 968,
+        "endChar": 16
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af048184_a73ae29c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "Same nit.\n\nAlso, I suggest having all the functions look like updateTexturesDescriptorSet, where descriptorSet is initialized to NULL outside the loop, and only initialized once inside the `if`. Not a big deal, the other ways are fine too, but in that case make all function look similar.",
+      "range": {
+        "startLine": 1052,
+        "startChar": 11,
+        "endLine": 1052,
+        "endChar": 16
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baabe61e_ce4a6d51",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "What if `bufferBinding.get() \u003d\u003d nullptr` for all the buffers? Is that even possible?",
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55f58fdc_253c658c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "Same nit",
+      "range": {
+        "startLine": 1155,
+        "startChar": 15,
+        "endLine": 1155,
+        "endChar": 20
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48bc69ce_539bfe39",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "Looks unnecessary, but if you want to keep it, please replicate in other functions.",
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9812d76c_bac13509",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "Same nit",
+      "range": {
+        "startLine": 1387,
+        "startChar": 19,
+        "endLine": 1387,
+        "endChar": 24
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cef803f8_dddc7506",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 10
@@ -81,6 +224,53 @@
         "startChar": 31,
         "endLine": 1639,
         "endChar": 73
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2be953c1_3256378d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "Is this fixing something? If so, looks like an unrelated bugfix based on the change description.",
+      "parentUuid": "cef803f8_dddc7506",
+      "range": {
+        "startLine": 1639,
+        "startChar": 31,
+        "endLine": 1639,
+        "endChar": 73
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6512bdd1_a732cd1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:44:15Z",
+      "side": 1,
+      "message": "nit: Unnecessary change as mCurrentPoolIndex was just ASSERTed to be 0 above.",
+      "range": {
+        "startLine": 1705,
+        "startChar": 29,
+        "endLine": 1705,
+        "endChar": 46
       },
       "revId": "369ed9195687b0bea925574beb116faa83893ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
