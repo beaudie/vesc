@@ -88,6 +88,23 @@
     },
     {
       "key": {
+        "uuid": "dd45b935_168b2303",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1126309
+      },
+      "writtenOn": "2020-09-10T16:38:14Z",
+      "side": 1,
+      "message": "Hmm, apparently, MSVC refuses to convert a temporary |size_t| to |size_t\u0026\u0026|...\nI guess we could work that around by going back to std::move(), but apply them to separate local variables defined within the \"for\" loops.",
+      "revId": "1bc118485b4ac6fa3a61d92473bc1c14c5e0772a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5eea5006_3f808ab3",
         "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
         "patchSetId": 3
