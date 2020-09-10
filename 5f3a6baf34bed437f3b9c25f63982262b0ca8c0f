@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1ddd5d3_3f5d53c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T18:44:33Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "5f3a6baf34bed437f3b9c25f63982262b0ca8c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69a737bb_5e5ef6c0",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T18:44:33Z",
+      "side": 1,
+      "message": "nit: recommend against const here\n\nhttps://abseil.io/tips/109",
+      "range": {
+        "startLine": 240,
+        "startChar": 80,
+        "endLine": 240,
+        "endChar": 85
+      },
+      "revId": "5f3a6baf34bed437f3b9c25f63982262b0ca8c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
