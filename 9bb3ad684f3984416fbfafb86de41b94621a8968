@@ -136,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "6b37c48b_7e35934d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:21:38Z",
+      "side": 1,
+      "message": "Right, thanks for clearing this up. I was thinking that the ImageHelper is stored in the garbage queue while we wait for cleanup. Instead we store the contents of the ImageHelper in a garbage list and destroy the ImageHelper itself. So this approach won\u0027t work out of the box.\n\nThere are existing tricky bugs with storing mContentsDefined in RenderPassVk as well. If you use an ImageHelper as an EGL Image source, and then invalidate the target, writes to the source will not \"restore\" the contents. This is a bit tricky and unlikely to occur in practice. There may be other cases where we access the ImageHelper separately from the Framebuffer that don\u0027t \"restore\" contents on write.\n\nFor now maybe dump some of this into an open issue and defer any follow-up until we run into such a situation. I suggest we land the tests you wrote.",
+      "parentUuid": "1aaadbe5_24000dfc",
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7243f50_fed7c2f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 16
