@@ -16,6 +16,29 @@
       "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5bbceb5_eab38b5d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-10T20:12:12Z",
+      "side": 1,
+      "message": "Are these doing anything against a raw uint32_t (do we not allow 0 to be returned)?   Also, are they necessary when the checked values already did a ValueOrDie()?\n\nI think it should be safe to remove them here and below.",
+      "range": {
+        "startLine": 1691,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 54
+      },
+      "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
