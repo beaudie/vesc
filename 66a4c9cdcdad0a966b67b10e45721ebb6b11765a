@@ -37,6 +37,52 @@
     },
     {
       "key": {
+        "uuid": "132cf4ee_97cdeb90",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "nit: use enable_deferred_flush naming, or with RenderPass in there.",
+      "range": {
+        "startLine": 369,
+        "startChar": 36,
+        "endLine": 369,
+        "endChar": 59
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed5cf24e_ebe40cb2",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "nit: suggest including the word \u0027RenderPass\u0027 in this feature.",
+      "range": {
+        "startLine": 369,
+        "startChar": 12,
+        "endLine": 369,
+        "endChar": 32
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cafd83cb_3123fa57",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -120,6 +166,139 @@
       "side": 1,
       "message": "I don\u0027t particularly mind the checkCompletedCommands() call, but I was also wondering if we should just drop hasGPUPendingCommands(). Is it really better to break the render pass instead of just waiting for it to naturally end?\n\nYou could potentially split the change, adding the hasGPUPendingCommands() check in a second CL and then measure the impact with or without it. If data shows no difference, we can drop it and keep it simpler. If there\u0027s an improvement, then great!",
       "parentUuid": "688db3e0_b5f84039",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15ee787e_d0721d5b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "+1 to separating concerns.",
+      "parentUuid": "4e37b2ad_f5874a40",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "148d3ae8_c6ffac99",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4683,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "nit: \u003e 0 to explicitly resolve bool.",
+      "range": {
+        "startLine": 4683,
+        "startChar": 8,
+        "endLine": 4683,
+        "endChar": 27
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a0cfbf1_bfee2c8d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "nit: how about Device instead of GPU? SwiftShader is not a GPU. Also this can be a private method since you only call it internally.\n\ne.g. hasPendingDeviceCommands.",
+      "range": {
+        "startLine": 429,
+        "startChar": 9,
+        "endLine": 429,
+        "endChar": 30
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "991f6442_658f4bd7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "nit: prefer uint32_t if possible, it\u0027s nice for counts.",
+      "range": {
+        "startLine": 1082,
+        "startChar": 4,
+        "endLine": 1082,
+        "endChar": 10
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fe18bf9_8981ebc1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "nit: deferal",
+      "range": {
+        "startLine": 1867,
+        "startChar": 22,
+        "endLine": 1867,
+        "endChar": 31
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb529881_d7a4c105",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:29:39Z",
+      "side": 1,
+      "message": "Suggest fixing this before landing.\n\nAlternately I suggest enabling this only when Debug layers are disabled. This would be a separate \"performance mode\". Or IsAndroid() \u0026\u0026 !DebugLayers.",
+      "range": {
+        "startLine": 1869,
+        "startChar": 61,
+        "endLine": 1869,
+        "endChar": 76
+      },
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
