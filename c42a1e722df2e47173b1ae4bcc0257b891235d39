@@ -16,6 +16,24 @@
       "revId": "c42a1e722df2e47173b1ae4bcc0257b891235d39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "649f7e13_8b9fa88d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T13:03:24Z",
+      "side": 1,
+      "message": "SGTM. One thought I\u0027ve had is that we might want to split the EGL tests into their own test suite. Like we do with dEQP. Then the end2end_tests would become \"gl\" and \"egl\" tests and they could do things differently.",
+      "parentUuid": "457be1d6_2be9a3f6",
+      "revId": "c42a1e722df2e47173b1ae4bcc0257b891235d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
