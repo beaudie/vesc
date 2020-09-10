@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be5079a1_6ed80856",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:40:32Z",
+      "side": 1,
+      "message": "nit: can you link to the inclusivity rules?",
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26a155d2_95a22d3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:40:32Z",
+      "side": 1,
+      "message": "Looks great generally. Need a green run. Some comments below. We should also check if Chromium is adding a presubmit for the terms we should avoid.",
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fda27a18_c2e58ee4",
+        "filename": "dotfile_settings.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:40:32Z",
+      "side": 1,
+      "message": "you\u0027ll also need to update export_targets.py.",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41fa902e_a68c1fef",
+        "filename": "scripts/wgl.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:40:32Z",
+      "side": 1,
+      "message": "same here:\n\nhttps://github.com/KhronosGroup/OpenGL-Registry/blob/master/xml/wgl.xml#L16",
+      "range": {
+        "startLine": 32,
+        "startChar": 17,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

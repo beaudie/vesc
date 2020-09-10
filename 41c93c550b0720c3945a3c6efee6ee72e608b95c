@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a476b0a7_1e662834",
+        "filename": "scripts/egl.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T15:40:32Z",
+      "side": 0,
+      "message": "Can you omit this change? It\u0027s sourced externally and should be changed upstream.\n\nhttps://github.com/KhronosGroup/EGL-Registry/blob/master/api/egl.xml#L37",
+      "range": {
+        "startLine": 52,
+        "startChar": 13,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "41c93c550b0720c3945a3c6efee6ee72e608b95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
