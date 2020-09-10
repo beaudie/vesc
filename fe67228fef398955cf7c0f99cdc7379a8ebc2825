@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd873296_93c7603a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T19:27:05Z",
+      "side": 1,
+      "message": "Pretty sure that\u0027s http://crbug.com/1126994 .",
+      "revId": "fe67228fef398955cf7c0f99cdc7379a8ebc2825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
