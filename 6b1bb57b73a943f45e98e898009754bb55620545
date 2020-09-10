@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b070277_597c0d94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T21:38:41Z",
+      "side": 1,
+      "message": "Revert of a regression I introduced earlier caught by VVL. I think after this fix we can enable syncval.",
+      "revId": "6b1bb57b73a943f45e98e898009754bb55620545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
