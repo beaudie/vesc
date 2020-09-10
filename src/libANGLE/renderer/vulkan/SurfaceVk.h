@@ -1,3 +1,4 @@
+//#define OLD_CODE
 //
 // Copyright 2016 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -239,6 +240,15 @@ class WindowSurfaceVk : public SurfaceVk
     vk::Semaphore getAcquireImageSemaphore();
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() { return mPreTransform; }
+#ifdef OLD_CODE
+#else   // OLD_CODE
+
+    // Calling vkAcquireNextImageKHR() is normally deferred until needed.  When the next image
+    // swapchain is needed (including by the RenderTargetVk methods that need the objects for the
+    // next swapchain image, e.g. ImageHelper), these methods will acquire it
+    angle::Result acquireNextImage();
+    angle::Result acquireNextImage(const gl::Context *context);
+#endif  // OLD_CODE
 
   protected:
     angle::Result swapImpl(const gl::Context *context,
@@ -267,7 +277,16 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result resizeSwapchainImages(vk::Context *context, uint32_t imageCount);
     void releaseSwapchainImages(ContextVk *contextVk);
     void destroySwapChainImages(DisplayVk *displayVk);
+    // This method actually calls vkAcquireNextImageKHR() to acquire the next swapchain image.  It
+    // is called when the swapchain is initially created, and is called on a deferred basis
+    // afterwards.
     VkResult nextSwapchainImage(vk::Context *context);
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    // This method is called when a swapchain image is presented.  It saves state necessary to call
+    // vkAcquireNextImageKHR() later.
+    void deferNextSwapchainImage(const gl::Context *context);
+#endif  // OLD_CODE
     angle::Result present(ContextVk *contextVk,
                           EGLint *rects,
                           EGLint n_rects,
@@ -323,6 +342,16 @@ class WindowSurfaceVk : public SurfaceVk
     vk::ImageViewHelper mColorImageMSViews;
     angle::ObserverBinding mColorImageMSBinding;
     vk::Framebuffer mFramebufferMS;
+#ifdef OLD_CODE
+#else   // OLD_CODE
+
+    // Cached state needed to defer swapchain resizes and calling vkAcquireNextImageKHR() until as
+    // late as possible after vkQueuePresentKHR().
+    bool mDeferredAcquire;
+    bool mDeferredPresentOutOfDate;
+    uint32_t mDeferredSwapHistoryIndex;
+    const gl::Context *mDeferredContext;
+#endif  // OLD_CODE
 };
 
 }  // namespace rx
