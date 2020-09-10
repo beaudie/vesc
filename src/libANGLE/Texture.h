@@ -50,7 +50,13 @@ class Texture;
 
 constexpr GLuint kInitialMaxLevel = 1000;
 
-bool IsMipmapFiltered(const SamplerState &samplerState);
+bool IsMipmapFiltered(GLenum minFilterMode);
+
+// Convert a given filter mode to nearest filtering.
+GLenum ConvertToNearestFilterMode(GLenum filterMode);
+
+// Convert a given filter mode to nearest mip filtering.
+GLenum ConvertToNearestMipFilterMode(GLenum filterMode);
 
 struct ImageDesc final
 {
