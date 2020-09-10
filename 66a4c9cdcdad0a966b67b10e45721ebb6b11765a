@@ -52,6 +52,24 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "688db3e0_b5f84039",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T00:23:32Z",
+      "side": 1,
+      "message": "checkCompletedCommands() itself still have a little benefit though:\n1) It allows command buffers gets recycled earlier and resource serials gets updated sooner, so not really wasted.\n2) For very first glFlush call, GPU is idle, this gets to GPU faster. This means new behavior is closer to old behavior than removing the check.\n\nThis call is not expected to be frequent call and is not in perf critical path as well, so IMO, this is better than not checking. Let me know if you feel strongly on this.",
+      "parentUuid": "44a7a837_73e5e474",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
