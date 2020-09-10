@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "4a01dc3a_63cdfad4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:24:13Z",
+      "side": 1,
+      "message": "Seeing as we\u0027re in concordance here I suggest we do it in this CL.",
+      "parentUuid": "04130210_fcd53cfe",
+      "range": {
+        "startLine": 1687,
+        "startChar": 23,
+        "endLine": 1687,
+        "endChar": 71
+      },
+      "revId": "43cdbac5a43cbd6f8f3615d482cfdb5d010e53ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf533aa8_a039ed48",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 8
