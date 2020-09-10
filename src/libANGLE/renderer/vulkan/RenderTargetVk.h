@@ -1,3 +1,4 @@
+//#define OLD_CODE
 //
 // Copyright 2016 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -29,6 +30,7 @@ class RenderPassDesc;
 
 class ContextVk;
 class TextureVk;
+class WindowSurfaceVk;
 
 // This is a very light-weight class that does not own to the resources it points to.
 // It's meant only to copy across some information from a FramebufferAttachment to the
@@ -90,6 +92,13 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                               vk::ImageViewHelper *imageViews,
                               vk::ImageHelper *resolveImage,
                               vk::ImageViewHelper *resolveImageViews);
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    void deferNextSwapchainImage(rx::WindowSurfaceVk *windowSurface)
+    {
+        mWindowSurfaceNeedingNextSwapchainImage = windowSurface;
+    }
+#endif  // OLD_CODE
 
     angle::Result flushStagedUpdates(ContextVk *contextVk,
                                      vk::ClearValuesArray *deferredClears,
@@ -136,6 +145,13 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     gl::LevelIndex mLevelIndexGL;
     uint32_t mLayerIndex;
 
+#ifdef OLD_CODE
+#else  // OLD_CODE
+    // Non-nullptr when mImage, et.al is stale because WindowSurfaceVk presented that image, but has
+    // not yet acquired the next image that should be rendered to.
+    rx::WindowSurfaceVk *mWindowSurfaceNeedingNextSwapchainImage;
+
+#endif  // OLD_CODE
     // Whether the render target has been invalidated.  If so, DONT_CARE is used instead of LOAD for
     // loadOp of this attachment.
     bool mContentDefined;

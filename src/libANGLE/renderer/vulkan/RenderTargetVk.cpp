@@ -11,6 +11,7 @@
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
+#include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -32,6 +33,10 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
       mResolveImageViews(other.mResolveImageViews),
       mLevelIndexGL(other.mLevelIndexGL),
       mLayerIndex(other.mLayerIndex),
+#ifdef OLD_CODE
+#else   // OLD_CODE
+      mWindowSurfaceNeedingNextSwapchainImage(nullptr),
+#endif  // OLD_CODE
       mContentDefined(other.mContentDefined)
 {
     other.reset();
@@ -52,6 +57,10 @@ void RenderTargetVk::init(vk::ImageHelper *image,
     mLevelIndexGL      = levelIndexGL;
     mLayerIndex        = layerIndex;
 
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    mWindowSurfaceNeedingNextSwapchainImage = nullptr;
+#endif  // OLD_CODE
     // Conservatively assume the content is defined.
     mContentDefined = true;
 
@@ -66,7 +75,11 @@ void RenderTargetVk::reset()
     mResolveImageViews = nullptr;
     mLevelIndexGL      = gl::LevelIndex(0);
     mLayerIndex        = 0;
-    mContentDefined    = false;
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    mWindowSurfaceNeedingNextSwapchainImage = nullptr;
+#endif  // OLD_CODE
+    mContentDefined = false;
 }
 
 vk::ImageViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
@@ -83,16 +96,32 @@ vk::ImageViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
 
 vk::ImageViewSubresourceSerial RenderTargetVk::getDrawSubresourceSerial() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    if (mWindowSurfaceNeedingNextSwapchainImage)
+    {
+        angle::Result result = mWindowSurfaceNeedingNextSwapchainImage->acquireNextImage();
+        ASSERT(result == angle::Result::Continue);
+    }
+#endif  // OLD_CODE
     return getSubresourceSerialImpl(mImageViews);
 }
 
 vk::ImageViewSubresourceSerial RenderTargetVk::getResolveSubresourceSerial() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     return getSubresourceSerialImpl(mResolveImageViews);
 }
 
 void RenderTargetVk::onColorDraw(ContextVk *contextVk)
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(!mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
 
     contextVk->onImageRenderPassWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
@@ -109,6 +138,10 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk)
 
 void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, bool isReadOnly)
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     const angle::Format &format = mImage->getFormat().actualImageFormat();
     ASSERT(format.hasDepthOrStencilBits());
     VkImageAspectFlags aspectFlags = vk::GetDepthStencilAspectFlags(format);
@@ -137,24 +170,48 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, bool isReadOnly)
 
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    if (mWindowSurfaceNeedingNextSwapchainImage)
+    {
+        angle::Result result = mWindowSurfaceNeedingNextSwapchainImage->acquireNextImage();
+        ASSERT(result == angle::Result::Continue);
+    }
+#endif  // OLD_CODE
     ASSERT(mImage && mImage->valid());
     return *mImage;
 }
 
 const vk::ImageHelper &RenderTargetVk::getImageForRenderPass() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    if (mWindowSurfaceNeedingNextSwapchainImage)
+    {
+        angle::Result result = mWindowSurfaceNeedingNextSwapchainImage->acquireNextImage();
+        ASSERT(result == angle::Result::Continue);
+    }
+#endif  // OLD_CODE
     ASSERT(mImage && mImage->valid());
     return *mImage;
 }
 
 vk::ImageHelper &RenderTargetVk::getResolveImageForRenderPass()
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(mResolveImage && mResolveImage->valid());
     return *mResolveImage;
 }
 
 const vk::ImageHelper &RenderTargetVk::getResolveImageForRenderPass() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(mResolveImage && mResolveImage->valid());
     return *mResolveImage;
 }
@@ -164,6 +221,10 @@ angle::Result RenderTargetVk::getImageViewImpl(ContextVk *contextVk,
                                                vk::ImageViewHelper *imageViews,
                                                const vk::ImageView **imageViewOut) const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(image.valid() && imageViews);
     vk::LevelIndex levelVK = mImage->toVKLevel(mLevelIndexGL);
     return imageViews->getLevelLayerDrawImageView(contextVk, image, levelVK, mLayerIndex,
@@ -173,6 +234,10 @@ angle::Result RenderTargetVk::getImageViewImpl(ContextVk *contextVk,
 angle::Result RenderTargetVk::getImageView(ContextVk *contextVk,
                                            const vk::ImageView **imageViewOut) const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(mImage);
     return getImageViewImpl(contextVk, *mImage, mImageViews, imageViewOut);
 }
@@ -180,12 +245,20 @@ angle::Result RenderTargetVk::getImageView(ContextVk *contextVk,
 angle::Result RenderTargetVk::getResolveImageView(ContextVk *contextVk,
                                                   const vk::ImageView **imageViewOut) const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(mResolveImage);
     return getImageViewImpl(contextVk, *mResolveImage, mResolveImageViews, imageViewOut);
 }
 
 bool RenderTargetVk::isResolveImageOwnerOfData() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     // If there's a resolve attachment and the image itself is transient, it's the resolve
     // attachment that owns the data, so all non-render-pass accesses to the render target data
     // should go through the resolve attachment.
@@ -195,6 +268,10 @@ bool RenderTargetVk::isResolveImageOwnerOfData() const
 angle::Result RenderTargetVk::getAndRetainCopyImageView(ContextVk *contextVk,
                                                         const vk::ImageView **imageViewOut) const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     retainImageViews(contextVk);
 
     const vk::ImageViewHelper *imageViews =
@@ -217,12 +294,22 @@ angle::Result RenderTargetVk::getAndRetainCopyImageView(ContextVk *contextVk,
 
 const vk::Format &RenderTargetVk::getImageFormat() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    // Even if waiting for the swapchain image, any image from the swapchain should be good to use.
+    // ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(mImage && mImage->valid());
     return mImage->getFormat();
 }
 
 gl::Extents RenderTargetVk::getExtents() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    // Even if waiting for the swapchain image, any image from the swapchain should be good to use.
+    // ASSERT(mWindowSurfaceNeedingNextSwapchainImage == nullptr);
+#endif  // OLD_CODE
     ASSERT(mImage && mImage->valid());
     vk::LevelIndex levelVK = mImage->toVKLevel(mLevelIndexGL);
     return mImage->getLevelExtents2D(levelVK);
@@ -238,16 +325,36 @@ void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image,
     mImageViews        = imageViews;
     mResolveImage      = resolveImage;
     mResolveImageViews = resolveImageViews;
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    mWindowSurfaceNeedingNextSwapchainImage = nullptr;
+#endif  // OLD_CODE
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForCopy() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    if (mWindowSurfaceNeedingNextSwapchainImage)
+    {
+        angle::Result result = mWindowSurfaceNeedingNextSwapchainImage->acquireNextImage();
+        ASSERT(result == angle::Result::Continue);
+    }
+#endif  // OLD_CODE
     ASSERT(mImage && mImage->valid() && (mResolveImage == nullptr || mResolveImage->valid()));
     return isResolveImageOwnerOfData() ? *mResolveImage : *mImage;
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForWrite() const
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    if (mWindowSurfaceNeedingNextSwapchainImage)
+    {
+        angle::Result result = mWindowSurfaceNeedingNextSwapchainImage->acquireNextImage();
+        ASSERT(result == angle::Result::Continue);
+    }
+#endif  // OLD_CODE
     ASSERT(mImage && mImage->valid() && (mResolveImage == nullptr || mResolveImage->valid()));
     return isResolveImageOwnerOfData() ? *mResolveImage : *mImage;
 }
@@ -256,6 +363,13 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
                                                  vk::ClearValuesArray *deferredClears,
                                                  uint32_t deferredClearIndex)
 {
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    if (mWindowSurfaceNeedingNextSwapchainImage)
+    {
+        ANGLE_TRY(mWindowSurfaceNeedingNextSwapchainImage->acquireNextImage());
+    }
+#endif  // OLD_CODE
     // This function is called when the framebuffer is notified of an update to the attachment's
     // contents.  Therefore, set mContentDefined so that the next render pass will have loadOp=LOAD.
     mContentDefined = true;
