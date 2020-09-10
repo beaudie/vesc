@@ -377,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "72fa4f90_b7667ae4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5478,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:20:22Z",
+      "side": 1,
+      "message": "Understood. The comment could probably be expanded to be more clear. Also, typo: equivalent.",
+      "parentUuid": "9b5d9757_5b618eef",
+      "range": {
+        "startLine": 5477,
+        "startChar": 81,
+        "endLine": 5478,
+        "endChar": 45
+      },
+      "revId": "570ae523e2681893a01e33214c1d964326676e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06e5b4d8_f21d8681",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 3
