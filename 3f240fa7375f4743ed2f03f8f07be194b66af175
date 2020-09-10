@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23d0213f_4010415f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:01:48Z",
+      "side": 1,
+      "message": "Thanks again Amy for looking into this. With all the fallback paths and features like prerotation, it\u0027s getting hard to make sure they all interact correctly. We should probably sit down and formalize the math per case (like blit-no-rotation, resolve-90-degree-rotation, etc. flipped or not etc) so we can make sense of this code!",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a148a11b_1c88239d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:01:48Z",
+      "side": 1,
+      "message": "Understood that AdjustBlitResolveParametersForResolve doesn\u0027t have enough information to fix this.\n\nHowever, there are a number of things I really don\u0027t understand here.\n\n1. Why isn\u0027t this conditional to isResolve? The blit (not resolve) code uses normalized coordinates, so it shouldn\u0027t need adjustments when flipping, isn\u0027t that so?\n2. Why doesn\u0027t Rotated180Degrees need the same adjustment for params-\u003esrcOffset[0]?\n\nAlso, there\u0027s an ASSERT, but I\u0027m not sure if the code here is entirely correct. The assumption in this function is that if there\u0027s prerotation, then one of the framebuffers is the default one (which is true) and that its Y-flipped because of Vulkan (also true). Now glBlitFramebuffer doesn\u0027t allow flipping when resolving, but it does with normal blit. So what if glBlitFramebuffer did a flip on its own? Would you please add a prerotation test that does a non-multisampled color blit with flipping? I suggest drawing a gradient (you can adapt essl31_shaders::fs::RedGreenGradient()) for verification.",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e718883c_ba669255",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:01:48Z",
+      "side": 1,
+      "message": "I suggest choosing a non-square size, to increase the chances of catching bugs with prerotation.",
+      "range": {
+        "startLine": 949,
+        "startChar": 67,
+        "endLine": 949,
+        "endChar": 75
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f54480_f82e25de",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:01:48Z",
+      "side": 1,
+      "message": "nit: You can remove this comment. After this change lands, it will be out of context.",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a5f508e_18b4c29e",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:01:48Z",
+      "side": 1,
+      "message": "typo. Also the comment seems like it belongs next to the previous one (where it says around x\u003d0 still failing)",
+      "range": {
+        "startLine": 1011,
+        "startChar": 41,
+        "endLine": 1011,
+        "endChar": 48
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8875747_e0b78b26",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:01:48Z",
+      "side": 1,
+      "message": "Same comment",
+      "range": {
+        "startLine": 1041,
+        "startChar": 67,
+        "endLine": 1041,
+        "endChar": 75
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
