@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ec6a43c_2b378f15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "Thanks for working it through with the other reviewers. Some follow-up comments.",
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a47baae1_2d50e309",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "nit: in other places you refer to this as commandSize, so probably should use that naming here as well.",
+      "range": {
+        "startLine": 697,
+        "startChar": 13,
+        "endLine": 697,
+        "endChar": 33
+      },
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a13befd1_d2757116",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need the else.",
+      "range": {
+        "startLine": 747,
+        "startChar": 4,
+        "endLine": 748,
+        "endChar": 5
+      },
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1381f9c_8fde44b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need the else.",
+      "range": {
+        "startLine": 759,
+        "startChar": 7,
+        "endLine": 760,
+        "endChar": 9
+      },
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9db54a89_ccd8b7e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "nit: 0xFFFFFFFF for consistency with other constants in ANGLE.",
+      "range": {
+        "startLine": 881,
+        "startChar": 38,
+        "endLine": 881,
+        "endChar": 48
+      },
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b9adff9_0652cdec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "nit: generally we prefer to name things positively, e.g. \"no longer invalidate\" -\u003e \"hasWriteAfterInvalidate\"",
+      "range": {
+        "startLine": 992,
+        "startChar": 9,
+        "endLine": 992,
+        "endChar": 30
+      },
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34dfe794_2db68070",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "Some musings:\n\nThere\u0027s really 3 states:\n\n1. not invalidated\n2. invalidated and writes enabled\n3. invalidated and writes disabled\n\nSo we could use an enum here with the three values. We could get rid of the infinite command size (0xFFFFFFFF). Alternately we could keep the 0xFFFFFFF indicator and store a boolean here for if writes are disabled (instead of a cmd count).\n\nThe way you have it now is good. Just leaving this here for posterity.",
+      "range": {
+        "startLine": 1101,
+        "startChar": 4,
+        "endLine": 1101,
+        "endChar": 35
+      },
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d441aa07_acf8e938",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:11:42Z",
+      "side": 1,
+      "message": "I notice still a lot of boilerplate is repeated. We can get better code re-use using a template with a callback function (lambda).\n\n template \u003c..., typename FuncT\u003e\n void doYourTesting(..., FuncT testFunc)\n {\n   // write your test setup\n\n   testFunc();\n\n   // write your test teardown\n }\n\n TEST_P(..., YourTest)\n {\n   auto myTestFunc \u003d [](.. args if necessary ..) {\n     // write your calls, using args if required\n   };\n\n   doYourTesting(..., myTestFunc);\n }",
+      "range": {
+        "startLine": 544,
+        "startChar": 7,
+        "endLine": 544,
+        "endChar": 35
+      },
+      "revId": "4a41204d817586088bca417be16aae3780bf1ab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
