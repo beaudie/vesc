@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e7234448_b1425515",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:17:59Z",
+      "side": 1,
+      "message": "Looking good! I wonder if you want to add a VulkanPerformanceCountersTest so we don\u0027t accidentally regress this?",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cafd83cb_3123fa57",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -67,6 +84,24 @@
       "side": 1,
       "message": "checkCompletedCommands() itself still have a little benefit though:\n1) It allows command buffers gets recycled earlier and resource serials gets updated sooner, so not really wasted.\n2) For very first glFlush call, GPU is idle, this gets to GPU faster. This means new behavior is closer to old behavior than removing the check.\n\nThis call is not expected to be frequent call and is not in perf critical path as well, so IMO, this is better than not checking. Let me know if you feel strongly on this.",
       "parentUuid": "44a7a837_73e5e474",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e37b2ad_f5874a40",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:17:59Z",
+      "side": 1,
+      "message": "I don\u0027t particularly mind the checkCompletedCommands() call, but I was also wondering if we should just drop hasGPUPendingCommands(). Is it really better to break the render pass instead of just waiting for it to naturally end?\n\nYou could potentially split the change, adding the hasGPUPendingCommands() check in a second CL and then measure the impact with or without it. If data shows no difference, we can drop it and keep it simpler. If there\u0027s an improvement, then great!",
+      "parentUuid": "688db3e0_b5f84039",
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
