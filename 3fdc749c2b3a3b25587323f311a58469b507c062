@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5589cee2_260741e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T04:38:02Z",
+      "side": 1,
+      "message": "Don\u0027t get discouraged by the SPIR-V, it\u0027s actually quite simple!\n\nThere are failures with Intel/Windows, which looks like a driver bug. I\u0027ll add a feature in the next revision to disable the extension on that config.",
+      "revId": "3fdc749c2b3a3b25587323f311a58469b507c062",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
