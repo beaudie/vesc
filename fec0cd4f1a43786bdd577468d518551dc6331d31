@@ -33,6 +33,42 @@
       "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6479aa88_9c3787ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:11:31Z",
+      "side": 1,
+      "message": "I haven\u0027t measured (yet), but given that it\u0027s for a driver bug, there isn\u0027t much to do even if there\u0027s some regression (which there likely is).\n\nI kept it separate so we can pinpoint perf differences (in the Chrome dashboard) more easily.",
+      "parentUuid": "339a0aef_2de31540",
+      "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f193c91f_39c53df1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:11:31Z",
+      "side": 1,
+      "message": "Yes: https://issuetracker.google.com/issues/166809097",
+      "parentUuid": "6c7fa23f_d21a02bd",
+      "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
