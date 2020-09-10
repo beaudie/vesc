@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "b290cd6d_50b5363f",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T20:14:52Z",
+      "side": 1,
+      "message": "nit: can you make these return \"ANGLE_NO_DISCARD bool\" like the below, with an out parameter? they should get inlined so no pointer math is used. Then you can use the MATH macro to satisfy Tim\u0027s comment.",
+      "range": {
+        "startLine": 141,
+        "startChar": 26,
+        "endLine": 141,
+        "endChar": 48
+      },
+      "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d5bbceb5_eab38b5d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
