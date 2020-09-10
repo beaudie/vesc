@@ -50,7 +50,10 @@ class Texture;
 
 constexpr GLuint kInitialMaxLevel = 1000;
 
-bool IsMipmapFiltered(const SamplerState &samplerState);
+bool IsMipmapFiltered(GLenum minFilterMode);
+
+// Convert a given filter mode to point filtering.
+GLenum ConvertToPointFilterMode(GLenum filterMode);
 
 struct ImageDesc final
 {

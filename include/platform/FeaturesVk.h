@@ -361,6 +361,24 @@ struct FeaturesVk : FeatureSetBase
         "preferred_large_heap_block_size_4M", FeatureCategory::VulkanWorkarounds,
         "Use 4 MB preferred large heap block size with AMD allocator", &members,
         "http://anglebug.com/4995"};
+
+    std::array<angle::Feature, 4> forceTextureLODOffset = {
+        angle::Feature{"force_texture_lod_offset_1", angle::FeatureCategory::VulkanWorkarounds,
+                       "Increase the minimum texture level-of-detail by 1 when sampling.",
+                       &members},
+        angle::Feature{"force_texture_lod_offset_2", angle::FeatureCategory::VulkanWorkarounds,
+                       "Increase the minimum texture level-of-detail by 2 when sampling.",
+                       &members},
+        angle::Feature{"force_texture_lod_offset_3", angle::FeatureCategory::VulkanWorkarounds,
+                       "Increase the minimum texture level-of-detail by 3 when sampling.",
+                       &members},
+        angle::Feature{"force_texture_lod_offset_4", angle::FeatureCategory::VulkanWorkarounds,
+                       "Increase the minimum texture level-of-detail by 4 when sampling.",
+                       &members},
+    };
+
+    Feature forcePointFiltering = {"force_point_filtering", FeatureCategory::VulkanWorkarounds,
+                                   "Force point filtering when sampling.", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
