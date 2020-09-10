@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2e0e530_ca5e28ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-10T23:06:09Z",
+      "side": 1,
+      "message": "Pulled out the refactoring to pass along ProgramMergedVaryings into separate CL.\nPTAL",
+      "revId": "bd3e700fea228f76cf6bc46206782b83782f5dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
