@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6e94314_97f1d840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T19:20:55Z",
+      "side": 1,
+      "message": "The occlusion query test failure is due to QC driver bug https://issuetracker.google.com/166809097. The test is doing this sequence: glClear; draw; glFlush; glClear; draw; With this change, the second glClear call becomes vkClearAtatchment call which we know QC has a driver bug. To make test coverage unchange, I have changed glFlush to glFinish.",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
