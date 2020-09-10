@@ -16,6 +16,75 @@
       "revId": "369ed9195687b0bea925574beb116faa83893ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e306d98f_90b9c057",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3996,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T00:11:51Z",
+      "side": 1,
+      "message": "My understanding is that each swapChainImage has immutable sampler, and this will recreate the pool every time this is been used, will this be a problem here?",
+      "range": {
+        "startLine": 3996,
+        "startChar": 31,
+        "endLine": 3996,
+        "endChar": 51
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3503e01e_d7ebe04a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T00:11:51Z",
+      "side": 1,
+      "message": "So this is needed because it is moved from previous version of createPipelineLayout and now you have combined createPipelineLayout and update into one. Probably worth a comment here explain why you need to call reset since it is not very obvious what does activeTextures\u003d\u003dNULL means.",
+      "range": {
+        "startLine": 741,
+        "startChar": 4,
+        "endLine": 745,
+        "endChar": 0
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cef803f8_dddc7506",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T00:11:51Z",
+      "side": 1,
+      "message": "If this is inUse, will it leak since we are not calling destroy here?",
+      "range": {
+        "startLine": 1639,
+        "startChar": 31,
+        "endLine": 1639,
+        "endChar": 73
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
