@@ -924,6 +924,8 @@ class CommandBufferHelper : angle::NonCopyable
     void executeBarriers(ContextVk *contextVk, PrimaryCommandBuffer *primary);
 
     void setHasRenderPass(bool hasRenderPass) { mIsRenderPassCommandBuffer = hasRenderPass; }
+    void open() { mCommandBuffer.open(); }
+    void close() { mCommandBuffer.close(); }
     void reset();
     void releaseToContextQueue(ContextVk *contextVk);
 

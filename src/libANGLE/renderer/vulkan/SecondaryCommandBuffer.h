@@ -688,9 +688,13 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
     }
 
+    void open() { mIsOpen = true; }
+    void close() { mIsOpen = false; }
+
     void reset()
     {
         mCommands.clear();
+        mIsOpen = false;
         initialize(mAllocator);
         mResetQueryQueue.clear();
     }
@@ -716,6 +720,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     template <class StructType>
     ANGLE_INLINE StructType *commonInit(CommandID cmdID, size_t allocationSize)
     {
+        ASSERT(mIsOpen);
         mCurrentBytesRemaining -= allocationSize;
 
         CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
@@ -797,6 +802,9 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         memcpy(writePointer, paramData, sizeInBytes);
         return writePointer + sizeInBytes;
     }
+
+    // flag to indicate that commandBuffer is open for new commands
+    bool mIsOpen;
 
     std::vector<CommandHeader *> mCommands;
 
