@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "ec2689d6_5b248c5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:21:54Z",
+      "side": 1,
+      "message": "LGTM, will defer to Shabi\u0027s review for detailed feedback.",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a148a11b_1c88239d",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -115,6 +132,29 @@
         "startChar": 67,
         "endLine": 1041,
         "endChar": 75
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c557d83_e903391a",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:21:54Z",
+      "side": 1,
+      "message": "nit: please leave a small one-line comment before each new test you add. other reviewers, don\u0027t forget to remind new contributors.",
+      "range": {
+        "startLine": 1228,
+        "startChar": 0,
+        "endLine": 1228,
+        "endChar": 6
       },
       "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
