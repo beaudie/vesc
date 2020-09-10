@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "04130210_fcd53cfe",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:12:38Z",
+      "side": 1,
+      "message": "I suggested the same earlier. Charlie\u0027s preference was to do that in a follow up.",
+      "parentUuid": "1b696d18_d6f4155e",
+      "range": {
+        "startLine": 1687,
+        "startChar": 23,
+        "endLine": 1687,
+        "endChar": 71
+      },
+      "revId": "43cdbac5a43cbd6f8f3615d482cfdb5d010e53ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf533aa8_a039ed48",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 8
