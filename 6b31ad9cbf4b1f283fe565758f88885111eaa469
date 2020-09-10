@@ -139,6 +139,24 @@
       "revId": "6b31ad9cbf4b1f283fe565758f88885111eaa469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85745f11_476f0feb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T19:10:06Z",
+      "side": 1,
+      "message": "It would be good to fix that with an ASSERT as that situation can arise in any number of situations throughout the backend.\n\nI took a closer look, and I agree the non-threaded version of the bug is impossible to reproduce currently as kNumCommandBuffers\u003d2. So effectively after the render pass is closed, the command buffer gets reallocated to the same one!\n\nProbably the (or one of) the reasons Tobin couldn\u0027t increase that number is the very same bug you are fixing here.\n\n---\n\nMy suggestion would be to:\n\n- Fix this minimally (get the command buffer here) and submit it.\n\nAs a follow up:\n\n- Increase kNumCommandBuffers to at least 4\n- In functions that record a command in the command buffer, add an ASSERT that the command buffer is initialized/active/whatever (effectively a bool that on flush gets set to false and back to true when the command buffer is selected again)\n- Fix any other similar bugs that are encountered",
+      "parentUuid": "ea4b1cd3_f1ee6c3c",
+      "revId": "6b31ad9cbf4b1f283fe565758f88885111eaa469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
