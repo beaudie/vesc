@@ -1684,18 +1684,13 @@ angle::Result TextureVk::copyAndStageImageSubresource(ContextVk *contextVk,
 
     // Stage an update to the new image
     ASSERT(stagingBuffer);
-    uint32_t bufferRowLength   = updatedExtents.width;
-    uint32_t bufferImageHeight = updatedExtents.height;
     const gl::InternalFormat &formatInfo =
         gl::GetSizedInternalFormatInfo(mImage->getFormat().internalFormat);
-    if (formatInfo.compressed)
-    {
-        // In the case of a compressed texture, bufferRowLength can never be smaller than the
-        // compressed format's compressed block width, and bufferImageHeight can never be smaller
-        // than the compressed block height.
-        bufferRowLength   = std::max(bufferRowLength, formatInfo.compressedBlockWidth);
-        bufferImageHeight = std::max(bufferImageHeight, formatInfo.compressedBlockHeight);
-    }
+    uint32_t bufferRowLength   = formatInfo.computeBufferRowLength(updatedExtents.width);
+    uint32_t bufferImageHeight = formatInfo.computeBufferImageHeight(updatedExtents.height);
+    ANGLE_VK_CHECK_MATH(contextVk, bufferRowLength);
+    ANGLE_VK_CHECK_MATH(contextVk, bufferImageHeight);
+
     ANGLE_TRY(mImage->stageSubresourceUpdateFromBuffer(
         contextVk, bufferSize, dstLevelGL, currentLayer, layerCount, bufferRowLength,
         bufferImageHeight, updatedExtents, offset, stagingBuffer, stagingBufferOffsets));

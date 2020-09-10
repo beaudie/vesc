@@ -3781,16 +3781,19 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     size_t outputRowPitch;
     size_t outputDepthPitch;
     size_t stencilAllocationSize = 0;
-    uint32_t bufferRowLength;
-    uint32_t bufferImageHeight;
     size_t allocationSize;
 
     LoadImageFunctionInfo loadFunctionInfo = vkFormat.textureLoadFunctions(type);
     LoadImageFunction stencilLoadFunction  = nullptr;
 
+    const gl::InternalFormat &storageFormatInfo = vkFormat.getInternalFormatInfo(type);
+    uint32_t bufferRowLength   = storageFormatInfo.computeBufferRowLength(glExtents.width);
+    uint32_t bufferImageHeight = storageFormatInfo.computeBufferImageHeight(glExtents.height);
+    ANGLE_VK_CHECK_MATH(contextVk, bufferRowLength);
+    ANGLE_VK_CHECK_MATH(contextVk, bufferImageHeight);
+
     if (storageFormat.isBlock)
     {
-        const gl::InternalFormat &storageFormatInfo = vkFormat.getInternalFormatInfo(type);
         GLuint rowPitch;
         GLuint depthPitch;
         GLuint totalSize;
@@ -3806,18 +3809,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
 
         outputRowPitch   = rowPitch;
         outputDepthPitch = depthPitch;
-
-        angle::CheckedNumeric<uint32_t> checkedRowLength =
-            rx::CheckedRoundUp<uint32_t>(glExtents.width, storageFormatInfo.compressedBlockWidth);
-        angle::CheckedNumeric<uint32_t> checkedImageHeight =
-            rx::CheckedRoundUp<uint32_t>(glExtents.height, storageFormatInfo.compressedBlockHeight);
-
-        ANGLE_VK_CHECK_MATH(contextVk, checkedRowLength.IsValid());
-        ANGLE_VK_CHECK_MATH(contextVk, checkedImageHeight.IsValid());
-
-        bufferRowLength   = checkedRowLength.ValueOrDie();
-        bufferImageHeight = checkedImageHeight.ValueOrDie();
-        allocationSize    = totalSize;
+        allocationSize   = totalSize;
     }
     else
     {
@@ -3858,9 +3850,6 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
             outputRowPitch = storageFormat.pixelBytes * glExtents.width;
         }
         outputDepthPitch = outputRowPitch * glExtents.height;
-
-        bufferRowLength   = glExtents.width;
-        bufferImageHeight = glExtents.height;
 
         allocationSize = outputDepthPitch * glExtents.depth;
 

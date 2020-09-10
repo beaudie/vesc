@@ -138,6 +138,36 @@ struct InternalFormat
 
     GLuint computePixelBytes(GLenum formatType) const;
 
+    ANGLE_INLINE uint32_t computeBufferRowLength(uint32_t width) const
+    {
+        uint32_t bufferRowLength = width;
+
+        if (compressed)
+        {
+            angle::CheckedNumeric<uint32_t> checkedRowLength =
+                rx::CheckedRoundUp<uint32_t>(width, compressedBlockWidth);
+
+            bufferRowLength = checkedRowLength.ValueOrDie();
+        }
+
+        return bufferRowLength;
+    }
+
+    ANGLE_INLINE uint32_t computeBufferImageHeight(uint32_t height) const
+    {
+        uint32_t bufferImageHeight = height;
+
+        if (compressed)
+        {
+            angle::CheckedNumeric<uint32_t> checkedImageHeight =
+                rx::CheckedRoundUp<uint32_t>(height, compressedBlockHeight);
+
+            bufferImageHeight = checkedImageHeight.ValueOrDie();
+        }
+
+        return bufferImageHeight;
+    }
+
     ANGLE_NO_DISCARD bool computeRowPitch(GLenum formatType,
                                           GLsizei width,
                                           GLint alignment,
