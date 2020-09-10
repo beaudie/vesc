@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06424971_4e3b6471",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:15:39Z",
+      "side": 1,
+      "message": "LGTM, thanks for all the new tests.",
+      "revId": "8e71c9fb675a22dca5338c9dbb700d267ec39690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e6b0f31_f3204cd2",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:15:39Z",
+      "side": 1,
+      "message": "nit: use a different name to avoid overloading.",
+      "range": {
+        "startLine": 160,
+        "startChar": 19,
+        "endLine": 160,
+        "endChar": 42
+      },
+      "revId": "8e71c9fb675a22dca5338c9dbb700d267ec39690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99f391ad_7d77d98b",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 17
+      },
+      "lineNbr": 1223,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:15:39Z",
+      "side": 1,
+      "message": "nit: suggest a more explanatory name.",
+      "range": {
+        "startLine": 1223,
+        "startChar": 35,
+        "endLine": 1223,
+        "endChar": 37
+      },
+      "revId": "8e71c9fb675a22dca5338c9dbb700d267ec39690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
