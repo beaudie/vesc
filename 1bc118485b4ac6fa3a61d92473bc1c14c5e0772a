@@ -51,6 +51,69 @@
       "revId": "1bc118485b4ac6fa3a61d92473bc1c14c5e0772a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c60c202c_fbdb5fa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:23:05Z",
+      "side": 1,
+      "message": "LGTM with style fix. Thanks for fixing.",
+      "revId": "1bc118485b4ac6fa3a61d92473bc1c14c5e0772a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5eea5006_3f808ab3",
+        "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:23:05Z",
+      "side": 1,
+      "message": "nit: please use c++-style casts, e.g. static_cast.\n\nhttps://google.github.io/styleguide/cppguide.html#Casting",
+      "range": {
+        "startLine": 56,
+        "startChar": 42,
+        "endLine": 56,
+        "endChar": 48
+      },
+      "revId": "1bc118485b4ac6fa3a61d92473bc1c14c5e0772a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3525cb0a_47f5ddb7",
+        "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:23:05Z",
+      "side": 1,
+      "message": "nit: same.",
+      "range": {
+        "startLine": 93,
+        "startChar": 42,
+        "endLine": 93,
+        "endChar": 48
+      },
+      "revId": "1bc118485b4ac6fa3a61d92473bc1c14c5e0772a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
