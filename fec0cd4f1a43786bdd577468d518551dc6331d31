@@ -16,6 +16,23 @@
       "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c7fa23f_d21a02bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T13:13:03Z",
+      "side": 1,
+      "message": "Just following up - did we report the bug to QC?",
+      "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
