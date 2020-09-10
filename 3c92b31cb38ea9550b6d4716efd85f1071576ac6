@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "2f1da676_6752b2fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-10T17:37:26Z",
+      "side": 1,
+      "message": "Had the same comments as Jamie. LGTM when we get green runs.",
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fda27a18_c2e58ee4",
         "filename": "dotfile_settings.gni",
         "patchSetId": 2
