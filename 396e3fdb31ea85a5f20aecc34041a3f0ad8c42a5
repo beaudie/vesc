@@ -75,6 +75,30 @@
       "revId": "396e3fdb31ea85a5f20aecc34041a3f0ad8c42a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e42082f_62fd86ec",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2020-09-10T19:39:53Z",
+      "side": 1,
+      "message": "To clarify that it\u0027s different from x, otherwise, the code below would look like:\nMinMax(source.x, sourceX ...\nwhich is less readable, IMHO. It looks like it\u0027s the same variable twice.",
+      "parentUuid": "473d86d8_a7e179e3",
+      "range": {
+        "startLine": 561,
+        "startChar": 38,
+        "endLine": 561,
+        "endChar": 39
+      },
+      "revId": "396e3fdb31ea85a5f20aecc34041a3f0ad8c42a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
