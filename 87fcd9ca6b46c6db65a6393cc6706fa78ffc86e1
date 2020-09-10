@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dd5f340_202a779e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1679,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T19:41:30Z",
+      "side": 1,
+      "message": "Aren\u0027t you glad we did this? :)",
+      "revId": "87fcd9ca6b46c6db65a6393cc6706fa78ffc86e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "161416dc_a444eabd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T19:41:30Z",
+      "side": 1,
+      "message": "Jamie\u0027s suggestion was to move this to FramebufferVk and place it next to mCurrentFramebufferDesc since it\u0027s not used by operator\u003d\u003d (meaning the same vk::Framebuffer is taken out of the cache regardless of the value of this variable).",
+      "revId": "87fcd9ca6b46c6db65a6393cc6706fa78ffc86e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
