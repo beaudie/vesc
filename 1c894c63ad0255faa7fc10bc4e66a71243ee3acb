@@ -63,6 +63,30 @@
       "revId": "1c894c63ad0255faa7fc10bc4e66a71243ee3acb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "999b3adc_607aaf16",
+        "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T03:51:47Z",
+      "side": 1,
+      "message": "Ok I see the issue. put() needs an rvalue reference, and the warning being enabled warns that value is technically no longer \"initialized\" but is being used below.\n\nThe cast looks weird, but does the job. I would suggest making the creation of temporary here even more explicit:\n\n    EXPECT_TRUE(sizedCache.put(value, size_t(value), 1));",
+      "parentUuid": "6d00735b_7e8aafc8",
+      "range": {
+        "startLine": 56,
+        "startChar": 42,
+        "endLine": 56,
+        "endChar": 61
+      },
+      "revId": "1c894c63ad0255faa7fc10bc4e66a71243ee3acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
