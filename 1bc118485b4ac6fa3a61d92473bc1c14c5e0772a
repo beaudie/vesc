@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "9ba58103_eb49ad4d",
+        "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1126309
+      },
+      "writtenOn": "2020-09-10T16:27:16Z",
+      "side": 1,
+      "message": "That was done in Patchset 2, but then changed as per feedback from Shahbaz.\n\nThe tricky part about these conversions here is that they\u0027re not casting from one type to another, but rather constructing a temporary object of the same type.",
+      "parentUuid": "5eea5006_3f808ab3",
+      "range": {
+        "startLine": 56,
+        "startChar": 42,
+        "endLine": 56,
+        "endChar": 48
+      },
+      "revId": "1bc118485b4ac6fa3a61d92473bc1c14c5e0772a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3525cb0a_47f5ddb7",
         "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
         "patchSetId": 3
