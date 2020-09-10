@@ -326,6 +326,30 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de7425cf_c7edc7a2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:26:51Z",
+      "side": 1,
+      "message": "It\u0027s very much a part of having a performance and debugging mode. This is part of our existing workflow and does not add additional untested use cases. e.g. in performance mode ASSERTs are disabled.",
+      "parentUuid": "a924e5f4_1b4a1872",
+      "range": {
+        "startLine": 1869,
+        "startChar": 61,
+        "endLine": 1869,
+        "endChar": 76
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
