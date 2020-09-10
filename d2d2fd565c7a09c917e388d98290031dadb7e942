@@ -210,6 +210,24 @@
       "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "296cfd5d_10647d20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-10T11:22:19Z",
+      "side": 1,
+      "message": "Hi Shahbaz. I add two end2end tests and fix the offset in CPU in patchset4.\n\n1) difference between ms0 and ms4\nI compared the msaa4 and msaa0 on android. They do haven\u0027t difference in CPU code, but in the compute shader, ms0 uses texture() to sample and ms4 uses texelFetch(). Texture() handles normalized ([0,1]) texture coordinates but texelFetch handles unnormalized coordinates. The way to sample seems to be the reason.\nAccording to GLSLangSpec.4.60, texture\u0027s src can\u0027t be gsampler2DMS. Maybe there is another way to deal with 2DMS using texture().\n\n2) two new added tests\nThe added test in patchset2 can only cover the flipY on Linux, but can\u0027t cover the prerotation code on android. I think they are needed to record bugs found and test the CL.\nIn the check part of these two tests, there are some comments for two bugs. One is the offset issue being discussed, the other is an unknown issue with prerotation on android. Though the cts tests can pass on linux and android after fixing the offset issue, but the result images aren\u0027t right actually. Some pixels near one of the image\u0027s edge are still wrong, they form a shape like “aliasing”. This issue may need a new ID to be fixed later.\n\n3)offset fix\nI think it\u0027s complex to fix the offset in AdjustBlitResolveParametersForResolve since it can\u0027t get useful isReserved() flags of prerotation on android. Do you think it can be accepted to fix it in AdjustBlitResolveParametersForPreRotation function like patchset4? It can work with prerotation and won\u0027t affect other path.",
+      "parentUuid": "942de89e_a8369699",
+      "revId": "d2d2fd565c7a09c917e388d98290031dadb7e942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
