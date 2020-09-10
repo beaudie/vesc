@@ -584,6 +584,30 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87623f8c_d7458e66",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-10T17:14:06Z",
+      "side": 1,
+      "message": "Enabling everywhere would be my preference, especially with the prevalence of debugging/profiling on desktop with ANGLE traces as much as possible.\n\nI\u0027d also prefer not tying this to debug layers to keep the behavior consistent, since most people develop with debug builds.",
+      "parentUuid": "8c87380e_e704e20b",
+      "range": {
+        "startLine": 1869,
+        "startChar": 61,
+        "endLine": 1869,
+        "endChar": 76
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
