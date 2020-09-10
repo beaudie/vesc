@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53f79429_c47449a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115919
+      },
+      "writtenOn": "2020-09-10T17:44:04Z",
+      "side": 1,
+      "message": "Could you take a look?\nI do not have a permission to run CQ even try. Could you help me to run it?\n\nThanks,\n- hidehiko",
+      "revId": "dfa85e2b5ba47d2e0021ff1504fcba3c57ad357d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
