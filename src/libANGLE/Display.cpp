@@ -1470,6 +1470,30 @@ EGLClientBuffer Display::GetNativeClientBuffer(const AHardwareBuffer *buffer)
     return angle::android::AHardwareBufferToClientBuffer(buffer);
 }
 
+// static
+Error Display::CreateNativeClientBuffer(const egl::AttributeMap &attribMap,
+                                        EGLClientBuffer *eglClientBuffer)
+{
+    GLenum internalFormat =
+        gl::GetGlInternalFormatForChannelSize(attribMap, gl::GetInternalFormatMap());
+    int width  = attribMap.getAsInt(EGL_WIDTH, 0);
+    int height = attribMap.getAsInt(EGL_HEIGHT, 0);
+    int usage  = attribMap.getAsInt(EGL_NATIVE_BUFFER_USAGE_ANDROID, 0);
+
+    // https://developer.android.com/ndk/reference/group/a-hardware-buffer#ahardwarebuffer_lock
+    // for AHardwareBuffer_lock()
+    // The passed AHardwareBuffer must have one layer, otherwise the call will fail.
+    constexpr int kLayerCount = 1;
+
+    *eglClientBuffer = angle::android::CreateEGLClientBufferFromAHardwareBuffer(
+        width, height, kLayerCount,
+        angle::android::GLInternalFormatToNativePixelFormat(internalFormat), usage);
+
+    return (*eglClientBuffer == nullptr)
+               ? egl::EglBadParameter() << "native client buffer allocation failed."
+               : NoError();
+}
+
 Error Display::waitClient(const gl::Context *context)
 {
     return mImplementation->waitClient(context);
