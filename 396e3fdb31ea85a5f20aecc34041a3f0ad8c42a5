@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "303164a8_45315740",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T18:37:16Z",
+      "side": 1,
+      "message": "LGTM - can you add a regression test that works outside of clusterfuzz?",
+      "revId": "396e3fdb31ea85a5f20aecc34041a3f0ad8c42a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
