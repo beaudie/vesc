@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aae4315_1fdcb8af",
+        "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:47:12Z",
+      "side": 1,
+      "message": "nit: angle naming style is valueCopy",
+      "range": {
+        "startLine": 56,
+        "startChar": 15,
+        "endLine": 56,
+        "endChar": 26
+      },
+      "revId": "0c55d2de9209f4884c06c780066d7fc6ef729953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cd25d92_3f5f8603",
+        "filename": "src/libANGLE/SizedMRUCache_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:47:12Z",
+      "side": 1,
+      "message": "nit: angle naming style is valueCopy",
+      "range": {
+        "startLine": 94,
+        "startChar": 15,
+        "endLine": 94,
+        "endChar": 26
+      },
+      "revId": "0c55d2de9209f4884c06c780066d7fc6ef729953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
