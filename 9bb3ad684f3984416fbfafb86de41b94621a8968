@@ -154,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "7eb14952_8608854d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:22:37Z",
+      "side": 1,
+      "message": "Regarding modifying the image outside framebuffer, we do have a (hopefully complete) notification system. DIRTY_BIT_*_BUFFER_CONTENTS is set in such a case, and FramebufferVk::syncState, through a call to RenderTargetVk::flushStagedUpdates, sets contents defined.\n\nBecause we track contents defined in the render target, unfortunately we also set contents defined with DIRTY_BIT_*_ATTACHMENT because we don\u0027t know if the image was modified while not attached to the framebuffer.\n\nWhat generates the notification that sets DIRTY_BIT_*_BUFFER_CONTENTS can probably be adapted to instead directly set contents defined in the image. That was at least my plan for moving contents defined to the image.\n\n---\n\nRegarding the image deletion bug, a potential solution is to sync the framebuffers that are attached to the texture/renderbuffer that\u0027s being deleted before the actual deletion. WDYT?",
+      "parentUuid": "6b37c48b_7e35934d",
+      "revId": "9bb3ad684f3984416fbfafb86de41b94621a8968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7243f50_fed7c2f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 16
