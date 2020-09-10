@@ -1116,6 +1116,36 @@ const InternalFormatInfoMap &GetInternalFormatMap()
     return *formatMap;
 }
 
+GLenum GetGlInternalFormatForChannelSize(const egl::AttributeMap &attribMap,
+                                         const gl::InternalFormatInfoMap &formatMap)
+{
+    // Retrieve channel size from attribute map. The default value should be 0, per spec.
+    GLuint redSize   = static_cast<GLuint>(attribMap.getAsInt(EGL_RED_SIZE, 0));
+    GLuint greenSize = static_cast<GLuint>(attribMap.getAsInt(EGL_GREEN_SIZE, 0));
+    GLuint blueSize  = static_cast<GLuint>(attribMap.getAsInt(EGL_BLUE_SIZE, 0));
+    GLuint alphaSize = static_cast<GLuint>(attribMap.getAsInt(EGL_ALPHA_SIZE, 0));
+
+    const angle::android::FormatAndType *supportedFormatTypeList =
+        angle::android::GetSupportedFormatTypesForNativeClientBuffer();
+
+    for (uint32_t index = 0; index < angle::android::kSupportedFormatTypesCount; index++)
+    {
+        GLenum fmt     = supportedFormatTypeList[index].first;
+        GLenum fmtType = supportedFormatTypeList[index].second;
+
+        gl::InternalFormatInfoMap::const_iterator fmtItr = formatMap.find(fmt);
+        ASSERT(fmtItr != formatMap.end());
+
+        const gl::InternalFormat &format = fmtItr->second.at(fmtType);
+        if ((redSize == format.redBits) && (greenSize == format.greenBits) &&
+            (blueSize == format.blueBits) && (alphaSize == format.alphaBits))
+        {
+            return fmt;
+        }
+    }
+    return 0;
+}
+
 static FormatSet BuildAllSizedInternalFormatSet()
 {
     FormatSet result;
