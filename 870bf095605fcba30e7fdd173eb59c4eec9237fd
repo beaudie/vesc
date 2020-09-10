@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a45851e_531dccc2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-10T22:08:14Z",
+      "side": 1,
+      "message": "Is this because we only have one HandleAllocator type?",
+      "revId": "870bf095605fcba30e7fdd173eb59c4eec9237fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8e65da0_319071ac",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
