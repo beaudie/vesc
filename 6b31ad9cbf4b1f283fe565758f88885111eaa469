@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "c5bbfc7c_48ba4f0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:38:56Z",
+      "side": 1,
+      "message": "Ouch! This should even show easily without threading. Take this test for example:\n\n- Attach FBO to texture level 0\n- Draw\n- glTexSubImage2D into texture level 0\n- Draw again\n\nWithout this change, the data upload would be lost because it\u0027s written to a command buffer that\u0027s already flushed. Isn\u0027t that correct?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 8
+      },
+      "revId": "6b31ad9cbf4b1f283fe565758f88885111eaa469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2603996_c0672923",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -81,6 +104,23 @@
       "revId": "6b31ad9cbf4b1f283fe565758f88885111eaa469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "930bd6bc_b997818a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:38:56Z",
+      "side": 1,
+      "message": "I think if you take the command buffer right after the above operation, there\u0027s nothing that can break it again, so you don\u0027t need to retake it in every command below.",
+      "revId": "6b31ad9cbf4b1f283fe565758f88885111eaa469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
