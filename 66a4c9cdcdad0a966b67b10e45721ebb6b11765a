@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "71fead6f_60c2aba2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T15:09:26Z",
+      "side": 1,
+      "message": "Actually I think I need to bring back the disable glFlushDeferral if sync object is used. That is still required regardless if I am doing flush at FBO boundary or RP boundary.",
+      "parentUuid": "e7234448_b1425515",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cafd83cb_3123fa57",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
