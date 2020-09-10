@@ -52,6 +52,29 @@
       "revId": "396e3fdb31ea85a5f20aecc34041a3f0ad8c42a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "473d86d8_a7e179e3",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T19:32:13Z",
+      "side": 1,
+      "message": "Why 2? Looks like you can drop that from all four variables.",
+      "range": {
+        "startLine": 561,
+        "startChar": 38,
+        "endLine": 561,
+        "endChar": 39
+      },
+      "revId": "396e3fdb31ea85a5f20aecc34041a3f0ad8c42a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
