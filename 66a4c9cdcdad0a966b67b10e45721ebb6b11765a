@@ -83,6 +83,54 @@
     },
     {
       "key": {
+        "uuid": "131bcde9_2d04a7b6",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "132cf4ee_97cdeb90",
+      "range": {
+        "startLine": 369,
+        "startChar": 36,
+        "endLine": 369,
+        "endChar": 59
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a6812317_6d40c290",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed5cf24e_ebe40cb2",
+      "range": {
+        "startLine": 369,
+        "startChar": 12,
+        "endLine": 369,
+        "endChar": 32
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cafd83cb_3123fa57",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -190,6 +238,24 @@
     },
     {
       "key": {
+        "uuid": "97314013_8c1344a6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "Since three of you has concerns, I am removing the check for now.",
+      "parentUuid": "15ee787e_d0721d5b",
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "148d3ae8_c6ffac99",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -210,6 +276,30 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4add693a_ccc3b7e3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4683,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "148d3ae8_c6ffac99",
+      "range": {
+        "startLine": 4683,
+        "startChar": 8,
+        "endLine": 4683,
+        "endChar": 27
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -236,6 +326,30 @@
     },
     {
       "key": {
+        "uuid": "4e9d3d6e_a41c56ed",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "This now removed",
+      "parentUuid": "2a0cfbf1_bfee2c8d",
+      "range": {
+        "startLine": 429,
+        "startChar": 9,
+        "endLine": 429,
+        "endChar": 30
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "991f6442_658f4bd7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 9
@@ -259,6 +373,30 @@
     },
     {
       "key": {
+        "uuid": "844ee340_54df01e8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "991f6442_658f4bd7",
+      "range": {
+        "startLine": 1082,
+        "startChar": 4,
+        "endLine": 1082,
+        "endChar": 10
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fe18bf9_8981ebc1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 9
@@ -279,6 +417,30 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38bcfa83_e94d8f02",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fe18bf9_8981ebc1",
+      "range": {
+        "startLine": 1867,
+        "startChar": 22,
+        "endLine": 1867,
+        "endChar": 31
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -341,6 +503,30 @@
       "side": 1,
       "message": "It\u0027s very much a part of having a performance and debugging mode. This is part of our existing workflow and does not add additional untested use cases. e.g. in performance mode ASSERTs are disabled.",
       "parentUuid": "a924e5f4_1b4a1872",
+      "range": {
+        "startLine": 1869,
+        "startChar": 61,
+        "endLine": 1869,
+        "endChar": 76
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54b51929_9434a176",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:28:46Z",
+      "side": 1,
+      "message": "For sure will fix this before landing.\n\nRegarding only enable with debug layer are disabled, I think it is a bit dangerous to have different behavior depending on debug or release. For example, if someone looking a glFlush related bug. Now with debug layer enabled bug goes away. It is going to be hard for people to figure out that ANGLE actually has different behavior with debug layer enabled.",
+      "parentUuid": "fb529881_d7a4c105",
       "range": {
         "startLine": 1869,
         "startChar": 61,
