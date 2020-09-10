@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f771e41_bd41ddc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T01:50:27Z",
+      "side": 1,
+      "message": "Trivial change. Going to land TBR Tobin.",
+      "revId": "d1c1e5555ca2ebfbb8b76e7ac7adca7d625526b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
