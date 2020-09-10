@@ -51,6 +51,24 @@
       "revId": "5cf944073e927344443cd0f92a198e52a0e23cb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1263042_3ff77dbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-10T22:24:55Z",
+      "side": 1,
+      "message": "I thought about crbug.com/1015810, but looks like it\u0027s unrelated as it was about angle::Process and not ResourceManager.",
+      "parentUuid": "2a3c49b4_af0cb838",
+      "revId": "5cf944073e927344443cd0f92a198e52a0e23cb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
