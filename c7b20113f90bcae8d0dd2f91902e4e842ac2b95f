@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f15833d_1062e4bd",
+        "filename": "src/libANGLE/renderer/metal/shaders/format_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T14:12:36Z",
+      "side": 1,
+      "message": "Maybe a file level comment here - is this a .h file for use in metal shaders?",
+      "revId": "c7b20113f90bcae8d0dd2f91902e4e842ac2b95f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
