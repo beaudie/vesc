@@ -49,9 +49,9 @@ InitState DetermineInitState(const Context *context, Buffer *unpackBuffer, const
 }
 }  // namespace
 
-bool IsMipmapFiltered(const SamplerState &samplerState)
+bool IsMipmapFiltered(GLenum minFilterMode)
 {
-    switch (samplerState.getMinFilter())
+    switch (minFilterMode)
     {
         case GL_NEAREST:
         case GL_LINEAR:
@@ -64,6 +64,20 @@ bool IsMipmapFiltered(const SamplerState &samplerState)
         default:
             UNREACHABLE();
             return false;
+    }
+}
+
+GLenum ConvertToNearestFilterMode(GLenum filterMode)
+{
+    switch (filterMode)
+    {
+        case GL_LINEAR:
+            return GL_NEAREST;
+        case GL_LINEAR_MIPMAP_NEAREST:
+        case GL_LINEAR_MIPMAP_LINEAR:
+            return GL_NEAREST_MIPMAP_NEAREST;
+        default:
+            return filterMode;
     }
 }
 
@@ -315,7 +329,7 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
         }
     }
 
-    if (mType != TextureType::_2DMultisample && IsMipmapFiltered(samplerState))
+    if (mType != TextureType::_2DMultisample && IsMipmapFiltered(samplerState.getMinFilter()))
     {
         if (!npotSupport)
         {

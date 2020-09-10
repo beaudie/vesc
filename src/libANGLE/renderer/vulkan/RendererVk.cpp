@@ -1868,6 +1868,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
 
     ANGLE_FEATURE_CONDITION(&mFeatures, deferFlushUntilEndRenderPass, true);
 
+    for (size_t i = 0; i < mFeatures.forceTextureLODOffset.size(); i++)
+    {
+        ANGLE_FEATURE_CONDITION(&mFeatures, forceTextureLODOffset[i], false);
+    }
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceNearestFiltering, false);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
