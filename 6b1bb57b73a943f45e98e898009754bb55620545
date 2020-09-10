@@ -16,6 +16,23 @@
       "revId": "6b1bb57b73a943f45e98e898009754bb55620545",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad476d5e_a9f7bb83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T21:45:55Z",
+      "side": 1,
+      "message": "LGTM. Could also use ResourceAccess instead of BarrierType.",
+      "revId": "6b1bb57b73a943f45e98e898009754bb55620545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
