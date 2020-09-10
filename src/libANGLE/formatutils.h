@@ -278,6 +278,9 @@ typedef std::unordered_map<GLenum, std::unordered_map<GLenum, InternalFormat>>
     InternalFormatInfoMap;
 const InternalFormatInfoMap &GetInternalFormatMap();
 
+GLenum GetGlInternalFormatForChannelSize(const egl::AttributeMap &attribMap,
+                                         const gl::InternalFormatInfoMap &formatMap);
+
 ANGLE_INLINE int GetNativeVisualID(const InternalFormat &internalFormat)
 {
     int nativeVisualId = 0;
