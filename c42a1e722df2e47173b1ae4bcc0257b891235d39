@@ -34,6 +34,24 @@
       "revId": "c42a1e722df2e47173b1ae4bcc0257b891235d39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b30add7_6a936425",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-10T16:06:50Z",
+      "side": 1,
+      "message": "Sounds like a good idea: anglebug.com/5031",
+      "parentUuid": "649f7e13_8b9fa88d",
+      "revId": "c42a1e722df2e47173b1ae4bcc0257b891235d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
