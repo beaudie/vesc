@@ -608,6 +608,30 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99a4612e_39f07250",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T18:42:36Z",
+      "side": 1,
+      "message": "I would prefer enabling everywhere to Android only. Especially as this may benefit performance on desktop as well.\n\nI use glFlush often to reduce test cases. It\u0027s a bit inconvenient to have to play with features as part of the debugging workflow but it\u0027s not a blocker.",
+      "parentUuid": "87623f8c_d7458e66",
+      "range": {
+        "startLine": 1869,
+        "startChar": 61,
+        "endLine": 1869,
+        "endChar": 76
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
