@@ -39,6 +39,30 @@
       "revId": "5f3a6baf34bed437f3b9c25f63982262b0ca8c0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47ab8663_a5e3dea4",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-10T18:55:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69a737bb_5e5ef6c0",
+      "range": {
+        "startLine": 240,
+        "startChar": 80,
+        "endLine": 240,
+        "endChar": 85
+      },
+      "revId": "5f3a6baf34bed437f3b9c25f63982262b0ca8c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
