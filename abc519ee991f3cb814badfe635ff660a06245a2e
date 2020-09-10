@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f106abe4_ce80b683",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:17:06Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 11
+      },
+      "revId": "abc519ee991f3cb814badfe635ff660a06245a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "461e0afd_616f7e93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-10T16:17:06Z",
+      "side": 1,
+      "message": "Tim: please add a regression test to VulkanUniformUpdatesTest.cpp. Even if this isn\u0027t strictly a uniform bug, you can limit pool sizes directly in that test. (We should probably rename it to something more specific).",
+      "revId": "abc519ee991f3cb814badfe635ff660a06245a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
