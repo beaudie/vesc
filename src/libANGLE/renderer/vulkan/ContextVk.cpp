@@ -4735,6 +4735,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
+        ASSERT(mRenderPassCommands->close());
         vk::CommandProcessorTask task = {this, &mPrimaryCommands, mRenderPassCommands};
         ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushInsideRenderPassCommands");
         queueCommandsToWorker(task);
@@ -4777,6 +4778,7 @@ void ContextVk::getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandB
     mAvailableCommandBuffers.pop();
     lock.unlock();
     (*commandBuffer)->setHasRenderPass(hasRenderPass);
+    ASSERT((*commandBuffer)->open());
 }
 
 void ContextVk::recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer)
@@ -4874,6 +4876,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
+        ASSERT(mOutsideRenderPassCommands->close());
         vk::CommandProcessorTask task = {this, &mPrimaryCommands, mOutsideRenderPassCommands};
         ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushOutsideRenderPassCommands");
         queueCommandsToWorker(task);
