@@ -560,6 +560,30 @@
       "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c87380e_e704e20b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-10T16:38:21Z",
+      "side": 1,
+      "message": "Sorry I mean debug layer enabled. I would expect with debug layer enabled, ANGLE still behaves the same. If bug goes away with debug layer, either a debug layer bug or timing related bug or bugs with each layer interaction. It is better for our behave remains consistent. \n\nASSERT is different, it did not change behavior.\n\nEnabling conditionally for specific GPU/Vendor/platform is common, people will expect that. But I actually not object to enable this for all, not just android, given that the change is now much limited than I originally started.",
+      "parentUuid": "93f811f0_dfb84173",
+      "range": {
+        "startLine": 1869,
+        "startChar": 61,
+        "endLine": 1869,
+        "endChar": 76
+      },
+      "revId": "66a4c9cdcdad0a966b67b10e45721ebb6b11765a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
