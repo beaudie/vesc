@@ -1138,6 +1138,31 @@ static FormatSet BuildAllSizedInternalFormatSet()
     return result;
 }
 
+GLenum getGlInternalFormatForChannelSize(GLuint redSize,
+                                         GLuint greenSize,
+                                         GLuint blueSize,
+                                         GLuint alphaSize,
+                                         const std::vector<gl::FormatType> &supportedFormatList)
+{
+    const InternalFormatInfoMap &formatMap = GetInternalFormatMap();
+    for (FormatType supportedFormat : supportedFormatList)
+    {
+        GLenum fmt     = supportedFormat.format;
+        GLenum fmtType = supportedFormat.type;
+
+        InternalFormatInfoMap::const_iterator fmtItr = formatMap.find(fmt);
+        ASSERT(fmtItr != formatMap.end());
+
+        const InternalFormat &format = fmtItr->second.at(fmtType);
+        if ((redSize == format.redBits) && (greenSize == format.greenBits) &&
+            (blueSize == format.blueBits) && (alphaSize == format.alphaBits))
+        {
+            return fmt;
+        }
+    }
+    return 0;
+}
+
 uint32_t GetPackedTypeInfo(GLenum type)
 {
     switch (type)

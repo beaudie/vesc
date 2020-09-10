@@ -4520,6 +4520,84 @@ Error ValidateGetNativeClientBufferANDROID(const AHardwareBuffer *buffer)
     return NoError();
 }
 
+Error ValidateCreateNativeClientBufferANDROID(const EGLint *attrib_list)
+{
+
+    // No extension check is done because no display is passed to eglGetNativeClientBufferANDROID
+    // despite it being a display extension.  No display is needed for the implementation though.
+    if (attrib_list == nullptr || attrib_list[0] == EGL_NONE)
+    {
+        return EglBadParameter() << "NULL attrib_list.";
+    }
+
+    const auto &attribMap = AttributeMap::CreateFromIntArray(attrib_list);
+
+    int width      = attribMap.getAsInt(EGL_WIDTH, 0);
+    int height     = attribMap.getAsInt(EGL_HEIGHT, 0);
+    int red_size   = attribMap.getAsInt(EGL_RED_SIZE, 0);
+    int green_size = attribMap.getAsInt(EGL_GREEN_SIZE, 0);
+    int blue_size  = attribMap.getAsInt(EGL_BLUE_SIZE, 0);
+    int alpha_size = attribMap.getAsInt(EGL_ALPHA_SIZE, 0);
+    int usage      = attribMap.getAsInt(EGL_NATIVE_BUFFER_USAGE_ANDROID, 0);
+
+    for (AttributeMap::const_iterator attributeIter = attribMap.begin();
+         attributeIter != attribMap.end(); attributeIter++)
+    {
+        EGLAttrib attribute = attributeIter->first;
+        switch (attribute)
+        {
+            case EGL_WIDTH:
+            case EGL_HEIGHT:
+                if (width <= 0 || height <= 0)
+                {
+                    return EglBadParameter() << "incorrect buffer dimensions requested";
+                }
+                break;
+            case EGL_RED_SIZE:
+            case EGL_GREEN_SIZE:
+            case EGL_BLUE_SIZE:
+            case EGL_ALPHA_SIZE:
+                if (red_size < 0 || green_size < 0 || blue_size < 0 || alpha_size < 0)
+                {
+                    return EglBadParameter() << "incorrect channel size requested";
+                }
+                break;
+            case EGL_NATIVE_BUFFER_USAGE_ANDROID:
+                // The buffer must be used for either a texture or a
+                // renderbuffer.
+                if ((usage & ~(EGL_NATIVE_BUFFER_USAGE_PROTECTED_BIT_ANDROID |
+                               EGL_NATIVE_BUFFER_USAGE_RENDERBUFFER_BIT_ANDROID |
+                               EGL_NATIVE_BUFFER_USAGE_TEXTURE_BIT_ANDROID)) != 0)
+                {
+                    return EglBadParameter() << "invalid usage flag";
+                }
+                break;
+            case EGL_NONE:
+                break;
+            default:
+                return EglBadAttribute() << "invalid attribute";
+        }
+    }
+
+    // TODO(http://anglebug.com/4062): add GL_RGB10_A2 and GL_RGBA16F formats once this
+    // issue is resolved
+    // We only support these 3 GL internal formats with these 3
+    // format types for creating native client buffers, for now.
+    const std::vector<gl::FormatType> kSupportedGLInternalFormats = {
+        {GL_RGB8, GL_UNSIGNED_BYTE},
+        {GL_RGBA8, GL_UNSIGNED_BYTE},
+        {GL_RGB565, GL_UNSIGNED_SHORT_5_6_5}};
+
+    GLenum internalFormat = gl::getGlInternalFormatForChannelSize(
+        red_size, green_size, blue_size, alpha_size, kSupportedGLInternalFormats);
+
+    if (angle::android::GLInternalFormatToNativePixelFormat(internalFormat) == 0)
+    {
+        return EglBadParameter() << "unsupported format";
+    }
+    return NoError();
+}
+
 Error ValidateDupNativeFenceFDANDROID(const Display *display, const Sync *sync)
 {
     ANGLE_TRY(ValidateDisplay(display));

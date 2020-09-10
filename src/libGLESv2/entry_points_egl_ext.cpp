@@ -1513,6 +1513,19 @@ EGLClientBuffer EGLAPIENTRY EGL_GetNativeClientBufferANDROID(const struct AHardw
     return egl::Display::GetNativeClientBuffer(buffer);
 }
 
+EGLClientBuffer EGLAPIENTRY EGL_CreateNativeClientBufferANDROID(const EGLint *attrib_list)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    FUNC_EVENT("const EGLint *attrib_list = 0x%016" PRIxPTR, (uintptr_t)attrib_list);
+
+    Thread *thread = egl::GetCurrentThread();
+    ANGLE_EGL_TRY_RETURN(thread, ValidateCreateNativeClientBufferANDROID(attrib_list),
+                         "eglCreateNativeClientBufferANDROID", nullptr, nullptr);
+
+    thread->setSuccess();
+    return egl::Display::CreateNativeClientBuffer(attrib_list);
+}
+
 EGLint EGLAPIENTRY EGL_DupNativeFenceFDANDROID(EGLDisplay dpy, EGLSyncKHR sync)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();

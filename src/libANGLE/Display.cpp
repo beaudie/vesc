@@ -1470,6 +1470,41 @@ EGLClientBuffer Display::GetNativeClientBuffer(const AHardwareBuffer *buffer)
     return angle::android::AHardwareBufferToClientBuffer(buffer);
 }
 
+// static
+EGLClientBuffer Display::CreateNativeClientBuffer(const EGLint *attrib_list)
+{
+    const auto &attribMap = AttributeMap::CreateFromIntArray(attrib_list);
+
+    int width      = attribMap.getAsInt(EGL_WIDTH, 0);
+    int height     = attribMap.getAsInt(EGL_HEIGHT, 0);
+    int red_size   = attribMap.getAsInt(EGL_RED_SIZE, 0);
+    int green_size = attribMap.getAsInt(EGL_GREEN_SIZE, 0);
+    int blue_size  = attribMap.getAsInt(EGL_BLUE_SIZE, 0);
+    int alpha_size = attribMap.getAsInt(EGL_ALPHA_SIZE, 0);
+    int usage      = attribMap.getAsInt(EGL_NATIVE_BUFFER_USAGE_ANDROID, 0);
+
+    // TODO(http://anglebug.com/4062): add GL_RGB10_A2 and GL_RGBA16F formats once this
+    // issue is resolved
+    // We only support these 3 GL internal formats with these 3
+    // format types for creating native client buffers, for now.
+    const std::vector<gl::FormatType> kSupportedGLInternalFormats = {
+        {GL_RGB8, GL_UNSIGNED_BYTE},
+        {GL_RGBA8, GL_UNSIGNED_BYTE},
+        {GL_RGB565, GL_UNSIGNED_SHORT_5_6_5}};
+
+    GLenum internalFormat = gl::getGlInternalFormatForChannelSize(
+        red_size, green_size, blue_size, alpha_size, kSupportedGLInternalFormats);
+
+    // https://developer.android.com/ndk/reference/group/a-hardware-buffer#ahardwarebuffer_lock
+    // for AHardwareBuffer_lock()
+    // The passed AHardwareBuffer must have one layer, otherwise the call will fail.
+    constexpr int kLayerCount = 1;
+
+    return angle::android::CreateEGLClientBufferFromAHardwareBuffer(
+        width, height, kLayerCount,
+        angle::android::GLInternalFormatToNativePixelFormat(internalFormat), usage);
+}
+
 Error Display::waitClient(const gl::Context *context)
 {
     return mImplementation->waitClient(context);

@@ -10,6 +10,9 @@
 #define COMMON_ANDROIDUTIL_H_
 
 #include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <stdint.h>
+
 #include "angle_gl.h"
 
 struct ANativeWindowBuffer;
@@ -23,6 +26,11 @@ namespace android
 
 ANativeWindowBuffer *ClientBufferToANativeWindowBuffer(EGLClientBuffer clientBuffer);
 EGLClientBuffer AHardwareBufferToClientBuffer(const AHardwareBuffer *hardwareBuffer);
+EGLClientBuffer CreateEGLClientBufferFromAHardwareBuffer(int width,
+                                                         int height,
+                                                         int depth,
+                                                         int androidFormat,
+                                                         int usage);
 
 void GetANativeWindowBufferProperties(const ANativeWindowBuffer *buffer,
                                       int *width,
@@ -33,6 +41,8 @@ GLenum NativePixelFormatToGLInternalFormat(int pixelFormat);
 int GLInternalFormatToNativePixelFormat(GLenum internalFormat);
 
 AHardwareBuffer *ANativeWindowBufferToAHardwareBuffer(ANativeWindowBuffer *windowBuffer);
+
+uint64_t GetAHBUsage(int eglNativeBufferUsage);
 
 }  // namespace android
 }  // namespace angle

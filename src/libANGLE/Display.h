@@ -199,6 +199,7 @@ class Display final : public LabeledObject,
     BlobCache &getBlobCache() { return mBlobCache; }
 
     static EGLClientBuffer GetNativeClientBuffer(const struct AHardwareBuffer *buffer);
+    static EGLClientBuffer CreateNativeClientBuffer(const EGLint *attrib_list);
 
     Error waitClient(const gl::Context *context);
     Error waitNative(const gl::Context *context, EGLint engine);
