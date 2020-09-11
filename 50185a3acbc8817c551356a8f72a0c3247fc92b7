@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3e1d066_9133753e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T15:45:34Z",
+      "side": 1,
+      "message": "Is this strictly for validation? Can we make this zero overhead in release with dcheck off somehow?",
+      "revId": "50185a3acbc8817c551356a8f72a0c3247fc92b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
