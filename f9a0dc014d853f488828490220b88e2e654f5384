@@ -51,6 +51,24 @@
       "revId": "f9a0dc014d853f488828490220b88e2e654f5384",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33a86b6f_2ed0a386",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T13:50:44Z",
+      "side": 1,
+      "message": "The specific exception exception is:\n\nAlthough you should not use exceptions in your own code, they are used extensively in the ATL and some STLs, including the one that comes with Visual C++. When using the ATL, you should define _ATL_NO_EXCEPTIONS to disable exceptions. You should investigate whether you can also disable exceptions in your STL, but if not, it is OK to turn on exceptions in the compiler. (Note that this is only to get the STL to compile. You should still not write exception handling code yourself.)\n\nGiven that we\u0027re on Mac and we do not need to turn on exceptions to get our code to compile this wording doesn\u0027t apply. Exceptions are still banned in any case with our without that rule in Chrome. We allow them in testing code only.\n\nWorking around the crashes is our best bet. In the long-term we can switch from SPIRV-Cross to Tint when Tint has a SPIR-V front-end.",
+      "parentUuid": "974d82bb_059089ba",
+      "revId": "f9a0dc014d853f488828490220b88e2e654f5384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
