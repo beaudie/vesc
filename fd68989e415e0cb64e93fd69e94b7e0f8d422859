@@ -62,6 +62,30 @@
       "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9f3a143_07bc0d99",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T20:04:03Z",
+      "side": 1,
+      "message": "Rather, it looks like these should be impossible, so you can turn them into ASSERTs.\n\n---\n\nActually, there\u0027s a difference in behavior here. Previously, if there was an overflow (because, say the application uploads to coordinates near MAX_UINT), there would be failure but not a crash. The valueOrDie() calls turn it into a crash. As Tim mentioned, these are ineffective because of the previous valueOrDie().\n\nCould you please add a test that tries something crazy like that? As in upload/copy/something to near maximum coordinates? You should be able to get a GL error prior to this CL.",
+      "parentUuid": "d5bbceb5_eab38b5d",
+      "range": {
+        "startLine": 1691,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 54
+      },
+      "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
