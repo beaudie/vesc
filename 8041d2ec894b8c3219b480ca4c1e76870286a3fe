@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "a50004e0_8f5ea41d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T21:27:27Z",
+      "side": 1,
+      "message": "Shabi, we can always use the offline glslang validator as part of our workflow. That won\u0027t cause any binary size bloat. This is in UtilsVk - that makes me think we can use the offline compiler.",
+      "parentUuid": "45ca1257_3f5fbe8b",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b0bcf08_174b8f6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
