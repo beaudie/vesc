@@ -16,6 +16,24 @@
       "revId": "56691473eb44a365138f1b37715e4b1a65e75df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88badfb3_67070426",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4574,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T15:17:41Z",
+      "side": 1,
+      "message": "Talked offline. This is correct. To summarize:\n\n1. This can technically be removed as staging buffers can\u0027t be coming from a render pass.\n2. Please add a comment to 4583 that says the staging image could have been used in a render pass and that onImageTransferRead may have caused the command buffers to be flushed.",
+      "parentUuid": "dc34cdc6_72007884",
+      "revId": "56691473eb44a365138f1b37715e4b1a65e75df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
