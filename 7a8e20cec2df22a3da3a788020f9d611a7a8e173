@@ -592,6 +592,30 @@
     },
     {
       "key": {
+        "uuid": "faae562e_492e587f",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T21:50:39Z",
+      "side": 1,
+      "message": "consider a situation where an entirely different texture is bound after the previous texture in that slot is reallocated as mutable.\n1. Texture A is bound to slot 1 \n2. Sampler is bound to slot 1 \n3. Sampler has sRGB_decode state set \n4. Some extra logic that doesn\u0027t include a draw \n5. Texture B is bound to slot 1 \n6. A draw is issued which uses texture slot 1\n\nIf we are too eager, we could accidentally reallocate texture A during step (4).\nWe would like to only have to reallocate texture B, and leave texture A alone.\n\nWe are OK with leaving textures that have been used once with sRGB_decode as mutable, but we want to avoid doing that reallocation on textures that are never used with sRGB_decode state.",
+      "parentUuid": "1f7381e5_8a70ce05",
+      "range": {
+        "startLine": 3191,
+        "startChar": 0,
+        "endLine": 3216,
+        "endChar": 1
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33fdbc4e_b68b38b9",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
