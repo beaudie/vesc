@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "98bed9e5_d43143ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T20:37:51Z",
+      "side": 1,
+      "message": "Swapping reviewers since Jamie is back. Charlie, you are still welcome to review!\n\nTim, I\u0027ll go over your comments later. High level response is that I don\u0027t generate glsl because we are moving away from needing glslang and towards generating our own SPIR-V. The alternative to glslang would have been to generate glsl, then use our own compiler (for which input attachment support needs to be added) to generate SPIR-V (when we get the ability). That\u0027s both less efficient and more work.\n\nI agree though that hardcoded SPIR-V as-is is not great. I\u0027ve been thinking about how to improve that. One idea I had was to instead of using hex values, use SPIR-V Headers symbols to basically generate the instructions at compile time. The structure of the SPIR-V-generation code would be the same, but symbolized. I\u0027ve also been thinking of expanding the comments to give an overall view of what the end result should look like, we should make it easier to understand how the pieces are stitched together.",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b0bcf08_174b8f6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
