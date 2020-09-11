@@ -110,6 +110,24 @@
     },
     {
       "key": {
+        "uuid": "e570e716_cfc10e08",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T15:40:50Z",
+      "side": 1,
+      "message": "Doubled it to 24. We don\u0027t run super long so it only makes a couple swaps per test.",
+      "parentUuid": "791e3793_331fac7b",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1247eac_907ad481",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 9
