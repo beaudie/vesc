@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a4a58b01_a682b573",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T15:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a06d11a6_4fb630df",
+      "revId": "ecd25a61e728c4902538967103f6ae211c3ca04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb703f48_64a752a5",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "ecd25a61e728c4902538967103f6ae211c3ca04f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "294326e6_51211960",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T15:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb703f48_64a752a5",
+      "range": {
+        "startLine": 806,
+        "startChar": 9,
+        "endLine": 806,
+        "endChar": 14
+      },
+      "revId": "ecd25a61e728c4902538967103f6ae211c3ca04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
