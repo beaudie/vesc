@@ -1880,6 +1880,16 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
             return;
         }
 
+        // This is triggered when the Vulkan backend defers acquiring the next
+        // image for the default framebuffer.
+        if (message == angle::SubjectMessage::SurfaceNeedsNewImage)
+        {
+            // NOTE: I'm reusing the following dirty bit, which is not used by the Vulkan backend.
+            mDirtyBits.set(DIRTY_BIT_DEFAULT_LAYERS);
+            onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
+            return;
+        }
+
         // This can be triggered by the GL back-end TextureGL class.
         ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
         return;

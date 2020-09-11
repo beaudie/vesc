@@ -477,7 +477,11 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mCurrentSwapHistoryIndex(0),
       mCurrentSwapchainImageIndex(0),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
-      mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex)
+      mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
+      mDeferredAcquire(false),
+      mDeferredPresentOutOfDate(false),
+      mDeferredSwapHistoryIndex(0),
+      mDeferredContext(nullptr)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -920,6 +924,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
+    mDeferredAcquire      = false;
 
     // Intialize the swapchain image views.
     uint32_t imageCount = 0;
@@ -1118,6 +1123,13 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
 FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
                                                            const gl::FramebufferState &state)
 {
+    if (mDeferredAcquire)
+    {
+        // Normally, acquiring the next image won't be delayed this long, but it is possible
+        // (e.g. some tests don't do any drawing, but still call eglSwapBuffers() multiple times).
+        angle::Result result = acquireNextImage(context);
+        ASSERT(result == angle::Result::Continue);
+    }
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
     return FramebufferVk::CreateDefaultFBO(renderer, state, this);
 }
@@ -1316,15 +1328,63 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::swapImpl");
 
     ContextVk *contextVk = vk::GetImpl(context);
+
+    if (mDeferredAcquire)
+    {
+        // Normally, acquiring the next image won't be delayed this long, but it is possible
+        // (e.g. some tests don't do any drawing, but still call eglSwapBuffers() multiple times).
+        ANGLE_TRY(acquireNextImage(context));
+    }
+
+    mDeferredPresentOutOfDate = false;
+    // Save this now, since present() will increment the value.
+    mDeferredSwapHistoryIndex = static_cast<uint32_t>(mCurrentSwapHistoryIndex);
+
+    ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &mDeferredPresentOutOfDate));
+
+    if (!mDeferredPresentOutOfDate)
+    {
+        // Defer acquiring the next swapchain image since the swapchain is not out-of-date.
+        deferNextSwapchainImage(context);
+    }
+    else
+    {
+        // Immediately try to acquire the next image, which will recognize the out-of-date
+        // swapchain (potentially because of a rotation change), and recreate it.
+        ANGLE_TRY(acquireNextImage(context));
+    }
+
+    return angle::Result::Continue;
+}
+
+void WindowSurfaceVk::deferNextSwapchainImage(const gl::Context *context)
+{
+    mDeferredAcquire = true;
+    mDeferredContext = context;
+
+    // Update the RenderTarget to know that the next swapchain image has been deferred (if not
+    // multisampling).
+    if (!mColorImageMS.valid())
+    {
+        mColorRenderTarget.setDeferredSwapchainImage(this);
+    }
+
+    // Set Framebuffer dirty bits so that the image will be acquired before draws/reads are done.
+    onStateChange(angle::SubjectMessage::SurfaceNeedsNewImage);
+}
+
+angle::Result WindowSurfaceVk::acquireNextImage()
+{
+    return acquireNextImage(mDeferredContext);
+}
+
+angle::Result WindowSurfaceVk::acquireNextImage(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
-    bool presentOutOfDate = false;
-    // Save this now, since present() will increment the value.
-    uint32_t currentSwapHistoryIndex = static_cast<uint32_t>(mCurrentSwapHistoryIndex);
-
-    ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
-
-    ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, presentOutOfDate));
+    ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, mDeferredSwapHistoryIndex,
+                                         mDeferredPresentOutOfDate));
 
     {
         // Note: TRACE_EVENT0 is put here instead of inside the function to workaround this issue:
@@ -1337,12 +1397,15 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         // before continuing.
         if (ANGLE_UNLIKELY((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR)))
         {
-            ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, true));
+            ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, mDeferredSwapHistoryIndex, true));
             // Try one more time and bail if we fail
             result = nextSwapchainImage(contextVk);
         }
         ANGLE_VK_TRY(contextVk, result);
     }
+
+    mDeferredPresentOutOfDate = false;
+    mDeferredSwapHistoryIndex = 0;
 
     RendererVk *renderer = contextVk->getRenderer();
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk));
@@ -1387,6 +1450,8 @@ VkResult WindowSurfaceVk::nextSwapchainImage(vk::Context *context)
     {
         onStateChange(angle::SubjectMessage::SubjectChanged);
     }
+
+    mDeferredAcquire = false;
 
     return VK_SUCCESS;
 }
@@ -1547,6 +1612,11 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                                                      const vk::RenderPass &compatibleRenderPass,
                                                      vk::Framebuffer **framebufferOut)
 {
+    if (mDeferredAcquire)
+    {
+        ANGLE_TRY(acquireNextImage());
+    }
+
     vk::Framebuffer &currentFramebuffer =
         isMultiSampled() ? mFramebufferMS
                          : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
