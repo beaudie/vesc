@@ -33,6 +33,24 @@
       "revId": "f9a0dc014d853f488828490220b88e2e654f5384",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "974d82bb_059089ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-11T13:43:51Z",
+      "side": 1,
+      "message": "I was hoping there could be an exception for spirv-cross (since C++ style guide also allows exception for Windows specific code). spirv-cross only interacts with the rest of the code base through mtl_glslang_utils.mm (exceptions are handled here, they shouldn\u0027t be escaped outside). Any exceptions raised should be self contained within mtl_glslang_utils.mm+spirv-cross only. The rest of the code base still has exceptions disabled.\n\nBut anw, this is not really important atm. The crashes could still be avoided by working-around them.",
+      "parentUuid": "493be75a_875e18e1",
+      "revId": "f9a0dc014d853f488828490220b88e2e654f5384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
