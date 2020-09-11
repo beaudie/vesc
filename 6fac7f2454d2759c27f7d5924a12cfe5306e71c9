@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "7d591625_acaf18a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T20:53:23Z",
+      "side": 1,
+      "message": "descriptor",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab080fa_61062aea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T20:53:23Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ff96ebb_a13193e0",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 18
@@ -13,6 +59,23 @@
       "writtenOn": "2020-09-11T20:26:52Z",
       "side": 1,
       "message": "Kind of hard to verify correctness in the review TBH. I didn\u0027t notice any bugs.",
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0901164f_0b786c93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T20:53:23Z",
+      "side": 1,
+      "message": "You\u0027ll want to download and run the Android Basic Media Decoder (https://github.com/android/media-samples/tree/master/BasicMediaDecoder) to verify that the YUV functionality is still working.",
       "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
