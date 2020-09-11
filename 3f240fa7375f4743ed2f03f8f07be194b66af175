@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "6d804c87_20953517",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T20:13:27Z",
+      "side": 1,
+      "message": "1. It _is_ weird, but let\u0027s land this and I can come back to it later for some refactoring and cleanup.\n3. It\u0027s a good test then :) It would be great if you duplicated that test for a color version as color and depth/stencil go through different paths. While you are at it, you could duplicate them and have them Y-flip instead of X-flip too.",
+      "parentUuid": "1045b49f_0e3d8218",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e718883c_ba669255",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 4

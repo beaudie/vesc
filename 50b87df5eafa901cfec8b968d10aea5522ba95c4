@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "692f1e34_618bd4f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T20:13:27Z",
+      "side": 1,
+      "message": "Just a few more tests for posterity and we can land this. Thanks again!",
+      "revId": "50b87df5eafa901cfec8b968d10aea5522ba95c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28b4549a_b0ad8fe9",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T20:13:27Z",
+      "side": 1,
+      "message": "Please create a new bug for this and add comment above this with the link.",
+      "revId": "50b87df5eafa901cfec8b968d10aea5522ba95c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
