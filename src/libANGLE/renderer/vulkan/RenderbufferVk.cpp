@@ -41,7 +41,8 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
                                              size_t samples,
                                              GLenum internalformat,
                                              size_t width,
-                                             size_t height)
+                                             size_t height,
+                                             bool isRenderToTexture)
 {
     ContextVk *contextVk       = vk::GetImpl(context);
     RendererVk *renderer       = contextVk->getRenderer();
@@ -105,16 +106,17 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
                                          size_t width,
                                          size_t height)
 {
-    return setStorageImpl(context, 1, internalformat, width, height);
+    return setStorageImpl(context, 1, internalformat, width, height, false);
 }
 
 angle::Result RenderbufferVk::setStorageMultisample(const gl::Context *context,
                                                     size_t samples,
                                                     GLenum internalformat,
                                                     size_t width,
-                                                    size_t height)
+                                                    size_t height,
+                                                    bool isRenderToTexture)
 {
-    return setStorageImpl(context, samples, internalformat, width, height);
+    return setStorageImpl(context, samples, internalformat, width, height, isRenderToTexture);
 }
 
 angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *context,

@@ -38,14 +38,15 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
     virtual angle::Result setStorage(const gl::Context *context,
                                      GLenum internalformat,
                                      size_t width,
-                                     size_t height)                   = 0;
+                                     size_t height)                     = 0;
     virtual angle::Result setStorageMultisample(const gl::Context *context,
                                                 size_t samples,
                                                 GLenum internalformat,
                                                 size_t width,
-                                                size_t height)        = 0;
+                                                size_t height,
+                                                bool isRenderToTexture) = 0;
     virtual angle::Result setStorageEGLImageTarget(const gl::Context *context,
-                                                   egl::Image *image) = 0;
+                                                   egl::Image *image)   = 0;
 
     virtual GLenum getColorReadFormat(const gl::Context *context);
     virtual GLenum getColorReadType(const gl::Context *context);
