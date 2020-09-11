@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "45ca1257_3f5fbe8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T21:08:32Z",
+      "side": 1,
+      "message": "We will always need to support compiling GLSL, whether it\u0027s via glslang, our own compiler, or something else.   SPIR-V isn\u0027t meant to be written directly, but compiled from something human-readable.\n\nThe SPIR-V whitepaper states:\n\n\u003e SPIR-V is sufficiently far removed from source code that a significant explicit step is required to recover the original. Without tools, its raw binary form is difficult to read or modify.\n\nWhile I appreciate that implementing this CL with SPIR-V took significant effort and CQ can likely be trusted that it\u0027s (at least mostly) correct, I don\u0027t think it\u0027s the correct decision in the long run.   It\u0027s too difficult to read, modify, extend, verify, or debug.\n\n\u003e The alternative to glslang would have been to generate glsl, then use our own compiler (for which input attachment support needs to be added) to generate SPIR-V (when we get the ability). That\u0027s both less efficient and more work.\n\n1. How much work is involved with adding enough input attachment support to land this CL?\n2. Why can\u0027t this CL use precompiled shaders like the other functionality in UtilsVk.cpp?   How much more inefficient is that option?",
+      "parentUuid": "98bed9e5_d43143ba",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b0bcf08_174b8f6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
