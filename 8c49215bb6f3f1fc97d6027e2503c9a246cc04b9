@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "1b25de8f_06f6d92b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T19:38:54Z",
+      "side": 1,
+      "message": "Looking good! Please add a VulkanPerformanceCountersTest test to ensure we don\u0027t regress this later.",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6005ed5_31a8b8d7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -87,6 +104,23 @@
       "writtenOn": "2020-09-11T17:28:30Z",
       "side": 1,
       "message": "Can you add a comment here (or in ContextVk::flush()) explaining why sync objects need to be treated differently and force flushes?",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e38375_3816eea4",
+        "filename": "src/tests/gl_tests/OcclusionQueriesTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T19:38:54Z",
+      "side": 1,
+      "message": "I would do something different. The test wants to ensure that flush doesn\u0027t screw things up, and since this is optimizing flush, it\u0027s actually good to leave that be!\n\nInstead, of changing to glFinish(), how about skipping the test on Android? You can mark it with the same bug, and when I finally get around to landing this [1], we can enable it.\n\nBy the way, that change has a failure in OcclusionQueriesTest.ClearNotCounted which makes me think the root cause of the failure here is not the same as what [1] fixes, but rather some other bugs both of these CLs are independently exposing.\n\n[1]: https://chromium-review.googlesource.com/c/angle/angle/+/2382416",
       "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
