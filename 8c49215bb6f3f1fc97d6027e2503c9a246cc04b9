@@ -124,6 +124,24 @@
       "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8358ad5_e61eabd7",
+        "filename": "src/tests/gl_tests/OcclusionQueriesTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-11T20:05:24Z",
+      "side": 1,
+      "message": "I think the test wants to ensure the submission between beginQuery/endQuery does not screw up occlusion query. That is why it is adding a flush call there. With flush nopped, I dont think there is any value to leave flush there. But covering that specific test scenario is still useful. That is why change to finish  is better here so that we don\u0027t lose the intended coverage.",
+      "parentUuid": "a9e38375_3816eea4",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
