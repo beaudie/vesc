@@ -16,6 +16,29 @@
       "revId": "e2065588288d4445a37e6dc1db207b54218ac1a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "24f2451a_b9025b42",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T15:40:56Z",
+      "side": 1,
+      "message": "nit: the double check is kind of odd. Maybe add a comment saying this is for the Mock ICD, or just fix that to not report this feature.",
+      "range": {
+        "startLine": 1256,
+        "startChar": 0,
+        "endLine": 1259,
+        "endChar": 96
+      },
+      "revId": "e2065588288d4445a37e6dc1db207b54218ac1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
