@@ -86,6 +86,30 @@
       "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e106a8db_79e466b7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-09-11T21:31:25Z",
+      "side": 1,
+      "message": "Not sure if I fully follow this test suggestion. Can a test get near MAX_UINT if the width/height of the texture should be limited to GL_MAX_TEXTURE_SIZE, which I think is around 16k for most GPUs.",
+      "parentUuid": "d9f3a143_07bc0d99",
+      "range": {
+        "startLine": 1691,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 54
+      },
+      "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
