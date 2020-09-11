@@ -19,6 +19,41 @@
     },
     {
       "key": {
+        "uuid": "4b4ca0bb_d120f833",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-11T17:19:20Z",
+      "side": 1,
+      "message": "Is this the upstream fix?\nhttps://github.com/KhronosGroup/Vulkan-Tools/pull/437",
+      "parentUuid": "4427f290_543dd6c2",
+      "revId": "e2065588288d4445a37e6dc1db207b54218ac1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fffd325c_a6e04f53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-11T17:19:20Z",
+      "side": 1,
+      "message": "LGTM with nit and a question.",
+      "revId": "e2065588288d4445a37e6dc1db207b54218ac1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24f2451a_b9025b42",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
@@ -30,6 +65,30 @@
       "writtenOn": "2020-09-11T15:40:56Z",
       "side": 1,
       "message": "nit: the double check is kind of odd. Maybe add a comment saying this is for the Mock ICD, or just fix that to not report this feature.",
+      "range": {
+        "startLine": 1256,
+        "startChar": 0,
+        "endLine": 1259,
+        "endChar": 96
+      },
+      "revId": "e2065588288d4445a37e6dc1db207b54218ac1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ffabff6_ee94d936",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-11T17:19:20Z",
+      "side": 1,
+      "message": "Agreed, comment should be sufficient until upstream is fixed, maybe with a TODO.",
+      "parentUuid": "24f2451a_b9025b42",
       "range": {
         "startLine": 1256,
         "startChar": 0,
