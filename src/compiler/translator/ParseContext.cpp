@@ -210,6 +210,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxCombinedTextureImageUnits(resources.MaxCombinedTextureImageUnits),
       mMaxUniformLocations(resources.MaxUniformLocations),
       mMaxUniformBufferBindings(resources.MaxUniformBufferBindings),
+      mMaxVertexAttribs(resources.MaxVertexAttribs),
       mMaxAtomicCounterBindings(resources.MaxAtomicCounterBindings),
       mMaxShaderStorageBufferBindings(resources.MaxShaderStorageBufferBindings),
       mDeclaringFunction(false),
@@ -4691,6 +4692,11 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
         if (intValue < 0)
         {
             error(intValueLine, "out of range: location must be non-negative",
+                  intValueString.c_str());
+        }
+        else if (mShaderType == GL_VERTEX_SHADER && intValue >= mMaxVertexAttribs)
+        {
+            error(intValueLine, "out of range: location must be less than GL_MAX_VERTEX_ATTRIBS",
                   intValueString.c_str());
         }
         else

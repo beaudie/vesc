@@ -653,6 +653,7 @@ class TParseContext : angle::NonCopyable
     int mMaxCombinedTextureImageUnits;
     int mMaxUniformLocations;
     int mMaxUniformBufferBindings;
+    int mMaxVertexAttribs;
     int mMaxAtomicCounterBindings;
     int mMaxShaderStorageBufferBindings;
 
