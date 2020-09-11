@@ -33,6 +33,63 @@
       "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e04ddbc_86693999",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T17:28:30Z",
+      "side": 1,
+      "message": "LGTM.   I\u0027ll let Shabi give the official +2.",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d6005ed5_31a8b8d7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T17:28:30Z",
+      "side": 1,
+      "message": "This can be removed now too.",
+      "range": {
+        "startLine": 978,
+        "startChar": 41,
+        "endLine": 978,
+        "endChar": 62
+      },
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff3f7614_fe9f5427",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T17:28:30Z",
+      "side": 1,
+      "message": "Can you add a comment here (or in ContextVk::flush()) explaining why sync objects need to be treated differently and force flushes?",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
