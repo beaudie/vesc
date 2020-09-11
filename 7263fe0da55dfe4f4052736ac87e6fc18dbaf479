@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3013dca_83c6cf3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T12:14:36Z",
+      "side": 1,
+      "message": "LGTM, will defer to Sahbi/Charlie for main review.",
+      "revId": "7263fe0da55dfe4f4052736ac87e6fc18dbaf479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64665740_569fcd5c",
+        "filename": "src/tests/gl_tests/VulkanDescriptorSetTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T12:14:36Z",
+      "side": 1,
+      "message": "nit: update",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "7263fe0da55dfe4f4052736ac87e6fc18dbaf479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d383ff79_21d85673",
+        "filename": "src/tests/gl_tests/VulkanDescriptorSetTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T12:14:36Z",
+      "side": 1,
+      "message": "doesn\u0027t seem to be used?",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 47
+      },
+      "revId": "7263fe0da55dfe4f4052736ac87e6fc18dbaf479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
