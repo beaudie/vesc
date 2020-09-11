@@ -34,6 +34,24 @@
       "revId": "56691473eb44a365138f1b37715e4b1a65e75df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5c4dcf7_15729853",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4574,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T15:42:23Z",
+      "side": 1,
+      "message": "Discussed offline. 4574 probably not needed as contextVk-\u003eonBufferTransferRead shouldn\u0027t close the outsideCommandBuffer under these conditions, but reload the commandBuffer pointer just in case.",
+      "parentUuid": "dc34cdc6_72007884",
+      "revId": "56691473eb44a365138f1b37715e4b1a65e75df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
