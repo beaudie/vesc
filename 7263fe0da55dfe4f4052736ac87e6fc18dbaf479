@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "f9d5d111_38ab4a12",
+        "filename": "src/tests/gl_tests/VulkanDescriptorSetTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T16:00:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64665740_569fcd5c",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "7263fe0da55dfe4f4052736ac87e6fc18dbaf479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d383ff79_21d85673",
         "filename": "src/tests/gl_tests/VulkanDescriptorSetTest.cpp",
         "patchSetId": 16
@@ -62,6 +86,30 @@
       "revId": "7263fe0da55dfe4f4052736ac87e6fc18dbaf479",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee9126fd_2ffea3af",
+        "filename": "src/tests/gl_tests/VulkanDescriptorSetTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T16:00:40Z",
+      "side": 1,
+      "message": "Oops, yup.   This was necessary for the original version of limitMaxSets(), but I forgot to pull it back out.   Good catch.",
+      "parentUuid": "d383ff79_21d85673",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 47
+      },
+      "revId": "7263fe0da55dfe4f4052736ac87e6fc18dbaf479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
