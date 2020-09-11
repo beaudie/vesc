@@ -102,6 +102,46 @@
       "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1d906bb_5a5da5bf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3998,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T21:55:21Z",
+      "side": 1,
+      "message": "This makes me nervousness. I deliberately split the function because createPipelineLayout does more work than needed to deal with the immutable sampler. Besides re-compiling the shaders when they don\u0027t need it was resetting some state that was causing issues. I figured we really didn\u0027t want to recompile so that was the main reason for the split.",
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54ff8b8d_f20ecaba",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T21:55:21Z",
+      "side": 1,
+      "message": "createPipelineLayout",
+      "range": {
+        "startLine": 730,
+        "startChar": 3,
+        "endLine": 730,
+        "endChar": 23
+      },
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
