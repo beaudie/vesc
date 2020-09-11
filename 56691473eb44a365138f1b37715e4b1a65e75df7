@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc34cdc6_72007884",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4574,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T14:05:05Z",
+      "side": 1,
+      "message": "This should happen after the command that flushes the CB, not before these. If the next command for example closes the CB, then the buffer barriers above for example will still be recorded on the old CB.\n\n---\n\nAlso, since the RP is closed in line 4481, why is anything here flushing the CB?!",
+      "revId": "56691473eb44a365138f1b37715e4b1a65e75df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
