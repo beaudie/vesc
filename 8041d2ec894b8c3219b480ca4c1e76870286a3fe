@@ -16,6 +16,412 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8010bd4b_72c3a74a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "My concern with this CL is with the use of magic machine code, rather than GLSL which would be much more human-readable and maintainable.   I skipped reviewing most of that code, since I don\u0027t agree with the premise, nor understand any of it anyway.\n\nWhy can\u0027t GLSL be used?",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b0bcf08_174b8f6b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "nit: startNewSubpass() to match the render pass naming.",
+      "range": {
+        "startLine": 584,
+        "startChar": 9,
+        "endLine": 584,
+        "endChar": 20
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dae5cd74_d7d9c307",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "\u0027k\u0027",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b71d4251_c334e12b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Everything else has a lowercase \u0027k\u0027 (including this file, ContextVk, etc.), so this should be reverted.\n\nThis applies to the rest of this CL also.",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e6e5d4c_f427d88d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Adding image usage flags always seems to come with some side effect we weren\u0027t expecting - typically in a way that hurts performance.\n\nCan you (or work with Cody to) check if this changes benchmark results for T-Red and MH3.0 on Android?",
+      "range": {
+        "startLine": 1264,
+        "startChar": 50,
+        "endLine": 1264,
+        "endChar": 85
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c2cd1c2_f8fcfd32",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Why 2x here?",
+      "range": {
+        "startLine": 298,
+        "startChar": 26,
+        "endLine": 298,
+        "endChar": 45
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5618827_69869ae9",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Why are you generating machine code directly (not even SPIR-V assembly), rather than GLSL?   This looks like it will be essentially impossible to maintain in the future.",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dbd15d9_21a9c68e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "These are the same functions as in glslang_wrapper_utils.cpp.   Is there a better home where they can both live?   Or maybe just make those visible so they can be called here too?",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 406,
+        "endChar": 1
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f10be88_55770ab9",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Might be worth doing an ASSERT(attachmentCount \u003e 0) at the start of this function.",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49c4dd4c_7e74eec5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "This is where things become unreviewable and unmaintainable.   There\u0027s no way to know that these magic numbers are correct or what to do when they aren\u0027t anymore.\n\nI would strongly suggest using GLSL and avoid all of this unless there\u0027s a very good reason to do raw machine code like this.",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56236fe8_aafe03df",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Can you use fill() here?",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76abb304_19169f40",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Why use 1-based rather than 0-based?",
+      "range": {
+        "startLine": 410,
+        "startChar": 8,
+        "endLine": 410,
+        "endChar": 18
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "001f9281_df1f5dc6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Rather than hardcoding the number of allowed subpasses, I think this should be a vector that has each subpass description added to it.   Then, the VkRenderPassCreateInfo is created after all of the VkSubpassDescription have been built up.   This allows other subpasses to be created in the future without having to grow the array size to make everyone happy.   It also avoids magic numbers and allocated extra stack space for a feature that\u0027s rarely used (at least on Android, which is where we are currently targetting).",
+      "range": {
+        "startLine": 482,
+        "startChar": 37,
+        "endLine": 482,
+        "endChar": 38
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10baea3c_f4ebdcc5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "These should have a comment indicating that their lifetime needs to match createInfo since their contents are used in the vkCreateRenderPass() command, and that they can\u0027t be moved into the conditional block (the only place they currently used when looking at this function.",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 488,
+        "endChar": 68
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab24cde_bbbb81c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Move this to after all of the VkSubpassDescription and VkSubpassDependency have been built and closer to where the renderPass-\u003einit() call is made.",
+      "range": {
+        "startLine": 513,
+        "startChar": 0,
+        "endLine": 522,
+        "endChar": 48
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df1eaa37_c99dd7d5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "This restricts using multiple subpasses to just this unresolve case.   Instead, this should check the same desc.getColorUnresolveAttachmentMask().any() to know we are in the unresolve case.",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb831625_d81c252a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "This block should be moved into a helper similar to InitializeUnresolveSubpass() and called before building the VkRenderPassCreateInfo.   Then you can treat createInfo.dependencyCount and createInfo.pDependencies the same as colorAttachmentCount/pColorAttachments above and always set them with the std::vector the helper modifies:\n\n  std::vector\u003cVkSubpassDependency\u003e subpassDependencies;\n  InitializeUnresolveSubpassDependencies(..., \u0026subpassDependencies);\n  ...\n  createInfo.dependencyCount \u003d subpassDependencies.size();\n  createInfo.pDependencies   \u003d subpassDependencies.data();\n\nThis will also avoid allocating arrays that are rarely used.",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65fde4f5_73c4d33c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "nit: subsequent",
+      "range": {
+        "startLine": 531,
+        "startChar": 83,
+        "endLine": 531,
+        "endChar": 93
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8143924a_8703ef30",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "Why isn\u0027t this mRenderPassDesc.colorAttachmentRange + mRenderPassDesc.getColorUnresolveAttachmentMask().count()?",
+      "range": {
+        "startLine": 1243,
+        "startChar": 0,
+        "endLine": 1244,
+        "endChar": 93
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1757a93c_ba79dc31",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T20:22:31Z",
+      "side": 1,
+      "message": "nit: fsStr",
+      "range": {
+        "startLine": 1597,
+        "startChar": 22,
+        "endLine": 1597,
+        "endChar": 27
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
