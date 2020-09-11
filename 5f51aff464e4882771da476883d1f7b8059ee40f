@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "a44bdad0_64c87db6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T18:08:41Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c98152a_870f686e",
         "filename": "src/common/android_util.cpp",
         "patchSetId": 1
@@ -154,6 +171,30 @@
       "side": 1,
       "message": "tried doing it but including \"formatutils.h\" inside \"android_utils\" causes linker error since angle_base depends on the static lib that contains android_util.cpp. any suggestions?\n\n\u003e This doesn\u0027t check componentType\n\nThe \"kSupportedGLInternalFormats\" specifies the format type and we use that when retrieving the \"InternalFormat\" struct\n\n\u003e colorEncoding, sRGB formats could be returned\n\nThere is no way to know this info at buffer creation time. EGL_EXT_image_gl_colorspace will be used later while creating the EGL image out of this buffer",
       "parentUuid": "043b7026_75cd7642",
+      "range": {
+        "startLine": 1141,
+        "startChar": 0,
+        "endLine": 1165,
+        "endChar": 0
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ed0209_39416f40",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T18:08:41Z",
+      "side": 1,
+      "message": "improvised a bit, WDYT?",
+      "parentUuid": "e87a5943_6a2e5e99",
       "range": {
         "startLine": 1141,
         "startChar": 0,
