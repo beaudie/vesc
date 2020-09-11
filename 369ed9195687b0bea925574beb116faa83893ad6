@@ -259,6 +259,24 @@
     },
     {
       "key": {
+        "uuid": "f9a62ff1_d472bb88",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-11T20:21:22Z",
+      "side": 1,
+      "message": "You can add a __builtin_trap() (i.e. ASSERT(false)) on line 1042 and see in which situation you get there, then try to replicate that for every buffer?\n\nWhat if the application shader loads an atomic counter, but there is no atomic counter buffer bound at all? I don\u0027t know if that makes the call invalid, or would it go through, but if it does, I\u0027m guessing it would trigger this ASSERT.",
+      "parentUuid": "f2be7a22_afc6292f",
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f58fdc_253c658c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 10
