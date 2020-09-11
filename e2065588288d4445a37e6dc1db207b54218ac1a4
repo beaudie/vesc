@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4427f290_543dd6c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T15:31:42Z",
+      "side": 1,
+      "message": "PTAL. Had to land one fix to the upstream mock ICD. Likely the usage bits should be fixed in the mock ICD as well. This CL works around that bug.",
+      "revId": "e2065588288d4445a37e6dc1db207b54218ac1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
