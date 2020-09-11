@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7fca3cf_312ef7a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f106abe4_ce80b683",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 11
+      },
+      "revId": "abc519ee991f3cb814badfe635ff660a06245a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "461e0afd_616f7e93",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 11
@@ -39,6 +63,24 @@
       "revId": "abc519ee991f3cb814badfe635ff660a06245a2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfc1ec06_e41b6e73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "I created a new file:\nsrc/tests/gl_tests/VulkanDescriptorSetTest.cpp\n\nI set `kDefaultDescriptorPoolMaxSets \u003d 1` and ran various end2end tests until one failed on ToT master without the fix, then copied the test into there.   Unfortunately, I realized a bit late that the premise of the test is a bit flawed when using the original version of limitMaxSets() in VulkanUniformUpdatesTest.cpp.\n\nThe goal of this fix is to make sure the descriptor set layout matches the descriptor pool sizes, so that the descriptor set count can be accurate.   However, in order to set the new pool size in the test, we need to specify the descriptor counts for each type, which also has to match the descriptor set layout.   This means the test is mimicking the fix and is essentially fixing the descriptor pool, so it also passes on master without the fix.\n\nThe (more) correct way to test this is by converting mMaxSetsPerPool to a static class member that\u0027s modifiable via SetMaxSetsPerPoolForTesting(), which is called in the tests before draw/dispatch.   This causes the descriptor pools to be created by ProgramExecutableVk::createPipelineLayout(), rather than test code, and correctly catches the failure on master - along with verifying that the fix works.",
+      "parentUuid": "461e0afd_616f7e93",
+      "revId": "abc519ee991f3cb814badfe635ff660a06245a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

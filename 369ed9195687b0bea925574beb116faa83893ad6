@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "7b8c48dc_c71ca3a7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3996,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "Hm, that\u0027s a good point.\n\nThe problem is we need to recreate them the first time, since the descriptor set layouts no longer match what the original pools were created with.   However, we don\u0027t know that the layouts could match the next time we come through here.\n\nI think the DescriptorPoolHelper implementation should prevent us from leaking memory though, since it\u0027ll destroy the pool before reallocating a new one to replace it.   There is still the CPU/driver overhead involved with that though.\n\nI think we\u0027d need to update the DynamicDescriptorPool/DescriptorPoolHelper implementations to hold on to the descriptor set layout handle they are being created for, so the pool creation is a no-op if that hasn\u0027t changed.   This would let the descriptor set layout cache prevent us from recreating pools, since it should return the same handle.\n\nSince immutable samplers don\u0027t seem too common and this is passing the bots, I\u0027ll open up a bug to work on that next and put a TODO here.\n\nANGLE issue: http://anglebug.com/5033\n\nLet me know if fixing this in a follow-on is ok.",
+      "parentUuid": "e306d98f_90b9c057",
+      "range": {
+        "startLine": 3996,
+        "startChar": 31,
+        "endLine": 3996,
+        "endChar": 51
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3503e01e_d7ebe04a",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 10
@@ -70,6 +94,30 @@
       "writtenOn": "2020-09-10T00:11:51Z",
       "side": 1,
       "message": "So this is needed because it is moved from previous version of createPipelineLayout and now you have combined createPipelineLayout and update into one. Probably worth a comment here explain why you need to call reset since it is not very obvious what does activeTextures\u003d\u003dNULL means.",
+      "range": {
+        "startLine": 741,
+        "startChar": 4,
+        "endLine": 745,
+        "endChar": 0
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b25c742_0221ad7f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "I\u0027ve added a comment.   Let me know if that helps clarify things.\n\nJust for a bit more historical context, this CL is actually restoring createPipelineLayout() to a single function, which is how it was originally implemented before being split as part of Courtney\u0027s immutable samplers change (which is why I CC\u0027ed him on this CL).",
+      "parentUuid": "3503e01e_d7ebe04a",
       "range": {
         "startLine": 741,
         "startChar": 4,
@@ -105,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "ea271e41_a8eeee5b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a28bf170_027b7c7b",
+      "range": {
+        "startLine": 968,
+        "startChar": 11,
+        "endLine": 968,
+        "endChar": 16
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af048184_a73ae29c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 10
@@ -128,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "3f823b97_3a20b4b3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "I\u0027ve move the declaration outside the loop.\n\nTo add some context, we can\u0027t initialize it to NULL, since each of these functions needs reuse the same ShaderResource descriptor set to fill in the correct bindings, rather than allocating a new one.",
+      "parentUuid": "af048184_a73ae29c",
+      "range": {
+        "startLine": 1052,
+        "startChar": 11,
+        "endLine": 1052,
+        "endChar": 16
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baabe61e_ce4a6d51",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 10
@@ -139,6 +235,24 @@
       "writtenOn": "2020-09-10T01:44:15Z",
       "side": 1,
       "message": "What if `bufferBinding.get() \u003d\u003d nullptr` for all the buffers? Is that even possible?",
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2be7a22_afc6292f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "I had the same worry, which is why I added the assert here (and eventually everywhere else).   It passes the bots though, so it seems safe enough for now.   I don\u0027t know enough about how that stuff works to know what could lead to that situation though.\n\nLet me know if you can think of a sequence I can add a test for to see what happens here.",
+      "parentUuid": "baabe61e_ce4a6d51",
       "revId": "369ed9195687b0bea925574beb116faa83893ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -168,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "2a0dc733_eb056550",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55f58fdc_253c658c",
+      "range": {
+        "startLine": 1155,
+        "startChar": 15,
+        "endLine": 1155,
+        "endChar": 20
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48bc69ce_539bfe39",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 10
@@ -179,6 +317,24 @@
       "writtenOn": "2020-09-10T01:44:15Z",
       "side": 1,
       "message": "Looks unnecessary, but if you want to keep it, please replicate in other functions.",
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45800e8d_e5de629e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "Probably overly paranoid, but it helps ease my mind.\n\nI added the last missing one to updateAtomicCounterBuffersDescriptorSet().",
+      "parentUuid": "48bc69ce_539bfe39",
       "revId": "369ed9195687b0bea925574beb116faa83893ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -205,6 +361,30 @@
       "revId": "369ed9195687b0bea925574beb116faa83893ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dcb430a_2a59c38b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9812d76c_bac13509",
+      "range": {
+        "startLine": 1387,
+        "startChar": 19,
+        "endLine": 1387,
+        "endChar": 24
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -252,6 +432,30 @@
       "revId": "369ed9195687b0bea925574beb116faa83893ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9053db66_09a080a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-11T01:56:29Z",
+      "side": 1,
+      "message": "Good catch.   Reverted.\n\nThis leaked through from trying to solve the Serial issue while trying to get the tests to pass with `kDefaultDescriptorPoolMaxSets \u003d 1`, so I could be entirely confident we have the descriptor pool sizes correctly matching the descriptor set layouts.",
+      "parentUuid": "2be953c1_3256378d",
+      "range": {
+        "startLine": 1639,
+        "startChar": 31,
+        "endLine": 1639,
+        "endChar": 73
+      },
+      "revId": "369ed9195687b0bea925574beb116faa83893ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
