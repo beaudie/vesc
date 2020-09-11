@@ -16,6 +16,24 @@
       "revId": "50185a3acbc8817c551356a8f72a0c3247fc92b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a05a9ce_3defef2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-11T15:47:25Z",
+      "side": 1,
+      "message": "Yeah, strictly validation.\nI could ifdef the open \u0026 close calls (3 of them), would that be okay?",
+      "parentUuid": "a3e1d066_9133753e",
+      "revId": "50185a3acbc8817c551356a8f72a0c3247fc92b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
