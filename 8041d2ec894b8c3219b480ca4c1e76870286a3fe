@@ -230,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "b6cba6d6_4b1b610a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-11T20:38:33Z",
+      "side": 1,
+      "message": "Agree this code has maintainability issues. Would also like to know more about why you went with this design.",
+      "parentUuid": "49c4dd4c_7e74eec5",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56236fe8_aafe03df",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 13
