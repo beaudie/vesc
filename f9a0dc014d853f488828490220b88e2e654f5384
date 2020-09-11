@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "094468f7_f4a9e7ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-11T07:51:00Z",
+      "side": 1,
+      "message": "spirv-cross translating to MSL doesn\u0027t support every feature of SPIRV. For example, passing array of matrices as vertex shader\u0027s stage output is not supported. Another example is that LOD sampling from shadow sampler is not supported either. In those cases, since exceptions are disabled, spirv-cross will just abort/crash the whole app/Chromium\u0027s web page.\nI think it is better to enable exceptions when compiling spirv-cross to allow the back-end to catch and return errors to the application layer rather than making it crash.",
+      "revId": "f9a0dc014d853f488828490220b88e2e654f5384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
