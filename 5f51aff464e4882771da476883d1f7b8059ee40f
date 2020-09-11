@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3e433103_e92d09f5",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "unfortunately there are CI bots that are \u003c API level 26 and are used in some part of the testing. we need this #ifndef",
+      "parentUuid": "0c98152a_870f686e",
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ea347dc_a3f8a06f",
         "filename": "src/libANGLE/Display.h",
         "patchSetId": 1
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "d244d708_3cb1ad0e",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ea347dc_a3f8a06f",
+      "range": {
+        "startLine": 202,
+        "startChar": 4,
+        "endLine": 202,
+        "endChar": 79
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "043b7026_75cd7642",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 1
@@ -70,6 +112,30 @@
       "writtenOn": "2020-09-10T18:42:35Z",
       "side": 1,
       "message": "I\u0027d do this all in a helper in android_util, pass the attribute map and have the known list of supported formats there too.\n\nAs is, there are a couple issues:\n  - This doesn\u0027t check componentType so float formats could be returned if they match the componentSize\n  - same for colorEncoding, sRGB formats could be returned",
+      "range": {
+        "startLine": 1141,
+        "startChar": 0,
+        "endLine": 1165,
+        "endChar": 0
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e87a5943_6a2e5e99",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "tried doing it but including \"formatutils.h\" inside \"android_utils\" causes linker error since angle_base depends on the static lib that contains android_util.cpp. any suggestions?\n\n\u003e This doesn\u0027t check componentType\n\nThe \"kSupportedGLInternalFormats\" specifies the format type and we use that when retrieving the \"InternalFormat\" struct\n\n\u003e colorEncoding, sRGB formats could be returned\n\nThere is no way to know this info at buffer creation time. EGL_EXT_image_gl_colorspace will be used later while creating the EGL image out of this buffer",
+      "parentUuid": "043b7026_75cd7642",
       "range": {
         "startLine": 1141,
         "startChar": 0,
@@ -99,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "5fd88743_0000871d",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "2 things -\n1. this should have been done when the support to create EGL images out of AHB was added way back, otherwise the AHB, which is a refCounted object, could be deleted while ANGLE is using it\n2. EGL_ANDROID_create_native_client_buffer explicitly says so -\n    \"The simplest method is to increment the reference count of the buffer in\n     eglCreateImagKHR, and then decrement it in eglDestroyImageKHR. This should\n     ensure proper lifetime semantics.\"",
+      "parentUuid": "c9be9b63_0e6abede",
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7878e2a6_70b54346",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
@@ -122,6 +206,30 @@
     },
     {
       "key": {
+        "uuid": "ca5a0e56_8dafdecf",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4537,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7878e2a6_70b54346",
+      "range": {
+        "startLine": 4537,
+        "startChar": 8,
+        "endLine": 4537,
+        "endChar": 16
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "851b748d_efe329fa",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
@@ -133,6 +241,30 @@
       "writtenOn": "2020-09-10T18:42:35Z",
       "side": 1,
       "message": "This doesn\u0027t cover if the width and height are unspecified. Maybe validate that they are \u003e0 by querying them from the attribute map after this validation.",
+      "range": {
+        "startLine": 4551,
+        "startChar": 0,
+        "endLine": 4554,
+        "endChar": 17
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7d3b453_5953c81a",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "i pass in \"0\" as the default value to -\n\u003e int width  \u003d attribMap.getAsInt(EGL_WIDTH, 0);\n\u003e int height \u003d attribMap.getAsInt(EGL_HEIGHT, 0);\n\nthat covers the case where width and height are unspecified and i return error when either of them are equal to \"0\".\n\nwhat am i missing?",
+      "parentUuid": "851b748d_efe329fa",
       "range": {
         "startLine": 4551,
         "startChar": 0,
@@ -168,6 +300,30 @@
     },
     {
       "key": {
+        "uuid": "39f9beb3_0bdd87ef",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4563,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "same response as above, what am i missing?",
+      "parentUuid": "e7ba6b3c_46e59b83",
+      "range": {
+        "startLine": 4560,
+        "startChar": 0,
+        "endLine": 4563,
+        "endChar": 17
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70bd8f0c_9e4eab44",
         "filename": "src/libANGLE/validationEGL.h",
         "patchSetId": 1
@@ -191,6 +347,30 @@
     },
     {
       "key": {
+        "uuid": "247b5815_788b7ddd",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70bd8f0c_9e4eab44",
+      "range": {
+        "startLine": 340,
+        "startChar": 46,
+        "endLine": 340,
+        "endChar": 71
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5038d2e8_b0e57d8d",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 1
@@ -202,6 +382,24 @@
       "writtenOn": "2020-09-10T20:32:12Z",
       "side": 1,
       "message": "Do we need with width \u0026 height as args? Aren\u0027t they part of attribsANWB?",
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9955a117_09789ab3",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-11T02:29:48Z",
+      "side": 1,
+      "message": "it is but thought retrieving it from a flat \"EGLint[]\" array is unnecessary work",
+      "parentUuid": "5038d2e8_b0e57d8d",
       "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
