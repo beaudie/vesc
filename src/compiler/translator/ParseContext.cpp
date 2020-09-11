@@ -210,6 +210,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxCombinedTextureImageUnits(resources.MaxCombinedTextureImageUnits),
       mMaxUniformLocations(resources.MaxUniformLocations),
       mMaxUniformBufferBindings(resources.MaxUniformBufferBindings),
+      mMaxVertexAttribs(resources.MaxVertexAttribs),
       mMaxAtomicCounterBindings(resources.MaxAtomicCounterBindings),
       mMaxShaderStorageBufferBindings(resources.MaxShaderStorageBufferBindings),
       mDeclaringFunction(false),
@@ -1541,6 +1542,18 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
         }
     }
 
+    if (mShaderVersion >= 300 && publicType.qualifier == EvqVertexIn)
+    {
+        // Valid vertex input declarations can't be unsized arrays since they can't be initialized.
+        // But invalid shaders may still reach here with an unsized array declaration.
+        TType type(publicType);
+        if (!type.isUnsizedArray())
+        {
+            checkAttributeLocationInRange(identifierLocation, type.getLocationCount(),
+                                          publicType.layoutQualifier);
+        }
+    }
+
     // check for layout qualifier issues
     const TLayoutQualifier layoutQualifier = publicType.layoutQualifier;
 
@@ -1791,6 +1804,17 @@ void TParseContext::checkUniformLocationInRange(const TSourceLoc &location,
     if (loc >= 0 && loc + objectLocationCount > mMaxUniformLocations)
     {
         error(location, "Uniform location out of range", "location");
+    }
+}
+
+void TParseContext::checkAttributeLocationInRange(const TSourceLoc &location,
+                                                  int objectLocationCount,
+                                                  const TLayoutQualifier &layoutQualifier)
+{
+    int loc = layoutQualifier.location;
+    if (loc >= 0 && loc + objectLocationCount > mMaxVertexAttribs)
+    {
+        error(location, "Attribute location out of range", "location");
     }
 }
 
