@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "1045b49f_0e3d8218",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-11T12:54:55Z",
+      "side": 1,
+      "message": "Thank you Shahbaz,Jamie.\n\n1. From my test results,ms0 stencil blit can\u0027t pass on pixel (size-1,size-1) without the adjustments, mentioned in the comment of BlitStencilWithRotation in patchset 4. It\u0027s a little weird. I think maybe it\u0027s better to adjust both isResolve and !isResolve.\n2. Thanks shahbaz, I think 180Degrees need the same adjustment, or it\u0027ll meet the same issue in shader.\n\n3. BlitStencilWithFlip is added to test non-multisampled stencil blit with flipping and prerotation. Sorry of misunderstanding your meaning, I should have added color blit rather than stencil blit. But the stencil blit with flipping and prerotation couldn\u0027t pass on android too and the result image was totally wrong. So I skip the test on android.",
+      "parentUuid": "a148a11b_1c88239d",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e718883c_ba669255",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 4
@@ -76,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "d96d283b_a6fb03e0",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-11T12:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e718883c_ba669255",
+      "range": {
+        "startLine": 949,
+        "startChar": 67,
+        "endLine": 949,
+        "endChar": 75
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5f54480_f82e25de",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 4
@@ -90,6 +132,24 @@
       "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05595486_d8bc04c3",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-11T12:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5f54480_f82e25de",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +176,30 @@
     },
     {
       "key": {
+        "uuid": "449f889a_090cc6d3",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-11T12:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a5f508e_18b4c29e",
+      "range": {
+        "startLine": 1011,
+        "startChar": 41,
+        "endLine": 1011,
+        "endChar": 48
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8875747_e0b78b26",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 4
@@ -139,6 +223,30 @@
     },
     {
       "key": {
+        "uuid": "f7891c8a_a634dca1",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-11T12:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8875747_e0b78b26",
+      "range": {
+        "startLine": 1041,
+        "startChar": 67,
+        "endLine": 1041,
+        "endChar": 75
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c557d83_e903391a",
         "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
         "patchSetId": 4
@@ -159,6 +267,30 @@
       "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "147ae643_37b02cc5",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-11T12:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c557d83_e903391a",
+      "range": {
+        "startLine": 1228,
+        "startChar": 0,
+        "endLine": 1228,
+        "endChar": 6
+      },
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
