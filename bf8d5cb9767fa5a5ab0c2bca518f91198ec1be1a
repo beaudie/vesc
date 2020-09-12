@@ -16,6 +16,63 @@
       "revId": "bf8d5cb9767fa5a5ab0c2bca518f91198ec1be1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db439566_939f93a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T04:56:01Z",
+      "side": 1,
+      "message": "Awesome, thanks for the test.",
+      "revId": "bf8d5cb9767fa5a5ab0c2bca518f91198ec1be1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8184dd25_eee74126",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T04:56:01Z",
+      "side": 1,
+      "message": "nit: stray .",
+      "range": {
+        "startLine": 1437,
+        "startChar": 51,
+        "endLine": 1437,
+        "endChar": 52
+      },
+      "revId": "bf8d5cb9767fa5a5ab0c2bca518f91198ec1be1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "960222e0_718ba2c2",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T04:56:01Z",
+      "side": 1,
+      "message": "nit: redundant with the hasAndroidHardwareBufferSupport check below?",
+      "revId": "bf8d5cb9767fa5a5ab0c2bca518f91198ec1be1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
