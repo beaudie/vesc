@@ -24,9 +24,6 @@ ANGLE_REENABLE_SUGGEST_OVERRIDE_WARNINGS
 ANGLE_REENABLE_SHADOWING_WARNING
 ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
-// SPIR-V tools include for AST validation.
-#include <spirv-tools/libspirv.hpp>
-
 #include <array>
 #include <numeric>
 
@@ -1016,40 +1013,6 @@ angle::Result LinkProgram(const GlslangErrorCallback &callback, glslang::TProgra
     }
     return angle::Result::Continue;
 }
-
-#if defined(ANGLE_ENABLE_ASSERTS)
-void ValidateSpirvMessage(spv_message_level_t level,
-                          const char *source,
-                          const spv_position_t &position,
-                          const char *message)
-{
-    WARN() << "Level" << level << ": " << message;
-}
-
-bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob)
-{
-    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
-
-    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
-    bool result = spirvTools.Validate(spirvBlob);
-
-    if (!result)
-    {
-        std::string readableSpirv;
-        spirvTools.Disassemble(spirvBlob, &readableSpirv, 0);
-        WARN() << "Invalid SPIR-V:\n" << readableSpirv;
-    }
-
-    return result;
-}
-#else   // ANGLE_ENABLE_ASSERTS
-bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob)
-{
-    // Placeholder implementation since this is only used inside an ASSERT().
-    // Return false to indicate an error in case this is ever accidentally used somewhere else.
-    return false;
-}
-#endif  // ANGLE_ENABLE_ASSERTS
 
 // Base class for SPIR-V transformations.
 class SpirvTransformerBase : angle::NonCopyable
@@ -5060,7 +5023,7 @@ angle::Result GlslangTransformSpirvCode(const GlslangErrorCallback &callback,
         ANGLE_GLSLANG_CHECK(callback, aliasingTransformer.transform(), GlslangError::InvalidSpirv);
     }
 
-    ASSERT(ValidateSpirv(*spirvBlobOut));
+    ASSERT(spirv::Validate(*spirvBlobOut));
 
     return angle::Result::Continue;
 }
@@ -5118,23 +5081,4 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     return angle::Result::Continue;
 }
 
-angle::Result GlslangCompileShaderOneOff(const GlslangErrorCallback &callback,
-                                         gl::ShaderType shaderType,
-                                         const std::string &shaderSource,
-                                         SpirvBlob *spirvBlobOut)
-{
-    const TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
-
-    glslang::TShader shader(kShLanguageMap[shaderType]);
-    glslang::TProgram program;
-
-    ANGLE_TRY(
-        CompileShader(callback, builtInResources, shaderType, shaderSource, &shader, &program));
-    ANGLE_TRY(LinkProgram(callback, &program));
-
-    glslang::TIntermediate *intermediate = program.getIntermediate(kShLanguageMap[shaderType]);
-    glslang::GlslangToSpv(*intermediate, *spirvBlobOut);
-
-    return angle::Result::Continue;
-}
 }  // namespace rx
