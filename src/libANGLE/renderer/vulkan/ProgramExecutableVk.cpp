@@ -684,69 +684,6 @@ angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
     return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
 }
 
-angle::Result ProgramExecutableVk::initDynamicDescriptorPools(
-    ContextVk *contextVk,
-    vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
-    DescriptorSetIndex descriptorSetIndex)
-{
-    std::vector<VkDescriptorPoolSize> descriptorPoolSizes;
-    vk::DescriptorSetLayoutBindingVector bindingVector;
-    std::vector<VkSampler> immutableSamplers;
-
-    descriptorSetLayoutDesc.unpackBindings(&bindingVector, &immutableSamplers);
-
-    for (const VkDescriptorSetLayoutBinding &binding : bindingVector)
-    {
-        if (binding.descriptorCount > 0)
-        {
-            VkDescriptorPoolSize poolSize = {};
-
-            poolSize.type            = binding.descriptorType;
-            poolSize.descriptorCount = binding.descriptorCount;
-            descriptorPoolSizes.emplace_back(poolSize);
-        }
-    }
-
-    RendererVk *renderer = contextVk->getRenderer();
-    if (renderer->getFeatures().bindEmptyForUnusedDescriptorSets.enabled &&
-        descriptorPoolSizes.empty())
-    {
-        // For this workaround, we have to create an empty descriptor set for each descriptor set
-        // index, so make sure their pools are initialized.
-        switch (descriptorSetIndex)
-        {
-            case DescriptorSetIndex::ShaderResource:
-            {
-                VkDescriptorPoolSize poolSize = {};
-
-                poolSize.type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                poolSize.descriptorCount = 1;
-                descriptorPoolSizes.emplace_back(poolSize);
-                break;
-            }
-            case DescriptorSetIndex::Texture:
-            {
-                VkDescriptorPoolSize poolSize = {};
-
-                poolSize.type            = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                poolSize.descriptorCount = 1;
-                descriptorPoolSizes.emplace_back(poolSize);
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
-    if (!descriptorPoolSizes.empty())
-    {
-        ANGLE_TRY(mDynamicDescriptorPools[ToUnderlying(descriptorSetIndex)].init(
-            contextVk, descriptorPoolSizes.data(), descriptorPoolSizes.size()));
-    }
-
-    return angle::Result::Continue;
-}
-
 angle::Result ProgramExecutableVk::createPipelineLayout(
     const gl::Context *glContext,
     gl::ActiveTextureArray<vk::TextureUnit> *activeTextures)
@@ -805,7 +742,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(
         contextVk, uniformsAndXfbSetDesc,
-        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::UniformsAndXfb)]));
+        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::UniformsAndXfb)],
+        &mDynamicDescriptorPools[ToUnderlying(DescriptorSetIndex::UniformsAndXfb)]));
 
     // Uniform and storage buffers, atomic counter buffers and images:
     vk::DescriptorSetLayoutDesc resourcesSetDesc;
@@ -833,7 +771,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(
         contextVk, resourcesSetDesc,
-        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::ShaderResource)]));
+        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::ShaderResource)],
+        &mDynamicDescriptorPools[ToUnderlying(DescriptorSetIndex::ShaderResource)]));
 
     // Textures:
     vk::DescriptorSetLayoutDesc texturesSetDesc;
@@ -848,7 +787,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(
         contextVk, texturesSetDesc,
-        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::Texture)]));
+        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::Texture)],
+        &mDynamicDescriptorPools[ToUnderlying(DescriptorSetIndex::Texture)]));
 
     // Driver uniforms:
     VkShaderStageFlags driverUniformsStages =
@@ -857,7 +797,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         contextVk->getDriverUniformsDescriptorSetDesc(driverUniformsStages);
     ANGLE_TRY(renderer->getDescriptorSetLayout(
         contextVk, driverUniformsSetDesc,
-        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::DriverUniforms)]));
+        &mDescriptorSetLayouts[ToUnderlying(DescriptorSetIndex::DriverUniforms)],
+        &mDynamicDescriptorPools[ToUnderlying(DescriptorSetIndex::DriverUniforms)]));
 
     // Create pipeline layout with these 4 descriptor sets.
     vk::PipelineLayoutDesc pipelineLayoutDesc;
@@ -871,13 +812,6 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
 
     ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, mDescriptorSetLayouts,
                                           &mPipelineLayout));
-
-    // Initialize descriptor pools.
-    ANGLE_TRY(initDynamicDescriptorPools(contextVk, uniformsAndXfbSetDesc,
-                                         DescriptorSetIndex::UniformsAndXfb));
-    ANGLE_TRY(initDynamicDescriptorPools(contextVk, resourcesSetDesc,
-                                         DescriptorSetIndex::ShaderResource));
-    ANGLE_TRY(initDynamicDescriptorPools(contextVk, texturesSetDesc, DescriptorSetIndex::Texture));
 
     mDynamicBufferOffsets.resize(glExecutable.getLinkedShaderStageCount());
 

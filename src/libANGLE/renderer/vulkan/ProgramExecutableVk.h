@@ -219,9 +219,6 @@ class ProgramExecutableVk
     angle::Result updateImagesDescriptorSet(const gl::ProgramExecutable &executable,
                                             const gl::ShaderType shaderType,
                                             ContextVk *contextVk);
-    angle::Result initDynamicDescriptorPools(ContextVk *contextVk,
-                                             vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
-                                             DescriptorSetIndex descriptorSetIndex);
 
     // Descriptor sets for uniform blocks and textures for this program.
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mDescriptorSets;

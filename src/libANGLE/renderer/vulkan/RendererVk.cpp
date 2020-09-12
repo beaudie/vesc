@@ -1967,12 +1967,14 @@ const gl::Limitations &RendererVk::getNativeLimitations() const
 }
 
 angle::Result RendererVk::getDescriptorSetLayout(
-    vk::Context *context,
+    ContextVk *context,
     const vk::DescriptorSetLayoutDesc &desc,
-    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
+    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut,
+    vk::DynamicDescriptorPool *descriptorPoolOut)
 {
     std::lock_guard<decltype(mDescriptorSetLayoutCacheMutex)> lock(mDescriptorSetLayoutCacheMutex);
-    return mDescriptorSetLayoutCache.getDescriptorSetLayout(context, desc, descriptorSetLayoutOut);
+    return mDescriptorSetLayoutCache.getDescriptorSetLayout(context, desc, descriptorSetLayoutOut,
+                                                            descriptorPoolOut);
 }
 
 angle::Result RendererVk::getPipelineLayout(
