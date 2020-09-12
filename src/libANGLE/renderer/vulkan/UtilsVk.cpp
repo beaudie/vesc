@@ -422,7 +422,8 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(
         contextVk, descriptorSetDesc,
-        &mDescriptorSetLayouts[function][ToUnderlying(DescriptorSetIndex::InternalShader)]));
+        &mDescriptorSetLayouts[function][ToUnderlying(DescriptorSetIndex::InternalShader)],
+        &mDescriptorPools[function]));
 
     gl::ShaderType pushConstantsShaderStage =
         isCompute ? gl::ShaderType::Compute : gl::ShaderType::Fragment;
@@ -441,12 +442,6 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
     ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc,
                                           mDescriptorSetLayouts[function],
                                           &mPipelineLayouts[function]));
-
-    if (setSizesCount > 0)
-    {
-        ANGLE_TRY(mDescriptorPools[function].init(contextVk, setSizes,
-                                                  static_cast<uint32_t>(setSizesCount)));
-    }
 
     return angle::Result::Continue;
 }
