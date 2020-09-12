@@ -145,13 +145,13 @@ ScopedPerfEventHelper::~ScopedPerfEventHelper()
     }
 }
 
-LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
-    : mFunction(function), mLine(line), mSeverity(severity)
+LogMessage::LogMessage(const char *file, const char *function, int line, LogSeverity severity)
+    : mFile(file), mFunction(function), mLine(line), mSeverity(severity)
 {
     // EVENT() does not require additional function(line) info.
     if (mSeverity != LOG_EVENT)
     {
-        mStream << mFunction << "(" << mLine << "): ";
+        mStream << mFile << ":" << mLine << " (" << mFunction << "): ";
     }
 }
 
