@@ -230,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "e19d69d6_6a6a27a0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3998,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T04:23:21Z",
+      "side": 1,
+      "message": "Here\u0027s a first pass at tying descriptor pools to layouts and only allocating a new pool when it\u0027s necessary:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2407282",
+      "parentUuid": "e4457761_131a56d8",
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54ff8b8d_f20ecaba",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 18
