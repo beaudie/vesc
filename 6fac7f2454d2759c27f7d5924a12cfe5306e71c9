@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "982eb1ee_f238500e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T00:20:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d591625_acaf18a3",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ab080fa_61062aea",
         "filename": "/COMMIT_MSG",
         "patchSetId": 18
@@ -45,6 +69,30 @@
       "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dc1f2c4_346bda6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T00:20:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ab080fa_61062aea",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +130,24 @@
     },
     {
       "key": {
+        "uuid": "4925d18e_3aeb1315",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T00:20:42Z",
+      "side": 1,
+      "message": "The video plays as well as ToT master without the fix, which is to say not great.   The left half seems good, but it\u0027s got issues with the right half of the screen being updated very irregularly.\n\nPerformance-wise, both ANGLE and the native GL driver are super janky; I can\u0027t tell much of a difference between them.\n\nSince it behaves the same with and without the fix, I\u0027ll call this CL good (or at least not any worse).\n\nDid that video ever play correctly with ANGLE?   Should I open a bug about it not displaying correctly?",
+      "parentUuid": "0901164f_0b786c93",
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ecae998_7c6fb0aa",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 18
@@ -105,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "2c1bbf98_6f11d166",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3997,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T00:20:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ecae998_7c6fb0aa",
+      "range": {
+        "startLine": 3997,
+        "startChar": 23,
+        "endLine": 3997,
+        "endChar": 29
+      },
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1d906bb_5a5da5bf",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 18
@@ -122,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "e4457761_131a56d8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3998,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T00:20:42Z",
+      "side": 1,
+      "message": "Hopefully someone will correct me if I\u0027m wrong, but...\n\nThe problem is that initial split of the work was buggy, since we didn\u0027t reallocate the descriptor pools to match the new descriptor set layouts.   This is one of the cases which leads to the descriptor counts not matching between the layouts and the pools, potentially causing us to over-allocate from the pools.   Re-allocating the descriptor pools also requires recreating the pipeline layout, since the descriptors in the old pools will all be released when the old pools are destroyed to make room for the new ones.\n\nPreventing all of that requires knowing the descriptor set layouts from the beginning, which I don\u0027t think we can since things can change right up until the draw call.\n\nThe fact that it worked before was a happy accident based on how many descriptors we allocate per pool, so we never exhaust them to hit this bug.\n\nI did open http://anglebug.com/5033 to try and mitigate this a bit by potentially tracking the descriptor set layout that the descriptor pool was created for, so we can recognize that we\u0027ve been down this path before and don\u0027t actually need to recreate the pools.   While that may help the second time down this path, I don\u0027t see a good way to prevent it the first time.",
+      "parentUuid": "e1d906bb_5a5da5bf",
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54ff8b8d_f20ecaba",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 18
@@ -133,6 +241,30 @@
       "writtenOn": "2020-09-11T21:55:21Z",
       "side": 1,
       "message": "createPipelineLayout",
+      "range": {
+        "startLine": 730,
+        "startChar": 3,
+        "endLine": 730,
+        "endChar": 23
+      },
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a9a4b7c_71b4df8a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T00:20:42Z",
+      "side": 1,
+      "message": "I actually just removed this comment entirely since it\u0027s not accurate anymore anyway.   Each block within it is pretty descriptive of what it\u0027s doing, and (as can be seen here) the contents can change at any time without this being updated.",
+      "parentUuid": "54ff8b8d_f20ecaba",
       "range": {
         "startLine": 730,
         "startChar": 3,

@@ -22,6 +22,30 @@
       "revId": "2999ad4ed52c19cb03118dd835e8d06c8a1b9b54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c4496c1_0fe7760a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T00:20:42Z",
+      "side": 0,
+      "message": "It looks like this is done in ProgramExecutableVk::addAtomicCounterBufferDescriptorSetDesc():\n\n    void ProgramExecutableVk::addAtomicCounterBufferDescriptorSetDesc(\n        const std::vector\u003cgl::AtomicCounterBuffer\u003e \u0026atomicCounterBuffers,\n        const gl::ShaderType shaderType,\n        vk::DescriptorSetLayoutDesc *descOut)\n    {\n    ...\n        // A single storage buffer array is used for all stages for simplicity.\n        descOut-\u003eupdate(info.binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,\n                        gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS,\n                        gl_vk::kShaderStageMap[shaderType], nullptr);\n    }\n\nMakes sense I got this for free, since the descriptor set layout would have to contain the bindings in order to be used in the shader.   Also another good argument for this change, since it simplifies how all of this is calculated by doing it in a single place.",
+      "parentUuid": "a4c88238_50e43bdd",
+      "range": {
+        "startLine": 842,
+        "startChar": 28,
+        "endLine": 842,
+        "endChar": 69
+      },
+      "revId": "2999ad4ed52c19cb03118dd835e8d06c8a1b9b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
