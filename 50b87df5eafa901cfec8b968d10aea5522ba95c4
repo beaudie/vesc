@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "e52978cc_435c2f76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-12T00:26:46Z",
+      "side": 1,
+      "message": "Re-LGTM and will let Shabi +2",
+      "revId": "50b87df5eafa901cfec8b968d10aea5522ba95c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28b4549a_b0ad8fe9",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 6
