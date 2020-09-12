@@ -683,11 +683,6 @@ class ClearValuesArray final
     bool empty() const { return mEnabled.none(); }
     bool any() const { return mEnabled.any(); }
 
-    gl::DrawBufferMask getEnabledColorAttachmentsMask() const
-    {
-        return gl::DrawBufferMask(static_cast<gl::DrawBufferMask::value_type>(mEnabled.to_ulong()));
-    }
-
   private:
     gl::AttachmentArray<VkClearValue> mValues;
     gl::AttachmentsMask mEnabled;
