@@ -1120,10 +1120,11 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     ANGLE_VK_TRY(contextVk, framebuffer.init(contextVk->getDevice(), framebufferInfo));
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
-    vk::ClearValuesArray clearValues;
-    clearValues.store(0, VK_IMAGE_ASPECT_COLOR_BIT, {});
+    vk::PackedClearValuesArray clearValues;
+    clearValues.store(vk::kZeroAttachmentIndex, VK_IMAGE_ASPECT_COLOR_BIT, {});
 
-    renderPassAttachmentOps.initWithLoadStore(0, vk::ImageLayout::ColorAttachment,
+    renderPassAttachmentOps.initWithLoadStore(vk::kZeroAttachmentIndex,
+                                              vk::ImageLayout::ColorAttachment,
                                               vk::ImageLayout::ColorAttachment);
 
     ANGLE_TRY(contextVk->beginNewRenderPass(framebuffer, renderArea, renderPassDesc,
