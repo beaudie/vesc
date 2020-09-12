@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51e0195f_7170be81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-12T04:31:34Z",
+      "side": 1,
+      "message": "PTAL\n\nThis takes the previous CL a bit further by tying descriptor pool allocation to descriptor set layouts, to ensure there is always a 1:1 correlation.   This works fine today, since the descriptor set layout cache survives for the lifetime of the context.\n\nIt doesn\u0027t handle recycling of descriptor set layout handles if we ever end up freeing them in the future, though, since the pools currently don\u0027t know that the layout handle was freed and reallocated.   That\u0027s probably not something we\u0027ll need to handle, but it shouldn\u0027t be too terrible to build that in if we need to later.",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
