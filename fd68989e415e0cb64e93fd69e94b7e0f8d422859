@@ -110,6 +110,30 @@
       "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be0a3d3b_1f5c79fc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T05:10:46Z",
+      "side": 1,
+      "message": "I\u0027m not sure. Depends on if the GL validation or the front end stops code like this:\n\n    glCopyTexSubImage2D(..., MAX_UINT-1, MAX_UINT-1, 0, 0, 100, 100);\n\nor\n\n    glCopyTexSubImage2D(..., 100, 100, 0, 0, MAX_UINT-1, MAX_UINT-1);\n\nIf it does, then Checked math was not necessary.",
+      "parentUuid": "e106a8db_79e466b7",
+      "range": {
+        "startLine": 1691,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 54
+      },
+      "revId": "fd68989e415e0cb64e93fd69e94b7e0f8d422859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
