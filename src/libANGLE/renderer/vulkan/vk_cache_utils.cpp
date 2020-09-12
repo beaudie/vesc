@@ -1018,14 +1018,29 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
 
     const gl::DrawBufferMask blendEnableMask(inputAndBlend.blendEnableMask);
 
+    // Zero-init all states.
+    blendAttachmentState = {};
+
     for (uint32_t colorIndexGL = 0; colorIndexGL < blendState.attachmentCount; ++colorIndexGL)
     {
         VkPipelineColorBlendAttachmentState &state = blendAttachmentState[colorIndexGL];
 
-        state.blendEnable = blendEnableMask[colorIndexGL] ? VK_TRUE : VK_FALSE;
+        if (blendEnableMask[colorIndexGL])
+        {
+            // To avoid triggering valid usage error, blending must be disabled for formats that do
+            // not have VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT feature bit set.
+            // From OpenGL ES clients, this means disabling blending for integer formats.
+            const angle::Format &actualFormat = contextVk->getRenderer()
+                                                    ->getFormat(mRenderPassDesc[colorIndexGL])
+                                                    .actualImageFormat();
+            if (!actualFormat.isInt())
+            {
+                state.blendEnable = VK_TRUE;
+                UnpackBlendAttachmentState(inputAndBlend.attachments[colorIndexGL], &state);
+            }
+        }
         state.colorWriteMask =
             Int4Array_Get<VkColorComponentFlags>(inputAndBlend.colorWriteMaskBits, colorIndexGL);
-        UnpackBlendAttachmentState(inputAndBlend.attachments[colorIndexGL], &state);
     }
 
     // We would define dynamic state here if it were to be used.

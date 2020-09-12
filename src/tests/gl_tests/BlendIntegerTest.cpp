@@ -43,9 +43,6 @@ class BlendIntegerTest : public ANGLETest
     template <GLenum internalformat, GLuint components, bool isSigned>
     void runTest()
     {
-        // https://crbug.com/angleproject/4548
-        ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsIntel() && !isVulkanSwiftshaderRenderer());
-
         constexpr char kFsui[] =
             "#version 300 es\n"
             "out highp uvec4 o_drawBuffer0;\n"
