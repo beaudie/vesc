@@ -2303,16 +2303,78 @@ void DescriptorSetLayoutCache::destroy(VkDevice device)
     mPayload.clear();
 }
 
-angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
-    vk::Context *context,
-    const vk::DescriptorSetLayoutDesc &desc,
-    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
+angle::Result DescriptorSetLayoutCache::getDescriptorPool(
+    ContextVk *contextVk,
+    const vk::DescriptorSetLayoutBindingVector &bindingVector,
+    VkDescriptorSetLayout descriptorSetLayout,
+    vk::DynamicDescriptorPool *descriptorPoolOut)
 {
+    ASSERT(descriptorPoolOut);
+
+    std::vector<VkDescriptorPoolSize> descriptorPoolSizes;
+
+    for (const VkDescriptorSetLayoutBinding &binding : bindingVector)
+    {
+        if (binding.descriptorCount > 0)
+        {
+            VkDescriptorPoolSize poolSize = {};
+
+            poolSize.type            = binding.descriptorType;
+            poolSize.descriptorCount = binding.descriptorCount;
+            descriptorPoolSizes.emplace_back(poolSize);
+        }
+    }
+
+    RendererVk *renderer = contextVk->getRenderer();
+    if (renderer->getFeatures().bindEmptyForUnusedDescriptorSets.enabled &&
+        descriptorPoolSizes.empty())
+    {
+        // For this workaround, we have to create an empty descriptor set for each descriptor set
+        // index, so make sure their pools are initialized.
+        VkDescriptorPoolSize poolSize = {};
+        // The type doesn't matter, since it's not actually used for anything.
+        poolSize.type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        poolSize.descriptorCount = 1;
+        descriptorPoolSizes.emplace_back(poolSize);
+    }
+
+    if (!descriptorPoolSizes.empty())
+    {
+        ANGLE_TRY(descriptorPoolOut->init(contextVk, descriptorPoolSizes.data(),
+                                          descriptorPoolSizes.size(), descriptorSetLayout));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
+    ContextVk *contextVk,
+    const vk::DescriptorSetLayoutDesc &desc,
+    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut,
+    vk::DynamicDescriptorPool *descriptorPoolOut)
+{
+    ASSERT(descriptorPoolOut);
+
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
     {
         vk::RefCountedDescriptorSetLayout &layout = iter->second;
         descriptorSetLayoutOut->set(&layout);
+
+        if (descriptorPoolOut->getDescriptorSetLayout() !=
+            descriptorSetLayoutOut->get().getHandle())
+        {
+            // The descriptor set layouts match, but the pool hasn't been allocated yet. This can
+            // happen if multiple programs have (for example) the same uniforms.
+            // Create the corresponding descriptor set pool for this descriptor set layout.
+            vk::DescriptorSetLayoutBindingVector bindingVector;
+            std::vector<VkSampler> immutableSamplers;
+            desc.unpackBindings(&bindingVector, &immutableSamplers);
+            ANGLE_TRY(getDescriptorPool(contextVk, bindingVector,
+                                        descriptorSetLayoutOut->get().getHandle(),
+                                        descriptorPoolOut));
+        }
+
         return angle::Result::Continue;
     }
 
@@ -2328,12 +2390,16 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     createInfo.pBindings    = bindingVector.data();
 
     vk::DescriptorSetLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    ANGLE_VK_TRY(contextVk, newLayout.init(contextVk->getDevice(), createInfo));
 
     auto insertedItem =
         mPayload.emplace(desc, vk::RefCountedDescriptorSetLayout(std::move(newLayout)));
     vk::RefCountedDescriptorSetLayout &insertedLayout = insertedItem.first->second;
     descriptorSetLayoutOut->set(&insertedLayout);
+
+    // Create the corresponding descriptor set pool for this descriptor set layout.
+    ANGLE_TRY(getDescriptorPool(contextVk, bindingVector, descriptorSetLayoutOut->get().getHandle(),
+                                descriptorPoolOut));
 
     return angle::Result::Continue;
 }

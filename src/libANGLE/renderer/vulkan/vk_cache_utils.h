@@ -1205,6 +1205,11 @@ class GraphicsPipelineCache final : angle::NonCopyable
     std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper> mPayload;
 };
 
+namespace vk
+{
+class DynamicDescriptorPool;
+}
+
 class DescriptorSetLayoutCache final : angle::NonCopyable
 {
   public:
@@ -1214,11 +1219,17 @@ class DescriptorSetLayoutCache final : angle::NonCopyable
     void destroy(VkDevice device);
 
     angle::Result getDescriptorSetLayout(
-        vk::Context *context,
+        ContextVk *contextVk,
         const vk::DescriptorSetLayoutDesc &desc,
-        vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
+        vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut,
+        vk::DynamicDescriptorPool *descriptorPoolOut);
 
   private:
+    angle::Result getDescriptorPool(ContextVk *contextVk,
+                                    const vk::DescriptorSetLayoutBindingVector &bindingVector,
+                                    VkDescriptorSetLayout descriptorSetLayout,
+                                    vk::DynamicDescriptorPool *descriptorPoolOut);
+
     std::unordered_map<vk::DescriptorSetLayoutDesc, vk::RefCountedDescriptorSetLayout> mPayload;
 };
 
