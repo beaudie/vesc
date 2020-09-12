@@ -789,7 +789,10 @@ void ContextVk::onDestroy(const gl::Context *context)
         driverUniforms.destroy(mRenderer);
     }
 
-    mDriverUniformsDescriptorPool.destroy(device);
+    for (vk::DynamicDescriptorPool &dynamicDescriptorPool : mDriverUniformsDescriptorPools)
+    {
+        dynamicDescriptorPool.destroy(device);
+    }
 
     mDefaultUniformStorage.release(mRenderer);
     mEmptyBuffer.release(mRenderer);
@@ -834,9 +837,6 @@ angle::Result ContextVk::initialize()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::initialize");
 
-    VkDescriptorPoolSize driverSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1};
-    ANGLE_TRY(mDriverUniformsDescriptorPool.init(this, &driverSetSize, 1));
-
     ANGLE_TRY(mQueryPools[gl::QueryType::AnySamples].init(this, VK_QUERY_TYPE_OCCLUSION,
                                                           vk::kDefaultOcclusionQueryPoolSize));
     ANGLE_TRY(mQueryPools[gl::QueryType::AnySamplesConservative].init(
@@ -865,8 +865,9 @@ angle::Result ContextVk::initialize()
 
         vk::DescriptorSetLayoutDesc desc =
             getDriverUniformsDescriptorSetDesc(kPipelineStages[pipeline]);
-        ANGLE_TRY(mRenderer->getDescriptorSetLayout(
-            this, desc, &mDriverUniforms[pipeline].descriptorSetLayout));
+        ANGLE_TRY(mRenderer->getDescriptorSetLayout(this, desc,
+                                                    &mDriverUniforms[pipeline].descriptorSetLayout,
+                                                    &mDriverUniformsDescriptorPools[pipeline]));
     }
 
     mGraphicsPipelineDesc.reset(new vk::GraphicsPipelineDesc());
@@ -3855,8 +3856,10 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     }
 
     // Allocate a new descriptor set.
+    bool isCompute            = getState().getProgramExecutable()->isCompute();
+    PipelineType pipelineType = isCompute ? PipelineType::Compute : PipelineType::Graphics;
     bool newPoolAllocated;
-    ANGLE_TRY(mDriverUniformsDescriptorPool.allocateSetsAndGetInfo(
+    ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].allocateSetsAndGetInfo(
         this, driverUniforms->descriptorSetLayout.get().ptr(), 1,
         &driverUniforms->descriptorPoolBinding, &driverUniforms->descriptorSet, &newPoolAllocated));
 

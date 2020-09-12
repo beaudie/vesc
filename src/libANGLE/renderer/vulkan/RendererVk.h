@@ -134,9 +134,10 @@ class RendererVk : angle::NonCopyable
 
     // Queries the descriptor set layout cache. Creates the layout if not present.
     angle::Result getDescriptorSetLayout(
-        vk::Context *context,
+        ContextVk *context,
         const vk::DescriptorSetLayoutDesc &desc,
-        vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
+        vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut,
+        vk::DynamicDescriptorPool *descriptorPoolOut);
 
     // Queries the pipeline layout cache. Creates the layout if not present.
     angle::Result getPipelineLayout(vk::Context *context,
