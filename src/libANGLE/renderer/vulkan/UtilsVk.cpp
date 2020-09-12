@@ -9,9 +9,12 @@
 
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 
+// SPIR-V headers include for AST transformation.
+#include <spirv/unified1/spirv.hpp>
+
+#include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
-#include "libANGLE/renderer/vulkan/GlslangWrapperVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
@@ -336,7 +339,9 @@ void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_
     offset[1] = params.destOffset[1] - params.srcOffset[1] * srcOffsetFactorY;
 }
 
-// Creates a shader that looks like the following, based on the number and types of unresolve
+namespace unresolve
+{
+// The unresolve shader looks like the following, based on the number and types of unresolve
 // attachments.
 //
 //     #version 450 core
@@ -354,44 +359,712 @@ void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_
 //         colorOut1 = subpassLoad(colorIn1);
 //         colorOut2 = subpassLoad(colorIn2);
 //     }
-angle::Result MakeUnresolveFragShader(
-    vk::Context *context,
-    uint32_t attachmentCount,
-    gl::DrawBuffersArray<UnresolveAttachmentType> &attachmentTypes,
-    SpirvBlob *spirvBlobOut)
+//
+// This shader compiles to the following SPIR-V:
+//
+//           OpCapability Shader                        \
+//           OpCapability InputAttachment                \
+//      %1 = OpExtInstImport "GLSL.std.450"               \  Preamble.  Mostly fixed, except
+//           OpMemoryModel Logical GLSL450                 \ OpEntryPoint should enumerate
+//           OpEntryPoint Fragment %4 "main" %24 %25 %26   / out variables.
+//           OpExecutionMode %4 OriginUpperLeft           /
+//           OpSource GLSL 450                           /
+//
+//           OpName %4 "main"       \
+//           OpName %24 "colorOut0"  \
+//           OpName %25 "colorOut1"   \
+//           OpName %26 "colorOut2"    \ Debug information.  Not generated here.
+//           OpName %27 "colorIn0"     /
+//           OpName %28 "colorIn1"    /
+//           OpName %29 "colorIn2"   /
+//
+//           OpDecorate %24 Location 0      \
+//           OpDecorate %25 Location 1       \ Location decoration of out variables.
+//           OpDecorate %26 Location 2       /
+//
+//           OpDecorate %27 DescriptorSet 0        \
+//           OpDecorate %27 Binding 0               \
+//           OpDecorate %27 InputAttachmentIndex 0   \
+//           OpDecorate %28 DescriptorSet 0           \  set, binding and input_attachment
+//           OpDecorate %28 Binding 1                  \ decorations of the subpassInput
+//           OpDecorate %28 InputAttachmentIndex 1     / variables.
+//           OpDecorate %29 DescriptorSet 0           /
+//           OpDecorate %29 Binding 2                /
+//           OpDecorate %29 InputAttachmentIndex 2  /
+//
+//      %2 = OpTypeVoid         \ Type of main().  Fixed.
+//      %3 = OpTypeFunction %2  /
+//
+//      %6 = OpTypeFloat 32                             \
+//      %7 = OpTypeVector %6 4                           \
+//      %8 = OpTypePointer Output %7                      \ Type declaration for "out vec4"
+//      %9 = OpTypeImage %6 SubpassData 0 0 0 2 Unknown   / and "subpassInput".  Fixed.
+//     %10 = OpTypePointer UniformConstant %9            /
+//
+//     %11 = OpTypeInt 32 1                              \
+//     %12 = OpTypeVector %11 4                           \
+//     %13 = OpTypePointer Output %12                      \ Type declaration for "out ivec4"
+//     %14 = OpTypeImage %11 SubpassData 0 0 0 2 Unknown   / and "isubpassInput".  Fixed.
+//     %15 = OpTypePointer UniformConstant %14            /
+//
+//     %16 = OpTypeInt 32 0                              \
+//     %17 = OpTypeVector %16 4                           \
+//     %18 = OpTypePointer Output %17                      \ Type declaration for "out uvec4"
+//     %19 = OpTypeImage %16 SubpassData 0 0 0 2 Unknown   / and "usubpassInput".  Fixed.
+//     %20 = OpTypePointer UniformConstant %19            /
+//
+//     %21 = OpConstant %11 0                \
+//     %22 = OpTypeVector %11 2               \ ivec2(0) for OpImageRead.  subpassLoad
+//     %23 = OpConstantComposite %22 %21 %21  / doesn't require coordinates.  Fixed.
+//
+//     %24 = OpVariable %8 Output            \
+//     %25 = OpVariable %13 Output            \
+//     %26 = OpVariable %18 Output             \ Actual "out" and "*subpassInput"
+//     %27 = OpVariable %10 UniformConstant    / variable declarations.
+//     %28 = OpVariable %15 UniformConstant   /
+//     %29 = OpVariable %20 UniformConstant  /
+//
+//      %4 = OpFunction %2 None %3   \ Start of main().  Fixed.
+//      %5 = OpLabel                 /
+//
+//     %30 = OpLoad %9 %27           \
+//     %31 = OpImageRead %7 %30 %23   \ colorOut0 = subpassLoad(colorIn0);
+//           OpStore %24 %31          /
+//
+//     %32 = OpLoad %14 %28          \
+//     %33 = OpImageRead %12 %32 %23  \ colorOut1 = subpassLoad(colorIn1);
+//           OpStore %25 %33          /
+//
+//     %34 = OpLoad %19 %29          \
+//     %35 = OpImageRead %17 %34 %23  \ colorOut2 = subpassLoad(colorIn2);
+//           OpStore %26 %35          /
+//
+//           OpReturn           \ End of main().  Fixed.
+//           OpFunctionEnd      /
+//
+// What makes the generation of this shader manageable is that the majority of it is constant
+// between the different variations of the shader.  The rest are repeating patterns with different
+// ids or indices.
+
+enum
 {
-    std::ostringstream source;
+    // Signifies that an id needs to be generated in its place, or an appropriate type id needs to
+    // be selected, or an index needs to be specified.
+    kIdUnspecified = 0,
 
-    source << "#version 450 core\n";
+    // main() ids
+    kIdExtInstImport = 1,
+    kIdVoid,
+    kIdMainType,
+    kIdMain,
+    kIdMainLabel,
 
-    for (uint32_t attachmentIndex = 0; attachmentIndex < attachmentCount; ++attachmentIndex)
-    {
-        const UnresolveAttachmentType type = attachmentTypes[attachmentIndex];
-        ASSERT(type != kUnresolveTypeUnused);
+    // Types for "out vec4" and "subpassInput"
+    kIdFloatType,
+    kIdFloat4Type,
+    kIdFloat4OutType,
+    kIdFloatSubpassImageType,
+    kIdFloatSubpassInputType,
 
-        const char *prefix =
-            type == kUnresolveTypeUint ? "u" : type == kUnresolveTypeSint ? "i" : "";
+    // Types for "out ivec4" and "isubpassInput"
+    kIdSIntType,
+    kIdSInt4Type,
+    kIdSInt4OutType,
+    kIdSIntSubpassImageType,
+    kIdSIntSubpassInputType,
 
-        source << "layout(location=" << attachmentIndex << ") out " << prefix << "vec4 colorOut"
-               << attachmentIndex << ";\n";
-        source << "layout(input_attachment_index=" << attachmentIndex
-               << ", set=0, binding=" << attachmentIndex << ") uniform " << prefix
-               << "subpassInput colorIn" << attachmentIndex << ";\n";
-    }
+    // Types for "out uvec4" and "usubpassInput"
+    kIdUIntType,
+    kIdUInt4Type,
+    kIdUInt4OutType,
+    kIdUIntSubpassImageType,
+    kIdUIntSubpassInputType,
 
-    source << "void main(){\n";
+    // ivec2(0) constant
+    kIdSIntZero,
+    kIdSInt2Type,
+    kIdSInt2Zero,
 
-    for (uint32_t attachmentIndex = 0; attachmentIndex < attachmentCount; ++attachmentIndex)
-    {
-        source << "colorOut" << attachmentIndex << " = subpassLoad(colorIn" << attachmentIndex
-               << ");\n";
-    }
+    // Ids generated for in/out and temp variables starting from this id.
+    kIdFirstUnused,
+};
 
-    source << "}\n";
-
-    return GlslangWrapperVk::CompileShaderOneOff(context, gl::ShaderType::Fragment, source.str(),
-                                                 spirvBlobOut);
+constexpr uint32_t MakeOpLen(spv::Op op, uint32_t len)
+{
+    // SPIR-V 1.0 Table 2: Instruction Physical Layout
+    return len << 16 | op;
 }
+
+constexpr uint32_t MakeStr(uint32_t char0, uint32_t char1, uint32_t char2, uint32_t char3)
+{
+    // SPIR-V 1.0 Section 2.2.1 Instructions, Literal.  Strings are packed four characters by four,
+    // little-endian and nul-terminated, padded with 0 to align with word boundary.
+    return char0 | char1 << 8 | char2 << 16 | char3 << 24;
+}
+
+constexpr uint32_t kPreamble1[] = {
+    // OpCapability Shader
+    MakeOpLen(spv::OpCapability, 2),
+    spv::CapabilityShader,
+    // OpCapability InputAttachment
+    MakeOpLen(spv::OpCapability, 2),
+    spv::CapabilityInputAttachment,
+    // %1 = OpExtInstImport "GLSL.std.450"
+    MakeOpLen(spv::OpExtInstImport, 6),
+    kIdExtInstImport,
+    MakeStr('G', 'L', 'S', 'L'),
+    MakeStr('.', 's', 't', 'd'),
+    MakeStr('.', '4', '5', '0'),
+    0x00000000,
+    // OpMemoryModel Logical GLSL450
+    MakeOpLen(spv::OpMemoryModel, 3),
+    spv::AddressingModelLogical,
+    spv::MemoryModelGLSL450,
+};
+
+// The following template is used to generate the OpEntryPoint instruction.  The length of the
+// instruction and the OUT_* ids need to be modified.
+constexpr uint32_t kEntryPoint[] = {
+    // OpEntryPoint Fragment %4 "main" %OUT_0 %OUT_1 ...
+    MakeOpLen(spv::OpEntryPoint, 0),
+    spv::ExecutionModelFragment,
+    kIdMain,
+    MakeStr('m', 'a', 'i', 'n'),
+    0x00000000,
+};
+
+template <size_t N>
+void Append(const uint32_t (&spirv)[N], std::vector<uint32_t> *code)
+{
+    code->insert(code->end(), spirv, spirv + N);
+}
+
+void InsertUnresolveEntryPoint(uint32_t attachmentCount,
+                               uint32_t idOut0,
+                               std::vector<uint32_t> *code)
+{
+    // Needs to modify:
+    //
+    //  - the instruction length to 5 + attachmentCount
+    //  - append the %OUT_N ids
+    const size_t entryPointOffset = code->size();
+    Append(kEntryPoint, code);
+
+    (*code)[entryPointOffset] =
+        MakeOpLen(spv::OpEntryPoint, ArraySize(kEntryPoint) + attachmentCount);
+
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        code->push_back(idOut0 + n);
+    }
+}
+
+constexpr uint32_t kPreamble2[] = {
+    // OpExecutionMode %4 OriginUpperLeft
+    MakeOpLen(spv::OpExecutionMode, 3),
+    kIdMain,
+    spv::ExecutionModeOriginUpperLeft,
+    // OpSource GLSL 450
+    MakeOpLen(spv::OpSource, 3),
+    spv::SourceLanguageGLSL,
+    450,
+};
+
+// The following template is used to decorate each attachment.  The OUT_N and IN_N ids need to be
+// modified (0 in this template) as well as the index N (also 0).
+constexpr uint32_t kDecorate[] = {
+    // OpDecorate %OUT_N Location N
+    MakeOpLen(spv::OpDecorate, 4),
+    kIdUnspecified,
+    spv::DecorationLocation,
+    kIdUnspecified,
+    // OpDecorate %IN_N DescriptorSet 0
+    MakeOpLen(spv::OpDecorate, 4),
+    kIdUnspecified,
+    spv::DecorationDescriptorSet,
+    0,
+    // OpDecorate %IN_N Binding N
+    MakeOpLen(spv::OpDecorate, 4),
+    kIdUnspecified,
+    spv::DecorationBinding,
+    kIdUnspecified,
+    // OpDecorate %IN_N InputAttachmentIndex N
+    MakeOpLen(spv::OpDecorate, 4),
+    kIdUnspecified,
+    spv::DecorationInputAttachmentIndex,
+    kIdUnspecified,
+};
+
+void AssertOp(const uint32_t instructionWord0, spv::Op expected)
+{
+    // SPIR-V 1.0 Table 2: Instruction Physical Layout
+    constexpr uint32_t kOpMask = 0xFFFFu;
+    ASSERT((instructionWord0 & kOpMask) == expected);
+}
+
+void InsertUnresolveDecorations(uint32_t attachmentIndex,
+                                uint32_t idOut,
+                                uint32_t idIn,
+                                std::vector<uint32_t> *code)
+{
+    // Needs to modify:
+    //
+    //  - %OUT_N and %IN_N ids
+    //  - Location, Binding and InputAttachmentIndex (all N)
+    size_t decorationOffset = code->size();
+    Append(kDecorate, code);
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpDecorate
+    constexpr uint32_t kDecorateInstructionLength = 4;
+    constexpr size_t kIdIndex                     = 1;
+    constexpr size_t kDecorationValueIndex        = 3;
+
+    // OpDecorate %OUT_N Location N
+    (*code)[decorationOffset + kIdIndex]              = idOut;
+    (*code)[decorationOffset + kDecorationValueIndex] = attachmentIndex;
+
+    decorationOffset += kDecorateInstructionLength;
+    AssertOp(code->at(decorationOffset), spv::OpDecorate);
+
+    // OpDecorate %IN_N DescriptorSet 0
+    (*code)[decorationOffset + kIdIndex] = idIn;
+
+    decorationOffset += kDecorateInstructionLength;
+    AssertOp(code->at(decorationOffset), spv::OpDecorate);
+
+    // OpDecorate %IN_N Binding N
+    (*code)[decorationOffset + kIdIndex]              = idIn;
+    (*code)[decorationOffset + kDecorationValueIndex] = attachmentIndex;
+
+    decorationOffset += kDecorateInstructionLength;
+    AssertOp(code->at(decorationOffset), spv::OpDecorate);
+
+    // OpDecorate %IN_N InputAttachmentIndex N
+    (*code)[decorationOffset + kIdIndex]              = idIn;
+    (*code)[decorationOffset + kDecorationValueIndex] = attachmentIndex;
+}
+
+// Types used throughout the shader
+constexpr uint32_t kCommonTypes[] = {
+    // %2 = OpTypeVoid
+    MakeOpLen(spv::OpTypeVoid, 2),
+    kIdVoid,
+    // %3 = OpTypeFunction %2
+    MakeOpLen(spv::OpTypeFunction, 3),
+    kIdMainType,
+    kIdVoid,
+
+    // Float types.
+
+    // %6 = OpTypeFloat 32
+    MakeOpLen(spv::OpTypeFloat, 3),
+    kIdFloatType,
+    32,
+    // %7 = OpTypeVector %6 4
+    MakeOpLen(spv::OpTypeVector, 4),
+    kIdFloat4Type,
+    kIdFloatType,
+    4,
+    // %8 = OpTypePointer Output %7
+    MakeOpLen(spv::OpTypePointer, 4),
+    kIdFloat4OutType,
+    spv::StorageClassOutput,
+    kIdFloat4Type,
+    // %9 = OpTypeImage %6 SubpassData 0 0 0 2 Unknown
+    MakeOpLen(spv::OpTypeImage, 9),
+    kIdFloatSubpassImageType,
+    kIdFloatType,
+    spv::DimSubpassData,
+    0,
+    0,
+    0,
+    2,
+    spv::ImageFormatUnknown,
+    // %10 = OpTypePointer UniformConstant %9
+    MakeOpLen(spv::OpTypePointer, 4),
+    kIdFloatSubpassInputType,
+    spv::StorageClassUniformConstant,
+    kIdFloatSubpassImageType,
+
+    // Signed integer types.  Identical to float except for base type.
+
+    // %11 = OpTypeInt 32 1
+    MakeOpLen(spv::OpTypeInt, 4),
+    kIdSIntType,
+    32,
+    1,
+    // %12 = OpTypeVector %11 4
+    MakeOpLen(spv::OpTypeVector, 4),
+    kIdSInt4Type,
+    kIdSIntType,
+    4,
+    // %13 = OpTypePointer Output %12
+    MakeOpLen(spv::OpTypePointer, 4),
+    kIdSInt4OutType,
+    spv::StorageClassOutput,
+    kIdSInt4Type,
+    // %14 = OpTypeImage %11 SubpassData 0 0 0 2 Unknown
+    MakeOpLen(spv::OpTypeImage, 9),
+    kIdSIntSubpassImageType,
+    kIdSIntType,
+    spv::DimSubpassData,
+    0,
+    0,
+    0,
+    2,
+    spv::ImageFormatUnknown,
+    // %15 = OpTypePointer UniformConstant %14
+    MakeOpLen(spv::OpTypePointer, 4),
+    kIdSIntSubpassInputType,
+    spv::StorageClassUniformConstant,
+    kIdSIntSubpassImageType,
+
+    // Unsigned integer types.  Identical to float except for base type.
+
+    // %16 = OpTypeInt 32 0
+    MakeOpLen(spv::OpTypeInt, 4),
+    kIdUIntType,
+    32,
+    0,
+    // %17 = OpTypeVector %16 4
+    MakeOpLen(spv::OpTypeVector, 4),
+    kIdUInt4Type,
+    kIdUIntType,
+    4,
+    // %18 = OpTypePointer Output %17
+    MakeOpLen(spv::OpTypePointer, 4),
+    kIdUInt4OutType,
+    spv::StorageClassOutput,
+    kIdUInt4Type,
+    // %19 = OpTypeImage %16 SubpassData 0 0 0 2 Unknown
+    MakeOpLen(spv::OpTypeImage, 9),
+    kIdUIntSubpassImageType,
+    kIdUIntType,
+    spv::DimSubpassData,
+    0,
+    0,
+    0,
+    2,
+    spv::ImageFormatUnknown,
+    // %20 = OpTypePointer UniformConstant %19
+    MakeOpLen(spv::OpTypePointer, 4),
+    kIdUIntSubpassInputType,
+    spv::StorageClassUniformConstant,
+    kIdUIntSubpassImageType,
+
+    // Constant ivec2(0)
+
+    // %21 = OpConstant %11 0
+    MakeOpLen(spv::OpConstant, 4),
+    kIdSIntType,
+    kIdSIntZero,
+    0,
+    // %22 = OpTypeVector %11 2
+    MakeOpLen(spv::OpTypeVector, 4),
+    kIdSInt2Type,
+    kIdSIntType,
+    2,
+    // %23 = OpConstantComposite %22 %21 %21
+    MakeOpLen(spv::OpConstantComposite, 5),
+    kIdSInt2Type,
+    kIdSInt2Zero,
+    kIdSIntZero,
+    kIdSIntZero,
+};
+
+// The following template is used to generate the output and input attachment declarations.  The
+// OUT_N and IN_N ids need to be modified (0 in this template), as well as the types.
+constexpr uint32_t kAttachmentDecl[] = {
+    // %OUT_N = OpVariable %kId*OutType(%8/%13/%18) Output
+    MakeOpLen(spv::OpVariable, 4),
+    kIdUnspecified,
+    kIdUnspecified,
+    spv::StorageClassOutput,
+    // %IN_N = OpVariable %kId*SubpassInputType(%10/%15/%20) UniformConstant
+    MakeOpLen(spv::OpVariable, 4),
+    kIdUnspecified,
+    kIdUnspecified,
+    spv::StorageClassUniformConstant,
+};
+
+void InsertUnresolveAttachmentDecl(uint32_t idOut,
+                                   uint32_t idIn,
+                                   UnresolveAttachmentType attachmentType,
+                                   std::vector<uint32_t> *code)
+{
+    uint32_t idOutType = kIdUnspecified;
+    uint32_t idInType  = kIdUnspecified;
+
+    // Needs to modify:
+    //
+    //  - %OUT_N and %IN_N ids
+    //  - OutType id and SubpassInputType id
+    size_t variableOffset = code->size();
+    Append(kAttachmentDecl, code);
+
+    switch (attachmentType)
+    {
+        case kUnresolveTypeFloat:
+            idOutType = kIdFloat4OutType;
+            idInType  = kIdFloatSubpassInputType;
+            break;
+
+        case kUnresolveTypeSint:
+            idOutType = kIdSInt4OutType;
+            idInType  = kIdSIntSubpassInputType;
+            break;
+
+        case kUnresolveTypeUint:
+            idOutType = kIdUInt4OutType;
+            idInType  = kIdUIntSubpassInputType;
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpVariable
+    constexpr uint32_t kVariableInstructionLength = 4;
+    constexpr size_t kTypeIdIndex                 = 1;
+    constexpr size_t kIdIndex                     = 2;
+
+    // %OUT_N = OpVariable %OutType Output
+    (*code)[variableOffset + kTypeIdIndex] = idOutType;
+    (*code)[variableOffset + kIdIndex]     = idOut;
+
+    variableOffset += kVariableInstructionLength;
+    AssertOp(code->at(variableOffset), spv::OpVariable);
+
+    // %IN_N = OpVariable %SubpassInputType UniformConstant
+    (*code)[variableOffset + kTypeIdIndex] = idInType;
+    (*code)[variableOffset + kIdIndex]     = idIn;
+}
+
+// Top of the main function.
+constexpr uint32_t kMainTop[] = {
+    // %4 = OpFunction %2 None %3
+    MakeOpLen(spv::OpFunction, 5),
+    kIdVoid,
+    kIdMain,
+    spv::FunctionControlMaskNone,
+    kIdMainType,
+    // %5 = OpLabel
+    MakeOpLen(spv::OpLabel, 2),
+    kIdMainLabel,
+};
+
+// The following template is used to generate the load/store operations.  The OUT_N and IN_N ids
+// need to be modified (0 in this template) as well as the intermediate ids (also 0 in this
+// template) and the types.
+constexpr uint32_t kLoadStore[] = {
+    // %TEMP_1 = OpLoad %kId*SubpassImageType(%9/%14/%19) %IN_N
+    MakeOpLen(spv::OpLoad, 4),
+    kIdUnspecified,
+    kIdUnspecified,
+    kIdUnspecified,
+    // %TEMP_2 = OpImageRead %kId*4Type(%7/%12/%17) %TEMP_1 %23
+    MakeOpLen(spv::OpImageRead, 5),
+    kIdUnspecified,
+    kIdUnspecified,
+    kIdUnspecified,
+    kIdSInt2Zero,
+    // OpStore %OUT_N %TEMP_2
+    MakeOpLen(spv::OpStore, 3),
+    kIdUnspecified,
+    kIdUnspecified,
+};
+
+void InsertUnresolveLoadStore(uint32_t idOut,
+                              uint32_t idIn,
+                              uint32_t idTemp1,
+                              uint32_t idTemp2,
+                              UnresolveAttachmentType attachmentType,
+                              std::vector<uint32_t> *code)
+{
+    uint32_t idVecType   = kIdUnspecified;
+    uint32_t idImageType = kIdUnspecified;
+
+    // Needs to modify:
+    //
+    //  - %OUT_N and %IN_N ids
+    //  - %TEMP_1 and %TEMP_2 ids
+    //  - VecType id and SubpassImageType id
+    size_t instructionOffset = code->size();
+    Append(kLoadStore, code);
+
+    switch (attachmentType)
+    {
+        case kUnresolveTypeFloat:
+            idVecType   = kIdFloat4Type;
+            idImageType = kIdFloatSubpassImageType;
+            break;
+
+        case kUnresolveTypeSint:
+            idVecType   = kIdSInt4Type;
+            idImageType = kIdSIntSubpassImageType;
+            break;
+
+        case kUnresolveTypeUint:
+            idVecType   = kIdUInt4Type;
+            idImageType = kIdUIntSubpassImageType;
+            break;
+
+        default:
+            UNREACHABLE();
+    }
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpLoad
+    constexpr uint32_t kLoadInstructionLength = 4;
+    constexpr size_t kLoadTypeIdIndex         = 1;
+    constexpr size_t kLoadIdIndex             = 2;
+    constexpr size_t kLoadPointerIndex        = 3;
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpImageRead
+    constexpr uint32_t kImageReadInstructionLength = 5;
+    constexpr size_t kImageReadTypeIdIndex         = 1;
+    constexpr size_t kImageReadIdIndex             = 2;
+    constexpr size_t kImageReadImageIndex          = 3;
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpStore
+    constexpr size_t kStorePointerIndex = 1;
+    constexpr size_t kStoreObjectIndex  = 2;
+
+    // %TEMP_1 = OpLoad %... %IN_N
+    (*code)[instructionOffset + kLoadTypeIdIndex]  = idImageType;
+    (*code)[instructionOffset + kLoadIdIndex]      = idTemp1;
+    (*code)[instructionOffset + kLoadPointerIndex] = idIn;
+
+    instructionOffset += kLoadInstructionLength;
+    AssertOp(code->at(instructionOffset), spv::OpImageRead);
+
+    // %TEMP_2 = OpImageRead %... %TEMP_1 %...
+    (*code)[instructionOffset + kImageReadTypeIdIndex] = idVecType;
+    (*code)[instructionOffset + kImageReadIdIndex]     = idTemp2;
+    (*code)[instructionOffset + kImageReadImageIndex]  = idTemp1;
+
+    instructionOffset += kImageReadInstructionLength;
+    AssertOp(code->at(instructionOffset), spv::OpStore);
+
+    // OpStore %OUT_N %TEMP_2
+    (*code)[instructionOffset + kStorePointerIndex] = idOut;
+    (*code)[instructionOffset + kStoreObjectIndex]  = idTemp2;
+}
+
+// Bottom of the main function.
+constexpr uint32_t kMainBottom[] = {
+    // OpReturn
+    MakeOpLen(spv::OpReturn, 1),
+    // OpFunctionEnd
+    MakeOpLen(spv::OpFunctionEnd, 1),
+};
+
+std::vector<uint32_t> MakeFragShader(uint32_t attachmentCount,
+                                     gl::DrawBuffersArray<UnresolveAttachmentType> &attachmentTypes)
+{
+    std::vector<uint32_t> code;
+
+    // Reserve a sensible amount of memory.  A single-attachment shader is 167 words.
+    code.reserve(167);
+
+    // Generate ids for %OUT_N, %IN_N, each needing |attachmentCount| ids and %TEMP* needing
+    // 2x|attachmentCount| ids.
+    const uint32_t kIdOut0  = kIdFirstUnused;
+    const uint32_t kIdIn0   = kIdOut0 + attachmentCount;
+    const uint32_t kIdTemp0 = kIdIn0 + attachmentCount;
+    const uint32_t kIdCount = kIdTemp0 + 2 * attachmentCount;
+
+    // Header:
+    //
+    //  - Magic number
+    //  - Version (1.0)
+    //  - ANGLE's Generator number (24 tool id (higher 16 bits), 0 for tool version (lower 16 bits))
+    //  - Bound (kIdCount)
+    //  - 0 (reserved)
+    constexpr uint32_t kANGLEGeneratorId = 24;
+    code.push_back(spv::MagicNumber);
+    code.push_back(0x00010000);
+    code.push_back(kANGLEGeneratorId << 16 | 0);
+    code.push_back(kIdCount);
+    code.push_back(0x00000000);
+
+    // What goes before OpEntryPoint
+    Append(kPreamble1, &code);
+
+    // The entry point
+    InsertUnresolveEntryPoint(attachmentCount, kIdOut0, &code);
+
+    // What goes after OpEntryPoint
+    Append(kPreamble2, &code);
+
+    // Attachment decorations
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        InsertUnresolveDecorations(n, kIdOut0 + n, kIdIn0 + n, &code);
+    }
+
+    // Common types
+    Append(kCommonTypes, &code);
+
+    // Attachment declarations
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        InsertUnresolveAttachmentDecl(kIdOut0 + n, kIdIn0 + n, attachmentTypes[n], &code);
+    }
+
+    // Top of main
+    Append(kMainTop, &code);
+
+    // Load and store for each attachment
+    for (uint32_t n = 0; n < attachmentCount; ++n)
+    {
+        const uint32_t idTemp1 = kIdTemp0 + 2 * n;
+        const uint32_t idTemp2 = idTemp1 + 1;
+        InsertUnresolveLoadStore(kIdOut0 + n, kIdIn0 + n, idTemp1, idTemp2, attachmentTypes[n],
+                                 &code);
+    }
+
+    // Bottom of main
+    Append(kMainBottom, &code);
+
+    return code;
+}
+
+#if defined(ANGLE_ENABLE_ASSERTS)
+void MakeFragShader_unittest()
+{
+    gl::DrawBuffersArray<UnresolveAttachmentType> attachmentTypes;
+
+    attachmentTypes[0]               = kUnresolveTypeFloat;
+    std::vector<uint32_t> shaderCode = unresolve::MakeFragShader(1, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeSint;
+    shaderCode         = unresolve::MakeFragShader(1, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeUint;
+    shaderCode         = unresolve::MakeFragShader(1, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeFloat;
+    attachmentTypes[1] = kUnresolveTypeSint;
+    attachmentTypes[2] = kUnresolveTypeUint;
+    shaderCode         = unresolve::MakeFragShader(3, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+
+    attachmentTypes[0] = kUnresolveTypeFloat;
+    attachmentTypes[1] = kUnresolveTypeSint;
+    attachmentTypes[2] = kUnresolveTypeUint;
+    attachmentTypes[3] = kUnresolveTypeFloat;
+    attachmentTypes[4] = kUnresolveTypeSint;
+    attachmentTypes[5] = kUnresolveTypeUint;
+    attachmentTypes[6] = kUnresolveTypeFloat;
+    attachmentTypes[7] = kUnresolveTypeSint;
+    shaderCode         = unresolve::MakeFragShader(8, attachmentTypes);
+    ASSERT(ValidateSpirv(shaderCode));
+}
+#endif
+}  // namespace unresolve
 
 angle::Result GetUnresolveFrag(vk::Context *context,
                                uint32_t attachmentCount,
@@ -403,8 +1076,9 @@ angle::Result GetUnresolveFrag(vk::Context *context,
         return angle::Result::Continue;
     }
 
-    SpirvBlob shaderCode;
-    ANGLE_TRY(MakeUnresolveFragShader(context, attachmentCount, attachmentTypes, &shaderCode));
+    std::vector<uint32_t> shaderCode = unresolve::MakeFragShader(attachmentCount, attachmentTypes);
+
+    ASSERT(ValidateSpirv(shaderCode));
 
     // Create shader lazily. Access will need to be locked for multi-threading.
     return vk::InitShaderAndSerial(context, &shader->get(), shaderCode.data(),
@@ -436,7 +1110,12 @@ uint32_t UtilsVk::GetGenerateMipmapMaxLevels(ContextVk *contextVk)
                : kGenerateMipmapMaxLevels;
 }
 
-UtilsVk::UtilsVk() = default;
+UtilsVk::UtilsVk()
+{
+#if defined(ANGLE_ENABLE_ASSERTS)
+    unresolve::MakeFragShader_unittest();
+#endif
+}
 
 UtilsVk::~UtilsVk() = default;
 
