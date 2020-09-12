@@ -547,6 +547,31 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
     return kImageMemoryBarrierData[imageLayout].layout;
 }
 
+// PackedClearValuesArray implementation
+PackedClearValuesArray::PackedClearValuesArray() : mValues{} {}
+PackedClearValuesArray::~PackedClearValuesArray() = default;
+
+PackedClearValuesArray::PackedClearValuesArray(const PackedClearValuesArray &other) = default;
+PackedClearValuesArray &PackedClearValuesArray::operator=(const PackedClearValuesArray &rhs) =
+    default;
+
+void PackedClearValuesArray::store(PackedAttachmentIndex index,
+                                   VkImageAspectFlags aspectFlags,
+                                   const VkClearValue &clearValue)
+{
+    ASSERT(aspectFlags != 0);
+    if (aspectFlags != VK_IMAGE_ASPECT_STENCIL_BIT)
+    {
+        storeNoDepthStencil(index, clearValue);
+    }
+}
+
+void PackedClearValuesArray::storeNoDepthStencil(PackedAttachmentIndex index,
+                                                 const VkClearValue &clearValue)
+{
+    mValues[index.get()] = clearValue;
+}
+
 // CommandBufferHelper implementation.
 CommandBufferHelper::CommandBufferHelper()
     : mPipelineBarriers(),
@@ -814,8 +839,8 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const gl::Rectangle &renderArea,
                                           const RenderPassDesc &renderPassDesc,
                                           const AttachmentOpsArray &renderPassAttachmentOps,
-                                          const uint32_t depthStencilAttachmentIndex,
-                                          const ClearValuesArray &clearValues,
+                                          const PackedAttachmentIndex depthStencilAttachmentIndex,
+                                          const PackedClearValuesArray &clearValues,
                                           CommandBuffer **commandBufferOut)
 {
     ASSERT(mIsRenderPassCommandBuffer);
@@ -1044,6 +1069,7 @@ void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
         size_t depthStencilAttachmentCount = mRenderPassDesc.hasDepthStencilAttachment() ? 1 : 0;
         size_t colorAttachmentCount        = attachmentCount - depthStencilAttachmentCount;
 
+        PackedAttachmentIndex atatchmentIndexVk;
         std::string loadOps, storeOps;
 
         if (colorAttachmentCount > 0)
@@ -1053,8 +1079,9 @@ void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 
             for (size_t i = 0; i < colorAttachmentCount; ++i)
             {
-                loadOps += GetLoadOpShorthand(mAttachmentOps[i].loadOp);
-                storeOps += GetStoreOpShorthand(mAttachmentOps[i].storeOp);
+                loadOps += GetLoadOpShorthand(mAttachmentOps[atatchmentIndexVk].loadOp);
+                storeOps += GetStoreOpShorthand(mAttachmentOps[atatchmentIndexVk].storeOp);
+                ++atatchmentIndexVk;
             }
         }
 
@@ -1064,13 +1091,12 @@ void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 
             loadOps += " Depth/Stencil: ";
             storeOps += " Depth/Stencil: ";
-            size_t dsIndex = colorAttachmentCount;
 
-            loadOps += GetLoadOpShorthand(mAttachmentOps[dsIndex].loadOp);
-            loadOps += GetLoadOpShorthand(mAttachmentOps[dsIndex].stencilLoadOp);
+            loadOps += GetLoadOpShorthand(mAttachmentOps[atatchmentIndexVk].loadOp);
+            loadOps += GetLoadOpShorthand(mAttachmentOps[atatchmentIndexVk].stencilLoadOp);
 
-            storeOps += GetStoreOpShorthand(mAttachmentOps[dsIndex].storeOp);
-            storeOps += GetStoreOpShorthand(mAttachmentOps[dsIndex].stencilStoreOp);
+            storeOps += GetStoreOpShorthand(mAttachmentOps[atatchmentIndexVk].storeOp);
+            storeOps += GetStoreOpShorthand(mAttachmentOps[atatchmentIndexVk].stencilStoreOp);
         }
 
         if (attachmentCount > 0)
@@ -1145,11 +1171,11 @@ void CommandBufferHelper::pauseTransformFeedbackIfStarted()
                                         mTransformFeedbackCounterBuffers.data());
 }
 
-void CommandBufferHelper::updateRenderPassColorClear(size_t colorIndex,
+void CommandBufferHelper::updateRenderPassColorClear(PackedAttachmentIndex colorIndexVk,
                                                      const VkClearValue &clearValue)
 {
-    mAttachmentOps.setClearOp(colorIndex);
-    mClearValues.store(static_cast<uint32_t>(colorIndex), VK_IMAGE_ASPECT_COLOR_BIT, clearValue);
+    mAttachmentOps.setClearOp(colorIndexVk);
+    mClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT, clearValue);
 }
 
 void CommandBufferHelper::updateRenderPassDepthStencilClear(VkImageAspectFlags aspectFlags,

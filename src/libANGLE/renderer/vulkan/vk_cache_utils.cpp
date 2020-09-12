@@ -243,8 +243,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     FramebufferAttachmentArray<VkAttachmentDescription> attachmentDescs;
 
     // Pack color attachments
-    uint32_t colorAttachmentCount = 0;
-    uint32_t attachmentCount      = 0;
+    PackedAttachmentIndex attachmentCount;
     for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
     {
         // Vulkan says:
@@ -262,7 +261,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
             continue;
         }
 
-        uint32_t colorIndexVk    = colorAttachmentCount++;
+        uint32_t colorIndexVk    = attachmentCount.get();
         angle::FormatID formatID = desc[colorIndexGL];
         ASSERT(formatID != angle::FormatID::NONE);
         const vk::Format &format = context->getRenderer()->getFormat(formatID);
@@ -274,7 +273,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         colorAttachmentRefs.push_back(colorRef);
 
         UnpackAttachmentDesc(&attachmentDescs[colorIndexVk], format, desc.samples(),
-                             ops[colorIndexVk]);
+                             ops[attachmentCount]);
 
         ++attachmentCount;
     }
@@ -283,10 +282,10 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     if (desc.hasDepthStencilAttachment())
     {
         ResourceAccess dsAccess      = desc.getDepthStencilAccess();
-        uint32_t depthStencilIndex   = static_cast<uint32_t>(desc.depthStencilAttachmentIndex());
-        uint32_t depthStencilIndexVk = colorAttachmentCount;
+        uint32_t depthStencilIndexGL = static_cast<uint32_t>(desc.depthStencilAttachmentIndex());
+        uint32_t depthStencilIndexVk = attachmentCount.get();
 
-        angle::FormatID formatID = desc[depthStencilIndex];
+        angle::FormatID formatID = desc[depthStencilIndexGL];
         ASSERT(formatID != angle::FormatID::NONE);
         const vk::Format &format = context->getRenderer()->getFormat(formatID);
 
@@ -305,13 +304,13 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         }
 
         UnpackAttachmentDesc(&attachmentDescs[depthStencilIndexVk], format, desc.samples(),
-                             ops[depthStencilIndexVk]);
+                             ops[attachmentCount]);
 
         ++attachmentCount;
     }
 
     // Pack color resolve attachments
-    const uint32_t nonResolveAttachmentCount = attachmentCount;
+    const uint32_t nonResolveAttachmentCount = attachmentCount.get();
     for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
     {
         if (!desc.hasColorResolveAttachment(colorIndexGL))
@@ -322,7 +321,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
 
         ASSERT(desc.isColorAttachmentEnabled(colorIndexGL));
 
-        uint32_t colorResolveIndexVk = attachmentCount;
+        uint32_t colorResolveIndexVk = attachmentCount.get();
         const vk::Format &format     = context->getRenderer()->getFormat(desc[colorIndexGL]);
 
         VkAttachmentReference colorRef;
@@ -344,8 +343,9 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     subpassDesc.pInputAttachments    = nullptr;
     subpassDesc.colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     subpassDesc.pColorAttachments    = colorAttachmentRefs.data();
-    subpassDesc.pResolveAttachments =
-        attachmentCount > nonResolveAttachmentCount ? colorResolveAttachmentRefs.data() : nullptr;
+    subpassDesc.pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
+                                          ? colorResolveAttachmentRefs.data()
+                                          : nullptr;
     subpassDesc.pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
@@ -355,7 +355,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     VkRenderPassCreateInfo createInfo = {};
     createInfo.sType                  = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     createInfo.flags                  = 0;
-    createInfo.attachmentCount        = attachmentCount;
+    createInfo.attachmentCount        = attachmentCount.get();
     createInfo.pAttachments           = attachmentDescs.data();
     createInfo.subpassCount           = 1;
     createInfo.pSubpasses             = &subpassDesc;
@@ -1555,17 +1555,17 @@ AttachmentOpsArray &AttachmentOpsArray::operator=(const AttachmentOpsArray &othe
     return *this;
 }
 
-const PackedAttachmentOpsDesc &AttachmentOpsArray::operator[](size_t index) const
+const PackedAttachmentOpsDesc &AttachmentOpsArray::operator[](PackedAttachmentIndex index) const
 {
-    return mOps[index];
+    return mOps[index.get()];
 }
 
-PackedAttachmentOpsDesc &AttachmentOpsArray::operator[](size_t index)
+PackedAttachmentOpsDesc &AttachmentOpsArray::operator[](PackedAttachmentIndex index)
 {
-    return mOps[index];
+    return mOps[index.get()];
 }
 
-void AttachmentOpsArray::initWithLoadStore(size_t index,
+void AttachmentOpsArray::initWithLoadStore(PackedAttachmentIndex index,
                                            ImageLayout initialLayout,
                                            ImageLayout finalLayout)
 {
@@ -1574,42 +1574,42 @@ void AttachmentOpsArray::initWithLoadStore(size_t index,
     setStencilOps(index, VK_ATTACHMENT_LOAD_OP_LOAD, VK_ATTACHMENT_STORE_OP_STORE);
 }
 
-void AttachmentOpsArray::setLayouts(size_t index,
+void AttachmentOpsArray::setLayouts(PackedAttachmentIndex index,
                                     ImageLayout initialLayout,
                                     ImageLayout finalLayout)
 {
-    PackedAttachmentOpsDesc &ops = mOps[index];
+    PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.initialLayout, initialLayout);
     SetBitField(ops.finalLayout, finalLayout);
 }
 
-void AttachmentOpsArray::setOps(size_t index,
+void AttachmentOpsArray::setOps(PackedAttachmentIndex index,
                                 VkAttachmentLoadOp loadOp,
                                 VkAttachmentStoreOp storeOp)
 {
-    PackedAttachmentOpsDesc &ops = mOps[index];
+    PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.loadOp, loadOp);
     SetBitField(ops.storeOp, storeOp);
 }
 
-void AttachmentOpsArray::setStencilOps(size_t index,
+void AttachmentOpsArray::setStencilOps(PackedAttachmentIndex index,
                                        VkAttachmentLoadOp loadOp,
                                        VkAttachmentStoreOp storeOp)
 {
-    PackedAttachmentOpsDesc &ops = mOps[index];
+    PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.stencilLoadOp, loadOp);
     SetBitField(ops.stencilStoreOp, storeOp);
 }
 
-void AttachmentOpsArray::setClearOp(size_t index)
+void AttachmentOpsArray::setClearOp(PackedAttachmentIndex index)
 {
-    PackedAttachmentOpsDesc &ops = mOps[index];
+    PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.loadOp, VK_ATTACHMENT_LOAD_OP_CLEAR);
 }
 
-void AttachmentOpsArray::setClearStencilOp(size_t index)
+void AttachmentOpsArray::setClearStencilOp(PackedAttachmentIndex index)
 {
-    PackedAttachmentOpsDesc &ops = mOps[index];
+    PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.stencilLoadOp, VK_ATTACHMENT_LOAD_OP_CLEAR);
 }
 
@@ -2138,7 +2138,7 @@ angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
     // It would be nice to pre-populate the cache in the Renderer so we rarely miss here.
     vk::AttachmentOpsArray ops;
 
-    uint32_t colorAttachmentCount = 0;
+    vk::PackedAttachmentIndex colorIndexVk;
     for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
     {
         if (!desc.isColorAttachmentEnabled(colorIndexGL))
@@ -2146,9 +2146,9 @@ angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
             continue;
         }
 
-        uint32_t colorIndexVk = colorAttachmentCount++;
         ops.initWithLoadStore(colorIndexVk, vk::ImageLayout::ColorAttachment,
                               vk::ImageLayout::ColorAttachment);
+        ++colorIndexVk;
     }
 
     if (desc.hasDepthStencilAttachment())
@@ -2165,8 +2165,7 @@ angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
             imageLayout = vk::ImageLayout::DepthStencilAttachment;
         }
 
-        uint32_t depthStencilIndexVk = colorAttachmentCount;
-        ops.initWithLoadStore(depthStencilIndexVk, imageLayout, imageLayout);
+        ops.initWithLoadStore(colorIndexVk, imageLayout, imageLayout);
     }
 
     return getRenderPassWithOps(contextVk, serial, desc, ops, renderPassOut);
