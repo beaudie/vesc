@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "3d0c8fad_f65a566f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T01:35:21Z",
+      "side": 1,
+      "message": "Ok, doing this in SPIR-V can be delayed. I\u0027m going to change this to use glslang wrapper, and post the direct SPIR-V generation separately. We can discuss that then.\n\n@Tim, adding support for input attachments to the translator is a little hacky IMO. It\u0027s a small feature from GL_KHR_vulkan_glsl that won\u0027t get exposed to applications. Not to mention that it would go through a bunch of transformations, then would need the SPIR-V transformation to set set/bindings etc.\n\nThat said, again I do agree that this doesn\u0027t read very well. I made the decision of generating this directly in SPIR-V because this shader is as simple as a SPIR-V shader can possibly get. I know it looks alien if you don\u0027t know SPIR-V, but I believe a decent comment could make this a lot more understandable.\n\nThis change can\u0027t precompile this shader because there are 9840 variations. Also why it uses unordered_map for the shaders and pipelines.\n\n---\n\n@Jamie, unless we ship the offline glslang validator, how is that an option? And if we do ship it, isn\u0027t that size bloat already?",
+      "parentUuid": "398c8588_aa636b94",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b0bcf08_174b8f6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
