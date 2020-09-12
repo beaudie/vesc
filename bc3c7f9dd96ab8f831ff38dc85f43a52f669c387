@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd34652f_af292c4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T05:31:21Z",
+      "side": 1,
+      "message": "Split change.\n\nHas two updates:\n\n1. Added an overview of how the SPIR-V ends up looking like, specifying what each section is and what\u0027s generated vs what\u0027s fixed. It may look verbose, but really it\u0027s as simple as SPIR-V can get. The code would have been much shorter too if clang didn\u0027t insist on putting every SPIR-V word on one line!\n\n2. Used SPIR-V Headers constants instead of binary words. Reading the instruction \"binaries\" should be hopefully easier, though there\u0027s no particular reason one might do that. The SPIR-V is validated, and a number of combinations are tested by a unittest and end2end tests.\n\nI sympathize with the fact that modifying this (if ever needed) would require familiarity with SPIR-V, which is not common. I do still feel that this shader is special (and simple) enough to warrant this kind of code generation.\n\nIn the end, I\u0027m ok if this is just a stop-gap measure to ease the work to remove our dependency to glslang. Once our translator can generate SPIR-V, we could potentially follow up by adding support for these features and go back to generating GLSL.",
+      "revId": "bc3c7f9dd96ab8f831ff38dc85f43a52f669c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a8faa3a_31c8563c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T05:31:21Z",
+      "side": 1,
+      "message": "Trivial repeating patterns",
+      "range": {
+        "startLine": 381,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 53
+      },
+      "revId": "bc3c7f9dd96ab8f831ff38dc85f43a52f669c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e4c1e89_e28c55d3",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T05:31:21Z",
+      "side": 1,
+      "message": "Fixed type declarations that will be in every variation verbatim.",
+      "range": {
+        "startLine": 395,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 84
+      },
+      "revId": "bc3c7f9dd96ab8f831ff38dc85f43a52f669c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28590a3c_06b5db7d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T05:31:21Z",
+      "side": 1,
+      "message": "Trivial repeating patterns",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 46
+      },
+      "revId": "bc3c7f9dd96ab8f831ff38dc85f43a52f669c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e526084_ce5c5c71",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T05:31:21Z",
+      "side": 1,
+      "message": "Again, trivial repeating pattern",
+      "range": {
+        "startLine": 430,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 39
+      },
+      "revId": "bc3c7f9dd96ab8f831ff38dc85f43a52f669c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93744db3_b53031f7",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T05:31:21Z",
+      "side": 1,
+      "message": "Biggest chunk of SPIR-V, corresponding to the fixed type decl area above.",
+      "revId": "bc3c7f9dd96ab8f831ff38dc85f43a52f669c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
