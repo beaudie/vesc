@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "6135f2c4_e7812994",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-12T02:37:48Z",
+      "side": 1,
+      "message": "And done. Pending this [1] landing and rolled before I can run the tests on the bots, but anyway the generated SPIR-V is equivalent so the bots should still be green.\n\n[1]: https://github.com/KhronosGroup/glslang/pull/2394",
+      "parentUuid": "3d0c8fad_f65a566f",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b0bcf08_174b8f6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
