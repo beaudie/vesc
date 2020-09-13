@@ -39,6 +39,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cccfcbbf_07ab0bbf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T17:29:10Z",
+      "side": 1,
+      "message": "\u003e set the masking when we initialize the desc rather than when we unpack\n\nUnpackBlendAttachmentState sets only funcs and factors. Are you suggesting to merge desc zero-initialization with setting state.colorWriteMask?\n\n\u003e The big question is if we should be allowing blending when we cannot support it in the hardware. What formats trigger this warning?\n\nBlend state is global in OpenGL and is simply ignored for attachments with unsupported (e.g. integer) formats:\n\u003e Blending applies only if the color buffer has a fixed-point format.  If the colorbuffer has an integer format, proceed to the next operation.\n\nWhereas in Vulkan, it\u0027s VUID-VkGraphicsPipelineCreateInfo-blendEnable-02023:\n\u003e If rasterization is not disabled and the subpass uses color attachments, then for each color attachment in the subpass the blendEnable member of the corresponding element of the pAttachment member of pColorBlendState must be VK_FALSE if the attached image’s format features does not contain VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT",
+      "parentUuid": "db954cb5_3fcb20bf",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
