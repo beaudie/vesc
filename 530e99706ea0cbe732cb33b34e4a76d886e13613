@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1251bbd_6649b1e1",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-13T09:07:26Z",
+      "side": 1,
+      "message": "nit: stray whitespace",
+      "range": {
+        "startLine": 247,
+        "startChar": 73,
+        "endLine": 247,
+        "endChar": 74
+      },
+      "revId": "530e99706ea0cbe732cb33b34e4a76d886e13613",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

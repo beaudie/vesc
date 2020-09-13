@@ -63,6 +63,30 @@
       "revId": "7c426578ddd2676c71e7ea9fc4b4b038f288b097",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb08dd07_1cd0001c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-13T09:07:26Z",
+      "side": 1,
+      "message": "I\u0027ll investigate a bit. It\u0027s possible that we don\u0027t have any other similar tests so this bug went uncaught. The situation in that test is that COLOR_ATTACHMENT0 is not enabled, and there is blending on COLOR_ATTACHMENT1. That\u0027s apparently throwing the windows/intel driver off.\n\nDo you mind adding a non-multisampled-render-to-texture version of that test in your CL? You can duplicate DrawBuffersTest.Gaps from DrawBuffersTest.cpp, and add a blended draw after the draw call (and before verifying the attachment) similar to this failing test. That I would expect would also fail with this (and it\u0027s much simpler to debug than MultisampledRenderToTextureES3Test.ColorAttachment1).\n\n---\n\nAlso, any idea how the rest of the changes in the CL are possibly fixing that? I\u0027m trying to understand if this is a driver bug or an ANGLE bug.",
+      "parentUuid": "1a5ed693_989c57e8",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "7c426578ddd2676c71e7ea9fc4b4b038f288b097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
