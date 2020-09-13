@@ -81,6 +81,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2f72923_80ae236d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-13T17:55:12Z",
+      "side": 1,
+      "message": "\u003e Blend state is global in OpenGL and is simply ignored for attachments with unsupported (e.g. integer) formats:\n\u003e \u003e Blending applies only if the color buffer has a fixed-point format.  If the colorbuffer has an integer format, proceed to the next operation.\n\nThanks for the tip. The precise wording I see is:\n\n\u003e Blending applies only if the color buffer has a fixed-point or floating-point\n\u003e format. If the color buffer has an integer format, proceed to the next\n\u003e operation.\n\nThat\u0027s from https://www.khronos.org/registry/OpenGL/specs/es/3.2/es_spec_3.2.pdf .\n\nThe wording implies we can force disable blend for integer formats only. And if we always disable integer blending we\u0027d behave correctly even on imaginary Vulkan implementations that support integer blends.\n\n\u003e \u003e set the masking when we initialize the desc rather than when we unpack\n\u003e \n\u003e UnpackBlendAttachmentState sets only funcs and factors. Are you suggesting to merge desc zero-initialization with setting state.colorWriteMask?\n\nIn GraphicsPipelineDesc::updateBlendEnabled and setRenderPassDesc, you can pass the ContextVk or RendererVk pointer (for format queries) and disable the blends in GraphicsPipelineDesc directly if the RenderPass has an integer format (or formats).\n\nUpdating the GraphicsPipelineDesc is a minor optimization/consistency cleanup because you don\u0027t have the possibility of storing duplicate VkPipeline values for different GraphicsPipelineDesc hash keys. It\u0027s  e.g. even if you disable and enable an integer blend you\u0027d end up with the same desc.",
+      "parentUuid": "cccfcbbf_07ab0bbf",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
