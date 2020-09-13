@@ -87,6 +87,30 @@
       "revId": "7c426578ddd2676c71e7ea9fc4b4b038f288b097",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc06cf4_0dcef96a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T16:47:28Z",
+      "side": 1,
+      "message": "Seems like it\u0027s an unrelated issue. Adding a new test moved the failure from the multisampled test to a new one.",
+      "parentUuid": "cb08dd07_1cd0001c",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "7c426578ddd2676c71e7ea9fc4b4b038f288b097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
