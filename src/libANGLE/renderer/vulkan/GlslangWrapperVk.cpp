@@ -80,7 +80,7 @@ angle::Result GlslangWrapperVk::GetShaderCode(
 {
     return GlslangGetShaderSpirvCode(
         [context](GlslangError error) { return ErrorHandler(context, error); }, linkedShaderStages,
-        glCaps, shaderSources, variableInfoMap, shaderCodeOut);
+        glCaps, /* allowXfbEmulation */ true, shaderSources, variableInfoMap, shaderCodeOut);
 }
 
 // static
