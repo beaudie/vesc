@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5e50ef85_d7b86c4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T17:49:14Z",
+      "side": 1,
+      "message": "Looks like both failures are flaky.",
+      "parentUuid": "cbf9a44e_766793df",
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db954cb5_3fcb20bf",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
