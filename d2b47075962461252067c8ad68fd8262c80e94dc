@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "efa99beb_8a2e2344",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-13T08:26:21Z",
+      "side": 1,
+      "message": "Is it possible to add a meaningful performance counter for this? Then we can add a test that both verifies this and prevents regressions.",
+      "range": {
+        "startLine": 13,
+        "startChar": 13,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51e0195f_7170be81",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -16,6 +39,23 @@
       "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fbc6a8ed_3a991816",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-13T08:26:21Z",
+      "side": 1,
+      "message": "Do you happen to know if this affects CPU performance in any way?",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
