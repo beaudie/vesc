@@ -1038,6 +1038,16 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
                 state.blendEnable = VK_TRUE;
                 UnpackBlendAttachmentState(inputAndBlend.attachments[colorIndexGL], &state);
             }
+            else
+            {
+                const vk::Format &f =
+                    contextVk->getRenderer()->getFormat(mRenderPassDesc[colorIndexGL]);
+                fprintf(stderr,
+                        "Attachment %u: actualFormatID: %u NOT BLENDABLE but asked to blend.\n"
+                        "intendedFormatID: %u, internalFormat: 0x%04x vk image format: %u\n",
+                        colorIndexGL, actualFormatID, f.intendedFormatID, f.internalFormat,
+                        f.vkImageFormat);
+            }
         }
         state.colorWriteMask =
             Int4Array_Get<VkColorComponentFlags>(inputAndBlend.colorWriteMaskBits, colorIndexGL);
