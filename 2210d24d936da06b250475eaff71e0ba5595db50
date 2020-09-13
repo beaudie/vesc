@@ -129,6 +129,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8f870e2_af32dccc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-13T18:09:44Z",
+      "side": 1,
+      "message": "With the failing test (having two attachments UNUSED (color attachment 0) and RGBA (color attachment 1)), I noticed this was only affecting the UNUSED attachment (which has format 0).\n\nI made the UnpackBlendAttachmentState call unconditional just to see what happens, and the test still failed: https://chromium-review.googlesource.com/c/angle/angle/+/2407200/2. The only difference basically being that before the change, the UNUSED attachment had blend\u003dtrue and after it has blend\u003dfalse.\n\nMy speculation is that the Intel driver is using the wrong index to load the attachment blend information.",
+      "parentUuid": "5d241542_d01b50b3",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
