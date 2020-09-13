@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c4d3edb_24021d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T19:31:39Z",
+      "side": 1,
+      "message": "We may need to take https://chromium-review.googlesource.com/c/angle/angle/+/2389007 into account here.",
+      "revId": "5dd0f24ab2ced1120ee4d228d286d64d65b73047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
