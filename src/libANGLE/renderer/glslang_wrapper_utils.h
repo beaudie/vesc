@@ -49,8 +49,11 @@ struct GlslangSourceOptions
 {
     bool useOldRewriteStructSamplers        = false;
     bool supportsTransformFeedbackExtension = false;
-    bool emulateTransformFeedback           = false;
-    bool emulateBresenhamLines              = false;
+    // This flag controls whether XFB emulation code would be inserted to translated source
+    // or not. This code could still be disabled by GlslangGetShaderSpirvCode() later via
+    // turnOnXfbEmulationCodeViaMacro boolean flag.
+    bool emulateTransformFeedback = false;
+    bool emulateBresenhamLines    = false;
 };
 
 using SpirvBlob = std::vector<uint32_t>;
@@ -130,9 +133,12 @@ angle::Result GlslangTransformSpirvCode(const GlslangErrorCallback &callback,
                                         const SpirvBlob &initialSpirvBlob,
                                         SpirvBlob *spirvBlobOut);
 
+// - turnOnXfbEmulationCodeViaMacro: if this is true, "#define ANGLE_ENABLE_XFB_EMULATION" will be
+// inserted to the shaderSources to enable XFB emulation code.
 angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const gl::ShaderBitSet &linkedShaderStages,
                                         const gl::Caps &glCaps,
+                                        bool turnOnXfbEmulationCodeViaMacro,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut);

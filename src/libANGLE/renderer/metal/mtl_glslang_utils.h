@@ -37,6 +37,7 @@ struct TranslatedShaderInfo
 
     std::array<SamplerBinding, kMaxGLSamplerBindings> actualSamplerBindings;
     std::array<uint32_t, kMaxGLUBOBindings> actualUBOBindings;
+    std::array<uint32_t, kMaxShaderXFBs> actualXFBBindings;
     bool hasUBOArgumentBuffer;
 };
 
@@ -45,18 +46,32 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderMapInterfaceVariableInfoMap *variableInfoMapOut);
 
-angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
-                                        const gl::ShaderBitSet &linkedShaderStages,
-                                        const gl::Caps &glCaps,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
-                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut);
+// Convert GLSL to SPIRV.
+// - shaderCodeOut will contain result SPIRV code per shader stage when XFB emulation is turned off.
+// - xfbOnlyShaderCodeOut if passed in will contain result vertex shader's SPIRV code when XFB
+// emulation is turned on.
+angle::Result GlslangGetShaderSpirvCode(
+    ErrorHandler *context,
+    const gl::ShaderBitSet &linkedShaderStages,
+    const gl::Caps &glCaps,
+    const gl::ProgramState &programState,
+    const gl::ShaderMap<std::string> &shaderSources,
+    const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+    gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut,
+    std::vector<uint32_t> *xfbOnlyShaderCodeOut /** nullable */);
 
 // Translate from SPIR-V code to Metal shader source code.
+// - spirvShaderCode is SPIRV code per shader stage when XFB emulation is turned off.
+// - xfbOnlySpirvCode is  vertex shader's SPIRV code when XFB emulation is turned on.
+// - mslShaderInfoOut is result MSL info per shader stage when XFB emulation is turned off.
+// - mslXfbOnlyShaderInfoOut is result vertex shader's MSL info when XFB emulation is turned on.
 angle::Result SpirvCodeToMsl(Context *context,
                              const gl::ProgramState &programState,
-                             gl::ShaderMap<std::vector<uint32_t>> *sprivShaderCode,
-                             gl::ShaderMap<TranslatedShaderInfo> *mslShaderInfoOut);
+                             const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                             gl::ShaderMap<std::vector<uint32_t>> *spirvShaderCode,
+                             std::vector<uint32_t> *xfbOnlySpirvCode /** nullable */,
+                             gl::ShaderMap<TranslatedShaderInfo> *mslShaderInfoOut,
+                             TranslatedShaderInfo *mslXfbOnlyShaderInfoOut /** nullable */);
 
 }  // namespace mtl
 }  // namespace rx
