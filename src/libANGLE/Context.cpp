@@ -3295,7 +3295,27 @@ void Context::initCaps()
     mState.mCaps = mImplementation->getNativeCaps();
 
     mSupportedExtensions = generateSupportedExtensions();
-    mState.mExtensions   = mSupportedExtensions;
+
+    if (!mDisplay->getFrontendFeatures().allowCompressedFormats.enabled)
+    {
+        INFO() << "Limiting compressed format support.\n";
+
+        mSupportedExtensions.textureCompressionASTCHDRKHR      = false;
+        mSupportedExtensions.textureCompressionASTCLDRKHR      = false;
+        mSupportedExtensions.textureCompressionASTCOES         = false;
+        mSupportedExtensions.textureCompressionBPTC            = false;
+        mSupportedExtensions.textureCompressionDXT1            = false;
+        mSupportedExtensions.textureCompressionDXT3            = false;
+        mSupportedExtensions.textureCompressionDXT5            = false;
+        mSupportedExtensions.textureCompressionRGTC            = false;
+        mSupportedExtensions.textureCompressionS3TCsRGB        = false;
+        mSupportedExtensions.textureCompressionSliced3dASTCKHR = false;
+        mSupportedExtensions.textureFilteringCHROMIUM          = false;
+
+        mState.mCaps.compressedTextureFormats.clear();
+    }
+
+    mState.mExtensions = mSupportedExtensions;
 
     mState.mLimitations = mImplementation->getNativeLimitations();
 
