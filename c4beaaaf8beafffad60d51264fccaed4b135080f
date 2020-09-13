@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c07fdc66_90e3a8e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T23:49:59Z",
+      "side": 1,
+      "message": "I think I found something.\n\nThere are four \"angle_end2end_tests on Intel GPU\" Windows shards. Two of them have driver version 24.20.100.6286 and the two others - 26.20.100.8141. Failures occur only on shards with the older version.",
+      "revId": "c4beaaaf8beafffad60d51264fccaed4b135080f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -201,6 +201,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "375a7494_6a5878d9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T23:49:59Z",
+      "side": 1,
+      "message": "\u003e we should update the condition to either be for unused or integer attachments\n\nLooks like the issue is more complicated. Got this error in angle_perftests:\n\n\u003e pipeline.pColorBlendState.pAttachments[0].blendEnable is VK_TRUE but format VkImage 0x18790000001879[] associated with this attached image (VK_FORMAT_R4G4B4A4_UNORM_PACK16) does not support VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT\n\nThis could be a driver bug since on my Intel machine that format has the COLOR_ATTACHMENT_BLEND_BIT set.",
+      "parentUuid": "e71c3357_1ab7e2d4",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
