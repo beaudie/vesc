@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "853e0b5a_44e09a67",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3313,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T19:19:39Z",
+      "side": 1,
+      "message": "Should ETC1/ETC2/EAC formats be also included here?",
+      "range": {
+        "startLine": 3303,
+        "startChar": 0,
+        "endLine": 3313,
+        "endChar": 71
+      },
+      "revId": "9afd6a1cd63904463373b19925f046d14bbaeb86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
