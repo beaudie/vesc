@@ -16,6 +16,23 @@
       "revId": "5dd0f24ab2ced1120ee4d228d286d64d65b73047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40e4b00f_58e8aca3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T20:59:31Z",
+      "side": 1,
+      "message": "Looks like there are three more new failures here, exclusive to Intel:\n Test case \u0027dEQP-GLES31.functional.draw_buffers_indexed.random.max_required_draw_buffers.8\u0027..\n Fail (Verification of renderbuffer 2 failed.)\n Buffer format: RGBA, SIGNED_INT32\n\n Test case \u0027dEQP-GLES31.functional.draw_buffers_indexed.random.max_implementation_draw_buffers.0\u0027..\n Fail (Verification of renderbuffer 5 failed.)\n Buffer format: RGBA, SIGNED_INT8\n\n Test case \u0027dEQP-GLES31.functional.draw_buffers_indexed.random.max_implementation_draw_buffers.19\u0027..\n Fail (Verification of renderbuffer 4 failed.)\n Buffer format: RGBA, SIGNED_INT8\n\nIIRC, these failures didn\u0027t happen a few months ago when the CL was initially authored.",
+      "revId": "5dd0f24ab2ced1120ee4d228d286d64d65b73047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
