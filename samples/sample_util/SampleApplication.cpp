@@ -77,6 +77,7 @@ SampleApplication::SampleApplication(std::string name,
       mWidth(width),
       mHeight(height),
       mRunning(false),
+      mStepCount(0),
       mGLWindow(nullptr),
       mEGLWindow(nullptr),
       mOSWindow(nullptr),
@@ -255,6 +256,14 @@ int SampleApplication::run()
         mOSWindow->messageLoop();
 
         prevTime = elapsedTime;
+
+        mStepCount++;
+
+        if (mStepCount % 100 == 0)
+        {
+            printf("Rate: %0.2lf steps / second\n",
+                   static_cast<double>(mStepCount) / mTimer.getElapsedTime());
+        }
     }
 
     destroy();
