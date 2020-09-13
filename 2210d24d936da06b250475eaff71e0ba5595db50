@@ -153,6 +153,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78b972f9_ca3b956a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T18:43:06Z",
+      "side": 1,
+      "message": "\u003e The precise wording I see is:\n\nOuch, I looked into the ES 3.0 spec.\n\n\u003e disable the blends in GraphicsPipelineDesc directly\n\nMaybe defer that optimization to CL 2172739 as it handles individual blend states within GraphicsPipelineDesc anyway?\n\n\u003e Intel driver is using the wrong index\n\nGiven that the failure \"moved\" to another similar test and disappeared on the second run, maybe the driver sometimes performs a draw operation before actually applying a new pipeline (with blending enabled)?",
+      "parentUuid": "a8f870e2_af32dccc",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
