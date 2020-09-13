@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbf9a44e_766793df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-13T16:52:31Z",
+      "side": 1,
+      "message": "Before PS 3 (without DrawBuffersTest.BlendWithGaps), this CL failed on MultisampledRenderToTextureES3Test.ColorAttachment1/ES3_Vulkan.\n\nNow it fails on DrawBuffersTest.BlendWithGaps/ES2_Vulkan_NoTransformFeedback.\n\nFWIW, I cannot reproduce any of these failures locally.",
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
