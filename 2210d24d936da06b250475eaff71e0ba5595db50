@@ -177,6 +177,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e71c3357_1ab7e2d4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-13T19:49:27Z",
+      "side": 1,
+      "message": "\u003e \u003e The precise wording I see is:\n\u003e \n\u003e Ouch, I looked into the ES 3.0 spec.\n\nNP. I think we should update the condition to either be for unused or integer attachments depending on what\u0027s correct.\n\n\u003e \u003e disable the blends in GraphicsPipelineDesc directly\n\u003e \n\u003e Maybe defer that optimization to CL 2172739 as it handles individual blend states within GraphicsPipelineDesc anyway?\n\nSure, SGTM.",
+      "parentUuid": "78b972f9_ca3b956a",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
