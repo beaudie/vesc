@@ -33,6 +33,23 @@
       "revId": "5f8df59057758fb072b2651d1343997b4f590c18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f527f402_3103fdea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-14T19:35:24Z",
+      "side": 1,
+      "message": "+Shabi ... this is the CL that I used to help flush out design issues for delaying calls to vkAcquireNextImageKHR().  It behaves as desired for NBA 2K20 (ANI calls happen shortly before QP).",
+      "revId": "5f8df59057758fb072b2651d1343997b4f590c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
