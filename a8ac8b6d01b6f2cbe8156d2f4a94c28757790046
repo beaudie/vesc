@@ -51,6 +51,24 @@
       "revId": "a8ac8b6d01b6f2cbe8156d2f4a94c28757790046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77c253db_c5c26bae",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T16:44:21Z",
+      "side": 1,
+      "message": "Because this is a polling loop. I don\u0027t want to overtax one thread/core.\n\nThis is 100ms and it runs in a master process that doesn\u0027t run any tests. The tests all run in child processes. This is an area of code most people aren\u0027t familiar with. See https://chromium.googlesource.com/angle/angle/+/refs/changes/36/2407836/2/src/tests/test_utils/runner for some limited info.\n\nThe reason I was experimenting with changing the polling frequency is because spinning up \"max CPUs\" processes was causing crashes on my Linux workstation. I wasn\u0027t sure if it was because too many graphics contexts were being created at once so I tried throttling them a little bit. That didn\u0027t seem to help. Using a limit of 16 seemed to work. I left this in because it seemed like a reasonable improvement to not poll so much and space out the work.",
+      "parentUuid": "38d1f458_2f24cae0",
+      "revId": "a8ac8b6d01b6f2cbe8156d2f4a94c28757790046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
