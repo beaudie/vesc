@@ -205,6 +205,30 @@
       "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16febabc_07a6b481",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:50:53Z",
+      "side": 1,
+      "message": "It\u0027s ANGLE\u0027s design goal to not cache redundant except for measurable performance gains. Are you concerned about just editing a lot of code or about regression CPU perf? We\u0027ve definitely gone to great lengths to avoid caching things before.",
+      "parentUuid": "c7bc2b75_b7b63b26",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 30
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
