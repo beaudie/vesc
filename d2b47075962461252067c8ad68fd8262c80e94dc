@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3269f43c_764b4420",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-14T19:49:01Z",
+      "side": 1,
+      "message": "Hm, nothing is coming to mind.   The test you\u0027re describing is: make sure we aren\u0027t allocating for the same descriptor set layout multiple times for the same program.\n\nDynamicDescriptorPool::init() already verifies that it\u0027s only being initialized once per layout, which will catch that case:\n\n    angle::Result DynamicDescriptorPool::init(ContextVk *contextVk,\n                                              const VkDescriptorPoolSize *setSizes,\n                                              size_t setSizeCount,\n                                              VkDescriptorSetLayout descriptorSetLayout)\n    {\n    ...\n        ASSERT(mDescriptorSetLayout \u003d\u003d VK_NULL_HANDLE);\n\nIs there something else you had in mind?",
+      "parentUuid": "efa99beb_8a2e2344",
+      "range": {
+        "startLine": 13,
+        "startChar": 13,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51e0195f_7170be81",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -129,6 +153,42 @@
     },
     {
       "key": {
+        "uuid": "914e951f_6495df53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-14T19:49:01Z",
+      "side": 1,
+      "message": "The pool is allocated with specific sizes for each descriptor type:\n\n    typedef struct VkDescriptorPoolSize {\n        VkDescriptorType    type;\n        uint32_t            descriptorCount;\n    } VkDescriptorPoolSize;\n\nWhen a descriptor set is allocated from a pool, we pass a descriptor set layout handle, which the vulkan driver uses to determine how many descriptors of each type to allocate from the pool.\n\n    VkResult vkAllocateDescriptorSets(\n        VkDevice                                    device,\n        const VkDescriptorSetAllocateInfo*          pAllocateInfo,\n        VkDescriptorSet*                            pDescriptorSets);\n\nWhen allocating descriptor sets, we need to know that the pool has enough descriptors available to satisfy the requirements of the descriptor set, otherwise we will get an error like VK_ERROR_OUT_OF_POOL_MEMORY or VK_ERROR_FRAGMENTED_POOL.   To simplify this tracking in ANGLE, we create descriptor pools that match descriptor set layouts, so we always know we can allocate an exact number of descriptor sets from that pool.   If the pool is ever exhausted, every descriptor in the pool has been used (there are no gaps or remaining descriptors of any type).\n\nWe could change this to create a general pool per program that contains every type of descriptor, and then allocate from that.   The complication there comes from tracking allocations internally, since we\u0027d need to keep track of the types and counts of each descriptor in each descriptor set layout.   That\u0027s necessary so we can correctly track the descriptor type counts the pool has remaining and that the pool can satisfy the allocation request for that particular descriptor set layout.\n\nThere are a few issues:\n1. When do we create the pool?   How do we know we have all of the descriptor set layouts available so we can know which types (and how many of each) to allocate for?\n2. How do we handle one particular descriptor set layout exhausting all of the descriptors of a particular type, while all of the other types are still relatively unused?   DynamicDescriptorPool would need to be updated to check a pool has enough of all of the necessary descriptor types available before allocating, which could result in checking multiple pools to find a full descriptor sets\u0027 worth of descriptors.\n\nFreeing descriptors leads to the possibility of fragmentation:\n\n\u003e Fragmentation of a descriptor pool is possible and may lead to descriptor set allocation failures. A failure due to fragmentation is defined as failing a descriptor set allocation despite the sum of all outstanding descriptor set allocations from the pool plus the requested allocation requiring no more than the total number of descriptors requested at pool creation. Implementations provide certain guarantees of when fragmentation must not cause allocation failure, as described below.\n\nSince we can\u0027t know how the driver allocates descriptors, we wouldn\u0027t be able to predict/prevent fragmentation.   It is \"recoverable\" (in the coarsest sense of the term), though we don\u0027t currently special-case error handling:\n\n\u003e If an allocation failure occurs due to fragmentation, an application can create an additional descriptor pool to perform further descriptor set allocations.\n\nPersonally, I think tying descriptor set layouts to descriptor pools is the correct thing to do to simplify all of this.   We should instead focus on finding the \"correct\" number of descriptor sets worth of descriptors to create the pools with (DynamicDescriptorPool::mMaxSetsPerPool), to make sure we aren\u0027t allocating too many descriptors for one pool (wasting memory) and not enough for another (wasting CPU cycles allocating more pools).",
+      "parentUuid": "b6893e0c_abdae4fc",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db13d99f_e26c1119",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-14T19:49:01Z",
+      "side": 1,
+      "message": "I wanted to reply in the CL to try and make sure everyone\u0027s questions are answered without missing any.   I\u0027ll go through and write something up in a doc explaining what I can and then schedule a tech talk to walk through it.\n\nFeel free to ask any other questions beforehand to help make sure it gets covered in the doc/talk.",
+      "parentUuid": "a2b4f862_7b832ccf",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbc6a8ed_3a991816",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
@@ -140,6 +200,24 @@
       "writtenOn": "2020-09-13T08:26:21Z",
       "side": 1,
       "message": "Do you happen to know if this affects CPU performance in any way?",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d9bc523_756bec3c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-14T19:49:01Z",
+      "side": 1,
+      "message": "angle::PackedEnumMap is implemented with what\u0027s essentially an array:\n\nclass PackedEnumMap\n{\n...\n    reference operator[](E n)\n    {\n        ASSERT(static_cast\u003csize_t\u003e(n) \u003c mPrivateData.size());\n        return mPrivateData[static_cast\u003cUnderlyingType\u003e(n)];\n    }\n\nWe shouldn\u0027t notice one additional index into an array to handle dirty driver uniforms.",
+      "parentUuid": "fbc6a8ed_3a991816",
       "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
