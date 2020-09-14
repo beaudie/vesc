@@ -33,6 +33,24 @@
       "revId": "202475ce598bc720121a9477c750ab5d08c8d438",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "352b3849_e9cbb187",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T13:55:33Z",
+      "side": 1,
+      "message": "I actually put it in shader_utils after test_utils was a dead-end. test_utils doesn\u0027t have access to GLES calls. I could rename shader_utils to gles_helper_utils or something but I didn\u0027t want to make this change too onerous for such a small feature.",
+      "parentUuid": "86b130d3_a0de8213",
+      "revId": "202475ce598bc720121a9477c750ab5d08c8d438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
