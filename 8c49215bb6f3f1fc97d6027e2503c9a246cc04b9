@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "562a3322_2d2ddcfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T16:41:26Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "1b25de8f_06f6d92b",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6005ed5_31a8b8d7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -93,6 +111,30 @@
     },
     {
       "key": {
+        "uuid": "6c6065a5_967049a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T16:41:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6005ed5_31a8b8d7",
+      "range": {
+        "startLine": 978,
+        "startChar": 41,
+        "endLine": 978,
+        "endChar": 62
+      },
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff3f7614_fe9f5427",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 11
@@ -107,6 +149,24 @@
       "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f358692_14d77d7b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T16:41:26Z",
+      "side": 1,
+      "message": "Done. Added in the ContextVk::flush().",
+      "parentUuid": "ff3f7614_fe9f5427",
+      "revId": "8c49215bb6f3f1fc97d6027e2503c9a246cc04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
