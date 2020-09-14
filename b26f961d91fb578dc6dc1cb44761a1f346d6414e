@@ -253,6 +253,30 @@
       "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5afa344f_d5712c8a",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T18:11:32Z",
+      "side": 1,
+      "message": "OK, sounds good. If you like to keep this change smaller - make a split change that starts piping the ContextVk pointers around first, then rebase this change on top of it.",
+      "parentUuid": "ab4ed1e7_5901c77c",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 30
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
