@@ -113,6 +113,67 @@ class SharedResourceUse final : angle::NonCopyable
     ResourceUse *mUse;
 };
 
+class SharedResourceUsePool
+{
+  public:
+    SharedResourceUsePool() {}
+    ~SharedResourceUsePool() { releaseSharedResouceUsePool(); }
+
+    ANGLE_INLINE SharedResourceUse *acquireSharedResouceUse()
+    {
+        if (mSharedResourceUseFreeList.empty())
+        {
+            ensureCapacity();
+        }
+
+        SharedResourceUse *sharedResourceUse = mSharedResourceUseFreeList.back();
+        mSharedResourceUseFreeList.pop_back();
+        return sharedResourceUse;
+    }
+
+    ANGLE_INLINE void releaseSharedResouceUse(SharedResourceUse *sharedResourceUse)
+    {
+        mSharedResourceUseFreeList.push_back(sharedResourceUse);
+    }
+
+  private:
+    void releaseSharedResouceUsePool()
+    {
+        mSharedResourceUseFreeList.clear();
+        for (SharedResourceUseBlock &block : mSharedResourceUsePool)
+        {
+            block.clear();
+        }
+        mSharedResourceUsePool.clear();
+    }
+
+    void ensureCapacity()
+    {
+        // Allocate a SharedResourceUse block
+        constexpr size_t kSharedResourceUseBlockSize = 2048;
+        size_t newSize                               = (mSharedResourceUsePool.empty())
+                             ? kSharedResourceUseBlockSize
+                             : mSharedResourceUsePool.back().capacity() * 2;
+        SharedResourceUseBlock sharedResourceUseBlock;
+        sharedResourceUseBlock.resize(newSize);
+
+        // Append it to the SharedResourceUse pool
+        mSharedResourceUsePool.emplace_back(std::move(sharedResourceUseBlock));
+
+        // Add the newly allocated SharedResourceUse to the free list
+        mSharedResourceUseFreeList.reserve(newSize);
+        SharedResourceUseBlock &newSharedResourceUseBlock = mSharedResourceUsePool.back();
+        for (SharedResourceUse &use : newSharedResourceUseBlock)
+        {
+            mSharedResourceUseFreeList.push_back(&use);
+        }
+    }
+
+    using SharedResourceUseBlock = std::vector<SharedResourceUse>;
+    std::vector<SharedResourceUseBlock> mSharedResourceUsePool;
+    std::vector<SharedResourceUse *> mSharedResourceUseFreeList;
+};
+
 class SharedGarbage
 {
   public:
@@ -138,21 +199,38 @@ class ResourceUseList final : angle::NonCopyable
     ResourceUseList();
     virtual ~ResourceUseList();
 
-    void add(const SharedResourceUse &resourceUse);
+    ANGLE_INLINE void add(const SharedResourceUse &resourceUse,
+                          SharedResourceUsePool *sharedResourceUsePool)
+    {
+        SharedResourceUse *newUse = sharedResourceUsePool->acquireSharedResouceUse();
+        newUse->set(resourceUse);
+        mResourceUses.emplace_back(newUse);
+    }
 
-    void releaseResourceUses();
-    void releaseResourceUsesAndUpdateSerials(Serial serial);
+    ANGLE_INLINE void releaseResourceUses(SharedResourceUsePool *sharedResourceUsePool)
+    {
+        for (SharedResourceUse *use : mResourceUses)
+        {
+            use->release();
+            sharedResourceUsePool->releaseSharedResouceUse(use);
+        }
+        mResourceUses.clear();
+    }
+    ANGLE_INLINE void releaseResourceUsesAndUpdateSerials(
+        Serial serial,
+        SharedResourceUsePool *sharedResourceUsePool)
+    {
+        for (SharedResourceUse *use : mResourceUses)
+        {
+            use->releaseAndUpdateSerial(serial);
+            sharedResourceUsePool->releaseSharedResouceUse(use);
+        }
+        mResourceUses.clear();
+    }
 
   private:
-    std::vector<SharedResourceUse> mResourceUses;
+    std::vector<SharedResourceUse *> mResourceUses;
 };
-
-ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse &resourceUse)
-{
-    SharedResourceUse newUse;
-    newUse.set(resourceUse);
-    mResourceUses.emplace_back(std::move(newUse));
-}
 
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
 // of their use in ANGLE and VkQueues via SharedResourceUse.
@@ -183,7 +261,12 @@ class Resource : angle::NonCopyable
     angle::Result waitForIdle(ContextVk *contextVk, const char *debugMessage);
 
     // Adds the resource to a resource use list.
-    void retain(ResourceUseList *resourceUseList);
+    ANGLE_INLINE void retain(ResourceUseList *resourceUseList,
+                             SharedResourceUsePool *sharedResourceUsePool)
+    {
+        // Store reference in resource list.
+        resourceUseList->add(mUse, sharedResourceUsePool);
+    }
 
   protected:
     Resource();
@@ -192,12 +275,6 @@ class Resource : angle::NonCopyable
     // Current resource lifetime.
     SharedResourceUse mUse;
 };
-
-ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList)
-{
-    // Store reference in resource list.
-    resourceUseList->add(mUse);
-}
 }  // namespace vk
 }  // namespace rx
 
