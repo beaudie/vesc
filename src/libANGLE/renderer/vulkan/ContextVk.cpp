@@ -811,7 +811,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mCommandQueue.destroy(device);
 
-    mResourceUseList.releaseResourceUses();
+    mResourceUseList.releaseResourceUses(getSharedResourceUsePool());
 
     mUtils.destroy(mRenderer);
 
@@ -1159,7 +1159,7 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
         mCurrentIndirectBuffer = indirectBuffer;
     }
 
-    mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+    mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                     vk::PipelineStage::DrawIndirect, indirectBuffer);
 
     ANGLE_TRY(setupDraw(context, mode, firstVertex, vertexCount, instanceCount,
@@ -1430,10 +1430,9 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             }
         }
         // Ensure the image is in read-only layout
-        commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
-                                       &image);
+        commandBufferHelper->imageRead(this, image.getAspectFlags(), textureLayout, &image);
 
-        textureVk->retainImageViews(&mResourceUseList);
+        textureVk->retainImageViews(this);
     }
 
     if (executable->hasTextures())
@@ -1477,7 +1476,7 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *con
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+            mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
                                             vk::PipelineStage::VertexInput, arrayBuffer);
         }
     }
@@ -1495,8 +1494,8 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(const gl::Context *conte
                                    mVertexArray->getCurrentElementArrayBufferOffset(),
                                    getVkIndexType(mCurrentDrawElementsType));
 
-    mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDEX_READ_BIT,
-                                    vk::PipelineStage::VertexInput, elementArrayBuffer);
+    mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
+                                    elementArrayBuffer);
 
     return angle::Result::Continue;
 }
@@ -1558,7 +1557,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
         {
             vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
             ASSERT(bufferHelper);
-            mRenderPassCommands->bufferWrite(&mResourceUseList, VK_ACCESS_SHADER_WRITE_BIT,
+            mRenderPassCommands->bufferWrite(this, VK_ACCESS_SHADER_WRITE_BIT,
                                              vk::PipelineStage::VertexShader,
                                              vk::AliasingMode::Disallowed, bufferHelper);
         }
@@ -1597,9 +1596,9 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     {
         vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
         ASSERT(bufferHelper);
-        mRenderPassCommands->bufferWrite(
-            &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
-            vk::PipelineStage::TransformFeedback, vk::AliasingMode::Disallowed, bufferHelper);
+        mRenderPassCommands->bufferWrite(this, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
+                                         vk::PipelineStage::TransformFeedback,
+                                         vk::AliasingMode::Disallowed, bufferHelper);
     }
 
     const gl::TransformFeedbackBuffersArray<VkBuffer> &bufferHandles =
@@ -2293,7 +2292,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
-        mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                         vk::PipelineStage::DrawIndirect, currentIndirectBuf);
 
         // We have instanced vertex attributes that need to be emulated for Vulkan.
@@ -2347,7 +2346,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
-        mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                         vk::PipelineStage::DrawIndirect, currentIndirectBuf);
 
         // We have instanced vertex attributes that need to be emulated for Vulkan.
@@ -3553,7 +3552,7 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 
     gl::Buffer *glBuffer     = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
     vk::BufferHelper &buffer = vk::GetImpl(glBuffer)->getBuffer();
-    mOutsideRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+    mOutsideRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                            vk::PipelineStage::DrawIndirect, &buffer);
 
     commandBuffer->dispatchIndirect(buffer.getBuffer(), indirect);
@@ -4082,8 +4081,8 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         }
         VkImageAspectFlags aspectFlags = image->getAspectFlags();
 
-        commandBufferHelper->imageWrite(&mResourceUseList, aspectFlags, imageLayout,
-                                        vk::AliasingMode::Allowed, image);
+        commandBufferHelper->imageWrite(this, aspectFlags, imageLayout, vk::AliasingMode::Allowed,
+                                        image);
     }
 
     return angle::Result::Continue;
@@ -4158,7 +4157,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     ANGLE_VK_TRY(this, mPrimaryCommands.end());
 
     Serial serial = getCurrentQueueSerial();
-    mResourceUseList.releaseResourceUsesAndUpdateSerials(serial);
+    mResourceUseList.releaseResourceUsesAndUpdateSerials(serial, getSharedResourceUsePool());
 
     waitForSwapchainImageIfNecessary();
 
@@ -4460,7 +4459,7 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
 
-    mOutsideRenderPassCommands->bufferRead(&mResourceUseList, readAccessType, readStage, buffer);
+    mOutsideRenderPassCommands->bufferRead(this, readAccessType, readStage, buffer);
 
     return angle::Result::Continue;
 }
@@ -4480,7 +4479,7 @@ angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
 
-    mOutsideRenderPassCommands->bufferWrite(&mResourceUseList, writeAccessType, writeStage,
+    mOutsideRenderPassCommands->bufferWrite(this, writeAccessType, writeStage,
                                             vk::AliasingMode::Disallowed, buffer);
 
     return angle::Result::Continue;
@@ -4520,7 +4519,7 @@ angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
 
     image->recordReadBarrier(aspectFlags, imageLayout,
                              &mOutsideRenderPassCommands->getCommandBuffer());
-    image->retain(&mResourceUseList);
+    image->retain(&mResourceUseList, getSharedResourceUsePool());
 
     return angle::Result::Continue;
 }
@@ -4536,7 +4535,7 @@ angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
 
     image->recordWriteBarrier(aspectFlags, imageLayout,
                               &mOutsideRenderPassCommands->getCommandBuffer());
-    image->retain(&mResourceUseList);
+    image->retain(&mResourceUseList, getSharedResourceUsePool());
     image->onWrite();
 
     return angle::Result::Continue;
