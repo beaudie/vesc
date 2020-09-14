@@ -104,6 +104,30 @@
       "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6d9962c_77a53e5d",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T21:34:10Z",
+      "side": 1,
+      "message": "Ouch, right. I remember getting bit by this problem. Is it fixed later on in the chain? We want all these calls inlined.\n\nIf not we might have to extract the class from ShareGroupVk into a helper class and pass that around.",
+      "parentUuid": "fbe3ecaf_45b8a25d",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 1
+      },
+      "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
