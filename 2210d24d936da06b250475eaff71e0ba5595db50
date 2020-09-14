@@ -225,6 +225,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "934c90b7_203cf94b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T00:52:07Z",
+      "side": 1,
+      "message": "Good catch. It should theoretically be possible to write a failing unit test that would expect blending to work for RGBA4. Likely we should be checking for blend support for non-integer formats in FillTextureFormatCaps for textureAttachment and renderbuffer.",
+      "parentUuid": "375a7494_6a5878d9",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

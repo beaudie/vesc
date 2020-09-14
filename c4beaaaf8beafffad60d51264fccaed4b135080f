@@ -16,6 +16,24 @@
       "revId": "c4beaaaf8beafffad60d51264fccaed4b135080f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce4f427a_fcfff8cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T00:52:07Z",
+      "side": 1,
+      "message": "Good find. https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1053803 indicates the driver versions are mid-upgrade. CC\u0027ing bsheedy.",
+      "parentUuid": "c07fdc66_90e3a8e2",
+      "revId": "c4beaaaf8beafffad60d51264fccaed4b135080f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
