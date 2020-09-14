@@ -301,6 +301,30 @@
     },
     {
       "key": {
+        "uuid": "cc731be0_2af262ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T20:13:13Z",
+      "side": 1,
+      "message": "That\u0027s fine, we can keep PackedAttachmentIndex. It\u0027s better than the Vk options.",
+      "parentUuid": "008af4fb_dc414aa9",
+      "range": {
+        "startLine": 879,
+        "startChar": 6,
+        "endLine": 879,
+        "endChar": 27
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5157c051_bd74aa16",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -383,6 +407,30 @@
       "side": 1,
       "message": "I find ++ is easier to read though. Code is much cleaner in the place that uses it.",
       "parentUuid": "2ae5f135_92262305",
+      "range": {
+        "startLine": 888,
+        "startChar": 0,
+        "endLine": 892,
+        "endChar": 5
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9b547e0_9f91a3db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T20:13:13Z",
+      "side": 1,
+      "message": "Preference for named methods and to almost always avoid overloading. It makes it unclear that types are actually classes with methods. This use is definitely within the style guide, so I won\u0027t block the review.",
+      "parentUuid": "c06836b0_151712e1",
       "range": {
         "startLine": 888,
         "startChar": 0,
