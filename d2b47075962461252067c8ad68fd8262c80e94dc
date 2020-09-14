@@ -93,6 +93,24 @@
     },
     {
       "key": {
+        "uuid": "ca52f948_2ef2756c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T16:50:34Z",
+      "side": 1,
+      "message": "Actually seem some of the prior comments (\"maybe this is a good tech talk subject\", \"the right direction should be a global pool\") I think we should move this design discussion to a Google doc, get a consensus, then do the review.",
+      "parentUuid": "cf38d212_e0a7962e",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbc6a8ed_3a991816",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
