@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c35bd84_0f8717e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T20:14:58Z",
+      "side": 1,
+      "message": "LGTM once this gets a green run. Nice work!\n\nI did check on desktop NV and unfortunately the reduced RP count didn\u0027t measurably improve perf.",
+      "revId": "7cd34dbebca77bb026f3e7ab3a30c22799502e36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb27736b_f1080443",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T20:14:58Z",
+      "side": 1,
+      "message": "nit: as a follow-up, suggest moving this to gl::FramebufferState. We actually used to have it there and we removed it a while back.",
+      "range": {
+        "startLine": 254,
+        "startChar": 23,
+        "endLine": 254,
+        "endChar": 47
+      },
+      "revId": "7cd34dbebca77bb026f3e7ab3a30c22799502e36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
