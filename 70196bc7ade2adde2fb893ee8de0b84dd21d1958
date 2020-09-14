@@ -128,6 +128,30 @@
       "revId": "70196bc7ade2adde2fb893ee8de0b84dd21d1958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "639a40f8_f3f8ef68",
+        "filename": "samples/sample_util/SampleApplication.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T20:35:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22b3528a_673460e6",
+      "range": {
+        "startLine": 264,
+        "startChar": 20,
+        "endLine": 264,
+        "endChar": 47
+      },
+      "revId": "70196bc7ade2adde2fb893ee8de0b84dd21d1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
