@@ -34,6 +34,24 @@
       "revId": "c4beaaaf8beafffad60d51264fccaed4b135080f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a8b07db_59b0d6ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-14T18:46:37Z",
+      "side": 1,
+      "message": "We should probably ensure that all bots are updated, otherwise future CLs may randomly fail.",
+      "parentUuid": "ce4f427a_fcfff8cf",
+      "revId": "c4beaaaf8beafffad60d51264fccaed4b135080f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
