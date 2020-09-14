@@ -56,6 +56,30 @@
       "revId": "70196bc7ade2adde2fb893ee8de0b84dd21d1958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c662d337_f419c5ac",
+        "filename": "samples/sample_util/SampleApplication.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T15:21:08Z",
+      "side": 1,
+      "message": "I don\u0027t follow. It\u0027s still printing steps/seconds, just printing it every 100 steps. It\u0027s basically frames/second. Can you clarify the concern?",
+      "parentUuid": "5529430a_a22c673b",
+      "range": {
+        "startLine": 264,
+        "startChar": 20,
+        "endLine": 264,
+        "endChar": 47
+      },
+      "revId": "70196bc7ade2adde2fb893ee8de0b84dd21d1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
