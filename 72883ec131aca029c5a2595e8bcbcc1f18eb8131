@@ -16,6 +16,52 @@
       "revId": "72883ec131aca029c5a2595e8bcbcc1f18eb8131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57a3f25c_30cd99ed",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T13:00:13Z",
+      "side": 1,
+      "message": "nit: OrImage? might require a bigger rename.",
+      "range": {
+        "startLine": 475,
+        "startChar": 4,
+        "endLine": 475,
+        "endChar": 21
+      },
+      "revId": "72883ec131aca029c5a2595e8bcbcc1f18eb8131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1d335a9_1da0b829",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3431,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T13:00:13Z",
+      "side": 1,
+      "message": "nit: suggest you comment here that these two suppressions are for unsupported configs.",
+      "range": {
+        "startLine": 3431,
+        "startChar": 4,
+        "endLine": 3431,
+        "endChar": 22
+      },
+      "revId": "72883ec131aca029c5a2595e8bcbcc1f18eb8131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
