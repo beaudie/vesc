@@ -16,6 +16,75 @@
       "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92b94ed6_028a532e",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T01:11:20Z",
+      "side": 1,
+      "message": "nit: no need to inline this",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beaf32f3_0c678434",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T01:11:20Z",
+      "side": 1,
+      "message": "nit: no need to inline this either - the empty check should be the only item that consistently gets hit.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 5
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2b98223_97750719",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T01:11:20Z",
+      "side": 1,
+      "message": "avoiding storing this pointer will be important as it\u0027s on every object. what are the points of code that need access to the ContextVk?",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 30
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
