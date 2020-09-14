@@ -111,6 +111,24 @@
     },
     {
       "key": {
+        "uuid": "a2b4f862_7b832ccf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-14T17:24:52Z",
+      "side": 1,
+      "message": "We have a follow-up bug to change the YUV sampler to use an angle::Serial but don\u0027t remember any other changes.\nImmutable samplers are a pain. We don\u0027t know about them until draw time when we discover that we are binding to a texture that requires an immutable sampler which forces us to redo the descriptor layouts and related state.",
+      "parentUuid": "ca52f948_2ef2756c",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbc6a8ed_3a991816",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
