@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45c45b32_3b26b7e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-14T15:20:10Z",
+      "side": 1,
+      "message": "Nice. I think you should leave a day or two in between each of these CLs landing just in case something unknown breaks.",
+      "revId": "21112a7f0e854094230ab1614ad40d121434c926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
