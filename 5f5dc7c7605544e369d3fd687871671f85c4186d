@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "18e647c3_ef8b91df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T23:10:32Z",
+      "side": 1,
+      "message": "Each gtest shard (one machone) will itself shard into multiple processes. We do encounter limits. I found on Linux I had to limit the processes count to avoid crashes. I found no crashes with 16 max. I haven\u0027t fully investigated other platforms yet. This change is necessary to test on the CQ.",
+      "parentUuid": "712494d1_690d20d1",
+      "range": {
+        "startLine": 10,
+        "startChar": 51,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "5f5dc7c7605544e369d3fd687871671f85c4186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f15fe63_39b9ca37",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -53,6 +77,41 @@
       "writtenOn": "2020-09-14T22:37:56Z",
       "side": 1,
       "message": "Seems to be passing on the bots, so I guess this works...",
+      "revId": "5f5dc7c7605544e369d3fd687871671f85c4186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff672b24_d86fa7cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T23:10:32Z",
+      "side": 1,
+      "message": "We don\u0027t run this --bot-mode on the bots quite yet.",
+      "parentUuid": "e13656db_4e9558d9",
+      "revId": "5f5dc7c7605544e369d3fd687871671f85c4186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff18922_1907230c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T23:10:32Z",
+      "side": 1,
+      "message": "Thanks for the reviews! Will unblock further improvements/experiments.",
       "revId": "5f5dc7c7605544e369d3fd687871671f85c4186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
