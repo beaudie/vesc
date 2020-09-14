@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1dde30f7_61483ce5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-14T11:09:38Z",
+      "side": 1,
+      "message": "Thanks Shahbaz,Ian. The color blit test with flip has been added, it can\u0027t get right result image on android too. The issue to tracker is http://anglebug.com/5044.",
+      "parentUuid": "6d804c87_20953517",
+      "revId": "3f240fa7375f4743ed2f03f8f07be194b66af175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e718883c_ba669255",
         "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
         "patchSetId": 4

@@ -50,6 +50,24 @@
       "revId": "50b87df5eafa901cfec8b968d10aea5522ba95c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c36162a0_d05162a4",
+        "filename": "src/tests/egl_tests/EGLPreRotationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-14T11:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28b4549a_b0ad8fe9",
+      "revId": "50b87df5eafa901cfec8b968d10aea5522ba95c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
