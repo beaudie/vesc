@@ -33,6 +33,24 @@
       "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d04d38a8_b0eab547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-14T21:40:32Z",
+      "side": 1,
+      "message": "That\u0027s what Chromium does, too.\nhttps://source.chromium.org/chromium/chromium/src/+/master:base/logging.cc;l\u003d874",
+      "parentUuid": "5e53d553_97092c57",
+      "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
