@@ -16,6 +16,23 @@
       "revId": "5f8df59057758fb072b2651d1343997b4f590c18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74a6abb6_6ec75e48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-14T19:33:31Z",
+      "side": 1,
+      "message": "I did some testing on Pixel 4 XL.  With the NBA 2K20 perftest, I did not see any gain (perhaps some, but well within the noise).  However, with AGI analysis of the actual game, I saw that no frames blocked on ANI/dequeue_buffer, and that the ANI calls occured shortly before the QP calls.  It was as I expected.  When combined with multiple threads, the hope is that we will see CPU-time improvement.",
+      "revId": "5f8df59057758fb072b2651d1343997b4f590c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
