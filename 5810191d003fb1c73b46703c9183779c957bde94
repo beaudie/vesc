@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df334c58_036ff976",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: technically ANGLE packs the indexes/attachments for Vulkan.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cdb2887_7f983986",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: \u0027a mistake\u0027 or \u0027mistakes\u0027 (countable noun)",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 7
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40d0004a_f3f44ee2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: and uses",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa7bd548_790fa829",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: attachments",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 10
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "319093e5_2278d1cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "LGTM, nice cleanup. Some nits below. The clear values array thing always bugged me.",
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54622e87_7be3493b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: I don\u0027t think this does anything. You\u0027re using the type by-value below.",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 28
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d49a8b13_a3f01f3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: can we call it just AttachmentIndex? As long as there isn\u0027t already an AttachmementIndex type you can use this in Packed* types just fine.",
+      "range": {
+        "startLine": 879,
+        "startChar": 6,
+        "endLine": 879,
+        "endChar": 27
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5157c051_bd74aa16",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: you can put in the initializer list or using the default initializer. Also this can also be constexpr.",
+      "range": {
+        "startLine": 882,
+        "startChar": 30,
+        "endLine": 882,
+        "endChar": 46
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ae5f135_92262305",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "very minor nit: can we add a named method? i.e. getAndIncrement. overloading isn\u0027t necessary here. Even better -\u003e just void increment().",
+      "range": {
+        "startLine": 888,
+        "startChar": 0,
+        "endLine": 892,
+        "endChar": 5
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d657647_23542cfc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T17:48:35Z",
+      "side": 1,
+      "message": "nit: for consistency kZeroAttachmentIndex",
+      "range": {
+        "startLine": 906,
+        "startChar": 39,
+        "endLine": 906,
+        "endChar": 65
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
