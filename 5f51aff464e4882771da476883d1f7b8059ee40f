@@ -207,6 +207,30 @@
     },
     {
       "key": {
+        "uuid": "64bd29c6_3686c7c4",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T19:31:21Z",
+      "side": 1,
+      "message": "Ok, this is better. It\u0027s fine that it still lives here but a couple suggestions to improve the code.",
+      "parentUuid": "c7ed0209_39416f40",
+      "range": {
+        "startLine": 1141,
+        "startChar": 0,
+        "endLine": 1165,
+        "endChar": 0
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c9be9b63_0e6abede",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 1
@@ -372,6 +396,30 @@
     },
     {
       "key": {
+        "uuid": "8484e647_ca76a851",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T19:31:21Z",
+      "side": 1,
+      "message": "It\u0027s missing the case where the user doesn\u0027t define a width and height so this case never gets hit and the default width/height are invalid.",
+      "parentUuid": "d7d3b453_5953c81a",
+      "range": {
+        "startLine": 4551,
+        "startChar": 0,
+        "endLine": 4554,
+        "endChar": 17
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7ba6b3c_46e59b83",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 1
@@ -416,6 +464,30 @@
       "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54329206_2ba48a48",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4563,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T19:31:21Z",
+      "side": 1,
+      "message": "These are actually fine because the default value is valid.",
+      "parentUuid": "39f9beb3_0bdd87ef",
+      "range": {
+        "startLine": 4560,
+        "startChar": 0,
+        "endLine": 4563,
+        "endChar": 17
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

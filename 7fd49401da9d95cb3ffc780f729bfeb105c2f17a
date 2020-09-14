@@ -16,6 +16,98 @@
       "revId": "7fd49401da9d95cb3ffc780f729bfeb105c2f17a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "161deb40_7018778e",
+        "filename": "src/common/android_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T19:31:21Z",
+      "side": 1,
+      "message": "I think this can just be a global variable in a std::array so there is no need to have a kSupportedFormatTypesCount.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 46
+      },
+      "revId": "7fd49401da9d95cb3ffc780f729bfeb105c2f17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dbcd2c3_ac913af6",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T19:31:21Z",
+      "side": 1,
+      "message": "We should probably give this a more specific name now that it references android specific things.\n\nHow about GetAndroidHardwareBufferFormatFromChannelSizes",
+      "range": {
+        "startLine": 1119,
+        "startChar": 7,
+        "endLine": 1119,
+        "endChar": 40
+      },
+      "revId": "7fd49401da9d95cb3ffc780f729bfeb105c2f17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578cb653_5b07694b",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T19:31:21Z",
+      "side": 1,
+      "message": "Think you can remove this parameter.",
+      "range": {
+        "startLine": 1120,
+        "startChar": 41,
+        "endLine": 1120,
+        "endChar": 83
+      },
+      "revId": "7fd49401da9d95cb3ffc780f729bfeb105c2f17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c904089_79aa924e",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T19:31:21Z",
+      "side": 1,
+      "message": "I think you can use just sized internal formats instead of the format/type pair. Then this loop  can look like:\n\n        GLenum sizedInternalFormat     \u003d supportedFormatTypeList[index];\n\n        const gl::InternalFormat \u0026format \u003d GetSizedInternalFormatInfo(sizedInternalFormat);\n        ASSERT(format.internalFormat !\u003d GL_NONE \u0026\u0026 format.sized);\n        if ((redSize \u003d\u003d format.redBits) \u0026\u0026 (greenSize \u003d\u003d format.greenBits) \u0026\u0026\n            (blueSize \u003d\u003d format.blueBits) \u0026\u0026 (alphaSize \u003d\u003d format.alphaBits))\n        {\n            return sizedInternalFormat;\n        }",
+      "range": {
+        "startLine": 1133,
+        "startChar": 8,
+        "endLine": 1144,
+        "endChar": 9
+      },
+      "revId": "7fd49401da9d95cb3ffc780f729bfeb105c2f17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
