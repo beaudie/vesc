@@ -51,6 +51,24 @@
       "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66142407_4c173493",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T21:44:17Z",
+      "side": 1,
+      "message": "This is only printed on errors, right? How does the increased size of logs from errors impact development?",
+      "parentUuid": "d04d38a8_b0eab547",
+      "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
