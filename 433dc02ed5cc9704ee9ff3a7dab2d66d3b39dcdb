@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "105aae00_1102b6f7",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-09-14T19:03:29Z",
+      "side": 1,
+      "message": "This can still technically overflow, because objectLocationCount comes from type.getLocationCount(), which can return INT_MAX:\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/compiler/translator/Types.cpp;l\u003d508",
+      "range": {
+        "startLine": 1815,
+        "startChar": 47,
+        "endLine": 1815,
+        "endChar": 72
+      },
+      "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
