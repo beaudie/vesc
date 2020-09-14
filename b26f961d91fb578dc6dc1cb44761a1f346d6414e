@@ -229,6 +229,30 @@
       "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab4ed1e7_5901c77c",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-14T17:55:31Z",
+      "side": 1,
+      "message": "\u003e Are you concerned about just editing a lot of code or about regression CPU perf?\n\nyes, worried about large amount of code changes not necessarily perf.\n\nok will take a stab at it and upload another patchset",
+      "parentUuid": "16febabc_07a6b481",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 30
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
