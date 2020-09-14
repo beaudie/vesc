@@ -249,6 +249,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c7de79_34011d07",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T01:49:37Z",
+      "side": 1,
+      "message": "\u003e Likely we should be checking for blend support for non-integer formats in FillTextureFormatCaps for textureAttachment and renderbuffer.\n\nWe do:\n\n    outTextureCaps-\u003eblendable \u003d renderer-\u003ehasImageFormatFeatureBits(format, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT);",
+      "parentUuid": "934c90b7_203cf94b",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
