@@ -56,6 +56,30 @@
       "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "817be6f1_af8f3219",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-14T21:13:25Z",
+      "side": 1,
+      "message": "wanted to but that would require inclusion of contextvk header in resourcevk header.\n\nshould i go ahead with that?",
+      "parentUuid": "f8434fc0_a85a51b2",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 1
+      },
+      "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
