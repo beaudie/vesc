@@ -16,6 +16,46 @@
       "revId": "70196bc7ade2adde2fb893ee8de0b84dd21d1958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc3d5533_7f706bd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-14T15:18:05Z",
+      "side": 1,
+      "message": "Good change, one suggested fix.",
+      "revId": "70196bc7ade2adde2fb893ee8de0b84dd21d1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5529430a_a22c673b",
+        "filename": "samples/sample_util/SampleApplication.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-14T15:18:05Z",
+      "side": 1,
+      "message": "I know you brought this over directly, but the measurement doesn\u0027t seem right on this.  It is always going to be step increments in 100, with unknown number of seconds. So it should be \"time/100 steps\", or if you want to keep the \"larger is better\" scale just rename it to \"steps per elapsed time\".",
+      "range": {
+        "startLine": 264,
+        "startChar": 20,
+        "endLine": 264,
+        "endChar": 47
+      },
+      "revId": "70196bc7ade2adde2fb893ee8de0b84dd21d1958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
