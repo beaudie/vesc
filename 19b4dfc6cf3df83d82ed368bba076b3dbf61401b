@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d85c1da_f335f61b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T20:36:44Z",
+      "side": 1,
+      "message": "This comment had needed an update!",
+      "range": {
+        "startLine": 1829,
+        "startChar": 4,
+        "endLine": 1829,
+        "endChar": 62
+      },
+      "revId": "19b4dfc6cf3df83d82ed368bba076b3dbf61401b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
