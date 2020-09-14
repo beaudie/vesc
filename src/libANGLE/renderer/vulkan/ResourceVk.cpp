@@ -59,6 +59,12 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessa
     return angle::Result::Continue;
 }
 
+void Resource::retain(ContextVk *contextVk)
+{
+    // Store reference in resource list.
+    contextVk->getResourceUseList().add(mUse);
+}
+
 // SharedGarbage implementation.
 SharedGarbage::SharedGarbage() = default;
 

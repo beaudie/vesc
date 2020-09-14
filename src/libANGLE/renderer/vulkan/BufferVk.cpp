@@ -536,7 +536,7 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
 
     if (updateRegionBeforeSubData || updateRegionAfterSubData)
     {
-        src->retain(&contextVk->getResourceUseList());
+        src->retain(contextVk);
     }
 
     ANGLE_TRY(acquireBufferHelper(contextVk, size, &mBuffer));

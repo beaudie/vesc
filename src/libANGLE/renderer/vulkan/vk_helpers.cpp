@@ -623,12 +623,12 @@ bool CommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer) const
     return access == BufferAccess::Write;
 }
 
-void CommandBufferHelper::bufferRead(ResourceUseList *resourceUseList,
+void CommandBufferHelper::bufferRead(ContextVk *contextVk,
                                      VkAccessFlags readAccessType,
                                      PipelineStage readStage,
                                      BufferHelper *buffer)
 {
-    buffer->retain(resourceUseList);
+    buffer->retain(contextVk);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
     if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
     {
@@ -642,13 +642,13 @@ void CommandBufferHelper::bufferRead(ResourceUseList *resourceUseList,
     }
 }
 
-void CommandBufferHelper::bufferWrite(ResourceUseList *resourceUseList,
+void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
                                       VkAccessFlags writeAccessType,
                                       PipelineStage writeStage,
                                       AliasingMode aliasingMode,
                                       BufferHelper *buffer)
 {
-    buffer->retain(resourceUseList);
+    buffer->retain(contextVk);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
     if (buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
@@ -666,12 +666,12 @@ void CommandBufferHelper::bufferWrite(ResourceUseList *resourceUseList,
     }
 }
 
-void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
+void CommandBufferHelper::imageRead(ContextVk *contextVk,
                                     VkImageAspectFlags aspectFlags,
                                     ImageLayout imageLayout,
                                     ImageHelper *image)
 {
-    image->retain(resourceUseList);
+    image->retain(contextVk);
 
     if (image->isReadBarrierNecessary(imageLayout))
     {
@@ -695,13 +695,13 @@ void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
     }
 }
 
-void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
+void CommandBufferHelper::imageWrite(ContextVk *contextVk,
                                      VkImageAspectFlags aspectFlags,
                                      ImageLayout imageLayout,
                                      AliasingMode aliasingMode,
                                      ImageHelper *image)
 {
-    image->retain(resourceUseList);
+    image->retain(contextVk);
     image->onWrite();
     // Write always requires a barrier
     PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
@@ -1469,10 +1469,9 @@ void DynamicBuffer::release(RendererVk *renderer)
 
 void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk)
 {
-    ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
     for (BufferHelper *bufferHelper : mInFlightBuffers)
     {
-        bufferHelper->retain(resourceUseList);
+        bufferHelper->retain(contextVk);
 
         // If the dynamic buffer was resized we cannot reuse the retained buffer.
         if (bufferHelper->getSize() < mSize)
@@ -5008,7 +5007,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         ANGLE_TRY(resolvedImage.get().init2DStaging(
             contextVk, renderer->getMemoryProperties(), gl::Extents(area.width, area.height, 1),
             *mFormat, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
-        resolvedImage.get().retain(&contextVk->getResourceUseList());
+        resolvedImage.get().retain(contextVk);
     }
 
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
@@ -5399,6 +5398,11 @@ void ImageViewHelper::destroy(VkDevice device)
     mImageViewSerial = kInvalidImageViewSerial;
 }
 
+void ImageViewHelper::retain(ContextVk *contextVk) const
+{
+    contextVk->getResourceUseList().add(mUse);
+}
+
 angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
                                              gl::TextureType viewType,
                                              const ImageHelper &image,
@@ -5588,7 +5592,7 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
 {
     ASSERT(mImageViewSerial.valid());
 
-    retain(&contextVk->getResourceUseList());
+    retain(contextVk);
 
     ImageView *imageView = GetLevelImageView(&mLevelDrawImageViews, levelVK, image.getLevelCount());
 
@@ -5614,7 +5618,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     ASSERT(mImageViewSerial.valid());
     ASSERT(!image.getFormat().actualImageFormat().isBlock);
 
-    retain(&contextVk->getResourceUseList());
+    retain(contextVk);
 
     uint32_t layerCount = GetImageLayerCountForView(image);
 
