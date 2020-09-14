@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7e0ade_3a5cfd7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T21:31:40Z",
+      "side": 1,
+      "message": "Per Jamie\u0027s request, the follow up of previous CL.",
+      "revId": "b1e5b277a53ff2bee6dafb5f560e970ed549f598",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
