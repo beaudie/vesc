@@ -273,6 +273,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e89ff6cd_cf7d39af",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T02:15:17Z",
+      "side": 1,
+      "message": "The blendable cap isn\u0027t used to filter out the \u0027textureAttachment\u0027 caps for formats that can\u0027t be blended. Likely it should be checked for non-depth/stencil non-integer formats.",
+      "parentUuid": "05c7de79_34011d07",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
