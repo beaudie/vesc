@@ -16,6 +16,24 @@
       "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d60e522e_271a8f9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T02:21:37Z",
+      "side": 1,
+      "message": "Hi, I didn\u0027t see your earlier messages. Not sure why. Sorry about that!\n\nPlease feel free to suppress the failures with ANGLE_SKIP_TEST_IF(...). No need to file bugs as Adreno/GL Win/D3D11/ES3.1 are not maintained.",
+      "parentUuid": "631f815b_205dbe09",
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
