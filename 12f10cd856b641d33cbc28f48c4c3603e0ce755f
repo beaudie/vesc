@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "0e765290_1cf4953d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T21:18:00Z",
+      "side": 1,
+      "message": "Because ops only accepts PackedAttachmentIndex, I have to use attachmentCount here.\nThey are the same value, but we need a uint32_t at line 270, that is why you have line 264.\nI will get rid of colorIndexVk here.",
+      "parentUuid": "29ea5aab_3ebc16b9",
+      "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84649acb_0dc13319",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "c3be1135_6955f69b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T21:18:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84649acb_0dc13319",
+      "range": {
+        "startLine": 1094,
+        "startChar": 30,
+        "endLine": 1094,
+        "endChar": 47
+      },
+      "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "409c7f01_9c45d65d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 3
@@ -73,6 +115,24 @@
       "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b0b493e_bdd8ce7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T21:18:00Z",
+      "side": 1,
+      "message": "I actually also have similar feeling as well. The default constructor now removed.",
+      "parentUuid": "409c7f01_9c45d65d",
+      "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
