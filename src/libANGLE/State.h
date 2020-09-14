@@ -580,6 +580,8 @@ class State : angle::NonCopyable
         // still bound.
         DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING,
         DIRTY_BIT_READ_FRAMEBUFFER_BINDING,
+        DIRTY_BIT_PROGRAM_BINDING,  // Must be before DIRTY_BIT_PROGRAM_EXECUTABLE and
+                                    // SAMPLE_COVERAGE_ENABLED
         DIRTY_BIT_SCISSOR_TEST_ENABLED,
         DIRTY_BIT_SCISSOR,
         DIRTY_BIT_VIEWPORT,
@@ -625,7 +627,6 @@ class State : angle::NonCopyable
         DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING,
         DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING,
         // TODO(jmadill): Fine-grained dirty bits for each index.
-        DIRTY_BIT_PROGRAM_BINDING,  // Must be before DIRTY_BIT_PROGRAM_EXECUTABLE
         DIRTY_BIT_PROGRAM_EXECUTABLE,
         // TODO(jmadill): Fine-grained dirty bits for each texture/sampler.
         DIRTY_BIT_SAMPLER_BINDINGS,

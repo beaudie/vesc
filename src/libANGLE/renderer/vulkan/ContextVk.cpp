@@ -1306,7 +1306,6 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
                                                      vk::CommandBuffer *commandBuffer)
 {
     ASSERT(mExecutable);
-    mExecutable->updateEarlyFragmentTestsOptimization(this);
 
     if (!mCurrentGraphicsPipeline)
     {
@@ -2792,11 +2791,14 @@ void ContextVk::invalidateProgramBindingHelper(const gl::State &glState)
     {
         mProgramPipeline->onProgramBind(this);
     }
+
+    mExecutable->updateEarlyFragmentTestsOptimization(this);
 }
 
 angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *context)
 {
-    const gl::State &glState = context->getState();
+    const gl::State &glState                = context->getState();
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
 
     if (glState.getProgramExecutable()->isCompute())
     {
@@ -2808,7 +2810,7 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         // later.
         invalidateDefaultAttributes(context->getStateCache().getActiveDefaultAttribsMask());
         invalidateVertexAndIndexBuffers();
-        bool useVertexBuffer = (glState.getProgramExecutable()->getMaxActiveAttribLocation() > 0);
+        bool useVertexBuffer = (executable->getMaxActiveAttribLocation() > 0);
         mNonIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
         mIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
         mCurrentGraphicsPipeline = nullptr;
@@ -2880,6 +2882,11 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED:
                 updateSampleMask(glState);
+                static_assert(gl::State::DIRTY_BIT_PROGRAM_BINDING <
+                                  gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED,
+                              "Dirty bit ordering error");
+                ASSERT(mExecutable);
+                mExecutable->updateEarlyFragmentTestsOptimization(this);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE:
                 updateSampleMask(glState);
