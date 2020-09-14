@@ -161,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "a757ccb4_b3c37271",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T17:52:48Z",
+      "side": 1,
+      "message": "I came up with the same in the next change (that generates SPIR-V). Let\u0027s continue discussion over there.\n\nThe complexity IMO is about the same. If you ever change the glsl file, you need to adapt the SPIR-V transformation accordingly. There are type modifications involved (unlike our usual transformation), so it can get a little involved.\n\nI\u0027m down with it though.",
+      "parentUuid": "c1cc394a_e0c4e866",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b0bcf08_174b8f6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
