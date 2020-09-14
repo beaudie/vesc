@@ -87,6 +87,24 @@
       "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae1d4826_33151dd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T21:49:27Z",
+      "side": 1,
+      "message": "I would guess the chance of this change running whatever stores the logs out of capacity and causing CQ outages is unlikely. I like having the full path because it makes it very clear where the error is coming from. WDYT?",
+      "parentUuid": "8d15ec8d_4b963bd6",
+      "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
