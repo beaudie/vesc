@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ee6ddb4_62b5c25e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-14T18:08:20Z",
+      "side": 1,
+      "message": "Pointing Charlie and Courtney to this CL, for their testing.",
+      "revId": "5f8df59057758fb072b2651d1343997b4f590c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
