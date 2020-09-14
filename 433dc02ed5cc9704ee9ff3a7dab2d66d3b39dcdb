@@ -19,6 +19,52 @@
     },
     {
       "key": {
+        "uuid": "7e6e0ecc_3b984393",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T20:07:19Z",
+      "side": 1,
+      "message": "This is the validation change that is causing dEQP to break I think.",
+      "range": {
+        "startLine": 1804,
+        "startChar": 8,
+        "endLine": 1804,
+        "endChar": 15
+      },
+      "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fa23772_ebbc0898",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-14T20:07:19Z",
+      "side": 1,
+      "message": "This suffers from the same potential overflow that Alexis mentioned",
+      "range": {
+        "startLine": 1804,
+        "startChar": 19,
+        "endLine": 1804,
+        "endChar": 98
+      },
+      "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "105aae00_1102b6f7",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 3
