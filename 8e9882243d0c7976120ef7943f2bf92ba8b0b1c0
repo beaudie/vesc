@@ -16,6 +16,23 @@
       "revId": "8e9882243d0c7976120ef7943f2bf92ba8b0b1c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81156a0d_e03aba6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T21:18:20Z",
+      "side": 1,
+      "message": "These look like they belong to vk_utils",
+      "revId": "8e9882243d0c7976120ef7943f2bf92ba8b0b1c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
