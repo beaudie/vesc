@@ -105,6 +105,24 @@
       "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50075cc0_df270de4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-14T22:08:20Z",
+      "side": 1,
+      "message": "At least start it at \"angle\".\nNo reason to print the location where builders check out the sources.",
+      "parentUuid": "ae1d4826_33151dd5",
+      "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
