@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8a5cf477_403d8f52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df334c58_036ff976",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5cdb2887_7f983986",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "5810191d003fb1c73b46703c9183779c957bde94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15c5aac7_babe8a3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cdb2887_7f983986",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 7
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "427e6828_fe9a02d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40d0004a_f3f44ee2",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa7bd548_790fa829",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "5810191d003fb1c73b46703c9183779c957bde94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72cefe0a_3281dbac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa7bd548_790fa829",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 10
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "141f11a2_0b1c87d9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "Its needed because vk_cache_utils.h does not include the vk_helper.h which define this class.",
+      "parentUuid": "54622e87_7be3493b",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 28
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d49a8b13_a3f01f3c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -145,6 +265,30 @@
       "writtenOn": "2020-09-14T17:48:35Z",
       "side": 1,
       "message": "nit: can we call it just AttachmentIndex? As long as there isn\u0027t already an AttachmementIndex type you can use this in Packed* types just fine.",
+      "range": {
+        "startLine": 879,
+        "startChar": 6,
+        "endLine": 879,
+        "endChar": 27
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "008af4fb_dc414aa9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "I am trying to keep it consistent with PackedClearValuesArray. Would you like ClearValuesArrayVk better? Then I can rename both of them to ***Vk. I do see various other usage of Packed in the name, for example PackedColorBlendAttachmentState.",
+      "parentUuid": "d49a8b13_a3f01f3c",
       "range": {
         "startLine": 879,
         "startChar": 6,
@@ -180,6 +324,30 @@
     },
     {
       "key": {
+        "uuid": "6e2206ef_73cd5233",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5157c051_bd74aa16",
+      "range": {
+        "startLine": 882,
+        "startChar": 30,
+        "endLine": 882,
+        "endChar": 46
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ae5f135_92262305",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -191,6 +359,30 @@
       "writtenOn": "2020-09-14T17:48:35Z",
       "side": 1,
       "message": "very minor nit: can we add a named method? i.e. getAndIncrement. overloading isn\u0027t necessary here. Even better -\u003e just void increment().",
+      "range": {
+        "startLine": 888,
+        "startChar": 0,
+        "endLine": 892,
+        "endChar": 5
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c06836b0_151712e1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "I find ++ is easier to read though. Code is much cleaner in the place that uses it.",
+      "parentUuid": "2ae5f135_92262305",
       "range": {
         "startLine": 888,
         "startChar": 0,
@@ -223,6 +415,30 @@
       "revId": "5810191d003fb1c73b46703c9183779c957bde94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4111a5fd_ec7ff223",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T19:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d657647_23542cfc",
+      "range": {
+        "startLine": 906,
+        "startChar": 39,
+        "endLine": 906,
+        "endChar": 65
+      },
+      "revId": "5810191d003fb1c73b46703c9183779c957bde94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
