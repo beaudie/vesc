@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "c1cc394a_e0c4e866",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T16:57:52Z",
+      "side": 1,
+      "message": "Thanks... regarding the 9840 variations. That was what I was wondering. How hard would it be to generate a single (or up to say 8) templates with glslang then modify them with the wrapper utils? Like we do for locations. Would that have the best of both worlds? A general .glsl file for maintenance, simple SPIR-V permutation editing, and a lack of run-time dependence on glslang?",
+      "parentUuid": "6135f2c4_e7812994",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b0bcf08_174b8f6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
