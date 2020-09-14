@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "bb4770c6_2fd2d2e7",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-14T15:04:05Z",
+      "side": 1,
+      "message": "Done, but is there a cost if it were inlined?",
+      "parentUuid": "92b94ed6_028a532e",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "beaf32f3_0c678434",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 6
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "f9bece77_b8470e58",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-14T15:04:05Z",
+      "side": 1,
+      "message": "Done, but is there a cost if it were inlined?",
+      "parentUuid": "beaf32f3_0c678434",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 5
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2b98223_97750719",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 6
@@ -76,6 +124,30 @@
       "writtenOn": "2020-09-14T01:11:20Z",
       "side": 1,
       "message": "avoiding storing this pointer will be important as it\u0027s on every object. what are the points of code that need access to the ContextVk?",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 30
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d13fb67_75e517f6",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-14T15:04:05Z",
+      "side": 1,
+      "message": "\u003e as it\u0027s on every object\n\n\"ResourceUseList\" is only stored in ContextVk AFAICT, what other objects did you have in mind?\n\n\u003e what are the points of code that need access to the ContextVk?\n\nwe need access to \"ShareGroupVk\" to call \"mShareGroup-\u003eacquireSharedResouceUse\" and \"mShareGroup-\u003ereleaseSharedResouceUse\" from \"ResourceUseList::add\" and \"ResourceUseList::releaseResourceUse*\" respectively",
+      "parentUuid": "c2b98223_97750719",
       "range": {
         "startLine": 148,
         "startChar": 4,
