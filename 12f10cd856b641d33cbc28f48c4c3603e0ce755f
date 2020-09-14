@@ -16,6 +16,63 @@
       "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "29ea5aab_3ebc16b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-14T20:41:04Z",
+      "side": 1,
+      "message": "Does this need to change?   It looks like colorIndexVk and attachmentCount are the same value.\n\nGoing further do we need the colorIndexVk indirection anymore, or can we just use attachmentCount everywhere in here?   Same question with depthStencilIndexVk and colorResolveIndexVk below too.",
+      "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84649acb_0dc13319",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-14T20:41:04Z",
+      "side": 1,
+      "message": "typo: attachmentIndexVk",
+      "range": {
+        "startLine": 1094,
+        "startChar": 30,
+        "endLine": 1094,
+        "endChar": 47
+      },
+      "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "409c7f01_9c45d65d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-14T20:41:04Z",
+      "side": 1,
+      "message": "I suggest removing of this constructor and only allow the one below that requires specifying the index value. to help make the rest of the code a little clearer.   For example:\n\n    FramebufferVk::startNewRenderPass\n    {\n    ...\n        vk::PackedAttachmentIndex colorIndexVk;\n        for (size_t colorIndexGL : mAttachedColorBufferMask)\n        {\n            RenderTargetVk *colorRenderTarget \u003d colorRenderTargets[colorIndexGL];\n            ASSERT(colorRenderTarget);\n\n            renderPassAttachmentOps.setLayouts(colorIndexVk, vk::ImageLayout::ColorAttachment,\n                                               vk::ImageLayout::ColorAttachment);\n\nThis looks like colorIndexVk was never initialized, whereas PackedAttachmentIndex(0) would make it more obvious it is (and to what value), without the coder/reviewer having to dig into implementation details to determine where the loop is starting.",
+      "revId": "12f10cd856b641d33cbc28f48c4c3603e0ce755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
