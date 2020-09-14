@@ -293,10 +293,10 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
 
 void RenderTargetVk::retainImageViews(ContextVk *contextVk) const
 {
-    mImageViews->retain(&contextVk->getResourceUseList());
+    mImageViews->retain(contextVk);
     if (mResolveImageViews)
     {
-        mResolveImageViews->retain(&contextVk->getResourceUseList());
+        mResolveImageViews->retain(contextVk);
     }
 }
 

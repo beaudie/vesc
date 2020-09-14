@@ -526,7 +526,7 @@ class ContextVk : public ContextImpl, public vk::Context
                                vk::ImageHelper *image)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->imageRead(&mResourceUseList, aspectFlags, imageLayout, image);
+        mRenderPassCommands->imageRead(this, aspectFlags, imageLayout, image);
     }
 
     void onImageRenderPassWrite(VkImageAspectFlags aspectFlags,
@@ -534,8 +534,8 @@ class ContextVk : public ContextImpl, public vk::Context
                                 vk::ImageHelper *image)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->imageWrite(&mResourceUseList, aspectFlags, imageLayout,
-                                        vk::AliasingMode::Allowed, image);
+        mRenderPassCommands->imageWrite(this, aspectFlags, imageLayout, vk::AliasingMode::Allowed,
+                                        image);
     }
 
     vk::CommandBuffer &getOutsideRenderPassCommandBuffer()
