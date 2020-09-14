@@ -16,6 +16,46 @@
       "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82f48319_57b1798b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T21:11:59Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8434fc0_a85a51b2",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T21:11:59Z",
+      "side": 1,
+      "message": "nit: might as well inline this, even if you do it next CL anyway.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 1
+      },
+      "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
