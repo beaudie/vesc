@@ -51,6 +51,24 @@
       "revId": "fff0876aff44a54db3a67a5ec75bdec9ff6fb09b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "749042e8_9eadfa82",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-09-14T18:49:36Z",
+      "side": 1,
+      "message": "Thanks for catching that. I should avoid Tylenol-fueled coding. :-(",
+      "parentUuid": "85e0bbab_ee60cf57",
+      "revId": "fff0876aff44a54db3a67a5ec75bdec9ff6fb09b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
