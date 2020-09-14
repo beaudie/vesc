@@ -59,6 +59,23 @@
     },
     {
       "key": {
+        "uuid": "b6893e0c_abdae4fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-14T16:11:37Z",
+      "side": 1,
+      "message": "Correct me if I am wrong. From reading VK spec is that the pool itself seems has nothing about layout/binding baked in. It only has type information in it. So this tightly coupled thing is our implementation choice? Also instead of doing accounting ourselves, why not rely on Alloc failure to detect we run out of pool space? I am also seeing there is vkFreeDescriptorSets API if pool is created with a flag and we are not using it as well. Is it because we are not tracking the descriptor set individually? I am wondering if the right direction should be have global pool and allocate from that instead. On top of  that if DS in the cache has not been used for very long time, we return them back to  pool.",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbc6a8ed_3a991816",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
