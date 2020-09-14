@@ -34,6 +34,150 @@
       "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b960be98_b16c1662",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T02:44:20Z",
+      "side": 1,
+      "message": "I hadn\u0027t got any notifications for this change either (not even that it was uploaded). Weird.",
+      "parentUuid": "d60e522e_271a8f9f",
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e1d2651_2f5c5d86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T02:44:20Z",
+      "side": 1,
+      "message": "Excellent! I was surprised just how little needed to be changed in RewriteStructSamplers!",
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54b56b3c_3938313a",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T02:44:20Z",
+      "side": 1,
+      "message": "nit: we wrap to 100 chars",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 42
+      },
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca75956_8d824675",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3707,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T02:44:20Z",
+      "side": 1,
+      "message": "typo: flattened. Also, wrap to 100 chars",
+      "range": {
+        "startLine": 3707,
+        "startChar": 32,
+        "endLine": 3707,
+        "endChar": 39
+      },
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08a1f6af_9a561d2f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T02:44:20Z",
+      "side": 1,
+      "message": "Please avoid identical dimensions to flush out bugs where the dimensions are used in the wrong order.\n\nAlso, could you please make this 3D or even 4D? That would give a better confidence that there are loops where there should be!",
+      "range": {
+        "startLine": 3433,
+        "startChar": 73,
+        "endLine": 3433,
+        "endChar": 77
+      },
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87f8c98f_6480f4c3",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3472,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T02:44:20Z",
+      "side": 1,
+      "message": "Unnecessary barrier. No shader write was performed prior to this line.",
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44c1d5a7_f34f0783",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T02:44:20Z",
+      "side": 1,
+      "message": "GL_BUFFER_UPDATE_BARRIER_BIT should do.",
+      "range": {
+        "startLine": 3477,
+        "startChar": 20,
+        "endLine": 3477,
+        "endChar": 39
+      },
+      "revId": "ab84077c4580884e59fe1cad3c1884124ec90924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
