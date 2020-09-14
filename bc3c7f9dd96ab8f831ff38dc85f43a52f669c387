@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4d538694_476acf29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:21:30Z",
+      "side": 1,
+      "message": "One upside of baking the most complicated form and transforming it in UtilsVk is that the same transformation can then be applied to the ClearImage shader, which could have had the exact same number of combinations. Except with ClearImage I could work around that by clearing every attachment individually (hence only have 24 variations). With the transformation in place and applied to ClearImage, it could also clear the whole framebuffer in one draw call.",
+      "parentUuid": "47db092f_1c7b641e",
+      "revId": "bc3c7f9dd96ab8f831ff38dc85f43a52f669c387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a8faa3a_31c8563c",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 1
