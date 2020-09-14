@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "c045f1dd_2f5b7ccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T16:54:27Z",
+      "side": 1,
+      "message": "LGTM, no reason this can\u0027t be caught at compile time.",
+      "revId": "fff0876aff44a54db3a67a5ec75bdec9ff6fb09b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb4789bb_00cea02d",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 2
@@ -13,6 +30,24 @@
       "writtenOn": "2020-09-12T00:35:38Z",
       "side": 1,
       "message": "loc + objectLocationCount\nNit: Potential integer overflow",
+      "revId": "fff0876aff44a54db3a67a5ec75bdec9ff6fb09b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85e0bbab_ee60cf57",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T16:54:27Z",
+      "side": 1,
+      "message": "+1, good catch.",
+      "parentUuid": "bb4789bb_00cea02d",
       "revId": "fff0876aff44a54db3a67a5ec75bdec9ff6fb09b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
