@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "712494d1_690d20d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-14T22:37:56Z",
+      "side": 1,
+      "message": "Do you mean each gtest shard running in a separate process?\nWould we encounter problems if we increase shard size?",
+      "range": {
+        "startLine": 10,
+        "startChar": 51,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "5f5dc7c7605544e369d3fd687871671f85c4186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f15fe63_39b9ca37",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -13,6 +36,23 @@
       "writtenOn": "2020-09-14T20:40:36Z",
       "side": 1,
       "message": "Yuly: PTAL",
+      "revId": "5f5dc7c7605544e369d3fd687871671f85c4186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e13656db_4e9558d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-14T22:37:56Z",
+      "side": 1,
+      "message": "Seems to be passing on the bots, so I guess this works...",
       "revId": "5f5dc7c7605544e369d3fd687871671f85c4186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
