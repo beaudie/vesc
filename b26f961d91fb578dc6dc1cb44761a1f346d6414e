@@ -181,6 +181,30 @@
       "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7bc2b75_b7b63b26",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-14T17:45:59Z",
+      "side": 1,
+      "message": "thats a lot of code change, esp. in things like \"CommandBufferHelper::[buffer, image][Read, Write]\" where resourcelist is passed in instead of context. Given that most apps are single context i am not sure the cost of storing a pointer outweighs changing all these function prototypes. what am i missing?",
+      "parentUuid": "a9f821ae_136bd332",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 30
+      },
+      "revId": "b26f961d91fb578dc6dc1cb44761a1f346d6414e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
