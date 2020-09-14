@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 
 namespace rx
 {
@@ -59,6 +60,46 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessa
     return angle::Result::Continue;
 }
 
+// SharedResourceUsePool implementation.
+SharedResourceUsePool::SharedResourceUsePool() {}
+
+SharedResourceUsePool::~SharedResourceUsePool()
+{
+    releaseSharedResouceUsePool();
+}
+
+void SharedResourceUsePool::releaseSharedResouceUsePool()
+{
+    mSharedResourceUseFreeList.clear();
+    for (SharedResourceUseBlock &block : mSharedResourceUsePool)
+    {
+        block.clear();
+    }
+    mSharedResourceUsePool.clear();
+}
+
+void SharedResourceUsePool::ensureCapacity()
+{
+    // Allocate a SharedResourceUse block
+    constexpr size_t kSharedResourceUseBlockSize = 2048;
+    size_t newSize                               = (mSharedResourceUsePool.empty())
+                         ? kSharedResourceUseBlockSize
+                         : mSharedResourceUsePool.back().capacity() * 2;
+    SharedResourceUseBlock sharedResourceUseBlock;
+    sharedResourceUseBlock.resize(newSize);
+
+    // Append it to the SharedResourceUse pool
+    mSharedResourceUsePool.emplace_back(std::move(sharedResourceUseBlock));
+
+    // Add the newly allocated SharedResourceUse to the free list
+    mSharedResourceUseFreeList.reserve(newSize);
+    SharedResourceUseBlock &newSharedResourceUseBlock = mSharedResourceUsePool.back();
+    for (SharedResourceUse &use : newSharedResourceUseBlock)
+    {
+        mSharedResourceUseFreeList.push_back(&use);
+    }
+}
+
 // SharedGarbage implementation.
 SharedGarbage::SharedGarbage() = default;
 
@@ -105,26 +146,6 @@ ResourceUseList::ResourceUseList()
 ResourceUseList::~ResourceUseList()
 {
     ASSERT(mResourceUses.empty());
-}
-
-void ResourceUseList::releaseResourceUses()
-{
-    for (SharedResourceUse &use : mResourceUses)
-    {
-        use.release();
-    }
-
-    mResourceUses.clear();
-}
-
-void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial)
-{
-    for (SharedResourceUse &use : mResourceUses)
-    {
-        use.releaseAndUpdateSerial(serial);
-    }
-
-    mResourceUses.clear();
 }
 }  // namespace vk
 }  // namespace rx
