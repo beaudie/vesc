@@ -76,6 +76,23 @@
     },
     {
       "key": {
+        "uuid": "cf38d212_e0a7962e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-14T16:48:52Z",
+      "side": 1,
+      "message": "I think the design of immutable samplers as it stands had some issues that I brought up with Courtney. I don\u0027t fully recall my idea - can we treat immutable samplers separately somehow? We\u0027re doing a lot of special work to support them in a general case. I\u0027m concerned about over-generalization.",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbc6a8ed_3a991816",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
