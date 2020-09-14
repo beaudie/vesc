@@ -1063,7 +1063,9 @@ class ContextVk : public ContextImpl, public vk::Context
     bool mHasPrimaryCommands;
 
     // Transform feedback buffers.
-    std::unordered_set<const vk::BufferHelper *> mCurrentTransformFeedbackBuffers;
+    static constexpr size_t kExpectedMaxXFBBuffers = 8;
+    angle::FastUnorderedSet<const vk::BufferHelper *, kExpectedMaxXFBBuffers>
+        mCurrentTransformFeedbackBuffers;
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
@@ -1131,7 +1133,7 @@ class ContextVk : public ContextImpl, public vk::Context
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
     const vk::BufferHelper *buffer)
 {
-    if (!buffer || mCurrentTransformFeedbackBuffers.count(buffer) == 0)
+    if (!buffer || !mCurrentTransformFeedbackBuffers.contains(buffer))
     {
         return angle::Result::Continue;
     }
