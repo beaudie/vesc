@@ -297,6 +297,30 @@
       "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1af93edb_138bf926",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-14T14:24:47Z",
+      "side": 1,
+      "message": "Requiring that feature bit for RGBA4 fixed that one test but broke a bunch of others.\n\nLooks like the assertion in MemoryObjectVk::createImage expects that the actual format matches the requested one. The tests in VulkanExternalImageTest include three packed formats and likely Intel Linux driver reports wrong caps for some of them. The latter leads to falling back to RGBA32 which breaks the assertion.",
+      "parentUuid": "e89ff6cd_cf7d39af",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1041,
+        "endChar": 9
+      },
+      "revId": "2210d24d936da06b250475eaff71e0ba5595db50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
