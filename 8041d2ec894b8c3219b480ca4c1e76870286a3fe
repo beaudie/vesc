@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "900bd652_975d7a67",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b0bcf08_174b8f6b",
+      "range": {
+        "startLine": 584,
+        "startChar": 9,
+        "endLine": 584,
+        "endChar": 20
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dae5cd74_d7d9c307",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 13
@@ -180,6 +204,24 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92bccf1b_5ab5c5cb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Replied in another comment.",
+      "parentUuid": "dae5cd74_d7d9c307",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -200,6 +242,24 @@
     },
     {
       "key": {
+        "uuid": "7e763aef_a87ea757",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "It\u0027s not the best, I agree. Originally I had added the suffix like colorIndexGL and colorIndexVk. A while back when I added GL/Vk suffixes for level index, the consensus was that since the counterpart is GL, that should also be VK.\n\nSince I was touching this code, I made this consistent with levelIndexGL and levelIndexVK.",
+      "parentUuid": "b71d4251_c334e12b",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e6e5d4c_f427d88d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -211,6 +271,30 @@
       "writtenOn": "2020-09-11T20:22:31Z",
       "side": 1,
       "message": "Adding image usage flags always seems to come with some side effect we weren\u0027t expecting - typically in a way that hurts performance.\n\nCan you (or work with Cody to) check if this changes benchmark results for T-Red and MH3.0 on Android?",
+      "range": {
+        "startLine": 1264,
+        "startChar": 50,
+        "endLine": 1264,
+        "endChar": 85
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8086f583_6fac78cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Sure. +Cody, do you mind giving this change a try? Note that you need the latest glslang to have rolled.\n\n---\n\nMy understanding nevertheless is that:\n\n- On desktop, input attachments are sampled from, so in terms of the effect on the image, INPUT \u003d\u003d SAMPLED\n- On tiling, input attachments are part of the tile data, so in terms of the effect on the image, INPUT \u003d\u003d COLOR_ATTACHMENT\n\nThat is to say, I don\u0027t expect any regressions to ensue.",
+      "parentUuid": "9e6e5d4c_f427d88d",
       "range": {
         "startLine": 1264,
         "startChar": 50,
@@ -246,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "f5dadd9d_c3e54898",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "UnresolveAttachmentType has 4 possible values. Added a comment.",
+      "parentUuid": "9c2cd1c2_f8fcfd32",
+      "range": {
+        "startLine": 298,
+        "startChar": 26,
+        "endLine": 298,
+        "endChar": 45
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5618827_69869ae9",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 13
@@ -260,6 +368,24 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f6bc008_42d2406d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Generating GLSL for now.",
+      "parentUuid": "d5618827_69869ae9",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -286,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "0ada7406_74f2420b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "No longer applicable.",
+      "parentUuid": "4dbd15d9_21a9c68e",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 406,
+        "endChar": 1
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f10be88_55770ab9",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 13
@@ -300,6 +450,24 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fcf61dc_e4a719f7",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "No longer applicable.",
+      "parentUuid": "4f10be88_55770ab9",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -338,6 +506,24 @@
     },
     {
       "key": {
+        "uuid": "66536ee7_8ffa7077",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "No longer applicable.",
+      "parentUuid": "b6cba6d6_4b1b610a",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56236fe8_aafe03df",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 13
@@ -352,6 +538,24 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e8b3ccb_3ef5639d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56236fe8_aafe03df",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -378,6 +582,30 @@
     },
     {
       "key": {
+        "uuid": "e50cdd66_8491a073",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "That\u0027s the number of attachments it unresolves. Renamed to be clearer.",
+      "parentUuid": "76abb304_19169f40",
+      "range": {
+        "startLine": 410,
+        "startChar": 8,
+        "endLine": 410,
+        "endChar": 18
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "001f9281_df1f5dc6",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
@@ -398,6 +626,30 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b67239dc_01f84937",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Changed to FastVector so the normal use-case doesn\u0027t allocate memory. I still initialize it with a value of 2 though. The ~40 bytes of VkSubpassDescription is not going to hurt us :)\n\nAlso, this feature is particularly targeted to tilers. Chrome on Android would certainly use it, any another MSAA-based application *should* also use it (though it\u0027s a pity (for them) that some/most don\u0027t).",
+      "parentUuid": "001f9281_df1f5dc6",
+      "range": {
+        "startLine": 482,
+        "startChar": 37,
+        "endLine": 482,
+        "endChar": 38
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -424,6 +676,30 @@
     },
     {
       "key": {
+        "uuid": "13294f59_5bcee95f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10baea3c_f4ebdcc5",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 488,
+        "endChar": 68
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ab24cde_bbbb81c7",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
@@ -447,6 +723,30 @@
     },
     {
       "key": {
+        "uuid": "0f89e132_32932089",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ab24cde_bbbb81c7",
+      "range": {
+        "startLine": 513,
+        "startChar": 0,
+        "endLine": 522,
+        "endChar": 48
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df1eaa37_c99dd7d5",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
@@ -464,6 +764,24 @@
     },
     {
       "key": {
+        "uuid": "4836ddde_25cf2827",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df1eaa37_c99dd7d5",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb831625_d81c252a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
@@ -478,6 +796,24 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bad1d8a6_494db817",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb831625_d81c252a",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -504,6 +840,30 @@
     },
     {
       "key": {
+        "uuid": "8d85c52e_801523df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65fde4f5_73c4d33c",
+      "range": {
+        "startLine": 531,
+        "startChar": 83,
+        "endLine": 531,
+        "endChar": 93
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8143924a_8703ef30",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
@@ -527,6 +887,30 @@
     },
     {
       "key": {
+        "uuid": "4a248091_a1ef8ead",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Because blend state\u0027s attachment count is the same as color attachment count for the subpass. In the unresolve subpass, there are getColorUnresolveAttachmentMask.count() color attachments. In the application subpass, there are colorAttachmentRange() color attachment. They are unrelated.",
+      "parentUuid": "8143924a_8703ef30",
+      "range": {
+        "startLine": 1243,
+        "startChar": 0,
+        "endLine": 1244,
+        "endChar": 93
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1757a93c_ba79dc31",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 13
@@ -547,6 +931,30 @@
       "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f236d38c_94e41025",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-14T05:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1757a93c_ba79dc31",
+      "range": {
+        "startLine": 1597,
+        "startChar": 22,
+        "endLine": 1597,
+        "endChar": 27
+      },
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
