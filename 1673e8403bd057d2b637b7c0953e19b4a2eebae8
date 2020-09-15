@@ -52,6 +52,24 @@
       "revId": "1673e8403bd057d2b637b7c0953e19b4a2eebae8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e50bbd0_adad78c9",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-15T11:59:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ccea490_aefa5fce",
+      "revId": "1673e8403bd057d2b637b7c0953e19b4a2eebae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
