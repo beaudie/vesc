@@ -2329,6 +2329,7 @@ angle::Result DescriptorSetLayoutCache::getDescriptorPool(
     if (renderer->getFeatures().bindEmptyForUnusedDescriptorSets.enabled &&
         descriptorPoolSizes.empty())
     {
+        ASSERT(false);  // TIMTIM - Does CQ test this path?
         // For this workaround, we have to create an empty descriptor set for each descriptor set
         // index, so make sure their pools are initialized.
         VkDescriptorPoolSize poolSize = {};
