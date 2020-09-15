@@ -2237,6 +2237,10 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
+        // Color render targets are never entirely transient.  Only depth/stencil
+        // multisampled-render-to-texture textures can be so.
+        ASSERT(!colorRenderTarget->isEntirelyTransient());
+
         renderPassAttachmentOps.setLayouts(colorIndexVk, vk::ImageLayout::ColorAttachment,
                                            vk::ImageLayout::ColorAttachment);
 
@@ -2253,11 +2257,11 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         }
         else
         {
-            renderPassAttachmentOps.setOps(colorIndexVk,
-                                           colorRenderTarget->hasDefinedContent()
-                                               ? VK_ATTACHMENT_LOAD_OP_LOAD
-                                               : VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-                                           storeOp);
+            const VkAttachmentLoadOp loadOp = colorRenderTarget->hasDefinedContent()
+                                                  ? VK_ATTACHMENT_LOAD_OP_LOAD
+                                                  : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+
+            renderPassAttachmentOps.setOps(colorIndexVk, loadOp, storeOp);
             packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                     kUninitializedClearValue);
         }
@@ -2304,8 +2308,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // no resolve attachment, there's no data to load.  The latter is the case with
         // depth/stencil texture attachments per GL_EXT_multisampled_render_to_texture2.
         if (!depthStencilRenderTarget->hasDefinedContent() ||
-            (depthStencilRenderTarget->isImageTransient() &&
-             !depthStencilRenderTarget->hasResolveAttachment()))
+            depthStencilRenderTarget->isEntirelyTransient())
         {
             depthLoadOp   = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
