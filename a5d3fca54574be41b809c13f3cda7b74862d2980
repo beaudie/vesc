@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ab5e763_40b89b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-15T13:20:20Z",
+      "side": 1,
+      "message": "Please note a potential future caveat.\n\nIn OpenGL ES 3.0, BPTC formats can be used with TEXTURE_3D target. In Metal, using compressed formats with TEXTURE_3D target requires \"Metal 3\".",
+      "revId": "a5d3fca54574be41b809c13f3cda7b74862d2980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
