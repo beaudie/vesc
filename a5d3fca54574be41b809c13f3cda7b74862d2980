@@ -16,6 +16,24 @@
       "revId": "a5d3fca54574be41b809c13f3cda7b74862d2980",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e31a6b5_248902c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-15T14:19:05Z",
+      "side": 1,
+      "message": "Noted thanks, looks like there are some subtle things not available anywhere on the official docs.",
+      "parentUuid": "1ab5e763_40b89b93",
+      "revId": "a5d3fca54574be41b809c13f3cda7b74862d2980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
