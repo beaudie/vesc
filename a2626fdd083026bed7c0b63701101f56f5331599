@@ -22,6 +22,30 @@
       "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fca3b46c_818ea4d0",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T20:45:04Z",
+      "side": 1,
+      "message": "I like RenderTargetTransience. Are you still ok with RenderTargetTransience::Persistent? Or do you prefer ::NotTransient?",
+      "parentUuid": "671ab486_0031c62e",
+      "range": {
+        "startLine": 33,
+        "startChar": 11,
+        "endLine": 33,
+        "endChar": 29
+      },
+      "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
