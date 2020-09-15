@@ -34,6 +34,24 @@
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce856d68_8379ff6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-15T16:29:35Z",
+      "side": 1,
+      "message": "Sure, I can do that.  From my quick grepping, that looks to be the following traces:\n\nsubway_surfer_500/subway_surfer_500_capture_context4.h:#include \"util/gles_loader_autogen.h\"\ncandy_crush_500/candy_crush_500_capture_context2.h:#include \"util/gles_loader_autogen.h\"\ntemple_run_300/temple_run_300_capture_context3.h:#include \"util/gles_loader_autogen.h\"",
+      "parentUuid": "910d6e56_553b4c62",
+      "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
