@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a76ea114_a1467980",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-15T18:50:30Z",
+      "side": 1,
+      "message": "Jamie, here\u0027s a first-pass attempt to use the message-passing approach that you favor.  I simplified it a bit by using a dirty bit that the Vulkan backend doesn\u0027t use (see comments in the code for more thoughts about that).  I also left/modified the RenderTargetVk code in place in order to have ASSERT\u0027s that can catch anything that isn\u0027t covered by the message passing.  Assuming no suprises, I\u0027ll pull that code out.\n\nTo test, I\u0027ll kick off bots that aren\u0027t broken.",
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ee9fd98b_09e644d6",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1888,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-15T18:50:30Z",
+      "side": 1,
+      "message": "This dirty bit is only used by the GL backend.\n\nBy using a dedicated dirty bit, I avoided problems (e.g. with RenderTargetVk methods being called before the next image was acquired), and could directly call ANI (and only call ANI).\n\nI have some thoughts about how to use different names for this bit for GL and Vulkan, but want to talk with Jamie (others?) about it.",
+      "range": {
+        "startLine": 1887,
+        "startChar": 12,
+        "endLine": 1888,
+        "endChar": 53
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02f33a79_35fc4a62",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-15T18:50:30Z",
+      "side": 1,
+      "message": "I left the infrastructure in RenderTargetVk for this patchset, so that I could have ASSERT\u0027s to catch any cases that aren\u0027t handled by the message-passing approach.  Assuming that it works out, I\u0027ll remove all of the modified RenderTargetVk code.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d9fe27b_c6539400",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-15T18:50:30Z",
+      "side": 1,
+      "message": "These values are still needed no matter which approach we use",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
