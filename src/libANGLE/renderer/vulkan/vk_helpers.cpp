@@ -909,6 +909,20 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     // Depth/Stencil buffer optimizations:
     //
+
+    // If During the entire renderpass we never write to the depth and stencil, we can use
+    // DepthStencilReadOnly layout.
+    if ((mDepthStartAccess == ResourceAccess::ReadOnly &&
+         mStencilStartAccess != ResourceAccess::Write) ||
+        (mStencilStartAccess == ResourceAccess::ReadOnly &&
+         mDepthStartAccess != ResourceAccess::Write))
+    {
+        mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, ImageLayout::DepthStencilReadOnly,
+                                  ImageLayout::DepthStencilReadOnly);
+        // Barrier aggregation messes up with RenderPass restarting.
+        mForceIndividualBarriers = true;
+    }
+
     // First, if the attachment is invalidated, skip the store op.
     if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
     {
