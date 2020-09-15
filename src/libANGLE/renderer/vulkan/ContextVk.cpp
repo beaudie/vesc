@@ -3022,6 +3022,18 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
+                // Because endRenderpass call is deferred until next startRenderpass call, and we
+                // are evaluating if we could transition into depth read only mode or not at
+                // endRenderpass time, we must handle such transiton before we modify
+                // mDrawFramebuffer. Since read only is one way street (i.e, if you are not read
+                // only it will never read only), if we can not switch to depth read only here, we
+                // will not switch to it at endRenderpass time as well.
+                if (mRenderPassCommands->shouldSwitchToDepthReadOnlyMode())
+                {
+                    ANGLE_TRY(mDrawFramebuffer->restartRenderPassInReadOnlyDepthMode(
+                        this, mRenderPassCommands));
+                }
+
                 // FramebufferVk::syncState signals that we should start a new command buffer.
                 // But changing the binding can skip FramebufferVk::syncState if the Framebuffer
                 // has no dirty bits. Thus we need to explicitly clear the current command
@@ -3973,7 +3985,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 
             if (hasStartedRenderPass())
             {
-                if (mRenderPassCommands->hasDepthWriteOrClear())
+                if (mRenderPassCommands->hasDepthStencilWriteOrClear())
                 {
                     ANGLE_TRY(flushCommandsAndEndRenderPass());
                 }
@@ -4613,6 +4625,15 @@ void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass()
 {
+    // If During the entire renderpass we never write to the depth and stencil, we switch to
+    // DepthStencilReadOnly layout instead so that barriers are cheaper and allows driver to
+    // optimize out storeOp.
+    if (mRenderPassCommands->shouldSwitchToDepthReadOnlyMode())
+    {
+        ANGLE_TRY(
+            mDrawFramebuffer->restartRenderPassInReadOnlyDepthMode(this, mRenderPassCommands));
+    }
+
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
     ASSERT(mOutsideRenderPassCommands->empty());

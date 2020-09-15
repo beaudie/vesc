@@ -1079,11 +1079,16 @@ class CommandBufferHelper : angle::NonCopyable
                                     const vk::RenderPassDesc &renderPassDesc);
     ResourceAccess getDepthStartAccess() const { return mDepthStartAccess; }
 
-    bool hasDepthWriteOrClear() const
+    bool hasDepthStencilWriteOrClear() const
     {
         return mDepthStartAccess == ResourceAccess::Write ||
-               mAttachmentOps[mDepthStencilAttachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
+               mStencilStartAccess == ResourceAccess::Write ||
+               mAttachmentOps[mDepthStencilAttachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ||
+               mAttachmentOps[mDepthStencilAttachmentIndex].stencilLoadOp ==
+                   VK_ATTACHMENT_LOAD_OP_CLEAR;
     }
+
+    bool shouldSwitchToDepthReadOnlyMode() const;
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);

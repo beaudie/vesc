@@ -2291,6 +2291,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     RenderTargetVk *depthStencilRenderTarget              = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        // Right now we don't have ability to switch from read only back to writeable without
+        // breaking renderpass. We always default to writable depth on a new renderpass to avoid
+        // renderpass break later on when it actually writes to depth. At end of renderpass we
+        // always check and try switching to read only mode if possible.
+        setReadOnlyDepthMode(false);
+
         // depth stencil attachment always immediately follow color attachment
         depthStencilAttachmentIndex = colorIndexVk;
 
@@ -2528,6 +2534,9 @@ angle::Result FramebufferVk::restartRenderPassInReadOnlyDepthMode(
 {
     ASSERT(!isReadOnlyDepthMode());
     setReadOnlyDepthMode(true);
+
+    // When we switch to read only, we must insert a layout transition.
+    getDepthStencilRenderTarget()->onDepthStencilDraw(contextVk, true);
 
     vk::Framebuffer *currentFramebuffer = nullptr;
     ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr));

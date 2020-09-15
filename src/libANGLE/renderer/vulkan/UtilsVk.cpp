@@ -1418,6 +1418,17 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     contextVk->onImageRenderPassRead(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
                                      src);
 
+    // If we are blitting depth/stencil, we must notify context's renderpass that we are writing to
+    // the buffer so that they will not try to optimize out the storeOp
+    if (blitDepth)
+    {
+        contextVk->onDepthAccess(vk::ResourceAccess::Write);
+    }
+    if (blitStencil)
+    {
+        contextVk->onStencilAccess(vk::ResourceAccess::Write);
+    }
+
     VkDescriptorImageInfo imageInfos[2] = {};
 
     if (blitColor)

@@ -636,6 +636,15 @@ class ContextVk : public ContextImpl, public vk::Context
 
     void onSyncHelperInitialize() { mSyncObjectPendingFlush = true; }
 
+    bool onDepthAccess(vk::ResourceAccess access)
+    {
+        return mRenderPassCommands->onDepthAccess(access);
+    }
+    bool onStencilAccess(vk::ResourceAccess access)
+    {
+        return mRenderPassCommands->onStencilAccess(access);
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

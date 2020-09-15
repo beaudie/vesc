@@ -881,6 +881,18 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mCounter++;
 }
 
+bool CommandBufferHelper::shouldSwitchToDepthReadOnlyMode() const
+{
+    // If we are in the middle of renderpass and we have a depth stencil buffer and it is not in
+    // read only layout yet, and we are doing read only access to it in the entire renderpass, then
+    // we should update the layout to read only layout. With the read only layout driver is able to
+    // skip the store op and we have lighter barrier as well.
+    return started() && mDepthStencilAttachmentIndex != kAttachmentIndexInvalid &&
+           static_cast<ImageLayout>(mAttachmentOps[mDepthStencilAttachmentIndex].initialLayout) !=
+               ImageLayout::DepthStencilReadOnly &&
+           !hasDepthStencilWriteOrClear();
+}
+
 void CommandBufferHelper::restartRenderPassWithReadOnlyDepth(const Framebuffer &framebuffer,
                                                              const RenderPassDesc &renderPassDesc)
 {
