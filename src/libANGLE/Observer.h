@@ -54,6 +54,9 @@ enum class SubjectMessage
 
     // Indicates an external change to the default framebuffer.
     SurfaceChanged,
+
+    // Indicates the default framebuffer needs to acquire a new image.
+    SurfaceNeedsNewImage,
 };
 
 // The observing class inherits from this interface class.

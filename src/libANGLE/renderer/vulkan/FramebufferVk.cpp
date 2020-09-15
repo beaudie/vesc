@@ -1700,6 +1700,14 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 // can add related data (such as width/height) to the cache
                 clearCache(contextVk);
                 break;
+            // NOTE: I'm reusing the following dirty bit, which is not used by the Vulkan backend.
+            case gl::Framebuffer::DIRTY_BIT_DEFAULT_LAYERS:
+                ASSERT(mBackbuffer);
+                if (mBackbuffer)
+                {
+                    ANGLE_TRY(mBackbuffer->acquireNextImage());
+                }
+                break;
             default:
             {
                 static_assert(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0, "FB dirty bits");
