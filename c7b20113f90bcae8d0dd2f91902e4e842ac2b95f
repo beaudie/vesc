@@ -16,6 +16,24 @@
       "revId": "c7b20113f90bcae8d0dd2f91902e4e842ac2b95f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84b6c3dc_67d0218c",
+        "filename": "src/libANGLE/renderer/metal/shaders/format_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-15T08:50:56Z",
+      "side": 1,
+      "message": "I was planning to update the comment of this file to indicate that it is used by metal shaders. But this CL is already submitted. So will update it at some point in future then.",
+      "parentUuid": "2f15833d_1062e4bd",
+      "revId": "c7b20113f90bcae8d0dd2f91902e4e842ac2b95f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
