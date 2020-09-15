@@ -65,6 +65,29 @@
     },
     {
       "key": {
+        "uuid": "71050278_04f9bf74",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T18:56:31Z",
+      "side": 1,
+      "message": "my thought was you could do the acquire in here. no extra dirty bit needed.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d9fe27b_c6539400",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 7
