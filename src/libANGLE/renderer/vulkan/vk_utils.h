@@ -785,6 +785,7 @@ struct PerfCounters
     uint32_t stencilClears;
     uint32_t stencilLoads;
     uint32_t stencilStores;
+    uint32_t readOnlyDepthStencils;
 };
 
 // A Vulkan image level index.
