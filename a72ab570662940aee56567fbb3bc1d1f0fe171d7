@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "8c1d6035_66550104",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-15T16:06:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "411483c7_71398dd4",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 0
+      },
+      "revId": "a72ab570662940aee56567fbb3bc1d1f0fe171d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64d6c599_b21bc719",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 12
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "d545db59_151e4e49",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-15T16:06:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64d6c599_b21bc719",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 5
+      },
+      "revId": "a72ab570662940aee56567fbb3bc1d1f0fe171d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1b763b6_397cea66",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 12
@@ -93,6 +141,30 @@
       "writtenOn": "2020-09-15T00:56:58Z",
       "side": 1,
       "message": "nit: pretty sure this should stay in the cpp as well, it\u0027s only called on flush.",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 5
+      },
+      "revId": "a72ab570662940aee56567fbb3bc1d1f0fe171d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe45d849_3518f16d",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-15T16:06:39Z",
+      "side": 1,
+      "message": "but that means potentially on every swapbuffer call a.k.a every frame. why not keep it inline?",
+      "parentUuid": "c1b763b6_397cea66",
       "range": {
         "startLine": 219,
         "startChar": 0,
