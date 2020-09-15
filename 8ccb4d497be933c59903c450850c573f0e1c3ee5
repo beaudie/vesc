@@ -67,6 +67,103 @@
       "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c1e8672_733dc467",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T10:01:38Z",
+      "side": 1,
+      "message": "Sorry this took so long",
+      "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a6cce32f_d4ee10c5",
+        "filename": "src/compiler/translator/tree_ops/FlagSamplersWithTexelFetch.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T10:01:38Z",
+      "side": 1,
+      "message": "ASSERT(IsSampler(GLVariableType(uniform.type)));",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 34
+      },
+      "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c024ebd_49c3d302",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T10:01:38Z",
+      "side": 1,
+      "message": "I still don\u0027t like how syncing texture units results in TextureVk::syncState being called twice (potentially). I understand we are already doing this with images, but I think that should be fixed too instead of piling on the problem. What\u0027s wrong with the following?\n\n- Move DIRTY_OBJECT_TEXTURE_UNITS up before DIRTY_OBJECT_TEXTURES.\n- Every time DIRTY_OBJECT_TEXTURE_UNITS is set, also set DIRTY_OBJECT_TEXTURES\n- Inside handler for DIRTY_OBJECT_TEXTURE_UNITS, take the Texture object and set DIRTY_BIT_SRGB_DECODE. In the future, if there are other use cases, we could add dirty bits for texture units and have the handler set those dirty bits in the texture.\n\nThen this is contained entirely in the front end, and the double syncState is also avoided.",
+      "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86305594_7b5909cb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T10:01:38Z",
+      "side": 1,
+      "message": "There are many ifs here. Can you make sure there are tests covering every path? No need to write end2end tests for paths that are already well tested by dEQP.",
+      "range": {
+        "startLine": 2277,
+        "startChar": 0,
+        "endLine": 2364,
+        "endChar": 5
+      },
+      "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8055823_faa0f570",
+        "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T10:01:38Z",
+      "side": 1,
+      "message": "Please expand the test such that it goes back to not using sRGB override and verify that it\u0027s done correctly.",
+      "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
