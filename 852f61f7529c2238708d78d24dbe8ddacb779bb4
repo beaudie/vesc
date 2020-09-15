@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7c2ecbc_2da6e9d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000164
+      },
+      "writtenOn": "2020-09-15T13:42:00Z",
+      "side": 1,
+      "message": "This seems to have broken the roll into Skia (https://skia-review.googlesource.com/c/skia/+/317037):\n\nERROR at //third_party/externals/angle2/src/libANGLE/renderer/null/BUILD.gn:7:1: Unable to load \"/mnt/pd0/s/w/ir/skia/build/config/dcheck_always_on.gni\".\nimport(\"//build/config/dcheck_always_on.gni\")\n^-------------------------------------------\nSee //third_party/externals/angle2/BUILD.gn:550:18: which caused the file to be included.\n    configs +\u003d [ \"src/libANGLE/renderer/null:angle_null_backend_config\" ]\n                 ^-----------------------------------------------------\n\nDo we need to update our code for this?",
+      "revId": "852f61f7529c2238708d78d24dbe8ddacb779bb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
