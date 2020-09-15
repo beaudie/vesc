@@ -1994,6 +1994,9 @@ angle::Result TextureVk::initRenderTargets(ContextVk *contextVk,
 
         const bool isMultisampledRenderToTexture =
             renderToTextureIndex != gl::RenderToTextureImageIndex::Default;
+        RenderTargetTransience persistence = isMultisampledRenderToTexture
+                                                 ? RenderTargetTransience::MultisampledTransient
+                                                 : RenderTargetTransience::Default;
 
         // If multisampled render to texture, use the multisampled image as draw image instead, and
         // resolve into the texture's image automatically.
@@ -2014,13 +2017,14 @@ angle::Result TextureVk::initRenderTargets(ContextVk *contextVk,
             {
                 resolveImage      = nullptr;
                 resolveImageViews = nullptr;
+
+                persistence = RenderTargetTransience::EntirelyTransient;
             }
         }
 
         renderTargets[layerIndex].init(drawImage, drawImageViews, resolveImage, resolveImageViews,
                                        getNativeImageLevel(levelIndex),
-                                       getNativeImageLayer(layerIndex),
-                                       isMultisampledRenderToTexture);
+                                       getNativeImageLayer(layerIndex), persistence);
     }
     return angle::Result::Continue;
 }

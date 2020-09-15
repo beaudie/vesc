@@ -43,7 +43,7 @@ void RenderTargetVk::init(vk::ImageHelper *image,
                           vk::ImageViewHelper *resolveImageViews,
                           gl::LevelIndex levelIndexGL,
                           uint32_t layerIndex,
-                          bool isImageTransient)
+                          RenderTargetTransience persistence)
 {
     mImage             = image;
     mImageViews        = imageViews;
@@ -55,7 +55,7 @@ void RenderTargetVk::init(vk::ImageHelper *image,
     // Conservatively assume the content is defined.
     mContentDefined = true;
 
-    mIsImageTransient = isImageTransient;
+    mPersistence = persistence;
 }
 
 void RenderTargetVk::reset()

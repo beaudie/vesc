@@ -900,6 +900,27 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
     pauseTransformFeedbackIfStarted();
 
+    PerfCounters &counters = contextVk->getPerfCounters();
+
+    // Fill out color perf counters
+    vk::PackedAttachmentIndex colorIndexVk(0);
+    for (uint32_t colorIndexGL = 0; colorIndexGL < mRenderPassDesc.colorAttachmentRange();
+         ++colorIndexGL)
+    {
+        if (!mRenderPassDesc.isColorAttachmentEnabled(colorIndexGL))
+        {
+            continue;
+        }
+
+        PackedAttachmentOpsDesc &ops = mAttachmentOps[colorIndexVk];
+
+        counters.colorClears += ops.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
+        counters.colorLoads += ops.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
+        counters.colorStores += ops.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
+
+        ++colorIndexVk;
+    }
+
     if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
     {
         return;
@@ -937,9 +958,7 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     ASSERT((mRenderPassDesc.getDepthStencilAccess() != ResourceAccess::ReadOnly) ||
            mDepthStartAccess != ResourceAccess::Write);
 
-    // Fill out perf counters
-    PerfCounters &counters = contextVk->getPerfCounters();
-
+    // Fill out depth/stencil perf counters
     counters.depthClears += dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
     counters.depthLoads += dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
     counters.depthStores += dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
