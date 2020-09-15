@@ -4604,6 +4604,15 @@ void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass()
 {
+    // If During the entire renderpass we never write to the depth and stencil, we can use
+    // DepthStencilReadOnly layout.
+    if (mRenderPassCommands->started() && mRenderPassCommands->isDepthStencilReadOnly() &&
+        !mDrawFramebuffer->isReadOnlyDepthMode())
+    {
+        ANGLE_TRY(
+            mDrawFramebuffer->restartRenderPassInReadOnlyDepthMode(this, mRenderPassCommands));
+    }
+
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
     ASSERT(mOutsideRenderPassCommands->empty());

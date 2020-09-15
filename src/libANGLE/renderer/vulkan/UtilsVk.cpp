@@ -1417,6 +1417,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer));
     contextVk->onImageRenderPassRead(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
                                      src);
+    contextVk->onDepthAccess(vk::ResourceAccess::Write);
 
     VkDescriptorImageInfo imageInfos[2] = {};
 

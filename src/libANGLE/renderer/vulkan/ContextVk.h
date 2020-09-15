@@ -635,6 +635,10 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::PerfCounters &getPerfCounters() { return mPerfCounters; }
 
     void onSyncHelperInitialize() { mSyncObjectPendingFlush = true; }
+    bool onDepthAccess(vk::ResourceAccess access)
+    {
+        return mRenderPassCommands->onDepthAccess(access);
+    }
 
   private:
     // Dirty bits.

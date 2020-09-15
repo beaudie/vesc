@@ -2530,6 +2530,7 @@ angle::Result FramebufferVk::restartRenderPassInReadOnlyDepthMode(
 {
     ASSERT(!isReadOnlyDepthMode());
     setReadOnlyDepthMode(true);
+    getDepthStencilRenderTarget()->onDepthStencilDraw(contextVk, true);
 
     vk::Framebuffer *currentFramebuffer = nullptr;
     ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr));

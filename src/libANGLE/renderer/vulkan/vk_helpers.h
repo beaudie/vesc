@@ -1084,6 +1084,12 @@ class CommandBufferHelper : angle::NonCopyable
                mAttachmentOps[mDepthStencilAttachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
     }
 
+    bool isDepthStencilReadOnly() const
+    {
+        return started() && mDepthStartAccess != ResourceAccess::Write &&
+               mStencilStartAccess != ResourceAccess::Write;
+    }
+
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
 
