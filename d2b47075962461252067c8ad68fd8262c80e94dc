@@ -189,6 +189,41 @@
     },
     {
       "key": {
+        "uuid": "44230ecb_d06fbe9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-15T00:14:10Z",
+      "side": 1,
+      "message": "Overall looks good to me.",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d3d0ebbd_5e7871ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-15T00:14:10Z",
+      "side": 1,
+      "message": "Thanks for explanation. I will need to look a bit more. I feel that we are wasting quite a bit of descriptor set pool here given that it is per program. We can continue discuss this. I actually see this CL might help if we end up moving pool to global, since in this CL, you actually have moved the pool creation to DescriptorSetLayoutCache.",
+      "parentUuid": "914e951f_6495df53",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbc6a8ed_3a991816",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 2
@@ -218,6 +253,29 @@
       "side": 1,
       "message": "angle::PackedEnumMap is implemented with what\u0027s essentially an array:\n\nclass PackedEnumMap\n{\n...\n    reference operator[](E n)\n    {\n        ASSERT(static_cast\u003csize_t\u003e(n) \u003c mPrivateData.size());\n        return mPrivateData[static_cast\u003cUnderlyingType\u003e(n)];\n    }\n\nWe shouldn\u0027t notice one additional index into an array to handle dirty driver uniforms.",
       "parentUuid": "fbc6a8ed_3a991816",
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3095bbb6_427ebb37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2338,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-15T00:14:10Z",
+      "side": 1,
+      "message": "This function is largely moved from ProgramExecutableVk::initDynamicDescriptorPools(), but removed the switch() in the original code. Is this intended?",
+      "range": {
+        "startLine": 2332,
+        "startChar": 8,
+        "endLine": 2338,
+        "endChar": 51
+      },
       "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
