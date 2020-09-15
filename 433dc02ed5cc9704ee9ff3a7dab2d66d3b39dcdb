@@ -65,6 +65,54 @@
     },
     {
       "key": {
+        "uuid": "0ac7057e_a7c5fdf4",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-09-15T03:41:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e6e0ecc_3b984393",
+      "range": {
+        "startLine": 1804,
+        "startChar": 8,
+        "endLine": 1804,
+        "endChar": 15
+      },
+      "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b6e1bad_94450261",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-09-15T03:41:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fa23772_ebbc0898",
+      "range": {
+        "startLine": 1804,
+        "startChar": 19,
+        "endLine": 1804,
+        "endChar": 98
+      },
+      "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "105aae00_1102b6f7",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 3
@@ -108,6 +156,54 @@
       "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec470a6b_4f09f1d8",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-09-15T03:41:53Z",
+      "side": 1,
+      "message": "I think attributes can only be basic types. Anyway, that might not be validated before this point so no harm in being thorough. Done.",
+      "parentUuid": "105aae00_1102b6f7",
+      "range": {
+        "startLine": 1815,
+        "startChar": 47,
+        "endLine": 1815,
+        "endChar": 72
+      },
+      "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4ef24c0_6b47c5b0",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-09-15T03:41:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e46fb130_2b86ce88",
+      "range": {
+        "startLine": 1815,
+        "startChar": 8,
+        "endLine": 1815,
+        "endChar": 12
+      },
+      "revId": "433dc02ed5cc9704ee9ff3a7dab2d66d3b39dcdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
