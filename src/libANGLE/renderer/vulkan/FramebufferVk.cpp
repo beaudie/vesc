@@ -2260,11 +2260,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         }
         else
         {
-            renderPassAttachmentOps.setOps(colorIndexVk,
-                                           colorRenderTarget->hasDefinedContent()
-                                               ? VK_ATTACHMENT_LOAD_OP_LOAD
-                                               : VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-                                           storeOp);
+            renderPassAttachmentOps.setOps(
+                colorIndexVk,
+                !colorRenderTarget->isEntirelyTransient() && colorRenderTarget->hasDefinedContent()
+                    ? VK_ATTACHMENT_LOAD_OP_LOAD
+                    : VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+                storeOp);
             packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                     kUninitializedClearValue);
         }
@@ -2287,6 +2288,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         if (colorRenderTarget->hasResolveAttachment() && colorRenderTarget->isImageTransient() &&
             renderPassAttachmentOps[colorIndexVk].loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
         {
+            ASSERT(!colorRenderTarget->isEntirelyTransient());
+
             ANGLE_TRY(copyResolveToMultisampedAttachment(contextVk, colorRenderTarget));
         }
 
@@ -2311,8 +2314,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // no resolve attachment, there's no data to load.  The latter is the case with
         // depth/stencil texture attachments per GL_EXT_multisampled_render_to_texture2.
         if (!depthStencilRenderTarget->hasDefinedContent() ||
-            (depthStencilRenderTarget->isImageTransient() &&
-             !depthStencilRenderTarget->hasResolveAttachment()))
+            depthStencilRenderTarget->isEntirelyTransient())
         {
             depthLoadOp   = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;

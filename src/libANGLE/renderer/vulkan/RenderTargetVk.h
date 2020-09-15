@@ -30,6 +30,20 @@ class RenderPassDesc;
 class ContextVk;
 class TextureVk;
 
+enum class ContentPersistence
+{
+    // Regular render targets that load and store from the image.
+    Persistent,
+    // Multisampled-render-to-texture textures, where the implicit multisampled image is transient,
+    // but the resolved image is persistent.
+    MultisampledTransient,
+    // Multisampled-render-to-texture renderbuffers, where both the implicit multisampled image and
+    // the resolved image are transient.  Resolve is still done for the sake of the following
+    // operation that intends to read from the render target.  However, loadOp of the next render
+    // pass is DONT_CARE if not CLEAR.
+    EntirelyTransient,
+};
+
 // This is a very light-weight class that does not own to the resources it points to.
 // It's meant only to copy across some information from a FramebufferAttachment to the
 // business rendering logic. It stores Images and ImageViews by pointer for performance.
@@ -48,7 +62,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
               vk::ImageViewHelper *resolveImageViews,
               gl::LevelIndex levelIndexGL,
               uint32_t layerIndex,
-              bool isImageTransient);
+              ContentPersistence persistence);
     void reset();
 
     vk::ImageViewSubresourceSerial getDrawSubresourceSerial() const;
@@ -103,10 +117,13 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     void invalidateEntireContent() { mContentDefined = false; }
     void restoreEntireContent() { mContentDefined = true; }
 
-    // See the description of mIsImageTransient for details of how the following two can
-    // interact.
+    // See the description of mPersistence for details of how the following two can interact.
     bool hasResolveAttachment() const { return mResolveImage != nullptr; }
-    bool isImageTransient() const { return mIsImageTransient; }
+    bool isImageTransient() const { return mPersistence != ContentPersistence::Persistent; }
+    bool isEntirelyTransient() const
+    {
+        return mPersistence == ContentPersistence::EntirelyTransient;
+    }
 
   private:
     angle::Result getImageViewImpl(ContextVk *contextVk,
@@ -140,22 +157,23 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // loadOp of this attachment.
     bool mContentDefined;
 
-    // If resolve attachment exists, |mIsImageTransient| is true if the multisampled results need to
-    // be discarded.
+    // If resolve attachment exists, |mPersistence| could be *Transient if the multisampled results
+    // need to be discarded.
     //
-    // - GL_EXT_multisampled_render_to_texture: this is true for render targets created for this
-    //   extension's usage.  Only color attachments use this optimization at the moment.
-    // - GL_EXT_multisampled_render_to_texture2: this is true for depth/stencil textures per this
-    //   extension, even though a resolve attachment is not even provided.
-    // - Multisampled swapchain: TODO(syoussefi) this is true for the multisampled color attachment.
-    //   http://anglebug.com/4836
+    // - GL_EXT_multisampled_render_to_texture[2]: this is |MultisampledTransient| for render
+    //   targets created from color textures.  It is |EntirelyTransient| for render targets created
+    //   from renderbuffers.
+    // - GL_EXT_multisampled_render_to_texture2: this is |EntirelyTransient| for depth/stencil
+    //   textures per this extension, even though a resolve attachment is not even provided.
+    // - Multisampled swapchain: TODO(syoussefi) this is |MultisampledTransient| for the
+    //   multisampled color attachment.  http://anglebug.com/4836
     //
     // Based on the above, we have:
     //
     //                   mResolveImage == nullptr        |       mResolveImage != nullptr
     //                                                   |
     //                      Normal rendering             |               Invalid
-    // !IsTransient            No resolve                |
+    // Persistent              No resolve                |
     //                       storeOp = STORE             |
     //                    Owner of data: mImage          |
     //                                                   |
@@ -163,13 +181,14 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     //                                                   |
     //               EXT_multisampled_render_to_texture2 | GL_EXT_multisampled_render_to_texture
     //                                                   | or multisampled Swapchain optimization
-    // IsTransient             No resolve                |               Resolve
+    // !Persistent             No resolve                |               Resolve
     //                      storeOp = DONT_CARE          |         storeOp = DONT_CARE
     //                Owner of data: None (not stored)   |     Owner of data: mResolveImage
     //
-    // In the above, storeOp of the resolve attachment is always STORE.  if !IsTransient, storeOp is
-    // affected by a framebuffer invalidate call.
-    bool mIsImageTransient;
+    // In the above, storeOp of the resolve attachment is always STORE.  If Persistent, storeOp is
+    // affected by a framebuffer invalidate call.  If |EntirelyTransient|, loadOp of the render
+    // target is never LOAD.
+    ContentPersistence mPersistence;
 };
 
 // A vector of rendertargets

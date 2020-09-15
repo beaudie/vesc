@@ -111,12 +111,17 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         ANGLE_TRY(mMultisampledImage.initImplicitMultisampledRenderToTexture(
             contextVk, renderer->getMemoryProperties(), gl::TextureType::_2D, samples, *mImage));
 
+        // Note that multisampled-render-to-texture renderbuffers autoinvalidate at the end of the
+        // render pass.  They do retain their resolved image for the sake of the following operation
+        // that may read from it (which can be overriden with glInvalidateFramebuffer), but the
+        // loadOp of the subsequent render pass is never LOAD.
         mRenderTarget.init(&mMultisampledImage, &mMultisampledImageViews, mImage, &mImageViews,
-                           gl::LevelIndex(0), 0, true);
+                           gl::LevelIndex(0), 0, ContentPersistence::EntirelyTransient);
     }
     else
     {
-        mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, gl::LevelIndex(0), 0, false);
+        mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, gl::LevelIndex(0), 0,
+                           ContentPersistence::Persistent);
     }
 
     return angle::Result::Continue;
@@ -178,7 +183,7 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     }
 
     mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, imageVk->getImageLevel(),
-                       imageVk->getImageLayer(), false);
+                       imageVk->getImageLayer(), ContentPersistence::Persistent);
 
     return angle::Result::Continue;
 }
