@@ -177,6 +177,24 @@
       "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1f24215_82b06549",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-15T18:09:09Z",
+      "side": 1,
+      "message": "Cool. Didn\u0027t we have some non-clang builders, too? I guess these are not too important, since they don\u0027t run tests.",
+      "parentUuid": "83e8d68a_84650d8b",
+      "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
