@@ -314,6 +314,24 @@
     },
     {
       "key": {
+        "uuid": "026e1ad7_588a5d41",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-15T17:52:31Z",
+      "side": 1,
+      "message": "I remember I have removed this API in my CL (which is now merged). This API is not been used.",
+      "parentUuid": "70572057_d3fd0b53",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e6e5d4c_f427d88d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
