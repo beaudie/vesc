@@ -46,6 +46,30 @@
       "revId": "d1ea4e3496e7468e2f2d74af931cd338d0fe1f54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e181e1c_8a08dc24",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T16:07:43Z",
+      "side": 1,
+      "message": "\u003e Actually I was expecting in future the \"turnOnXfbEmulationCodeViaMacro\" would be moved to GlslangTransformSpirvCode() instead once XFB emulation is moved to SPIR-V.\n\nMy thought was that you would transform the SPIR-V twice, once with xfb and once without. Given that the transformation is quite fast, it should be much simpler than adding an extra transformation.\n\n\u003e Is GlslangTransformSpirvCode() capable of completely remove dead code referenced by a disabled specialization constant? I think this shouldn\u0027t be too hard for added XFB emulation code.\n\nThere was code in the past to turn the spec const into a normal constant, but removing dead code is complicated IIRC. Something to do with figuring out when the if ends without having to parse a whole lot of things.\n\n\u003e The reason I put \"turnOnXfbEmulationCodeViaMacro\" to \"GlslangGetShaderSpirvCode()\" is because doing so would avoid double \"GlslangGetShaderSource()\" calls.\n\nI suggest refactoring GlslangGetShaderSource such that GlslangAssignLocations is called once but the part that modifies the VS is called twice. That should not add much overhead.",
+      "parentUuid": "3957beab_2504f530",
+      "range": {
+        "startLine": 62,
+        "startChar": 57,
+        "endLine": 62,
+        "endChar": 91
+      },
+      "revId": "d1ea4e3496e7468e2f2d74af931cd338d0fe1f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
