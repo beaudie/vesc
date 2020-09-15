@@ -174,6 +174,30 @@
       "revId": "a72ab570662940aee56567fbb3bc1d1f0fe171d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "706826b9_01e778d2",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T16:35:38Z",
+      "side": 1,
+      "message": "One function call per swap seems below the useful inline threshold for right now. Inlining has costs for incremental compiles when you modify functions and for binary size bloat. So the default rule is \"don\u0027t inline\" unless you can measure a performance improvement.",
+      "parentUuid": "fe45d849_3518f16d",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 5
+      },
+      "revId": "a72ab570662940aee56567fbb3bc1d1f0fe171d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
