@@ -1717,7 +1717,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                         dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
                 }
 
-                ASSERT(!previousDeferredClears.test(colorIndexGL));
+                ASSERT(deferClears || !previousDeferredClears.test(colorIndexGL));
 
                 ANGLE_TRY(updateColorAttachment(context, deferClears, colorIndexGL));
                 break;
