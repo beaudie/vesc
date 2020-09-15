@@ -123,6 +123,24 @@
       "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0c354cc_933cf20f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T17:16:41Z",
+      "side": 1,
+      "message": "OK, took your first suggestion. Since that was easier to implement.",
+      "parentUuid": "50075cc0_df270de4",
+      "revId": "ea22176c4ace6a216eecb10994e54014be37b21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
