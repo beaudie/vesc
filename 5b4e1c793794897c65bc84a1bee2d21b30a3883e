@@ -88,6 +88,30 @@
     },
     {
       "key": {
+        "uuid": "cddf42b1_e0f59321",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-15T19:38:41Z",
+      "side": 1,
+      "message": "Yes. I understand.  There were a few reasons why I didn\u0027t use this.  What I have is getting ASSERT\u0027s.  I\u0027ll debug/see if I can plumb your approach to see if that helps.\n\nHere\u0027s some:\n\n1) This is a generic SurfaceVk method.  We need a WindowSurfaceVk method, which knows about the swapchain, whether ANI was deferred, etc.\n\n2) This method is called multiple times per call to FramebufferVk::syncState() (even multiple times for the same dirty bit).  I guess the waste of time isn\u0027t too bad, since it\u0027s once/frame.\n\n3) I ran into chicken-and-egg ... I tried both DIRTY_BIT_READ_BUFFER and DIRTY_BIT_DRAW_BUFFERS.  When I used the DIRTY_BIT_DRAW_BUFFERS, before this method was called (i.e. before ANI could happen), a RenderTargetVk method was called that depended on ANI having been done.",
+      "parentUuid": "71050278_04f9bf74",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d9fe27b_c6539400",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 7
