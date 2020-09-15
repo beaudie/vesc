@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffb2125f_3a631bd5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T14:17:53Z",
+      "side": 1,
+      "message": "Since you are double compiling the shader anyway, could you change things such that the actual `@@ XFB-DECL @@` and `@@ XFB-OUT @@` are modified once for with xfb and once for without xfb? Then you can get rid of the `ANGLE_ENABLE_XFB_EMULATION` macro (and probably all the changes in this file).\n\nThe reason is anglebug.com/4889. Transform feedback patches will soon no longer be applied on the source but in SPIR-V itself. A hack like this would be hard to work with.",
+      "range": {
+        "startLine": 62,
+        "startChar": 57,
+        "endLine": 62,
+        "endChar": 91
+      },
+      "revId": "d1ea4e3496e7468e2f2d74af931cd338d0fe1f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
