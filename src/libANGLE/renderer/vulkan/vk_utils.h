@@ -779,6 +779,9 @@ struct PerfCounters
     uint32_t writeDescriptorSets;
     uint32_t flushedOutsideRenderPassCommandBuffers;
     uint32_t resolveImageCommands;
+    uint32_t colorClears;
+    uint32_t colorLoads;
+    uint32_t colorStores;
     uint32_t depthClears;
     uint32_t depthLoads;
     uint32_t depthStores;
