@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "64701e42_ac6a57b0",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1806,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-15T14:39:03Z",
+      "side": 1,
+      "message": "No it\u0027s not. That\u0027s why it works when cast to unsigned.\n\nBut, since it\u0027s UB, the optimizer can assume there wouldn\u0027t be an overflow and make assumptions about what it can do to the code that could be wrong. For example, it could test the last  part first, and if the result is not \u003e\u003d mMaxUniformLocations, it could assume the other two conditions are not true either and don\u0027t test them.",
+      "parentUuid": "5f41844c_f2a68a2b",
+      "range": {
+        "startLine": 1806,
+        "startChar": 43,
+        "endLine": 1806,
+        "endChar": 68
+      },
+      "revId": "2958c64b4c1dfb28604fdf32ab9e8aea4d451a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80ca554c_72635878",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 5
