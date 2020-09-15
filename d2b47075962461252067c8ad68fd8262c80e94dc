@@ -279,6 +279,30 @@
       "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "791d0d73_8265ad42",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2338,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:29:36Z",
+      "side": 1,
+      "message": "Yes, it\u0027s intended.\n\nThe original switch statement was to preserve the functionality of the code, however it\u0027s not necessary.   Since the descriptor set layout is empty (there are no bindings), the type of the descriptor that the pool is being allocated for is irrelevant, since no descriptors will ever be allocated for these descriptor sets.   That switch is removed to simplify the code and make it clearer that it doesn\u0027t matter.\n\nCQ tests this path on Android, so it seems to be working from that perspective as well.",
+      "parentUuid": "3095bbb6_427ebb37",
+      "range": {
+        "startLine": 2332,
+        "startChar": 8,
+        "endLine": 2338,
+        "endChar": 51
+      },
+      "revId": "d2b47075962461252067c8ad68fd8262c80e94dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
