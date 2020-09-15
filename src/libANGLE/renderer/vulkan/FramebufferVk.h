@@ -115,6 +115,7 @@ class FramebufferVk : public FramebufferImpl
     RenderTargetVk *getColorReadRenderTarget() const;
 
     angle::Result startNewRenderPass(ContextVk *contextVk,
+                                     bool readOnlyDepthMode,
                                      const gl::Rectangle &renderArea,
                                      vk::CommandBuffer **commandBufferOut);
     void restoreDepthStencilDefinedContents();
@@ -132,9 +133,13 @@ class FramebufferVk : public FramebufferImpl
 
     bool hasDeferredClears() const { return !mDeferredClears.empty(); }
     angle::Result flushDeferredClears(ContextVk *contextVk, const gl::Rectangle &renderArea);
-    void setReadOnlyDepthMode(bool readOnlyDepthEnabled);
-    angle::Result restartRenderPassInReadOnlyDepthMode(ContextVk *contextVk,
-                                                       vk::CommandBufferHelper *renderPass);
+    void setReadOnlyDepthFeedbackMode(bool readOnlyDepthFeedbackModeEnabled)
+    {
+        mDepthReadOnlyFeedbackLoopMode = readOnlyDepthFeedbackModeEnabled;
+    }
+    bool isDepthReadOnlyFeedbackLoopMode() const { return mDepthReadOnlyFeedbackLoopMode; }
+    angle::Result updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
+                                                    vk::CommandBufferHelper *renderPass);
 
   private:
     FramebufferVk(RendererVk *renderer,
@@ -230,6 +235,8 @@ class FramebufferVk : public FramebufferImpl
                                       vk::ImageViewSubresourceSerial resolveImageViewSerial);
     void removeColorResolveAttachment(uint32_t colorIndexGL);
 
+    void setReadOnlyDepthMode(bool readOnlyDepthEnabled);
+
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
@@ -252,6 +259,11 @@ class FramebufferVk : public FramebufferImpl
     std::unordered_map<vk::FramebufferDesc, vk::FramebufferHelper> mFramebufferCache;
 
     vk::ClearValuesArray mDeferredClears;
+
+    // Tracks if we are in depth feedback loop. Depth read only feedback loop is a special kind of
+    // depth stencil read only mode. When we are in feedback loop, we must flush renderpass to exit
+    // the loop instead of update the layout.
+    bool mDepthReadOnlyFeedbackLoopMode;
 };
 }  // namespace rx
 
