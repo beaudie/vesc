@@ -977,7 +977,8 @@ class CommandBufferHelper : angle::NonCopyable
     void endRenderPass(ContextVk *contextVk);
 
     void restartRenderPassWithReadOnlyDepth(const Framebuffer &framebuffer,
-                                            const RenderPassDesc &renderPassDesc);
+                                            const RenderPassDesc &renderPassDesc,
+                                            bool readOnlyDepth);
 
     void beginTransformFeedback(size_t validBufferCount,
                                 const VkBuffer *counterBuffers,
@@ -1078,13 +1079,17 @@ class CommandBufferHelper : angle::NonCopyable
 
     void updateRenderPassForResolve(vk::Framebuffer *newFramebuffer,
                                     const vk::RenderPassDesc &renderPassDesc);
-    ResourceAccess getDepthStartAccess() const { return mDepthStartAccess; }
 
-    bool hasDepthWriteOrClear() const
+    bool hasDepthStencilWriteOrClear() const
     {
         return mDepthStartAccess == ResourceAccess::Write ||
-               mAttachmentOps[mDepthStencilAttachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
+               mStencilStartAccess == ResourceAccess::Write ||
+               mAttachmentOps[mDepthStencilAttachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ||
+               mAttachmentOps[mDepthStencilAttachmentIndex].stencilLoadOp ==
+                   VK_ATTACHMENT_LOAD_OP_CLEAR;
     }
+
+    bool shouldSwitchToDepthReadOnlyMode() const;
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
@@ -1119,8 +1124,11 @@ class CommandBufferHelper : angle::NonCopyable
 
     bool mIsRenderPassCommandBuffer;
 
-    // State tracking for whether to optimize the loadOp to DONT_CARE
+    // State tracking for the maxmium depth access during the entire renderpass. Note that this does
+    // not include clear operation which does not affected by depth test.
     ResourceAccess mDepthStartAccess;
+    // State tracking for the maxmium stencil access during the entire renderpass. Note that this
+    // does not include clear operation which does not affected by stencil test.
     ResourceAccess mStencilStartAccess;
 
     // State tracking for whether to optimize the storeOp to DONT_CARE
