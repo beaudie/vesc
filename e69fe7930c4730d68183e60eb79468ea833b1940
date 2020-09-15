@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c29bc05c_bc318a9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:30:25Z",
+      "side": 1,
+      "message": "Hopefully everyone got a notification, but I put together a doc explaining why the changes in these CLs are necessary:\ngo/angle-descriptor-set-layout-pool",
+      "revId": "e69fe7930c4730d68183e60eb79468ea833b1940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
