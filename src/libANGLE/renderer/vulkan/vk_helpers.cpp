@@ -755,8 +755,6 @@ bool CommandBufferHelper::onDepthAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
     UpdateAccess(&mDepthStartAccess, access);
-    ASSERT((mRenderPassDesc.getDepthStencilAccess() != ResourceAccess::ReadOnly) ||
-           mDepthStartAccess != ResourceAccess::Write);
 
     // Update the invalidate state for optimizing this render pass's storeOp
     return onDepthStencilAccess(access, &mDepthCmdSizeInvalidated, &mDepthCmdSizeDisabled);
@@ -881,15 +879,25 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mCounter++;
 }
 
+bool CommandBufferHelper::shouldSwitchToDepthReadOnlyMode() const
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(mRenderPassStarted);
+    return mDepthStencilAttachmentIndex != kAttachmentIndexInvalid &&
+           !hasDepthStencilWriteOrClear();
+}
+
 void CommandBufferHelper::restartRenderPassWithReadOnlyDepth(const Framebuffer &framebuffer,
-                                                             const RenderPassDesc &renderPassDesc)
+                                                             const RenderPassDesc &renderPassDesc,
+                                                             bool readOnlyDepth)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(mRenderPassStarted);
 
     mRenderPassDesc = renderPassDesc;
-    mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, ImageLayout::DepthStencilReadOnly,
-                              ImageLayout::DepthStencilReadOnly);
+    ImageLayout depthStencilLayout =
+        readOnlyDepth ? ImageLayout::DepthStencilReadOnly : ImageLayout::DepthStencilAttachment;
+    mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, depthStencilLayout, depthStencilLayout);
     mFramebuffer.setHandle(framebuffer.getHandle());
 
     // Barrier aggregation messes up with RenderPass restarting.

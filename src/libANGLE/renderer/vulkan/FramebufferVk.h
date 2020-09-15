@@ -115,6 +115,7 @@ class FramebufferVk : public FramebufferImpl
     RenderTargetVk *getColorReadRenderTarget() const;
 
     angle::Result startNewRenderPass(ContextVk *contextVk,
+                                     bool readOnlyDepthMode,
                                      const gl::Rectangle &renderArea,
                                      vk::CommandBuffer **commandBufferOut);
     void restoreDepthStencilDefinedContents();
@@ -133,8 +134,8 @@ class FramebufferVk : public FramebufferImpl
     bool hasDeferredClears() const { return !mDeferredClears.empty(); }
     angle::Result flushDeferredClears(ContextVk *contextVk, const gl::Rectangle &renderArea);
     void setReadOnlyDepthMode(bool readOnlyDepthEnabled);
-    angle::Result restartRenderPassInReadOnlyDepthMode(ContextVk *contextVk,
-                                                       vk::CommandBufferHelper *renderPass);
+    angle::Result updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
+                                                    vk::CommandBufferHelper *renderPass);
 
   private:
     FramebufferVk(RendererVk *renderer,
