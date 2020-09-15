@@ -193,6 +193,11 @@ class WindowSurfaceVk : public SurfaceVk
     void destroy(const egl::Display *display) override;
 
     egl::Error initialize(const egl::Display *display) override;
+    angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                            GLenum binding,
+                                            const gl::ImageIndex &imageIndex,
+                                            GLsizei samples,
+                                            FramebufferAttachmentRenderTarget **rtOut) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
     egl::Error swap(const gl::Context *context) override;
@@ -240,6 +245,15 @@ class WindowSurfaceVk : public SurfaceVk
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() { return mPreTransform; }
 
+    // Calling vkAcquireNextImageKHR() is normally deferred until needed.  When the next image
+#ifdef OLD_CODE
+    // swapchain is needed, these methods will acquire it
+    angle::Result acquireNextImage();
+#else   // OLD_CODE
+    // swapchain is needed, this method will acquire it
+#endif  // OLD_CODE
+    angle::Result acquireNextImage(const gl::Context *context);
+
   protected:
     angle::Result swapImpl(const gl::Context *context,
                            EGLint *rects,
@@ -267,7 +281,13 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result resizeSwapchainImages(vk::Context *context, uint32_t imageCount);
     void releaseSwapchainImages(ContextVk *contextVk);
     void destroySwapChainImages(DisplayVk *displayVk);
+    // This method actually calls vkAcquireNextImageKHR() to acquire the next swapchain image.  It
+    // is called when the swapchain is initially created, and is called on a deferred basis
+    // afterwards.
     VkResult nextSwapchainImage(vk::Context *context);
+    // This method is called when a swapchain image is presented.  It saves state necessary to call
+    // vkAcquireNextImageKHR() later.
+    void deferNextSwapchainImage(const gl::Context *context);
     angle::Result present(ContextVk *contextVk,
                           EGLint *rects,
                           EGLint n_rects,
@@ -323,6 +343,15 @@ class WindowSurfaceVk : public SurfaceVk
     vk::ImageViewHelper mColorImageMSViews;
     angle::ObserverBinding mColorImageMSBinding;
     vk::Framebuffer mFramebufferMS;
+
+    // Cached state needed to defer swapchain resizes and calling vkAcquireNextImageKHR() until as
+    // late as possible after vkQueuePresentKHR().
+    bool mDeferredAcquire;
+    bool mDeferredPresentOutOfDate;
+    uint32_t mDeferredSwapHistoryIndex;
+#ifdef OLD_CODE
+    const gl::Context *mDeferredContext;
+#endif  // OLD_CODE
 };
 
 }  // namespace rx
