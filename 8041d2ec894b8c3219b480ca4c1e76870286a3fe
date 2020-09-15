@@ -296,6 +296,24 @@
     },
     {
       "key": {
+        "uuid": "70572057_d3fd0b53",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:23:55Z",
+      "side": 1,
+      "message": "The problems is that there is now a mix of \"Vk\" and \"VK\" throughout the code.   What are the rules for when each should be used?\n\nUnfortunately, it looks like the files in src/libANGLE/renderer/gl/ all end with a \"GL\" suffix, while those in src/libANGLE/renderer/vulkan/ end with a \"Vk\" suffix.   So, while they don\u0027t match each other, the variable names with \"GL\" and \"Vk\" are consistent within themselves.   I don\u0027t think trying to move to \"VK\" is the correct answer.\n\nI don\u0027t really have a preference either way, I\u0027m just looking for consistency.   If we would like to change the names (either GL-\u003eGl or Vk-\u003eVK), it should be done in a separate refactor CL that fixes all of them to match.\n\nMy more immediate concern (which brought this up) is that these clutter up this review a bit.",
+      "parentUuid": "7e763aef_a87ea757",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e6e5d4c_f427d88d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13

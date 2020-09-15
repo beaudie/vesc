@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b953e085_c39bc4d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:23:55Z",
+      "side": 1,
+      "message": "Thanks for the update. This version is much easier to review.",
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7bed9_be7178f4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:23:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure where things went wrong, but it looks like linkedShaderStages isn\u0027t being used anymore.   This should be able to be updated to \u0027linkedShaderStages\u0027.   I\u0027ve got a CL trying this out here (once CQ is happy again):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2412364\n\nRegardless, the shaderSources[shaderType].empty() check should prevent trying to link an empty shader anyway, so it should still be usable by MakeUnresolveFragShader() below.",
+      "range": {
+        "startLine": 2226,
+        "startChar": 43,
+        "endLine": 2226,
+        "endChar": 63
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef3ca096_f5a6477d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2239,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:23:55Z",
+      "side": 1,
+      "message": "Same, \u0027linkedShaderStages\u0027.",
+      "range": {
+        "startLine": 2239,
+        "startChar": 43,
+        "endLine": 2239,
+        "endChar": 63
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc50067d_ee3bcdd5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:23:55Z",
+      "side": 1,
+      "message": "Why is this necessary?   It looks like GlslangGetShaderSpirvCode() is doing the same thing, and it would be nice to not have to maintain two versions of this.",
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b07e1cd1_f6795403",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:23:55Z",
+      "side": 1,
+      "message": "As noted above, you should be able to call GlslangGetShaderSpirvCode() here.   Why is CompileShaderOneOff() necessary/desired?",
+      "range": {
+        "startLine": 395,
+        "startChar": 0,
+        "endLine": 396,
+        "endChar": 63
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96c06567_ee0288e2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-15T17:23:55Z",
+      "side": 1,
+      "message": "subpassDependencies.size()",
+      "range": {
+        "startLine": 597,
+        "startChar": 37,
+        "endLine": 597,
+        "endChar": 38
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
