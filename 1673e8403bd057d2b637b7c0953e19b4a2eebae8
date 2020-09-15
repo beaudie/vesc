@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e89664c1_b820a355",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-15T11:19:53Z",
+      "side": 1,
+      "message": "Could you add:\n            \"MTLPixelFormatBC4_RUnorm\": {\"filterable\": \"true\"},\n            \"MTLPixelFormatBC4_RSnorm\": {\"filterable\": \"true\"},\n            \"MTLPixelFormatBC5_RGUnorm\": {\"filterable\": \"true\"},\n            \"MTLPixelFormatBC5_RGSnorm\": {\"filterable\": \"true\"},\n            \"MTLPixelFormatBC6H_RGBUfloat\": {\"filterable\": \"true\"},\n            \"MTLPixelFormatBC6H_RGBFloat\": {\"filterable\": \"true\"},\n            \"MTLPixelFormatBC7_RGBAUnorm\": {\"filterable\": \"true\"},\n            \"MTLPixelFormatBC7_RGBAUnorm_sRGB\": {\"filterable\": \"true\"}\nhere?\nI added Metal format caps table some time ago, but forgot to add the entries for BC4-7 formats.\nWithout these entries, BC4-7 formats won\u0027t be reported as filterable by metal back-end.\nThanks,",
+      "revId": "1673e8403bd057d2b637b7c0953e19b4a2eebae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
