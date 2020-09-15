@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "671ab486_0031c62e",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T20:43:52Z",
+      "side": 1,
+      "message": "nit: content persistence is quite an abstract concept. Can you use a more specific name? e.g. RenderTargetBehaviour (similar to eglSwapBehaviour) or RenderTargetTransience? At least we can use Transience everywhere instead of persistence + transience.",
+      "range": {
+        "startLine": 33,
+        "startChar": 11,
+        "endLine": 33,
+        "endChar": 29
+      },
+      "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
