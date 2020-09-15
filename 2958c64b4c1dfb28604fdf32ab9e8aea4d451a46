@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "78729709_18012cbf",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1806,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2020-09-15T12:26:46Z",
+      "side": 1,
+      "message": "Casting to unsigned simply prevents the undefined behavior from happening, which would silence the UBSAN bot, but it doesn\u0027t prevent the overflow from happening. These if statement conditions actually prevent any overflow from happening.",
+      "parentUuid": "a6563cad_79f62f68",
+      "range": {
+        "startLine": 1806,
+        "startChar": 43,
+        "endLine": 1806,
+        "endChar": 68
+      },
+      "revId": "2958c64b4c1dfb28604fdf32ab9e8aea4d451a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80ca554c_72635878",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 5
