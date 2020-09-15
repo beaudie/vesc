@@ -293,7 +293,8 @@ FramebufferVk::FramebufferVk(RendererVk *renderer,
     : FramebufferImpl(state),
       mBackbuffer(backbuffer),
       mFramebuffer(nullptr),
-      mActiveColorComponents(0)
+      mActiveColorComponents(0),
+      mDepthReadOnlyFeedbackLoopMode(false)
 {
     mReadPixelBuffer.init(renderer, VK_BUFFER_USAGE_TRANSFER_DST_BIT, kReadPixelsBufferAlignment,
                           kMinReadPixelsBufferSize, true);
@@ -484,16 +485,16 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                 "Clear effectively discarding previous draw call results. Suggest earlier Clear "
                 "followed by masked color or depth/stencil draw calls instead");
 
-            clearWithCommand(&contextVk->getStartedRenderPassCommands().getCommandBuffer(),
-                             scissoredRenderArea, clearColorDrawBuffersMask,
-                             clearDepthWithRenderPassLoadOp, clearStencilWithRenderPassLoadOp,
-                             clearColorValue, clearDepthStencilValue);
+            ANGLE_TRY(clearWithCommand(
+                contextVk, &contextVk->getStartedRenderPassCommands(), scissoredRenderArea,
+                clearColorDrawBuffersMask, clearDepthWithRenderPassLoadOp,
+                clearStencilWithRenderPassLoadOp, clearColorValue, clearDepthStencilValue));
         }
         else
         {
-            clearWithLoadOp(contextVk, clearColorDrawBuffersMask, clearDepthWithRenderPassLoadOp,
-                            clearStencilWithRenderPassLoadOp, clearColorValue,
-                            clearDepthStencilValue);
+            ANGLE_TRY(clearWithLoadOp(
+                contextVk, clearColorDrawBuffersMask, clearDepthWithRenderPassLoadOp,
+                clearStencilWithRenderPassLoadOp, clearColorValue, clearDepthStencilValue));
         }
 
         // Fallback to other methods for whatever isn't cleared here.
@@ -2096,12 +2097,12 @@ VkClearValue FramebufferVk::getCorrectedColorClearValue(size_t colorIndexGL,
     return clearValue;
 }
 
-void FramebufferVk::clearWithLoadOp(ContextVk *contextVk,
-                                    gl::DrawBufferMask clearColorBuffers,
-                                    bool clearDepth,
-                                    bool clearStencil,
-                                    const VkClearColorValue &clearColorValue,
-                                    const VkClearDepthStencilValue &clearDepthStencilValue)
+angle::Result FramebufferVk::clearWithLoadOp(ContextVk *contextVk,
+                                             gl::DrawBufferMask clearColorBuffers,
+                                             bool clearDepth,
+                                             bool clearStencil,
+                                             const VkClearColorValue &clearColorValue,
+                                             const VkClearDepthStencilValue &clearDepthStencilValue)
 {
     // Set the appropriate loadOp and clear values for depth and stencil.
     VkImageAspectFlags dsAspectFlags = 0;
@@ -2138,6 +2139,8 @@ void FramebufferVk::clearWithLoadOp(ContextVk *contextVk,
             VkClearValue clearValue;
             clearValue.depthStencil = clearDepthStencilValue;
             commands.updateRenderPassDepthStencilClear(dsAspectFlags, clearValue);
+            // If we were in depth read only mode, we must change to write mode
+            ANGLE_TRY(updateRenderPassReadOnlyDepthMode(contextVk, &commands));
         }
     }
     else
@@ -2164,15 +2167,18 @@ void FramebufferVk::clearWithLoadOp(ContextVk *contextVk,
             renderTarget->getImageForWrite().stageClear(imageIndex, dsAspectFlags, clearValue);
         }
     }
+    return angle::Result::Continue;
 }
 
-void FramebufferVk::clearWithCommand(vk::CommandBuffer *renderPassCommandBuffer,
-                                     const gl::Rectangle &scissoredRenderArea,
-                                     gl::DrawBufferMask clearColorBuffers,
-                                     bool clearDepth,
-                                     bool clearStencil,
-                                     const VkClearColorValue &clearColorValue,
-                                     const VkClearDepthStencilValue &clearDepthStencilValue)
+angle::Result FramebufferVk::clearWithCommand(
+    ContextVk *contextVk,
+    vk::CommandBufferHelper *renderpassCommands,
+    const gl::Rectangle &scissoredRenderArea,
+    gl::DrawBufferMask clearColorBuffers,
+    bool clearDepth,
+    bool clearStencil,
+    const VkClearColorValue &clearColorValue,
+    const VkClearDepthStencilValue &clearDepthStencilValue)
 {
     gl::DrawBuffersVector<VkClearAttachment> attachments;
     // Go through clearColorBuffers and add them to the list of attachments to clear.
@@ -2191,25 +2197,35 @@ void FramebufferVk::clearWithCommand(vk::CommandBuffer *renderPassCommandBuffer,
     {
         dsAspectFlags |= VK_IMAGE_ASPECT_DEPTH_BIT;
         dsClearValue.depthStencil = clearDepthStencilValue;
+        // We are inserting a depth write command here, so mark it. This will not catch by
+        // setDepthAccess call because clear is not affected by depth test enable.
+        renderpassCommands->onDepthAccess(vk::ResourceAccess::Write);
     }
 
     if (clearStencil)
     {
         dsAspectFlags |= VK_IMAGE_ASPECT_STENCIL_BIT;
         dsClearValue.depthStencil = clearDepthStencilValue;
+        // We are inserting a stencil write command here, so mark it.
+        renderpassCommands->onStencilAccess(vk::ResourceAccess::Write);
     }
 
     if (dsAspectFlags != 0)
     {
         attachments.emplace_back(VkClearAttachment{dsAspectFlags, 0, dsClearValue});
+        // We may have changed access mode, update read only depth mode here. This will not catch by
+        // setDepthAccess call because clear is not affected by depth test enable.
+        ANGLE_TRY(updateRenderPassReadOnlyDepthMode(contextVk, renderpassCommands));
     }
 
-    VkClearRect rect        = {};
-    rect.rect.extent.width  = scissoredRenderArea.width;
-    rect.rect.extent.height = scissoredRenderArea.height;
-    rect.layerCount         = 1;
+    VkClearRect rect                           = {};
+    rect.rect.extent.width                     = scissoredRenderArea.width;
+    rect.rect.extent.height                    = scissoredRenderArea.height;
+    rect.layerCount                            = 1;
+    vk::CommandBuffer *renderPassCommandBuffer = &renderpassCommands->getCommandBuffer();
     renderPassCommandBuffer->clearAttachments(static_cast<uint32_t>(attachments.size()),
                                               attachments.data(), 1, &rect);
+    return angle::Result::Continue;
 }
 
 angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
@@ -2222,6 +2238,7 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
+                                                bool readOnlyDepthMode,
                                                 const gl::Rectangle &renderArea,
                                                 vk::CommandBuffer **commandBufferOut)
 {
@@ -2296,6 +2313,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     RenderTargetVk *depthStencilRenderTarget              = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        // We can only strat the renderpass in read only mode if it is requested to be read only and
+        // we are not doing clear.
+        bool depthStencilReadOnly =
+            readOnlyDepthMode && !mDeferredClears.testDepth() && !mDeferredClears.testStencil();
+        setReadOnlyDepthMode(depthStencilReadOnly);
+
         // depth stencil attachment always immediately follow color attachment
         depthStencilAttachmentIndex = colorIndexVk;
 
@@ -2321,11 +2344,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             depthStoreOp   = VK_ATTACHMENT_STORE_OP_DONT_CARE;
             stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         }
-
-        vk::ImageLayout dsLayout = isReadOnlyDepthMode() ? vk::ImageLayout::DepthStencilReadOnly
-                                                         : vk::ImageLayout::DepthStencilAttachment;
-
-        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex, dsLayout, dsLayout);
 
         if (mDeferredClears.testDepth() || mDeferredClears.testStencil())
         {
@@ -2372,6 +2390,11 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         renderPassAttachmentOps.setOps(depthStencilAttachmentIndex, depthLoadOp, depthStoreOp);
         renderPassAttachmentOps.setStencilOps(depthStencilAttachmentIndex, stencilLoadOp,
                                               stencilStoreOp);
+
+        vk::ImageLayout dsLayout = isReadOnlyDepthMode() ? vk::ImageLayout::DepthStencilReadOnly
+                                                         : vk::ImageLayout::DepthStencilAttachment;
+
+        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex, dsLayout, dsLayout);
     }
 
     ANGLE_TRY(contextVk->beginNewRenderPass(*framebuffer, renderArea, mRenderPassDesc,
@@ -2527,17 +2550,33 @@ void FramebufferVk::setReadOnlyDepthMode(bool readOnlyDepthEnabled)
     }
 }
 
-angle::Result FramebufferVk::restartRenderPassInReadOnlyDepthMode(
-    ContextVk *contextVk,
-    vk::CommandBufferHelper *renderPass)
+angle::Result FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
+                                                               vk::CommandBufferHelper *renderPass)
 {
-    ASSERT(!isReadOnlyDepthMode());
-    setReadOnlyDepthMode(true);
+    bool readOnlyDepth =
+        mDepthReadOnlyFeedbackLoopMode || renderPass->shouldSwitchToDepthReadOnlyMode();
+    if (readOnlyDepth == isReadOnlyDepthMode())
+    {
+        return angle::Result::Continue;
+    }
+
+    if (!readOnlyDepth)
+    {
+        // feedback loop can only handle readonly layout. If we are switching out of read only mode
+        // because of depth write, we always starts new renderpass
+        ASSERT(!mDepthReadOnlyFeedbackLoopMode);
+    }
+
+    setReadOnlyDepthMode(readOnlyDepth);
+
+    // When we switch to read only, we must insert a layout transition.
+    getDepthStencilRenderTarget()->onDepthStencilDraw(contextVk, readOnlyDepth);
 
     vk::Framebuffer *currentFramebuffer = nullptr;
     ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr));
 
-    renderPass->restartRenderPassWithReadOnlyDepth(*currentFramebuffer, mRenderPassDesc);
+    renderPass->restartRenderPassWithReadOnlyDepth(*currentFramebuffer, mRenderPassDesc,
+                                                   readOnlyDepth);
 
     return angle::Result::Continue;
 }
