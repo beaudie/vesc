@@ -152,6 +152,30 @@
       "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c096ad87_103b5abe",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-15T00:18:14Z",
+      "side": 1,
+      "message": "i resolved this in a different way, i made a SharedResourceUsePool class and placed it in ResourceVk.h. I dont need this change any more and i have all retain(...) and add(...) and release*(...) methods neatly inlined. will abandon this and have a single change up for review shortly",
+      "parentUuid": "fd6d7823_6dc87e11",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 1
+      },
+      "revId": "c384da9ee319db4aa7cd95f71fdd492feb7e5759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
