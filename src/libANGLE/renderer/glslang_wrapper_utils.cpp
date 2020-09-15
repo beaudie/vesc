@@ -2180,7 +2180,7 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     };
     glslang::TProgram program;
 
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : linkedShaderStages)
     {
         if (shaderSources[shaderType].empty())
         {
@@ -2215,7 +2215,7 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
         ANGLE_GLSLANG_CHECK(callback, false, GlslangError::InvalidShader);
     }
 
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : linkedShaderStages)
     {
         if (shaderSources[shaderType].empty())
         {
