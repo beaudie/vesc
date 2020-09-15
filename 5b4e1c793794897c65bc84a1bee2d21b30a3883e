@@ -136,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "b1d12d1c_5b482d0c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T19:54:46Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why you\u0027re using DIRTY_BIT_DRAW_BUFFERS. The dirty bit via the surface change should correspond to DIRTY_BIT_*_ATTACHMENT or CONTENTS.",
+      "parentUuid": "6172ff69_b68e73f9",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d9fe27b_c6539400",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 7
