@@ -232,6 +232,30 @@
     },
     {
       "key": {
+        "uuid": "cc652bfb_79160821",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-15T22:47:07Z",
+      "side": 1,
+      "message": "Triggering an \"ASSERT(!previousDeferredClears.test(colorIndexGL));\"\n\nComment says:\n\n    // If we are notified that any attachment is dirty, but we have deferred clears for them, a\n    // flushDeferredClears() call is missing somewhere.  ASSERT this to catch these bugs.",
+      "parentUuid": "0586ef32_d5db8351",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d9fe27b_c6539400",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 7
