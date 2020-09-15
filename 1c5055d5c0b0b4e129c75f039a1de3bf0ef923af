@@ -67,6 +67,42 @@
       "revId": "1c5055d5c0b0b4e129c75f039a1de3bf0ef923af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64ee186d_3e902f10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T17:07:52Z",
+      "side": 1,
+      "message": "For consistency and simplicity I was going for positive-features only. \"Enable\"/\"allow\" vs \"Disable\"/\"disallow\".",
+      "parentUuid": "6be28b63_b24eef66",
+      "revId": "1c5055d5c0b0b4e129c75f039a1de3bf0ef923af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1252e299_d8fb80ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T17:07:52Z",
+      "side": 1,
+      "message": "Hey Alexey. Sorry I didn\u0027t see your earlier reply. I think maybe you left it when the CL was \"WIP\" and that didn\u0027t send an email notification.\n\nThanks for noticing that I missed a bunch of extensions. Added, PTAL.",
+      "parentUuid": "c12b7452_012c0269",
+      "revId": "1c5055d5c0b0b4e129c75f039a1de3bf0ef923af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
