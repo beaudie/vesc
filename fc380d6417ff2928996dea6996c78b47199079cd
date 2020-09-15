@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc08f8df_655e79ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-15T14:43:58Z",
+      "side": 1,
+      "message": "This should probably be enough to support 2D ASTC LDR formats. Other ASTC features are slightly more complicated.\n\nTo support TEXTURE_3D targets with 2D formats on GLES 3.0, the platform must support \"Metal 3\". The corresponding ANGLE extension is called \"textureCompressionSliced3dASTCKHR\".\n\nTo support HDR payloads, the platform must support MTLGPUFamilyApple6 feature set (only A13 for now). Also that would likely require replacing all \"_LDR\" enums with their \"_HDR\" counterparts at runtime as ASTC HDR is fully backwards-compatible with ASTC LDR while OpenGL ES uses the same format enums for both profiles.",
+      "revId": "fc380d6417ff2928996dea6996c78b47199079cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
