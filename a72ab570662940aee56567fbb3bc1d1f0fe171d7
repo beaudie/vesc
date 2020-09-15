@@ -198,6 +198,30 @@
       "revId": "a72ab570662940aee56567fbb3bc1d1f0fe171d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b95b7fe_bffd28c8",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-15T17:33:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "706826b9_01e778d2",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 5
+      },
+      "revId": "a72ab570662940aee56567fbb3bc1d1f0fe171d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
