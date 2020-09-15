@@ -16,6 +16,24 @@
       "revId": "852f61f7529c2238708d78d24dbe8ddacb779bb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0a3c0f0_78faccaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-15T13:45:59Z",
+      "side": 1,
+      "message": "It\u0027s a bug in the new configuration. I\u0027ll fix it. Unfortunately our CQ is broken right now because of https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1128306 but it should go into tomorrow\u0027s roll.",
+      "parentUuid": "b7c2ecbc_2da6e9d1",
+      "revId": "852f61f7529c2238708d78d24dbe8ddacb779bb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
