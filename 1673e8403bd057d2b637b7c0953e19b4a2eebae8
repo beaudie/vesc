@@ -34,6 +34,24 @@
       "revId": "1673e8403bd057d2b637b7c0953e19b4a2eebae8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ccea490_aefa5fce",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-15T11:37:42Z",
+      "side": 1,
+      "message": "BC1-3, ETC, PVRTC caps are already hard-coded in mtl_format_utils.mm (https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/metal/mtl_format_utils.mm#268). They were hard-coded before the caps table was introduced to json file. I also forgot to update them.\n\nYou can remove the hard-coded code from mtl_format_utils.mm and add them to json file, or just leave it, I will update them myself in another CL.",
+      "parentUuid": "d0dc1887_3068db8f",
+      "revId": "1673e8403bd057d2b637b7c0953e19b4a2eebae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
