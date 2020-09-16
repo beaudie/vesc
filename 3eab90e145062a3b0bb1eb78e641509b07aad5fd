@@ -16,6 +16,23 @@
       "revId": "3eab90e145062a3b0bb1eb78e641509b07aad5fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f50d095_6ef13926",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T17:01:36Z",
+      "side": 1,
+      "message": "Will let this pass through CQ. Once you remove the ASSERTs I\u0027ll give it another look.",
+      "revId": "3eab90e145062a3b0bb1eb78e641509b07aad5fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
