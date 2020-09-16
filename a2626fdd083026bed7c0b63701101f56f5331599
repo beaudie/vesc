@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "56830bb0_0a8ebc13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-16T00:35:36Z",
+      "side": 1,
+      "message": "Nice and straightforward.",
+      "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7c1e146_a53f02a4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2267,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-16T00:35:36Z",
+      "side": 1,
+      "message": "I think this is large enough to pull out into a separate variable declaration.   Matching the ternary operator that storeOp uses above should be fine, but I have a (very) slight preference for a full \u0027if\u0027 since there are multiple conditionals being checked.\n\n    VkAttachmentLoadOp loadOp \u003d VK_ATTACHMENT_LOAD_OP_LOAD;\n    if (colorRenderTarget-\u003eisEntirelyTransient() || !colorRenderTarget-\u003ehasDefinedContent())\n    {\n        VkAttachmentLoadOp loadOp \u003d VK_ATTACHMENT_LOAD_OP_DONT_CARE;\n    }",
+      "range": {
+        "startLine": 2265,
+        "startChar": 0,
+        "endLine": 2267,
+        "endChar": 54
+      },
+      "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "671ab486_0031c62e",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 2
