@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1c29715_e5b04704",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-16T21:26:35Z",
+      "side": 1,
+      "message": "Instead of having mDeferredSwapHistoryIndex, why not just set mCurrentSwapHistoryIndex to -1 at line 1351? From the code I am reading, checkForOutOfDateSwapchain() is not really using passed in mDeferredSwapHistoryIndex argument, so you can remove it. Then you look at this again, I think you can also delete mDeferredSwapHistoryIndex. (Pardon me if I missed something here)",
+      "range": {
+        "startLine": 1348,
+        "startChar": 4,
+        "endLine": 1348,
+        "endChar": 80
+      },
+      "revId": "ce4bd26d6792eb352480eb2564417d829e18cb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
