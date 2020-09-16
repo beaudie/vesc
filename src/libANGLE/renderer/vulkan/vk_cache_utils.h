@@ -165,7 +165,12 @@ class alignas(4) RenderPassDesc final
     angle::FormatID operator[](size_t index) const
     {
         ASSERT(index < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1);
-        return static_cast<angle::FormatID>(mAttachmentFormats[index]);
+
+        const uint8_t mask = index == depthStencilAttachmentIndex()
+                                 ? kDepthStencilFormatStorageMask
+                                 : std::numeric_limits<uint8_t>::max();
+
+        return static_cast<angle::FormatID>(mAttachmentFormats[index] & mask);
     }
 
   private:
@@ -213,7 +218,14 @@ class alignas(4) RenderPassDesc final
     //
     // The resolve attachments are packed after the non-resolve attachments.  They use the same
     // formats, so they are not specified in this array.
+    //
+    // The depth/stencil angle::FormatID values are in the range [1, 7], and therefore require only
+    // 3 bits to be stored.  As a result, the upper 5 bits of mAttachmentFormats.back() is free to
+    // use for other purposes.
     FramebufferNonResolveAttachmentArray<uint8_t> mAttachmentFormats;
+
+    // Depth/stencil format is stored in 3 bits.
+    static constexpr uint8_t kDepthStencilFormatStorageMask = 0x7;
 };
 
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs);
