@@ -8475,6 +8475,11 @@ void Context::onGPUSwitch()
     initRendererString();
 }
 
+std::mutex &Context::getDisplayGlobalMutex() const
+{
+    return mDisplay->getDisplayGlobalMutex();
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 
