@@ -16,6 +16,23 @@
       "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79480834_0a15c1b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-16T03:52:51Z",
+      "side": 1,
+      "message": "This improves Manhattan score from 4547 to 5112 on pixel4! One caveat is that somehow my on screen number is much higher than Tobine\u0027s number, and my native GLES score is only 3938. So there is a bit too good to be true here that I need to double check. But none the less it improves onscreen number 12%!",
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
