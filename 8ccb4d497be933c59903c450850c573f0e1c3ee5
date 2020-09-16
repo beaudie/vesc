@@ -145,6 +145,24 @@
     },
     {
       "key": {
+        "uuid": "774804e5_4a1d174c",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T21:13:13Z",
+      "side": 1,
+      "message": "See my notes. We should try to get rid of the special units behaviour and use updateActiveTextures. And deal with issues in that design as they come up.",
+      "parentUuid": "ccce4081_f7e71938",
+      "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86305594_7b5909cb",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
