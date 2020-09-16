@@ -16,6 +16,23 @@
       "revId": "b2dcbf0b511f231eb4c6b45620c9beed5e000d28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89e4ceff_548c6e98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T22:38:48Z",
+      "side": 1,
+      "message": "Unrelated N5X flake. angle_perftests on Android is known to be flaky, though not sure on the specific issue. Going to take the plunge and land this bypassing CQ.",
+      "revId": "b2dcbf0b511f231eb4c6b45620c9beed5e000d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
