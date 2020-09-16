@@ -254,6 +254,7 @@ class Display final : public LabeledObject,
     egl::Error handleGPUSwitch();
 
     std::mutex &getDisplayGlobalMutex() { return mDisplayGlobalMutex; }
+    std::mutex &getProgramCacheMutex() { return mProgramCacheMutex; }
 
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
@@ -325,6 +326,7 @@ class Display final : public LabeledObject,
     std::vector<angle::ScratchBuffer> mZeroFilledBuffers;
 
     std::mutex mDisplayGlobalMutex;
+    std::mutex mProgramCacheMutex;
 };
 
 }  // namespace egl
