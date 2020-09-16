@@ -284,6 +284,24 @@
     },
     {
       "key": {
+        "uuid": "dfdcd681_1ad8166f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3998,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-16T23:54:17Z",
+      "side": 1,
+      "message": "Looking at the Vulkan spec:\n\n\u003e 13.2.1. Descriptor Set Layout\n\u003e A descriptor set layout object is defined by an array of zero or more descriptor bindings. Each individual descriptor binding is specified by a descriptor type, a count (array size) of the number of descriptors in the binding, a set of shader stages that can access the binding, and (if using immutable samplers) an array of sampler descriptors.\n\nFurther down:\n\n\u003e pImmutableSamplers affects initialization of samplers. If descriptorType specifies a VK_DESCRIPTOR_TYPE_SAMPLER or VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER type descriptor, then pImmutableSamplers can be used to initialize a set of immutable samplers. Immutable samplers are permanently bound into the set layout and must not be changed; updating a VK_DESCRIPTOR_TYPE_SAMPLER descriptor with immutable samplers is not allowed and updates to a VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER descriptor with immutable samplers does not modify the samplers (the image views are updated, but the sampler updates are ignored). If pImmutableSamplers is not NULL, then it points to an array of sampler handles that will be copied into the set layout and used for the corresponding binding. Only the sampler handles are copied; the sampler objects must not be destroyed before the final use of the set layout and any descriptor pools and sets created using it. If pImmutableSamplers is NULL, then the sampler slots are dynamic and sampler handles must be bound into descriptor sets using this layout. If descriptorType is not one of these descriptor types, then pImmutableSamplers is ignored.\n\nFinally:\n\n\u003e Immutable Sampler\n\u003e A sampler descriptor provided at descriptor set layout creation time, and that is used for that binding in all descriptor sets allocated from the layout, and cannot be changed.\n\nSo it sounds like immutable samplers affects the descriptor set/layout enough that recreating them (and the pools) is required.\n\nI\u0027m going to keep this how it is for now, since it doesn\u0027t appear to be regressing anything.   As with the rest of the descriptor set code, I\u0027m sure there\u0027s plenty of room for improvement, and we can always revisit this again if/when we see issues.",
+      "parentUuid": "5a05ebf3_9ce736c6",
+      "revId": "6fac7f2454d2759c27f7d5924a12cfe5306e71c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54ff8b8d_f20ecaba",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 18
