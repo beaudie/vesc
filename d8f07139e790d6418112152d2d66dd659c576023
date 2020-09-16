@@ -16,6 +16,24 @@
       "revId": "d8f07139e790d6418112152d2d66dd659c576023",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32d01684_4e0af921",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-16T17:24:33Z",
+      "side": 1,
+      "message": "Without this change, the following error occurred:\n\nANGLE   : ARM, Mali-G77, OpenGL ES 3.2   \nANGLE   : ERR: generateConfigs(476): RGBA(10,10,10,2) not handled\nANGLE   : ERR: generateConfigs(476): RGBA(10,10,10,2) not handled\nANGLE   : ERR: generateConfigs(478):   ! Unreachable reached: generateConfigs(../../third_party/angle/src/libANGLE/renderer/gl/egl/DisplayEGL.cpp:478)\nANGLE   : FATAL: generateConfigs(478):         ! Unreachable reached: generateConfigs(../../third_party/angle/src/libANGLE/renderer/gl/egl/DisplayEGL.cpp:478)",
+      "parentUuid": "8fe2b2d6_5bfe45f4",
+      "revId": "d8f07139e790d6418112152d2d66dd659c576023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
