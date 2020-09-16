@@ -365,7 +365,10 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
             case GL_ALPHA:
                 if (colorbufferFormat != GL_ALPHA8_EXT && colorbufferFormat != GL_RGBA4 &&
                     colorbufferFormat != GL_RGB5_A1 && colorbufferFormat != GL_RGBA8_OES &&
-                    colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      colorbufferFormat == GL_RGBA32F) &&
+                    !(context->getExtensions().textureHalfFloat && colorbufferFormat == GL_RGBA16F))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -376,7 +379,13 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                     colorbufferFormat != GL_RGB565 && colorbufferFormat != GL_RGB8_OES &&
                     colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_BGRA8_EXT &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F ||
+                       colorbufferFormat == GL_RG32F || colorbufferFormat == GL_R32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F ||
+                       colorbufferFormat == GL_RG16F || colorbufferFormat == GL_R16F)))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -389,7 +398,14 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                     colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_R32F &&
                     colorbufferFormat != GL_RG32F && colorbufferFormat != GL_RGB32F &&
                     colorbufferFormat != GL_RGBA32F && colorbufferFormat != GL_BGRA8_EXT &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F ||
+                       colorbufferFormat == GL_RG32F || colorbufferFormat == GL_R32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F ||
+                       colorbufferFormat == GL_RG16F || colorbufferFormat == GL_R16F)))
+
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -401,7 +417,13 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                     colorbufferFormat != GL_RGB5_A1 && colorbufferFormat != GL_RGBA8_OES &&
                     colorbufferFormat != GL_RG32F && colorbufferFormat != GL_RGB32F &&
                     colorbufferFormat != GL_RGBA32F && colorbufferFormat != GL_BGRA8_EXT &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F ||
+                       colorbufferFormat == GL_RG32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F ||
+                       colorbufferFormat == GL_RG16F)))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -412,7 +434,11 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                     colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_RGB32F &&
                     colorbufferFormat != GL_RGBA32F && colorbufferFormat != GL_BGRA8_EXT &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F)))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -422,7 +448,10 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
             case GL_RGBA:
                 if (colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_RGBA32F &&
-                    colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      colorbufferFormat == GL_RGBA32F) &&
+                    !(context->getExtensions().textureHalfFloat && colorbufferFormat == GL_RGBA16F))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -466,7 +495,10 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
             case GL_ALPHA:
                 if (colorbufferFormat != GL_ALPHA8_EXT && colorbufferFormat != GL_RGBA4 &&
                     colorbufferFormat != GL_RGB5_A1 && colorbufferFormat != GL_BGRA8_EXT &&
-                    colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      colorbufferFormat == GL_RGBA32F) &&
+                    !(context->getExtensions().textureHalfFloat && colorbufferFormat == GL_RGBA16F))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -477,7 +509,13 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                     colorbufferFormat != GL_RGB565 && colorbufferFormat != GL_RGB8_OES &&
                     colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_RGBA8_OES &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F ||
+                       colorbufferFormat == GL_RG32F || colorbufferFormat == GL_R32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F ||
+                       colorbufferFormat == GL_RG16F || colorbufferFormat == GL_R16F)))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -488,7 +526,13 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                     colorbufferFormat != GL_RGB565 && colorbufferFormat != GL_RGB8_OES &&
                     colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_RGBA8_OES &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F ||
+                       colorbufferFormat == GL_RG32F || colorbufferFormat == GL_R32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F ||
+                       colorbufferFormat == GL_RG16F || colorbufferFormat == GL_R16F)))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -498,7 +542,13 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                 if (colorbufferFormat != GL_RG8_EXT && colorbufferFormat != GL_RGB565 &&
                     colorbufferFormat != GL_RGB8_OES && colorbufferFormat != GL_RGBA4 &&
                     colorbufferFormat != GL_RGB5_A1 && colorbufferFormat != GL_BGRA8_EXT &&
-                    colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_RGBA8_OES && colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F ||
+                       colorbufferFormat == GL_RG32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F ||
+                       colorbufferFormat == GL_RG16F)))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -508,7 +558,11 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                 if (colorbufferFormat != GL_RGB565 && colorbufferFormat != GL_RGB8_OES &&
                     colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_RGBA8_OES &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX &&
+                    !(context->getExtensions().textureFloatOES &&
+                      (colorbufferFormat == GL_RGBA32F || colorbufferFormat == GL_RGB32F)) &&
+                    !(context->getExtensions().textureHalfFloat &&
+                      (colorbufferFormat == GL_RGBA16F || colorbufferFormat == GL_RGB16F)))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -518,7 +572,10 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
             case GL_RGBA:
                 if (colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_RGBA8_OES &&
-                    colorbufferFormat != GL_BGR5_A1_ANGLEX)
+                    colorbufferFormat != GL_BGR5_A1_ANGLEX && colorbufferFormat != GL_RGBA16F &&
+                    !(context->getExtensions().textureFloatOES &&
+                      colorbufferFormat == GL_RGBA32F) &&
+                    !(context->getExtensions().textureHalfFloat && colorbufferFormat == GL_RGBA16F))
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -1243,8 +1300,15 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                     case GL_UNSIGNED_BYTE:
                         break;
                     case GL_FLOAT:
-                    case GL_HALF_FLOAT_OES:
                         if (!context->getExtensions().textureFloatOES)
+                        {
+                            context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                            return false;
+                        }
+                        break;
+                    case GL_HALF_FLOAT_OES:
+                        if (!context->getExtensions().textureFloatOES &&
+                            !context->getExtensions().textureHalfFloat)
                         {
                             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                             return false;
