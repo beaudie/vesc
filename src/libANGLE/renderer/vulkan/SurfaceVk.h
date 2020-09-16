@@ -193,6 +193,11 @@ class WindowSurfaceVk : public SurfaceVk
     void destroy(const egl::Display *display) override;
 
     egl::Error initialize(const egl::Display *display) override;
+    angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                            GLenum binding,
+                                            const gl::ImageIndex &imageIndex,
+                                            GLsizei samples,
+                                            FramebufferAttachmentRenderTarget **rtOut) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
     egl::Error swap(const gl::Context *context) override;
@@ -267,7 +272,19 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result resizeSwapchainImages(vk::Context *context, uint32_t imageCount);
     void releaseSwapchainImages(ContextVk *contextVk);
     void destroySwapChainImages(DisplayVk *displayVk);
-    VkResult nextSwapchainImage(vk::Context *context);
+    // This method calls vkAcquireNextImageKHR() to acquire the next swapchain image.  It is called
+    // when the swapchain is initially created and when present() finds the swapchain out of date.
+    // Otherwise, it is called later by deferAcquiringOfNextSwapchainImage().
+    VkResult acquireNextSwapchainImage(vk::Context *context);
+    // This method is called when a swapchain image is presented.  It saves state necessary to call
+    // deferAcquiringOfNextSwapchainImage() later.
+    void deferAcquiringOfNextSwapchainImage(const gl::Context *context);
+    // Called later, when the next swapchain image must be acquired, this method will recreate the
+    // swapchain (if needed) and call the acquireNextSwapchainImage() method.
+    angle::Result doDeferredAcquireOfNextSwapchainImage(const gl::Context *context,
+                                                        bool presentOutOfDate);
+    // Returns true if should call doDeferredAcquireOfNextSwapchainImage()
+    bool needToAcquireNextSwapchainImage();
     angle::Result present(ContextVk *contextVk,
                           EGLint *rects,
                           EGLint n_rects,
@@ -323,6 +340,12 @@ class WindowSurfaceVk : public SurfaceVk
     vk::ImageViewHelper mColorImageMSViews;
     angle::ObserverBinding mColorImageMSBinding;
     vk::Framebuffer mFramebufferMS;
+
+    // Record state for deferring the acquire of the next image.  When acquiring the next image is
+    // deferred, the value is set to the then-current value of mCurrentSwapHistoryIndex.  When an
+    // image has been acquired, the value is set to kInvalidDeferredSwapHistoryIndex.
+    uint32_t mDeferredSwapHistoryIndex;
+    static constexpr uint32_t kInvalidDeferredSwapHistoryIndex = 0xffffffff;
 };
 
 }  // namespace rx
