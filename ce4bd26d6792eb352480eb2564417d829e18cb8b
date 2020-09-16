@@ -46,6 +46,53 @@
       "revId": "ce4bd26d6792eb352480eb2564417d829e18cb8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d3a39a8_6c9364d5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T22:51:08Z",
+      "side": 1,
+      "message": "\u003e To be more exact: recreateSwapchain is not using swapHistoryIndex argument ...\n\nThanks Charlie!  I was relying on an out-of-date comment and didn\u0027t see that it wasn\u0027t used.\n\nI\u0027ll remove the unused arguments.\n\nI started to do as you proposed with, mCurrentSwapHistoryIndex.  Then, I realized that I wasn\u0027t sure what value to set it to when we acquire the next image.  Shabi added it to throttle presents from getting too far ahead.  I\u0027m not sure how well that works, but I\u0027d rather not take that on for this CL.\n\nAs a result, I\u0027m going back to a bool to track whether we\u0027re deferred or not.  Is that okay?",
+      "parentUuid": "94cd6b18_f27555d7",
+      "range": {
+        "startLine": 1348,
+        "startChar": 4,
+        "endLine": 1348,
+        "endChar": 80
+      },
+      "revId": "ce4bd26d6792eb352480eb2564417d829e18cb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3375631a_97606989",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T22:51:08Z",
+      "side": 1,
+      "message": "This is the cause of the crashing perftests.  There\u0027s a dirty-object path to this code that\u0027s processed before dirty-bit processing can call ANI.  My next patchset will fix this.",
+      "range": {
+        "startLine": 1694,
+        "startChar": 0,
+        "endLine": 1695,
+        "endChar": 97
+      },
+      "revId": "ce4bd26d6792eb352480eb2564417d829e18cb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
