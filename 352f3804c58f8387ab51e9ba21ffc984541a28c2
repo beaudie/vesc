@@ -51,6 +51,116 @@
       "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "042851af_9de72644",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T13:59:29Z",
+      "side": 1,
+      "message": "It\u0027s a bit different because it forces the acquire in a few places when I only proposed adding it to the getAttachmentRenderTarget. Although honestly I\u0027m not even sure you need it there if getFramebuffer gets called every time. You could try removing the getAttachmentRenderTarget overload and see if it works.",
+      "parentUuid": "e5c66141_b2cf5fac",
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9b42f5c_6c98b471",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T13:59:29Z",
+      "side": 1,
+      "message": "It isn\u0027t OK to ditch errors here. If you want to process the acquire here you\u0027ll need to switch this to return an error.",
+      "range": {
+        "startLine": 1131,
+        "startChar": 9,
+        "endLine": 1131,
+        "endChar": 50
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "063ebc54_b43f2bf4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T13:59:29Z",
+      "side": 1,
+      "message": "ideally we wouldn\u0027t need these overloads with removing the cache variable.",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 247,
+        "endChar": 63
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5214b4_1146787a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T13:59:29Z",
+      "side": 1,
+      "message": "should be in the cpp file please.",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 5
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "164f5093_3ded8d89",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T13:59:29Z",
+      "side": 1,
+      "message": "we definitely don\u0027t want to we caching a context or contextVk pointer. You seem to only need the gl Context to get access to the DisplayVk. You can move this egl::Display pointer from Context to gl::State to make it available via ContextVk. Then try passing the ContextVk around directly. Is there a place it\u0027s hard to access?",
+      "range": {
+        "startLine": 356,
+        "startChar": 4,
+        "endLine": 356,
+        "endChar": 40
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
