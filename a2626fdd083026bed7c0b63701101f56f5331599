@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "79073c1a_06ea0c14",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2267,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T04:05:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7c1e146_a53f02a4",
+      "range": {
+        "startLine": 2265,
+        "startChar": 0,
+        "endLine": 2267,
+        "endChar": 54
+      },
+      "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "671ab486_0031c62e",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 2
@@ -110,6 +134,30 @@
       "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45bd1d11_ecf1b878",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T04:05:21Z",
+      "side": 1,
+      "message": "Default is probably the most accurate. Persistent is not entirely correct when RT is invalidated for example.\n\nDone.",
+      "parentUuid": "27b3439b_d5af4464",
+      "range": {
+        "startLine": 33,
+        "startChar": 11,
+        "endLine": 33,
+        "endChar": 29
+      },
+      "revId": "a2626fdd083026bed7c0b63701101f56f5331599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
