@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "26621790_71841eb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T16:58:34Z",
+      "side": 1,
+      "message": "\u003e It\u0027s a bit different because it forces the acquire in a few places when I only proposed adding it to the getAttachmentRenderTarget.\n\nTrue.  There are cases that weren\u0027t covered (e.g. neither getAttachmentRenderTarget nor getFramebuffer are called).  I\u0027ll list example test names for paths that are needed.\n\n\u003e Although honestly I\u0027m not even sure you need it there if getFramebuffer gets called every time. You could try removing the getAttachmentRenderTarget overload and see if it works.\n\nYes, tried that.  getFramebuffer() is too late with the dirty-bit approach.  ANI updates the RenderTargetVk with the correct ImageHelper and ImageViewHelper.  RenderTargetVk methods are accessed before getFramebuffer().  I\u0027ve removed the ASSERTs at this point, or it would be easy to show.",
+      "parentUuid": "042851af_9de72644",
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9b42f5c_6c98b471",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -83,6 +101,30 @@
       "writtenOn": "2020-09-16T13:59:29Z",
       "side": 1,
       "message": "It isn\u0027t OK to ditch errors here. If you want to process the acquire here you\u0027ll need to switch this to return an error.",
+      "range": {
+        "startLine": 1131,
+        "startChar": 9,
+        "endLine": 1131,
+        "endChar": 50
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "439e16ca_3e7e6ea2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T16:58:34Z",
+      "side": 1,
+      "message": "This function is only called by an initializer in one the Framebuffer constructors (front-end object).  I\u0027m happy to be shown how to do this differently.  Is it possible to redo that constructor in order to handle an error?",
+      "parentUuid": "a9b42f5c_6c98b471",
       "range": {
         "startLine": 1131,
         "startChar": 9,
@@ -118,6 +160,30 @@
     },
     {
       "key": {
+        "uuid": "fe936456_1558da5c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T16:58:34Z",
+      "side": 1,
+      "message": "My new patchset will attempt to remove this call and the cached context (with ASSERT\u0027s in case there\u0027s a surprise)",
+      "parentUuid": "6f0a4064_301753bc",
+      "range": {
+        "startLine": 1609,
+        "startChar": 4,
+        "endLine": 1612,
+        "endChar": 5
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "063ebc54_b43f2bf4",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 11
@@ -141,6 +207,30 @@
     },
     {
       "key": {
+        "uuid": "fa562663_02ac6a30",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T16:58:34Z",
+      "side": 1,
+      "message": "I think the dirty-bit approach allows me to eliminate the first one (will try with ASSERTs to make sure there are no surprises).",
+      "parentUuid": "063ebc54_b43f2bf4",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 247,
+        "endChar": 63
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5214b4_1146787a",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 11
@@ -161,6 +251,30 @@
       "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdec2a7f_4c0f8a59",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T16:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5214b4_1146787a",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 5
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -207,6 +321,30 @@
       "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c4abce9_73668ade",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T16:58:34Z",
+      "side": 1,
+      "message": "WindowSurfaceVk::getCurrentFramebuffer() is the only place, and I think the dirty-bit processing allows me to delete the call (will test with an ASSERT to ensure that\u0027s correct).",
+      "parentUuid": "164f5093_3ded8d89",
+      "range": {
+        "startLine": 356,
+        "startChar": 4,
+        "endLine": 356,
+        "endChar": 40
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
