@@ -231,6 +231,30 @@
     },
     {
       "key": {
+        "uuid": "d9ebc2ce_797d1b5e",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-16T19:01:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "64bd29c6_3686c7c4",
+      "range": {
+        "startLine": 1141,
+        "startChar": 0,
+        "endLine": 1165,
+        "endChar": 0
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9be9b63_0e6abede",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 1
@@ -417,6 +441,30 @@
       "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83288cb1_6bc7242b",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-16T19:01:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8484e647_ca76a851",
+      "range": {
+        "startLine": 4551,
+        "startChar": 0,
+        "endLine": 4554,
+        "endChar": 17
+      },
+      "revId": "5f51aff464e4882771da476883d1f7b8059ee40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
