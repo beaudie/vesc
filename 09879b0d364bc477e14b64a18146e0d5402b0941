@@ -39,6 +39,52 @@
       "revId": "09879b0d364bc477e14b64a18146e0d5402b0941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "035f2724_9239525c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T20:02:15Z",
+      "side": 1,
+      "message": "the one outstanding issue to fix. Might have to think about how to fix this. Can you process this outside the call that ends up calling this (possibly virtual) function? And ASSERT here we do not need to \"do\" the deferred acquire.",
+      "range": {
+        "startLine": 1139,
+        "startChar": 0,
+        "endLine": 1145,
+        "endChar": 10
+      },
+      "revId": "09879b0d364bc477e14b64a18146e0d5402b0941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c73000f3_e94039d9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T20:02:15Z",
+      "side": 1,
+      "message": "nit: can be const?",
+      "range": {
+        "startLine": 287,
+        "startChar": 9,
+        "endLine": 287,
+        "endChar": 40
+      },
+      "revId": "09879b0d364bc477e14b64a18146e0d5402b0941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
