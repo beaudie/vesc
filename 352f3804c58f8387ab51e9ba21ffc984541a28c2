@@ -95,6 +95,29 @@
     },
     {
       "key": {
+        "uuid": "6f0a4064_301753bc",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-16T16:47:49Z",
+      "side": 1,
+      "message": "Does it matter if mDeferredContext (which is the context that calls swap) is different from the context that calls WindowSurfaceVk::getCurrentFramebuffer (where it is been used)? From what I read, it only needs context to get some global object (display/renderer), and send error to if failed. But arguably the error should send to the context that who triggered the call at that time. So the easiest is just pass this contextVk into acquireNextImage so that you can get rid of mDeferedContext.",
+      "range": {
+        "startLine": 1609,
+        "startChar": 4,
+        "endLine": 1612,
+        "endChar": 5
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "063ebc54_b43f2bf4",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 11
@@ -134,6 +157,29 @@
         "startChar": 0,
         "endLine": 259,
         "endChar": 5
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03ca1757_e69f3936",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-16T16:47:49Z",
+      "side": 1,
+      "message": "Instead of adding a new boolean to track, could you just use mCurrentSwapchainImageIndex and set it to kSwapCHainImageIndexInvalid (defined to -1) to indicate that current swap chain image is is invalid and needs to be acquired? That way you have one less variable to maintain and code is easier to read as well.",
+      "range": {
+        "startLine": 353,
+        "startChar": 9,
+        "endLine": 353,
+        "endChar": 25
       },
       "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
