@@ -184,6 +184,54 @@
     },
     {
       "key": {
+        "uuid": "3691ee9c_a8990ae7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T19:37:01Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "fe936456_1558da5c",
+      "range": {
+        "startLine": 1609,
+        "startChar": 4,
+        "endLine": 1612,
+        "endChar": 5
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1244a9f_50dddd89",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T19:37:01Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "fe936456_1558da5c",
+      "range": {
+        "startLine": 1609,
+        "startChar": 4,
+        "endLine": 1612,
+        "endChar": 5
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "063ebc54_b43f2bf4",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 11
@@ -298,6 +346,30 @@
       "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccb43c5e_c1f2cf9a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T19:37:01Z",
+      "side": 1,
+      "message": "Thanks.  I used a different member to do the same thing as you suggest.  Only one value being tracked now.",
+      "parentUuid": "03ca1757_e69f3936",
+      "range": {
+        "startLine": 353,
+        "startChar": 9,
+        "endLine": 353,
+        "endChar": 25
+      },
+      "revId": "352f3804c58f8387ab51e9ba21ffc984541a28c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

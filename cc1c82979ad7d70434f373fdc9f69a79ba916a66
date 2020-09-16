@@ -16,6 +16,24 @@
       "revId": "cc1c82979ad7d70434f373fdc9f69a79ba916a66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60f64f16_c3273d16",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T19:37:01Z",
+      "side": 1,
+      "message": "Will re-add this comment to a newer patchset, so it\u0027s not lost",
+      "parentUuid": "eba84bdf_746a69ad",
+      "revId": "cc1c82979ad7d70434f373fdc9f69a79ba916a66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

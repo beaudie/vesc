@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "dd18dc5a_b0ceed3b",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1888,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T19:37:01Z",
+      "side": 1,
+      "message": "Obsolete",
+      "parentUuid": "ee9fd98b_09e644d6",
+      "range": {
+        "startLine": 1887,
+        "startChar": 12,
+        "endLine": 1888,
+        "endChar": 53
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02f33a79_35fc4a62",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 7
@@ -62,6 +86,30 @@
       "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71382845_9362abeb",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T19:37:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02f33a79_35fc4a62",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -300,6 +348,30 @@
       "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeff0eb1_97f1e09c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-16T19:37:01Z",
+      "side": 1,
+      "message": "Obsolete",
+      "parentUuid": "6d9fe27b_c6539400",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 0
+      },
+      "revId": "5b4e1c793794897c65bc84a1bee2d21b30a3883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
