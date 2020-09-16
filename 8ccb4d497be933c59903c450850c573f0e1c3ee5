@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "ccce4081_f7e71938",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-16T21:10:55Z",
+      "side": 1,
+      "message": "One of the reasons we pursued this path was because the mutable-bit requirement we need is vulkan-specific, and we didn\u0027t want to add frontend code that\u0027s only applicable to one backend.\n\nIf we\u0027re ok with moving more of this logic into the frontend we could look into an alternative solution.\n\nComplicating this matter (and the reason for this existing in the first place) is the fact that samplers can trigger this state as well as textures.\nA change in texture state can cause a change in the samplers that access that texture, but a change in the sampler state can (via srgb_decode) force a change in the texture as well. There is a circular dependency here, and the function of the double-syncstate is to break that cycle by resolving different parts of the texture state at different times. (resolve texture state -\u003e resolve sampler state, some of which depends on that -\u003e resolve texture mutable bit state, which depends on the previous)\n\nNote that the dependency is only circular so long as we try to resolve all state for a particular dirty object at once.",
+      "parentUuid": "6c024ebd_49c3d302",
+      "revId": "8ccb4d497be933c59903c450850c573f0e1c3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86305594_7b5909cb",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
