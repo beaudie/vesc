@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbc72959_5a72677b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-16T23:44:33Z",
+      "side": 1,
+      "message": "Nice work on enabling the new testing.",
+      "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82f0cdcf_89f96840",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-16T23:44:33Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 81,
+        "startChar": 35,
+        "endLine": 81,
+        "endChar": 40
+      },
+      "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b69ea112_b8b52621",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-16T23:44:33Z",
+      "side": 1,
+      "message": "It looks like getSamples() does some extra checking to know what to query for the sample count:\n\n    inline GLsizei FramebufferAttachment::getSamples() const\n    {\n        return (mRenderToTextureSamples !\u003d kDefaultRenderToTextureSamples) ? getRenderToTextureSamples()\n                                                                           : getResourceSamples();\n    }\n\nLooking at the prototypes:\n\n    GLsizei getSamples() const;\n    // This will always return the actual sample count of the attachment even if\n    // render_to_texture extension is active on this FBattachment object.\n    GLsizei getResourceSamples() const;\n\nWhat\u0027s difference between what getSamples() and getResourceSamples() return here and why does only the validation code need to make this change?",
+      "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
