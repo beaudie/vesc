@@ -1337,8 +1337,8 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
         vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
         vk::ImageHelper &dstImage = drawRenderTarget->getImageForWrite();
-        vk::LevelIndex levelVK    = dstImage.toVKLevel(drawRenderTarget->getLevelIndex());
-        resolveRegion.dstSubresource.mipLevel       = levelVK.get();
+        vk::LevelIndex levelVk    = dstImage.toVKLevel(drawRenderTarget->getLevelIndex());
+        resolveRegion.dstSubresource.mipLevel       = levelVk.get();
         resolveRegion.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
 
         srcImage->resolve(&dstImage, resolveRegion, &commandBuffer);
@@ -1367,7 +1367,7 @@ angle::Result FramebufferVk::copyResolveToMultisampedAttachment(ContextVk *conte
     // There's no choice but to use a draw-based path to perform this copy.
 
     gl::Extents extents    = colorRenderTarget->getExtents();
-    vk::LevelIndex levelVK = src->toVKLevel(colorRenderTarget->getLevelIndex());
+    vk::LevelIndex levelVk = src->toVKLevel(colorRenderTarget->getLevelIndex());
     uint32_t layer         = colorRenderTarget->getLayerIndex();
 
     UtilsVk::CopyImageParameters params;
@@ -1377,7 +1377,7 @@ angle::Result FramebufferVk::copyResolveToMultisampedAttachment(ContextVk *conte
     params.srcExtents[1]       = extents.height;
     params.destOffset[0]       = 0;
     params.destOffset[1]       = 0;
-    params.srcMip              = levelVK.get();
+    params.srcMip              = levelVk.get();
     params.srcLayer            = layer;
     params.srcHeight           = extents.height;
     params.srcPremultiplyAlpha = false;
