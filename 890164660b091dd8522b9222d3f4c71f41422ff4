@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ec1df56_b359031f",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T17:58:24Z",
+      "side": 1,
+      "message": "this is a reasonable use of auto.",
+      "range": {
+        "startLine": 422,
+        "startChar": 12,
+        "endLine": 422,
+        "endChar": 16
+      },
+      "revId": "890164660b091dd8522b9222d3f4c71f41422ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf939537_d05b008a",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T17:58:24Z",
+      "side": 1,
+      "message": "nit: avoid auto in these cases. prefer using a readable type\n\nhttps://google.github.io/styleguide/cppguide.html#Type_deduction\n\n\"use type deduction only to make the code clearer or safer, and do not use it merely to avoid the inconvenience of writing an explicit type. When judging whether the code is clearer, keep in mind that your readers are not necessarily on your team, or familiar with your project, so types that you and your reviewer experience as unnecessary clutter will very often provide useful information to others.\"",
+      "range": {
+        "startLine": 483,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 12
+      },
+      "revId": "890164660b091dd8522b9222d3f4c71f41422ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
