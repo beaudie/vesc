@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "fa9d5e2f_4623cdab",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T03:53:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3fa7bed9_be7178f4",
+      "range": {
+        "startLine": 2226,
+        "startChar": 43,
+        "endLine": 2226,
+        "endChar": 63
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef3ca096_f5a6477d",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 16
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "810627ac_c348f45f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2239,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T03:53:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ef3ca096_f5a6477d",
+      "range": {
+        "startLine": 2239,
+        "startChar": 43,
+        "endLine": 2239,
+        "endChar": 63
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc50067d_ee3bcdd5",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 16
@@ -79,6 +127,24 @@
       "revId": "40173da427149dba7fed6bafda565554811726e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c113824_e679b745",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T03:53:18Z",
+      "side": 1,
+      "message": "GlslangGetShaderSpirvCode() gets a bunch of extra parameters that don\u0027t apply here. The rest are vectorized which this doesn\u0027t need. I refactored the bulk of the code so this would be rather trivial.\n\nI\u0027m not too concerned with maintenance since we are going to remove dependency to glslang anyway.",
+      "parentUuid": "fc50067d_ee3bcdd5",
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "9e9fb296_fb823085",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T03:53:18Z",
+      "side": 1,
+      "message": "Answered in other comment. It felt ugly creating bunches of maps and passing them around.",
+      "parentUuid": "b07e1cd1_f6795403",
+      "range": {
+        "startLine": 395,
+        "startChar": 0,
+        "endLine": 396,
+        "endChar": 63
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96c06567_ee0288e2",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 16
@@ -125,6 +215,30 @@
       "revId": "40173da427149dba7fed6bafda565554811726e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d4bff9f_36b36844",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T03:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96c06567_ee0288e2",
+      "range": {
+        "startLine": 597,
+        "startChar": 37,
+        "endLine": 597,
+        "endChar": 38
+      },
+      "revId": "40173da427149dba7fed6bafda565554811726e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

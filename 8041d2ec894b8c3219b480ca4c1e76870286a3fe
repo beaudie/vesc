@@ -332,6 +332,24 @@
     },
     {
       "key": {
+        "uuid": "9e103aa4_4df661e2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T03:53:18Z",
+      "side": 1,
+      "message": "There was an inconsistency with colorIndexVk and levelIndexVK (both of which I introduced myself, SMH). *level*VK has more instances, which is why I changed colorIndexVk. I actually prefer Vk and VK was more easily greppable, so changed VK to Vk in split CL: https://chromium-review.googlesource.com/c/angle/angle/+/2413155",
+      "parentUuid": "026e1ad7_588a5d41",
+      "revId": "8041d2ec894b8c3219b480ca4c1e76870286a3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e6e5d4c_f427d88d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
