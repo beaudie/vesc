@@ -22,6 +22,30 @@
       "revId": "ce4bd26d6792eb352480eb2564417d829e18cb8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94cd6b18_f27555d7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-16T21:30:22Z",
+      "side": 1,
+      "message": "To be more exact: recreateSwapchain is not using swapHistoryIndex argument. checkForOutOfDateSwapchain is using swapHistoryIndex only to pass it to recreateSwapchain. So both of them can remove this argument. It kind of make sense too, that create a swap chain has nothing to do with which index you are currently using.",
+      "parentUuid": "d1c29715_e5b04704",
+      "range": {
+        "startLine": 1348,
+        "startChar": 4,
+        "endLine": 1348,
+        "endChar": 80
+      },
+      "revId": "ce4bd26d6792eb352480eb2564417d829e18cb8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
