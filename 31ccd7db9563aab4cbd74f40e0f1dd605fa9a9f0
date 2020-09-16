@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "35fda6ce_c967a6ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T20:29:35Z",
+      "side": 1,
+      "message": "Hopefully these are the last bits I need from this function. Actually I\u0027m gonna use 2 or 3 bits probably, so still a few left after that.\n\nWe could probably also put the compressed formats last and pack renderable formats to 7 bits, if we want another 8 bits for something ;)",
+      "parentUuid": "d78a5d61_78fa112b",
+      "revId": "31ccd7db9563aab4cbd74f40e0f1dd605fa9a9f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2262e27e_d66276e1",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "31ccd7db9563aab4cbd74f40e0f1dd605fa9a9f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cbcc0bb_c59eabe1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-16T20:29:35Z",
+      "side": 1,
+      "message": "You got me curious.\n\nI found that the following are similar (different assembly, no branches, same binary size):\n\n        const uint8_t mask \u003d index \u003d\u003d depthStencilAttachmentIndex()\n                                 ? kDepthStencilFormatStorageMask\n                                 : std::numeric_limits\u003cuint8_t\u003e::max();\n\n        return static_cast\u003cangle::FormatID\u003e(mAttachmentFormats[index] \u0026 mask);\n\nvs\n\n        uint8_t format \u003d mAttachmentFormats[index];\n        if (index \u003d\u003d depthStencilAttachmentIndex())\n        {\n            format \u0026\u003d kDepthStencilFormatStorageMask;\n        }\n        return static_cast\u003cangle::FormatID\u003e(format);\n\nHowever, the following one is magically much better. Somehow it looks like the optimizer is being smarter here and understands which branch is taken in the color loop and the depth/stencil if, so the branch is actually free:\n\n        if (index \u003c depthStencilAttachmentIndex())\n        {\n            return static_cast\u003cangle::FormatID\u003e(mAttachmentFormats[index]);\n        }\n        else\n        {\n            return static_cast\u003cangle::FormatID\u003e(mAttachmentFormats[index] \u0026 kDepthStencilFormatStorageMask);\n        }\n\nIn the color loop for example, I don\u0027t see 0x7 (kDepthStencilFormatStorageMask) at all! The getRenderPassWithOps() function is 32 bytes smaller too because of this.\n\nOn the other hand, there\u0027s some code duplication which is not nice.\n\n---\n\nEdit: I tried this (changed \u003d\u003d to \u003e\u003d):\n\n        uint8_t format \u003d mAttachmentFormats[index];\n        if (index \u003e\u003d depthStencilAttachmentIndex())\n        {\n            format \u0026\u003d kDepthStencilFormatStorageMask;\n        }\n        return static_cast\u003cangle::FormatID\u003e(format);\n\nAnd that compiles similarly to the `if/else` case. Changed to this one!",
+      "parentUuid": "2262e27e_d66276e1",
+      "range": {
+        "startLine": 169,
+        "startChar": 8,
+        "endLine": 173,
+        "endChar": 78
+      },
+      "revId": "31ccd7db9563aab4cbd74f40e0f1dd605fa9a9f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
