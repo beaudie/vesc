@@ -341,12 +341,17 @@ size_t Debug::getGroupStackDepth() const
 void Debug::insertPerfWarning(GLenum severity, const char *message, uint32_t *repeatCount) const
 {
     constexpr uint32_t kMaxRepeat = 4;
-    if (*repeatCount >= kMaxRepeat)
     {
-        return;
+        std::lock_guard<std::mutex> lock(GetDebugMutex());
+
+        if (*repeatCount >= kMaxRepeat)
+        {
+            return;
+        }
+
+        ++*repeatCount;
     }
 
-    ++*repeatCount;
     std::string msg = message;
     if (*repeatCount == kMaxRepeat)
     {
