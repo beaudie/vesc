@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d78a5d61_78fa112b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T14:03:22Z",
+      "side": 1,
+      "message": "We\u0027re getting pretty serious about this packing here. LGTM, although we might at some point have to expand the size of this guy.",
+      "revId": "31ccd7db9563aab4cbd74f40e0f1dd605fa9a9f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2262e27e_d66276e1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-16T14:03:22Z",
+      "side": 1,
+      "message": "nit: suggest using an \u0027if\u0027 here, it will be more optimal.",
+      "range": {
+        "startLine": 169,
+        "startChar": 8,
+        "endLine": 173,
+        "endChar": 78
+      },
+      "revId": "31ccd7db9563aab4cbd74f40e0f1dd605fa9a9f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
