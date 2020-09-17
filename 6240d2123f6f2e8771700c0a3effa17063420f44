@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "98e9bc9d_7da65711",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-17T02:42:14Z",
+      "side": 1,
+      "message": "I have almost all features of GLE$ 3.0 already implemented, just waiting to be merged and adapted to latest ANGLE changes. Except flat shading\u0027s provoking vertex. I was going to do a hack (slow-path actually), maybe Metal dev could find a best way to deal with this flat shading issue (Metal uses first provoking vertex convention). Perhaps they could help improve the existing code also, given my limited personal time, some of the code might not be optimal. Here are things left for GLES 3.0:\n- primitive restart (esp for triangle fan and line loop emulation).\n- integer textures.\n- shadow samplers (compare mode and so on).\n- texture array (code is already there actually).\n- texture swizzle.\n- fence sync.\n- flat shading\u0027s provoking vertex *\nExcept the last one, I was planning to push my own implementations to ANGLE. But Apple dev team could try to tackle these features on their own also, but perhaps they could give us a plan so that I could avoid the conflicts.\n\nCurrently only pre-iPhone 11 has 31 total buffers limit (including those in AB). iPhone 10 and above have at least 96 buffers, macOS has at least 64 buffers.\nIf we only use vertex attributes and UBO + XFB then the total buffers needed is at least 16 + 12 + 4 \u003d 32 \u003e 31 limit.\nWe can disable ES 3.0 on pre-iphone 10 or reduce UBO slots to below 12 (not conforming to GLES 3.0 spec min limit) or Metal dev team could help improve the buffers allocation currently on metal back-end (for example, I dedicated one slot for default attribute, if all attributes are enabled, then this slot is wasted).\nXFB buffers usage could be further reduced to 1 if we just write all vertex outputs to a buffer in 1st pass then in 2nd pass, copy XFB attributes from this buffer to XFB buffers via compute shader. Though this is slower approach and it could be done in following up CL after the XFB CL.",
+      "parentUuid": "8d837d04_05fee1cf",
+      "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d121c5a_dc9fe292",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 2
