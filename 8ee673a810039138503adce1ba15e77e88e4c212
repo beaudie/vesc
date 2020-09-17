@@ -16,6 +16,46 @@
       "revId": "8ee673a810039138503adce1ba15e77e88e4c212",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "195b02a0_83233d25",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:56:43Z",
+      "side": 1,
+      "message": "Maybe better have a separate getMemoryProgramCacheMutex() (mutex still in display). There is no reason why this code has to contend with the code guarding gActiveCompilers for example.",
+      "range": {
+        "startLine": 1661,
+        "startChar": 51,
+        "endLine": 1661,
+        "endChar": 72
+      },
+      "revId": "8ee673a810039138503adce1ba15e77e88e4c212",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb329446_9d0478fa",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1668,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:56:43Z",
+      "side": 1,
+      "message": "Shouldn\u0027t cache-\u003egetProgram (in Program::linkImpl) also be locked by the same lock?",
+      "revId": "8ee673a810039138503adce1ba15e77e88e4c212",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
