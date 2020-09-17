@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "26c22b37_ec17bf06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T23:51:59Z",
+      "side": 1,
+      "message": "OK, nevermind the atomics thing for now.\n\nThis is the point in the code which stands out as not matching the contract of this function. Can you redesign this to:\n\n- *not* store the descriptor set layout handle in the pool (unless it\u0027s strictly for an ASSERT) \n- split off pool init from layout init. They\u0027re just too very separate things and the pool init shouldn\u0027t be a lazy check, it should be in very specific situations (immutable sampler stuff and program init only, right?)\n- add a valid() command to determine if a pool needs init?",
+      "parentUuid": "14c8ad9d_445271c3",
+      "range": {
+        "startLine": 2380,
+        "startChar": 0,
+        "endLine": 2383,
+        "endChar": 9
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c808193_9782a597",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 5
