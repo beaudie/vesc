@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6caac08a_d3d94d8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T22:11:50Z",
+      "side": 1,
+      "message": "Please re-review. I was totally wrong that renderbuffers shouldn\u0027t resolve. Only depth/stencil textures shouldn\u0027t.\n\nWhile working on tests, I also discovered that clear of MSRTT depth/stencil textures was broken, and this change fixes that too (kind of tied with the transience cleanup, so I didn\u0027t split them)",
+      "revId": "3d505c711b579bf4abd1c9a531f4ab6a6cd46345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
