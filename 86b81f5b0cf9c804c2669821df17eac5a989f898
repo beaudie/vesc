@@ -116,6 +116,24 @@
       "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bcfc41a_ad7c7203",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-17T15:40:04Z",
+      "side": 1,
+      "message": "Sounds good.   Thanks for the explanation.",
+      "parentUuid": "f1384d75_d02ee1eb",
+      "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
