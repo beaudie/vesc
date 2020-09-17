@@ -16,6 +16,23 @@
       "revId": "bf275be98e98666743bb95090fed0b98210eac76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "509ed8a1_a076c2c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-17T11:24:48Z",
+      "side": 1,
+      "message": "This cannot be tested for now since there is no iOS bots as well as test cases anw.",
+      "revId": "bf275be98e98666743bb95090fed0b98210eac76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
