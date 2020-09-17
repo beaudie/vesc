@@ -31,7 +31,6 @@ class PersistentCommandPool final
     angle::Result init(vk::Context *context, uint32_t queueFamilyIndex);
 
     angle::Result allocate(vk::Context *context, vk::PrimaryCommandBuffer *commandBufferOut);
-
     angle::Result collect(vk::Context *context, vk::PrimaryCommandBuffer &&buffer);
 
     bool valid() const { return mCommandPool.valid(); }

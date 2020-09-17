@@ -1783,6 +1783,8 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
                                      vk::ResourceUseList *resourceList,
                                      vk::PrimaryCommandBuffer &&commandBuffer)
 {
+    ASSERT(!getRenderer()->getFeatures().enableCommandProcessingThread.enabled);
+
     if (vk::CommandBufferHelper::kEnableCommandStreamDiagnostics)
     {
         dumpCommandStreamDiagnostics();
@@ -4322,8 +4324,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     mDefaultUniformStorage.releaseInFlightBuffersToResourceUseList(this);
     mStagingBuffer.releaseInFlightBuffersToResourceUseList(this);
 
-    // TODO: Verify that waitForSwapchainImageIfNecessary makes sense both w/ & w/o threading. I
-    // believe they do, but want confirmation.
+    // TODO: https://issuetracker.google.com/issues/170329600 - Verify that
+    // waitForSwapchainImageIfNecessary makes sense both w/ & w/o threading. I believe they do, but
+    // want confirmation.
     waitForSwapchainImageIfNecessary();
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
@@ -4448,13 +4451,8 @@ bool ContextVk::isSerialInUse(Serial serial) const
 
 angle::Result ContextVk::checkCompletedCommands()
 {
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
-    {
-        vk::CommandProcessorTask checkCompletedCommands;
-        checkCompletedCommands.initTask(vk::CustomTask::CheckCompletedCommands);
-        commandProcessorSyncErrorsAndQueueCommand(&checkCompletedCommands);
-        return angle::Result::Continue;
-    }
+    ASSERT(!mRenderer->getFeatures().enableCommandProcessingThread.enabled);
+
     return mCommandQueue.checkCompletedCommands(this);
 }
 
