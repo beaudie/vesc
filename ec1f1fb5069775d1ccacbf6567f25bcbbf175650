@@ -161,6 +161,24 @@
       "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ad49db6_13071bcd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-17T22:21:49Z",
+      "side": 1,
+      "message": "\u003e Are we confident we\u0027re doing everything those comments describe correctly ...?\n\nGood question.  I\u0027ll look at this (watching code on Android) when I get a chance.  The Android framework team has been doing development (for years) on Nexus/Pixel device (i.e. Qualcomm).  From Sunny\u0027s email:\n\n\u003e In our Vulkan driver, vkDestroyImage (android native buffer) destroys the memory immediately which might cause the running GPU to generate a memory access issue.\n\nI suspect there\u0027s a difference in how the 2 Vulkan drivers handle vkDestroyImage, and that\u0027s at the heart of the problem.",
+      "parentUuid": "b6145026_54abf9de",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
