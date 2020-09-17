@@ -512,7 +512,10 @@ void RendererVk::onDestroy()
 
     mOneOffCommandPool.destroy(mDevice);
 
-    mFenceRecycler.destroy(mDevice);
+    {
+        std::lock_guard<decltype(mFenceMutex)> lock(mFenceMutex);
+        mFenceRecycler.destroy(mDevice);
+    }
 
     mPipelineLayoutCache.destroy(mDevice);
     mDescriptorSetLayoutCache.destroy(mDevice);
@@ -2197,6 +2200,7 @@ VkResult RendererVk::queuePresent(egl::ContextPriority priority,
 angle::Result RendererVk::newSharedFence(vk::Context *context,
                                          vk::Shared<vk::Fence> *sharedFenceOut)
 {
+    std::lock_guard<decltype(mFenceMutex)> lock(mFenceMutex);
     vk::Fence fence;
     if (mFenceRecycler.empty())
     {
