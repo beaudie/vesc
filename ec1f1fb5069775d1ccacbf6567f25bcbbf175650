@@ -90,6 +90,23 @@
       "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9947a70f_90f782c2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-17T21:19:05Z",
+      "side": 1,
+      "message": "Hmm.  I think the problem with the test failures on Android is that you\u0027re trying to create a new swapchain for a VkSurfaceKHR that already has a swapchain.  vkCreateSwapchainKHR() is probably returning VK_ERROR_NATIVE_WINDOW_IN_USE_KHR.  See: https://android.googlesource.com/platform/frameworks/native/+/master/vulkan/libvulkan/swapchain.cpp#1067",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
