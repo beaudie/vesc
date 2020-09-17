@@ -50,6 +50,24 @@
       "revId": "abb7982ed9324d94995354f74cabd3e39cfddd79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f99214aa_c48f79c1",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T14:01:27Z",
+      "side": 1,
+      "message": "Currently we don\u0027t initialize the compiler for contexts that don\u0027t compile shaders. There\u0027s some small risk that there\u0027s a use case for creating the compiler lazily out there somewhere. If we initialize the compiler at \"compile\" time, there\u0027s no way to avoid a mutex. If we want to change where the compiler is initialized, can we do that in a separate CL and just quickly land these SAN fixes?",
+      "parentUuid": "9031dab6_f8e12e94",
+      "revId": "abb7982ed9324d94995354f74cabd3e39cfddd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
