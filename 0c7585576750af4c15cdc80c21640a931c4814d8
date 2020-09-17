@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4cb4caa8_238ab18d",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 18
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-17T15:55:49Z",
+      "side": 1,
+      "message": "Do you mean we should move this to before the switch case? Actually there is one condition that this fallthrough won\u0027t happen, when (dstAngleFormat.id !\u003d readAngleFormat.id)",
+      "parentUuid": "f6ee4f56_7d374589",
+      "range": {
+        "startLine": 1188,
+        "startChar": 16,
+        "endLine": 1188,
+        "endChar": 55
+      },
+      "revId": "0c7585576750af4c15cdc80c21640a931c4814d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "165ae28d_478faee0",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 18
@@ -36,6 +60,30 @@
       "writtenOn": "2020-09-14T17:02:12Z",
       "side": 1,
       "message": "nit: could make variables kPixelSize, kBufferWidth, kBufferHeight, it\u0027d make this test more readable\n\nSame goes for other tests below",
+      "range": {
+        "startLine": 2323,
+        "startChar": 32,
+        "endLine": 2323,
+        "endChar": 43
+      },
+      "revId": "0c7585576750af4c15cdc80c21640a931c4814d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49ff14d7_7fecdd14",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2323,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-17T15:55:49Z",
+      "side": 1,
+      "message": "I think the test code doesn\u0027t need to be very clean. Besides 16 is used in a lot of places even before these new tests. If I converted this to kPixelSize, it should be used for a lot of other places too for it to make sense. Also, if new people read the tests, they would have to search for kPixelSize.",
+      "parentUuid": "165ae28d_478faee0",
       "range": {
         "startLine": 2323,
         "startChar": 32,
