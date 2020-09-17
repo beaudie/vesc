@@ -228,6 +228,11 @@ deps = {
     'url': '{chromium_git}/external/github.com/Tencent/rapidjson@7484e06c589873e1ed80382d262087e4fa80fb63',
   },
 
+  'third_party/six': {
+    'url': '{chromium_git}/external/bitbucket.org/gutworth/six@e0898d97d5951af01ba56e86acaa7530762155c8',
+    'condition': 'not build_with_chromium',
+  },
+
   'third_party/spirv-cross/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Cross@{spirv_cross_revision}',
     'condition': 'not build_with_chromium',
