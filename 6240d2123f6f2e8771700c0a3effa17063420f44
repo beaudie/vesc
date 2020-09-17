@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d837d04_05fee1cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T00:42:55Z",
+      "side": 1,
+      "message": "Thanks Quyen for your contributions! Do you have more worked planned after we land XFB? FYI the Apple Metal team has been looking at the back-end you\u0027ve contributed and are working internally to be able to contribute directly.\n\nSome feedback on this patch from an Apple dev is: \"From my read of the patch, it looks like there\u0027s no respecting the tier limits for AB tiers\nhttps://developer.apple.com/documentation/metal/buffers/about_argument_buffers?language\u003dobjc \".\n\nCan you see if we can respect the tier limits?",
+      "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d121c5a_dc9fe292",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T00:42:55Z",
+      "side": 1,
+      "message": "Can you please use ANGLE_INSTANTIATE_TEST_ES3_AND to inject the Metal config? I was having issues with the overloading approach you\u0027re using here. GTest warns about unused configs on some platforms although it currently doesn\u0027t cause the step to fail. If you can change prior tests to use these kind of macros that would be appreciated as well.",
+      "range": {
+        "startLine": 3254,
+        "startChar": 27,
+        "endLine": 3254,
+        "endChar": 44
+      },
+      "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
