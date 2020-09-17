@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae25b29a_afc7f1ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-09-17T11:48:41Z",
+      "side": 1,
+      "message": "To fix the regression of color blit on mali.\nThe patch https://chromium-review.googlesource.com/c/angle/angle/+/2392162/8 can pass on Pixel 2, but will make some color blit tests fail on mali.\nBefore understanding pre-rotation better, just to make all tests pass, I move the offset aligning code from AdjustBlitResolveParametersForPreRotation to stencilBlitResolveNoShaderExport to avoid affecting color blit.",
+      "revId": "2d798c09fdc8cc1c5b66c7862d14053bfc8ee838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
