@@ -125,6 +125,24 @@
       "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05283755_c8056198",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-17T21:56:40Z",
+      "side": 1,
+      "message": "An Android platform fix won\u0027t come until a QPR at the earliest, assuming affected devices can update at all.   While that\u0027s not a problem for the official release of ANGLE on Android (which is still a release or two away), it could be a long while before CQ (or ARM) gets an Android fix.\n\nAre we doing things differently than most people, or is this a pretty fundamental bug that\u0027s somehow gone unnoticed?\n\nLooking at the framework code:\n\n    void ReleaseSwapchainImage(VkDevice device,\n                               ANativeWindow* window,\n                               int release_fence,\n                               Swapchain::Image\u0026 image) {\n    ...\n        if (image.dequeued) {\n            if (release_fence \u003e\u003d 0) {\n                // We get here from vkQueuePresentKHR. The application is\n                // responsible for creating an execution dependency chain from\n                // vkAcquireNextImage (dequeue_fence) to vkQueuePresentKHR\n                // (release_fence), so we can drop the dequeue_fence here.\n                if (image.dequeue_fence \u003e\u003d 0)\n                    close(image.dequeue_fence);\n            } else {\n                // We get here during swapchain destruction, or various serious\n                // error cases e.g. when we can\u0027t create the release_fence during\n                // vkQueuePresentKHR. In non-error cases, the dequeue_fence should\n                // have already signalled, since the swapchain images are supposed\n                // to be idle before the swapchain is destroyed. In error cases,\n                // there may be rendering in flight to the image, but since we\n                // weren\u0027t able to create a release_fence, waiting for the\n                // dequeue_fence is about the best we can do.\n                release_fence \u003d image.dequeue_fence;\n            }\n            image.dequeue_fence \u003d -1;\n\n            if (window) {\n                window-\u003ecancelBuffer(window, image.buffer.get(), release_fence);\n            } else {\n                if (release_fence \u003e\u003d 0) {\n                    sync_wait(release_fence, -1 /* forever */);\n                    close(release_fence);\n                }\n            }\n\n            image.dequeued \u003d false;\n        }\n\nAre we confident we\u0027re doing everything those comments describe correctly (admittedly, I don\u0027t understand everything there)?",
+      "parentUuid": "cce576d8_6c52c8b8",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
