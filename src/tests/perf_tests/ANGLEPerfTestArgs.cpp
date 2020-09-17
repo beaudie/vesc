@@ -21,6 +21,11 @@ const char *gScreenShotDir = nullptr;
 bool gVerboseLogging       = false;
 }  // namespace angle
 
+namespace
+{
+constexpr char kRenderTestDirArg[] = "--render-test-output-dir=";
+}  // namespace
+
 using namespace angle;
 
 void ANGLEProcessPerfTestArgs(int *argc, char **argv)
@@ -65,6 +70,10 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
         else if (strcmp("--verbose-logging", argv[argIndex]) == 0)
         {
             gVerboseLogging = true;
+        }
+        else if (strncmp(kRenderTestDirArg, argv[argIndex], strlen(kRenderTestDirArg)) == 0)
+        {
+            gScreenShotDir = argv[argIndex] + strlen(kRenderTestDirArg);
         }
         else
         {
