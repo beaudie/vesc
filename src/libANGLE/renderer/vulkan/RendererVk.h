@@ -246,9 +246,22 @@ class RendererVk : angle::NonCopyable
     std::string getAndClearLastValidationMessage(uint32_t *countSinceLastClear);
 
     uint64_t getMaxFenceWaitTimeNs() const;
-    Serial getCurrentQueueSerial() const { return mCurrentQueueSerial; }
-    Serial getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
-    Serial getLastCompletedQueueSerial() const { return mLastCompletedQueueSerial; }
+
+    ANGLE_INLINE Serial getCurrentQueueSerial()
+    {
+        std::lock_guard<std::mutex> lock(mQueueSerialMutex);
+        return mCurrentQueueSerial;
+    }
+    ANGLE_INLINE Serial getLastSubmittedQueueSerial()
+    {
+        std::lock_guard<std::mutex> lock(mQueueSerialMutex);
+        return mLastSubmittedQueueSerial;
+    }
+    ANGLE_INLINE Serial getLastCompletedQueueSerial()
+    {
+        std::lock_guard<std::mutex> lock(mQueueSerialMutex);
+        return mLastCompletedQueueSerial;
+    }
 
     void onCompletedSerial(Serial serial);
 
@@ -333,6 +346,7 @@ class RendererVk : angle::NonCopyable
     AtomicSerialFactory mQueueSerialFactory;
     AtomicSerialFactory mShaderSerialFactory;
 
+    std::mutex mQueueSerialMutex;
     Serial mLastCompletedQueueSerial;
     Serial mLastSubmittedQueueSerial;
     Serial mCurrentQueueSerial;
