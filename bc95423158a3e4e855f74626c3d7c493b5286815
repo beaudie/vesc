@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fea9822b_edc6fb23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-17T19:50:55Z",
+      "side": 1,
+      "message": "PTAL, open to ideas on how to implement \"parameters\" for features other than multiple features with different strings.\n\nAlso prefer to keep this in the VK backend for now, intercepting the creation/updates of frontend samplers and textures to do this is more work than at the bottom level in Vulkan.",
+      "revId": "bc95423158a3e4e855f74626c3d7c493b5286815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
