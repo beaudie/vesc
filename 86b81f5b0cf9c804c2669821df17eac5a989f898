@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a802fe6b_dec7bd09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:35:59Z",
+      "side": 1,
+      "message": "Thanks. This extension is not tested by dEQP, so these tests are all we got.",
+      "parentUuid": "fbc72959_5a72677b",
+      "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82f0cdcf_89f96840",
         "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.h",
         "patchSetId": 4
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "6bee8f9f_55242687",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82f0cdcf_89f96840",
+      "range": {
+        "startLine": 81,
+        "startChar": 35,
+        "endLine": 81,
+        "endChar": 40
+      },
+      "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b69ea112_b8b52621",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 4
@@ -53,6 +95,24 @@
       "writtenOn": "2020-09-16T23:44:33Z",
       "side": 1,
       "message": "It looks like getSamples() does some extra checking to know what to query for the sample count:\n\n    inline GLsizei FramebufferAttachment::getSamples() const\n    {\n        return (mRenderToTextureSamples !\u003d kDefaultRenderToTextureSamples) ? getRenderToTextureSamples()\n                                                                           : getResourceSamples();\n    }\n\nLooking at the prototypes:\n\n    GLsizei getSamples() const;\n    // This will always return the actual sample count of the attachment even if\n    // render_to_texture extension is active on this FBattachment object.\n    GLsizei getResourceSamples() const;\n\nWhat\u0027s difference between what getSamples() and getResourceSamples() return here and why does only the validation code need to make this change?",
+      "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1384d75_d02ee1eb",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:35:59Z",
+      "side": 1,
+      "message": "\u003e why does only the validation code need to make this change?\n\nThe backends already know what\u0027s the right thing to do. I had fixed the frontend previously. These validation spots were left incorrect.\n\n\u003e What\u0027s difference between what getSamples() and getResourceSamples() return here\n\nAs the comment says, `getSamples()` returns the \"draw\" samples, while `getResourceSamples()` returns the \"storage\" samples. With MSRTT textures, the texture itself was singlesampled, so `getResourceSamples()` would return 0 (i.e. not multisampled), but there was multisampled drawing, so `getSamples()` would return N.\n\nWith MSRTT renderbuffers, previously they both returned N because ANGLE didn\u0027t implement MSRTT renderbuffers correctly (it treated them as regular multisampled in fact). This change fixes that such that getResourceSamples() for MSRTT renderbuffers returns 0.\n\nSo here, blit (not resolve) wants to make sure its source is not multisampled. The number of samples of the \"storage\" of the source, which is what is read, is what matters not the number of samples used to \"draw\" into it.\n\n---\n\nThis particular case was actually tested by MSRTT texture tests, but was passing by accident because for the texture version of the test EquivalentForBlit had been true.",
+      "parentUuid": "b69ea112_b8b52621",
       "revId": "86b81f5b0cf9c804c2669821df17eac5a989f898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
