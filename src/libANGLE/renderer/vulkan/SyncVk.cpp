@@ -32,9 +32,8 @@ SyncHelper::~SyncHelper() {}
 void SyncHelper::releaseToRenderer(RendererVk *renderer)
 {
     renderer->collectGarbageAndReinit(&mUse, &mEvent);
-    // printf("SyncHelper fence %p in releaseToRenderer\n", mFence.get().getHandle());
-    // TODO: Currently just stalling on worker thread here to try and avoid race
-    //  condition. If this works, need some alternate solution
+    // TODO: https://issuetracker.google.com/170312581 - Currently just stalling on worker thread
+    // here to try and avoid race condition. If this works, need some alternate solution
     renderer->waitForCommandProcessorIdle();
     mFence.reset(renderer->getDevice());
 }
@@ -52,7 +51,8 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
 
     DeviceScoped<Event> event(device);
     ANGLE_VK_TRY(contextVk, event.get().init(device, eventCreateInfo));
-    // TODO: For now wait for worker thread to finish then get next fence from renderer
+    // TODO: https://issuetracker.google.com/170312581 - For now wait for worker thread to finish
+    // then get next fence from renderer
     if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
     {
         contextVk->getRenderer()->waitForCommandProcessorIdle();
@@ -113,7 +113,7 @@ angle::Result SyncHelper::clientWait(Context *context,
     // Wait on the fence that's expected to be signaled on the first vkQueueSubmit after
     // `initialize` was called. The first fence is the fence created to signal this sync.
     ASSERT(mFence.get().valid());
-    // TODO: Wait could be command to worker
+    // TODO: https://issuetracker.google.com/170312581 - Wait could be command to worker
     VkResult status = mFence.get().wait(renderer->getDevice(), timeout);
 
     // Check for errors, but don't consider timeout as such.
@@ -215,7 +215,7 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
             CommandProcessorTask oneOffQueueSubmit;
             oneOffQueueSubmit.initOneOffQueueSubmit(VK_NULL_HANDLE, contextVk->getPriority(),
                                                     &fence.get());
-            renderer->queueCommand(&oneOffQueueSubmit);
+            contextVk->commandProcessorSyncErrorsAndQueueCommand(&oneOffQueueSubmit);
             renderer->waitForCommandProcessorIdle();
         }
         else

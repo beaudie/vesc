@@ -193,10 +193,14 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
         ASSERT(!mQueryHelper.hasPendingWork(contextVk));
     }
 
-    // If the command buffer this query is being written to is still in flight, its reset command
-    // may not have been performed by the GPU yet.  To avoid a race condition in this case, wait
-    // for the batch to finish first before querying (or return not-ready if not waiting).
-    ANGLE_TRY(contextVk->checkCompletedCommands());
+    if (!contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // If the command buffer this query is being written to is still in flight, its reset
+        // command may not have been performed by the GPU yet.  To avoid a race condition in this
+        // case, wait for the batch to finish first before querying (or return not-ready if not
+        // waiting).
+        ANGLE_TRY(contextVk->checkCompletedCommands());
+    }
     if (contextVk->isSerialInUse(mQueryHelper.getStoredQueueSerial()))
     {
         if (!wait)

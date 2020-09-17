@@ -1056,7 +1056,7 @@ class ContextVk : public ContextImpl, public vk::Context
     // We use a single pool for recording commands. We also keep a free list for pool recycling.
     vk::CommandPool mCommandPool;
 
-    // TODO: This can be killed once threading is enabled b/153666475
+    // TODO: This can be killed once threading is enabled https://issuetracker.google.com/153666475
     CommandQueue mCommandQueue;
     vk::GarbageList mCurrentGarbage;
 
