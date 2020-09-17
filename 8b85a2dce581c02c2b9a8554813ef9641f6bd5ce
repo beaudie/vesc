@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11edb39a_80bc3305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-17T18:39:11Z",
+      "side": 1,
+      "message": "I updated this to do begin/endDebugUtilsLabel calls.\nIt wraps large sequences of VK calls leading up to draws with those debug pairs and the begin call call includes all GL calls up to that point. However, in initial test w/ AGI it is not showing the begin/end debug calls like RenderDoc does.\nIf someone is setup to run RenderDoc on Android and wants to give this a try there let me know what you see.\nI may try it as well but don\u0027t currently have RenderDoc set up so doing some other testing for now.",
+      "revId": "8b85a2dce581c02c2b9a8554813ef9641f6bd5ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
