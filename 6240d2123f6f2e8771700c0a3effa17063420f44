@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "6dae9cc8_e31caa9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T15:52:29Z",
+      "side": 1,
+      "message": "OK, SGTM on limited tier 1 iOS devices to GLES 2.0.",
+      "parentUuid": "f4cefc56_0bb1e4d1",
+      "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d121c5a_dc9fe292",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 2
