@@ -16,6 +16,92 @@
       "revId": "bc95423158a3e4e855f74626c3d7c493b5286815",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "020a5d23_2d3f2f48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T19:55:01Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "bc95423158a3e4e855f74626c3d7c493b5286815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5095ddb9_21693744",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T19:55:01Z",
+      "side": 1,
+      "message": "nit: could be a small split refactor change.",
+      "range": {
+        "startLine": 226,
+        "startChar": 67,
+        "endLine": 226,
+        "endChar": 79
+      },
+      "revId": "bc95423158a3e4e855f74626c3d7c493b5286815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a682cdb_437e0c7f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T19:55:01Z",
+      "side": 1,
+      "message": "nit: can be a range-for, most likely.",
+      "range": {
+        "startLine": 1871,
+        "startChar": 0,
+        "endLine": 1874,
+        "endChar": 5
+      },
+      "revId": "bc95423158a3e4e855f74626c3d7c493b5286815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edc8ee50_9adf90ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T19:55:01Z",
+      "side": 1,
+      "message": "tiny nit: can you use a more descriptive index name?",
+      "range": {
+        "startLine": 1991,
+        "startChar": 16,
+        "endLine": 1991,
+        "endChar": 18
+      },
+      "revId": "bc95423158a3e4e855f74626c3d7c493b5286815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
