@@ -59,6 +59,53 @@
     },
     {
       "key": {
+        "uuid": "97104f9c_90e5cde6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-17T22:56:57Z",
+      "side": 1,
+      "message": "What leads to this case:\n\n1.) Program A creates DescriptorSetLayoutDesc DescA\n2.) Program B creates DescriptorSetLayoutDesc DescB, which matches DescA\n\nImportantly, both DescriptorSetLayoutDesc DescA and DescB are equal and result in the same VkDescriptorSetLayout.\n\n3.) Program A calls getDescriptorSetLayout()\n- This results in a new VkDescriptorSetLayout, which is added to the cache.\n- This creates a new descriptor pool for the new descriptor set layout below (ref-1).\n4.) Program B calls getDescriptorSetLayout()\n- Since DescB \u003d\u003d DescA, the VkDescriptorSetLayout can be pulled from the cache and returned to Program B.\n- However, program B doesn\u0027t have a matching pool yet, so need to create it here.\n\nWhile the descriptor set layout is \u0027global\u0027 (owned by the RendererVk), the descriptor pools are program-specific.   This means that multiple programs can share descriptor set layouts, but need to have their own pools created.\n\nThis check is making sure that we create a new descriptor pool for the descriptor set layout if it hasn\u0027t been created yet, by checking the VkDescriptorSetLayout in the pool.   There are two options for how to do this check:\n\n1.) Do the handles match (this version)?\nOR\n2.) Does the pool\u0027s mDescriptorSetLayout \u003d\u003d VK_NULL_HANDLE\n\nIt would probably be clearer to check for VK_NULL_HANDLE to make it more obvious this is the first time the pool is being allocated for this descriptor set.   To make sure we still catch errors related to attempting to reallocate a pool for a different layout, we could do something like:\n\n        VkDescriptorSetLayout poolsLayout \u003d descriptorPoolOut-\u003egetDescriptorSetLayout();\n        if (poolsLayout \u003d\u003d VK_NULL_HANDLE)\n        {\n            // Allocate the new pool\n            ...\n        }\n        else\n        {\n            // Make sure the program\u0027s pool matches this layout\n            ASSERT(poolsLayout \u003d\u003d descriptorSetLayoutOut-\u003eget().getHandle());\n        }\n\nMake sense?",
+      "parentUuid": "e0a0ed0c_3ed6efec",
+      "range": {
+        "startLine": 2380,
+        "startChar": 0,
+        "endLine": 2383,
+        "endChar": 9
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c808193_9782a597",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2419,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-17T22:56:57Z",
+      "side": 1,
+      "message": "ref-1",
+      "range": {
+        "startLine": 2418,
+        "startChar": 0,
+        "endLine": 2419,
+        "endChar": 52
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8356692_3c470040",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 5
@@ -130,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "d52463e0_dd091abe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-17T22:56:57Z",
+      "side": 1,
+      "message": "Oh, I completely missed you were referring to DynamicDescriptorPool below.\n\nDone.",
+      "parentUuid": "2add51cc_6825c864",
+      "range": {
+        "startLine": 56,
+        "startChar": 11,
+        "endLine": 56,
+        "endChar": 22
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06957998_9359c58a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -141,6 +212,30 @@
       "writtenOn": "2020-09-17T22:18:36Z",
       "side": 1,
       "message": "const.. also probably name make this clear it\u0027s for validation only.",
+      "range": {
+        "startLine": 317,
+        "startChar": 26,
+        "endLine": 317,
+        "endChar": 48
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e6bbed1_30b8fb55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-17T22:56:57Z",
+      "side": 1,
+      "message": "As noted in the other comment, I forgot this is used to make sure we only allocate a pool once also.",
+      "parentUuid": "06957998_9359c58a",
       "range": {
         "startLine": 317,
         "startChar": 26,
@@ -212,6 +307,30 @@
       "side": 1,
       "message": "Is it only used for validation? Maybe just make that clear in the name. Probably a good idea to keep it.",
       "parentUuid": "46c88ffc_fd41c15c",
+      "range": {
+        "startLine": 330,
+        "startChar": 26,
+        "endLine": 330,
+        "endChar": 46
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e75231b_fcbb8e8f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-17T22:56:57Z",
+      "side": 1,
+      "message": "Oops, I take it back.\n\nWhile it\u0027s used to verify that the descriptor set layout matches what the pool is created for when allocating descriptor sets, replying to your other comment reminded me that this is also used to ensure that a descriptor pool is only created once per layout.   See the other comment for details.",
+      "parentUuid": "310f7488_e0773ff5",
       "range": {
         "startLine": 330,
         "startChar": 26,
