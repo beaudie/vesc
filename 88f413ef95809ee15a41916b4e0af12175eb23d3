@@ -16,6 +16,24 @@
       "revId": "88f413ef95809ee15a41916b4e0af12175eb23d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2fbe41c7_01047f9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-17T14:51:37Z",
+      "side": 1,
+      "message": "I\u0027d like to investigate three new Intel dEQP failures first that weren\u0027t present a few months ago. They don\u0027t show up in dry runs because Intel bots don\u0027t run gles31 suite. Btw, there\u0027s an open issue in VK-CTS to move this extension\u0027s tests from gles31 to gles3.",
+      "parentUuid": "b2b4d541_42d95646",
+      "revId": "88f413ef95809ee15a41916b4e0af12175eb23d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
