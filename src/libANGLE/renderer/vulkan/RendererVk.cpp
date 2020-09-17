@@ -501,7 +501,11 @@ void RendererVk::onDestroy()
     }
 
     // Then assign an infinite "last completed" serial to force garbage to delete.
-    mLastCompletedQueueSerial = Serial::Infinite();
+    {
+        std::lock_guard<decltype(mQueueSerialMutex)> lock(mQueueSerialMutex);
+        mLastCompletedQueueSerial = Serial::Infinite();
+    }
+
     (void)cleanupGarbage(true);
     ASSERT(mSharedGarbage.empty());
 
@@ -561,8 +565,11 @@ void RendererVk::onDestroy()
 
 void RendererVk::notifyDeviceLost()
 {
-    mLastCompletedQueueSerial = mLastSubmittedQueueSerial;
-    mDeviceLost               = true;
+    {
+        std::lock_guard<decltype(mQueueSerialMutex)> lock(mQueueSerialMutex);
+        mLastCompletedQueueSerial = mLastSubmittedQueueSerial;
+    }
+    mDeviceLost = true;
     mDisplay->notifyDeviceLost();
 }
 
@@ -2096,6 +2103,22 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
 }
 
+Serial RendererVk::getCurrentQueueSerial()
+{
+    std::lock_guard<decltype(mQueueSerialMutex)> lock(mQueueSerialMutex);
+    return mCurrentQueueSerial;
+}
+Serial RendererVk::getLastSubmittedQueueSerial()
+{
+    std::lock_guard<decltype(mQueueSerialMutex)> lock(mQueueSerialMutex);
+    return mLastSubmittedQueueSerial;
+}
+Serial RendererVk::getLastCompletedQueueSerial()
+{
+    std::lock_guard<decltype(mQueueSerialMutex)> lock(mQueueSerialMutex);
+    return mLastCompletedQueueSerial;
+}
+
 angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       egl::ContextPriority priority,
                                       const VkSubmitInfo &submitInfo,
@@ -2118,9 +2141,12 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
 
     ANGLE_TRY(cleanupGarbage(false));
 
-    *serialOut                = mCurrentQueueSerial;
-    mLastSubmittedQueueSerial = mCurrentQueueSerial;
-    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+    {
+        std::lock_guard<decltype(mQueueSerialMutex)> lock(mQueueSerialMutex);
+        *serialOut                = mCurrentQueueSerial;
+        mLastSubmittedQueueSerial = mCurrentQueueSerial;
+        mCurrentQueueSerial       = mQueueSerialFactory.generate();
+    }
 
     return angle::Result::Continue;
 }
@@ -2262,7 +2288,7 @@ angle::Result RendererVk::cleanupGarbage(bool block)
     {
         // Possibly 'counter' should be always zero when we add the object to garbage.
         vk::SharedGarbage &garbage = *garbageIter;
-        if (garbage.destroyIfComplete(this, mLastCompletedQueueSerial))
+        if (garbage.destroyIfComplete(this, getLastCompletedQueueSerial()))
         {
             garbageIter = mSharedGarbage.erase(garbageIter);
         }
@@ -2298,6 +2324,7 @@ uint64_t RendererVk::getMaxFenceWaitTimeNs() const
 
 void RendererVk::onCompletedSerial(Serial serial)
 {
+    std::lock_guard<decltype(mQueueSerialMutex)> lock(mQueueSerialMutex);
     if (serial > mLastCompletedQueueSerial)
     {
         mLastCompletedQueueSerial = serial;
@@ -2331,7 +2358,7 @@ angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
     }
 
     if (!mPendingOneOffCommands.empty() &&
-        mPendingOneOffCommands.front().serial < mLastCompletedQueueSerial)
+        mPendingOneOffCommands.front().serial < getLastCompletedQueueSerial())
     {
         *commandBufferOut = std::move(mPendingOneOffCommands.front().commandBuffer);
         mPendingOneOffCommands.pop_front();
