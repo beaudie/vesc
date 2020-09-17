@@ -16,6 +16,52 @@
       "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c8356692_3c470040",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T21:53:34Z",
+      "side": 1,
+      "message": "you can pre-declare up here.",
+      "range": {
+        "startLine": 56,
+        "startChar": 11,
+        "endLine": 56,
+        "endChar": 22
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1bf1c0f_5de1d0ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T21:53:34Z",
+      "side": 1,
+      "message": "can you do this without storing the layout here?",
+      "range": {
+        "startLine": 330,
+        "startChar": 26,
+        "endLine": 330,
+        "endChar": 46
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
