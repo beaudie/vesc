@@ -107,6 +107,24 @@
       "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cce576d8_6c52c8b8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-17T21:21:48Z",
+      "side": 1,
+      "message": "Sorry that I forgot about that with my earlier review.\n\nFrom a technical/spec perspective, if we don\u0027t use oldSwapchain, I think the only alternative is you have to wait and do a vkDestroySwapchainKHR() before vkCreateSwapchainKHR().  I don\u0027t think that will give a very good user experience. \n I think we have to focus on getting an Android platform fix.",
+      "parentUuid": "9947a70f_90f782c2",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
