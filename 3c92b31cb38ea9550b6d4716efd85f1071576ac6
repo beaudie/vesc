@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a2ba54e0_f6ba9829",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-09-17T09:13:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be5079a1_6ed80856",
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26a155d2_95a22d3a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -76,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "9cedb3e7_2ba18840",
+        "filename": "dotfile_settings.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-09-17T09:13:42Z",
+      "side": 1,
+      "message": "What specifically do you mean?\n\nIt\u0027s not clear in context.",
+      "parentUuid": "fda27a18_c2e58ee4",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41fa902e_a68c1fef",
         "filename": "scripts/wgl.xml",
         "patchSetId": 2
@@ -96,6 +138,30 @@
       "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4bb4006_0061faee",
+        "filename": "scripts/wgl.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-09-17T09:13:42Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "41fa902e_a68c1fef",
+      "range": {
+        "startLine": 32,
+        "startChar": 17,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
