@@ -118,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "fbdc005b_889e41b6",
+        "filename": "dotfile_settings.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T13:29:57Z",
+      "side": 1,
+      "message": "export_targets.py had an error because of the change in GN and needed a fix. Anyway I see you rolled this back because it maybe needs a 3-way merge in Chrome?\n\nYou can duplicate the variable, roll ANGLE, change chrome, then go back and remove whitelist (if you\u0027re stuck on this one). Or someone else can, as you\u0027ve done a lot already!",
+      "parentUuid": "9cedb3e7_2ba18840",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "3c92b31cb38ea9550b6d4716efd85f1071576ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41fa902e_a68c1fef",
         "filename": "scripts/wgl.xml",
         "patchSetId": 2

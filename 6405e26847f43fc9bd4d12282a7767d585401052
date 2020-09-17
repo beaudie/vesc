@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c58adba_7d16d6e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T13:29:57Z",
+      "side": 1,
+      "message": "LGTM! Thanks Trevor. Geoff, any further comments?",
+      "revId": "6405e26847f43fc9bd4d12282a7767d585401052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
