@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "f4cefc56_0bb1e4d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-17T15:05:30Z",
+      "side": 1,
+      "message": "Yes, I was referring to the tier limit. The lowest tier (on iOS before A11 GPU on iPhone X) supports only 31 buffers, including both those bound to discrete slots and those embedded inside one argument buffer. So it is not enough to support minimum number of GLES buffers anw (16 attributes + 12 UBOs + 4 XFBs). So I suggested we disable GLES 3 on tier 1 iOS devices for now (it is not important atm anw since we can only test macOS).\n\nThe other tier limits (min 64 buffers on macOS and 96 buffers on iOS post A11) are non-issue since the metal back-end is not going to use that many buffers.",
+      "parentUuid": "176ade35_d216db61",
+      "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d121c5a_dc9fe292",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 2
