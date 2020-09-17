@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11734263_52d6cb0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:42:22Z",
+      "side": 1,
+      "message": "Thanks for the fix",
+      "revId": "ae288f33997158f8ceaf085262222d6e7ee4017c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea88b9b8_3b09d0f1",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:42:22Z",
+      "side": 1,
+      "message": "Please cache `*repeatCount \u003d\u003d kMaxRepeat` here and move the string assignment and +\u003d out of this scope. That way memory allocation is not done under the lock.",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 59
+      },
+      "revId": "ae288f33997158f8ceaf085262222d6e7ee4017c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
