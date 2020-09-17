@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "14c8ad9d_445271c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T23:03:40Z",
+      "side": 1,
+      "message": "My concern is you\u0027re doing all this work to fix the underlying bug that the descriptor set layout desc does not match the descriptor sets used in the pool. Specifically this code:\n\n    // A single storage buffer array is used for all stages for simplicity.\n    descOut-\u003eupdate(info.binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,\n                    gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS,\n                    gl_vk::kShaderStageMap[shaderType], nullptr);\n\nIs the real issue that this description does not match what happens with the pool?",
+      "parentUuid": "97104f9c_90e5cde6",
+      "range": {
+        "startLine": 2380,
+        "startChar": 0,
+        "endLine": 2383,
+        "endChar": 9
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c808193_9782a597",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 5
