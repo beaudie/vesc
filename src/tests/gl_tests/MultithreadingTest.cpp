@@ -5,8 +5,8 @@
 //
 // MulithreadingTest.cpp : Tests of multithreaded rendering
 
+#include "platform/FeaturesVk.h"
 #include "test_utils/ANGLETest.h"
-
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
 
@@ -30,9 +30,12 @@ class MultithreadingTest : public ANGLETest
         setConfigAlphaBits(8);
     }
 
+    void overrideFeaturesVk(angle::FeaturesVk *featuresVulkan) final;
+
     void runMultithreadedGLTest(
         std::function<void(EGLSurface surface, size_t threadIndex)> testBody,
-        size_t threadCount)
+        size_t threadCount,
+        EGLContext shareContext)
     {
         std::mutex mutex;
 
@@ -59,7 +62,7 @@ class MultithreadingTest : public ANGLETest
                     surface = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
                     EXPECT_EGL_SUCCESS();
 
-                    ctx = window->createContext(EGL_NO_CONTEXT);
+                    ctx = window->createContext(shareContext);
                     EXPECT_NE(EGL_NO_CONTEXT, ctx);
 
                     EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
@@ -88,6 +91,11 @@ class MultithreadingTest : public ANGLETest
         }
     }
 };
+
+void MultithreadingTest::overrideFeaturesVk(angle::FeaturesVk *features)
+{
+    features->overrideFeatures({"defer_flush_until_endrenderpass"}, false);
+}
 
 // Test that it's possible to make one context current on different threads
 TEST_P(MultithreadingTest, MakeCurrentSingleContext)
@@ -155,7 +163,7 @@ TEST_P(MultithreadingTest, MultiContextClear)
             EXPECT_PIXEL_COLOR_EQ(0, 0, color);
         }
     };
-    runMultithreadedGLTest(testBody, 72);
+    runMultithreadedGLTest(testBody, 72, EGL_NO_CONTEXT);
 }
 
 // Test that multiple threads can draw and readback pixels successfully at the same time
@@ -199,7 +207,104 @@ TEST_P(MultithreadingTest, MultiContextDraw)
             EXPECT_PIXEL_COLOR_EQ(0, 0, color);
         }
     };
-    runMultithreadedGLTest(testBody, 4);
+    runMultithreadedGLTest(testBody, 4, EGL_NO_CONTEXT);
+}
+
+// Test that multiple threads can draw and read back pixels correctly.
+// Disable defer_flush_until_endrenderpass so that glFlush will issue work to GPU in order to
+// maximize the chance we can hit QueueSerial race condition.
+TEST_P(MultithreadingTest, MultiContextDrawStressQueueSerial)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!isVulkanRenderer());
+
+    auto testBody = [](EGLSurface surface, size_t thread) {
+        constexpr size_t kIterationsPerThread = 100;
+        constexpr size_t kDrawsPerIteration   = 10;
+
+        ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+        glUseProgram(program);
+
+        GLint colorLocation = glGetUniformLocation(program, essl1_shaders::ColorUniform());
+
+        auto quadVertices = GetQuadVertices();
+
+        GLBuffer vertexBuffer;
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * 6, quadVertices.data(), GL_STATIC_DRAW);
+
+        GLint positionLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+        glEnableVertexAttribArray(positionLocation);
+        glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+        for (size_t iteration = 0; iteration < kIterationsPerThread; iteration++)
+        {
+            // Base the clear color on the thread and iteration indexes so every clear color is
+            // unique
+            const GLColor color(static_cast<GLubyte>(thread % 255),
+                                static_cast<GLubyte>(iteration % 255), 0, 255);
+            const angle::Vector4 floatColor = color.toNormalizedVector();
+            glUniform4fv(colorLocation, 1, floatColor.data());
+
+            for (size_t draw = 0; draw < kDrawsPerIteration; draw++)
+            {
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+            }
+
+            glFlush();
+
+            EXPECT_PIXEL_COLOR_EQ(0, 0, color);
+        }
+    };
+    runMultithreadedGLTest(testBody, 32, EGL_NO_CONTEXT);
+}
+
+TEST_P(MultithreadingTest, MultiContextCreateAndDeleteResources)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!isVulkanRenderer());
+
+    auto testBody = [](EGLSurface surface, size_t thread) {
+        constexpr size_t kIterationsPerThread = 32;
+        constexpr size_t kDrawsPerIteration   = 1;
+
+        ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+        glUseProgram(program);
+
+        GLint colorLocation = glGetUniformLocation(program, essl1_shaders::ColorUniform());
+
+        auto quadVertices = GetQuadVertices();
+
+        for (size_t iteration = 0; iteration < kIterationsPerThread; iteration++)
+        {
+            GLBuffer vertexBuffer;
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * 6, quadVertices.data(),
+                         GL_STATIC_DRAW);
+
+            GLint positionLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+            glEnableVertexAttribArray(positionLocation);
+            glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+            // Base the clear color on the thread and iteration indexes so every clear color is
+            // unique
+            const GLColor color(static_cast<GLubyte>(thread % 255),
+                                static_cast<GLubyte>(iteration % 255), 0, 255);
+            const angle::Vector4 floatColor = color.toNormalizedVector();
+            glUniform4fv(colorLocation, 1, floatColor.data());
+
+            for (size_t draw = 0; draw < kDrawsPerIteration; draw++)
+            {
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+            }
+
+            glFlush();
+
+            // EXPECT_PIXEL_COLOR_EQ(0, 0, color);
+        }
+        glFinish();
+    };
+    runMultithreadedGLTest(testBody, 32, EGL_NO_CONTEXT);
 }
 
 TEST_P(MultithreadingTest, MultiCreateContext)
