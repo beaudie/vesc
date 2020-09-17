@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4c736a19_b8d51cd0",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-17T16:13:08Z",
+      "side": 0,
+      "message": "no particular reason, was there an advantage of having it outside the class?",
+      "parentUuid": "fc4afe96_0aa68430",
+      "revId": "e82f28228921fc396dd537673fc25f1ef53fb91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a6bf3b9_50d3fd74",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 15
@@ -30,6 +48,24 @@
       "writtenOn": "2020-09-16T02:56:28Z",
       "side": 0,
       "message": "Why the move to class?",
+      "revId": "e82f28228921fc396dd537673fc25f1ef53fb91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb13b595_607c114e",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-17T16:13:08Z",
+      "side": 0,
+      "message": "no particular reason, was there an advantage of having it outside the class?",
+      "parentUuid": "7a6bf3b9_50d3fd74",
       "revId": "e82f28228921fc396dd537673fc25f1ef53fb91c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
