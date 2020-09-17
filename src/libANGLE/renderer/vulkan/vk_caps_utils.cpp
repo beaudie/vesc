@@ -87,10 +87,11 @@ void RendererVk::ensureCapsInitialized() const
         getFeatures().enableMultisampledRenderToTexture.enabled;
     mNativeExtensions.multisampledRenderToTexture2 =
         getFeatures().enableMultisampledRenderToTexture.enabled;
-    mNativeExtensions.copyTexture           = true;
-    mNativeExtensions.copyTexture3d         = true;
-    mNativeExtensions.copyCompressedTexture = true;
-    mNativeExtensions.debugMarker           = true;
+    mNativeExtensions.textureStorageMultisample2DArrayOES = limitsVk.standardSampleLocations;
+    mNativeExtensions.copyTexture                         = true;
+    mNativeExtensions.copyTexture3d                       = true;
+    mNativeExtensions.copyCompressedTexture               = true;
+    mNativeExtensions.debugMarker                         = true;
     mNativeExtensions.robustness =
         !IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) &&
         !IsARM(mPhysicalDeviceProperties.vendorID);
