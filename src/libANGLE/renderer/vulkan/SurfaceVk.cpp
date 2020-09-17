@@ -1296,8 +1296,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     }
 
     // Update the swap history for this presentation
-    // Note: this will force us to flush worker queue to get the fence.
-    // Should we be using a serial to allow more parallelism?
+    // TODO: https://issuetracker.google.com/issues/170312581 - this will force us to flush worker
+    // queue to get the fence.
     swap.sharedFence = contextVk->getLastSubmittedFence();
     ASSERT(!mAcquireImageSemaphore.valid());
 
@@ -1312,7 +1312,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         present.initPresent(contextVk->getPriority(), presentInfo);
 
         contextVk->commandProcessorSyncErrorsAndQueueCommand(&present);
-        // TODO: Just stalling here for now, but really want to let main thread continue
+        // TODO: https://issuetracker.google.com/issues/170329600 - Just stalling here for now, but
+        // really want to let main thread continue
         //   need to figure out how to handle work below off-thread and sync to main
         //   Also, need to fix lifetime of presentInfo data when main thread continues.
         //   There is a bunch of work happening after present to deal with swapchain recreation.
