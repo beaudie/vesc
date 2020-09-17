@@ -33,6 +33,24 @@
       "revId": "bf275be98e98666743bb95090fed0b98210eac76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd693574_d4f7c592",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-17T12:20:58Z",
+      "side": 1,
+      "message": "FWIW, there are dEQP and WebGL tests for ASTC, so as soon as bots are ready this should work with no extra effort.",
+      "parentUuid": "509ed8a1_a076c2c2",
+      "revId": "bf275be98e98666743bb95090fed0b98210eac76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
