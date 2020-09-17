@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "176ade35_d216db61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-17T14:23:34Z",
+      "side": 1,
+      "message": "Hey Quyen,\n\nPlease feel free to continue contributing your patch stack up until you are blocked with provoking vertex emulation. My last feedback from Apple is that it might take them a while to get permission to start directly contributing so it\u0027s best if we can finish your upstream contributions. If you get too busy to contribute, that\u0027s not a problem. Looking forward to all those CLs! Maybe we can turn on the dEQP GLES 3 tests with Metal at some point (Jonah can you help with that?)\n\nRegarding your comments about buffer limits, is that addressing the comment on tier lists? Sorry if it\u0027s a silly question, I am not very familiar with Metal.",
+      "parentUuid": "98e9bc9d_7da65711",
+      "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d121c5a_dc9fe292",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 2
