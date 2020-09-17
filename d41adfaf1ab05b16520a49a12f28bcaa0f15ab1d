@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2e5ca10_50b1b0fc",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-17T15:08:56Z",
+      "side": 1,
+      "message": "Where does display come from?",
+      "range": {
+        "startLine": 283,
+        "startChar": 41,
+        "endLine": 283,
+        "endChar": 48
+      },
+      "revId": "d41adfaf1ab05b16520a49a12f28bcaa0f15ab1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
