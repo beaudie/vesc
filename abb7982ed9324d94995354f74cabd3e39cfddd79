@@ -16,6 +16,23 @@
       "revId": "abb7982ed9324d94995354f74cabd3e39cfddd79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9031dab6_f8e12e94",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-17T02:52:16Z",
+      "side": 1,
+      "message": "It looks to me like this value is somewhat correlated to the number of contexts, except when a context hasn\u0027t yet compiled a shader or something.\n\nGiven that contexts are made to do actual rendering, isn\u0027t it true that gActiveCompilers becomes \u003e 0 pretty early in the program and gets back to 0 pretty much at the end? Why not have the Display call sh::Initialize and sh::Finalize on initialize() and terminate() respectively and remove this global altogether?\n\nAlternatively, the Display could maintain this and call sh::Initialize when mContextSet becomes non-empty() and sh::Finalize when it becomes empty().\n\n---\n\nOr is the cost of sh::Initialize so much that it has to be deferred and moved out of (Chrome) startup?",
+      "revId": "abb7982ed9324d94995354f74cabd3e39cfddd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
