@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1911cc86_941e8495",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-18T15:53:39Z",
+      "side": 1,
+      "message": "Is this CL OK to be merged? Do you have any comments, Jonah?",
+      "revId": "aea9cad4b4474e0595895549daec8a35248062ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
