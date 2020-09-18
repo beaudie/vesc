@@ -118,6 +118,24 @@
     },
     {
       "key": {
+        "uuid": "0540803e_ce2e7937",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-18T23:54:05Z",
+      "side": 1,
+      "message": "I do wish I wrote a test. The sample coverage stuff is always a myth to me, not sure how to write that test myself. If anyone has time to write such a test, I will appreciate. Based on what Jamie explains here, this looks good to me now.",
+      "parentUuid": "a9b5e8db_82a3f2fc",
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "199d883c_8242c005",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -153,6 +171,30 @@
       "side": 1,
       "message": "When I checked \"isEarlyFragmentTestsOptimizationAllowed\" it was checking isSampleCoverageEnabled, which corresponds to DIRTY_BIT_SAMPLE_COVERAGE_ENABLED.",
       "parentUuid": "199d883c_8242c005",
+      "range": {
+        "startLine": 2889,
+        "startChar": 17,
+        "endLine": 2889,
+        "endChar": 72
+      },
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f11aea9_9cf7f726",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2889,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-18T23:54:05Z",
+      "side": 1,
+      "message": "oops, that is my bug. It should check isSampleAlphaToCoverageEnabled(). Could you fix that instead? From what I read, what matters to the early fragment test matters is alpha to sample coverage, since FS could modify alpha, which could modify coverage, which interfere with depth test.",
+      "parentUuid": "15c91d85_97e58a0a",
       "range": {
         "startLine": 2889,
         "startChar": 17,
