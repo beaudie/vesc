@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2d453e8_a6f5c5d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:08:23Z",
+      "side": 1,
+      "message": "PTAL\n\nReverted some of the API changes based on Jamie\u0027s feedback.",
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0d9330f_e3dcb6bd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:08:23Z",
+      "side": 1,
+      "message": "This needs to hold a pool for both graphics and compute driver uniforms, since those generate different descriptor set layout handles.   I haven\u0027t looked into what the differences between the DescriptorSetLayoutDesc are, but trying to special-case the driver uniforms sharing the same descriptor pool with different layout handles probably doesn\u0027t gain us much compared to the extra complexity of the code (assuming the descriptor types/counts match).   The CPU overhead of creating another pool should also be negligible, since it\u0027s only done once per context.\n\nInstead, the change to reduce the starting size of all of the pools will be a better answer to recover the memory.   That change should involve getting counts of descriptor sets allocated for each type for apps/benchmarks, and possibly allow the callers to specify the sizes of the pools (rather than a default value that has to compromise for everyone).",
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "294b9b8a_cf1e3e8e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:08:23Z",
+      "side": 1,
+      "message": "- *not* store the descriptor set layout handle in the pool (unless it\u0027s strictly for an ASSERT)\n  - This is necessary for the assert, so the handle is still stored in the DynamicDescriptorPool.\n\n- split off pool init from layout init. They\u0027re just too very separate things and the pool init shouldn\u0027t be a lazy check, it should be in very specific situations (immutable sampler stuff and program init only, right?)\n  - Done\n\n- add a valid() command to determine if a pool needs init?\n  - Not necessary anymore, since we always create a new descriptor pool for each layout, since layouts aren\u0027t shared across programs anymore.",
+      "parentUuid": "26c22b37_ec17bf06",
+      "range": {
+        "startLine": 2380,
+        "startChar": 0,
+        "endLine": 2383,
+        "endChar": 9
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c808193_9782a597",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 5
@@ -296,6 +320,30 @@
     },
     {
       "key": {
+        "uuid": "4de0358e_30f2f74f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:08:23Z",
+      "side": 1,
+      "message": "This is removed.",
+      "parentUuid": "6e6bbed1_30b8fb55",
+      "range": {
+        "startLine": 317,
+        "startChar": 26,
+        "endLine": 317,
+        "endChar": 48
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1bf1c0f_5de1d0ec",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 5
@@ -388,6 +436,30 @@
       "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cbc88cb_2f916647",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:08:23Z",
+      "side": 1,
+      "message": "As mentioned elsewhere, this member will remain since it is used to verify that the descriptor set layout that the pool was created with matches the layout that\u0027s being used to allocate descriptors from the pool.",
+      "parentUuid": "4e75231b_fcbb8e8f",
+      "range": {
+        "startLine": 330,
+        "startChar": 26,
+        "endLine": 330,
+        "endChar": 46
+      },
+      "revId": "d4db6e2664e62888a248940481f41a5614f057c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
