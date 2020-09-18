@@ -128,6 +128,24 @@
     },
     {
       "key": {
+        "uuid": "06a07305_9f1ad01d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-09-18T01:22:16Z",
+      "side": 1,
+      "message": "Yes, very appreciated if you can add that 😊",
+      "parentUuid": "b25547a0_9a46cfa8",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9947a70f_90f782c2",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -211,6 +229,24 @@
       "side": 1,
       "message": "\u003e Are we confident we\u0027re doing everything those comments describe correctly ...?\n\nGood question.  I\u0027ll look at this (watching code on Android) when I get a chance.  The Android framework team has been doing development (for years) on Nexus/Pixel device (i.e. Qualcomm).  From Sunny\u0027s email:\n\n\u003e In our Vulkan driver, vkDestroyImage (android native buffer) destroys the memory immediately which might cause the running GPU to generate a memory access issue.\n\nI suspect there\u0027s a difference in how the 2 Vulkan drivers handle vkDestroyImage, and that\u0027s at the heart of the problem.",
       "parentUuid": "b6145026_54abf9de",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b32115d5_b5120f37",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-09-18T01:22:16Z",
+      "side": 1,
+      "message": "Previously we didn\u0027t have such issue, but after one change in gralloc, which accelerated the memory alloc/free logic, we can easily reproduce this issue. So this might also be timing issue even vkDestroyImage destroy the memory immediately.\nSince fixing Android framework will take a long time to be effective, can we workaround in ANGLE firstly? for example, add a wait idle before vkCreateSwapChainKHR (if there was an old chain), this should not affect performance a lot since no benchmark/games will resize frequently.",
+      "parentUuid": "9ad49db6_13071bcd",
       "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
