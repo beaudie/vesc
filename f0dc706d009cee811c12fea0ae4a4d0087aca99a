@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7bebe804_a6a7aff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-18T16:42:13Z",
+      "side": 1,
+      "message": "Will still try to land the new tests I wrote for crrev/c/2386478 (that tried to move mContentDefined to ImageHelper for D/S).  This is a straight copy of those test to a stand-alone CL.",
+      "revId": "f0dc706d009cee811c12fea0ae4a4d0087aca99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
