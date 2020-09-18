@@ -42,6 +42,29 @@
     },
     {
       "key": {
+        "uuid": "dba30749_12b1b606",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T19:31:36Z",
+      "side": 1,
+      "message": "A short \"because ...\" would be great",
+      "range": {
+        "startLine": 584,
+        "startChar": 61,
+        "endLine": 584,
+        "endChar": 62
+      },
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2d6c5b6_a48467c5",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -53,6 +76,24 @@
       "writtenOn": "2020-09-18T16:24:27Z",
       "side": 1,
       "message": "This moves from  ContextVk::handleDirtyGraphicsPipeline to here. When DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED is set, we set DIRTY_BIT_PROGRAM_EXECUTABLE, which will gte us to  ContextVk::invalidateProgramExecutableHelper(), which sets mCurrentGraphicsPipeline to NULL, which gets us to ContextVk::handleDirtyGraphicsPipeline() and detect mCurrentGraphicsPipeline is NULL and calls ProgramExecutableVk::getGraphicsPipeline). That call will end up modify the program to disable early fragment test.\n\nWith this change, does getGraphicsPipeline() still get called when DIRTY_BIT_PROGRAM_EXECUTABLE bit is set? From my brief code search, it does not seems so.",
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a097643a_6385bc06",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T19:31:36Z",
+      "side": 1,
+      "message": "Charlie, if you can think of a sequence of operations to exercise your concern, you can outline it for Jamie to write a test. Probably can add a counter for how many times this optimization was applied and use that for verification.",
+      "parentUuid": "f2d6c5b6_a48467c5",
       "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
