@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "9d33ce32_cdb06582",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T18:39:33Z",
+      "side": 1,
+      "message": "We don\u0027t have a standardized bar for \"complete\". I\u0027m fine with GLES 2.0 Metal being complete here. We could optionally make in progress / complete / conformant as our states.",
+      "parentUuid": "487580b5_9d84a90c",
+      "range": {
+        "startLine": 13,
+        "startChar": 106,
+        "endLine": 13,
+        "endChar": 114
+      },
+      "revId": "5d777d2336c0248788f0384b2655a8bec919db78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "44202f61_6698dc85",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
         "patchSetId": 3
