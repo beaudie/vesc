@@ -110,6 +110,24 @@
     },
     {
       "key": {
+        "uuid": "b25547a0_9a46cfa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T01:20:29Z",
+      "side": 1,
+      "message": "I guess there\u0027s not much to do here but abandon the CL? Do we want to do anything else? Like vkQueueWaitIdle under a workaround on ARM just to get things going?",
+      "parentUuid": "c5782b6b_d8896f35",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9947a70f_90f782c2",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
