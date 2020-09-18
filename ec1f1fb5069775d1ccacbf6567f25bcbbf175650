@@ -93,6 +93,23 @@
     },
     {
       "key": {
+        "uuid": "c5782b6b_d8896f35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-18T00:05:55Z",
+      "side": 1,
+      "message": "FYI ... the Android Framework bug is: https://issuetracker.google.com/issues/168800550\n\nIt is currently private to Google.  Sorry, that\u0027s the way that project is setup.\n\nI will say that Jesse Hall just posted on that bug.  He pointed out the intent of oldSwapchain (e.g. the app/ANGLE can only use already-acquired images) and that the Vulkan loader (a.k.a. Android platform) should not be immediately freeing them.  He suggested an idea for doing that (using a background thread to cleanup old images).\n\nAs Tim points out, it may be a while before a new loader makes it into our CQ bots.  Hopefully, it can land in the Keystone/test/AOSP branch(s) much sooner.",
+      "revId": "ec1f1fb5069775d1ccacbf6567f25bcbbf175650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9947a70f_90f782c2",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
