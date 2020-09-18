@@ -16,6 +16,24 @@
       "revId": "69f3c0f45432866bc013ac1471aa674a3ffcb742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3480d22b_97ec2839",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-18T23:40:22Z",
+      "side": 1,
+      "message": "One more data point: the test fails (Intel/Vulkan) only with GL_MAX blend equation.",
+      "parentUuid": "5d0ae4f2_c114f4d7",
+      "revId": "69f3c0f45432866bc013ac1471aa674a3ffcb742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
