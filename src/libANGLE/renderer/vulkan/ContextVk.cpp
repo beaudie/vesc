@@ -4161,12 +4161,17 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     mResourceUseList.releaseResourceUsesAndUpdateSerials(serial);
 
     waitForSwapchainImageIfNecessary();
+    if (serial.getValue() & 0x1)
+    {
+        std::this_thread::yield();
+    }
 
     VkSubmitInfo submitInfo = {};
     InitializeSubmitInfo(&submitInfo, mPrimaryCommands, mWaitSemaphores, mWaitSemaphoreStageMasks,
                          signalSemaphore);
 
     ANGLE_TRY(submitFrame(submitInfo, std::move(mPrimaryCommands)));
+    ASSERT(serial == getLastSubmittedQueueSerial());
 
     ANGLE_TRY(startPrimaryCommandBuffer());
 
