@@ -1271,15 +1271,15 @@ void GenerateCaps(const FunctionsGL *functions,
                               functions->isAtLeastGLES(gl::Version(3, 2)) ||
                               functions->hasGLESExtension("GL_KHR_debug") ||
                               functions->hasGLESExtension("GL_EXT_debug_marker");
-    extensions->eglImageOES         = functions->hasGLESExtension("GL_OES_EGL_image");
-    extensions->eglImageExternalOES = functions->hasGLESExtension("GL_OES_EGL_image_external");
+    extensions->eglImageOES         = functions->hasExtension("GL_OES_EGL_image");
+    extensions->eglImageExternalOES = functions->hasExtension("GL_OES_EGL_image_external");
     extensions->eglImageExternalWrapModesEXT =
         functions->hasExtension("GL_EXT_EGL_image_external_wrap_modes");
     extensions->eglImageExternalEssl3OES =
-        functions->hasGLESExtension("GL_OES_EGL_image_external_essl3");
-    extensions->eglImageArray = functions->hasGLESExtension("GL_EXT_EGL_image_array");
+        functions->hasExtension("GL_OES_EGL_image_external_essl3");
+    extensions->eglImageArray = functions->hasExtension("GL_EXT_EGL_image_array");
 
-    extensions->eglSyncOES = functions->hasGLESExtension("GL_OES_EGL_sync");
+    extensions->eglSyncOES = functions->hasExtension("GL_OES_EGL_sync");
 
     if (!features.disableTimestampQueries.enabled &&
         (functions->isAtLeastGL(gl::Version(3, 3)) ||
