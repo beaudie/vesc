@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "a26ca2fe_0a409bd1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:43:09Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you mean by \"double-counting\".\n\nThe DescriptorSetLayoutDesc is built up during each iteration of this loop (graphics, compute), and that is unpacked twice to get the binding counts:\n- once for the descriptor set layout in getDescriptorSetLayout()\n- once here for the descriptor pool",
+      "parentUuid": "f78d88b4_76cbb01f",
+      "range": {
+        "startLine": 872,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 9
+      },
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0d9330f_e3dcb6bd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -94,6 +118,24 @@
     },
     {
       "key": {
+        "uuid": "f703b436_8fbec5a1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:43:09Z",
+      "side": 1,
+      "message": "Agreed.   Shrinking the pools should be straightforward, and they should be able to grow in a way that more closely matches the actual requirements.\n\nThat change should be able to arrive relatively soon, and I don\u0027t think we\u0027ll see any drawbacks from this extra descriptor pool until then.  Tracked with: anglebug.com/5067: Vulkan: Improve descriptor pool creation size",
+      "parentUuid": "ca42b70c_a7c7d8a2",
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2043e382_ca3d6be1",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
@@ -114,6 +156,30 @@
       "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "388cf875_20100408",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T21:43:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2043e382_ca3d6be1",
+      "range": {
+        "startLine": 328,
+        "startChar": 26,
+        "endLine": 328,
+        "endChar": 46
+      },
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
