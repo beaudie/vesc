@@ -39,6 +39,30 @@
       "revId": "69d6563f84bd6a3efaf23826a45d73ce7552a320",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcdb8694_c7176248",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T19:24:24Z",
+      "side": 1,
+      "message": "Please add a comment. It\u0027s going to be easy for someone to think that ANGLE_INLINE doesn\u0027t look right and just remove it.\n\nAlso, I\u0027m curious to know what this inlining actually achieved. What performance increase do you see with this change alone?",
+      "parentUuid": "aef51320_e733d99f",
+      "range": {
+        "startLine": 540,
+        "startChar": 25,
+        "endLine": 540,
+        "endChar": 50
+      },
+      "revId": "69d6563f84bd6a3efaf23826a45d73ce7552a320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
