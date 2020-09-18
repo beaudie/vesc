@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "15d4474a_5e70cc4e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T03:49:50Z",
+      "side": 1,
+      "message": "MIPMAP_NEAREST instead of MIPMAP_LINEAR is probably going to be annoyingly noticeable. Have you checked how this change looks in games?\n\nMy feeling is that this is a better change:\n\n        case GL_LINEAR:\n            return GL_NEAREST;\n        case GL_LINEAR_MIPMAP_NEAREST:\n            return GL_NEAREST_MIPMAP_NEAREST;\n        case GL_LINEAR_MIPMAP_LINEAR:\n            return GL_NEAREST_MIPMAP_LINEAR;",
+      "range": {
+        "startLine": 78,
+        "startChar": 19,
+        "endLine": 78,
+        "endChar": 44
+      },
+      "revId": "bc95423158a3e4e855f74626c3d7c493b5286815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5095ddb9_21693744",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 5
