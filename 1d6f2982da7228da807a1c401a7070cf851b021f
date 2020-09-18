@@ -33,6 +33,29 @@
       "revId": "1d6f2982da7228da807a1c401a7070cf851b021f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c048d423_dd59efe1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T19:15:51Z",
+      "side": 1,
+      "message": "gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS\n\n(which is also 4)",
+      "range": {
+        "startLine": 1065,
+        "startChar": 53,
+        "endLine": 1065,
+        "endChar": 54
+      },
+      "revId": "1d6f2982da7228da807a1c401a7070cf851b021f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
