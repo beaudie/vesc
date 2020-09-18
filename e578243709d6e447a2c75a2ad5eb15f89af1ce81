@@ -33,6 +33,29 @@
       "revId": "e578243709d6e447a2c75a2ad5eb15f89af1ce81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d718111_34e1197d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T19:10:57Z",
+      "side": 1,
+      "message": "A helper would be nice, it\u0027s repeated below.",
+      "range": {
+        "startLine": 1344,
+        "startChar": 0,
+        "endLine": 1346,
+        "endChar": 54
+      },
+      "revId": "e578243709d6e447a2c75a2ad5eb15f89af1ce81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
