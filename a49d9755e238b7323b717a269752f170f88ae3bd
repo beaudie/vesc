@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "7298b2bd_9800b526",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T22:20:53Z",
+      "side": 1,
+      "message": "The CL that landed already didn\u0027t affect these descriptor set layouts/pools here in ContextVk, since they weren\u0027t hitting issues in the first place and were able to hide.   Adding the descriptor set layout handle to the pools showed that the layouts here are different between graphics and compute, so they require separate pools.\n\nThe prior version of this CL only unpacked once, since a single unpacking was used in getDescriptorSetLayout() to create the descriptor set layout and corresponding pool.\n\nHopefully that answers the question.",
+      "parentUuid": "284c9d81_8054c015",
+      "range": {
+        "startLine": 872,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 9
+      },
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0d9330f_e3dcb6bd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
