@@ -16,6 +16,23 @@
       "revId": "5b9434eda4437a399e93c6c8f1da085597a0fb3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45aa7fd8_e85fcaa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-09-18T02:17:54Z",
+      "side": 1,
+      "message": "Please ping once the test failures are addressed. Wonder if they\u0027re related to the difference between HALF_FLOAT and HALF_FLOAT_OES.\n",
+      "revId": "5b9434eda4437a399e93c6c8f1da085597a0fb3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
