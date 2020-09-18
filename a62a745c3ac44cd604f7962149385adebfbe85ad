@@ -39,6 +39,46 @@
       "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2d6c5b6_a48467c5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-18T16:24:27Z",
+      "side": 1,
+      "message": "This moves from  ContextVk::handleDirtyGraphicsPipeline to here. When DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED is set, we set DIRTY_BIT_PROGRAM_EXECUTABLE, which will gte us to  ContextVk::invalidateProgramExecutableHelper(), which sets mCurrentGraphicsPipeline to NULL, which gets us to ContextVk::handleDirtyGraphicsPipeline() and detect mCurrentGraphicsPipeline is NULL and calls ProgramExecutableVk::getGraphicsPipeline). That call will end up modify the program to disable early fragment test.\n\nWith this change, does getGraphicsPipeline() still get called when DIRTY_BIT_PROGRAM_EXECUTABLE bit is set? From my brief code search, it does not seems so.",
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "199d883c_8242c005",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2889,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-18T16:24:27Z",
+      "side": 1,
+      "message": "Is this needed? This dirty bit does not related to how fragment shader affects the sample coverage. Thus moving depth test before or after should not matter.",
+      "range": {
+        "startLine": 2889,
+        "startChar": 17,
+        "endLine": 2889,
+        "endChar": 72
+      },
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
