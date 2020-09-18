@@ -16,6 +16,23 @@
       "revId": "888634b376a934c89aa756b743a633fae315ad0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2582ac1c_d380d33f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-18T02:41:44Z",
+      "side": 1,
+      "message": "LGTM\n\nSunny, do you want to give a +2?",
+      "revId": "888634b376a934c89aa756b743a633fae315ad0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
