@@ -16,6 +16,52 @@
       "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01568342_5039ccf2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T14:46:20Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 508,
+        "startChar": 24,
+        "endLine": 508,
+        "endChar": 32
+      },
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8a91059_6b5aa408",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T14:46:20Z",
+      "side": 1,
+      "message": "nit: probably can still inline these.",
+      "range": {
+        "startLine": 2112,
+        "startChar": 0,
+        "endLine": 2127,
+        "endChar": 0
+      },
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
