@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b09e6ec_818ece4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T17:21:30Z",
+      "side": 1,
+      "message": "LGTM with rename.",
+      "revId": "c6484f17af0031f3db033c35bbb4d6241464aaae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebf3e88f_6e6c46ce",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T17:21:30Z",
+      "side": 1,
+      "message": "nit: would call this hasSharedGarbage to make it a positive statement.",
+      "range": {
+        "startLine": 86,
+        "startChar": 9,
+        "endLine": 86,
+        "endChar": 29
+      },
+      "revId": "c6484f17af0031f3db033c35bbb4d6241464aaae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
