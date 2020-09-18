@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e84f4d18_921646db",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-18T22:56:44Z",
+      "side": 0,
+      "message": "I thought the idea was to initialize results for tests which are not part of the current shard as well, which will be used when merging results from several shards.\nHowever, I\u0027ve lost track of what\u0027s going on with all the different run modes at this point.",
+      "range": {
+        "startLine": 934,
+        "startChar": 0,
+        "endLine": 934,
+        "endChar": 95
+      },
+      "revId": "e8d01272ebeff5b3b1c6fbaf0d4f964c954cd8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
