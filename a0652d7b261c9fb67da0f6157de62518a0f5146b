@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20d840e1_708b114c",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T14:46:47Z",
+      "side": 1,
+      "message": "you might as well enable ES3 here as well now that we\u0027re landing this. just to be consistent.",
+      "range": {
+        "startLine": 262,
+        "startChar": 23,
+        "endLine": 262,
+        "endChar": 33
+      },
+      "revId": "a0652d7b261c9fb67da0f6157de62518a0f5146b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
