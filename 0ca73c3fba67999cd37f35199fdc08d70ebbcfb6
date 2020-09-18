@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4c80ac0_a087bf6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-18T15:09:44Z",
+      "side": 1,
+      "message": "Just a few more changes in the readme, but otherwise looks great and works locally.",
+      "revId": "0ca73c3fba67999cd37f35199fdc08d70ebbcfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f7dbf8c_edc9c5ae",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-18T15:09:44Z",
+      "side": 1,
+      "message": "There are several spots in here that also need to be updated.",
+      "range": {
+        "startLine": 70,
+        "startChar": 40,
+        "endLine": 70,
+        "endChar": 50
+      },
+      "revId": "0ca73c3fba67999cd37f35199fdc08d70ebbcfb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
