@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3e79b2ed_acb48ddc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T15:31:16Z",
+      "side": 1,
+      "message": "Are there any concerns about holding a lock while calling into the Vulkan driver?\n\nIf so, since we don\u0027t need the lock anyway, something like this would be better if we also think there could be contention here:\n\n    angle::Result RendererVk::newSharedFence(vk::Context *context,\n                                             vk::Shared\u003cvk::Fence\u003e *sharedFenceOut)\n    {\n        bool gotRecycledFence \u003d false;\n\n        if (!mFenceRecycler.empty())\n        {\n            std::lock_guard\u003cdecltype(mFenceMutex)\u003e lock(mFenceMutex);\n            // Double check mFenceRecycler is still empty now that we have the lock.\n            if (!mFenceRecycler.empty())\n            {\n                mFenceRecycler.fetch(\u0026fence);\n                ANGLE_VK_TRY(context, fence.reset(mDevice));\n                gotRecycledFence \u003d true;\n            }\n        }\n\n        if (!gotRecycledFence)\n        {\n            VkFenceCreateInfo fenceCreateInfo \u003d {};\n            fenceCreateInfo.sType             \u003d VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;\n            fenceCreateInfo.flags             \u003d 0;\n            ANGLE_VK_TRY(context, fence.init(mDevice, fenceCreateInfo));\n        }\n\n        sharedFenceOut-\u003eassign(mDevice, std::move(fence));\n        return angle::Result::Continue;\n    }",
+      "range": {
+        "startLine": 2200,
+        "startChar": 0,
+        "endLine": 2219,
+        "endChar": 1
+      },
+      "revId": "bae10aa78641fbfe833c837a9743b4630f22966f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eba1e4a6_04944a1d",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 2
