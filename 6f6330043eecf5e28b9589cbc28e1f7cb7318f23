@@ -16,6 +16,23 @@
       "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28363813_d0939546",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-18T22:10:51Z",
+      "side": 1,
+      "message": "Nexus 5X has issue with this in expectations file, but pixel 2 does not:\n\n2546 ANDROID : dEQP-EGL.functional.query_context.*_pixmap \u003d SKIP\n\n\nI   37.970s run_tests_on_device(01e5abf9c2d31739)  Failed to validate test expectations.\nI   37.970s run_tests_on_device(01e5abf9c2d31739)   Line 207: expectation was unused.",
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
