@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d0ae4f2_c114f4d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-09-18T22:21:46Z",
+      "side": 1,
+      "message": "Moved to the existing BlendIntegerTest.\n\nThe second dryrun suggests a possible failure reason for Intel/Windows/Vulkan - a driver regression. Trybots running the old driver pass the test, namely: 24.20.100.6286 passes, 26.20.100.8141 fails.",
+      "revId": "69f3c0f45432866bc013ac1471aa674a3ffcb742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
