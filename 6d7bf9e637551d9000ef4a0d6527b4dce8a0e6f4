@@ -16,6 +16,23 @@
       "revId": "6d7bf9e637551d9000ef4a0d6527b4dce8a0e6f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "349cf6d3_8d83a201",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-18T21:09:02Z",
+      "side": 1,
+      "message": "Took a bit of fiddling to figure out how to run it, but this worked for me on Linux:\n\n  cd out/Performance\n  vpython ../../src/tests/restricted_traces/restricted_trace_gold_tests.py --isolated-script-test-output\u003d/tmp/foo --render-test-output-dir\u003d/tmp/foo/gold\n\nWhen experimenting, I could see the following error in output, but the script passed:\n\n  Error opening \u0027/tmp/foo/gold/angle_vulkan_mobile_legends.png\u0027. (\u003c\u003d I\u0027d forgotten to create the dir)\n\nCould use an example of how to run it, either in documentation, or in the script itself.\n\n",
+      "revId": "6d7bf9e637551d9000ef4a0d6527b4dce8a0e6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
