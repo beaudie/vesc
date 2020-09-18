@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5761787e_73148fe6",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-18T17:52:50Z",
+      "side": 1,
+      "message": "From what I can tell, all 3 of these act the same on iOS, right?\n\nOptional, but could be useful to instead wrap all this in some sort of flag/feature isGPUMemoryAvailable that only is true on macOS, so platform vs feature-usage is more clearly separated.",
+      "range": {
+        "startLine": 25,
+        "startChar": 11,
+        "endLine": 25,
+        "endChar": 30
+      },
+      "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1049ed85_990e2df1",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-18T17:52:50Z",
+      "side": 1,
+      "message": "nit: redundant",
+      "range": {
+        "startLine": 127,
+        "startChar": 35,
+        "endLine": 127,
+        "endChar": 62
+      },
+      "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fdfa7a4_709ed580",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-18T17:52:50Z",
+      "side": 1,
+      "message": "This is to ignore the ret value? It\u0027s ok to continue even if mBuffer wasn\u0027t reset?",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
