@@ -182,6 +182,15 @@ struct FeaturesVk : FeatureSetBase
                                       "VkDevice supports the VK_EXT_index_type_uint8 extension",
                                       &members, "http://anglebug.com/4405"};
 
+    // Whether the VkDevice supports the VK_KHR_depth_stencil_resolve extension with the
+    // independentResolveNone feature.
+    // http://anglebug.com/4836
+    Feature supportsDepthStencilResolve = {"supports_depth_stencil_resolve",
+                                           FeatureCategory::VulkanFeatures,
+                                           "VkDevice supports the VK_KHR_depth_stencil_resolve "
+                                           "extension with the independentResolveNone feature",
+                                           &members, "http://anglebug.com/4836"};
+
     // VK_PRESENT_MODE_FIFO_KHR causes random timeouts on Linux Intel. http://anglebug.com/3153
     Feature disableFifoPresentMode = {
         "disable_fifo_present_mode", FeatureCategory::VulkanWorkarounds,
