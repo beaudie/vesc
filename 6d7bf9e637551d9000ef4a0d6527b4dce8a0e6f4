@@ -33,6 +33,24 @@
       "revId": "6d7bf9e637551d9000ef4a0d6527b4dce8a0e6f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "765ac0fb_9f0f83fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T22:51:47Z",
+      "side": 1,
+      "message": "The --help hopefully is instructive on how to run the script. Added a mention of the vpython requirement.",
+      "parentUuid": "349cf6d3_8d83a201",
+      "revId": "6d7bf9e637551d9000ef4a0d6527b4dce8a0e6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
