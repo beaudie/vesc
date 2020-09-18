@@ -16,6 +16,29 @@
       "revId": "69d6563f84bd6a3efaf23826a45d73ce7552a320",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aef51320_e733d99f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T02:24:59Z",
+      "side": 1,
+      "message": "Wow, inlining something this large made a measurable difference!",
+      "range": {
+        "startLine": 540,
+        "startChar": 25,
+        "endLine": 540,
+        "endChar": 50
+      },
+      "revId": "69d6563f84bd6a3efaf23826a45d73ce7552a320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
