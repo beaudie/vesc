@@ -42,6 +42,29 @@
     },
     {
       "key": {
+        "uuid": "ef99c67b_da195146",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T15:46:24Z",
+      "side": 1,
+      "message": "Should we make these setters that live with the getters?   That may help in the future when someone is grepping the code and only sees them accessed via getters/setters that handle the locks for them.\n\nThe obvious drawback would be getting/releasing the lock multiple times to update each value in RendererVk::queueSubmit().",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 577,
+        "endChar": 5
+      },
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b8a91059_6b5aa408",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -59,6 +82,40 @@
         "endLine": 2127,
         "endChar": 0
       },
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32cf20a7_68769d71",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T15:46:24Z",
+      "side": 1,
+      "message": "This isn\u0027t holding the lock during the call to destroyIfComplete(), so either:\n\n1.) The lock isn\u0027t necessary here.\n- Hopefully this is the case, since it simplifies things a bit.\n\n2.) The lock is necessary, and needs to be acquired with the mGarbageMutex at the start of the function.\n- This exposes some trickiness that may come up in the future regarding the order that the mGarbageMutex and mQueueSerialMutex are acquired throughout the backend: they will always need to be acquired in the same order everywhere to avoid deadlocking.   I don\u0027t think we have any way to expose/enforce that to future developers, so hopefully we won\u0027t need both of these locks anywhere else.",
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6fb69d1_e99f18ff",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T15:46:24Z",
+      "side": 1,
+      "message": "Similar comment as above.   The lock is only held to get the current value, not while performing any logic based on that value.   Either the lock needs to be acquire for the duration of this block/function or mLastCompletedQueueSerial can be used directly.",
       "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
