@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00c42ca6_74eb9593",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-18T03:42:28Z",
+      "side": 1,
+      "message": "PTAL. There Windows/AMD failure seems to be a driver bug.",
+      "revId": "39ca1803123a657d817b1cb8a5e1c2372c4cbdd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
