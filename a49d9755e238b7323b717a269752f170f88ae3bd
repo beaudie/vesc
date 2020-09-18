@@ -19,6 +19,46 @@
     },
     {
       "key": {
+        "uuid": "d7629e7e_1f9d6763",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T21:24:51Z",
+      "side": 1,
+      "message": "LGTM - I was hoping we could get the single-counting without merging the APIs.",
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f78d88b4_76cbb01f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T21:24:51Z",
+      "side": 1,
+      "message": "is this still doing double-counting?",
+      "range": {
+        "startLine": 872,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 9
+      },
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0d9330f_e3dcb6bd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -30,6 +70,47 @@
       "writtenOn": "2020-09-18T21:08:23Z",
       "side": 1,
       "message": "This needs to hold a pool for both graphics and compute driver uniforms, since those generate different descriptor set layout handles.   I haven\u0027t looked into what the differences between the DescriptorSetLayoutDesc are, but trying to special-case the driver uniforms sharing the same descriptor pool with different layout handles probably doesn\u0027t gain us much compared to the extra complexity of the code (assuming the descriptor types/counts match).   The CPU overhead of creating another pool should also be negligible, since it\u0027s only done once per context.\n\nInstead, the change to reduce the starting size of all of the pools will be a better answer to recover the memory.   That change should involve getting counts of descriptor sets allocated for each type for apps/benchmarks, and possibly allow the callers to specify the sizes of the pools (rather than a default value that has to compromise for everyone).",
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca42b70c_a7c7d8a2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T21:24:51Z",
+      "side": 1,
+      "message": "Might not be an issue if we can deal with very small pools without overhead.",
+      "parentUuid": "a0d9330f_e3dcb6bd",
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2043e382_ca3d6be1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T21:24:51Z",
+      "side": 1,
+      "message": "nit: maybe comment that this isn\u0027t owned, is merely cached for testing. Might rename it too e.g. mCachedDescriptorSetLayout",
+      "range": {
+        "startLine": 328,
+        "startChar": 26,
+        "endLine": 328,
+        "endChar": 46
+      },
       "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
