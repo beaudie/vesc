@@ -22,6 +22,30 @@
       "revId": "e8d01272ebeff5b3b1c6fbaf0d4f964c954cd8a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5697755_a4635abb",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T23:01:19Z",
+      "side": 0,
+      "message": "Yeah, that didn\u0027t work out as planned. It left a bunch of bad results at the end of a shard. And then the merging step failed because of multiple incompatible results. We kind of badly need unit tests for this. For now I am getting away without them.",
+      "parentUuid": "e84f4d18_921646db",
+      "range": {
+        "startLine": 934,
+        "startChar": 0,
+        "endLine": 934,
+        "endChar": 95
+      },
+      "revId": "e8d01272ebeff5b3b1c6fbaf0d4f964c954cd8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
