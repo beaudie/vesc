@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0f3b9bcb_51b69419",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 18
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-18T22:27:52Z",
+      "side": 1,
+      "message": "Oh I see. That\u0027s a bit confusing to read\n\nHow about an extra function so you can just return early like:\n\nif (dstAngleFormat.id !\u003d readAngleFormat.id) {\n   switch (readAngleFormat.id) {\n        case angle::FormatID::B8G8R8A8_UNORM_SRGB:\n        case angle::FormatID::R8G8B8_UNORM_SRGB:\n        case angle::FormatID::R8G8B8A8_UNORM_SRGB:\n            switch (dstAngleFormat.id)\n            {\n                case angle::FormatID::B8G8R8A8_UNORM:\n                    return \u0026angle::Format::Get(angle::FormatID::B8G8R8A8_UNORM_SRGB);\n\n                case angle::FormatID::R8G8B8A8_UNORM:\n                    return \u0026angle::Format::Get(angle::FormatID::R8G8B8A8_UNORM_SRGB);\n\n                default:\n                    // Unsupported format.\n                    ANGLE_MTL_CHECK(contextMtl, false, GL_INVALID_ENUM);\n            }\n            break;\n   }\n}\nreturn \u0026dstAngleFormat;\n\n\nI think that should be the same (maybe double check)\n\nFeel free to decide what\u0027s best and merge when you\u0027re ready",
+      "parentUuid": "4cb4caa8_238ab18d",
+      "range": {
+        "startLine": 1188,
+        "startChar": 16,
+        "endLine": 1188,
+        "endChar": 55
+      },
+      "revId": "0c7585576750af4c15cdc80c21640a931c4814d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "165ae28d_478faee0",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 18
@@ -93,6 +117,30 @@
       "revId": "0c7585576750af4c15cdc80c21640a931c4814d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84b31992_abb48413",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2323,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-18T22:27:52Z",
+      "side": 1,
+      "message": "Ok, good points",
+      "parentUuid": "49ff14d7_7fecdd14",
+      "range": {
+        "startLine": 2323,
+        "startChar": 32,
+        "endLine": 2323,
+        "endChar": 43
+      },
+      "revId": "0c7585576750af4c15cdc80c21640a931c4814d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
