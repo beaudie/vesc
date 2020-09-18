@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "a9b2e243_7d9f2ce9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T17:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01568342_5039ccf2",
+      "range": {
+        "startLine": 508,
+        "startChar": 24,
+        "endLine": 508,
+        "endChar": 32
+      },
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef99c67b_da195146",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -62,6 +86,30 @@
       "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3855cd7_6578a158",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T17:14:45Z",
+      "side": 1,
+      "message": "I thought about that, but there are only two places we set them and one of them touches multiple so figured it wasn\u0027t necessary.",
+      "parentUuid": "ef99c67b_da195146",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 577,
+        "endChar": 5
+      },
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "3954846b_9fff4129",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T17:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8a91059_6b5aa408",
+      "range": {
+        "startLine": 2112,
+        "startChar": 0,
+        "endLine": 2127,
+        "endChar": 0
+      },
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "32cf20a7_68769d71",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "6d955d59_37b43ab9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T17:14:45Z",
+      "side": 1,
+      "message": "\u003e This isn\u0027t holding the lock during the call to destroyIfComplete(), so either:\nIt does, the lock(mGarbageMutex) at the top holds the lock for the duration of the function.\n\n\u003e This exposes some trickiness\nYeah. Truly you shouldn\u0027t need to lock around reading the last serial. As long as the read is an atomic operation at least. We don\u0027t need to have the absolute latest serial, just something recent.\nThat\u0027s why I made getters for these, that minimized the time the lock is held hopefully avoiding issues with multiple locks.\nIn a few cases I don\u0027t use the getter because I\u0027m accessing more than one element and didn\u0027t want to have to grab the lock multiple times.",
+      "parentUuid": "32cf20a7_68769d71",
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6fb69d1_e99f18ff",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -116,6 +206,24 @@
       "writtenOn": "2020-09-18T15:46:24Z",
       "side": 1,
       "message": "Similar comment as above.   The lock is only held to get the current value, not while performing any logic based on that value.   Either the lock needs to be acquire for the duration of this block/function or mLastCompletedQueueSerial can be used directly.",
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d191ea5e_5bf12337",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T17:14:45Z",
+      "side": 1,
+      "message": "I don\u0027t follow.\ngetLastCompletedQueueSerial will atomically grab the current serial which we use to compare with against mPendingOneOffCommands.front().serial. That\u0027s the only lock needed.\nWell, if multiple threads can call RendererVk::getCommandBufferOneOff may need to lock for mPendingOneOffCommands, I\u0027ll have to look at that.",
+      "parentUuid": "d6fb69d1_e99f18ff",
       "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
