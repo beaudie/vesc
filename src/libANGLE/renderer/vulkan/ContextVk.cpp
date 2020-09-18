@@ -4181,6 +4181,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     }
 
     ANGLE_VK_TRY(this, mPrimaryCommands.end());
+
     waitForSwapchainImageIfNecessary();
 
     VkSubmitInfo submitInfo = {};
