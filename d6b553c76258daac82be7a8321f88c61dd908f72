@@ -227,6 +227,24 @@
       "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f556ca8_419d9ad3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T17:45:21Z",
+      "side": 1,
+      "message": "This version of the lock acquisition doesn\u0027t guarantee that mPendingOneOffCommands is being compared to a coherent value of mLastCompletedQueueSerial relative to all of the m*QueueSerial values.   Another thread could still sneak in between reading mPendingOneOffCommands and mLastCompletedQueueSerial with a call to RendererVk::queueSubmit(), making the value of mLastCompletedQueueSerial essentially random (but still \u0027good\u0027) in that regard.\n\nIf we really want a stable value of mLastCompletedQueueSerial, the lock needs to be acquired before the conditional.   However, I suspect the lock is not actually necessary at all and whatever value we get from mLastCompletedQueueSerial is fine, since it can always be updated the instant after it\u0027s used here anyway.",
+      "parentUuid": "d191ea5e_5bf12337",
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
