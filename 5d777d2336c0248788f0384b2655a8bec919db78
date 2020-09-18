@@ -16,6 +16,52 @@
       "revId": "5d777d2336c0248788f0384b2655a8bec919db78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "487580b5_9d84a90c",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-18T18:08:05Z",
+      "side": 1,
+      "message": "😊\n\n@jmadill @syoussefi @geofflang do we have any \"qualifications\" for changing this? Is passing many webgl/deqp tests good enough?\nI just want to check in because this sort of broadcasts to the world that this backend is ready to use.",
+      "range": {
+        "startLine": 13,
+        "startChar": 106,
+        "endLine": 13,
+        "endChar": 114
+      },
+      "revId": "5d777d2336c0248788f0384b2655a8bec919db78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44202f61_6698dc85",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-18T18:08:05Z",
+      "side": 1,
+      "message": "nit: these types of comments aren\u0027t necessary and will likely eventually become out of date\n\nPersonally, would at least prefer the comment to change to just // gl::ShaderType::Vertex\nbecause including the whole if (condition) makes it seem like the actual branching/condition has been commented out",
+      "range": {
+        "startLine": 454,
+        "startChar": 8,
+        "endLine": 454,
+        "endChar": 51
+      },
+      "revId": "5d777d2336c0248788f0384b2655a8bec919db78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
