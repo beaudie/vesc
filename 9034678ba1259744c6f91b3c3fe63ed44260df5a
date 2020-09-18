@@ -68,6 +68,30 @@
       "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1db1f7a3_484bfd2d",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-18T18:25:48Z",
+      "side": 1,
+      "message": "finalizePendingBuffer() currently won\u0027t return any error. But I think this reset() function should still catch the return value properly in case it might return error in future.\nI forgot it. Will change.",
+      "parentUuid": "2fdfa7a4_709ed580",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -45,6 +45,30 @@
       "revId": "890164660b091dd8522b9222d3f4c71f41422ff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4633ba54_dff60de6",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-18T18:25:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf939537_d05b008a",
+      "range": {
+        "startLine": 483,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 12
+      },
+      "revId": "890164660b091dd8522b9222d3f4c71f41422ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
