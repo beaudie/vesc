@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d02982de_c962eeee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T02:27:40Z",
+      "side": 1,
+      "message": "change",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 6
+      },
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "904a14ba_4b1c03e9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
