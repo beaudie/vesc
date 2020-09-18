@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "714970c7_4ef6bef5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T17:48:55Z",
+      "side": 1,
+      "message": "Tim\u0027s right.. we should be ensuring that we write out the right serial for the objects that are submitted in the queue.\n\nThis lock will prevent undefined behaviour in TSAN but it might not fix the bugs in ANGLE.",
+      "range": {
+        "startLine": 2142,
+        "startChar": 0,
+        "endLine": 2148,
+        "endChar": 0
+      },
+      "revId": "dc5fdf430018b523a0cac7ecf3ce94b2a2adcee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
