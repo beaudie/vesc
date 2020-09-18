@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2f5eb63_a2c556d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-18T14:40:57Z",
+      "side": 1,
+      "message": "This one I\u0027m not as sure about. It fixes the issues TSAN was complaining about and we probably do need to lock around writes to the serial info, but reads should be okay without locks. In the cases where we read the current serial we are just looking for something recent, doesn\u0027t have to be the latest.\nUnless it\u0027s possible to get interrupted during the read somehow, e.g. get half of one serial and other half of a different one.",
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
