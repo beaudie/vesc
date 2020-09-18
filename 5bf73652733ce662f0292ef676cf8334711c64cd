@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c0ec6ba_2c4d1b20",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T17:01:07Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 406,
+        "startChar": 61,
+        "endLine": 406,
+        "endChar": 67
+      },
+      "revId": "5bf73652733ce662f0292ef676cf8334711c64cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5770b71_b878d9b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-18T17:01:07Z",
+      "side": 1,
+      "message": "Since only the last one sticks, should you assert if \u003e1 value is enabled to try and catch users doing goofy things like forcing multiple LOD biases (and wasting time wondering what\u0027s going on)?\n\nI think an ASSERT(mMipLodBias \u003d\u003d 0.0f) in the loop before setting mMipLodBias should be good enough.",
+      "range": {
+        "startLine": 1996,
+        "startChar": 0,
+        "endLine": 2004,
+        "endChar": 5
+      },
+      "revId": "5bf73652733ce662f0292ef676cf8334711c64cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
