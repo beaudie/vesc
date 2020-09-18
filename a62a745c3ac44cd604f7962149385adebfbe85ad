@@ -100,6 +100,24 @@
     },
     {
       "key": {
+        "uuid": "a9b5e8db_82a3f2fc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T21:06:08Z",
+      "side": 1,
+      "message": "Hey Charlie, invalidateProgramExecutableHelper calls invalidateVertexAndIndexBuffers which will set DIRTY_BIT_PIPELINE -\u003e handleDirtyGraphicsPipeline. \n\nhandleDirtyGraphicsPipeline will call getGraphicsPipeline if there is is a state change and there\u0027s no prior transition to a known pipeline state. if there is a transition it\u0027ll pull the new pipeline from the cache.\n\nShabi we could start tracking perf counters for dirty bit handlers. I\u0027m not sure if we want to track perf counters for specific function calls. CPU overhead tests should give us good regression protection (eventually).\n\nRegarding the dirty bit, when I checked \"isEarlyFragmentTestsOptimizationAllowed\" it was checking isSampleCoverageEnabled, which corresponds to DIRTY_BIT_SAMPLE_COVERAGE_ENABLED.",
+      "parentUuid": "a097643a_6385bc06",
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "199d883c_8242c005",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -111,6 +129,30 @@
       "writtenOn": "2020-09-18T16:24:27Z",
       "side": 1,
       "message": "Is this needed? This dirty bit does not related to how fragment shader affects the sample coverage. Thus moving depth test before or after should not matter.",
+      "range": {
+        "startLine": 2889,
+        "startChar": 17,
+        "endLine": 2889,
+        "endChar": 72
+      },
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15c91d85_97e58a0a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2889,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-18T21:06:08Z",
+      "side": 1,
+      "message": "When I checked \"isEarlyFragmentTestsOptimizationAllowed\" it was checking isSampleCoverageEnabled, which corresponds to DIRTY_BIT_SAMPLE_COVERAGE_ENABLED.",
+      "parentUuid": "199d883c_8242c005",
       "range": {
         "startLine": 2889,
         "startChar": 17,
