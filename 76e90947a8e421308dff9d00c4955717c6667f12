@@ -22,6 +22,30 @@
       "revId": "76e90947a8e421308dff9d00c4955717c6667f12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24e33a34_ca4046c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-19T17:35:37Z",
+      "side": 1,
+      "message": "Yeah, launch is only called in --bot-mode. Normal execution invokes the gtest macro (RUN_ALL_TESTS or something).",
+      "parentUuid": "d951d23f_7dcfd8c6",
+      "range": {
+        "startLine": 11,
+        "startChar": 60,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "76e90947a8e421308dff9d00c4955717c6667f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
