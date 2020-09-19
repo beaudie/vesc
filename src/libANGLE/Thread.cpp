@@ -11,7 +11,6 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
-#include "libANGLE/ErrorStrings.h"
 
 namespace egl
 {
@@ -93,18 +92,6 @@ Surface *Thread::getCurrentReadSurface() const
 
 gl::Context *Thread::getContext() const
 {
-    return mContext;
-}
-
-gl::Context *Thread::getValidContext() const
-{
-    if (mContext && mContext->isContextLost())
-    {
-        mContext->handleError(GL_OUT_OF_MEMORY, gl::err::kContextLost, __FILE__, ANGLE_FUNCTION,
-                              __LINE__);
-        return nullptr;
-    }
-
     return mContext;
 }
 
