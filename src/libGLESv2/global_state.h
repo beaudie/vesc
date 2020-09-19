@@ -20,6 +20,7 @@
 namespace angle
 {
 using GlobalMutex = std::recursive_mutex;
+extern std::atomic<angle::GlobalMutex *> gGlobalMutex;
 }  // namespace angle
 
 namespace egl
@@ -50,9 +51,12 @@ ANGLE_INLINE Context *GetGlobalContext()
     }
 #endif
 
-    if (gSingleThreadedContext)
     {
-        return gSingleThreadedContext;
+        std::lock_guard<angle::GlobalMutex> lock(*angle::gGlobalMutex);
+        if (gSingleThreadedContext)
+        {
+            return gSingleThreadedContext;
+        }
     }
 
     egl::Thread *thread = egl::GetCurrentThread();
@@ -74,9 +78,12 @@ ANGLE_INLINE Context *GetValidGlobalContext()
     }
 #endif
 
-    if (gSingleThreadedContext && !gSingleThreadedContext->isContextLost())
     {
-        return gSingleThreadedContext;
+        std::lock_guard<angle::GlobalMutex> lock(*angle::gGlobalMutex);
+        if (gSingleThreadedContext && !gSingleThreadedContext->isContextLost())
+        {
+            return gSingleThreadedContext;
+        }
     }
 
     egl::Thread *thread = egl::GetCurrentThread();
@@ -88,6 +95,7 @@ ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetShareGroupLock(const Contex
     return context->isShared() ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex())
                                : std::unique_lock<angle::GlobalMutex>();
 }
+
 }  // namespace gl
 
 #endif  // LIBGLESV2_GLOBALSTATE_H_

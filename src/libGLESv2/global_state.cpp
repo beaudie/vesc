@@ -15,6 +15,11 @@
 
 #include <atomic>
 
+namespace angle
+{
+ANGLE_REQUIRE_CONSTANT_INIT std::atomic<angle::GlobalMutex *> gGlobalMutex(nullptr);
+}  // namespace angle
+
 namespace gl
 {
 // In single-threaded cases we can avoid a TLS lookup for the current Context.
@@ -39,8 +44,7 @@ namespace
 static TLSIndex threadTLS = TLS_INVALID_INDEX;
 Debug *g_Debug            = nullptr;
 
-ANGLE_REQUIRE_CONSTANT_INIT std::atomic<angle::GlobalMutex *> g_Mutex(nullptr);
-static_assert(std::is_trivially_destructible<decltype(g_Mutex)>::value,
+static_assert(std::is_trivially_destructible<decltype(angle::gGlobalMutex)>::value,
               "global mutex is not trivially destructible");
 
 Thread *AllocateCurrentThread()
@@ -75,11 +79,11 @@ void AllocateDebug()
 
 void AllocateMutex()
 {
-    if (g_Mutex == nullptr)
+    if (angle::gGlobalMutex == nullptr)
     {
         std::unique_ptr<angle::GlobalMutex> newMutex(new angle::GlobalMutex());
         angle::GlobalMutex *expected = nullptr;
-        if (g_Mutex.compare_exchange_strong(expected, newMutex.get()))
+        if (angle::gGlobalMutex.compare_exchange_strong(expected, newMutex.get()))
         {
             newMutex.release();
         }
@@ -91,7 +95,7 @@ void AllocateMutex()
 angle::GlobalMutex &GetGlobalMutex()
 {
     AllocateMutex();
-    return *g_Mutex;
+    return *angle::gGlobalMutex;
 }
 
 Thread *GetCurrentThread()
@@ -119,19 +123,22 @@ void SetContextCurrent(Thread *thread, gl::Context *context)
 {
     // See above comment on gGlobalContext.
     // If the context is in multi-threaded mode, ignore the global context.
-    if (!gl::gIsMultiThreadedContext)
     {
-        // If the global context is unset or matches the current TLS, set the global context.
-        if (gl::gSingleThreadedContext == nullptr ||
-            gl::gSingleThreadedContext == thread->getContext())
+        std::lock_guard<angle::GlobalMutex> lock(*angle::gGlobalMutex);
+        if (!gl::gIsMultiThreadedContext)
         {
-            gl::gSingleThreadedContext = context;
-        }
-        else
-        {
-            // If the global context is set and does not match TLS, set multi-threaded mode.
-            gl::gSingleThreadedContext  = nullptr;
-            gl::gIsMultiThreadedContext = true;
+            // If the global context is unset or matches the current TLS, set the global context.
+            if (gl::gSingleThreadedContext == nullptr ||
+                gl::gSingleThreadedContext == thread->getContext())
+            {
+                gl::gSingleThreadedContext = context;
+            }
+            else
+            {
+                // If the global context is set and does not match TLS, set multi-threaded mode.
+                gl::gSingleThreadedContext  = nullptr;
+                gl::gIsMultiThreadedContext = true;
+            }
         }
     }
     thread->setCurrent(context);
@@ -161,7 +168,7 @@ void DeallocateDebug()
 
 void DeallocateMutex()
 {
-    angle::GlobalMutex *mutex = g_Mutex.exchange(nullptr);
+    angle::GlobalMutex *mutex = angle::gGlobalMutex.exchange(nullptr);
     {
         // Wait for the mutex to become released by other threads before deleting.
         std::lock_guard<angle::GlobalMutex> lock(*mutex);
