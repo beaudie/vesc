@@ -3592,6 +3592,8 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
     // The only barriers that are necessary are thus barriers in situations where the resource can
     // be written to and read from without changing the bindings.
 
+    Serial currentSerial;
+    bool needToWaitForIdle  = false;
     VkAccessFlags srcAccess = 0;
     VkAccessFlags dstAccess = 0;
 
@@ -3605,6 +3607,14 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
         dstAccess |= VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT;
     }
 
+    if ((getExtensions().bufferStorageEXT) &&
+        (barriers & GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT) != 0)
+    {
+        dstAccess         = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_MEMORY_READ_BIT;
+        needToWaitForIdle = true;
+        currentSerial     = getCurrentQueueSerial();
+    }
+
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
     VkMemoryBarrier memoryBarrier = {};
@@ -3614,6 +3624,11 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
 
     mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(stageMask, stageMask,
                                                                  &memoryBarrier);
+
+    if (needToWaitForIdle)
+    {
+        ANGLE_TRY(finishToSerial(currentSerial));
+    }
 
     return angle::Result::Continue;
 }
