@@ -1098,6 +1098,12 @@ bool ValidateBufferStorageEXT(const Context *context,
         return false;
     }
 
+    if (buffer->isImmutable())
+    {
+        context->validationError(GL_INVALID_OPERATION, kBufferImmutable);
+        return false;
+    }
+
     return true;
 }
 
