@@ -132,6 +132,30 @@
       "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21970ef2_919dffaa",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-19T02:56:09Z",
+      "side": 1,
+      "message": "This is purely a matter of making reviews easier. Jamie\u0027s suggestion is to compose a first CL that does all the no-op autogen code, which doesn\u0027t need much review (for example entry points, context functions, etc).\n\nThe auto-gen changes that only make sense with the extension (like format-related files) should remain in this CL.\n\nIf the change could be split up further, that would be even better. A good idea would be to implement the front-end + GL backend in one CL (because GL backend should be fairly simple), then implement the Vulkan backend in another.",
+      "parentUuid": "1891b375_0fb8f674",
+      "range": {
+        "startLine": 648,
+        "startChar": 0,
+        "endLine": 649,
+        "endChar": 31
+      },
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
