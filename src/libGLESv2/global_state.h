@@ -27,6 +27,8 @@ namespace egl
 class Debug;
 class Thread;
 
+extern thread_local Thread *gCurrentThread;
+
 angle::GlobalMutex &GetGlobalMutex();
 Thread *GetCurrentThread();
 Debug *GetDebug();
@@ -38,8 +40,6 @@ void SetContextCurrent(Thread *thread, gl::Context *context);
 
 namespace gl
 {
-extern Context *gSingleThreadedContext;
-
 ANGLE_INLINE Context *GetGlobalContext()
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
@@ -50,13 +50,8 @@ ANGLE_INLINE Context *GetGlobalContext()
     }
 #endif
 
-    if (gSingleThreadedContext)
-    {
-        return gSingleThreadedContext;
-    }
-
-    egl::Thread *thread = egl::GetCurrentThread();
-    return thread->getContext();
+    ASSERT(egl::gCurrentThread);
+    return egl::gCurrentThread->getContext();
 }
 
 ANGLE_INLINE Context *GetValidGlobalContext()
@@ -74,13 +69,8 @@ ANGLE_INLINE Context *GetValidGlobalContext()
     }
 #endif
 
-    if (gSingleThreadedContext && !gSingleThreadedContext->isContextLost())
-    {
-        return gSingleThreadedContext;
-    }
-
-    egl::Thread *thread = egl::GetCurrentThread();
-    return thread->getValidContext();
+    ASSERT(gCurrentValidContext);
+    return gCurrentValidContext;
 }
 
 ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetShareGroupLock(const Context *context)
