@@ -53,6 +53,41 @@
     },
     {
       "key": {
+        "uuid": "72274d5a_e4c091ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-19T00:14:21Z",
+      "side": 1,
+      "message": "Response",
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbf34837_e9ae8aa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-19T00:14:21Z",
+      "side": 1,
+      "message": "Its possibly an overlap/collision with \n2546 NEXUS5X : dEQP-EGL.functional.query_context.query_context.* \u003d SKIP\n\n\nBetter:\n2546 ANDROID : dEQP-EGL.functional.query_context.get_current_context.rgb*_pixmap \u003d SKIP\n2546 ANDROID : dEQP-EGL.functional.query_context.get_current_surface.rgb*_pixmap \u003d SKIP\n2546 ANDROID : dEQP-EGL.functional.query_context.get_current_display.rgb*_pixmap \u003d SKIP\n2546 ANDROID : dEQP-EGL.functional.query_context.query_context.rgb*_pixmap \u003d SKIP\n2546 ANDROID : dEQP-EGL.functional.query_context.get_current_context.other \u003d SKIP\n2546 ANDROID : dEQP-EGL.functional.query_context.get_current_surface.other \u003d SKIP\n2546 ANDROID : dEQP-EGL.functional.query_context.get_current_display.other \u003d SKIP\n2546 ANDROID : dEQP-EGL.functional.query_context.query_context.other \u003d SKIP",
+      "parentUuid": "28363813_d0939546",
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d0a60a5_12157a7c",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 23
@@ -64,6 +99,30 @@
       "writtenOn": "2020-09-18T22:19:22Z",
       "side": 1,
       "message": "Jeff, can you split off the boilerplate of adding the new extension and updating generated files? (Defaulting to disabled). We can land that quickly then investigate the functional changes.",
+      "range": {
+        "startLine": 648,
+        "startChar": 0,
+        "endLine": 649,
+        "endChar": 31
+      },
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1891b375_0fb8f674",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-19T00:14:21Z",
+      "side": 1,
+      "message": "I\u0027m trying to see what the point is, and the benefit. Not sure yet. What goes in first PR and what goes in second PR.\n\nCertainly there are a lot of comment lines with the autogen, but it also generates the LoadImageFunction and format checks all needed for the extension.\n\nThe non-autogen: Could limit change to extension vars/flags, validation, formatutils (optional), swizzle fix(optional), and EGL config by keeping extension string hidden in Caps.cpp. Then configs would work without enabling the extension.\n\nIs that the point? basic enable configs in one and the second PR for the extension autogen?\n\nThe expectations I tweaked mostly have to do with configs+stencil8. And SKIPPING the .other and _pixmap tests, since those never pass except in Xll pixmap case.\n\nNote we can\u0027t have extension without configs+stencil8 - texture_stencil tests require a stencil8 config and the extension.",
+      "parentUuid": "9d0a60a5_12157a7c",
       "range": {
         "startLine": 648,
         "startChar": 0,
