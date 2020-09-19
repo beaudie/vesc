@@ -3999,6 +3999,16 @@ bool ValidateMapBufferRangeBase(const Context *context,
         return false;
     }
 
+    if (context->getExtensions().bufferStorageEXT && buffer->isImmutable())
+    {
+        GLbitfield readWriteAccessBits = access & (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
+        if ((readWriteAccessBits & buffer->getImmutableFlags()) != readWriteAccessBits)
+        {
+            context->validationError(GL_INVALID_OPERATION, kBufferNotMappable);
+            return false;
+        }
+    }
+
     return ValidateMapBufferBase(context, target);
 }
 

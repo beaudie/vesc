@@ -3174,6 +3174,14 @@ bool ValidateMapBufferOES(const Context *context, BufferBinding target, GLenum a
         return false;
     }
 
+    if (context->getExtensions().bufferStorageEXT && buffer->isImmutable() &&
+        !(buffer->getImmutableFlags() & GL_MAP_WRITE_BIT))
+    {
+        ASSERT(access == GL_WRITE_ONLY_OES);
+        context->validationError(GL_INVALID_OPERATION, kBufferNotMappable);
+        return false;
+    }
+
     return ValidateMapBufferBase(context, target);
 }
 
@@ -3700,6 +3708,12 @@ bool ValidateBufferData(const Context *context,
         return false;
     }
 
+    if (context->getExtensions().bufferStorageEXT && buffer->isImmutable())
+    {
+        context->validationError(GL_INVALID_OPERATION, kBufferImmutable);
+        return false;
+    }
+
     return true;
 }
 
@@ -3745,6 +3759,13 @@ bool ValidateBufferSubData(const Context *context,
         buffer->isBoundForTransformFeedbackAndOtherUse())
     {
         context->validationError(GL_INVALID_OPERATION, kBufferBoundForTransformFeedback);
+        return false;
+    }
+
+    if (context->getExtensions().bufferStorageEXT && buffer->isImmutable() &&
+        !(buffer->getImmutableFlags() & GL_DYNAMIC_STORAGE_BIT_EXT))
+    {
+        context->validationError(GL_INVALID_OPERATION, kBufferNotUpdatable);
         return false;
     }
 

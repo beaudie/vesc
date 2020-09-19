@@ -46,6 +46,10 @@ class BufferState final : angle::NonCopyable
     GLint64 getSize() const { return mSize; }
     bool isBoundForTransformFeedback() const { return mTransformFeedbackIndexedBindingCount != 0; }
     std::string getLabel() const { return mLabel; }
+    void setImmutable(bool isImmutable) { mImmutable = isImmutable; }
+    GLboolean isImmutable() const { return mImmutable; }
+    void setImmutableFlags(GLbitfield flags) { mImmutableFlags = flags; }
+    GLbitfield getImmutableFlags() const { return mImmutableFlags; }
 
   private:
     friend class Buffer;
@@ -63,6 +67,8 @@ class BufferState final : angle::NonCopyable
     int mBindingCount;
     int mTransformFeedbackIndexedBindingCount;
     int mTransformFeedbackGenericBindingCount;
+    GLboolean mImmutable;
+    GLbitfield mImmutableFlags;
 };
 
 class Buffer final : public RefCountObject<BufferID>,
@@ -78,11 +84,22 @@ class Buffer final : public RefCountObject<BufferID>,
     void setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
 
+    angle::Result bufferStorage(Context *context,
+                                BufferBinding target,
+                                GLsizeiptr size,
+                                const void *data,
+                                GLbitfield flags);
     angle::Result bufferData(Context *context,
                              BufferBinding target,
                              const void *data,
                              GLsizeiptr size,
                              BufferUsage usage);
+    angle::Result bufferDataImpl(Context *context,
+                                 BufferBinding target,
+                                 const void *data,
+                                 GLsizeiptr size,
+                                 BufferUsage usage,
+                                 GLbitfield flags);
     angle::Result bufferSubData(const Context *context,
                                 BufferBinding target,
                                 const void *data,
@@ -119,6 +136,8 @@ class Buffer final : public RefCountObject<BufferID>,
     GLint64 getMapLength() const { return mState.mMapLength; }
     GLint64 getSize() const { return mState.mSize; }
     GLint64 getMemorySize() const;
+    GLboolean isImmutable() const { return mState.isImmutable(); }
+    GLbitfield getImmutableFlags() const { return mState.getImmutableFlags(); }
 
     rx::BufferImpl *getImplementation() const { return mImpl; }
 
