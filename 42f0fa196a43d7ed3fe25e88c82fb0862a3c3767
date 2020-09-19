@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "328fe092_8f25751a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-19T02:31:35Z",
+      "side": 1,
+      "message": "PTAL\n\nSecond try at landing the Abseil stuff.   As a refresher, here\u0027s the last try (which was reverted):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2321735\n\nThe translator changes (RewriteRowMajorMatrices.cpp) have been removed this time, since angletypes.h is not available in src/compiler/.   I\u0027m open to suggestions on what we can do there, while still supporting angle::HashMap as a layer of indirection to enable/disable Abseil (another change in this CL).   That work can be in a follow-on CL too, once we get over the first hurdle of enabling Abseil at all.",
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
