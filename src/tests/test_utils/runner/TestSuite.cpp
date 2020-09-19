@@ -1110,11 +1110,18 @@ bool TestSuite::finishProcess(ProcessInfo *processInfo)
 
         if (result.type == TestResultType::Pass)
         {
-            printf(" (%g ms)\n", result.elapsedTimeSeconds * 1000.0);
+            printf(" (%0.1lf ms)\n", result.elapsedTimeSeconds * 1000.0);
         }
         else
         {
-            printf(" (%s)\n", ResultTypeToString(result.type));
+            if (result.type == TestResultType::Timeout)
+            {
+                printf(" (TIMEOUT in %0.1lf s)\n", result.elapsedTimeSeconds);
+            }
+            else
+            {
+                printf(" (%s)\n", ResultTypeToString(result.type));
+            }
 
             const std::string &batchStdout = processInfo->process->getStdout();
             PrintTestOutputSnippet(id, result, batchStdout);
