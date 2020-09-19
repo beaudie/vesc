@@ -3958,7 +3958,31 @@ bool ValidateMapBufferRangeBase(const Context *context,
                                GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_FLUSH_EXPLICIT_BIT |
                                GL_MAP_UNSYNCHRONIZED_BIT;
 
-    if (access & ~(allAccessBits))
+    // GL_EXT_buffer_storage's additions to glMapBufferRange
+    GLbitfield bufferStorageAccessBits =
+        allAccessBits | GL_MAP_PERSISTENT_BIT_EXT | GL_MAP_COHERENT_BIT_EXT;
+
+    if (buffer->isImmutable())
+    {
+        if (access & ~(bufferStorageAccessBits))
+        {
+            context->validationError(GL_INVALID_VALUE, kInvalidAccessBits);
+            return false;
+        }
+
+        // It is invalid if any of bufferStorageMatchedAccessBits bits are included in access,
+        // but the same bits are not included in the buffer's storage flags
+        GLbitfield bufferStorageMatchedAccessBits = GL_MAP_READ_BIT | GL_MAP_WRITE_BIT |
+                                                    GL_MAP_PERSISTENT_BIT_EXT |
+                                                    GL_MAP_COHERENT_BIT_EXT;
+        GLbitfield accessFlags = access & bufferStorageMatchedAccessBits;
+        if ((accessFlags & buffer->getImmutableFlags()) != accessFlags)
+        {
+            context->validationError(GL_INVALID_OPERATION, kInvalidAccessBits);
+            return false;
+        }
+    }
+    else if (access & ~(allAccessBits))
     {
         context->validationError(GL_INVALID_VALUE, kInvalidAccessBits);
         return false;
