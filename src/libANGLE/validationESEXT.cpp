@@ -1057,7 +1057,53 @@ bool ValidateBufferStorageEXT(const Context *context,
                               const void *data,
                               GLbitfield flags)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (!context->isValidBufferBinding(targetPacked))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidBufferTypes);
+        return false;
+    }
+
+    if (size < 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kNegativeSize);
+        return false;
+    }
+
+    constexpr GLbitfield kAllUsageFlags =
+        (GL_DYNAMIC_STORAGE_BIT_EXT | GL_MAP_READ_BIT | GL_MAP_WRITE_BIT |
+         GL_MAP_PERSISTENT_BIT_EXT | GL_MAP_PERSISTENT_BIT_EXT | GL_CLIENT_STORAGE_BIT_EXT);
+    if (flags & (~kAllUsageFlags))
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidBufferUsageFlags);
+        return false;
+    }
+
+    if ((flags & (GL_MAP_PERSISTENT_BIT_EXT)) && !(flags & (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT)))
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidBufferUsageFlags);
+        return false;
+    }
+
+    if ((flags & (GL_MAP_COHERENT_BIT_EXT)) && !(flags & (GL_MAP_PERSISTENT_BIT_EXT)))
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidBufferUsageFlags);
+        return false;
+    }
+
+    Buffer *buffer = context->getState().getTargetBuffer(targetPacked);
+
+    if (buffer == nullptr)
+    {
+        context->validationError(GL_INVALID_OPERATION, kBufferNotBound);
+        return false;
+    }
+
+    if (buffer->isImmutable())
+    {
+        context->validationError(GL_INVALID_OPERATION, kBufferImmutable);
+        return false;
+    }
+
+    return true;
 }
 }  // namespace gl
