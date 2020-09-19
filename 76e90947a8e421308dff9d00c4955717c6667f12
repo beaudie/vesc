@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d951d23f_7dcfd8c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-19T17:19:05Z",
+      "side": 1,
+      "message": "Doesn\u0027t this always pass the flag? Or is launchChildTestProcess() only called in bot mode?",
+      "range": {
+        "startLine": 11,
+        "startChar": 60,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "76e90947a8e421308dff9d00c4955717c6667f12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
