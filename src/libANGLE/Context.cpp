@@ -272,6 +272,8 @@ bool IsColorMaskedOut(const BlendState &blend)
 }
 }  // anonymous namespace
 
+thread_local Context *gCurrentValidContext = nullptr;
+
 Context::Context(egl::Display *display,
                  const egl::Config *config,
                  const Context *shareContext,
@@ -2493,6 +2495,11 @@ void Context::validationError(GLenum errorCode, const char *message) const
 // [OpenGL ES 2.0.24] section 2.5 page 13.
 GLenum Context::getError()
 {
+    if (mContextLost)
+    {
+        handleError(GL_OUT_OF_MEMORY, err::kContextLost, __FILE__, ANGLE_FUNCTION, __LINE__);
+    }
+
     if (mErrors.empty())
     {
         return GL_NO_ERROR;
@@ -2522,6 +2529,9 @@ void Context::setContextLost()
     // Stop skipping validation, since many implementation entrypoint assume they can't
     // be called when lost, or with null object arguments, etc.
     mSkipValidation = false;
+
+    // Make sure we update TLS.
+    gCurrentValidContext = nullptr;
 }
 
 GLenum Context::getGraphicsResetStatus()
