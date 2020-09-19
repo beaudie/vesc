@@ -20,4 +20,14 @@ angle::Result BufferImpl::getSubData(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+angle::Result BufferImpl::setStorageData(const gl::Context *context,
+                                         gl::BufferBinding target,
+                                         const void *data,
+                                         size_t size,
+                                         GLbitfield flags)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
 }  // namespace rx
