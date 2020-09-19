@@ -104,18 +104,6 @@ typedef pthread_key_t TLSIndex;
 constexpr TLSIndex kAndroidOpenGLTlsSlot = 3;
 
 extern bool gUseAndroidOpenGLTlsSlot;
-ANGLE_INLINE bool SetContextToAndroidOpenGLTLSSlot(gl::Context *value)
-{
-#if defined(ANGLE_PLATFORM_ANDROID)
-    if (gUseAndroidOpenGLTlsSlot)
-    {
-        ANGLE_ANDROID_GET_GL_TLS()[kAndroidOpenGLTlsSlot] = static_cast<void *>(value);
-        return true;
-    }
-#endif
-    return false;
-}
-
 void SetUseAndroidOpenGLTlsSlot(bool platformTypeVulkan);
 
 // TODO(kbr): for POSIX platforms this will have to be changed to take
