@@ -86,6 +86,24 @@
       "revId": "9dad4be8a946b12a63f3e1db89c098b6ee78e2be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ae0ae2e_53ea4c4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-20T23:52:56Z",
+      "side": 1,
+      "message": "you are thinking of ResourceUse not SharedResourceUse. it is indeed the case that \"ResourceUse\" is destroyed along with the object but \"SharedResourceUse\" is a transient object used only while a resource is being tracked by the context. it would be constructed when adding a resource and destroyed when updating the resource\u0027s serial and releasing it",
+      "parentUuid": "6eea9a03_6cece79f",
+      "revId": "9dad4be8a946b12a63f3e1db89c098b6ee78e2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
