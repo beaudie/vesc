@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f339238_4d64a07b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-09-20T08:02:00Z",
+      "side": 1,
+      "message": "Hi Ian, can you please fix this? it should be getCopyImageView().valid()\n\nThis caused some CTS failures:\nKHR-GLES3.copy_tex_image_conversions.required.texture3d_*",
+      "revId": "1c1c6b4e3892f2ac095e60ba32adfbac08095e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
