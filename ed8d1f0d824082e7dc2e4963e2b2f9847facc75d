@@ -56,6 +56,29 @@
       "revId": "ed8d1f0d824082e7dc2e4963e2b2f9847facc75d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00d70ff7_b47c11f2",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-20T13:32:08Z",
+      "side": 1,
+      "message": "this error message isn\u0027t appropriate:\n\nMSG kInvalidBufferUsage \u003d \"Invalid buffer usage enum.\";\n\nThis field is a bitset and is named \u0027flags\u0027. Suggest you define at least one new error.",
+      "range": {
+        "startLine": 1083,
+        "startChar": 51,
+        "endLine": 1083,
+        "endChar": 70
+      },
+      "revId": "ed8d1f0d824082e7dc2e4963e2b2f9847facc75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
