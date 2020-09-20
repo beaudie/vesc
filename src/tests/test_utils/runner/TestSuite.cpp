@@ -650,7 +650,14 @@ std::string GetConfigNameFromTestIdentifier(const TestIdentifier &id)
     size_t doubleUnderscorePos = id.testName.find("__");
     if (doubleUnderscorePos == std::string::npos)
     {
-        return id.testName.substr(slashPos + 1);
+        std::string configName = id.testName.substr(slashPos + 1);
+
+        if (configName.size() < 3 || configName[0] != 'E' || configName[1] != 'S')
+        {
+            return "default";
+        }
+
+        return configName;
     }
     else
     {
