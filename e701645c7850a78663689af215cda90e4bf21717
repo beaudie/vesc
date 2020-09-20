@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "1c82de1c_8c5c4f62",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-20T23:27:15Z",
+      "side": 1,
+      "message": "can remove these getters as well",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 68
+      },
+      "revId": "e701645c7850a78663689af215cda90e4bf21717",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ca88353_57a724bd",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 3
