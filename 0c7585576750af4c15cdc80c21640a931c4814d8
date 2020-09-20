@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "6ba75aec_4a624297",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 18
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-20T16:22:02Z",
+      "side": 1,
+      "message": "Ack. This special sRGB case is by itself already confusing because when glReadPixels() is called, the dstAngleFormat will always be reported as normal RGB (i.e. B8G8R8A8_UNORM) but in fact, it depends on framebuffer format is sRGB or normal RGB. The read pixels returned to caller must use the same color space as the framebuffer\u0027s.",
+      "parentUuid": "0f3b9bcb_51b69419",
+      "range": {
+        "startLine": 1188,
+        "startChar": 16,
+        "endLine": 1188,
+        "endChar": 55
+      },
+      "revId": "0c7585576750af4c15cdc80c21640a931c4814d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "165ae28d_478faee0",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 18
