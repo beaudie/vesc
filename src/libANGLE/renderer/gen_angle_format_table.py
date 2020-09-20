@@ -342,39 +342,14 @@ def json_to_table_data(format_id, json, angle_to_gl):
 
     return format_entry_template.format(**parsed)
 
-
-# For convenience of the Vulkan backend, place depth/stencil formats first.  This allows
-# depth/stencil format IDs to be placed in only a few bits.
-def sorted_ds_first(all_angle):
-    ds_sorted = []
-    color_sorted = []
-    for format_id in sorted(all_angle):
-        if format_id == 'NONE':
-            continue
-        if format_id[0] == 'D' or format_id[0] == 'S':
-            ds_sorted.append(format_id)
-        else:
-            color_sorted.append(format_id)
-
-    return ds_sorted + color_sorted
-
-
 def parse_angle_format_table(all_angle, json_data, angle_to_gl):
     table_data = ''
-    for format_id in sorted_ds_first(all_angle):
+    for format_id in angle_format.sorted_ds_first(all_angle):
         assert (format_id != 'NONE')
         format_info = json_data[format_id] if format_id in json_data else {}
         table_data += json_to_table_data(format_id, format_info, angle_to_gl)
 
     return table_data
-
-
-def gen_enum_string(all_angle):
-    enum_data = '    NONE'
-    for format_id in sorted_ds_first(all_angle):
-        assert (format_id != 'NONE')
-        enum_data += ',\n    ' + format_id
-    return enum_data
 
 
 case_template = """        case {gl_format}:
@@ -426,7 +401,7 @@ def main():
         out_file.write(output_cpp)
         out_file.close()
 
-    enum_data = gen_enum_string(all_angle)
+    enum_data = angle_format.gen_enum_string(all_angle)
     num_angle_formats = len(all_angle)
     output_h = template_autogen_h.format(
         script_name=sys.argv[0],

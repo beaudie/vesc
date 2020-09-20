@@ -277,3 +277,30 @@ def get_vertex_copy_function(src_format, dst_format):
 
     return "CopyTo32FVertexData<%s, %d, %d, %s>" % (src_gl_type, num_channel, num_channel,
                                                     normalized)
+
+
+# For convenience of the Vulkan backend, place depth/stencil formats first.  This allows
+# depth/stencil format IDs to be placed in only a few bits.
+def sorted_ds_first(all_angle):
+    ds_sorted = []
+    color_sorted = []
+    for format_id in sorted(all_angle):
+        if format_id == 'NONE':
+            continue
+        if format_id[0] == 'D' or format_id[0] == 'S':
+            ds_sorted.append(format_id)
+        else:
+            color_sorted.append(format_id)
+
+    return ds_sorted + color_sorted
+
+
+def gen_enum_string(all_angle):
+    enum_data = '    NONE'
+    for format_id in sorted(all_angle):
+        if format_id == 'NONE':
+            continue
+    for format_id in sorted_ds_first(all_angle):
+        assert (format_id != 'NONE')
+        enum_data += ',\n    ' + format_id
+    return enum_data

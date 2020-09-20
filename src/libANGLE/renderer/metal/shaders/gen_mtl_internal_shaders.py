@@ -166,7 +166,12 @@ def gen_precompiled_shaders(mac_version, ios_version, variable_name, additional_
 
 def gen_shader_enums_code(angle_formats):
 
-    code = "namespace rx\n"
+    code = """// This file is similar to src/libANGLE/renderer/FormatID_autogen.h but is used by Metal default
+// shaders instead of C++ code.
+//
+"""
+
+    code += "namespace rx\n"
     code += "{\n"
     code += "namespace mtl_shader\n"
     code += "{\n"
@@ -175,11 +180,7 @@ def gen_shader_enums_code(angle_formats):
     code += "{\n"
     code += "enum\n"
     code += "{\n"
-    code += "    NONE,\n"
-    for angle_format in sorted(angle_formats):
-        if angle_format == 'NONE':  # NONE already moved to the beginning of enum declaration
-            continue
-        code += "    " + angle_format + ",\n"
+    code += angle_format.gen_enum_string(angle_formats) + '\n'
     code += "};\n\n"
     code += "}\n"
     code += "\n"
