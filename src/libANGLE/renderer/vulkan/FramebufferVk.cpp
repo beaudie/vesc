@@ -2203,7 +2203,11 @@ angle::Result FramebufferVk::clearWithCommand(
         dsAspectFlags |= VK_IMAGE_ASPECT_DEPTH_BIT;
         dsClearValue.depthStencil = clearDepthStencilValue;
         // Explicitly mark a depth write because we are clearing the depth buffer.
-        renderpassCommands->onDepthAccess(vk::ResourceAccess::Write);
+        if (renderpassCommands->onDepthAccess(vk::ResourceAccess::Write))
+        {
+            // The attachment is no longer invalidated, so set mContentDefined to true
+            restoreDepthStencilDefinedContents();
+        }
     }
 
     if (clearStencil)
@@ -2211,7 +2215,11 @@ angle::Result FramebufferVk::clearWithCommand(
         dsAspectFlags |= VK_IMAGE_ASPECT_STENCIL_BIT;
         dsClearValue.depthStencil = clearDepthStencilValue;
         // Explicitly mark a stencil write because we are clearing the stencil buffer.
-        renderpassCommands->onStencilAccess(vk::ResourceAccess::Write);
+        if (renderpassCommands->onStencilAccess(vk::ResourceAccess::Write))
+        {
+            // The attachment is no longer invalidated, so set mContentDefined to true
+            restoreDepthStencilDefinedContents();
+        }
     }
 
     if (dsAspectFlags != 0)
