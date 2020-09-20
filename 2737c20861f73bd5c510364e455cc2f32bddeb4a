@@ -16,6 +16,304 @@
       "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e110bc50_818b8692",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "You can drop the setters. The Buffer class is a friend; all the other fields are also set directly.",
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adec7aa0_90abc659",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "I suggest defaulting to DEVICE_LOCAL and add HOST_VISIBLE only if other accesses require it.",
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf1c3b8e_c4d12a5b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "nit: (x \u0026 y) !\u003d 0 to be explicit.",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 38
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab3cadac_e1abb821",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "Redundant HOST_VISIBLE (unless you default to DEVICE_LOCAL).\n\nDon\u0027t specify CACHED. The driver will choose cached or not based on whichever gives the best performance.",
+      "range": {
+        "startLine": 88,
+        "startChar": 23,
+        "endLine": 88,
+        "endChar": 95
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2597da3_07dc32ec",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 91,
+        "startChar": 8,
+        "endLine": 91,
+        "endChar": 46
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad74db4f_14eb6de9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "nit: (x \u0026 y) \u003d\u003d 0 to be explicit.",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 9
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7f20ff8_915ee9f2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "If you start with DEVICE_LOCAL, this `if` becomes unnecessary.",
+      "range": {
+        "startLine": 98,
+        "startChar": 22,
+        "endLine": 98,
+        "endChar": 57
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75532dd2_b1d8585a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "nit: !\u003d 0",
+      "range": {
+        "startLine": 212,
+        "startChar": 82,
+        "endLine": 212,
+        "endChar": 83
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be811d69_9e90bc0a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3965,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "No need to check for extension. buffer-\u003eisImmutable() implies extension is there.",
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af1537ac_ff169680",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "Redundant",
+      "range": {
+        "startLine": 3177,
+        "startChar": 8,
+        "endLine": 3177,
+        "endChar": 49
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbd2821c_b6f89f2e",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3178,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "Suggest (x\u0026y) \u003d\u003d 0 instead of !(x\u0026y) for clarity.",
+      "range": {
+        "startLine": 3178,
+        "startChar": 8,
+        "endLine": 3178,
+        "endChar": 9
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "041d0a21_ac05537b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3711,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "Redundant",
+      "range": {
+        "startLine": 3711,
+        "startChar": 8,
+        "endLine": 3711,
+        "endChar": 49
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0191a9e0_13234ce5",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3765,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "Redundant",
+      "range": {
+        "startLine": 3765,
+        "startChar": 8,
+        "endLine": 3765,
+        "endChar": 49
+      },
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "041e319d_e510c991",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-20T03:13:26Z",
+      "side": 1,
+      "message": "The implementation of this barrier bit is missing.\n\nLooks like it may need to incur a flush + finishToSerial + vkInvalidateMappedMemoryRanges IIUC. The pipeline barrier from device-write to host read is automatically inserted at flush time, so nothing needs to be added about that.\n\n---\n\nYou should be able to easily write a test for it:\n\n- Create persistent map of buffer\n- glDispatchCompute() that writes to buffer\n- (without flush) glMemoryBarrieer(GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT)\n- Verify contents of buffer\n\nWithout a flush/finishToSerial/invalidate, the contents of the buffer would be old because the dispatch is not even submitted to the GPU.",
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
