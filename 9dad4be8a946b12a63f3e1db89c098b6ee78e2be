@@ -68,6 +68,24 @@
       "revId": "9dad4be8a946b12a63f3e1db89c098b6ee78e2be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6eea9a03_6cece79f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-20T18:21:23Z",
+      "side": 1,
+      "message": "I did have one follow-up question. Maybe can raise this somewhere else. Don\u0027t resource uses only get created/destroyed when objects are destroyed? What objects are being created/destroyed during Manhattan\u0027s run?",
+      "parentUuid": "47d48c97_e4080d11",
+      "revId": "9dad4be8a946b12a63f3e1db89c098b6ee78e2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
