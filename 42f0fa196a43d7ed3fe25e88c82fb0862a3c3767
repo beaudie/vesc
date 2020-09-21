@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ccf63a5b_39cc3d67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-21T19:15:19Z",
+      "side": 1,
+      "message": "I like angleutils.h, since I like the angle namespace for angle::HashMap.   Let me know what you think.",
+      "parentUuid": "992d2626_20898214",
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71906f77_b09715fb",
         "filename": "BUILD.gn",
         "patchSetId": 5
@@ -74,6 +92,30 @@
       "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884f6c47_61e4cd5b",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-21T19:15:19Z",
+      "side": 1,
+      "message": "Ha, duh.",
+      "parentUuid": "71906f77_b09715fb",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 26
+      },
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -100,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "028c03b2_9095c3c1",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-21T19:15:19Z",
+      "side": 1,
+      "message": "\u003e recommend you introduce an angle_abseil_dir to be future-proof.\n\nEasy enough, since I made one with a previous CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2321734/14/build_overrides/angle.gni",
+      "parentUuid": "a51e0c10_240504b9",
+      "range": {
+        "startLine": 770,
+        "startChar": 21,
+        "endLine": 770,
+        "endChar": 45
+      },
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5eec8553_065c5f0b",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 5
@@ -120,6 +186,30 @@
       "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe6e8611_c5c4953b",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-21T19:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5eec8553_065c5f0b",
+      "range": {
+        "startLine": 1060,
+        "startChar": 11,
+        "endLine": 1060,
+        "endChar": 27
+      },
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
