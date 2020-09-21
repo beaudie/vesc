@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "aa939dd2_9611589a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T21:33:36Z",
+      "side": 1,
+      "message": "Good point. Will do.",
+      "parentUuid": "55c088a3_43560a05",
+      "range": {
+        "startLine": 2316,
+        "startChar": 0,
+        "endLine": 2320,
+        "endChar": 51
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "682320ef_2ec46803",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 9
@@ -77,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "af0c40de_21c4f42e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2573,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T21:33:36Z",
+      "side": 1,
+      "message": "Previously this readOnly mode is only used by feedback loop. The tetxure code will insert the layout transition. But now we are changing it without texture code, so we have to insert the transition. \n\nI am thinking to do a follow up CL to move the actual layout transition to endRenderpass time. That way we only do the layout transtion once, at the endRP time, thus avoiding unnecessary layout transitions during the RP build up time and hopefully able to get rid of mForceIndividualBarriers as well.",
+      "parentUuid": "682320ef_2ec46803",
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe90ed83_2e02aa91",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
@@ -88,6 +130,30 @@
       "writtenOn": "2020-09-21T20:28:14Z",
       "side": 1,
       "message": "The function name is misleading now.",
+      "range": {
+        "startLine": 981,
+        "startChar": 44,
+        "endLine": 981,
+        "endChar": 62
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b992abfd_c7421d48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T21:33:36Z",
+      "side": 1,
+      "message": "Agree. How about rename it to restartRenderPass?",
+      "parentUuid": "fe90ed83_2e02aa91",
       "range": {
         "startLine": 981,
         "startChar": 44,
@@ -181,6 +247,24 @@
       "writtenOn": "2020-09-21T20:28:14Z",
       "side": 1,
       "message": "Empty lines separating these into logical groups can help a lot with readability. See other tests for example.",
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "764458e4_6b30dc15",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T21:33:36Z",
+      "side": 1,
+      "message": "I probably can factor out some of the code that setup the depth FBO into its own function that other tests are using as well.",
+      "parentUuid": "cf8b5d66_586e0dca",
       "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
