@@ -16,6 +16,29 @@
       "revId": "3f8a0218d07ad8b2ebb1516cab2ee682c43cc6cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "428fa532_e4cb3765",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-21T22:35:58Z",
+      "side": 1,
+      "message": "You should run the last frame too, ResetReplay may depend on its state.",
+      "range": {
+        "startLine": 392,
+        "startChar": 56,
+        "endLine": 392,
+        "endChar": 86
+      },
+      "revId": "3f8a0218d07ad8b2ebb1516cab2ee682c43cc6cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
