@@ -2984,6 +2984,27 @@ const char *ValidateDrawStates(const Context *context)
             }
         }
 
+        // If there's a Program bound, we still want to link the PPO so we don't lose the dirty bit,
+        // but, we don't want to signal any errors if it fails since the failure would be unrelated
+        // to drawing with the Program.
+        if (programPipeline && programPipeline->hasAnyDirtyBit())
+        {
+            programPipeline->resetDirtyBits();
+
+            bool goodResult = programPipeline->link(context) == angle::Result::Continue;
+
+            //  If there is no active program for the vertex or fragment shader stages, the results
+            //  of vertex and fragment shader execution will respectively be undefined. However,
+            //  this is not an error, so ANGLE only signals PPO link failures if both VS and FS
+            //  stages are present.
+            const ProgramExecutable &executable = programPipeline->getExecutable();
+            if (!program && !goodResult && executable.hasVertexAndFragmentShader())
+            {
+                WARN() << "TIMTIM >> " << err::kProgramPipelineLinkFailed;
+                return err::kProgramPipelineLinkFailed;
+            }
+        }
+
         // Do some additional WebGL-specific validation
         if (extensions.webglCompatibility)
         {

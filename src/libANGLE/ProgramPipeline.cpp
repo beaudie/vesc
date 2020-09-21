@@ -699,13 +699,22 @@ bool ProgramPipeline::validateSamplers(InfoLog *infoLog, const Caps &caps)
 
 angle::Result ProgramPipeline::syncState(const Context *context)
 {
-    if (mDirtyBits.any())
+    // All dirty bits require re-linking the PPO. For draws, these need to be handled in the
+    // validation layer, so we fail any draw commands correctly, so we skip the link here and keep
+    // the dirty bits so we correctly link the PPO next time.
+
+    if (getExecutable().isCompute() && mDirtyBits.any())
     {
+        // Compute PPOs only contain a single stage, so the PPO link can't fail due to a bad program
+        // violating the spec, since the compute shader program must have successfully linked to be
+        // included in the PPO in the first place. However, there is still some necessary work to be
+        // done before the PPO can be used, so we still need to do the link work here.
+
         mDirtyBits.reset();
 
-        // If there's a Program bound, we still want to link the PPO so we don't
-        // lose the dirty bit, but, we don't want to signal any errors if it fails
-        // since the failure would be unrelated to drawing with the Program.
+        // If there's a Program bound, we still want to link the PPO so we don't lose the dirty
+        // bit, but, we don't want to signal any errors if it fails since the failure would be
+        // unrelated to drawing with the Program.
         bool goodResult = link(context) == angle::Result::Continue;
         if (!context->getState().getProgram())
         {
