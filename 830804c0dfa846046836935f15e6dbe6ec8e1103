@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a4411240_1b016a04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T16:38:54Z",
+      "side": 1,
+      "message": "Thanks! I just updated some comments as well.",
+      "parentUuid": "c176ca17_7db58596",
+      "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61f54a89_2e7e20ac",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 8
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "d8ee4fb0_11dc6484",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2316,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T16:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61f54a89_2e7e20ac",
+      "range": {
+        "startLine": 2316,
+        "startChar": 23,
+        "endLine": 2316,
+        "endChar": 29
+      },
+      "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "527b97ae_cce8aee5",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 8
@@ -53,6 +95,24 @@
       "writtenOn": "2020-09-21T16:22:18Z",
       "side": 1,
       "message": "This is done at the start of this block, but the decision to use it got moved to the bottom (what used to be at lines 2325-2328).\n\nShouldn\u0027t depthStencilReadOnly influence the store ops (i.e. DONT_CARE)?  If read only, seems like you need to load it, but you don\u0027t need to store it.",
+      "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6be45329_5397734c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T16:38:54Z",
+      "side": 1,
+      "message": "The whole problem here is that I can not change storeOP to DontCare just because this is read only. The spec says that Don\u0027t care means content is undefined after the renderpass, which is not what we mean here. That is why this CL is only intended to change the layout to read only. Some driver may able to detect this is read only and skip the storeOp but still preserve the content. QualComm does have an extension to introduce a new stoeOP enum, but that will be a separate CL once we have the driver includes the support.\n\nThe decision at line 2317 is to affect the initial layout we pick.",
+      "parentUuid": "527b97ae_cce8aee5",
       "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
