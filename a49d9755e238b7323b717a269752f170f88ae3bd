@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "88dc7717_fed4760c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T14:56:13Z",
+      "side": 1,
+      "message": "I see. Could you add a helper function to make the unpack code in one place? Really my concern was that my comments made you revert some of the nice parts of this CL.",
+      "parentUuid": "7298b2bd_9800b526",
+      "range": {
+        "startLine": 872,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 9
+      },
+      "revId": "a49d9755e238b7323b717a269752f170f88ae3bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0d9330f_e3dcb6bd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
