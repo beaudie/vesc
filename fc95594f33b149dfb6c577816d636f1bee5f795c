@@ -16,6 +16,23 @@
       "revId": "fc95594f33b149dfb6c577816d636f1bee5f795c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "664b8e6d_dbd981bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-21T14:39:55Z",
+      "side": 1,
+      "message": "Can you mention in the CL description that this slide_hash_neon.h file is inside third_party/zlib?",
+      "revId": "fc95594f33b149dfb6c577816d636f1bee5f795c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
