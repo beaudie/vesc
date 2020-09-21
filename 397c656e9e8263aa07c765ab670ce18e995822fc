@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "85e165d3_cef27c76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T20:01:15Z",
+      "side": 1,
+      "message": "To help understand, I wrote this https://docs.google.com/document/d/1FQeSHTWKA4kI-jTDkCJNIwcFgr5R21Bk90kIEa1ZQj4",
+      "parentUuid": "69be09f8_1d5ca658",
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30d8cc28_448e0f80",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
