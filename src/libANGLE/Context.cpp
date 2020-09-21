@@ -256,8 +256,7 @@ enum SubjectIndexes : angle::SubjectIndex
     kSamplerMaxSubjectIndex  = kSampler0SubjectIndex + IMPLEMENTATION_MAX_ACTIVE_TEXTURES,
     kVertexArraySubjectIndex = kSamplerMaxSubjectIndex,
     kReadFramebufferSubjectIndex,
-    kDrawFramebufferSubjectIndex,
-    kProgramPipelineSubjectIndex
+    kDrawFramebufferSubjectIndex
 };
 
 bool IsClearBufferEnabled(const FramebufferState &mState, GLenum buffer, GLint drawbuffer)
@@ -323,7 +322,6 @@ Context::Context(egl::Display *display,
       mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
       mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
-      mProgramPipelineObserverBinding(this, kProgramPipelineSubjectIndex),
       mThreadPool(nullptr),
       mFrameCapture(new angle::FrameCapture),
       mRefCount(0),
@@ -486,7 +484,6 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
 
@@ -536,7 +533,6 @@ void Context::initialize()
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
-    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
@@ -1175,7 +1171,6 @@ void Context::bindProgramPipeline(ProgramPipelineID pipelineHandle)
         mImplementation.get(), pipelineHandle);
     ANGLE_CONTEXT_TRY(mState.setProgramPipelineBinding(this, pipeline));
     mStateCache.onProgramExecutableChange(this);
-    mProgramPipelineObserverBinding.bind(pipeline);
 }
 
 void Context::beginQuery(QueryType target, QueryID query)
@@ -2739,7 +2734,6 @@ void Context::detachSampler(SamplerID sampler)
 void Context::detachProgramPipeline(ProgramPipelineID pipeline)
 {
     mState.detachProgramPipeline(this, pipeline);
-    mProgramPipelineObserverBinding.bind(nullptr);
 }
 
 void Context::vertexAttribDivisor(GLuint index, GLuint divisor)
@@ -3684,6 +3678,21 @@ ANGLE_INLINE angle::Result Context::prepareForDispatch()
     // We always assume PPOs are used for draws, until they aren't. If we are executing a dispatch
     // with a PPO, we need to convert it from a "draw"-type to "dispatch"-type.
     convertPpoToComputeOrDraw(true);
+
+    // Converting a PPO from graphics to compute requires re-linking it.
+    // Performing the work here simplifies the calls to convertPpoToComputeOrDraw(), by
+    // The compute shader must have successfully linked before being included in the PPO, so no
+    // validation errors should be possible when re-linking this PPO.
+    Program *program          = mState.getProgram();
+    ProgramPipeline *pipeline = mState.getProgramPipeline();
+    if (!program && pipeline)
+    {
+        bool goodResult = pipeline->link(this) == angle::Result::Continue;
+        // Linking the PPO can't fail due to a validation error within the compute program,
+        // since it successfully linked already in order to become part of the PPO in the first
+        // place.
+        ANGLE_CHECK(this, goodResult, "Program pipeline link failed", GL_INVALID_OPERATION);
+    }
 
     ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects, Command::Dispatch));
     return syncDirtyBits(mComputeDirtyBits);
@@ -5771,6 +5780,13 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
 
     // We always assume PPOs are used for draws, until they aren't. If we just executed a dispatch
     // with a PPO, we need to convert it back to a "draw"-type.
+    // We don't re-link the PPO again, since it's possible for that link to generate validation
+    // errors due to bad VS/FS, and we want to catch those errors during validation of the draw
+    // command: 11.1.3.11 Validation It is not always possible to determine at link time if a
+    // program object can execute successfully, given that LinkProgram can not know the state of the
+    // remainder of the pipeline. Therefore validation is done when the first rendering command
+    // which triggers shader invocations is issued, to determine if the set of active program
+    // objects can be executed.
     convertPpoToComputeOrDraw(false);
 
     if (ANGLE_UNLIKELY(IsError(result)))
@@ -5786,12 +5802,11 @@ void Context::convertPpoToComputeOrDraw(bool isCompute)
     if (!program && pipeline)
     {
         pipeline->getExecutable().setIsCompute(isCompute);
-        pipeline->setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_DRAW_DISPATCH_CHANGE);
-        mState.mDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
-        mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_EXECUTABLE);
+        pipeline->getState().resetIsLinked();
 
         // The PPO's isCompute() has changed, so its ProgramExecutable will produce different
         // results for things like getShaderStorageBlocks() or getImageBindings().
+        mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_EXECUTABLE);
         mStateCache.onProgramExecutableChange(this);
     }
 }
@@ -8297,11 +8312,6 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
                     UNREACHABLE();
                     break;
             }
-            break;
-
-        case kProgramPipelineSubjectIndex:
-            ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
-            mState.setProgramPipelineDirty();
             break;
 
         default:
