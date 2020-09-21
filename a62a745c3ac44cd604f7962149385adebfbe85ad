@@ -136,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "cf0bd9a6_de14044e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T13:50:10Z",
+      "side": 1,
+      "message": "Any idea of how to produce a rendering error with the incorrect early test optimization?",
+      "parentUuid": "0540803e_ce2e7937",
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "199d883c_8242c005",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -204,6 +222,30 @@
       "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "352942e0_82e2bd53",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2889,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T13:50:10Z",
+      "side": 1,
+      "message": "Done\n\nhttp://crrev.com/c/2422078",
+      "parentUuid": "3f11aea9_9cf7f726",
+      "range": {
+        "startLine": 2889,
+        "startChar": 17,
+        "endLine": 2889,
+        "endChar": 72
+      },
+      "revId": "a62a745c3ac44cd604f7962149385adebfbe85ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
