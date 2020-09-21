@@ -37,6 +37,69 @@
     },
     {
       "key": {
+        "uuid": "55c088a3_43560a05",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T20:28:14Z",
+      "side": 1,
+      "message": "You can move this down and make the condition based on whether loadOp \u003d\u003d CLEAR. Then if the logic of when CLEAR happens changes, we don\u0027t need to update this code.",
+      "range": {
+        "startLine": 2316,
+        "startChar": 0,
+        "endLine": 2320,
+        "endChar": 51
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682320ef_2ec46803",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2573,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T20:28:14Z",
+      "side": 1,
+      "message": "Why didn\u0027t the code need this before?",
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe90ed83_2e02aa91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T20:28:14Z",
+      "side": 1,
+      "message": "The function name is misleading now.",
+      "range": {
+        "startLine": 981,
+        "startChar": 44,
+        "endLine": 981,
+        "endChar": 62
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30d8cc28_448e0f80",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
@@ -77,6 +140,47 @@
         "endLine": 1129,
         "endChar": 36
       },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "076e187a_3531e677",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T20:28:14Z",
+      "side": 1,
+      "message": "mDepthAccess SGTM.",
+      "parentUuid": "5079a2e2_95e2829f",
+      "range": {
+        "startLine": 1129,
+        "startChar": 19,
+        "endLine": 1129,
+        "endChar": 36
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8b5d66_586e0dca",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T20:28:14Z",
+      "side": 1,
+      "message": "Empty lines separating these into logical groups can help a lot with readability. See other tests for example.",
       "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

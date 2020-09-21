@@ -134,6 +134,24 @@
       "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "220c1a91_13f155f3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T20:28:14Z",
+      "side": 1,
+      "message": "Charlie, my gut feeling is that DONT_CARE behaves the same as NONE, at least on tiling GPUs. If you can verify this with the partners, we could go ahead and use DONT_CARE.",
+      "parentUuid": "395e0b7b_8c58f084",
+      "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
