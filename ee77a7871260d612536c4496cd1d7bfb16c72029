@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a161d77_30e231a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "LGTM. I wouldn\u0027t say I fully understood the change. I didn\u0027t see anything wrong with how you handle the caching structures. Didn\u0027t thoroughly review the unresolve logic.",
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cb815d9_e77b91a1",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "nit: avoid nested ternary ops, hard to parse for the reader",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 0
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9c8226c_9aa21e08",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "nit: add a line that explicitly gives a type to program.second for readability",
+      "range": {
+        "startLine": 506,
+        "startChar": 9,
+        "endLine": 506,
+        "endChar": 14
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0f8610_d270e77e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "nit: add a line that explicitly gives a type to program.second for readability",
+      "range": {
+        "startLine": 512,
+        "startChar": 9,
+        "endLine": 512,
+        "endChar": 14
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "597e4009_3c180dc3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "nit: use an alias reference to reduce code boilerplate.",
+      "range": {
+        "startLine": 417,
+        "startChar": 4,
+        "endLine": 417,
+        "endChar": 30
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7b88c74_ae6296b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 425,
+        "startChar": 4,
+        "endLine": 425,
+        "endChar": 23
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9b0808e_d8f87385",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 561,
+        "startChar": 4,
+        "endLine": 561,
+        "endChar": 15
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd4d1922_9d4cebcf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "64 max subpasses seems excessive. Could likely do as few as 8. Not sure if you need to take action here. maybe a comment?",
+      "range": {
+        "startLine": 334,
+        "startChar": 13,
+        "endLine": 334,
+        "endChar": 21
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4bda507_39542124",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "maybe reset instead of update, as you go always ++ or \u003d 0.",
+      "range": {
+        "startLine": 625,
+        "startChar": 9,
+        "endLine": 625,
+        "endChar": 22
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c87b0805_e36f8c0c",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "fyi: you can always use common/ if you want. we might have some format utils stuff there.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 6
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1fbd23a_daedc3c8",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T15:19:06Z",
+      "side": 1,
+      "message": "nit: needs a bug, we do intend to follow-up eventually with amd/vulkan/win.",
+      "range": {
+        "startLine": 1387,
+        "startChar": 23,
+        "endLine": 1387,
+        "endChar": 32
+      },
+      "revId": "ee77a7871260d612536c4496cd1d7bfb16c72029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
