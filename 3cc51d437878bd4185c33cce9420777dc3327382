@@ -34,6 +34,23 @@
       "revId": "3cc51d437878bd4185c33cce9420777dc3327382",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca5f2a39_164adce1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T16:54:06Z",
+      "side": 1,
+      "message": "I\u0027ve been thinking if we could take a step back and clean this up. Adding mutexes all over the place is not easily verifiable, and is prone to future mistakes. There are two things I\u0027d like to see happen:\n\n1. Clear separation of data accessed by the threads:\n  * Data that is accessed entirely by the submit thread\n  * Data that is accessed entirely by the application thread\n  * Shared data. Can be further separated as:\n    * Data provided by the application thread and consumed in submit thread\n    * Data provided by the submit thread and consumed by the application thread\n2. Instead of adding mutexes to keep current code as is, add local copies of shared data for both threads, and synchronize them at specific points. When the submit thread dequeues a job, it can copy all the other data it needs for the submission at the same time (under mutex) and then use the local copies going forward. Same the other way, the application can sync the data (like what serial is finished, etc) when necessary, then use the local copies.",
+      "revId": "3cc51d437878bd4185c33cce9420777dc3327382",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
