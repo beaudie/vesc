@@ -626,6 +626,24 @@
       "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bff5ad2_1372b64d",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T02:05:42Z",
+      "side": 1,
+      "message": "Is it guaranteed that a coherent memory type is always available?\n\n\u003e \u003e The pipeline barrier from device-write to host read is automatically inserted at flush time\n\n\u003e is this done for all buffers and images irrespective of memorytypes? if so, why?\n\nA barrier is added at the end of the command-buffer-to-be-submitted if there is any host-visible buffer that is written to by the GPU (i.e transfered to or used as storage buffer). The reason is that the buffer may be mapped later by the application, so we perform the device-\u003ehost availability operation while we have the chance.",
+      "parentUuid": "c90528b0_157dd360",
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
