@@ -104,6 +104,24 @@
       "revId": "9dad4be8a946b12a63f3e1db89c098b6ee78e2be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbded865_029c72a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T01:02:08Z",
+      "side": 1,
+      "message": "Hm, something doesn\u0027t add up to me then. SharedResourceUse is just a pointer\n\n\"ResourceUse *mUse;\"\n\nWhat does re-using them really accomplish?",
+      "parentUuid": "4ae0ae2e_53ea4c4c",
+      "revId": "9dad4be8a946b12a63f3e1db89c098b6ee78e2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
