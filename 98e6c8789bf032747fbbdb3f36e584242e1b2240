@@ -16,6 +16,24 @@
       "revId": "98e6c8789bf032747fbbdb3f36e584242e1b2240",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "09ad5eb5_b934e40d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T17:03:02Z",
+      "side": 1,
+      "message": "I wish! But it will not. Gfxbench is using \"discard\" in fragment shader, which disqualifies it in the shader compile time.\n\nThanks for fixing this!",
+      "parentUuid": "75b40dda_ab2b1105",
+      "revId": "98e6c8789bf032747fbbdb3f36e584242e1b2240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
