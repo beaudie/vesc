@@ -16,6 +16,138 @@
       "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "86e8bf22_91b4ed71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-21T18:02:39Z",
+      "side": 1,
+      "message": "I don\u0027t mind landing this, but would be more comfortable if you could create an isolate, trigger it manually in Swarming and attach Swarming task output here.",
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81e81e38_40f5dc1e",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-21T18:02:39Z",
+      "side": 1,
+      "message": "Why do we need 2 args that set this?",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 67,
+        "endChar": 27
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19e58ffd_23e42158",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-21T18:02:39Z",
+      "side": 1,
+      "message": "I\u0027m not sure these files will be there when running as an isolate.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 0
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3eb32755_e9bba630",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-21T18:02:39Z",
+      "side": 1,
+      "message": "Are we able to create dirs on the bots at will?",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 67
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73817a2c_bf9018f9",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-21T18:02:39Z",
+      "side": 1,
+      "message": "typo, or you want to ignore the results of running with Xvfb?\nWe shouldn\u0027t be running with Xvfb on GPUs anyway.\nOnly SwANGLE should use Xvfb ;-)",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 23
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77c3e9d4_fcf1a120",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-21T18:02:39Z",
+      "side": 1,
+      "message": "I\u0027m curious whether this file will be in this location in the isolate.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 58
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
