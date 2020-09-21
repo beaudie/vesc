@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "604e0f60_32142e39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-21T10:54:47Z",
+      "side": 1,
+      "message": "Just a small change to correct the FormatID enum order used by PBO shaders. PTAL.",
+      "revId": "f5ac0d1a7e5b0ebcf20b96dedb8d590267a77387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
