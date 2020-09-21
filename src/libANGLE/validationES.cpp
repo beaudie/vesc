@@ -2984,6 +2984,20 @@ const char *ValidateDrawStates(const Context *context)
             }
         }
 
+        // If there's a Program bound, we still want to link the PPO so we don't lose the dirty bit,
+        // but, we don't want to signal any errors if it fails since the failure would be unrelated
+        // to drawing with the Program.
+        if (programPipeline && programPipeline->hasAnyDirtyBit())
+        {
+            programPipeline->resetDirtyBits();
+
+            bool goodResult = programPipeline->link(context) == angle::Result::Continue;
+            if (!program && !goodResult)
+            {
+                return err::kProgramPipelineLinkFailed;
+            }
+        }
+
         // Do some additional WebGL-specific validation
         if (extensions.webglCompatibility)
         {

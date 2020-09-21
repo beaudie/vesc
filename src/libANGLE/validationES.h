@@ -331,6 +331,24 @@ const char *ValidateDrawElementsStates(const Context *context);
 
 ANGLE_INLINE bool ValidateDrawBase(const Context *context, PrimitiveMode mode)
 {
+#if 0  // TIMTIM
+    gl::ProgramPipeline *pipeline = context->getState().getProgramPipeline();
+    if (pipeline && pipeline->hasAnyDirtyBit())
+    {
+        pipeline->resetDirtyBits();
+
+        // If there's a Program bound, we still want to link the PPO so we don't
+        // lose the dirty bit, but, we don't want to signal any errors if it fails
+        // since the failure would be unrelated to drawing with the Program.
+        bool goodResult = pipeline->link(context) == angle::Result::Continue;
+        if (!context->getState().getProgram() && !goodResult)
+        {
+            context->validationError(GL_INVALID_OPERATION, err::kProgramPipelineLinkFailed);
+            return false;
+        }
+    }
+#endif
+
     if (!context->getStateCache().isValidDrawMode(mode))
     {
         RecordDrawModeError(context, mode);

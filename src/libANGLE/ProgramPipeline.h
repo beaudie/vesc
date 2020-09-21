@@ -134,6 +134,7 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
     }
 
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+    void resetDirtyBits() { mDirtyBits.reset(); }
 
     GLboolean isValid() const { return mState.isValid(); }
 
