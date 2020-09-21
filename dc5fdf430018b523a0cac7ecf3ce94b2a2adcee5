@@ -22,6 +22,30 @@
       "revId": "dc5fdf430018b523a0cac7ecf3ce94b2a2adcee5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a0432fa_b7eb6494",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2148,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-21T15:54:45Z",
+      "side": 1,
+      "message": "Have filed a follow-up bug for regarding ensuring proper queueSerial use.\nb/169055809\nBasically, it\u0027s possible for this to be called from multiple threads causing the mCurrentQueueSerial to not actually match the queueSerial used for the corresponding queueSubmit. Which could potentially cause resources to be freed before they are actually done being used.",
+      "parentUuid": "714970c7_4ef6bef5",
+      "range": {
+        "startLine": 2142,
+        "startChar": 0,
+        "endLine": 2148,
+        "endChar": 0
+      },
+      "revId": "dc5fdf430018b523a0cac7ecf3ce94b2a2adcee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

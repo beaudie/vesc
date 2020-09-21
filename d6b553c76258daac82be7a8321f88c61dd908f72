@@ -231,6 +231,24 @@
     },
     {
       "key": {
+        "uuid": "9ae0cd7c_47d1297b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-21T15:54:45Z",
+      "side": 1,
+      "message": "Will do one getLastCompletedQueueSerial() outside the loop and use that value for the duration to reduce unnecessary locks to get the serial. We don\u0027t care about the exact value, just that it\u0027s recent.",
+      "parentUuid": "6d955d59_37b43ab9",
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6fb69d1_e99f18ff",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -317,6 +335,24 @@
       "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "078ef1f4_408a5095",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-21T15:54:45Z",
+      "side": 1,
+      "message": "Discussed offline.\nWe do need the lock to guarantee an atomic read of the value, that\u0027s not something C++ can do.\n\nJamie pointed out there is a related issue in ContextVk::flushImpl where the queueSerial applied to resources may not be the one that was actually used for the submit. Those operations need to be protected under a lock to ensure consistency.",
+      "parentUuid": "6f556ca8_419d9ad3",
+      "revId": "d6b553c76258daac82be7a8321f88c61dd908f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
