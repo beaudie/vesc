@@ -644,6 +644,24 @@
       "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb7b6a45_02aa9005",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-21T16:31:58Z",
+      "side": 1,
+      "message": "\u003e Is it guaranteed that a coherent memory type is always available?\n\nFrom spec - \"There must be at least one memory type with both the VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT and VK_MEMORY_PROPERTY_HOST_COHERENT_BIT bits set in its propertyFlags\"\n\n\u003e The reason is that the buffer may be mapped later by the application\n\nunless explicitly requested as coherent, the responsibility to make device-writes host-visible is on the application right?",
+      "parentUuid": "8bff5ad2_1372b64d",
+      "revId": "2737c20861f73bd5c510364e455cc2f32bddeb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
