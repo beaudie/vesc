@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3193783_19198bf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T21:25:49Z",
+      "side": 1,
+      "message": "The actual change is rather trivial. The biggest chunk is having to switch to vkCreateRenderPass2 based on a feature. That would be code that gets deleted when we can require Vulkan 1.2.",
+      "revId": "0f14115cd31586f7e46dcf54dc224bd6d693a990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
