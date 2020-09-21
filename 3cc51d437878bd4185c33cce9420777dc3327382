@@ -51,6 +51,24 @@
       "revId": "3cc51d437878bd4185c33cce9420777dc3327382",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83330a0a_a41db411",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-21T17:20:28Z",
+      "side": 1,
+      "message": "That is pretty much what we do in the threading phase2 code.\nThis CL is to address threading issues found by TSN prior to landing that code.\nThough running TSN on current code has shown me that there is more that needs to be handled in the threading phase2 code than we originally thought.",
+      "parentUuid": "ca5f2a39_164adce1",
+      "revId": "3cc51d437878bd4185c33cce9420777dc3327382",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
