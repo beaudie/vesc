@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c176ca17_7db58596",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-21T16:22:18Z",
+      "side": 1,
+      "message": "Couple of drive-by comments",
+      "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61f54a89_2e7e20ac",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2316,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-21T16:22:18Z",
+      "side": 1,
+      "message": "Typo: start",
+      "range": {
+        "startLine": 2316,
+        "startChar": 23,
+        "endLine": 2316,
+        "endChar": 29
+      },
+      "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "527b97ae_cce8aee5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-21T16:22:18Z",
+      "side": 1,
+      "message": "This is done at the start of this block, but the decision to use it got moved to the bottom (what used to be at lines 2325-2328).\n\nShouldn\u0027t depthStencilReadOnly influence the store ops (i.e. DONT_CARE)?  If read only, seems like you need to load it, but you don\u0027t need to store it.",
+      "revId": "830804c0dfa846046836935f15e6dbe6ec8e1103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
