@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30d8cc28_448e0f80",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T16:51:08Z",
+      "side": 1,
+      "message": "Will reword to \"Note that this does not include VK_ATTACHMENT_LOAD_OP_CLEAR which are tracked separately to allow other optimizations.\"",
+      "range": {
+        "startLine": 1127,
+        "startChar": 81,
+        "endLine": 1128,
+        "endChar": 73
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5079a2e2_95e2829f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T16:51:08Z",
+      "side": 1,
+      "message": "Does anyone have objection to change this variable name to mDepthMaxAccess (or just mDepthAccess)?",
+      "range": {
+        "startLine": 1129,
+        "startChar": 19,
+        "endLine": 1129,
+        "endChar": 36
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
