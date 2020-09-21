@@ -1838,7 +1838,7 @@ class ImageViewHelper : angle::NonCopyable
             (!mLinearColorspace &&
              mCurrentMaxLevel.get() < mPerLevelNonLinearCopyImageViews.size()))
         {
-            return getFetchImageView().valid();
+            return getCopyImageView().valid();
         }
         else
         {
