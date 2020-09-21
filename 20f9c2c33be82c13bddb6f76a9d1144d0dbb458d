@@ -16,6 +16,23 @@
       "revId": "20f9c2c33be82c13bddb6f76a9d1144d0dbb458d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83613d40_8f0bfee6",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-21T16:32:48Z",
+      "side": 1,
+      "message": "Please add to the comment that the clear should change the store op to STORE, and mContentDefined to true.\n\nI believe that passing this test will require a code change.  I don\u0027t think there\u0027s any plumbing from a clear to undo the invalidate/change mContentDefined.  Do you want to the change, or would you like me to work on it?  This seems somewhat related to the other CL you have that deals with clears and read-only D/S.",
+      "revId": "20f9c2c33be82c13bddb6f76a9d1144d0dbb458d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
