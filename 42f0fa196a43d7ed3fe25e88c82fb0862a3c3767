@@ -16,6 +16,93 @@
       "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "992d2626_20898214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T14:46:32Z",
+      "side": 1,
+      "message": "We can put the type alias somewhere in common/ instead. All libs have access to common/. Not sure which file exactly... maybe utilities?",
+      "parentUuid": "328fe092_8f25751a",
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71906f77_b09715fb",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T14:46:32Z",
+      "side": 1,
+      "message": "nit: can simply be angle_use_abseil \u003d angle_has_build \u0026\u0026 is_clang.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 26
+      },
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51e0c10_240504b9",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T14:46:32Z",
+      "side": 1,
+      "message": "nit: recommend you introduce an angle_abseil_dir to be future-proof. Right now the chromium / angle dirs are the same. Maybe some integration will want to change that. Typically this override dir would go in build_overrides, although it might easier just to do something like if (!defined(angle_abseil_dir)) { angle_abseil_dir \u003d \"//...\" }",
+      "range": {
+        "startLine": 770,
+        "startChar": 21,
+        "endLine": 770,
+        "endChar": 45
+      },
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5eec8553_065c5f0b",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T14:46:32Z",
+      "side": 1,
+      "message": "tiny nit: defined(ANGLE_USE_ABSEIL)",
+      "range": {
+        "startLine": 1060,
+        "startChar": 11,
+        "endLine": 1060,
+        "endChar": 27
+      },
+      "revId": "42f0fa196a43d7ed3fe25e88c82fb0862a3c3767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
