@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "a531dcfb_2adb12c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T21:46:45Z",
+      "side": 1,
+      "message": "LGTM, there we go. :)",
+      "revId": "148705f3b8609bf4bc3e5c02396e92f5414e17ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03fc5ad1_39c92264",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 1
@@ -64,6 +81,30 @@
       "writtenOn": "2020-09-21T21:33:27Z",
       "side": 1,
       "message": "FYI ... this was going to be fixed by crrev/c/2386478 (abandoned), which was the 3rd proposed approach for a fix.  All 3 of the proposed approaches suffered from objects that CAN going away without the ContextVk or CommandBufferHelper being informed (i.e. FramebufferVk, RenderTargetVk, and ImageHelper).\n\nA 4th option is to use the subject-observer pattern to communicate to CommandBufferHelper when ImageHelper/RenderTargetVk goes away.  Jamie did not want to pursue that approach.\n\nSince T-Rex does an invalidate and endRP, and since we don\u0027t know whether a draw will occur, we assume no draw will occur.  Thus, if a draw occurs, we won\u0027t save/load the contents.  It was decided to not fix this bug until an application is found that does this scenario.",
+      "range": {
+        "startLine": 715,
+        "startChar": 7,
+        "endLine": 715,
+        "endChar": 55
+      },
+      "revId": "148705f3b8609bf4bc3e5c02396e92f5414e17ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06178c74_d6c462ee",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T21:46:45Z",
+      "side": 1,
+      "message": "Oh, right. Thanks for putting in the link.",
+      "parentUuid": "03fc5ad1_39c92264",
       "range": {
         "startLine": 715,
         "startChar": 7,
