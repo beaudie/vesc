@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "e49e4b15_d7904554",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T22:33:33Z",
+      "side": 1,
+      "message": "Thanks for forcing this - it caught two separate issues. Only tested on Windows right now. Will land and fix follow-ups in Linux in Android as needed.\n\nSecond issue: https://chromium-review.googlesource.com/c/angle/angle/+/2422686",
+      "parentUuid": "86e8bf22_91b4ed71",
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e81e38_40f5dc1e",
         "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
         "patchSetId": 5
@@ -56,6 +74,30 @@
       "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9b6f7ea_f8ec8704",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T22:33:33Z",
+      "side": 1,
+      "message": "Used by different clients. the new one is used by chrome. Added a comment.",
+      "parentUuid": "81e81e38_40f5dc1e",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 67,
+        "endChar": 27
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "72cdab0b_403b39eb",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T22:33:33Z",
+      "side": 1,
+      "message": "The way it works, it doesn\u0027t matter. Python ignores invalid paths. As long as one of them is valid. Expanded comment.",
+      "parentUuid": "19e58ffd_23e42158",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 0
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3eb32755_e9bba630",
         "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
         "patchSetId": 5
@@ -93,6 +159,30 @@
       "writtenOn": "2020-09-21T18:02:39Z",
       "side": 1,
       "message": "Are we able to create dirs on the bots at will?",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 67
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cac099ea_16c5779b",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T22:33:33Z",
+      "side": 1,
+      "message": "I only use a temporary directory on the bots. That seems to work just fine.",
+      "parentUuid": "3eb32755_e9bba630",
       "range": {
         "startLine": 82,
         "startChar": 0,
@@ -128,6 +218,30 @@
     },
     {
       "key": {
+        "uuid": "1e3ae0c2_8354f9d0",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T22:33:33Z",
+      "side": 1,
+      "message": "Done. We may run this script on SwANGLE.",
+      "parentUuid": "73817a2c_bf9018f9",
+      "range": {
+        "startLine": 87,
+        "startChar": 20,
+        "endLine": 87,
+        "endChar": 23
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77c3e9d4_fcf1a120",
         "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
         "patchSetId": 5
@@ -139,6 +253,30 @@
       "writtenOn": "2020-09-21T18:02:39Z",
       "side": 1,
       "message": "I\u0027m curious whether this file will be in this location in the isolate.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 58
+      },
+      "revId": "ed4f7c36844dc9c3cecdc268a5d18f7370c097a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ebd065f_26eec8d0",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T22:33:33Z",
+      "side": 1,
+      "message": "See passing job in CL description.",
+      "parentUuid": "77c3e9d4_fcf1a120",
       "range": {
         "startLine": 104,
         "startChar": 0,
