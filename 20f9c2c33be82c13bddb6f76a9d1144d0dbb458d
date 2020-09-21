@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38e470be_fa0dd2e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-21T15:53:12Z",
+      "side": 1,
+      "message": "This demonstrate the bug with the glClear and InvalidateFramebuffer interaction",
+      "revId": "20f9c2c33be82c13bddb6f76a9d1144d0dbb458d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
