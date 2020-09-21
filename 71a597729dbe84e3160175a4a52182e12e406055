@@ -80,6 +80,30 @@
       "revId": "71a597729dbe84e3160175a4a52182e12e406055",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e1c5842_90e7a274",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-21T17:02:55Z",
+      "side": 1,
+      "message": "Ok, makes more sense now.\n\nThe test should be easy to do now. It should enable alpha to coverage, then output alpha such that coverage becomes 0 (i.e. no output), but otherwise all the other fragment tests pass (depth, stencil etc). If early fragment tests is mistakenly enabled, the draw should output something and the test should fail.",
+      "parentUuid": "e829eede_27f5cfc4",
+      "range": {
+        "startLine": 823,
+        "startChar": 0,
+        "endLine": 827,
+        "endChar": 0
+      },
+      "revId": "71a597729dbe84e3160175a4a52182e12e406055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
