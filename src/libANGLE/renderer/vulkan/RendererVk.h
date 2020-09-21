@@ -349,7 +349,6 @@ class RendererVk : angle::NonCopyable
     std::mutex mQueueSerialMutex;
     Serial mLastCompletedQueueSerial;
     Serial mLastSubmittedQueueSerial;
-    Serial mCurrentQueueSerial;
 
     bool mDeviceLost;
 

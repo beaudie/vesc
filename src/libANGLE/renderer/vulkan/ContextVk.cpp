@@ -4171,7 +4171,6 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
                          signalSemaphore);
 
     ANGLE_TRY(submitFrame(submitInfo, std::move(mPrimaryCommands)));
-    ASSERT(serial == getLastSubmittedQueueSerial());
 
     ANGLE_TRY(startPrimaryCommandBuffer());
 
