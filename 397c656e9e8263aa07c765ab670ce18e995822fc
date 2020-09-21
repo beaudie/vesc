@@ -236,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "d109450e_0a050a71",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-21T21:42:22Z",
+      "side": 1,
+      "message": "SGTM too",
+      "parentUuid": "076e187a_3531e677",
+      "range": {
+        "startLine": 1129,
+        "startChar": 19,
+        "endLine": 1129,
+        "endChar": 36
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf8b5d66_586e0dca",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 9
