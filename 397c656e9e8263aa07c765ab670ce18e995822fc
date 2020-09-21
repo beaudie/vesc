@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "69be09f8_1d5ca658",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T17:34:22Z",
+      "side": 1,
+      "message": "Nice work Charlie! Will get to this soon. It\u0027s a bit complex so will need to go over it with a clear head.",
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30d8cc28_448e0f80",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
