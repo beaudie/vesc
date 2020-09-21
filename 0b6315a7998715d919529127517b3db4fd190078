@@ -16,6 +16,24 @@
       "revId": "0b6315a7998715d919529127517b3db4fd190078",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb6ff173_872ec432",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-21T19:11:12Z",
+      "side": 1,
+      "message": "Merging to chromium/4240",
+      "parentUuid": "c825d7d0_431adc6c",
+      "revId": "0b6315a7998715d919529127517b3db4fd190078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
