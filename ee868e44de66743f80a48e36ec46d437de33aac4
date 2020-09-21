@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d4e3101_3c0bca41",
+        "filename": "src/common/tls.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-21T14:28:56Z",
+      "side": 1,
+      "message": "Need to keep this file around until we can switch off the translator\u0027s pool allocator code (PoolAlloc.cpp)",
+      "revId": "ee868e44de66743f80a48e36ec46d437de33aac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
