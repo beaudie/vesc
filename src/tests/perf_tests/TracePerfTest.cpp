@@ -393,6 +393,7 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     {
         ReplayFrame(testID, nextFrame);
     }
+    ResetReplay(testID);
     getGLWindow()->swap();
     glFinish();
 }
