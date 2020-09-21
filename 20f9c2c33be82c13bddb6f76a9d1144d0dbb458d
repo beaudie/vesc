@@ -149,6 +149,24 @@
       "revId": "20f9c2c33be82c13bddb6f76a9d1144d0dbb458d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ccaaa5e4_56465a3a",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-21T17:14:45Z",
+      "side": 1,
+      "message": "nit: to be consistent with other tests, perhaps change to:\n\n\"(should result: in storeOp \u003d STORE; mContentDefined \u003d true)\"",
+      "parentUuid": "0aa7455c_699626ef",
+      "revId": "20f9c2c33be82c13bddb6f76a9d1144d0dbb458d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
