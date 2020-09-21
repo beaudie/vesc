@@ -701,17 +701,9 @@ angle::Result ProgramPipeline::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
-        mDirtyBits.reset();
-
-        // If there's a Program bound, we still want to link the PPO so we don't
-        // lose the dirty bit, but, we don't want to signal any errors if it fails
-        // since the failure would be unrelated to drawing with the Program.
-        bool goodResult = link(context) == angle::Result::Continue;
-        if (!context->getState().getProgram())
-        {
-            ANGLE_CHECK(const_cast<Context *>(context), goodResult, "Program pipeline link failed",
-                        GL_INVALID_OPERATION);
-        }
+        // All dirty bits require re-linking the PPO and need to be handled in the validation layer,
+        // so we fail any draw commands correctly.
+        UNREACHABLE();
     }
 
     return angle::Result::Continue;
