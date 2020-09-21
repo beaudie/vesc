@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "c39281fc_153044c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-21T16:34:13Z",
+      "side": 1,
+      "message": "BTW, the test LGTM",
+      "revId": "20f9c2c33be82c13bddb6f76a9d1144d0dbb458d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83613d40_8f0bfee6",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 1
