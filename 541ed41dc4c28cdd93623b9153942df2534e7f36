@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "fcddc104_e9e6aa05",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-22T17:44:20Z",
+      "side": 1,
+      "message": "mPipelineCache is actually a Vulkan object and mPipelineCache.getCacheData is a Vulkan call made on that object so we don\u0027t need locking like we would for a cpu-based cache object.\nBasically we just lock for those things that would actually change the value of mPipelineCache, e.g. create a new Vulkan object. That only happens during RendererVk initialization and RendererVk::getPipelineCache.",
+      "parentUuid": "015d3889_9b56305e",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d5002c_0e7d4398",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -50,6 +68,24 @@
       "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a12b10a_02bfa07b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-22T17:44:20Z",
+      "side": 1,
+      "message": "My understanding here is that we expect the pipelineCache Vulkan object to already have been created. Once created we don\u0027t change the value of mPipelineCache and can thus reference it without the lock.\nTechnically the ASSERT probably should grab the lock in case it\u0027s not true but that seems overkill for this ASSERT.",
+      "parentUuid": "d6d5002c_0e7d4398",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
