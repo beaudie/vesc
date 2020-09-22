@@ -1361,8 +1361,11 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     ANGLE_TRY(setupProgram(contextVk, Function::ImageClear, fragmentShader, vertexShader,
                            imageClearProgram, &pipelineDesc, VK_NULL_HANDLE, &shaderParams,
                            sizeof(shaderParams), commandBuffer));
+
+    // Make sure this draw call doesn't count towards occlusion query results.
+    ANGLE_TRY(contextVk->pauseOcclusionQueryIfActive());
     commandBuffer->draw(6, 0);
-    return angle::Result::Continue;
+    return contextVk->resumeOcclusionQueryIfActive();
 }
 
 angle::Result UtilsVk::colorBlitResolve(ContextVk *contextVk,
@@ -1627,7 +1630,11 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     ANGLE_TRY(setupProgram(contextVk, Function::BlitResolve, fragmentShader, vertexShader,
                            &mBlitResolvePrograms[flags], &pipelineDesc, descriptorSet,
                            &shaderParams, sizeof(shaderParams), commandBuffer));
+
+    // Note: this utility starts the render pass directly, thus bypassing
+    // ContextVk::startRenderPass. As such, occlusion queries are not enabled.
     commandBuffer->draw(6, 0);
+
     descriptorPoolBinding.reset();
 
     return angle::Result::Continue;
@@ -2008,7 +2015,11 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ANGLE_TRY(setupProgram(contextVk, Function::ImageCopy, fragmentShader, vertexShader,
                            &mImageCopyPrograms[flags], &pipelineDesc, descriptorSet, &shaderParams,
                            sizeof(shaderParams), commandBuffer));
+
+    // Note: this utility creates its own framebuffer, thus bypassing ContextVk::startRenderPass.
+    // As such, occlusion queries are not enabled.
     commandBuffer->draw(6, 0);
+
     descriptorPoolBinding.reset();
 
     // Close the render pass for this temporary framebuffer.
@@ -2179,6 +2190,9 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
     ANGLE_TRY(setupProgram(contextVk, function, fragmentShader, vertexShader,
                            &mUnresolvePrograms[flags], &pipelineDesc, descriptorSet, nullptr, 0,
                            commandBuffer));
+
+    // This draw call is made before ContextVk gets a chance to start the occlusion query.  As such,
+    // occlusion queries are not enabled.
     commandBuffer->draw(6, 0);
     return angle::Result::Continue;
 }
