@@ -99,6 +99,30 @@
     },
     {
       "key": {
+        "uuid": "dd17860a_848b3502",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3615,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:41:23Z",
+      "side": 1,
+      "message": "In ContextVk::flushImpl(), can you please also apply this change?\n\n    - memoryBarrier.dstAccessMask   \u003d VK_ACCESS_HOST_READ_BIT;\n    + memoryBarrier.dstAccessMask   \u003d VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;",
+      "parentUuid": "359d8806_a88b0efd",
+      "range": {
+        "startLine": 3613,
+        "startChar": 0,
+        "endLine": 3615,
+        "endChar": 52
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06857dc9_41ffec2d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
