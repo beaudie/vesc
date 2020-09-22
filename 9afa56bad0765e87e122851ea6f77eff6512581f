@@ -51,6 +51,24 @@
       "revId": "9afa56bad0765e87e122851ea6f77eff6512581f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e9c18b6_69d5ef15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T14:47:11Z",
+      "side": 1,
+      "message": "It\u0027s harmful because it affects every ANGLE developer and adds noise and confusion. I think we actually should not land this as it\u0027s our only protection against this right now.",
+      "parentUuid": "7dedf0d8_b411d505",
+      "revId": "9afa56bad0765e87e122851ea6f77eff6512581f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
