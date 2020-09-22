@@ -1,0 +1,187 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5e0d28e_9c35559b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Having the \u00272\u0027 versions of these structures sure is a pain, especially since they added the new fields to the start of the structures.   I\u0027m not sure what the right answer is yet, but it seems like we should be able to figure out a good way to get the \u0027right\u0027 version of each struct and only fill it out once, rather than doing all of the reallocating and copying.   Keeping the benefits of RAII cleaning everything up at the end makes it more difficult too, though you guys know a lot more C++ tricks than I do.\n\nThat\u0027s certainly something that can come after this lands though.",
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4034aa3_4ca16065",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2326,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Since renderPassAttachmentOps.setOps() uses depthStoreOp as the storeOp, the comment doesn\u0027t seem to match the code regarding using STORE.",
+      "range": {
+        "startLine": 2320,
+        "startChar": 0,
+        "endLine": 2326,
+        "endChar": 13
+      },
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e4eb0b_155cd791",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Why preserve the resolve attachment, especially if unresolve isn\u0027t supported yet?",
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bee101b_55f82f87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "These lines checking the desc\u0027s pointers, but then using another container\u0027s data() pointers look odd.   Since inputRefs.data() will always exist (whether or not it\u0027s pointing to valid memory), can we just always set pInputAttachments \u003d inputRefs.data() and desc2Out-\u003einputAttachmentCount should control whether the driver actually tries to dereference it?\n\nI\u0027d expect something like:\n\n    desc2Out-\u003einputAttachmentCount    \u003d inputRefs.size();\n    desc2Out-\u003epInputAttachments       \u003d inputRefs.data();\n\nor:\n\n    desc2Out-\u003einputAttachmentCount    \u003d inputRefs.size();\n    desc2Out-\u003epInputAttachments       \u003d inputRefs.size() \u003e 0 ? inputRefs.data() : nullptr;\n\nRather than a mix of where the right data is at.",
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04a53ddb_a10c1694",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Similar to the above.   Rather than mixing where valid data comes from, get it all from the same place:\n\n    createInfo2.attachmentCount            \u003d attachmentDescs.size();\n    createInfo2.pAttachments               \u003d attachmentDescs.data();\n\nThis way, if there\u0027s a bug in how the converted data is built up, you should get all bad data, rather than partially correct data.",
+      "range": {
+        "startLine": 622,
+        "startChar": 0,
+        "endLine": 623,
+        "endChar": 68
+      },
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d61891ca_fcb010a8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Does this need to be set to nullptr if dependencyCount \u003d 0?",
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b5f2d21_e6e5afb4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Might be worth a kUnusedAttachment2.\n\n    constexpr VkAttachmentReference2 kUnusedAttachment2 \u003d\n        {VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR,\n         nullptr,\n         VK_ATTACHMENT_UNUSED,\n         VK_IMAGE_LAYOUT_UNDEFINED,\n         0};\n\n    VkAttachmentReference2KHR depthStencilResolveAttachmentRef \u003d kUnusedAttachment2;",
+      "range": {
+        "startLine": 647,
+        "startChar": 0,
+        "endLine": 650,
+        "endChar": 76
+      },
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7be96ff0_2c1e9a3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Looks like this can move into CreateRenderPass2(), since it\u0027s specific to that.",
+      "range": {
+        "startLine": 806,
+        "startChar": 0,
+        "endLine": 814,
+        "endChar": 5
+      },
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8388bb7_55b37b9f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T18:52:00Z",
+      "side": 1,
+      "message": "Should remove or update to include the possible resolve attachment.",
+      "range": {
+        "startLine": 1105,
+        "startChar": 66,
+        "endLine": 1106,
+        "endChar": 10
+      },
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
