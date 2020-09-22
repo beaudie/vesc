@@ -166,7 +166,9 @@ class UtilsVk : angle::NonCopyable
 
     struct UnresolveParameters
     {
-        gl::DrawBufferMask unresolveMask;
+        gl::DrawBufferMask unresolveColorMask;
+        bool unresolveDepth;
+        bool unresolveStencil;
     };
 
     // Based on the maximum number of levels in GenerateMipmap.comp.
@@ -406,30 +408,54 @@ class UtilsVk : angle::NonCopyable
         ImageClear  = 0,
         ImageCopy   = 1,
         BlitResolve = 2,
-        // Note: unresolve is special as it has a different layout per attachment
-        Unresolve1Attachment  = 3,
-        Unresolve2Attachments = 4,
-        Unresolve3Attachments = 5,
-        Unresolve4Attachments = 6,
-        Unresolve5Attachments = 7,
-        Unresolve6Attachments = 8,
-        Unresolve7Attachments = 9,
-        Unresolve8Attachments = 10,
+        // Note: unresolve is special as it has a different layout per attachment count
+        Unresolve1Attachment                  = 3,
+        Unresolve2Attachments                 = 4,
+        Unresolve3Attachments                 = 5,
+        Unresolve4Attachments                 = 6,
+        Unresolve5Attachments                 = 7,
+        Unresolve6Attachments                 = 8,
+        Unresolve7Attachments                 = 9,
+        Unresolve8Attachments                 = 10,
+        Unresolve1AttachmentWithDepth         = 11,
+        Unresolve2AttachmentsWithDepth        = 12,
+        Unresolve3AttachmentsWithDepth        = 13,
+        Unresolve4AttachmentsWithDepth        = 14,
+        Unresolve5AttachmentsWithDepth        = 15,
+        Unresolve6AttachmentsWithDepth        = 16,
+        Unresolve7AttachmentsWithDepth        = 17,
+        Unresolve8AttachmentsWithDepth        = 18,
+        Unresolve1AttachmentWithStencil       = 19,
+        Unresolve2AttachmentsWithStencil      = 20,
+        Unresolve3AttachmentsWithStencil      = 21,
+        Unresolve4AttachmentsWithStencil      = 22,
+        Unresolve5AttachmentsWithStencil      = 23,
+        Unresolve6AttachmentsWithStencil      = 24,
+        Unresolve7AttachmentsWithStencil      = 25,
+        Unresolve8AttachmentsWithStencil      = 26,
+        Unresolve1AttachmentWithDepthStencil  = 27,
+        Unresolve2AttachmentsWithDepthStencil = 28,
+        Unresolve3AttachmentsWithDepthStencil = 29,
+        Unresolve4AttachmentsWithDepthStencil = 30,
+        Unresolve5AttachmentsWithDepthStencil = 31,
+        Unresolve6AttachmentsWithDepthStencil = 32,
+        Unresolve7AttachmentsWithDepthStencil = 33,
+        Unresolve8AttachmentsWithDepthStencil = 34,
 
         // Functions implemented in compute
-        ComputeStartIndex          = 11,  // Special value to separate draw and dispatch functions.
-        ConvertIndexBuffer         = 11,
-        ConvertVertexBuffer        = 12,
-        BlitResolveStencilNoExport = 13,
-        OverlayCull                = 14,
-        OverlayDraw                = 15,
-        ConvertIndexIndirectBuffer = 16,
-        ConvertIndexIndirectLineLoopBuffer = 17,
-        ConvertIndirectLineLoopBuffer      = 18,
-        GenerateMipmap                     = 19,
+        ComputeStartIndex          = 35,  // Special value to separate draw and dispatch functions.
+        ConvertIndexBuffer         = 35,
+        ConvertVertexBuffer        = 36,
+        BlitResolveStencilNoExport = 37,
+        OverlayCull                = 38,
+        OverlayDraw                = 39,
+        ConvertIndexIndirectBuffer = 40,
+        ConvertIndexIndirectLineLoopBuffer = 41,
+        ConvertIndirectLineLoopBuffer      = 42,
+        GenerateMipmap                     = 43,
 
-        InvalidEnum = 20,
-        EnumCount   = 20,
+        InvalidEnum = 44,
+        EnumCount   = 44,
     };
 
     // Common function that creates the pipeline for the specified function, binds it and prepares

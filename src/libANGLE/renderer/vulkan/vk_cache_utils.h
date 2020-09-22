@@ -118,6 +118,7 @@ using FramebufferAttachmentsVector = angle::FixedVector<T, kMaxFramebufferAttach
 constexpr size_t kMaxFramebufferNonResolveAttachments = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1;
 template <typename T>
 using FramebufferNonResolveAttachmentArray = std::array<T, kMaxFramebufferNonResolveAttachments>;
+using FramebufferNonResolveAttachmentMask  = angle::BitSet16<kMaxFramebufferNonResolveAttachments>;
 
 class alignas(4) RenderPassDesc final
 {
@@ -144,6 +145,10 @@ class alignas(4) RenderPassDesc final
     void removeColorUnresolveAttachment(size_t colorIndexGL);
     // Indicate that a depth/stencil attachment should have a corresponding resolve attachment.
     void packDepthStencilResolveAttachment(bool resolveDepth, bool resolveStencil);
+    // Indicate that a depth/stencil attachment should take its data from the resolve attachment
+    // initially.
+    void packDepthStencilUnresolveAttachment(bool unresolveDepth, bool unresolveStencil);
+    void removeDepthStencilUnresolveAttachment();
 
     size_t hash() const;
 
@@ -180,6 +185,18 @@ class alignas(4) RenderPassDesc final
     bool hasStencilResolveAttachment() const
     {
         return (mAttachmentFormats.back() & kResolveStencilFlag) != 0;
+    }
+    bool hasDepthStencilUnresolveAttachment() const
+    {
+        return (mAttachmentFormats.back() & (kUnresolveDepthFlag | kUnresolveStencilFlag)) != 0;
+    }
+    bool hasDepthUnresolveAttachment() const
+    {
+        return (mAttachmentFormats.back() & kUnresolveDepthFlag) != 0;
+    }
+    bool hasStencilUnresolveAttachment() const
+    {
+        return (mAttachmentFormats.back() & kUnresolveStencilFlag) != 0;
     }
 
     // Get the number of attachments in the Vulkan render pass, i.e. after removing disabled
@@ -259,8 +276,10 @@ class alignas(4) RenderPassDesc final
     static constexpr uint8_t kDepthStencilFormatStorageMask = 0x7;
 
     // Flags stored in the upper 5 bits of mAttachmentFormats.back().
-    static constexpr uint8_t kResolveDepthFlag   = 0x80;
-    static constexpr uint8_t kResolveStencilFlag = 0x40;
+    static constexpr uint8_t kResolveDepthFlag     = 0x80;
+    static constexpr uint8_t kResolveStencilFlag   = 0x40;
+    static constexpr uint8_t kUnresolveDepthFlag   = 0x20;
+    static constexpr uint8_t kUnresolveStencilFlag = 0x10;
 };
 
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs);
@@ -1054,7 +1073,7 @@ class FramebufferDesc
 
     void updateColor(uint32_t index, ImageViewSubresourceSerial serial);
     void updateColorResolve(uint32_t index, ImageViewSubresourceSerial serial);
-    void updateColorUnresolveMask(gl::DrawBufferMask colorUnresolveMask);
+    void updateUnresolveMask(FramebufferNonResolveAttachmentMask unresolveMask);
     void updateDepthStencil(ImageViewSubresourceSerial serial);
     void updateDepthStencilResolve(ImageViewSubresourceSerial serial);
     void updateReadOnlyDepth(bool readOnlyDepth);
@@ -1076,13 +1095,13 @@ class FramebufferDesc
     void update(uint32_t index, ImageViewSubresourceSerial serial);
 
     // Note: this is an exclusive index. If there is one index it will be "1".
-    uint16_t mMaxIndex;
+    uint8_t mMaxIndex;
     uint8_t mReadOnlyDepth;
 
     // If the render pass contains an initial subpass to unresolve a number of attachments, the
     // subpass description is derived from the following mask, specifying which attachments need
-    // to be unresolved.
-    gl::DrawBufferMask mColorUnresolveAttachmentMask;
+    // to be unresolved.  Includes both color and depth/stencil attachments.
+    FramebufferNonResolveAttachmentMask mUnresolveAttachmentMask;
 
     FramebufferAttachmentArray<ImageViewSubresourceSerial> mSerials;
 };
