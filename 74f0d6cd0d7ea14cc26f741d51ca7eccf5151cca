@@ -16,6 +16,46 @@
       "revId": "74f0d6cd0d7ea14cc26f741d51ca7eccf5151cca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b15e5451_1bb6e817",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-22T14:31:53Z",
+      "side": 1,
+      "message": "LGTM with one nit.",
+      "revId": "74f0d6cd0d7ea14cc26f741d51ca7eccf5151cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1ecd86c_3241a37d",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-22T14:31:53Z",
+      "side": 1,
+      "message": "If you\u0027re accumulating fails, probably makes sense to remove this early return.",
+      "range": {
+        "startLine": 117,
+        "startChar": 20,
+        "endLine": 117,
+        "endChar": 29
+      },
+      "revId": "74f0d6cd0d7ea14cc26f741d51ca7eccf5151cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
