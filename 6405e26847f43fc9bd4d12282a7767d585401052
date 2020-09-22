@@ -51,6 +51,24 @@
       "revId": "6405e26847f43fc9bd4d12282a7767d585401052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d60b2b0_b914fcef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T17:12:05Z",
+      "side": 1,
+      "message": "You need to upload a new CL that resolves the merge conflict and then try again.",
+      "parentUuid": "09960459_aeb7af51",
+      "revId": "6405e26847f43fc9bd4d12282a7767d585401052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
