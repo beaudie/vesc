@@ -86,6 +86,24 @@
       "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c73e95e9_22163b37",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-22T17:52:59Z",
+      "side": 1,
+      "message": "Should also add, we may need a lock around blob cache because there is more than just pipeline cache that uses blob cache. Will look at that for a future CL.",
+      "parentUuid": "1a12b10a_02bfa07b",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
