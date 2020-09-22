@@ -178,12 +178,14 @@ void UnpackColorResolveAttachmentDesc(VkAttachmentDescription *desc,
     const angle::Format &angleFormat = format.actualImageFormat();
     ASSERT(angleFormat.depthBits == 0 && angleFormat.stencilBits == 0);
 
-    // Resolve attachments always have a sample count of 1.  For simplicity, unlikely cases where
-    // the resolve framebuffer is immediately invalidated or cleared are ignored.  Therefore, loadOp
-    // and storeOp can be fixed to DONT_CARE and STORE respectively.
+    // Resolve attachments always have a sample count of 1.
     //
-    // That said, if the corresponding color attachment needs to take its initial value from the
-    // resolve attachment (i.e. needs to be unresolved), loadOp needs to be set to LOAD.
+    // If the corresponding color attachment needs to take its initial value from the resolve
+    // attachment (i.e. needs to be unresolved), loadOp needs to be set to LOAD, otherwise it should
+    // be DONT_CARE as it gets overwritten during resolve.
+    //
+    // storeOp should be STORE.  If the attachment is invalidated, it would get set to DONT_CARE.
+    // TODO(syoussefi): currently invalidate doesn't affect storeOp of resolve attachment.
     desc->samples = VK_SAMPLE_COUNT_1_BIT;
     desc->loadOp =
         usedAsInputAttachment ? VK_ATTACHMENT_LOAD_OP_LOAD : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -195,7 +197,9 @@ void UnpackColorResolveAttachmentDesc(VkAttachmentDescription *desc,
 }
 
 void UnpackDepthStencilResolveAttachmentDesc(VkAttachmentDescription *desc,
-                                             const vk::Format &format)
+                                             const vk::Format &format,
+                                             bool usedAsDepthInputAttachment,
+                                             bool usedAsStencilInputAttachment)
 {
     // There cannot be simultaneous usages of the depth/stencil resolve image, as depth/stencil
     // resolve currently only comes from depth/stencil renderbuffers.
@@ -206,14 +210,15 @@ void UnpackDepthStencilResolveAttachmentDesc(VkAttachmentDescription *desc,
     const angle::Format &angleFormat = format.intendedFormat();
     ASSERT(angleFormat.depthBits != 0 || angleFormat.stencilBits != 0);
 
-    // Resolve attachments always have a sample count of 1.  Currently, invalidate of
-    // multisampled-render-to-texture depth/stencil renderbuffer is not implemented.  Therefore,
-    // loadOp and storeOp can be fixed to DONT_CARE and STORE respectively.
+    // Similarly to color resolve attachments, sample count is 1, loadOp is LOAD or DONT_CARE based
+    // on whether unresolve is required, and storeOp is STORE (if aspect exists).
     desc->samples = VK_SAMPLE_COUNT_1_BIT;
-    desc->loadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    desc->loadOp =
+        usedAsDepthInputAttachment ? VK_ATTACHMENT_LOAD_OP_LOAD : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     desc->storeOp =
         angleFormat.depthBits > 0 ? VK_ATTACHMENT_STORE_OP_STORE : VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    desc->stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    desc->stencilLoadOp =
+        usedAsStencilInputAttachment ? VK_ATTACHMENT_LOAD_OP_LOAD : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     desc->stencilStoreOp = angleFormat.stencilBits > 0 ? VK_ATTACHMENT_STORE_OP_STORE
                                                        : VK_ATTACHMENT_STORE_OP_DONT_CARE;
     desc->initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -258,10 +263,10 @@ void SetPipelineShaderStageInfo(const VkStructureType type,
     shaderStage->pSpecializationInfo = &specializationInfo;
 }
 
-// Defines a subpass that uses the resolve attachments as input attachments to initialize color
-// attachments that need to be "unresolved" at the start of the render pass.  The subpass will
-// only contain color attachments that need to be unresolved to simplify the shader that performs
-// the operations.
+// Defines a subpass that uses the resolve attachments as input attachments to initialize color and
+// depth/stencil attachments that need to be "unresolved" at the start of the render pass.  The
+// subpass will only contain the attachments that need to be unresolved to simplify the shader that
+// performs the operations.
 void InitializeUnresolveSubpass(
     const RenderPassDesc &desc,
     const gl::DrawBuffersVector<VkAttachmentReference> &drawSubpassColorAttachmentRefs,
@@ -269,7 +274,10 @@ void InitializeUnresolveSubpass(
     const VkAttachmentReference &depthStencilAttachmentRef,
     const VkAttachmentReference2KHR &depthStencilResolveAttachmentRef,
     gl::DrawBuffersVector<VkAttachmentReference> *unresolveColorAttachmentRefs,
-    gl::DrawBuffersVector<VkAttachmentReference> *unresolveInputAttachmentRefs,
+    gl::DrawBuffersVector<VkAttachmentReference> *unresolveColorInputAttachmentRefs,
+    VkAttachmentReference *unresolveDepthStencilAttachmentRef,
+    VkAttachmentReference2 *unresolveDepthInputAttachmentRef,
+    VkAttachmentReference2 *unresolveStencilInputAttachmentRef,
     FramebufferAttachmentsVector<uint32_t> *unresolvePreserveAttachmentRefs,
     VkSubpassDescription *subpassDesc)
 {
@@ -300,6 +308,11 @@ void InitializeUnresolveSubpass(
         //     RP Attachment[7] <- corresponding to resolve attachment of GL Color 4
         //     RP Attachment[8] <- corresponding to resolve attachment of GL Color 6
         //
+        // If the depth/stencil attachment is to be resolved, the following attachment would also be
+        // present:
+        //
+        //     RP Attachment[9] <- corresponding to resolve attachment of GL Depth/Stencil
+        //
         // The subpass that takes the application draw calls has the following attachments, creating
         // the mapping from the Vulkan attachment indices (i.e. RP attachment indices) to GL indices
         // as indicated by the GL shaders:
@@ -322,6 +335,10 @@ void InitializeUnresolveSubpass(
         //     Subpass[1] Resolve[6] -> RP Attachment[8]
         //     Subpass[1] Resolve[7] -> VK_ATTACHMENT_UNUSED
         //
+        // With depth/stencil resolve attachment:
+        //
+        //     Subpass[1] Depth/Stencil Resolve -> RP Attachment[9]
+        //
         // The initial subpass that's created here is (remember that in the above example Color 4
         // and 6 need to be unresolved):
         //
@@ -333,18 +350,27 @@ void InitializeUnresolveSubpass(
         // The trick here therefore is to use the color attachment refs already created for the
         // application draw subpass indexed with colorIndexGL.
         //
+        // If depth/stencil needs to be unresolved (note one input attachment per aspect):
+        //
+        //     Subpass[0] Input[2] -> RP Attachment[9] = Subpass[1] Depth Resolve
+        //     Subpass[0] Input[3] -> RP Attachment[9] = Subpass[1] Stencil Resolve
+        //     Subpass[0] Color[2] -> RP Attachment[5] = Subpass[1] Depth/Stencil
+        //
         // As an additional note, the attachments that are not used in the unresolve subpass must be
         // preserved.  That is color attachments and the depth/stencil attachment if any.  Resolve
         // attachments are rewritten by the next subpass, so they don't need to be preserved.  Note
-        // that there's no need to preserve a color attachment whose loadOp is DONT_CARE.  For
-        // simplicity, we preserve those as well.  The driver would ideally avoid preserving
-        // attachments with loadOp=DONT_CARE.
+        // that there's no need to preserve attachments whose loadOp is DONT_CARE.  For simplicity,
+        // we preserve those as well.  The driver would ideally avoid preserving attachments with
+        // loadOp=DONT_CARE.
         //
         // With the above example:
         //
         //     Subpass[0] Preserve[0] -> RP Attachment[0] = Subpass[1] Color[0]
         //     Subpass[0] Preserve[1] -> RP Attachment[1] = Subpass[1] Color[3]
         //     Subpass[0] Preserve[2] -> RP Attachment[4] = Subpass[1] Color[7]
+        //
+        // If depth/stencil is not unresolved:
+        //
         //     Subpass[0] Preserve[3] -> RP Attachment[5] = Subpass[1] Depth/Stencil
         //
         // Again, the color attachment refs already created for the application draw subpass can be
@@ -365,35 +391,56 @@ void InitializeUnresolveSubpass(
         ASSERT(drawSubpassResolveAttachmentRefs[colorIndexGL].attachment != VK_ATTACHMENT_UNUSED);
 
         unresolveColorAttachmentRefs->push_back(drawSubpassColorAttachmentRefs[colorIndexGL]);
-        unresolveInputAttachmentRefs->push_back(drawSubpassResolveAttachmentRefs[colorIndexGL]);
+        unresolveColorInputAttachmentRefs->push_back(
+            drawSubpassResolveAttachmentRefs[colorIndexGL]);
 
         // Note the input attachment layout should be shader read-only.  The subpass dependency
         // will take care of transitioning the layout of the resolve attachment to color attachment
         // automatically.
-        unresolveInputAttachmentRefs->back().layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        unresolveColorInputAttachmentRefs->back().layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     }
 
-    // Preserve depth/stencil attachments.
-    if (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED)
+    if (desc.hasDepthStencilUnresolveAttachment())
     {
-        // There's no need to preserve the depth attachment if loadOp=DONT_CARE, but we do for
-        // simplicity.
+        ASSERT(desc.hasDepthStencilAttachment());
+        ASSERT(desc.hasDepthStencilResolveAttachment());
+
+        *unresolveDepthStencilAttachmentRef = depthStencilAttachmentRef;
+
+        // Create one input attachment per aspect.
+        if (desc.hasDepthUnresolveAttachment())
+        {
+            *unresolveDepthInputAttachmentRef            = depthStencilResolveAttachmentRef;
+            unresolveDepthInputAttachmentRef->layout     = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            unresolveDepthInputAttachmentRef->aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        if (desc.hasStencilUnresolveAttachment())
+        {
+            *unresolveStencilInputAttachmentRef        = depthStencilResolveAttachmentRef;
+            unresolveStencilInputAttachmentRef->layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            unresolveStencilInputAttachmentRef->aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+    }
+    else if (desc.hasDepthStencilAttachment())
+    {
+        // Preserve the depth/stencil attachment if not unresolved.  Again, there's no need to
+        // preserve the depth attachment if loadOp=DONT_CARE, but we do for simplicity.
         unresolvePreserveAttachmentRefs->push_back(depthStencilAttachmentRef.attachment);
     }
 
     ASSERT(!unresolveColorAttachmentRefs->empty());
-    ASSERT(unresolveColorAttachmentRefs->size() == unresolveInputAttachmentRefs->size());
+    ASSERT(unresolveColorAttachmentRefs->size() == unresolveColorInputAttachmentRefs->size());
 
     const uint32_t attachmentCount = static_cast<uint32_t>(unresolveColorAttachmentRefs->size());
 
     subpassDesc->flags                   = 0;
     subpassDesc->pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpassDesc->inputAttachmentCount    = attachmentCount;
-    subpassDesc->pInputAttachments       = unresolveInputAttachmentRefs->data();
+    subpassDesc->pInputAttachments       = unresolveColorInputAttachmentRefs->data();
     subpassDesc->colorAttachmentCount    = attachmentCount;
     subpassDesc->pColorAttachments       = unresolveColorAttachmentRefs->data();
     subpassDesc->pResolveAttachments     = nullptr;
-    subpassDesc->pDepthStencilAttachment = nullptr;
+    subpassDesc->pDepthStencilAttachment = unresolveDepthStencilAttachmentRef;
     subpassDesc->preserveAttachmentCount =
         static_cast<uint32_t>(unresolvePreserveAttachmentRefs->size());
     subpassDesc->pPreserveAttachments = unresolvePreserveAttachmentRefs->data();
@@ -405,9 +452,12 @@ template <typename T>
 using SubpassVector = angle::FastVector<T, kSubpassFastVectorSize>;
 
 void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescription> &subpassDesc,
+                                            bool unresolveColor,
+                                            bool unresolveDepthStencil,
                                             std::vector<VkSubpassDependency> *subpassDependencies)
 {
     ASSERT(subpassDesc.size() >= 2);
+    ASSERT(unresolveColor || unresolveDepthStencil);
 
     // The unresolve subpass is the first subpass.  The application draw subpass is the next one.
     constexpr uint32_t kUnresolveSubpassIndex = 0;
@@ -416,12 +466,12 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
     // A subpass dependency is needed between the unresolve and draw subpasses.  There are two
     // hazards here:
     //
-    // - Subpass 0 writes to color attachments, subpass 1 writes to the same color attachments.
-    //   This is a WaW hazard (color write -> color write) similar to when two subsequent render
-    //   passes write to the same images.
+    // - Subpass 0 writes to color/depth/stencil attachments, subpass 1 writes to the same
+    //   attachments.  This is a WaW hazard (color/depth/stencil write -> color/depth/stencil write)
+    //   similar to when two subsequent render passes write to the same images.
     // - Subpass 0 reads from resolve attachments, subpass 1 writes to the same resolve attachments.
-    //   This is a WaR hazard (fragment shader read -> color write) which only requires an execution
-    //   barrier.
+    //   This is a WaR hazard (fragment shader read -> color/depth/stencil write) which only
+    //   requires an execution barrier.
     //
     // Note: the DEPENDENCY_BY_REGION flag is necessary to create a "framebuffer-local" dependency,
     // as opposed to "framebuffer-global".  The latter is effectively a render pass break.  The
@@ -438,21 +488,57 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
     // > can access any sample in the input attachment's pixel even if it only uses
     // > framebuffer-local dependencies.
     //
-    // The dependency for the first hazard above (color write -> color write) is on same-sample
-    // attachments, so it will not allow the use of input attachments as required by the unresolve
-    // subpass.  As a result, even though the second hazard seems to be subsumed by the first (its
-    // src stage is earlier and its dst stage is the same), a separate dependency is created for it
-    // just to obtain a pixel granularity dependency.
+    // The dependency for the first hazard above (attachment writattachmentcolor write) is on
+    // same-sample attachments, so it will not allow the use of input attachments as required by the
+    // unresolve subpass.  As a result, even though the second hazard seems to be subsumed by the
+    // first (its src stage is earlier and its dst stage is the same), a separate dependency is
+    // created for it just to obtain a pixel granularity dependency.
 
     subpassDependencies->emplace_back();
     VkSubpassDependency *dependency = &subpassDependencies->back();
 
+    constexpr VkPipelineStageFlags kColorWriteStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    constexpr VkPipelineStageFlags kColorReadWriteStage =
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    constexpr VkAccessFlags kColorWriteFlags = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    constexpr VkAccessFlags kColorReadWriteFlags =
+        kColorWriteFlags | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+
+    constexpr VkPipelineStageFlags kDepthStencilWriteStage =
+        VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+    constexpr VkPipelineStageFlags kDepthStencilReadWriteStage =
+        VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    constexpr VkAccessFlags kDepthStencilWriteFlags = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+    constexpr VkAccessFlags kDepthStencilReadWriteFlags =
+        kDepthStencilWriteFlags | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+
+    VkPipelineStageFlags attachmentWriteStages     = 0;
+    VkPipelineStageFlags attachmentReadWriteStages = 0;
+    VkAccessFlags attachmentWriteFlags             = 0;
+    VkAccessFlags attachmentReadWriteFlags         = 0;
+
+    if (unresolveColor)
+    {
+        attachmentWriteStages |= kColorWriteStage;
+        attachmentReadWriteStages |= kColorReadWriteStage;
+        attachmentWriteFlags |= kColorWriteFlags;
+        attachmentReadWriteFlags |= kColorReadWriteFlags;
+    }
+
+    if (unresolveDepthStencil)
+    {
+        attachmentWriteStages |= kDepthStencilWriteStage;
+        attachmentReadWriteStages |= kDepthStencilReadWriteStage;
+        attachmentWriteFlags |= kDepthStencilWriteFlags;
+        attachmentReadWriteFlags |= kDepthStencilReadWriteFlags;
+    }
+
     dependency->srcSubpass      = kUnresolveSubpassIndex;
     dependency->dstSubpass      = kDrawSubpassIndex;
-    dependency->srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency->dstStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency->srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    dependency->dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependency->srcStageMask    = attachmentWriteStages;
+    dependency->dstStageMask    = attachmentReadWriteStages;
+    dependency->srcAccessMask   = attachmentWriteFlags;
+    dependency->dstAccessMask   = attachmentReadWriteFlags;
     dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
     subpassDependencies->emplace_back();
@@ -461,9 +547,9 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
     dependency->srcSubpass      = kUnresolveSubpassIndex;
     dependency->dstSubpass      = kDrawSubpassIndex;
     dependency->srcStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-    dependency->dstStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency->dstStageMask    = attachmentReadWriteStages;
     dependency->srcAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
-    dependency->dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependency->dstAccessMask   = attachmentReadWriteFlags;
     dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 }
 
@@ -495,7 +581,7 @@ void ToAttachmentReference2(const VkAttachmentReference &ref,
 }
 
 void ToSubpassDescription2(const VkSubpassDescription &desc,
-                           const gl::DrawBuffersVector<VkAttachmentReference2KHR> &inputRefs,
+                           const FramebufferAttachmentsVector<VkAttachmentReference2KHR> &inputRefs,
                            const gl::DrawBuffersVector<VkAttachmentReference2KHR> &colorRefs,
                            const gl::DrawBuffersVector<VkAttachmentReference2KHR> &resolveRefs,
                            const VkAttachmentReference2KHR &depthStencilRef,
@@ -505,8 +591,8 @@ void ToSubpassDescription2(const VkSubpassDescription &desc,
     desc2Out->sType                   = VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2_KHR;
     desc2Out->flags                   = desc.flags;
     desc2Out->pipelineBindPoint       = desc.pipelineBindPoint;
-    desc2Out->inputAttachmentCount    = desc.inputAttachmentCount;
-    desc2Out->pInputAttachments       = desc.pInputAttachments ? inputRefs.data() : nullptr;
+    desc2Out->inputAttachmentCount    = static_cast<uint32_t>(inputRefs.size());
+    desc2Out->pInputAttachments       = !inputRefs.empty() ? inputRefs.data() : nullptr;
     desc2Out->colorAttachmentCount    = desc.colorAttachmentCount;
     desc2Out->pColorAttachments       = desc.pColorAttachments ? colorRefs.data() : nullptr;
     desc2Out->pResolveAttachments     = desc.pResolveAttachments ? resolveRefs.data() : nullptr;
@@ -531,6 +617,8 @@ void ToSubpassDependency2(const VkSubpassDependency &dep, VkSubpassDependency2KH
 angle::Result CreateRenderPass2(Context *context,
                                 const VkRenderPassCreateInfo &createInfo,
                                 const VkSubpassDescriptionDepthStencilResolve &depthStencilResolve,
+                                VkAttachmentReference2 unresolveDepthInputAttachmentRef,
+                                VkAttachmentReference2 unresolveStencilInputAttachmentRef,
                                 RenderPass *renderPass)
 {
     // Convert the attachments to VkAttachmentDescription2.
@@ -542,8 +630,8 @@ angle::Result CreateRenderPass2(Context *context,
 
     // Convert subpass attachments to VkAttachmentReference2 and the subpass description to
     // VkSubpassDescription2.
-    SubpassVector<gl::DrawBuffersVector<VkAttachmentReference2KHR>> subpassInputAttachmentRefs(
-        createInfo.subpassCount);
+    SubpassVector<FramebufferAttachmentsVector<VkAttachmentReference2KHR>>
+        subpassInputAttachmentRefs(createInfo.subpassCount);
     SubpassVector<gl::DrawBuffersVector<VkAttachmentReference2KHR>> subpassColorAttachmentRefs(
         createInfo.subpassCount);
     SubpassVector<gl::DrawBuffersVector<VkAttachmentReference2KHR>> subpassResolveAttachmentRefs(
@@ -554,13 +642,18 @@ angle::Result CreateRenderPass2(Context *context,
     for (uint32_t subpass = 0; subpass < createInfo.subpassCount; ++subpass)
     {
         const VkSubpassDescription &desc = createInfo.pSubpasses[subpass];
-        gl::DrawBuffersVector<VkAttachmentReference2KHR> &inputRefs =
+        FramebufferAttachmentsVector<VkAttachmentReference2KHR> &inputRefs =
             subpassInputAttachmentRefs[subpass];
         gl::DrawBuffersVector<VkAttachmentReference2KHR> &colorRefs =
             subpassColorAttachmentRefs[subpass];
         gl::DrawBuffersVector<VkAttachmentReference2KHR> &resolveRefs =
             subpassResolveAttachmentRefs[subpass];
         VkAttachmentReference2KHR &depthStencilRef = subpassDepthStencilAttachmentRefs[subpass];
+
+        const bool hasDepthInputAttachment =
+            unresolveDepthInputAttachmentRef.attachment != VK_ATTACHMENT_UNUSED;
+        const bool hasStencilInputAttachment =
+            unresolveStencilInputAttachmentRef.attachment != VK_ATTACHMENT_UNUSED;
 
         inputRefs.resize(desc.inputAttachmentCount);
         colorRefs.resize(desc.colorAttachmentCount);
@@ -569,10 +662,26 @@ angle::Result CreateRenderPass2(Context *context,
         // Convert subpass attachment references.
         for (uint32_t index = 0; index < desc.inputAttachmentCount; ++index)
         {
-            // TODO(syoussefi): support depth/stencil unresolve.  http://anglebug.com/4836
             ToAttachmentReference2(desc.pInputAttachments[index], VK_IMAGE_ASPECT_COLOR_BIT,
                                    &inputRefs[index]);
         }
+        if (subpass == 0)
+        {
+            const size_t depthStencilInputAttachmentCount =
+                (hasDepthInputAttachment ? 1 : 0) + (hasStencilInputAttachment ? 1 : 0);
+            inputRefs.resize(inputRefs.size() + depthStencilInputAttachmentCount);
+            // Add in depth/stencil input attachments.
+            uint32_t depthStencilInputIndex = desc.inputAttachmentCount;
+            if (hasDepthInputAttachment)
+            {
+                inputRefs[depthStencilInputIndex++] = unresolveDepthInputAttachmentRef;
+            }
+            if (hasStencilInputAttachment)
+            {
+                inputRefs[depthStencilInputIndex++] = unresolveStencilInputAttachmentRef;
+            }
+        }
+
         for (uint32_t index = 0; index < desc.colorAttachmentCount; ++index)
         {
             ToAttachmentReference2(desc.pColorAttachments[index], VK_IMAGE_ASPECT_COLOR_BIT,
@@ -751,7 +860,9 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
         depthStencilResolveAttachmentRef.aspectMask =
             VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
 
-        UnpackDepthStencilResolveAttachmentDesc(&attachmentDescs[attachmentCount.get()], format);
+        UnpackDepthStencilResolveAttachmentDesc(&attachmentDescs[attachmentCount.get()], format,
+                                                desc.hasDepthUnresolveAttachment(),
+                                                desc.hasStencilUnresolveAttachment());
 
         ++attachmentCount;
     }
@@ -763,15 +874,20 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
     // which is in turn used in VkRenderPassCreateInfo below.  That is why they are declared in the
     // same scope.
     gl::DrawBuffersVector<VkAttachmentReference> unresolveColorAttachmentRefs;
-    gl::DrawBuffersVector<VkAttachmentReference> unresolveInputAttachmentRefs;
+    gl::DrawBuffersVector<VkAttachmentReference> unresolveColorInputAttachmentRefs;
+    VkAttachmentReference unresolveDepthStencilAttachmentRef  = kUnusedAttachment;
+    VkAttachmentReference2 unresolveDepthInputAttachmentRef   = kUnusedAttachment2;
+    VkAttachmentReference2 unresolveStencilInputAttachmentRef = kUnusedAttachment2;
     FramebufferAttachmentsVector<uint32_t> unresolvePreserveAttachmentRefs;
     if (desc.getColorUnresolveAttachmentMask().any())
     {
         subpassDesc.push_back({});
-        InitializeUnresolveSubpass(desc, colorAttachmentRefs, colorResolveAttachmentRefs,
-                                   depthStencilAttachmentRef, depthStencilResolveAttachmentRef,
-                                   &unresolveColorAttachmentRefs, &unresolveInputAttachmentRefs,
-                                   &unresolvePreserveAttachmentRefs, &subpassDesc.back());
+        InitializeUnresolveSubpass(
+            desc, colorAttachmentRefs, colorResolveAttachmentRefs, depthStencilAttachmentRef,
+            depthStencilResolveAttachmentRef, &unresolveColorAttachmentRefs,
+            &unresolveColorInputAttachmentRefs, &unresolveDepthStencilAttachmentRef,
+            &unresolveDepthInputAttachmentRef, &unresolveStencilInputAttachmentRef,
+            &unresolvePreserveAttachmentRefs, &subpassDesc.back());
     }
 
     subpassDesc.push_back({});
@@ -786,9 +902,7 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
                                                   ? colorResolveAttachmentRefs.data()
                                                   : nullptr;
-    applicationSubpass->pDepthStencilAttachment =
-        (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
-                                                                      : nullptr);
+    applicationSubpass->pDepthStencilAttachment = &depthStencilAttachmentRef;
     applicationSubpass->preserveAttachmentCount = 0;
     applicationSubpass->pPreserveAttachments    = nullptr;
 
@@ -810,9 +924,11 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
     }
 
     std::vector<VkSubpassDependency> subpassDependencies;
-    if (desc.getColorUnresolveAttachmentMask().any())
+    if (desc.getColorUnresolveAttachmentMask().any() || desc.hasDepthStencilUnresolveAttachment())
     {
-        InitializeUnresolveSubpassDependencies(subpassDesc, &subpassDependencies);
+        InitializeUnresolveSubpassDependencies(
+            subpassDesc, desc.getColorUnresolveAttachmentMask().any(),
+            desc.hasDepthStencilUnresolveAttachment(), &subpassDependencies);
     }
 
     VkRenderPassCreateInfo createInfo = {};
@@ -835,7 +951,9 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
     // vkCreateRenderPass2KHR.
     if (desc.hasDepthStencilResolveAttachment())
     {
-        ANGLE_TRY(CreateRenderPass2(context, createInfo, depthStencilResolve, renderPass));
+        ANGLE_TRY(CreateRenderPass2(context, createInfo, depthStencilResolve,
+                                    unresolveDepthInputAttachmentRef,
+                                    unresolveStencilInputAttachmentRef, renderPass));
     }
     else
     {
@@ -1070,6 +1188,25 @@ void RenderPassDesc::packDepthStencilResolveAttachment(bool resolveDepth, bool r
     {
         mAttachmentFormats.back() |= kResolveStencilFlag;
     }
+}
+
+void RenderPassDesc::packDepthStencilUnresolveAttachment(bool unresolveDepth, bool unresolveStencil)
+{
+    ASSERT(hasDepthStencilAttachment());
+
+    if (unresolveDepth)
+    {
+        mAttachmentFormats.back() |= kUnresolveDepthFlag;
+    }
+    if (unresolveStencil)
+    {
+        mAttachmentFormats.back() |= kUnresolveStencilFlag;
+    }
+}
+
+void RenderPassDesc::removeDepthStencilUnresolveAttachment()
+{
+    mAttachmentFormats.back() &= ~(kUnresolveDepthFlag | kUnresolveStencilFlag);
 }
 
 RenderPassDesc &RenderPassDesc::operator=(const RenderPassDesc &other)
@@ -1525,7 +1662,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
 
     // If this graphics pipeline is for the unresolve operation, correct the color attachment count
     // for that subpass.
-    if (mRenderPassDesc.getColorUnresolveAttachmentMask().any() &&
+    if ((mRenderPassDesc.getColorUnresolveAttachmentMask().any() ||
+         mRenderPassDesc.hasDepthStencilUnresolveAttachment()) &&
         mRasterizationAndMultisampleStateInfo.bits.subpass == 0)
     {
         blendState.attachmentCount =
@@ -2417,11 +2555,13 @@ FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = defa
 
 void FramebufferDesc::update(uint32_t index, ImageViewSubresourceSerial serial)
 {
+    static_assert(kMaxFramebufferAttachments + 1 < std::numeric_limits<uint8_t>::max(),
+                  "mMaxIndex size is too small");
     ASSERT(index < kMaxFramebufferAttachments);
     mSerials[index] = serial;
     if (serial.imageViewSerial.valid())
     {
-        mMaxIndex = std::max(mMaxIndex, static_cast<uint16_t>(index + 1));
+        mMaxIndex = std::max(mMaxIndex, static_cast<uint8_t>(index + 1));
     }
 }
 
@@ -2435,9 +2575,9 @@ void FramebufferDesc::updateColorResolve(uint32_t index, ImageViewSubresourceSer
     update(kFramebufferDescColorResolveIndexOffset + index, serial);
 }
 
-void FramebufferDesc::updateColorUnresolveMask(gl::DrawBufferMask colorUnresolveMask)
+void FramebufferDesc::updateUnresolveMask(FramebufferNonResolveAttachmentMask unresolveMask)
 {
-    mColorUnresolveAttachmentMask = colorUnresolveMask;
+    mUnresolveAttachmentMask = unresolveMask;
 }
 
 void FramebufferDesc::updateDepthStencil(ImageViewSubresourceSerial serial)
@@ -2458,21 +2598,21 @@ void FramebufferDesc::updateReadOnlyDepth(bool readOnlyDepth)
 size_t FramebufferDesc::hash() const
 {
     return angle::ComputeGenericHash(&mSerials, sizeof(mSerials[0]) * mMaxIndex) ^
-           mColorUnresolveAttachmentMask.bits();
+           mUnresolveAttachmentMask.bits();
 }
 
 void FramebufferDesc::reset()
 {
     mMaxIndex      = 0;
     mReadOnlyDepth = false;
-    mColorUnresolveAttachmentMask.reset();
+    mUnresolveAttachmentMask.reset();
     memset(&mSerials, 0, sizeof(mSerials));
 }
 
 bool FramebufferDesc::operator==(const FramebufferDesc &other) const
 {
     if (mMaxIndex != other.mMaxIndex || mReadOnlyDepth != other.mReadOnlyDepth ||
-        mColorUnresolveAttachmentMask != other.mColorUnresolveAttachmentMask)
+        mUnresolveAttachmentMask != other.mUnresolveAttachmentMask)
     {
         return false;
     }
