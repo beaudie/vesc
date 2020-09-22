@@ -128,7 +128,14 @@ except subprocess.CalledProcessError:
 # -
 
 print('\nProcessing graph', file=sys.stderr)
-descs = json.loads(p.stdout.decode())
+desc_json = p.stdout.decode()
+
+# If `gn desc` produced warnings, skip those.
+desc_json_start = desc_json.find('{\n')
+assert desc_json_start >= 0
+desc_json = desc_json[desc_json_start:]
+
+descs = json.loads(desc_json)
 
 # Ready to traverse
 # ------------------------------------------------------------------------------
