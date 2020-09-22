@@ -122,6 +122,24 @@
       "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a230aac_6590801a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T20:16:38Z",
+      "side": 1,
+      "message": "Ok, doing some more reading, this is in the spec:\n\n9.6. Pipeline Cache\n\u003e If the pipeline cache passed into these commands is not VK_NULL_HANDLE, the implementation will query it for possible reuse opportunities and update it with new content. The use of the pipeline cache object in these commands is internally synchronized, and the same pipeline cache object can be used in multiple threads simultaneously.\n\nThat\u0027s how the pipeline cache is being used here, so it should be safe to access it without a lock.",
+      "parentUuid": "c73e95e9_22163b37",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
