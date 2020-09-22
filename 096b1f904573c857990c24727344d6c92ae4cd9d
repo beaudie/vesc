@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4343a53e_cd1032ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T14:55:18Z",
+      "side": 1,
+      "message": "See PS1 for bot results (not doing CQ+1 as the bots are congested). Suppressions are added for D3D and one Intel/Linux/Vulkan failure.",
+      "revId": "096b1f904573c857990c24727344d6c92ae4cd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
