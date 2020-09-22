@@ -427,6 +427,30 @@
     },
     {
       "key": {
+        "uuid": "cb791cfa_d8efae4e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-22T21:49:20Z",
+      "side": 1,
+      "message": "I was tuned out during the discussion of this during the meeting today (didn\u0027t know this was coming my way).  Is porting this CL some/all of what I\u0027ll be taking over?",
+      "parentUuid": "75569ea5_2559dce8",
+      "range": {
+        "startLine": 1057,
+        "startChar": 8,
+        "endLine": 1057,
+        "endChar": 28
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0f4f49d_aa156b78",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
