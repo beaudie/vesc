@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "f6a605f3_935a4a23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:16:58Z",
+      "side": 1,
+      "message": "Not sure if we should care about it now, but there was some intention to disable GL validation for speed up, but it was blocked on the validation layer having side effects. This piles on that.\n\nWould it be easy to support such a use case? Like where it used to link before this change, see if link was already done or not, and attempt it if not done?",
+      "range": {
+        "startLine": 18,
+        "startChar": 51,
+        "endLine": 18,
+        "endChar": 69
+      },
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35429baf_0c90d53e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -16,6 +39,23 @@
       "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c27cd51a_2fe88d6e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:16:58Z",
+      "side": 1,
+      "message": "What happens in this scenario?\n\n- Create pipeline that should fail link\n- Bind program\n- Draw\n- Unbind program\n- Draw\n\nThe second draw should fail with PPO link eror, right? But the first draw was the one that processed it and didn\u0027t report it.",
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
