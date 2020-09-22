@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "b8a80ba3_4996ae2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:23:36Z",
+      "side": 1,
+      "message": "Very impressive.",
+      "parentUuid": "b5b4c186_9cc80a31",
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa3a1acb_f1df4739",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -117,6 +135,30 @@
       "side": 1,
       "message": "Usually the depth write is tracked via mRenderPassCommands-\u003eonDepthAccess(GetDepthAccess(dsState)). That GetDepthAccess() call will return \"Read\" if depthTest\u003d\u003dfalse \u0026\u0026 depthMask\u003d\u003dtrue. But you are still able to do a depth clear. And if depth clear is implemented via vkCmdClearAttachments, we have to mark it as \"Write\" here.",
       "parentUuid": "a02c7008_a9943238",
+      "range": {
+        "startLine": 2160,
+        "startChar": 7,
+        "endLine": 2161,
+        "endChar": 30
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76ccd4b4_6ecc0e66",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:23:36Z",
+      "side": 1,
+      "message": "OK. I was thinking we should reword the comment. Something like \"Explicitly mark a depth write because we are clearing the depth buffer\" or something like that.",
+      "parentUuid": "d838da81_0e8051f9",
       "range": {
         "startLine": 2160,
         "startChar": 7,
@@ -246,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "b5ae7e87_0d1dd954",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:23:36Z",
+      "side": 1,
+      "message": "Yeah, nevermind, I missed that you removed the setLayout from above and moved it down here.",
+      "parentUuid": "ee59beb0_f85f4765",
+      "range": {
+        "startLine": 2356,
+        "startChar": 0,
+        "endLine": 2369,
+        "endChar": 92
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87d7cc19_b6727cca",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -351,6 +417,30 @@
       "side": 1,
       "message": "Sorry, what do you mean? The call is required though.",
       "parentUuid": "f70d3368_2628aab9",
+      "range": {
+        "startLine": 2582,
+        "startChar": 0,
+        "endLine": 2583,
+        "endChar": 71
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ac0ff04_046989a6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:23:36Z",
+      "side": 1,
+      "message": "Can we remove this line of code and the parameter to the function below? Why is it required? Does the Framebuffer actually change? My thinking is the Framebuffer doesn\u0027t have the layout information.",
+      "parentUuid": "31a89065_63940c77",
       "range": {
         "startLine": 2582,
         "startChar": 0,
@@ -479,6 +569,30 @@
     },
     {
       "key": {
+        "uuid": "dad28068_0d55099a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:23:36Z",
+      "side": 1,
+      "message": "Mode \u003e Layout I think, first proposal SGTM.",
+      "parentUuid": "c4340fc6_b268c228",
+      "range": {
+        "startLine": 984,
+        "startChar": 9,
+        "endLine": 984,
+        "endChar": 38
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff1682e1_bb4a84ce",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 10
@@ -537,6 +651,30 @@
       "side": 1,
       "message": "Right. I am referring to the optimization that we may nuke the clearOp if it is not been used and not been stored. I can be more explicit here about what the other optimization is.",
       "parentUuid": "11c8f7ec_b4877ac1",
+      "range": {
+        "startLine": 1128,
+        "startChar": 84,
+        "endLine": 1129,
+        "endChar": 19
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baeba908_e3032ee2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:23:36Z",
+      "side": 1,
+      "message": "Ack, mostly a wording suggestion.",
+      "parentUuid": "d21bf194_3b4bbc03",
       "range": {
         "startLine": 1128,
         "startChar": 84,
