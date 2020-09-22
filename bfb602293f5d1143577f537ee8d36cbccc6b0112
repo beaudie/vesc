@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "b5b4c186_9cc80a31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "Will absorb other feedbacks in next update. \nOn S20+ with GPU and memory clock locked, I am seeing Manhattan offscreen score has 6% improvement.",
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa3a1acb_f1df4739",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -88,6 +105,30 @@
     },
     {
       "key": {
+        "uuid": "d838da81_0e8051f9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "Usually the depth write is tracked via mRenderPassCommands-\u003eonDepthAccess(GetDepthAccess(dsState)). That GetDepthAccess() call will return \"Read\" if depthTest\u003d\u003dfalse \u0026\u0026 depthMask\u003d\u003dtrue. But you are still able to do a depth clear. And if depth clear is implemented via vkCmdClearAttachments, we have to mark it as \"Write\" here.",
+      "parentUuid": "a02c7008_a9943238",
+      "range": {
+        "startLine": 2160,
+        "startChar": 7,
+        "endLine": 2161,
+        "endChar": 30
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f67f78a_426189c8",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -99,6 +140,30 @@
       "writtenOn": "2020-09-22T21:41:24Z",
       "side": 1,
       "message": "nit: not sure what you mean here. What\u0027s a stencil test enable?",
+      "range": {
+        "startLine": 2169,
+        "startChar": 9,
+        "endLine": 2170,
+        "endChar": 38
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6cdfe7e_b98683c9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2170,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "See above. Stencil is slightly different, but the exact issue I described above still apply.",
+      "parentUuid": "9f67f78a_426189c8",
       "range": {
         "startLine": 2169,
         "startChar": 9,
@@ -157,6 +222,30 @@
     },
     {
       "key": {
+        "uuid": "ee59beb0_f85f4765",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "It is calling setLayout second time only when there is depth mode switch after renderpass have started. But yes, I do intend to get rid of extra layout transition for read/write switch with a follow on CL.",
+      "parentUuid": "8aade85b_876bfad7",
+      "range": {
+        "startLine": 2356,
+        "startChar": 0,
+        "endLine": 2369,
+        "endChar": 92
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87d7cc19_b6727cca",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -168,6 +257,30 @@
       "writtenOn": "2020-09-22T21:41:24Z",
       "side": 1,
       "message": "nit: can you not call this if there\u0027s no depth/stencil RT? or does this have to happen here?",
+      "range": {
+        "startLine": 2557,
+        "startChar": 0,
+        "endLine": 2561,
+        "endChar": 5
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73a52926_34d356ab",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2561,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "I can move the check to caller and change this to assert. It does appear most places that calling this function knows there is a depth buffer.",
+      "parentUuid": "87d7cc19_b6727cca",
       "range": {
         "startLine": 2557,
         "startChar": 0,
@@ -214,6 +327,30 @@
       "writtenOn": "2020-09-22T21:41:24Z",
       "side": 1,
       "message": "can we remove this? Maybe we can change the \"update\" API to be more direct.",
+      "range": {
+        "startLine": 2582,
+        "startChar": 0,
+        "endLine": 2583,
+        "endChar": 71
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31a89065_63940c77",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "Sorry, what do you mean? The call is required though.",
+      "parentUuid": "f70d3368_2628aab9",
       "range": {
         "startLine": 2582,
         "startChar": 0,
@@ -318,6 +455,30 @@
     },
     {
       "key": {
+        "uuid": "c4340fc6_b268c228",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "How about updateStartedRenderPassWithDepthMode()? With the ReadOnly in the name it sounds like switching to ReadOnly. But it actually could switch into or out of readOnly mode.\n\nOr updateStartedRenderPassDepthLayout()?",
+      "parentUuid": "19d541b3_c6d5907f",
+      "range": {
+        "startLine": 984,
+        "startChar": 9,
+        "endLine": 984,
+        "endChar": 38
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff1682e1_bb4a84ce",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 10
@@ -352,6 +513,30 @@
       "writtenOn": "2020-09-22T21:41:24Z",
       "side": 1,
       "message": "nit: allow for other optimizations. Isn\u0027t it technically not tracking the store op rather than the load op?",
+      "range": {
+        "startLine": 1128,
+        "startChar": 84,
+        "endLine": 1129,
+        "endChar": 19
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d21bf194_3b4bbc03",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T22:53:04Z",
+      "side": 1,
+      "message": "Right. I am referring to the optimization that we may nuke the clearOp if it is not been used and not been stored. I can be more explicit here about what the other optimization is.",
+      "parentUuid": "11c8f7ec_b4877ac1",
       "range": {
         "startLine": 1128,
         "startChar": 84,
