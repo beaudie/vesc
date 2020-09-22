@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "f398671a_453460c9",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done, improvised a bit",
+      "parentUuid": "36da5445_8536141f",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 5
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "666c68a6_3f0ff969",
         "filename": "src/libANGLE/renderer/BufferImpl.h",
         "patchSetId": 6
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "c8d90202_5e0430e9",
+        "filename": "src/libANGLE/renderer/BufferImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done, renamed for refactor",
+      "parentUuid": "666c68a6_3f0ff969",
+      "range": {
+        "startLine": 38,
+        "startChar": 26,
+        "endLine": 38,
+        "endChar": 40
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "035ef62a_4eeecb63",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 6
@@ -93,6 +141,24 @@
       "writtenOn": "2020-09-22T02:39:22Z",
       "side": 1,
       "message": "Why is there no more device local buffer?",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eab9cb75_dcf90c10",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "with just device local memory we wont be able to map and write to that buffer from host even if the buffer is not currently in use. This will require us to perform a staged update for this special case",
+      "parentUuid": "035ef62a_4eeecb63",
       "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -119,6 +185,30 @@
       "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "110646da_e159c1a8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db281820_dfe2d813",
+      "range": {
+        "startLine": 3610,
+        "startChar": 8,
+        "endLine": 3610,
+        "endChar": 42
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -169,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "aa145b72_dcc84f96",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3615,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd17860a_848b3502",
+      "range": {
+        "startLine": 3613,
+        "startChar": 0,
+        "endLine": 3615,
+        "endChar": 52
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06857dc9_41ffec2d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -183,6 +297,24 @@
       "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24d6c81c_d2074f8a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06857dc9_41ffec2d",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -206,6 +338,30 @@
       "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27321852_805ced93",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3630,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done, replaced all of this with a \"finishImpl\" call",
+      "parentUuid": "cb4313bc_6c855654",
+      "range": {
+        "startLine": 3630,
+        "startChar": 18,
+        "endLine": 3630,
+        "endChar": 47
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -256,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "8b32dfab_5876cf8a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3962,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb004e82_b6fed004",
+      "range": {
+        "startLine": 3962,
+        "startChar": 4,
+        "endLine": 3962,
+        "endChar": 16
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f792deb_0002a37c",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 6
@@ -276,6 +456,30 @@
       "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "214543d9_83ab1a80",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3967,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f792deb_0002a37c",
+      "range": {
+        "startLine": 3967,
+        "startChar": 12,
+        "endLine": 3967,
+        "endChar": 47
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -302,6 +506,30 @@
     },
     {
       "key": {
+        "uuid": "f5c06791_d6af5e7c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3975,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21e5b992_aca4289b",
+      "range": {
+        "startLine": 3975,
+        "startChar": 8,
+        "endLine": 3975,
+        "endChar": 20
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4efa1b1_72cbc031",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 6
@@ -313,6 +541,30 @@
       "writtenOn": "2020-09-22T12:45:56Z",
       "side": 1,
       "message": "The ext doesn\u0027t interact with map_buffer_oes... just to point that out, maybe leave a comment.",
+      "range": {
+        "startLine": 3171,
+        "startChar": 0,
+        "endLine": 3176,
+        "endChar": 0
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dc6fe5f_242cd71f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:13:06Z",
+      "side": 1,
+      "message": "it should work fine with map_buffer_oes. all this is checking is that when we have a call to \"glMapBufferOES(...., GL_WRITE_ONLY_OES)\" the storage flags were also set with the \"GL_MAP_WRITE_BIT\" bit, otherwise it is invalid",
+      "parentUuid": "d4efa1b1_72cbc031",
       "range": {
         "startLine": 3171,
         "startChar": 0,
