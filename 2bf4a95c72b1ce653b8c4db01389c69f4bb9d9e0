@@ -16,6 +16,23 @@
       "revId": "2bf4a95c72b1ce653b8c4db01389c69f4bb9d9e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c3d7050_d5931583",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:13:13Z",
+      "side": 1,
+      "message": "Courtney, if you recall, I asked for a regression test. Would you be able to write something that hits the garbage collection race that was missed in the earlier patch set?\n\nforeach (thread) -\u003e create/draw/delete\nforeach (thread) -\u003e finish\n\nSomething like that.",
+      "revId": "2bf4a95c72b1ce653b8c4db01389c69f4bb9d9e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
