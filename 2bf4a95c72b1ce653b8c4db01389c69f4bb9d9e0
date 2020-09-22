@@ -33,6 +33,24 @@
       "revId": "2bf4a95c72b1ce653b8c4db01389c69f4bb9d9e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e8f4ed6_e4f4e802",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-22T22:07:25Z",
+      "side": 1,
+      "message": "I wrote: https://chromium-review.googlesource.com/c/angle/angle/+/2421802\nTo stress the queueSubmit serial race condition we found.\nI\u0027ll add another test to that to do create/use/destroy use case.",
+      "parentUuid": "3c3d7050_d5931583",
+      "revId": "2bf4a95c72b1ce653b8c4db01389c69f4bb9d9e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
