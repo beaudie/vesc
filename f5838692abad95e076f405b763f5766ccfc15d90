@@ -36,6 +36,52 @@
     },
     {
       "key": {
+        "uuid": "36da5445_8536141f",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T12:45:56Z",
+      "side": 1,
+      "message": "I like how you got code re-use this way, I dislike how you need this \"if\" in here. I\u0027d suggest you either just duplicate the pre-post call code or use helper functions to get code re-use instead of making this check here.",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 5
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "666c68a6_3f0ff969",
+        "filename": "src/libANGLE/renderer/BufferImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T12:45:56Z",
+      "side": 1,
+      "message": "nit: just setStorage is probably fine, although it\u0027s a pain to rename now.",
+      "range": {
+        "startLine": 38,
+        "startChar": 26,
+        "endLine": 38,
+        "endChar": 40
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "035ef62a_4eeecb63",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 6
@@ -186,6 +232,30 @@
     },
     {
       "key": {
+        "uuid": "fb004e82_b6fed004",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3962,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T12:45:56Z",
+      "side": 1,
+      "message": "Also can be inside the \"if\".",
+      "parentUuid": "81ff881e_e7b46388",
+      "range": {
+        "startLine": 3962,
+        "startChar": 4,
+        "endLine": 3962,
+        "endChar": 16
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f792deb_0002a37c",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 6
@@ -225,6 +295,29 @@
         "startChar": 8,
         "endLine": 3975,
         "endChar": 20
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4efa1b1_72cbc031",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T12:45:56Z",
+      "side": 1,
+      "message": "The ext doesn\u0027t interact with map_buffer_oes... just to point that out, maybe leave a comment.",
+      "range": {
+        "startLine": 3171,
+        "startChar": 0,
+        "endLine": 3176,
+        "endChar": 0
       },
       "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
