@@ -33,6 +33,178 @@
       "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "035ef62a_4eeecb63",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "Why is there no more device local buffer?",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db281820_dfe2d813",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this. I believe specifying GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT without the extension would be a validation error, so it won\u0027t reach here.",
+      "range": {
+        "startLine": 3610,
+        "startChar": 8,
+        "endLine": 3610,
+        "endChar": 42
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "359d8806_a88b0efd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3615,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "As I mentioned, this barrier is automatically added if ANGLE detects that any write to host-visible buffer is done by the application. So all you need here is set `needToWaitForIdle.` See ContextVk::flushImpl() where mIsAnyHostVisibleBufferWritten is checked.\n\nIt\u0027s terrible that we can\u0027t know what serial to wait for though.",
+      "range": {
+        "startLine": 3613,
+        "startChar": 0,
+        "endLine": 3615,
+        "endChar": 52
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06857dc9_41ffec2d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "Missing flush()",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb4313bc_6c855654",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3630,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "Since this is finishing to the last serial, it\u0027s equivalent to `finish()`.",
+      "range": {
+        "startLine": 3630,
+        "startChar": 18,
+        "endLine": 3630,
+        "endChar": 47
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81ff881e_e7b46388",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3962,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "Can be constexpr",
+      "range": {
+        "startLine": 3962,
+        "startChar": 4,
+        "endLine": 3962,
+        "endChar": 16
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f792deb_0002a37c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3967,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "!\u003d 0",
+      "range": {
+        "startLine": 3967,
+        "startChar": 12,
+        "endLine": 3967,
+        "endChar": 47
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21e5b992_aca4289b",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3975,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T02:39:22Z",
+      "side": 1,
+      "message": "Can be `constexpr GLbitfield kBuffer...`",
+      "range": {
+        "startLine": 3975,
+        "startChar": 8,
+        "endLine": 3975,
+        "endChar": 20
+      },
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
