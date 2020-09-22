@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5b8937a_cbc89f3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-22T00:15:08Z",
+      "side": 1,
+      "message": "This was failing before jamie\u0027s fix of CL 2422078. \n\n../../third_party/angle/src/tests/gl_tests/MultisampleTest.cpp:428: Failure\nExpected equality of these values:\n  GLColor::green\n    Which is: Green\n  angle::ReadColor(1, 1)\n    Which is: Blue\nStack trace:\n#0 0x557b2415fcad (anonymous namespace)::MultisampleTest_AlphaToSampleCoverage_Test::TestBody()\n#1 0x557b249164f4 testing::internal::HandleSehExceptionsInMethodIfSupported\u003c\u003e()\n#2 0x557b24904cd2 testing::internal::HandleExceptionsInMethodIfSupported\u003c\u003e()\n\n[  FAILED  ] MultisampleTest.AlphaToSampleCoverage/ES2_Vulkan_NoFixture, where GetParam() \u003d (ES2_Vulkan_NoFixture, false) (482 ms)\n",
+      "revId": "ebef7f718aa4bca493527d75a276acee607ed51d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
