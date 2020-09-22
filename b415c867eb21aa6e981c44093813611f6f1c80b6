@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69da0dfa_27f201f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:49:09Z",
+      "side": 1,
+      "message": "Looks like msvc failures due to nit.",
+      "revId": "b415c867eb21aa6e981c44093813611f6f1c80b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d96753e_56178979",
+        "filename": "src/tests/gl_tests/gles1/VertexPointerTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T23:49:09Z",
+      "side": 1,
+      "message": "nit: not GLubytes.",
+      "range": {
+        "startLine": 79,
+        "startChar": 1,
+        "endLine": 82,
+        "endChar": 13
+      },
+      "revId": "b415c867eb21aa6e981c44093813611f6f1c80b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
