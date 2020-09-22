@@ -16,6 +16,52 @@
       "revId": "bd14fa90e378ab95cfe3b25ba3642865db4180f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5748e68_88f5bfb7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3643,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:15:58Z",
+      "side": 1,
+      "message": "need to remove this",
+      "range": {
+        "startLine": 3643,
+        "startChar": 8,
+        "endLine": 3643,
+        "endChar": 52
+      },
+      "revId": "bd14fa90e378ab95cfe3b25ba3642865db4180f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c307c4d4_63d37a2f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3985,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T21:15:58Z",
+      "side": 1,
+      "message": "need to change this",
+      "range": {
+        "startLine": 3985,
+        "startChar": 12,
+        "endLine": 3985,
+        "endChar": 40
+      },
+      "revId": "bd14fa90e378ab95cfe3b25ba3642865db4180f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
