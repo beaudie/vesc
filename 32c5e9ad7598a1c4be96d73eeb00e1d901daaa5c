@@ -59,6 +59,29 @@
     },
     {
       "key": {
+        "uuid": "ba56882f_a91ba191",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T17:04:29Z",
+      "side": 1,
+      "message": "nit: you can replace this with just bool mDirtyProgramStages .. dirty bits are intended to be passed to the back-end, so mDirtyBits is a bit of an overloaded term here.\n\nAlso you should rename this to just ::link.",
+      "range": {
+        "startLine": 706,
+        "startChar": 39,
+        "endLine": 706,
+        "endChar": 49
+      },
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c27cd51a_2fe88d6e",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 3
@@ -70,6 +93,24 @@
       "writtenOn": "2020-09-22T02:16:58Z",
       "side": 1,
       "message": "What happens in this scenario?\n\n- Create pipeline that should fail link\n- Bind program\n- Draw\n- Unbind program\n- Draw\n\nThe second draw should fail with PPO link eror, right? But the first draw was the one that processed it and didn\u0027t report it.",
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cfe86a5_250518c0",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T17:04:29Z",
+      "side": 1,
+      "message": "I would move this all to a getLinkedProgramExeuctable() call and hide the dirty bit handling. That\u0027s light on details, ping me if you want a clarification.",
+      "parentUuid": "c27cd51a_2fe88d6e",
       "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
