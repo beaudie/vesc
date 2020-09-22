@@ -451,6 +451,30 @@
     },
     {
       "key": {
+        "uuid": "009f194f_d8d39d09",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-22T23:09:21Z",
+      "side": 1,
+      "message": "Jamie can comment but I believe the answer is \"yes\" as the initial POC is not using gl::DebugAnnotator which is Jamie\u0027s preferred method of adding this functionality.",
+      "parentUuid": "cb791cfa_d8efae4e",
+      "range": {
+        "startLine": 1057,
+        "startChar": 8,
+        "endLine": 1057,
+        "endChar": 28
+      },
+      "revId": "317b2d358c942db417d61257cc460e1af57eeca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0f4f49d_aa156b78",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
