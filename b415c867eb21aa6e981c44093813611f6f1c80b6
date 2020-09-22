@@ -39,6 +39,30 @@
       "revId": "b415c867eb21aa6e981c44093813611f6f1c80b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae6efc6c_e47a5427",
+        "filename": "src/tests/gl_tests/gles1/VertexPointerTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-22T23:58:11Z",
+      "side": 1,
+      "message": "Done, oops",
+      "parentUuid": "2d96753e_56178979",
+      "range": {
+        "startLine": 79,
+        "startChar": 1,
+        "endLine": 82,
+        "endChar": 13
+      },
+      "revId": "b415c867eb21aa6e981c44093813611f6f1c80b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
