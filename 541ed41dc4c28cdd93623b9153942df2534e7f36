@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "aaf6a60f_720ff0f9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T18:27:22Z",
+      "side": 1,
+      "message": "mPipelineCache is internally synchronized. We don\u0027t need to lock around invoking it, although we do need to lock around initializing the pointer. Is that the race?",
+      "parentUuid": "fcddc104_e9e6aa05",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6d5002c_0e7d4398",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
