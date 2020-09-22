@@ -1,0 +1,389 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73be41c8_34686993",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "Nice work. This change touches a lot of points of code. We should try to consolidate it as much as we can to keep the maintenance burden down.",
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa3a1acb_f1df4739",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4641,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "This is now happening in two places. Can we merge them?",
+      "range": {
+        "startLine": 4641,
+        "startChar": 0,
+        "endLine": 4641,
+        "endChar": 64
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e065c69c_32f25b57",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5030,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "we\u0027re calling get*access multiple times. Can you consolidate?",
+      "range": {
+        "startLine": 5030,
+        "startChar": 51,
+        "endLine": 5030,
+        "endChar": 65
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a02c7008_a9943238",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "same as below",
+      "range": {
+        "startLine": 2160,
+        "startChar": 7,
+        "endLine": 2161,
+        "endChar": 30
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f67f78a_426189c8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2170,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: not sure what you mean here. What\u0027s a stencil test enable?",
+      "range": {
+        "startLine": 2169,
+        "startChar": 9,
+        "endLine": 2170,
+        "endChar": 38
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e457e32_62478fd6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2177,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: Because we may have changed the depth stencil access mode,",
+      "range": {
+        "startLine": 2177,
+        "startChar": 19,
+        "endLine": 2177,
+        "endChar": 64
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aade85b_876bfad7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "this seems to be calling setLayouts a second time. Can you make it so it only calls setLayouts once?",
+      "range": {
+        "startLine": 2356,
+        "startChar": 0,
+        "endLine": 2369,
+        "endChar": 92
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87d7cc19_b6727cca",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2561,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: can you not call this if there\u0027s no depth/stencil RT? or does this have to happen here?",
+      "range": {
+        "startLine": 2557,
+        "startChar": 0,
+        "endLine": 2561,
+        "endChar": 5
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa5042f4_cf5502ad",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2575,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: ASSERT(!mDepthReadOnlyFeedbackLoopMode || readOnlyDepth);\n\na -\u003e b \u003d\u003d b || !a",
+      "range": {
+        "startLine": 2569,
+        "startChar": 0,
+        "endLine": 2575,
+        "endChar": 5
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f70d3368_2628aab9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "can we remove this? Maybe we can change the \"update\" API to be more direct.",
+      "range": {
+        "startLine": 2582,
+        "startChar": 0,
+        "endLine": 2583,
+        "endChar": 71
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b5ecf0b_ddea445c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: setReadOnlyDepthFeedbackLoopMode for consistency",
+      "range": {
+        "startLine": 136,
+        "startChar": 9,
+        "endLine": 136,
+        "endChar": 37
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "846f84fd_1b347ba2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: isReadOnlyDepth..",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 140,
+        "endChar": 40
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2dda204_4f696704",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: mReadOnlyDepthFeedbackLoopMode for consistency with my docs",
+      "range": {
+        "startLine": 262,
+        "startChar": 9,
+        "endLine": 262,
+        "endChar": 39
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19d541b3_c6d5907f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "WDYT \"updateStartedRenderPassReadOnlyDepth\"\n\n\u0027Started\u0027 is key here. and \u0027ReadOnlyDepth\u0027 is the proper name.",
+      "range": {
+        "startLine": 984,
+        "startChar": 9,
+        "endLine": 984,
+        "endChar": 38
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff1682e1_bb4a84ce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: is",
+      "range": {
+        "startLine": 1128,
+        "startChar": 53,
+        "endLine": 1128,
+        "endChar": 56
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11c8f7ec_b4877ac1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: allow for other optimizations. Isn\u0027t it technically not tracking the store op rather than the load op?",
+      "range": {
+        "startLine": 1128,
+        "startChar": 84,
+        "endLine": 1129,
+        "endChar": 19
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4346b81_a850d046",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T21:41:24Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 1130,
+        "startChar": 32,
+        "endLine": 1133,
+        "endChar": 26
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
