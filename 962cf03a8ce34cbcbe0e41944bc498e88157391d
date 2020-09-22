@@ -16,6 +16,23 @@
       "revId": "962cf03a8ce34cbcbe0e41944bc498e88157391d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32ec3e15_a9c7b278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-22T13:39:43Z",
+      "side": 1,
+      "message": "Geoff/Jonah PTAL. Necessary to turn on TSAN angle_end2end_tests.",
+      "revId": "962cf03a8ce34cbcbe0e41944bc498e88157391d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
