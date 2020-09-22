@@ -51,6 +51,98 @@
       "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad9084e4_dce333c5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T15:26:14Z",
+      "side": 1,
+      "message": "Is this going to stay?",
+      "range": {
+        "startLine": 599,
+        "startChar": 0,
+        "endLine": 601,
+        "endChar": 79
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52ee8f7e_495aa9f8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T15:26:14Z",
+      "side": 1,
+      "message": "You can create a gl::AttribArrayMask type that uses a bitset instead.",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 25
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bacbea98_460661ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T15:26:14Z",
+      "side": 1,
+      "message": "nit: unnecessary cast. You can use `1u \u003c\u003c` if it complains about int vs uint.",
+      "range": {
+        "startLine": 239,
+        "startChar": 17,
+        "endLine": 239,
+        "endChar": 38
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50c343b0_5f3e9320",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T15:26:14Z",
+      "side": 1,
+      "message": "nit: uint32_t",
+      "range": {
+        "startLine": 108,
+        "startChar": 10,
+        "endLine": 108,
+        "endChar": 22
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
