@@ -69,6 +69,24 @@
       "revId": "9afa56bad0765e87e122851ea6f77eff6512581f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2ee01ba_7cbde092",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T14:48:21Z",
+      "side": 1,
+      "message": "SGTM. That CL was already in the process being reverted, so there\u0027s no need for this.",
+      "parentUuid": "1e9c18b6_69d5ef15",
+      "revId": "9afa56bad0765e87e122851ea6f77eff6512581f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
