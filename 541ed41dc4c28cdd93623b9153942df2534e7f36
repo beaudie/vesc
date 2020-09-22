@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a34118be_97431107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T16:38:46Z",
+      "side": 1,
+      "message": "Removing the +2, to give Courtney a chance to answer my questions.",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "015d3889_9b56305e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T16:38:46Z",
+      "side": 1,
+      "message": "It looks like this is only called by syncPipelineCacheVk(), so it shouldn\u0027t need a lock.   Is there a good way to ASSERT() that the lock is held by the current thread so we can guarantee that in the future too?",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d5002c_0e7d4398",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T16:38:46Z",
+      "side": 1,
+      "message": "Sounds like you\u0027re working on this now.   What are the thoughts on whether we need a lock here?\n\nSince this is called by WindowSurfaceVk::doDeferredAcquireNextImage(), it seems like it\u0027s necessary.   Can you try adding one to see how things look?",
+      "revId": "541ed41dc4c28cdd93623b9153942df2534e7f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
