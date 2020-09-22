@@ -154,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "72e32006_0fec5d8a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-22T22:53:41Z",
+      "side": 1,
+      "message": "\u003e I can\u0027t use data() in every case. \n\nWhy\u0027s that?   Because drivers are dereferencing pointers even though the corresponding count is 0?   I don\u0027t see anything in the spec that states if inputAttachmentCount is 0, then pInputAttachments must be null also, but I suppose the drivers could be doing something weird.\n\nPart of it is readability, but there is also a concern that inputAttachmentCount becomes larger than inputRefs.size(), causing the vulkan driver to read past the end of valid data.   We can guarantee we are passing corresponding values by just querying the vector directly.\n\nEach of the *Refs are just vectors, so they all respond to .size() and .data(), regardless of how many elements each of them have.   Taking the snippet I have above, and assuming we have a subpass without any input attachments:\n\n    desc2Out-\u003einputAttachmentCount    \u003d inputRefs.size(); \u003c\u003c-- returns 0\n    desc2Out-\u003epInputAttachments       \u003d inputRefs.data(); \u003c\u003c-- don\u0027t care, should never be used\n\nFor sanity checking of the ANGLE code, an ASSERT(desc.inputAttachmentCount \u003d\u003d inputRefs.size()) probably isn\u0027t a bad idea either.   While it seems like those counts will always match, they are vectors that are mutable, so things can always change in the future.\n\nBut yeah, we can see what Jamie has to say here too.",
+      "parentUuid": "1067f169_9f9df3de",
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04a53ddb_a10c1694",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 8
