@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "127d9885_66a25606",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-22T01:48:51Z",
+      "side": 1,
+      "message": "May be a bit too generic. How about something like updateRenderPassDepthMode?",
+      "parentUuid": "b992abfd_c7421d48",
+      "range": {
+        "startLine": 981,
+        "startChar": 44,
+        "endLine": 981,
+        "endChar": 62
+      },
+      "revId": "397c656e9e8263aa07c765ab670ce18e995822fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30d8cc28_448e0f80",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
