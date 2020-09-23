@@ -50,6 +50,24 @@
       "revId": "9243fdfdd30d1bfb4d9efb7855e04945933f7096",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de37c960_17375e7c",
+        "filename": "src/libANGLE/renderer/BufferImpl.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T18:30:54Z",
+      "side": 1,
+      "message": "Would require a bigger refactor. This seems okay to me as setData doesn\u0027t have to be lightning fast.",
+      "parentUuid": "a652d644_036df7b8",
+      "revId": "9243fdfdd30d1bfb4d9efb7855e04945933f7096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
