@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1fad37e_a862313c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-23T19:20:00Z",
+      "side": 1,
+      "message": "Can I get some early feedback here? (I\u0027ll clean up the code/style afterwards)\n\nChrome gets its driver_vendor and driver_version from SystemInfo, and if that fails, from GL_VERSION.\n\nOn Windows this has been fine because SystemInfo works well. But on Linux it\u0027s not always possible to get this info from libpci, and on Mac, we don\u0027t even bother trying to get it from system libraries.\n\nAngle always spits out ANGLE (angle_version_hash) as its GL_VERSION, so Chrome\u0027s backup does not work.\n\nWe can add driver_vendor and driver_version to the GL_RENDERER string instead. For example, on my Mac laptop with this change, we see: \"ATI Technologies Inc., AMD Radeon Pro 560X OpenGL Engine, ATI 3.8.24, OpenGL 4.1 core\" (so ATI 3.8.24)\nAnd then I\u0027ll update Chrome to check GL_RENDERER when it sees ANGLE in GL_VERSION\n\ndoes this sound okay to everyone?",
+      "revId": "67c6d34f5c3dc3286d8248651ce528994b0fb445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
