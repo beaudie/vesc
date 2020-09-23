@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c18f8d52_5558001e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T22:10:35Z",
+      "side": 1,
+      "message": "PTAL\n\nI took another pass that removed all of the dirty bit handling, since it doesn\u0027t appear necessary anymore.   This version feels a bit cleaner, aside from the special handling in Context::prepareForDispatch().   Maybe moving that into a helper in ProgramPipeline would be enough, but let me know.\n\nI\u0027m also not sure of a good way to handle linking either in the validation layer or not based on whether the validation layer exists, so let me know where you think we could fit that in.   Not using dirty bits means checking the PPO\u0027s link status on every draw call (not good), but keeping/reintroducing the dirty bits means having a separate linking code path which may not get exercised very often, since it sounds like this isn\u0027t something in CQ (also not good).   Is supporting this something that\u0027s necessary for this fix, or can we open a bug to tackle that later?",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

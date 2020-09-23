@@ -99,6 +99,30 @@
     },
     {
       "key": {
+        "uuid": "542ac467_931743ee",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T22:10:35Z",
+      "side": 1,
+      "message": "I removed the dirty bit handling in ProgramPipeline, since they were all related to linking the PPO.",
+      "parentUuid": "ba56882f_a91ba191",
+      "range": {
+        "startLine": 706,
+        "startChar": 39,
+        "endLine": 706,
+        "endChar": 49
+      },
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c27cd51a_2fe88d6e",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 3
@@ -128,6 +152,24 @@
       "side": 1,
       "message": "I would move this all to a getLinkedProgramExeuctable() call and hide the dirty bit handling. That\u0027s light on details, ping me if you want a clarification.",
       "parentUuid": "c27cd51a_2fe88d6e",
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da64ea26_d975f741",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T22:10:35Z",
+      "side": 1,
+      "message": "Unfortunately, the ProgramExecutable doesn\u0027t have any way to get back to the PPO that it\u0027s in, so it can\u0027t kick off a link operation.   There isn\u0027t anymore dirty bit handling either with the new version.",
+      "parentUuid": "2cfe86a5_250518c0",
       "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
