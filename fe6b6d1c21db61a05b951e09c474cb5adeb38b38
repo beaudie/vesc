@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e67596aa_d9c907e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:40:21Z",
+      "side": 1,
+      "message": "I also added check for mContentDefined by starting another renderpass that uses the depth buffer and check if it has a loadOP or not. If content is defined, it should load.",
+      "revId": "fe6b6d1c21db61a05b951e09c474cb5adeb38b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
