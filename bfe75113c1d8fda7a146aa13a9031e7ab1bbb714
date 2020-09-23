@@ -86,6 +86,24 @@
       "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b3309e8_e71ecbd2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T19:02:10Z",
+      "side": 1,
+      "message": "Ok then my guess was right that the context\u0027s staging buffer is expected to be used immediately (and that it doesn\u0027t try to remember which suballocation is pending what).\n\nLGTM.",
+      "parentUuid": "a1082884_0343f1a4",
+      "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
