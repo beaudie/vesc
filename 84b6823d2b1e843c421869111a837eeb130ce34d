@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a72b62c5_33552c42",
+        "filename": "src/common/version.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T14:01:06Z",
+      "side": 1,
+      "message": "`git rev` is not a command, and it\u0027s misleading. How about `git rev-list` as the command actually is?\n\nAlso, is this trying to clarify what ANGLE_REVISION is? Adding the `git` command seems unnecessary to me, just `.ANGLE_COMMIT_HASH` or ` (ANGLE_COMMIT_HASH)` is sufficient IMO.",
+      "range": {
+        "startLine": 25,
+        "startChar": 31,
+        "endLine": 25,
+        "endChar": 34
+      },
+      "revId": "84b6823d2b1e843c421869111a837eeb130ce34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
