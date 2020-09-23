@@ -1574,6 +1574,20 @@ std::string RendererVk::getRendererDescription() const
     return strstr.str();
 }
 
+std::string RendererVk::getVersionString() const
+{
+    std::stringstream strstr;
+
+    uint32_t driverVersion = mPhysicalDeviceProperties.driverVersion;
+
+    strstr << "Vulkan ";
+    strstr << VK_VERSION_MAJOR(driverVersion) << ".";
+    strstr << VK_VERSION_MINOR(driverVersion) << ".";
+    strstr << VK_VERSION_PATCH(driverVersion);
+
+    return strstr.str();
+}
+
 gl::Version RendererVk::getMaxSupportedESVersion() const
 {
     // Current highest supported version
