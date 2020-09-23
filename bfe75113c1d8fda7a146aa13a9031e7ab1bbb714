@@ -68,6 +68,24 @@
       "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1082884_0343f1a4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-09-23T18:56:50Z",
+      "side": 1,
+      "message": "Current angle has TextureVk::copyAndStageImageSubresource() that will:\n - copyImageDataToBuffer() which uses the context\u0027s staging buffer as the destination\n - Then stage a buffer update with stageSubresourceUpdateFromBuffer() which uses this same staging buffer as the source.\n\nContextVk\u0027s staging buffer can be stored in a \"updatesToKeep\" for an update later on.\nOn every SwapBuffers() call, contextVk will do a flushImpl() where it will then determine if it needs to releaseInFlightBuffersToResourceUseList(). We hit a scenario where the below is true and the buffer becomes invalid.\n\n// If the dynamic buffer was resized we cannot reuse the retained buffer.\nif (bufferHelper-\u003egetSize() \u003c mSize)\n{\n    bufferHelper-\u003erelease(contextVk-\u003egetRenderer());\n}\n\nThen when we get to a draw where the particular update needs to be flushed, it will hit an assert when preparing the copy command as the buffer is invalid.",
+      "parentUuid": "ea82df35_6dfcec1d",
+      "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
