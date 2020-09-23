@@ -11,6 +11,7 @@
 #include <EGL/eglext.h>
 
 #include "common/debug.h"
+#include "common/string_utils.h"
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
@@ -131,6 +132,101 @@ static void INTERNAL_GL_APIENTRY LogGLDebugMessage(GLenum source,
                << "\tSeverity: " << severityText << std::endl
                << "\tMessage: " << message;
     }
+}
+
+std::string ParseVersionString(std::string version_str)
+{
+    // Make sure the outputs are always initialized.
+    std::string driver_vendor  = "";
+    std::string driver_version = "";
+    bool is_es                 = false;
+    if (version_str.empty())
+        return "";
+    std::string lstr(version_str);
+    std::string kESPrefix = "OpenGL ES ";
+    if (angle::BeginsWith(lstr, kESPrefix))
+    {
+        is_es = true;
+        lstr  = angle::TrimString(lstr, kESPrefix);
+    }
+
+    std::vector<std::string> pieces =
+        angle::SplitString(lstr, " -()@", angle::WhitespaceHandling::TRIM_WHITESPACE,
+                           angle::SplitResult::SPLIT_WANT_NONEMPTY);
+    if (pieces.size() == 0)
+    {
+        // This should never happen, but let's just tolerant bad driver behavior.
+        return "";
+    }
+
+    if (is_es)
+    {
+        // Desktop GL doesn't specify the GL_VERSION format, but ES spec requires
+        // the string to be in the format of "OpenGL ES major.minor other_info".
+        ASSERT(pieces[0].size() >= 3);
+        if (pieces[0][pieces[0].size() - 1] == 'V')
+        {
+            // On Nexus 6 with Android N, GL_VERSION string is not spec compliant.
+            // There is no space between "3.1" and "V@104.0".
+            pieces[0].pop_back();
+        }
+    }
+    std::string gl_version(pieces[0]);
+
+    if (pieces.size() == 1)
+        return "";
+
+    std::string kVendors[] = {"Google", "Mesa",   "INTEL",    "NVIDIA",
+                              "ATI",    "FireGL", "Chromium", "APPLE"};
+    for (size_t ii = 1; ii < pieces.size(); ++ii)
+    {
+        for (auto vendor : kVendors)
+        {
+            if (pieces[ii] == vendor)
+            {
+                driver_vendor.assign(vendor.data(), vendor.size());
+                if (ii + 1 < pieces.size())
+                    driver_version.assign(pieces[ii + 1].data(), pieces[ii + 1].size());
+                return driver_vendor + " " + driver_version;
+            }
+        }
+    }
+    if (pieces.size() == 2)
+    {
+        if (pieces[1][0] == 'V')
+            pieces[1].erase(0, 1);
+        driver_version.assign(pieces[1].data(), pieces[1].size());
+        return driver_vendor + " " + driver_version;
+    }
+    std::string kMaliPrefix = "v1.r";
+    if (angle::BeginsWith(pieces[1], kMaliPrefix))
+    {
+        // Mali drivers: v1.r12p0-04rel0.44f2946824bb8739781564bffe2110c9
+        pieces[1] = angle::TrimString(pieces[1], kMaliPrefix);
+        std::vector<std::string> numbers =
+            angle::SplitString(pieces[1], "p", angle::WhitespaceHandling::TRIM_WHITESPACE,
+                               angle::SplitResult::SPLIT_WANT_NONEMPTY);
+        if (numbers.size() != 2)
+            return driver_vendor + " " + driver_version;
+        std::vector<std::string> parts =
+            angle::SplitString(pieces[2], ".", angle::WhitespaceHandling::TRIM_WHITESPACE,
+                               angle::SplitResult::SPLIT_WANT_NONEMPTY);
+        if (parts.size() != 2)
+            return driver_vendor + " " + driver_version;
+        driver_vendor  = "ARM";
+        driver_version = numbers[0] + "." + numbers[1] + "." + parts[0];
+        return driver_vendor + " " + driver_version;
+    }
+    for (size_t ii = 1; ii < pieces.size(); ++ii)
+    {
+        if (pieces[ii].find('.') != std::string::npos)
+        {
+            driver_version.assign(pieces[ii].data(), pieces[ii].size());
+            return driver_vendor + " " + driver_version;
+        }
+    }
+
+    return driver_vendor + " " + driver_version;
 }
 
 namespace rx
@@ -264,9 +360,13 @@ std::string RendererGL::getRendererDescription() const
         reinterpret_cast<const char *>(mFunctions->getString(GL_VENDOR)));
     std::string nativeRendererString(
         reinterpret_cast<const char *>(mFunctions->getString(GL_RENDERER)));
+    std::string nativeVersionString(
+        reinterpret_cast<const char *>(mFunctions->getString(GL_VERSION)));
+    std::string parsedVersionString = ParseVersionString(nativeVersionString);
 
     std::ostringstream rendererString;
-    rendererString << nativeVendorString << ", " << nativeRendererString << ", OpenGL";
+    rendererString << nativeVendorString << ", " << nativeRendererString << ", "
+                   << parsedVersionString << ", OpenGL";
     if (mFunctions->standard == STANDARD_GL_ES)
     {
         rendererString << " ES";
@@ -285,6 +385,8 @@ std::string RendererGL::getRendererDescription() const
             rendererString << " core";
         }
     }
+
+    printf("%s\n", rendererString.str().c_str());
 
     return rendererString.str();
 }
