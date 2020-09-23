@@ -42,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "431c6f7e_3f261239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-23T19:12:45Z",
+      "side": 1,
+      "message": "LGTM with nits handled.",
+      "revId": "9a45a7ac8f002d5bfdda6da761a7079d50d8208f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4666aed3_b1f7ea59",
         "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
         "patchSetId": 1
