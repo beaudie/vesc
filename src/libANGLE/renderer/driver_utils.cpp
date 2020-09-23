@@ -142,7 +142,7 @@ const char *GetVendorString(uint32_t vendorId)
     switch (vendorId)
     {
         case VENDOR_ID_AMD:
-            return "Advanced Micro Devices";
+            return "AMD";
         case VENDOR_ID_ARM:
             return "ARM";
         case VENDOR_ID_BROADCOM:
@@ -157,10 +157,14 @@ const char *GetVendorString(uint32_t vendorId)
             return "Imagination Technologies";
         case VENDOR_ID_QUALCOMM:
             return "Qualcomm";
+        case 0xba5eba11:  // Mock vendor ID used for tests.
+            return "Unknown";
+        case 0:
+            return "NULL";
         default:
             // TODO(jmadill): More vendor IDs.
-            ASSERT(vendorId == 0xba5eba11);  // Mock vendor ID used for tests.
-            return "Unknown";
+            UNIMPLEMENTED();
+            return "";
     }
 }
 

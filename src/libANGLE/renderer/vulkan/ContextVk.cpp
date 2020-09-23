@@ -2443,12 +2443,6 @@ gl::GraphicsResetStatus ContextVk::getResetStatus()
     return gl::GraphicsResetStatus::NoError;
 }
 
-std::string ContextVk::getVendorString() const
-{
-    UNIMPLEMENTED();
-    return std::string();
-}
-
 std::string ContextVk::getRendererDescription() const
 {
     return mRenderer->getRendererDescription();
