@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7fe1983_eb6d60f3",
+        "filename": "src/common/version.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-23T17:54:11Z",
+      "side": 1,
+      "message": "Should this one be deleted?",
+      "revId": "c7fc190d86221a8d92ed8aa84b9dd86e28f38468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
