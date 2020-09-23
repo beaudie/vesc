@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "d1cc9c2f_a421b2a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T22:29:57Z",
+      "side": 1,
+      "message": "nit: lose",
+      "range": {
+        "startLine": 7,
+        "startChar": 33,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "3670b7b2dd814444d5a4f1a7aa453ef33eff8e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b492fa5d_6539627d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T22:29:57Z",
+      "side": 1,
+      "message": "nit: lose",
+      "range": {
+        "startLine": 10,
+        "startChar": 27,
+        "endLine": 10,
+        "endChar": 31
+      },
+      "revId": "3670b7b2dd814444d5a4f1a7aa453ef33eff8e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0bae3118_e5b75e6f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -13,6 +59,23 @@
       "writtenOn": "2020-09-23T20:01:32Z",
       "side": 1,
       "message": "Much better fix! The bug was also there with the previous usages of setReadOnlyDepthMode. Could you please add regression tests? They should probably belong in MultisampledRenderToTextureTest.cpp. You could take RenderbufferDepthStencilClearDrawCopyThenBlend as the base of the test, and modify such that depth/stencil is changed to read-only mode. I see that can get called from a number of situations, so if you can exercise each path with a separate test, that would be ideal.\n\nThanks!",
+      "revId": "3670b7b2dd814444d5a4f1a7aa453ef33eff8e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05c16f25_41b114a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T22:29:57Z",
+      "side": 1,
+      "message": "LGTM\n\nThe other fix should probably be rebased on top of this one, so it has to land first (since it sounds like some CQ failures in the other CL may be because of this).",
       "revId": "3670b7b2dd814444d5a4f1a7aa453ef33eff8e11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
