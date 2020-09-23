@@ -86,6 +86,24 @@
       "revId": "73b4fc309bcc46acea0f0b980d9caac39ec461c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fb678d6_2ce87215",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T19:54:55Z",
+      "side": 1,
+      "message": "Cody, would you be okay with deferring this discussion and bringing it up in a more appropriate forum? As it stands this CL doesn\u0027t affect the AOSP integration at all. Wondering if there\u0027s any objection to landing it with the current design.",
+      "parentUuid": "0a9e37ae_4f736e22",
+      "revId": "73b4fc309bcc46acea0f0b980d9caac39ec461c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
