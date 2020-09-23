@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc3a8a78_1311bfc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-23T17:58:46Z",
+      "side": 1,
+      "message": "This looks good for Chromium builds.\n\nTim: I believe the manifests in AOSP and internal master live in those places, right?",
+      "revId": "73b4fc309bcc46acea0f0b980d9caac39ec461c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
