@@ -58,6 +58,8 @@
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
+#include "libANGLE/renderer/d3d/driver_utils_d3d.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/dxgi_support_table.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/trace.h"
@@ -4219,8 +4221,23 @@ angle::Result Renderer11::getIncompleteTexture(const gl::Context *context,
     return GetImplAs<Context11>(context)->getIncompleteTexture(context, type, textureOut);
 }
 
+std::string Renderer11::getVendorString() const
+{
+    return GetVendorString(mAdapterDescription.VendorId);
+}
+
+std::string Renderer11::getVersionString() const
+{
+    if (mRenderer11DeviceCaps.driverVersion.valid())
+    {
+        return GetDriverVersionString(mRenderer11DeviceCaps.driverVersion.value());
+    }
+    return std::string();
+}
+
 RendererD3D *CreateRenderer11(egl::Display *display)
 {
     return new Renderer11(display);
 }
+
 }  // namespace rx

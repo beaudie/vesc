@@ -475,6 +475,10 @@ class Renderer11 : public RendererD3D
                                        gl::TextureType type,
                                        gl::Texture **textureOut) override;
 
+    std::string getVendorString() const override;
+
+    std::string getVersionString() const override;
+
   private:
     void generateCaps(gl::Caps *outCaps,
                       gl::TextureCapsMap *outTextureCaps,
