@@ -682,6 +682,7 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mDisplayExtensions(),
       mDisplayExtensionString(),
       mVendorString(),
+      mVersionString(),
       mDevice(eglDevice),
       mSurface(nullptr),
       mPlatform(platform),
@@ -862,6 +863,7 @@ Error Display::initialize()
 
     initDisplayExtensions();
     initVendorString();
+    initVersionString();
 
     // Populate the Display's EGLDeviceEXT if the Display wasn't created using one
     if (mPlatform != EGL_PLATFORM_DEVICE_EXT)
@@ -1804,7 +1806,17 @@ bool Display::isValidNativeDisplay(EGLNativeDisplayType display)
 
 void Display::initVendorString()
 {
-    mVendorString = mImplementation->getVendorString();
+    mVendorString                = "Google Inc.";
+    std::string vendorStringImpl = mImplementation->getVendorString();
+    if (!vendorStringImpl.empty())
+    {
+        mVendorString += " (" + vendorStringImpl + ")";
+    }
+}
+
+void Display::initVersionString()
+{
+    mVersionString = mImplementation->getVersionString();
 }
 
 void Display::initializeFrontendFeatures()
@@ -1832,6 +1844,11 @@ const std::string &Display::getExtensionString() const
 const std::string &Display::getVendorString() const
 {
     return mVendorString;
+}
+
+const std::string &Display::getVersionString() const
+{
+    return mVersionString;
 }
 
 Device *Display::getDevice() const
@@ -2046,6 +2063,8 @@ void Display::returnScratchBufferImpl(angle::ScratchBuffer scratchBuffer,
 
 egl::Error Display::handleGPUSwitch()
 {
-    return mImplementation->handleGPUSwitch();
+    egl::Error ret = mImplementation->handleGPUSwitch();
+    initVendorString();
+    return ret;
 }
 }  // namespace egl

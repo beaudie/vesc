@@ -139,6 +139,11 @@ std::string DisplayEGL::getVendorString() const
     return vendor;
 }
 
+std::string DisplayEGL::getVersionString() const
+{
+    return GetVersionString(mRenderer->getFunctions());
+}
+
 egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                                          const egl::AttributeMap &eglAttributes,
                                          EGLContext *outContext,
