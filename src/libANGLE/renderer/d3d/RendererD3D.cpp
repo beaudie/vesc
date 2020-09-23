@@ -110,7 +110,12 @@ std::string RendererD3D::getVendorString() const
         return std::string(adapterLuidString);
     }
 
-    return std::string("");
+    return std::string();
+}
+
+std::string RendererD3D::getVendorString() const
+{
+    return std::string();
 }
 
 void RendererD3D::setGPUDisjoint()

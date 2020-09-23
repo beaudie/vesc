@@ -137,6 +137,11 @@ std::string DisplayMtl::getVendorString() const
     }
 }
 
+std::string DisplayMtl::getVersionString() const
+{
+    return std::string();
+}
+
 DeviceImpl *DisplayMtl::createDevice()
 {
     UNIMPLEMENTED();
