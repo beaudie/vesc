@@ -16,6 +16,23 @@
       "revId": "73b4fc309bcc46acea0f0b980d9caac39ec461c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52bce7d7_fe41a5bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-23T19:27:27Z",
+      "side": 1,
+      "message": "Confirmed, works for me locally in chromium based build.\n\nIf I\u0027m reading this right, upstream ANGLE will dictate the versionCode for all downstream branches (unless they happen to run the python script and use GN).  There will most likely be downstream commits that don\u0027t make it upstream, so the histories will differ.  I\u0027m okay with this, but curious if it is a concern for others.",
+      "revId": "73b4fc309bcc46acea0f0b980d9caac39ec461c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
