@@ -56,6 +56,23 @@
       "revId": "5af56709c387f3681a6cb818b929ab78ed9f8e00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fde7abab_d7e626a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T17:45:59Z",
+      "side": 1,
+      "message": "Losing unresolve attachments here is intentional. You can\u0027t know if there\u0027s a need for unresolve until startNewRenderPass when loadOps are determined.",
+      "revId": "5af56709c387f3681a6cb818b929ab78ed9f8e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
