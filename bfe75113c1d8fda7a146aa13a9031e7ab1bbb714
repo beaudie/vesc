@@ -104,6 +104,24 @@
       "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61b4c897_71f1a182",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T19:05:30Z",
+      "side": 1,
+      "message": "I think we allow a buffer that has been added to context\u0027s mUseList able to get freed is troublesome. I think I have ran into that bug before when I play with the releaseInFlightBuffer() code. So that is one bug.\n\nBut mean time, I think there is also another bug here that the context\u0027s staging buffer is expected to use and flush immediately. It is not expected to put in the keep list. Usually the caller makes the decision of which staging buffer to use and issue a flush immediately. I guess in this case, probably use per object staging buffer is the right thing to do anyway. So this fix looks good to me.",
+      "parentUuid": "7b3309e8_e71ecbd2",
+      "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
