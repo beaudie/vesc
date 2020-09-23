@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99729012_cd36c634",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T17:05:54Z",
+      "side": 1,
+      "message": "Friendly ping.\n\nAre we brave enough to give this another shot?",
+      "revId": "4cffd952b82b6a02ff240061e5f779905302d149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
