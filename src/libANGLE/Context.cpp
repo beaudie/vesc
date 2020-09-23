@@ -2893,7 +2893,11 @@ void Context::initRendererString()
 {
     std::ostringstream rendererString;
     rendererString << "ANGLE (";
+    rendererString << mDisplay->getVendorString();
+    rendererString << ", ";
     rendererString << mImplementation->getRendererDescription();
+    rendererString << ", ";
+    rendererString << mDisplay->getVersionString();
     rendererString << ")";
 
     mRendererString = MakeStaticString(rendererString.str());

@@ -80,6 +80,11 @@ std::string DisplayVk::getVendorString() const
     return vendorString;
 }
 
+std::string DisplayVk::getVersionString() const
+{
+    return std::string();
+}
+
 DeviceImpl *DisplayVk::createDevice()
 {
     UNIMPLEMENTED();

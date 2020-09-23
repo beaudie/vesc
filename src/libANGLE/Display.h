@@ -208,6 +208,7 @@ class Display final : public LabeledObject,
     const DisplayExtensions &getExtensions() const;
     const std::string &getExtensionString() const;
     const std::string &getVendorString() const;
+    const std::string &getVersionString() const;
 
     EGLint programCacheGetAttrib(EGLenum attrib) const;
     Error programCacheQuery(EGLint index,
@@ -266,6 +267,7 @@ class Display final : public LabeledObject,
 
     void initDisplayExtensions();
     void initVendorString();
+    void initVersionString();
     void initializeFrontendFeatures();
 
     angle::ScratchBuffer requestScratchBufferImpl(std::vector<angle::ScratchBuffer> *bufferVector);
@@ -300,6 +302,7 @@ class Display final : public LabeledObject,
     std::string mDisplayExtensionString;
 
     std::string mVendorString;
+    std::string mVersionString;
 
     Device *mDevice;
     Surface *mSurface;
