@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c94956fa_3678ce1a",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-23T14:28:33Z",
+      "side": 1,
+      "message": "Ack. Could be done in another CL. On iOS shared memory is also GPU memory so the meaning of each enums could still be correct for now.",
+      "parentUuid": "5761787e_73148fe6",
+      "range": {
+        "startLine": 25,
+        "startChar": 11,
+        "endLine": 25,
+        "endChar": 30
+      },
+      "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1049ed85_990e2df1",
         "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90974136_7dfd8536",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-23T14:28:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1049ed85_990e2df1",
+      "range": {
+        "startLine": 127,
+        "startChar": 35,
+        "endLine": 127,
+        "endChar": 62
+      },
+      "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -92,6 +140,30 @@
       "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "078be33f_466980f4",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-23T14:28:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1db1f7a3_484bfd2d",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "9034678ba1259744c6f91b3c3fe63ed44260df5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
