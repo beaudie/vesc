@@ -16,6 +16,24 @@
       "revId": "c7fc190d86221a8d92ed8aa84b9dd86e28f38468",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffb802c8_37b26603",
+        "filename": "src/common/version.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T18:04:54Z",
+      "side": 1,
+      "message": "Yeah. First we need to roll into Chromium since the validating cmd decoder includes this file verbatim. Need to update that path. Should probs leave a TODO here.",
+      "parentUuid": "c7fe1983_eb6d60f3",
+      "revId": "c7fc190d86221a8d92ed8aa84b9dd86e28f38468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
