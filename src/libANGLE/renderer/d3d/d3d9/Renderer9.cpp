@@ -52,6 +52,7 @@
 #include "libANGLE/renderer/d3d/d3d9/VertexBuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/formatutils9.h"
 #include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/trace.h"
 
 #if !defined(ANGLE_COMPILE_OPTIMIZATION_LEVEL)
@@ -3265,8 +3266,23 @@ angle::Result Renderer9::ensureVertexDataManagerInitialized(const gl::Context *c
     return angle::Result::Continue;
 }
 
+std::string Renderer9::getVendorString() const
+{
+    return GetVendorString(getVendorId());
+}
+
+std::string Renderer9::getVersionString() const
+{
+    std::ostringstream versionString;
+    versionString << "D3D9";
+    versionString << " " << mAdapterIdentifier.DriverVersion.HighPart << "."
+                  << mAdapterIdentifier.DriverVersion.LowPart;
+    return versionString.str();
+}
+
 RendererD3D *CreateRenderer9(egl::Display *display)
 {
     return new Renderer9(display);
 }
+
 }  // namespace rx

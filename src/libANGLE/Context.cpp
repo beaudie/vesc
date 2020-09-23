@@ -2892,7 +2892,11 @@ void Context::initRendererString()
 {
     std::ostringstream rendererString;
     rendererString << "ANGLE (";
+    rendererString << mDisplay->getImplementation()->getVendorString();
+    rendererString << ", ";
     rendererString << mImplementation->getRendererDescription();
+    rendererString << ", ";
+    rendererString << mDisplay->getImplementation()->getVersionString();
     rendererString << ")";
 
     mRendererString = MakeStaticString(rendererString.str());
@@ -2971,7 +2975,7 @@ const GLubyte *Context::getString(GLenum name) const
     switch (name)
     {
         case GL_VENDOR:
-            return reinterpret_cast<const GLubyte *>("Google Inc.");
+            return reinterpret_cast<const GLubyte *>(mDisplay->getVendorString().c_str());
 
         case GL_RENDERER:
             return reinterpret_cast<const GLubyte *>(mRendererString);
