@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "36604e2d_eb1f1903",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T19:18:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2d1d5be_7625ad4d",
+      "range": {
+        "startLine": 10,
+        "startChar": 4,
+        "endLine": 10,
+        "endChar": 12
+      },
+      "revId": "9a45a7ac8f002d5bfdda6da761a7079d50d8208f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e949beff_fe68084c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -79,6 +103,30 @@
       "revId": "9a45a7ac8f002d5bfdda6da761a7079d50d8208f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68f0f9bc_6a3b216b",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T19:18:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4666aed3_b1f7ea59",
+      "range": {
+        "startLine": 281,
+        "startChar": 33,
+        "endLine": 281,
+        "endChar": 40
+      },
+      "revId": "9a45a7ac8f002d5bfdda6da761a7079d50d8208f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
