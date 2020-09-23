@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "8132daca_a2fdbc36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-23T22:26:57Z",
+      "side": 1,
+      "message": "Responded to Shabi\u0027s feedback.\nI\u0027m going to leave implementing any changes as an exercise for Ian on a separate CL that he will create and work on based off of this CL.\nConsider this CL locked and just to be used as a temp reference until Ian\u0027s CL takes over.",
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f10f661_980b27ed",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 15
@@ -30,6 +47,30 @@
       "writtenOn": "2020-09-23T18:31:30Z",
       "side": 1,
       "message": "No big deal, but isn\u0027t the temp buffer local to this function?",
+      "range": {
+        "startLine": 8552,
+        "startChar": 0,
+        "endLine": 8552,
+        "endChar": 82
+      },
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11c85a7a_00275b7f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 8552,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-23T22:26:57Z",
+      "side": 1,
+      "message": "Yes, the related declarations could be moved from Context.h and into this function.",
+      "parentUuid": "5f10f661_980b27ed",
       "range": {
         "startLine": 8552,
         "startChar": 0,
@@ -59,6 +100,24 @@
     },
     {
       "key": {
+        "uuid": "786ed8d3_a2c2f600",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-23T22:26:57Z",
+      "side": 1,
+      "message": "Yes, good suggestions as the #if are pretty pervasive in this CL.",
+      "parentUuid": "a40c2660_fd0043e3",
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ff1adc8_0e23b4dd",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -76,6 +135,24 @@
     },
     {
       "key": {
+        "uuid": "50aaefc9_f862b409",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-23T22:26:57Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure this is what I showed on Tues. Hiding the GL commands behind the #2 label makes it so that a user can choose to only see the VK commands underpinning a glDraw if they\u0027d like. I\u0027m looking at some gfxbench traces now and the GL command sequence leading to a draw sometimes exceeds 100 calls so just expanding those immediately for every call would be annoying if someone just wants to see the VK calls.",
+      "parentUuid": "4ff1adc8_0e23b4dd",
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56542f92_4eb0bbd8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -87,6 +164,30 @@
       "writtenOn": "2020-09-23T18:31:30Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 1355,
+        "startChar": 73,
+        "endLine": 1355,
+        "endChar": 80
+      },
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad12f0bd_29a85b96",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-09-23T22:26:57Z",
+      "side": 1,
+      "message": "yep",
+      "parentUuid": "56542f92_4eb0bbd8",
       "range": {
         "startLine": 1355,
         "startChar": 73,
