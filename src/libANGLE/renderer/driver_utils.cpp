@@ -138,7 +138,7 @@ const char *GetVendorString(uint32_t vendorId)
     switch (vendorId)
     {
         case VENDOR_ID_AMD:
-            return "Advanced Micro Devices";
+            return "AMD";
         case VENDOR_ID_ARM:
             return "ARM";
         case VENDOR_ID_BROADCOM:
