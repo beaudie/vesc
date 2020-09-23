@@ -1529,6 +1529,11 @@ std::string RendererVk::getRendererDescription() const
     return strstr.str();
 }
 
+std::string RendererVk::getVersionString() const
+{
+    return std::string();
+}
+
 gl::Version RendererVk::getMaxSupportedESVersion() const
 {
     // Current highest supported version

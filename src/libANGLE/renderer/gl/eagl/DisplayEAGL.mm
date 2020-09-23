@@ -263,8 +263,14 @@ egl::Error DisplayEAGL::validateClientBuffer(const egl::Config *configuration,
 
 std::string DisplayEAGL::getVendorString() const
 {
-    // TODO(cwallez) find a useful vendor string
-    return "";
+    return std::string(
+        reinterpret_cast<const char *>(mRenderer->getFunctions()->getString(GL_VENDOR)));
+}
+
+std::string DisplayEAGL::getVersionString() const
+{
+    return std::string(
+        reinterpret_cast<const char *>(mRenderer->getFunctions()->getString(GL_VERSION)));
 }
 
 EAGLContextObj DisplayEAGL::getEAGLContext() const
