@@ -764,8 +764,14 @@ ResourceSerialFactory::~ResourceSerialFactory() {}
 
 uint32_t ResourceSerialFactory::issueSerial()
 {
-    ASSERT(mCurrentUniqueSerial + 1 > mCurrentUniqueSerial);
-    return mCurrentUniqueSerial++;
+#if defined(ANGLE_ENABLE_ASSERTS)
+    uint32_t prevSerial = mCurrentUniqueSerial;
+#endif
+    uint32_t newSerial = ++mCurrentUniqueSerial;
+#if defined(ANGLE_ENABLE_ASSERTS)
+    ASSERT(newSerial > prevSerial);
+#endif
+    return newSerial;
 }
 
 #define ANGLE_DEFINE_GEN_VK_SERIAL(Type)                         \
