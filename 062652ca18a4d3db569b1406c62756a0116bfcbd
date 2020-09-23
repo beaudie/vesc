@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "a0a18412_724b7bf2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:02:35Z",
+      "side": 1,
+      "message": "Maybe you forgot to commit this change?",
+      "parentUuid": "6b26b7eb_3e35c0c6",
+      "range": {
+        "startLine": 239,
+        "startChar": 17,
+        "endLine": 239,
+        "endChar": 38
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50c343b0_5f3e9320",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 18
