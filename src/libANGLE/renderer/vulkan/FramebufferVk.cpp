@@ -1739,7 +1739,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
     }
 
-    updateRenderPassDesc();
+    updateRenderPassDescDepthStencilAttachment();
 
     // Notify the ContextVk to update the pipeline desc.
     FramebufferVk *currentDrawFramebuffer = vk::GetImpl(context->getState().getDrawFramebuffer());
@@ -1753,36 +1753,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-void FramebufferVk::updateRenderPassDesc()
+void FramebufferVk::updateRenderPassDescDepthStencilAttachment()
 {
-    mRenderPassDesc = {};
-    mRenderPassDesc.setSamples(getSamples());
-
-    // Color attachments.
-    const auto &colorRenderTargets               = mRenderTargetCache.getColors();
-    const gl::DrawBufferMask colorAttachmentMask = mState.getColorAttachmentsMask();
-    for (size_t colorIndexGL = 0; colorIndexGL < colorAttachmentMask.size(); ++colorIndexGL)
-    {
-        if (colorAttachmentMask[colorIndexGL])
-        {
-            RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
-            ASSERT(colorRenderTarget);
-            mRenderPassDesc.packColorAttachment(
-                colorIndexGL,
-                colorRenderTarget->getImageForRenderPass().getFormat().intendedFormatID);
-
-            // Add the resolve attachment, if any.
-            if (colorRenderTarget->hasResolveAttachment())
-            {
-                mRenderPassDesc.packColorResolveAttachment(colorIndexGL);
-            }
-        }
-        else
-        {
-            mRenderPassDesc.packColorAttachmentGap(colorIndexGL);
-        }
-    }
-
     // Depth/stencil attachment.
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
@@ -2520,7 +2492,7 @@ void FramebufferVk::setReadOnlyDepthMode(bool readOnlyDepthEnabled)
     {
         mCurrentFramebufferDesc.updateReadOnlyDepth(readOnlyDepthEnabled);
         mFramebuffer = nullptr;
-        updateRenderPassDesc();
+        updateRenderPassDescDepthStencilAttachment();
     }
 }
 
