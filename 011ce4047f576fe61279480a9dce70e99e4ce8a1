@@ -1,0 +1,342 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "237ad038_7fcc0655",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "I haven\u0027t kept up with all of the other comments by Jamie/Shabi, so there may be some repeats in there.   I\u0027ll try and go through those next and get caught up.",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c8c63c1_22c59616",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4022,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4022,
+        "startChar": 52,
+        "endLine": 4022,
+        "endChar": 60
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e82870e8_0137d9aa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4622,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "Why not check for ReadOnly directly?   Why are we treating Unused as read only?",
+      "range": {
+        "startLine": 4621,
+        "startChar": 0,
+        "endLine": 4622,
+        "endChar": 95
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41c12bce_b99f7ae9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5021,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "nit: Otherwise, updating",
+      "range": {
+        "startLine": 5021,
+        "startChar": 32,
+        "endLine": 5021,
+        "endChar": 48
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcc4035d_c4dbcaa7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5022,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "Rather than saying errors will be generated, can you reword this to state why it\u0027s an error that the texture is in a writable layout in the same render pass?",
+      "range": {
+        "startLine": 5021,
+        "startChar": 83,
+        "endLine": 5022,
+        "endChar": 63
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ffe3213_17e6d3a8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5042,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "Why does this only need to be done when we know it\u0027s a read access, rather than for both read and write accesses?   Is it because the flushCommandsAndEndRenderPass() ended the render pass so there\u0027s nothing to update to read only?",
+      "range": {
+        "startLine": 5039,
+        "startChar": 0,
+        "endLine": 5042,
+        "endChar": 0
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c119787c_1a3c879d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2176,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "When did we do it before?",
+      "range": {
+        "startLine": 2176,
+        "startChar": 11,
+        "endLine": 2176,
+        "endChar": 16
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a761b4_c5008791",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2264,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "ref1",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03691cee_4b1163c5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "ref2",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0153803_c1596a22",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "This part looks like bug:\n\n    void FramebufferVk::setReadOnlyDepthMode(bool readOnlyDepthEnabled)\n    {\n        if (isReadOnlyDepthMode() !\u003d readOnlyDepthEnabled)\n        {\n            mCurrentFramebufferDesc.updateReadOnlyDepth(readOnlyDepthEnabled);\n            mFramebuffer \u003d nullptr;\n            updateRenderPassDesc();   \u003c\u003c---- empties and recreates mRenderPassDesc\n        }\n    }\n\n    void FramebufferVk::updateRenderPassDesc()\n    {\n        mRenderPassDesc \u003d {};  \u003c\u003c--- no good\n\nSo, setReadOnlyDepthMode() is clearing mRenderPassDesc, but we\u0027ve already put new valid data in mRenderPassDesc (ref1, ref2) that we (presumably) want to keep.\n\nI don\u0027t know what the fix is, but this version doesn\u0027t look right.",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57341660_20274517",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2567,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "This comment doesn\u0027t seem to be related to this assert, since there isn\u0027t any work related to restarting render passes being done here.",
+      "range": {
+        "startLine": 2565,
+        "startChar": 0,
+        "endLine": 2567,
+        "endChar": 61
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee260c29_4ccd8715",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2571,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "This work needs to be done both when switching to and from read only.",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85ff6b72_630af7b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "typo.\n\nThough, I\u0027m not really sure what \"maximum\" means in this context either.",
+      "range": {
+        "startLine": 1127,
+        "startChar": 30,
+        "endLine": 1127,
+        "endChar": 37
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "865fb9cc_6aebc501",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "nit: being",
+      "range": {
+        "startLine": 1129,
+        "startChar": 88,
+        "endLine": 1129,
+        "endChar": 92
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e6dc8dc_cade18b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1132,
+        "startChar": 30,
+        "endLine": 1132,
+        "endChar": 37
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "630cd8af_148b2502",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:03:05Z",
+      "side": 1,
+      "message": "nti: being",
+      "range": {
+        "startLine": 1135,
+        "startChar": 7,
+        "endLine": 1135,
+        "endChar": 11
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
