@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d9e6afc_a152f8f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T19:29:28Z",
+      "side": 1,
+      "message": "No strong opinion on the GL back-end\u0027s implementation of system info detection. It\u0027s a shame the we can\u0027t do it in the system info util lib. Can you check with Dawn\u0027s implementation and see if they have advanced any further beyond libpci?",
+      "revId": "077ec94e81038a2c691267107df038af84c3fa89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b082ff5_4b4bcd04",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T19:29:28Z",
+      "side": 1,
+      "message": "nit: looks like maybe copy-pasted from Chromium, should update the style (e.g. naming)",
+      "range": {
+        "startLine": 229,
+        "startChar": 11,
+        "endLine": 229,
+        "endChar": 25
+      },
+      "revId": "077ec94e81038a2c691267107df038af84c3fa89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
