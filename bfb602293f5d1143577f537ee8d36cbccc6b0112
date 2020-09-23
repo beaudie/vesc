@@ -77,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "d4505cea_1bd2e696",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4641,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Merge them means calling updateRenderPassDepthStencilAccess(). There is a bit more logic there that sets content defined, not sure if it is right thing to do though. Prefer not to change how mContentDefined is tracked in this CL. Do you mind defer this to the follow up CL so that I can make sure content defined tracking are not regressed.",
+      "parentUuid": "fa3a1acb_f1df4739",
+      "range": {
+        "startLine": 4641,
+        "startChar": 0,
+        "endLine": 4641,
+        "endChar": 64
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e065c69c_32f25b57",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -97,6 +121,30 @@
       "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a65dd5aa_c8eee718",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5030,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e065c69c_32f25b57",
+      "range": {
+        "startLine": 5030,
+        "startChar": 51,
+        "endLine": 5030,
+        "endChar": 65
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -241,6 +289,30 @@
     },
     {
       "key": {
+        "uuid": "8bbaf3dd_a68c7989",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2177,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e457e32_62478fd6",
+      "range": {
+        "startLine": 2177,
+        "startChar": 19,
+        "endLine": 2177,
+        "endChar": 64
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8aade85b_876bfad7",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -359,6 +431,30 @@
     },
     {
       "key": {
+        "uuid": "930b149a_c99abc9e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2561,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73a52926_34d356ab",
+      "range": {
+        "startLine": 2557,
+        "startChar": 0,
+        "endLine": 2561,
+        "endChar": 5
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa5042f4_cf5502ad",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 10
@@ -379,6 +475,30 @@
       "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e557e84f_daccd13b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2575,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa5042f4_cf5502ad",
+      "range": {
+        "startLine": 2569,
+        "startChar": 0,
+        "endLine": 2575,
+        "endChar": 5
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -453,6 +573,30 @@
     },
     {
       "key": {
+        "uuid": "0d759386_5b30acfc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "From my reading of spec, I agree with you that layout change should not require recreate of VkFramebuffer or renderpass. But I did not add these two lines, so prefer to fix this in the follow up CL.",
+      "parentUuid": "9ac0ff04_046989a6",
+      "range": {
+        "startLine": 2582,
+        "startChar": 0,
+        "endLine": 2583,
+        "endChar": 71
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b5ecf0b_ddea445c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 10
@@ -473,6 +617,30 @@
       "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afce34d1_fa20183a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b5ecf0b_ddea445c",
+      "range": {
+        "startLine": 136,
+        "startChar": 9,
+        "endLine": 136,
+        "endChar": 37
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -499,6 +667,30 @@
     },
     {
       "key": {
+        "uuid": "7cdc3a11_5220ed42",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "846f84fd_1b347ba2",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 140,
+        "endChar": 40
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2dda204_4f696704",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 10
@@ -519,6 +711,30 @@
       "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "076a2c3a_6b33aa2b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2dda204_4f696704",
+      "range": {
+        "startLine": 262,
+        "startChar": 9,
+        "endLine": 262,
+        "endChar": 39
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -590,6 +806,30 @@
       "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a66ed060_96c9ce7c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dad28068_0d55099a",
+      "range": {
+        "startLine": 984,
+        "startChar": 9,
+        "endLine": 984,
+        "endChar": 38
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -687,6 +927,30 @@
     },
     {
       "key": {
+        "uuid": "a3e22c24_32065448",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baeba908_e3032ee2",
+      "range": {
+        "startLine": 1128,
+        "startChar": 84,
+        "endLine": 1129,
+        "endChar": 19
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4346b81_a850d046",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 10
@@ -707,6 +971,30 @@
       "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87b3180f_48c703d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T00:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4346b81_a850d046",
+      "range": {
+        "startLine": 1130,
+        "startChar": 32,
+        "endLine": 1133,
+        "endChar": 26
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
