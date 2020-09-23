@@ -50,6 +50,24 @@
       "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea82df35_6dfcec1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T18:35:28Z",
+      "side": 1,
+      "message": "WOuld like to know exact bug here as well. The context staging buffer is never destroyed until ContextVk::destroy time.",
+      "parentUuid": "ff1c31a5_e481e1f7",
+      "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
