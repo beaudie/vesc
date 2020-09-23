@@ -175,6 +175,24 @@
       "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a12f7276_5900595b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T20:22:27Z",
+      "side": 1,
+      "message": "The problem here is not that retain() not been called, in fact, retain() is called  in releaseInFlightBuffersToResourceUseList right before it calls bufferHelper-\u003erelease(). The problem I think is that somehow the buffer gets released while it is retained. I don\u0027t know exactly how that happened though. filed http://b/169263967 to further investigation on this.",
+      "parentUuid": "dfbd6d90_b2a72c23",
+      "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
