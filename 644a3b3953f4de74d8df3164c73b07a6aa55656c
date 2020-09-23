@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98499b66_6183ac6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-23T20:12:56Z",
+      "side": 1,
+      "message": "Updated this to just report the entire GL_VERSION string in our GL_RENDERER string. The parsing will be done in Chrome",
+      "revId": "644a3b3953f4de74d8df3164c73b07a6aa55656c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
