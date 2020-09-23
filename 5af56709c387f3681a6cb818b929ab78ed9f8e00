@@ -113,6 +113,24 @@
       "revId": "5af56709c387f3681a6cb818b929ab78ed9f8e00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "800ad47d_434c6edd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T19:46:11Z",
+      "side": 1,
+      "message": "Shabi - For context, please take a look at my comment here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2411336/comment/b0153803_c1596a22/\n\nIt looks like there\u0027s a bug with mRenderPassDesc unintentionally being cleared out in that CL, which needs to be fixed up.",
+      "parentUuid": "b6269e6c_4e58906b",
+      "revId": "5af56709c387f3681a6cb818b929ab78ed9f8e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
