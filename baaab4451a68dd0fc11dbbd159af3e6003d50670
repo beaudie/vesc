@@ -16,6 +16,24 @@
       "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d58e0f80_73ed125e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-23T23:22:04Z",
+      "side": 1,
+      "message": "baseline -\n\n[ RUN      ] DrawCallPerfBenchmark.Run/vulkan_vbo_cycle\n*RESULT DrawCallPerf_vulkan.wall_time: vbo_cycle\u003d 353.0097665115 ns\n*RESULT DrawCallPerf_vulkan.wall_time: vbo_cycle\u003d 358.5612525938 ns\n*RESULT DrawCallPerf_vulkan.wall_time: vbo_cycle\u003d 358.4366241834 ns\n[       OK ] DrawCallPerfBenchmark.Run/vulkan_vbo_cycle (2308 ms)\n\nafter cherry-picking your revert patch -\n\n[ RUN      ] DrawCallPerfBenchmark.Run/vulkan_vbo_cycle\n*RESULT DrawCallPerf_vulkan.wall_time: vbo_cycle\u003d 354.0061200695 ns\n*RESULT DrawCallPerf_vulkan.wall_time: vbo_cycle\u003d 360.1810485482 ns\n*RESULT DrawCallPerf_vulkan.wall_time: vbo_cycle\u003d 364.4479802490 ns\n[       OK ] DrawCallPerfBenchmark.Run/vulkan_vbo_cycle (1629 ms)",
+      "parentUuid": "c9c8f812_4dabd14a",
+      "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
