@@ -16,6 +16,40 @@
       "revId": "9243fdfdd30d1bfb4d9efb7855e04945933f7096",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b7df327_34aeefe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:16:09Z",
+      "side": 1,
+      "message": "A little more cleanup and it\u0027s good to go!",
+      "revId": "9243fdfdd30d1bfb4d9efb7855e04945933f7096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a652d644_036df7b8",
+        "filename": "src/libANGLE/renderer/BufferImpl.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:16:09Z",
+      "side": 1,
+      "message": "Sneaky!\n\nWhy not just remove this function and add flags to setData? The backend can do the right thing, including ASSERT(usage \u003d\u003d BufferUsage::InvalidEnum) if they don\u0027t support the extension.",
+      "revId": "9243fdfdd30d1bfb4d9efb7855e04945933f7096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

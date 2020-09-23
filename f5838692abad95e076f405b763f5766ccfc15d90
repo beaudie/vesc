@@ -165,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "2467eaab_c0c92c59",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:16:09Z",
+      "side": 1,
+      "message": "Looks to me like if the flags don\u0027t contain any MAP* bits, the buffer could be device local.",
+      "parentUuid": "eab9cb75_dcf90c10",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db281820_dfe2d813",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
