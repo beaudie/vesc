@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "e410d766_9862fc38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T16:19:34Z",
+      "side": 1,
+      "message": "Thanks Tim for doing another good review. LGTM once Tim\u0027s comments and last nits are resolved.",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c8c63c1_22c59616",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -127,6 +144,29 @@
         "startChar": 0,
         "endLine": 5042,
         "endChar": 0
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5633c8b_61ea166a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T16:19:34Z",
+      "side": 1,
+      "message": "nit: FeedbackLoopMode to be completely consistent.",
+      "range": {
+        "startLine": 940,
+        "startChar": 9,
+        "endLine": 940,
+        "endChar": 48
       },
       "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -333,6 +373,29 @@
         "startChar": 7,
         "endLine": 1135,
         "endChar": 11
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfcdf457_cccb1381",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T16:19:34Z",
+      "side": 1,
+      "message": "can you clarify what this means? readOnlyDepthStencil \u003d\u003d a type of RenderPass?",
+      "range": {
+        "startLine": 788,
+        "startChar": 13,
+        "endLine": 788,
+        "endChar": 34
       },
       "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",

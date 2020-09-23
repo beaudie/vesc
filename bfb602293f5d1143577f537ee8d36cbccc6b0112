@@ -101,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "7acede85_0330e3cb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4641,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T16:19:34Z",
+      "side": 1,
+      "message": "Ack. I think my comment might be unclear - I was thinking you were passing the access to startNewRenderPass. In fact you\u0027re only passing a bool. Fine the way it is.",
+      "parentUuid": "d4505cea_1bd2e696",
+      "range": {
+        "startLine": 4641,
+        "startChar": 0,
+        "endLine": 4641,
+        "endChar": 64
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e065c69c_32f25b57",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -618,6 +642,30 @@
       "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b60a58_9a7f240f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T16:19:34Z",
+      "side": 1,
+      "message": "Thanks for following up with this. It\u0027s a bit tricky because of the RenderPass compatiblity rules you quoted. tl;dr this might be a design flaw I introduced in my read-only changes. I can take a look in a follow-up so we can proceed with this CL as it is. Maybe (?) the read-only mode can be a part of the \"ops\" array instead of the RenderPassDesc.",
+      "parentUuid": "eabafacc_a57050e6",
+      "range": {
+        "startLine": 2582,
+        "startChar": 0,
+        "endLine": 2583,
+        "endChar": 71
+      },
+      "revId": "bfb602293f5d1143577f537ee8d36cbccc6b0112",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
