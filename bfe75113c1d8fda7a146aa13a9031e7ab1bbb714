@@ -16,6 +16,23 @@
       "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3125f31c_0a0b5263",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T17:18:23Z",
+      "side": 1,
+      "message": "Thanks for the regression test.",
+      "revId": "bfe75113c1d8fda7a146aa13a9031e7ab1bbb714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
