@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ee383fd9_4b78db78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-23T14:50:19Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "084a7c24_caf83e91",
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad9084e4_dce333c5",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 18
@@ -74,6 +92,30 @@
       "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9962c2f1_00fad998",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-23T14:50:19Z",
+      "side": 1,
+      "message": "I think so.  It let\u0027s us see when vertex buffers are being recompressed too frequently, defeating the possible performance gains.",
+      "parentUuid": "ad9084e4_dce333c5",
+      "range": {
+        "startLine": 599,
+        "startChar": 0,
+        "endLine": 601,
+        "endChar": 79
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -100,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "7247801a_6c505490",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-23T14:50:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52ee8f7e_495aa9f8",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 25
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bacbea98_460661ec",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 18
@@ -123,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "6b26b7eb_3e35c0c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-23T14:50:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bacbea98_460661ec",
+      "range": {
+        "startLine": 239,
+        "startChar": 17,
+        "endLine": 239,
+        "endChar": 38
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50c343b0_5f3e9320",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 18
@@ -143,6 +233,30 @@
       "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "253774fc_2abb56c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-23T14:50:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50c343b0_5f3e9320",
+      "range": {
+        "startLine": 108,
+        "startChar": 10,
+        "endLine": 108,
+        "endChar": 22
+      },
+      "revId": "062652ca18a4d3db569b1406c62756a0116bfcbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
