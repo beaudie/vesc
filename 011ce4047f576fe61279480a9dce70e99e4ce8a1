@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "25b07388_d9cfa8a4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4022,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c8c63c1_22c59616",
+      "range": {
+        "startLine": 4022,
+        "startChar": 52,
+        "endLine": 4022,
+        "endChar": 60
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e82870e8_0137d9aa",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -70,6 +94,30 @@
       "writtenOn": "2020-09-23T16:03:05Z",
       "side": 1,
       "message": "Why not check for ReadOnly directly?   Why are we treating Unused as read only?",
+      "range": {
+        "startLine": 4621,
+        "startChar": 0,
+        "endLine": 4622,
+        "endChar": 95
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35822a0a_ae7fb8b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4622,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Right. You could have depth\u003d\u003dRead \u0026\u0026 stencil\u003d\u003dUnused, which should be Read access.",
+      "parentUuid": "e82870e8_0137d9aa",
       "range": {
         "startLine": 4621,
         "startChar": 0,
@@ -105,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "b9900e9a_a4c8091c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5021,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41c12bce_b99f7ae9",
+      "range": {
+        "startLine": 5021,
+        "startChar": 32,
+        "endLine": 5021,
+        "endChar": 48
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcc4035d_c4dbcaa7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -128,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "9f5212fb_2c2bf233",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5022,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcc4035d_c4dbcaa7",
+      "range": {
+        "startLine": 5021,
+        "startChar": 83,
+        "endLine": 5022,
+        "endChar": 63
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ffe3213_17e6d3a8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -139,6 +235,30 @@
       "writtenOn": "2020-09-23T16:03:05Z",
       "side": 1,
       "message": "Why does this only need to be done when we know it\u0027s a read access, rather than for both read and write accesses?   Is it because the flushCommandsAndEndRenderPass() ended the render pass so there\u0027s nothing to update to read only?",
+      "range": {
+        "startLine": 5039,
+        "startChar": 0,
+        "endLine": 5042,
+        "endChar": 0
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f76ae813_6284a203",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5042,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Right. The if case is ending the renderpass, so no need to \"update\"",
+      "parentUuid": "5ffe3213_17e6d3a8",
       "range": {
         "startLine": 5039,
         "startChar": 0,
@@ -174,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "a7d1ec47_11c721d9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5633c8b_61ea166a",
+      "range": {
+        "startLine": 940,
+        "startChar": 9,
+        "endLine": 940,
+        "endChar": 48
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c119787c_1a3c879d",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 11
@@ -194,6 +338,30 @@
       "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d66810e_738fd82f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2176,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c119787c_1a3c879d",
+      "range": {
+        "startLine": 2176,
+        "startChar": 11,
+        "endLine": 2176,
+        "endChar": 16
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -248,6 +416,24 @@
     },
     {
       "key": {
+        "uuid": "fb79dea1_1ff8df66",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Good catch. Looks like ref1/ref2 are recent changes. But I really did not change this piece of code. Let me try to kick another CL to address this.",
+      "parentUuid": "b0153803_c1596a22",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57341660_20274517",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 11
@@ -259,6 +445,30 @@
       "writtenOn": "2020-09-23T16:03:05Z",
       "side": 1,
       "message": "This comment doesn\u0027t seem to be related to this assert, since there isn\u0027t any work related to restarting render passes being done here.",
+      "range": {
+        "startLine": 2565,
+        "startChar": 0,
+        "endLine": 2567,
+        "endChar": 61
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e57ed2f_47e92220",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2567,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "It actually is related. I will reword it.\nI think the compound ASSERT is making it not obvious to understand.",
+      "parentUuid": "57341660_20274517",
       "range": {
         "startLine": 2565,
         "startChar": 0,
@@ -285,6 +495,24 @@
       "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "731d1f28_c0b18a2e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2571,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee260c29_4ccd8715",
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -334,6 +562,30 @@
     },
     {
       "key": {
+        "uuid": "a7282da3_09ad1c54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "865fb9cc_6aebc501",
+      "range": {
+        "startLine": 1129,
+        "startChar": 88,
+        "endLine": 1129,
+        "endChar": 92
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e6dc8dc_cade18b0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
@@ -354,6 +606,30 @@
       "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a68d8ac4_8925e240",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e6dc8dc_cade18b0",
+      "range": {
+        "startLine": 1132,
+        "startChar": 30,
+        "endLine": 1132,
+        "endChar": 37
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -380,6 +656,30 @@
     },
     {
       "key": {
+        "uuid": "aa30d29d_c035875d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "630cd8af_148b2502",
+      "range": {
+        "startLine": 1135,
+        "startChar": 7,
+        "endLine": 1135,
+        "endChar": 11
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfcdf457_cccb1381",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 11
@@ -400,6 +700,30 @@
       "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "243ee84f_aba039a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-23T17:05:45Z",
+      "side": 1,
+      "message": "changed to readOnlyDepthStencilRenderPasses",
+      "parentUuid": "cfcdf457_cccb1381",
+      "range": {
+        "startLine": 788,
+        "startChar": 13,
+        "endLine": 788,
+        "endChar": 34
+      },
+      "revId": "011ce4047f576fe61279480a9dce70e99e4ce8a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
