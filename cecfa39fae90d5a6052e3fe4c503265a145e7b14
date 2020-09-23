@@ -16,6 +16,40 @@
       "revId": "cecfa39fae90d5a6052e3fe4c503265a145e7b14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5c0e9ae_0da1e37e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-09-23T22:05:44Z",
+      "side": 1,
+      "message": "Super work James! LGTM. One small comment.\n",
+      "revId": "cecfa39fae90d5a6052e3fe4c503265a145e7b14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25ec3497_5eb8f146",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-09-23T22:05:44Z",
+      "side": 1,
+      "message": "The code duplication throughout is a little unfortunate. Would a couple of static inline helper functions improve readability?",
+      "revId": "cecfa39fae90d5a6052e3fe4c503265a145e7b14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
