@@ -4219,8 +4219,25 @@ angle::Result Renderer11::getIncompleteTexture(const gl::Context *context,
     return GetImplAs<Context11>(context)->getIncompleteTexture(context, type, textureOut);
 }
 
+std::string Renderer11::getVendorString() const
+{
+    return GetVendorString(mAdapterDescription.VendorId);
+}
+
+std::string Renderer11::getVersionString() const
+{
+    std::ostringstream versionString = "D3D11";
+    if (mRenderer11DeviceCaps.driverVersion.valid())
+    {
+        versionString << " " << mRenderer11DeviceCaps.driverVersion.value().HighPart << "."
+                      << mRenderer11DeviceCaps.driverVersion.value().LowPart;
+    }
+    return versionString.str();
+}
+
 RendererD3D *CreateRenderer11(egl::Display *display)
 {
     return new Renderer11(display);
 }
+
 }  // namespace rx
