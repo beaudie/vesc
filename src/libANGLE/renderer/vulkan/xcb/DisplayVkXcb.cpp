@@ -87,8 +87,17 @@ SurfaceImpl *DisplayVkXcb::createWindowSurfaceVk(const egl::SurfaceState &state,
 
 egl::ConfigSet DisplayVkXcb::generateConfigs()
 {
-    constexpr GLenum kColorFormats[] = {GL_BGRA8_EXT};
-    return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, this);
+    const std::vector<GLenum> kColorFormats = {GL_BGRA8_EXT};
+
+    angle::FixedVector<GLenum, 5> depthStencilFormats = {
+        GL_NONE, GL_DEPTH24_STENCIL8, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT16};
+
+    if (getCaps().stencil8)
+    {
+        depthStencilFormats.push_back(GL_STENCIL_INDEX8);
+    }
+    return egl_vk::GenerateConfigs(kColorFormats.data(), kColorFormats.size(),
+                                   depthStencilFormats.data(), depthStencilFormats.size(), this);
 }
 
 void DisplayVkXcb::checkConfigSupport(egl::Config *config)
