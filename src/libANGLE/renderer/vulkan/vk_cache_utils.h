@@ -1061,14 +1061,12 @@ class FramebufferDesc
     void updateColorUnresolveMask(gl::DrawBufferMask colorUnresolveMask);
     void updateDepthStencil(ImageViewSubresourceSerial serial);
     void updateDepthStencilResolve(ImageViewSubresourceSerial serial);
-    void updateReadOnlyDepth(bool readOnlyDepth);
     size_t hash() const;
     void reset();
 
     bool operator==(const FramebufferDesc &other) const;
 
     uint32_t attachmentCount() const;
-    bool isReadOnlyDepth() const { return mReadOnlyDepth != 0; }
 
     ImageViewSubresourceSerial getColorImageViewSerial(uint32_t index)
     {
@@ -1081,7 +1079,6 @@ class FramebufferDesc
 
     // Note: this is an exclusive index. If there is one index it will be "1".
     uint16_t mMaxIndex;
-    uint8_t mReadOnlyDepth;
 
     // If the render pass contains an initial subpass to unresolve a number of attachments, the
     // subpass description is derived from the following mask, specifying which attachments need
