@@ -2086,6 +2086,16 @@ std::string GetXfbBufferName(const uint32_t bufferIndex)
     return "xfbBuffer" + Str(bufferIndex);
 }
 
+void GlslangGenTransformFeedbackEmulationOutputs(GlslangSourceOptions &options,
+                                                 const gl::ProgramState &programState,
+                                                 GlslangProgramInterfaceInfo *programInterfaceInfo,
+                                                 std::string *vertexShader,
+                                                 ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+{
+    GenerateTransformFeedbackEmulationOutputs(options, programState, programInterfaceInfo,
+                                              vertexShader, variableInfoMapOut);
+}
+
 void GlslangAssignLocations(GlslangSourceOptions &options,
                             const gl::ProgramExecutable &programExecutable,
                             const gl::ShaderType shaderType,
@@ -2166,6 +2176,10 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
                 GenerateTransformFeedbackEmulationOutputs(
                     options, programState, programInterfaceInfo, vertexSource,
                     &(*variableInfoMapOut)[gl::ShaderType::Vertex]);
+            }
+            else
+            {
+                *vertexSource = SubstituteTransformFeedbackMarkers(*vertexSource, "", "");
             }
         }
     }
