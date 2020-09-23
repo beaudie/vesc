@@ -1130,11 +1130,7 @@ class CommandBufferHelper : angle::NonCopyable
     // that the depth buffer is not being used during the entire renderpass and store op is
     // VK_ATTACHMENT_STORE_OP_DONTCARE.
     ResourceAccess mDepthAccess;
-    // State tracking for the maximum (Write been the highest) stencil access during the entire
-    // renderpass. Note that this does not include VK_ATTACHMENT_LOAD_OP_CLEAR which is tracked
-    // separately. This is done this way to allow clear op to being optimized out when we find out
-    // that the stencil buffer is not being used during the entire renderpass and store op is
-    // VK_ATTACHMENT_STORE_OP_DONTCARE.
+    // Similar tracking to mDepthAccess but for the stencil aspect.
     ResourceAccess mStencilAccess;
 
     // State tracking for whether to optimize the storeOp to DONT_CARE
