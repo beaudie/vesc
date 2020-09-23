@@ -124,17 +124,12 @@ egl::Error DisplayMtl::restoreLostDevice(const egl::Display *display)
 
 std::string DisplayMtl::getVendorString() const
 {
-    ANGLE_MTL_OBJC_SCOPE
-    {
-        std::string vendorString = "Google Inc.";
-        if (mMetalDevice)
-        {
-            vendorString += " Metal Renderer: ";
-            vendorString += mMetalDevice.get().name.UTF8String;
-        }
+    return "Apple Inc.";
+}
 
-        return vendorString;
-    }
+std::string DisplayMtl::getVersionString() const
+{
+    return std::string();
 }
 
 DeviceImpl *DisplayMtl::createDevice()
