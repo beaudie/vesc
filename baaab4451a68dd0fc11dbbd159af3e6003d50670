@@ -34,6 +34,24 @@
       "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a61eb2c1_0b190296",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-23T23:37:24Z",
+      "side": 1,
+      "message": "Can you confirm your GN args?\n\nTry using scripts/perf_test_runner.py DrawCallPerfBenchmark.Run/vulkan_null_vbo_cycle\n\nThe \"null\" is important here for reducing variance. The vk command stream should be identical.",
+      "parentUuid": "d58e0f80_73ed125e",
+      "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
