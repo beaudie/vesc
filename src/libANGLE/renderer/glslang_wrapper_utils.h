@@ -105,6 +105,13 @@ std::string GetMappedSamplerNameOld(const std::string &originalName);
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
 std::string GetXfbBufferName(const uint32_t bufferIndex);
 
+void GlslangGenTransformFeedbackEmulationOutputs(
+    GlslangSourceOptions &options,
+    const gl::ProgramState &programState,
+    GlslangProgramInterfaceInfo *programInterfaceInfo,
+    std::string *vertexShader,
+    ShaderInterfaceVariableInfoMap *variableInfoMapOut);
+
 void GlslangAssignLocations(GlslangSourceOptions &options,
                             const gl::ProgramExecutable &programExecutable,
                             const gl::ShaderType shaderType,
