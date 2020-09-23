@@ -111,6 +111,30 @@
       "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6d815ac_c0f5aeb4",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-23T14:28:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d121c5a_dc9fe292",
+      "range": {
+        "startLine": 3254,
+        "startChar": 27,
+        "endLine": 3254,
+        "endChar": 44
+      },
+      "revId": "6240d2123f6f2e8771700c0a3effa17063420f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
