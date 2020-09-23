@@ -68,6 +68,24 @@
       "revId": "9243fdfdd30d1bfb4d9efb7855e04945933f7096",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bcb50d1_d1472552",
+        "filename": "src/libANGLE/renderer/BufferImpl.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-23T20:00:08Z",
+      "side": 1,
+      "message": "\u003e Would require a bigger refactor\n\nindeed, i will end up needing to modify files from all the backends. Please let me know if you want a todo bug added to address other backends and rename \"setData\", i want to avoid doing all that in this change",
+      "parentUuid": "de37c960_17375e7c",
+      "revId": "9243fdfdd30d1bfb4d9efb7855e04945933f7096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

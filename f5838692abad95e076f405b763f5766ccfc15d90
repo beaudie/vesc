@@ -183,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "edf181f0_32e3d830",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-23T20:00:08Z",
+      "side": 1,
+      "message": "the other 2 possible flags are - DYNAMIC_STORAGE_BIT_EXT and CLIENT_STORAGE_BIT_EXT\n\n1. DYNAMIC_STORAGE_BIT_EXT - means the contents of the data store may be updated after\n   creation through calls to BufferSubData. This again would require mapping the buffer\n2. CLIENT_STORAGE_BIT_EXT - spec is very brief about this flag and all i got out of it is if\n   this flag is present the buffer needs to be host-visible\n\nshabi, can you point out under which condition we could have had device local memory?",
+      "parentUuid": "2467eaab_c0c92c59",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db281820_dfe2d813",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
