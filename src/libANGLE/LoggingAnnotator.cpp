@@ -54,7 +54,9 @@ void LoggingAnnotator::logMessage(const gl::LogMessage &msg) const
                 UNREACHABLE();
         }
     }
+    //#if 0
     gl::Trace(msg.getSeverity(), msg.getMessage().c_str());
+    //#endif
 }
 
 }  // namespace angle

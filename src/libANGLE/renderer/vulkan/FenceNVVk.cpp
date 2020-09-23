@@ -28,6 +28,8 @@ void FenceNVVk::onDestroy(const gl::Context *context)
 
 angle::Result FenceNVVk::set(const gl::Context *context, GLenum condition)
 {
+    INFO() << "CLN FenceNVVk::set context=" << (context ? context->id() : 0)
+           << " condition=" << condition;
     ASSERT(condition == GL_ALL_COMPLETED_NV);
     return mFenceSync.initialize(vk::GetImpl(context));
 }
@@ -39,11 +41,14 @@ angle::Result FenceNVVk::test(const gl::Context *context, GLboolean *outFinished
 
     ASSERT(outFinished);
     *outFinished = signaled ? GL_TRUE : GL_FALSE;
+    INFO() << "CLN FenceNVVk::test context=" << (context ? context->id() : 0)
+           << " finished=" << *outFinished;
     return angle::Result::Continue;
 }
 
 angle::Result FenceNVVk::finish(const gl::Context *context)
 {
+    INFO() << "CLN FenceNVVk::finish context=" << (context ? context->id() : 0);
     VkResult outResult;
     ContextVk *contextVk = vk::GetImpl(context);
     return mFenceSync.clientWait(contextVk, contextVk, true, UINT64_MAX, &outResult);

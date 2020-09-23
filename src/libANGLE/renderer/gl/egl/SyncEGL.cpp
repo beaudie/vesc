@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/egl/SyncEGL.h"
 
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/gl/egl/FunctionsEGL.h"
 
@@ -72,6 +73,9 @@ egl::Error SyncEGL::clientWait(const egl::Display *display,
     }
 
     *outResult = result;
+    INFO() << "CLN: SyncEGL::clientWait display=" << display
+           << " context=" << (context ? context->id() : 0) << " flags=" << flags
+           << " timeout=" << timeout << " result=" << result;
     return egl::NoError();
 }
 
@@ -87,6 +91,8 @@ egl::Error SyncEGL::serverWait(const egl::Display *display,
         return egl::Error(mEGL->getError(), "eglWaitSync failed");
     }
 
+    INFO() << "CLN: SyncEGL::serverWait display=" << display
+           << " context=" << (context ? context->id() : 0) << " flags=" << flags;
     return egl::NoError();
 }
 
@@ -100,6 +106,8 @@ egl::Error SyncEGL::getStatus(const egl::Display *display, EGLint *outStatus)
         return egl::Error(mEGL->getError(), "eglGetSyncAttribKHR with EGL_SYNC_STATUS_KHR failed");
     }
 
+    INFO() << "CLN: SyncEGL::getStatus (eglGetSyncAttribKHR) display=" << display
+           << " status=" << *outStatus;
     return egl::NoError();
 }
 

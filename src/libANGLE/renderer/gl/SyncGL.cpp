@@ -39,6 +39,8 @@ angle::Result SyncGL::set(const gl::Context *context, GLenum condition, GLbitfie
     mSyncObject = mFunctions->fenceSync(condition, flags);
     ANGLE_CHECK(GetImplAs<ContextGL>(context), mSyncObject != 0,
                 "glFenceSync failed to create a GLsync object.", GL_OUT_OF_MEMORY);
+    INFO() << "CLN SyncGL::set (glFenceSync) context=" << (context ? context->id() : 0)
+           << " condition=" << condition << " flags=" << flags;
     return angle::Result::Continue;
 }
 
@@ -49,6 +51,8 @@ angle::Result SyncGL::clientWait(const gl::Context *context,
 {
     ASSERT(mSyncObject != 0);
     *outResult = mFunctions->clientWaitSync(mSyncObject, flags, timeout);
+    INFO() << "CLN SyncGL::clientWait context=" << (context ? context->id() : 0)
+           << " flags=" << flags << " timeout=" << timeout;
     return angle::Result::Continue;
 }
 
@@ -56,6 +60,8 @@ angle::Result SyncGL::serverWait(const gl::Context *context, GLbitfield flags, G
 {
     ASSERT(mSyncObject != 0);
     mFunctions->waitSync(mSyncObject, flags, timeout);
+    INFO() << "CLN SyncGL::serverWait context=" << (context ? context->id() : 0)
+           << " flags=" << flags << " timeout=" << timeout;
     return angle::Result::Continue;
 }
 

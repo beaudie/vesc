@@ -338,6 +338,9 @@ angle::Result SyncVk::set(const gl::Context *context, GLenum condition, GLbitfie
     ASSERT(condition == GL_SYNC_GPU_COMMANDS_COMPLETE);
     ASSERT(flags == 0);
 
+    INFO() << "CLN SyncVk::set (glFenceSync) context=" << (context ? context->id() : 0)
+           << " condition=" << condition << " flags=" << flags;
+
     return mSyncHelper.initialize(vk::GetImpl(context));
 }
 
@@ -346,6 +349,8 @@ angle::Result SyncVk::clientWait(const gl::Context *context,
                                  GLuint64 timeout,
                                  GLenum *outResult)
 {
+    INFO() << "CLN SyncVk::clientWait context=" << (context ? context->id() : 0)
+           << " flags=" << flags << " timeout=" << timeout;
     ContextVk *contextVk = vk::GetImpl(context);
 
     ASSERT((flags & ~GL_SYNC_FLUSH_COMMANDS_BIT) == 0);
@@ -379,6 +384,8 @@ angle::Result SyncVk::clientWait(const gl::Context *context,
 
 angle::Result SyncVk::serverWait(const gl::Context *context, GLbitfield flags, GLuint64 timeout)
 {
+    INFO() << "CLN SyncVk::serverWait context=" << (context ? context->id() : 0)
+           << " flags=" << flags << " timeout=" << timeout;
     ASSERT(flags == 0);
     ASSERT(timeout == GL_TIMEOUT_IGNORED);
 
@@ -392,6 +399,8 @@ angle::Result SyncVk::getStatus(const gl::Context *context, GLint *outResult)
     ANGLE_TRY(mSyncHelper.getStatus(vk::GetImpl(context), &signaled));
 
     *outResult = signaled ? GL_SIGNALED : GL_UNSIGNALED;
+    INFO() << "CLN SyncVk::getStatus context=" << (context ? context->id() : 0)
+           << " status=" << (signaled ? GL_SIGNALED : GL_UNSIGNALED);
     return angle::Result::Continue;
 }
 
