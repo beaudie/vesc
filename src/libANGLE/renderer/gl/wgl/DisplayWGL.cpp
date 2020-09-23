@@ -477,6 +477,18 @@ DeviceImpl *DisplayWGL::createDevice()
     return nullptr;
 }
 
+std::string DisplayWGL::getVendorString() const
+{
+    return std::string(
+        reinterpret_cast<const char *>(mRenderer->getFunctions()->getString(GL_VENDOR)));
+}
+
+std::string DisplayWGL::getVersionString() const
+{
+    return std::string(
+        reinterpret_cast<const char *>(mRenderer->getFunctions()->getString(GL_VERSION)));
+}
+
 egl::ConfigSet DisplayWGL::generateConfigs()
 {
     egl::ConfigSet configs;
@@ -585,12 +597,6 @@ egl::Error DisplayWGL::validateClientBuffer(const egl::Config *configuration,
         default:
             return DisplayGL::validateClientBuffer(configuration, buftype, clientBuffer, attribs);
     }
-}
-
-std::string DisplayWGL::getVendorString() const
-{
-    // UNIMPLEMENTED();
-    return "";
 }
 
 egl::Error DisplayWGL::initializeD3DDevice()

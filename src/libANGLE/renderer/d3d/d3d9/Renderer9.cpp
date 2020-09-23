@@ -3263,4 +3263,17 @@ angle::Result Renderer9::ensureVertexDataManagerInitialized(const gl::Context *c
 
     return angle::Result::Continue;
 }
+
+std::string Renderer9::getVendorString() const
+{
+    return GetVendorString(getVendorId());
+}
+
+std::string Renderer9::getVersionString() const
+{
+    std::ostringstream versionString = "D3D9";
+    versionString << " " << mAdapterIdentifier.DriverVersionHighPart << "."
+                  << mAdapterIdentifier.DriverVersionLowPart;
+    return versionString.str();
+}
 }  // namespace rx
