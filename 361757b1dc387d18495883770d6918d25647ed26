@@ -172,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "1c9b0475_4bec68b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T20:49:46Z",
+      "side": 1,
+      "message": "\u003e\u003e I can\u0027t use data() in every case.\n\n\u003e Why\u0027s that?\n\nMaybe it wasn\u0027t clear. I meant I can\u0027t use data() unconditionally in every case. The particular problematic case is pResolveAttachments, because it doesn\u0027t have a corresponding count. The driver depends on it being nullptr if there are no resolve attachments.\n\nThat said, in the next change I do actually get to a situation where inputRefs.size() is bigger than desc.inputAttachmentCount, so going to go with .size() and .data(). I kept the logic of `!empty() ? data() : nullptr` to be consistent (since resolve needs it anyway).",
+      "parentUuid": "72e32006_0fec5d8a",
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04a53ddb_a10c1694",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 8
@@ -219,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "10018ffc_b7746c4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T20:49:46Z",
+      "side": 1,
+      "message": "Nack. attachmentDescs is an \"Array\", so size() doesn\u0027t make sense.",
+      "parentUuid": "41be2917_a5e7654a",
+      "range": {
+        "startLine": 622,
+        "startChar": 0,
+        "endLine": 623,
+        "endChar": 68
+      },
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d61891ca_fcb010a8",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 8
@@ -251,6 +293,24 @@
       "revId": "361757b1dc387d18495883770d6918d25647ed26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeaf8211_ada014ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T20:49:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "971504d1_7348e70c",
+      "revId": "361757b1dc387d18495883770d6918d25647ed26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
