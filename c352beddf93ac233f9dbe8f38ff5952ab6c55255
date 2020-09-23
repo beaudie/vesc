@@ -16,6 +16,86 @@
       "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f10f661_980b27ed",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 8552,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:31:30Z",
+      "side": 1,
+      "message": "No big deal, but isn\u0027t the temp buffer local to this function?",
+      "range": {
+        "startLine": 8552,
+        "startChar": 0,
+        "endLine": 8552,
+        "endChar": 82
+      },
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a40c2660_fd0043e3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:31:30Z",
+      "side": 1,
+      "message": "Let\u0027s try and avoid this `#if` all over the place. How about moving the `#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)` inside `writeOpenGlApiString`, so this function is always defined, but potentially empty? Then it can be unconditionally called.\n\nEven better, can we make `writeOpenGlApiString` unconditionally built, but have it early out based on some global constexpr flag which is set only when `ANGLE_ENABLE_OGL_VK_API_MAPPING`? Then we can be sure we don\u0027t break build with this configuration by accident.",
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ff1adc8_0e23b4dd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:31:30Z",
+      "side": 1,
+      "message": "This looks different from your presentation, doesn\u0027t it? I thought you had something like this:\n\n    - glDraw command\n       + GL Command #1\n       + GL Command #2\n       + GL Command #3\n         ...\n       + GL Draw\n       - Vulkan commands\n           Vk Command #1\n           Vk Command #2\n           Vk draw\n\nIn other words, expanding the glDraw command would show the all GL commands immediately, but hide the VK commands by default.",
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56542f92_4eb0bbd8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-23T18:31:30Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1355,
+        "startChar": 73,
+        "endLine": 1355,
+        "endChar": 80
+      },
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
