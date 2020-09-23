@@ -571,6 +571,8 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
         display->setupDisplayPlatform(impl);
     }
 
+    INFO() << "CLN GetDisplayFromNativeDisplay display=" << display;
+
     return display;
 }
 
@@ -987,6 +989,9 @@ Error Display::createWindowSurface(const Config *configuration,
 
     mSurface = *outSurface;
 
+    INFO() << "CLN: createWindowSurface display=" << this << " window=" << window
+           << " surface=" << mSurface;
+
     return NoError();
 }
 
@@ -1007,6 +1012,8 @@ Error Display::createPbufferSurface(const Config *configuration,
     ASSERT(outSurface != nullptr);
     *outSurface = surface.release();
     mState.surfaceSet.insert(*outSurface);
+
+    INFO() << "CLN: createPbufferSurface display=" << this << " surface=" << (*outSurface);
 
     return NoError();
 }
@@ -1031,6 +1038,8 @@ Error Display::createPbufferFromClientBuffer(const Config *configuration,
     ASSERT(outSurface != nullptr);
     *outSurface = surface.release();
     mState.surfaceSet.insert(*outSurface);
+
+    INFO() << "CLN: createPbufferFromClientBuffer display=" << this << " surface=" << (*outSurface);
 
     return NoError();
 }
@@ -1202,6 +1211,10 @@ Error Display::createContext(const Config *configuration,
 
     ASSERT(outContext != nullptr);
     *outContext = context;
+
+    INFO() << "CLN: createContext shareContext=" << (shareContext ? shareContext->id() : 0)
+           << " context=" << (*outContext)->id();
+
     return NoError();
 }
 
@@ -1228,6 +1241,10 @@ Error Display::createSync(const gl::Context *currentContext,
     mSyncSet.insert(sync);
 
     *outSync = sync;
+
+    INFO() << "CLN: createSync context=" << (currentContext ? currentContext->id() : 0)
+           << " sync=" << (*outSync) << " type=" << type;
+
     return NoError();
 }
 
@@ -1236,6 +1253,9 @@ Error Display::makeCurrent(gl::Context *previousContext,
                            egl::Surface *readSurface,
                            gl::Context *context)
 {
+    INFO() << "CLN: makeCurrent context=" << (context ? context->id() : 0)
+           << " previousContext=" << (previousContext ? previousContext->id() : 0)
+           << " drawSurface=" << drawSurface << " readSurface=" << readSurface;
     if (!mInitialized)
     {
         return NoError();

@@ -422,21 +422,28 @@ EGLSyncKHR FunctionsEGL::createSyncKHR(EGLenum type, const EGLint *attrib_list) 
 
 EGLBoolean FunctionsEGL::destroySyncKHR(EGLSyncKHR sync) const
 {
+    INFO() << "CLN: FunctionsEGL::destroySyncKHR display=" << mEGLDisplay << " sync=" << sync;
     return mFnPtrs->destroySyncKHRPtr(mEGLDisplay, sync);
 }
 
 EGLint FunctionsEGL::clientWaitSyncKHR(EGLSyncKHR sync, EGLint flags, EGLTimeKHR timeout) const
 {
+    INFO() << "CLN: FunctionsEGL::clientWaitSyncKHR display=" << mEGLDisplay << " sync=" << sync
+           << " flags=" << flags << " timeout=" << timeout;
     return mFnPtrs->clientWaitSyncKHRPtr(mEGLDisplay, sync, flags, timeout);
 }
 
 EGLBoolean FunctionsEGL::getSyncAttribKHR(EGLSyncKHR sync, EGLint attribute, EGLint *value) const
 {
+    INFO() << "CLN: FunctionsEGL::getSyncAttribKHR display=" << mEGLDisplay << " sync=" << sync
+           << " attribute=" << attribute;
     return mFnPtrs->getSyncAttribKHRPtr(mEGLDisplay, sync, attribute, value);
 }
 
 EGLint FunctionsEGL::waitSyncKHR(EGLSyncKHR sync, EGLint flags) const
 {
+    INFO() << "CLN: FunctionsEGL::waitSyncKHR display=" << mEGLDisplay << " sync=" << sync
+           << " flags=" << flags;
     return mFnPtrs->waitSyncKHRPtr(mEGLDisplay, sync, flags);
 }
 

@@ -11,6 +11,7 @@
 #include "angle_gl.h"
 
 #include "common/utilities.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/renderer/EGLSyncImpl.h"
 
@@ -39,6 +40,7 @@ Sync::Sync(rx::EGLImplFactory *factory, EGLenum type, const AttributeMap &attrib
 
 void Sync::onDestroy(const Display *display)
 {
+    INFO() << "CLN Sync::onDestroy sync=" << this << " display=" << display;
     ASSERT(mFence);
     mFence->onDestroy(display);
     mFence.reset();
@@ -67,16 +69,22 @@ Error Sync::clientWait(const Display *display,
                        EGLTime timeout,
                        EGLint *outResult)
 {
+    INFO() << "CLN Sync::clientWait sync=" << this << " display=" << display
+           << " context=" << (context ? context->id() : 0) << " flags=" << flags
+           << " timeout=" << timeout;
     return mFence->clientWait(display, context, flags, timeout, outResult);
 }
 
 Error Sync::serverWait(const Display *display, const gl::Context *context, EGLint flags)
 {
+    INFO() << "CLN Sync::serverWait sync=" << this << " display=" << display
+           << " context=" << (context ? context->id() : 0) << " flags=" << flags;
     return mFence->serverWait(display, context, flags);
 }
 
 Error Sync::getStatus(const Display *display, EGLint *outStatus) const
 {
+    INFO() << "CLN Sync::getStatus sync=" << this << " display=" << display;
     return mFence->getStatus(display, outStatus);
 }
 

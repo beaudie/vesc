@@ -22,6 +22,7 @@
 #include "common/version.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Compiler.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/FrameCapture.h"
@@ -874,6 +875,8 @@ void Context::deleteRenderbuffer(RenderbufferID renderbuffer)
 
 void Context::deleteSync(GLsync sync)
 {
+    INFO() << "CLN Context::deleteSync context=" << this->id() << " sync=" << sync;
+
     // The spec specifies the underlying Fence object is not deleted until all current
     // wait commands finish. However, since the name becomes invalid, we cannot query the fence,
     // and since our API is currently designed for being called from a single thread, we can delete
@@ -2374,6 +2377,7 @@ void Context::flush()
 
 void Context::finish()
 {
+    INFO() << "CLN Context::finish (glFinish) context=" << this->id();
     ANGLE_CONTEXT_TRY(mImplementation->finish(this));
 }
 
@@ -7145,6 +7149,9 @@ GLsync Context::fenceSync(GLenum condition, GLbitfield flags)
     GLuint handle     = mState.mSyncManager->createSync(mImplementation.get());
     GLsync syncHandle = reinterpret_cast<GLsync>(static_cast<uintptr_t>(handle));
 
+    INFO() << "CLN Context::fenceSync context=" << this->id() << " condition=" << condition
+           << " flags=" << flags;
+
     Sync *syncObject = getSync(syncHandle);
     if (syncObject->set(this, condition, flags) == angle::Result::Stop)
     {
@@ -7162,6 +7169,8 @@ GLboolean Context::isSync(GLsync sync) const
 
 GLenum Context::clientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 {
+    INFO() << "CLN: Context::clientWaitSync context=" << this->id() << " sync=" << sync
+           << " flags=" << flags << " timeout=" << timeout;
     Sync *syncObject = getSync(sync);
 
     GLenum result = GL_WAIT_FAILED;
@@ -7174,6 +7183,8 @@ GLenum Context::clientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 
 void Context::waitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 {
+    INFO() << "CLN: Context::waitSync context=" << this->id() << " sync=" << sync
+           << " flags=" << flags << " timeout=" << timeout;
     Sync *syncObject = getSync(sync);
     ANGLE_CONTEXT_TRY(syncObject->serverWait(this, flags, timeout));
 }
@@ -7627,6 +7638,7 @@ GLboolean Context::isProgramPipeline(ProgramPipelineID pipeline) const
 
 void Context::finishFenceNV(FenceNVID fence)
 {
+    INFO() << "CLN Context::finishFenceNV context=" << this->id() << " fence=" << fence.value;
     FenceNV *fenceObject = getFenceNV(fence);
 
     ASSERT(fenceObject && fenceObject->isSet());
@@ -7665,6 +7677,8 @@ void Context::getFenceivNV(FenceNVID fence, GLenum pname, GLint *params)
         default:
             UNREACHABLE();
     }
+    INFO() << "CLN Context::getFenceivNV context=" << this->id() << " fence=" << fence.value
+           << " pname=" << pname << " params=" << *params;
 }
 
 void Context::getTranslatedShaderSource(ShaderProgramID shader,
@@ -7755,6 +7769,8 @@ void Context::readnPixels(GLint x,
 
 void Context::setFenceNV(FenceNVID fence, GLenum condition)
 {
+    INFO() << "CLN Context::setFenceNV context=" << this - id() << " fence=" << fence.value
+           << " condition=" << condition;
     ASSERT(condition == GL_ALL_COMPLETED_NV);
 
     FenceNV *fenceObject = getFenceNV(fence);
@@ -7764,6 +7780,7 @@ void Context::setFenceNV(FenceNVID fence, GLenum condition)
 
 GLboolean Context::testFenceNV(FenceNVID fence)
 {
+    INFO() << "CLN Context::testFenceNV context=" << this - id() << " fence=" << fence.value;
     FenceNV *fenceObject = getFenceNV(fence);
 
     ASSERT(fenceObject != nullptr);

@@ -11,6 +11,7 @@
 #include "angle_gl.h"
 
 #include "common/utilities.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/renderer/FenceNVImpl.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/SyncImpl.h"
@@ -29,11 +30,14 @@ FenceNV::~FenceNV()
 
 void FenceNV::onDestroy(const gl::Context *context)
 {
+    INFO() << "CLN: FenceNV::onDestroy context=" << (context ? context->id() : 0);
     mFence->onDestroy(context);
 }
 
 angle::Result FenceNV::set(const Context *context, GLenum condition)
 {
+    INFO() << "CLN: FenceNV::set context=" << (context ? context->id() : 0)
+           << " condition=" << condition;
     ANGLE_TRY(mFence->set(context, condition));
 
     mCondition = condition;
@@ -49,11 +53,14 @@ angle::Result FenceNV::test(const Context *context, GLboolean *outResult)
     ANGLE_TRY(mFence->test(context, &mStatus));
 
     *outResult = mStatus;
+    INFO() << "CLN: FenceNV::test context=" << (context ? context->id() : 0)
+           << " result=" << *outResult;
     return angle::Result::Continue;
 }
 
 angle::Result FenceNV::finish(const Context *context)
 {
+    INFO() << "CLN: FenceNV::finish context=" << (context ? context->id() : 0);
     ASSERT(mIsSet);
 
     ANGLE_TRY(mFence->finish(context));
@@ -73,6 +80,7 @@ Sync::Sync(rx::GLImplFactory *factory, GLuint id)
 
 void Sync::onDestroy(const Context *context)
 {
+    INFO() << "CLN: Sync::onDestroy context=" << (context ? context->id() : 0);
     ASSERT(mFence);
     mFence->onDestroy(context);
 }
@@ -84,6 +92,7 @@ Sync::~Sync()
 
 void Sync::setLabel(const Context *context, const std::string &label)
 {
+    INFO() << "CLN: Sync::setLabel context=" << (context ? context->id() : 0) << " label=" << label;
     mLabel = label;
 }
 
@@ -94,6 +103,8 @@ const std::string &Sync::getLabel() const
 
 angle::Result Sync::set(const Context *context, GLenum condition, GLbitfield flags)
 {
+    INFO() << "CLN: Sync::set context=" << (context ? context->id() : 0)
+           << " condition=" << condition << " flags=" << flags;
     ANGLE_TRY(mFence->set(context, condition, flags));
 
     mCondition = condition;
@@ -107,16 +118,24 @@ angle::Result Sync::clientWait(const Context *context,
                                GLenum *outResult)
 {
     ASSERT(mCondition != GL_NONE);
+
+    INFO() << "CLN: Sync::clientWait context=" << (context ? context->id() : 0)
+           << " flags=" << flags << " timeout=" << timeout;
+
     return mFence->clientWait(context, flags, timeout, outResult);
 }
 
 angle::Result Sync::serverWait(const Context *context, GLbitfield flags, GLuint64 timeout)
 {
+    INFO() << "CLN: Sync::serverWait context=" << (context ? context->id() : 0)
+           << " flags=" << flags << " timeout=" << timeout;
     return mFence->serverWait(context, flags, timeout);
 }
 
 angle::Result Sync::getStatus(const Context *context, GLint *outResult) const
 {
+    INFO() << "CLN: Sync::getStatus context=" << (context ? context->id() : 0)
+           << " fence=" << mFence;
     return mFence->getStatus(context, outResult);
 }
 
