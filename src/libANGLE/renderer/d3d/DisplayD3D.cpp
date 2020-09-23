@@ -373,6 +373,15 @@ std::string DisplayD3D::getVendorString() const
     return vendorString;
 }
 
+std::string DisplayD3D::getVersionString() const
+{
+    if (mRenderer)
+    {
+        return mRenderer->getVersionString();
+    }
+    return std::string();
+}
+
 void DisplayD3D::generateCaps(egl::Caps *outCaps) const
 {
     // Display must be initialized to generate caps

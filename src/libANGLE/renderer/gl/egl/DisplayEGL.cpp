@@ -128,6 +128,12 @@ std::string DisplayEGL::getVendorString() const
     return vendor;
 }
 
+std::string DisplayEGL::getVersionString() const
+{
+    return std::string(
+        reinterpret_cast<const char *>(mRenderer->getFunctions()->getString(GL_VERSION)));
+}
+
 egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                                          const egl::AttributeMap &eglAttributes,
                                          EGLContext *outContext,

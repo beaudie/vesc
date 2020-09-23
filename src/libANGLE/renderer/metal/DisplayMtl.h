@@ -45,6 +45,7 @@ class DisplayMtl : public DisplayImpl
     egl::Error restoreLostDevice(const egl::Display *display) override;
 
     std::string getVendorString() const override;
+    std::string getVersionString() const override;
 
     DeviceImpl *createDevice() override;
 
