@@ -294,6 +294,7 @@ FramebufferVk::FramebufferVk(RendererVk *renderer,
       mBackbuffer(backbuffer),
       mFramebuffer(nullptr),
       mActiveColorComponents(0),
+      mReadOnlyDepthStencilMode(false),
       mReadOnlyDepthFeedbackLoopMode(false)
 {
     mReadPixelBuffer.init(renderer, VK_BUFFER_USAGE_TRANSFER_DST_BIT, kReadPixelsBufferAlignment,
@@ -1621,6 +1622,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     vk::FramebufferDesc priorFramebufferDesc = mCurrentFramebufferDesc;
+    bool mPriorReadOnlyDepthStencilMode      = mReadOnlyDepthStencilMode;
 
     // Only defer clears for whole draw framebuffer ops. If the scissor test is on and the scissor
     // rect doesn't match the draw rect, forget it.
@@ -1719,17 +1721,18 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     // We cannot use read-only depth mode for clears.
     if (mDeferredClears.any())
     {
-        mCurrentFramebufferDesc.updateReadOnlyDepth(false);
+        mReadOnlyDepthStencilMode = false;
     }
 
     // No-op redundant changes to prevent closing the RenderPass.
-    if (mCurrentFramebufferDesc == priorFramebufferDesc)
+    if (mCurrentFramebufferDesc == priorFramebufferDesc &&
+        mReadOnlyDepthStencilMode == mPriorReadOnlyDepthStencilMode)
     {
         return angle::Result::Continue;
     }
 
     // Default to writable depth on any Framebuffer change.
-    mCurrentFramebufferDesc.updateReadOnlyDepth(false);
+    mReadOnlyDepthStencilMode = false;
 
     // The FBO's new attachment may have changed the renderable area
     const gl::State &glState = context->getState();
@@ -1799,7 +1802,7 @@ void FramebufferVk::updateRenderPassDesc()
     if (depthStencilRenderTarget)
     {
         vk::ResourceAccess dsAccess =
-            isReadOnlyDepthMode() ? vk::ResourceAccess::ReadOnly : vk::ResourceAccess::Write;
+            mReadOnlyDepthStencilMode ? vk::ResourceAccess::ReadOnly : vk::ResourceAccess::Write;
 
         mRenderPassDesc.packDepthStencilAttachment(
             depthStencilRenderTarget->getImageForRenderPass().getFormat().intendedFormatID,
@@ -2399,8 +2402,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                 VK_ATTACHMENT_LOAD_OP_CLEAR;
         setReadOnlyDepthMode(depthStencilReadOnly);
 
-        vk::ImageLayout dsLayout = isReadOnlyDepthMode() ? vk::ImageLayout::DepthStencilReadOnly
-                                                         : vk::ImageLayout::DepthStencilAttachment;
+        vk::ImageLayout dsLayout = mReadOnlyDepthStencilMode
+                                       ? vk::ImageLayout::DepthStencilReadOnly
+                                       : vk::ImageLayout::DepthStencilAttachment;
 
         renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex, dsLayout, dsLayout);
     }
@@ -2440,7 +2444,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // tracking content valid very loosely here that as long as it is attached, it assumes will
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
-        depthStencilRenderTarget->onDepthStencilDraw(contextVk, isReadOnlyDepthMode());
+        depthStencilRenderTarget->onDepthStencilDraw(contextVk, mReadOnlyDepthStencilMode);
     }
 
     if (unresolveMask.any())
@@ -2579,10 +2583,9 @@ angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk,
 
 void FramebufferVk::setReadOnlyDepthMode(bool readOnlyDepthEnabled)
 {
-    if (isReadOnlyDepthMode() != readOnlyDepthEnabled)
+    if (mReadOnlyDepthStencilMode != readOnlyDepthEnabled)
     {
-        mCurrentFramebufferDesc.updateReadOnlyDepth(readOnlyDepthEnabled);
-        mFramebuffer = nullptr;
+        mReadOnlyDepthStencilMode = readOnlyDepthEnabled;
 
         ASSERT(getDepthStencilRenderTarget());
         vk::ResourceAccess dsAccess =
@@ -2600,7 +2603,7 @@ angle::Result FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contex
     bool readOnlyDepthStencil =
         !getDepthStencilRenderTarget()->hasResolveAttachment() &&
         (mReadOnlyDepthFeedbackLoopMode || !renderPass->hasDepthStencilWriteOrClear());
-    if (readOnlyDepthStencil == isReadOnlyDepthMode())
+    if (readOnlyDepthStencil == mReadOnlyDepthStencilMode)
     {
         return angle::Result::Continue;
     }
