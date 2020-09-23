@@ -1249,6 +1249,67 @@ TEST_P(MultisampledRenderToTextureTest, RenderbufferDepthStencilClearThenDraw)
     clearThenBlendCommon(true);
 }
 
+// Test the depth read/write mode change within the renderpass while there is color unresolve
+// attachment
+TEST_P(MultisampledRenderToTextureTest, DepthReadWriteToggleWithStartedRenderPass)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    constexpr GLsizei kSize = 64;
+
+    setupCopyTexProgram();
+
+    GLFramebuffer fboMS;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboMS);
+
+    // Create framebuffer to draw into, with both color and depth attachments.
+    GLTexture textureMS;
+    GLRenderbuffer renderbufferMS;
+    createAndAttachColorAttachment(true, kSize, GL_COLOR_ATTACHMENT0, nullptr, &textureMS,
+                                   &renderbufferMS);
+
+    GLTexture dsTextureMS;
+    GLRenderbuffer dsRenderbufferMS;
+    createAndAttachDepthStencilAttachment(true, kSize, &dsTextureMS, &dsRenderbufferMS);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // First renderpass: draw with depth value 0.5f
+    glViewport(0, 0, kSize, kSize);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+    glDepthMask(GL_TRUE);
+    ANGLE_GL_PROGRAM(drawBlue, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+    drawQuad(drawBlue, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+    // The color check should end the renderpass
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    // Second renderpass: Start with depth read only and then switch to depth write
+    glDepthFunc(GL_LESS);
+    // Draw red with depth read only. pass depth test, Result: color=Red, depth=0.5
+    glDepthMask(GL_FALSE);
+    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.1f);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw green with depth write. Pass depth test. Result: color=Green, depth=0.3
+    glDepthMask(GL_TRUE);
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 0.3f);
+    ASSERT_GL_NO_ERROR();
+
+    // Create a texture and copy into it.
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, kSize, kSize, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // Verify the color is Green.
+    const GLColor expectedCopyResult(0, 255, 0, 255);
+    verifyResults(texture, expectedCopyResult, kSize, 0, 0, kSize, kSize);
+}
+
 void MultisampledRenderToTextureES3Test::colorAttachment1Common(bool useRenderbuffer)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));

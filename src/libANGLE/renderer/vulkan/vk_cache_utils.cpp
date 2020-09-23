@@ -797,6 +797,17 @@ void RenderPassDesc::packDepthStencilAttachment(angle::FormatID formatID, Resour
     SetBitField(mPackedColorAttachmentRangeAndDSAccess, colorRange + offset);
 }
 
+void RenderPassDesc::updateDepthStencilAttachment(ResourceAccess access)
+{
+    ASSERT(access != ResourceAccess::Unused);
+    ASSERT(hasDepthStencilAttachment());
+
+    size_t colorRange = colorAttachmentRange();
+    size_t offset =
+        access == ResourceAccess::ReadOnly ? NoColorDepthStencilRead : NoColorDepthStencilWrite;
+    SetBitField(mPackedColorAttachmentRangeAndDSAccess, colorRange + offset);
+}
+
 void RenderPassDesc::packColorResolveAttachment(size_t colorIndexGL)
 {
     ASSERT(isColorAttachmentEnabled(colorIndexGL));
