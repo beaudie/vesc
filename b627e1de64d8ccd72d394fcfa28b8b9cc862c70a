@@ -33,6 +33,24 @@
       "revId": "b627e1de64d8ccd72d394fcfa28b8b9cc862c70a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c9a3ef3_97b3a937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-23T17:42:51Z",
+      "side": 1,
+      "message": "indeed, the extension is now exposed and the deqp tests actually run instead of skipping with \"not supported\"",
+      "parentUuid": "a3d7635a_1fcf3e92",
+      "revId": "b627e1de64d8ccd72d394fcfa28b8b9cc862c70a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
