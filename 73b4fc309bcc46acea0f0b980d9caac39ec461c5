@@ -68,6 +68,24 @@
       "revId": "73b4fc309bcc46acea0f0b980d9caac39ec461c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a9e37ae_4f736e22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-23T19:35:57Z",
+      "side": 1,
+      "message": "For the projects that I\u0027ve maintained downstream, there\u0027s always a commit or two sprinkled in from Android fairies for various build reasons.  I guess this is a question for Geoff and Tim who maintain the downstream versions.  Are you planning to upstream all changes that occur?  Are there any downstream files not maintained upstream?  And if so, do we care if those changes are not reflected in the ANGLE version?\n\nActually, the histories may already differ, so the versions will never match.  I\u0027m okay with them differing, but I haven\u0027t built ANGLE in the Android tree very much.",
+      "parentUuid": "979f59bf_ebdcf0d3",
+      "revId": "73b4fc309bcc46acea0f0b980d9caac39ec461c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
