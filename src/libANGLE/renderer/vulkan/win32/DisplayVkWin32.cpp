@@ -134,9 +134,18 @@ egl::Error DisplayVkWin32::initialize(egl::Display *display)
 
 egl::ConfigSet DisplayVkWin32::generateConfigs()
 {
-    constexpr GLenum kColorFormats[] = {GL_RGB565, GL_BGRA8_EXT, GL_BGRX8_ANGLEX, GL_RGB10_A2_EXT,
-                                        GL_RGBA16F_EXT};
-    return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, this);
+    const std::vector<GLenum> kColorFormats = {GL_RGB565, GL_BGRA8_EXT, GL_BGRX8_ANGLEX,
+                                               GL_RGB10_A2_EXT, GL_RGBA16F_EXT};
+
+    angle::FixedVector<GLenum, 5> depthStencilFormats = {
+        GL_NONE, GL_DEPTH24_STENCIL8, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT16};
+
+    if (getCaps().stencil8)
+    {
+        depthStencilFormats.push_back(GL_STENCIL_INDEX8);
+    }
+    return egl_vk::GenerateConfigs(kColorFormats.data(), kColorFormats.size(),
+                                   depthStencilFormats.data(), depthStencilFormats.size(), this);
 }
 
 void DisplayVkWin32::checkConfigSupport(egl::Config *config)
