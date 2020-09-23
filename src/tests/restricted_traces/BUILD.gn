@@ -66,10 +66,15 @@ angle_shared_library("angle_restricted_traces") {
 
 group("angle_restricted_trace_gold_tests") {
   testonly = true
-  data_deps = [ "$angle_root/src/tests:angle_perftests" ]
+  data_deps = [
+    "$angle_root/src/tests:angle_perftests",
+    "$angle_root/src/tests:angle_system_info_test",
+  ]
   data = [
     "restricted_trace_gold_tests.py",
     "restricted_traces.json",
+    "skia_gold/",
+    "//build/skia_gold_common/",
     "//testing/scripts/common.py",
     "//testing/xvfb.py",
   ]
