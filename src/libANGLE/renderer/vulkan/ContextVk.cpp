@@ -4204,11 +4204,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     mDefaultUniformStorage.releaseInFlightBuffersToResourceUseList(this);
     mStagingBuffer.releaseInFlightBuffersToResourceUseList(this);
 
-    // TODO: Verify that these 3 calls make sense both w/ & w/o threading. I believe they do, but
-    // want confirmation.
-    Serial serial = getCurrentQueueSerial();
-    mResourceUseList.releaseResourceUsesAndUpdateSerials(serial, getSharedResourceUsePool());
-
+    // TODO: Verify that waitForSwapchainImageIfNecessary makes sense both w/ & w/o threading. I
+    // believe they do, but want confirmation.
     waitForSwapchainImageIfNecessary();
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
@@ -4230,7 +4227,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         // 2. Call submitFrame()
         // 3. Allocate new primary command buffer
         vk::CommandProcessorTask flushData(mWaitSemaphores, mWaitSemaphoreStageMasks,
-                                           signalSemaphore, mContextPriority, mCurrentGarbage);
+                                           signalSemaphore, mContextPriority, mCurrentGarbage,
+                                           mResourceUseList, getSharedResourceUsePool());
 
         // TODO: How to set up semaphores for submit. Should Context send them to worker?
         //  Should worker thread have those on its end? Need to explore.
@@ -4260,8 +4258,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         InitializeSubmitInfo(&submitInfo, mPrimaryCommands, mWaitSemaphores,
                              mWaitSemaphoreStageMasks, signalSemaphore);
 
-    ANGLE_TRY(submitFrame(submitInfo, &mResourceUseList, getSharedResourceUsePool(),
-                          std::move(mPrimaryCommands)));
+        ANGLE_TRY(submitFrame(submitInfo, &mResourceUseList, getSharedResourceUsePool(),
+                              std::move(mPrimaryCommands)));
 
         ANGLE_TRY(startPrimaryCommandBuffer());
     }

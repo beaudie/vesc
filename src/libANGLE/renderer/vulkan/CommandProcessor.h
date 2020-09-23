@@ -98,7 +98,9 @@ class CommandProcessorTask
                          std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks,
                          const vk::Semaphore *semaphore,
                          egl::ContextPriority priority,
-                         vk::GarbageList &currentGarbage)
+                         vk::GarbageList &currentGarbage,
+                         vk::ResourceUseList &currentResources,
+                         vk::SharedResourceUsePool *resourcePool)
         : mContextVk(nullptr),
           mCommandBuffer(nullptr),
           mWorkerCommand(vk::CustomTask::Flush),
@@ -106,8 +108,11 @@ class CommandProcessorTask
           mWaitSemaphoreStageMasks(waitSemaphoreStageMasks),
           mSemaphore(semaphore),
           mCurrentGarbage(std::move(currentGarbage)),
+          mResourcePool(resourcePool),
           mPriority(priority)
-    {}
+    {
+        std::move(mResourceUseList, currentResources);
+    }
 
     CommandProcessorTask &operator=(CommandProcessorTask &&rhs)
     {
@@ -123,10 +128,13 @@ class CommandProcessorTask
             std::swap(mSerial, rhs.mSerial);
             std::swap(mPresentInfo, rhs.mPresentInfo);
             std::swap(mPriority, rhs.mPriority);
+            std::swap(mResourceUseList, rhs.mResourceUseList);
+            mResourcePool = rhs.mResourcePool;
 
             // clear rhs now that everything has moved.
             rhs.mCommandBuffer = nullptr;
             rhs.mSemaphore     = nullptr;
+            rhs.mResourcePool  = nullptr;
         }
         return *this;
     }
@@ -143,6 +151,8 @@ class CommandProcessorTask
     std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
     const vk::Semaphore *mSemaphore;
     vk::GarbageList mCurrentGarbage;
+    vk::ResourceUseList mResourceUseList;
+    vk::SharedResourceUsePool *mResourcePool;
 
     // FinishToSerial command data
     Serial mSerial;
