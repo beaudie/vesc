@@ -16,6 +16,24 @@
       "revId": "255a28da057d9c860926806202dbecfb3dfe0699",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "844330af_36adfa5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-23T16:05:28Z",
+      "side": 1,
+      "message": "Since the changes are underneath angle_enable_commit_id, the roller script should \"just work\" since we have to disable that for AOSP (where git isn\u0027t a requirement).   I just rolled ANGLE last week, but we can try again after this lands since it\u0027s been going smoother lately.",
+      "parentUuid": "2a980302_fdb27278",
+      "revId": "255a28da057d9c860926806202dbecfb3dfe0699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
