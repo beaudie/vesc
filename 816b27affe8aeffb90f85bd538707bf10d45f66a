@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "84143d85_348a8a0c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T16:57:27Z",
+      "side": 1,
+      "message": "Actually no. The new API have an assertion to ensure we are updating an existing attachment. I think it is important that we catch a misuse here instead of try to save a few lines.",
+      "parentUuid": "cf1e1844_1413953c",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 797,
+        "endChar": 77
+      },
+      "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2dcd2d8_fe9f2852",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 6
@@ -62,6 +86,30 @@
       "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af02c451_2bde7945",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T16:57:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2dcd2d8_fe9f2852",
+      "range": {
+        "startLine": 800,
+        "startChar": 21,
+        "endLine": 800,
+        "endChar": 49
+      },
+      "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +147,24 @@
       "writtenOn": "2020-09-24T03:41:36Z",
       "side": 1,
       "message": "Does this really fail without the fix? Wasn\u0027t the issue that the \"unresolve\" attachment is what gets removed by mistake? Without the change, the \"resolve\" attachments are still there, so the final draw (green) will make it either way to `texture`.\n\nIIUC, the issue is that the second render pass will lose its unresolve color attachment, right?\n\nThe test should do this then:\n\n- RP 1: draw blue\n- Break RP\n- RP 2: blend red\n- Switch D/S mode\n- blend green\n\nThe test should verify in the end that all three draws were effective (by checking for the blended color). In particular, the lack of blue channel would be the symptom of the bug.",
+      "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35a5ead8_6a753efc",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T16:57:27Z",
+      "side": 1,
+      "message": "Interesting thing is that this test still passes even without the fix, on top of https://chromium-review.googlesource.com/c/angle/angle/+/2411336\n\nI have verified the sequence is doing the exact expected things: in second RP, the unresolve attachment gets removed.",
+      "parentUuid": "ff754d60_0ebdb6da",
       "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
