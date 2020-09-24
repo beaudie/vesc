@@ -50,6 +50,29 @@
       "revId": "203b958277a564c9fec4008de6e74f9613b4b7ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cd156de4_f762a8ea",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T13:06:01Z",
+      "side": 1,
+      "message": "nit: you can do it for this one as well.",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 539,
+        "endChar": 23
+      },
+      "revId": "203b958277a564c9fec4008de6e74f9613b4b7ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
