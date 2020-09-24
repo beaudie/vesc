@@ -16,6 +16,29 @@
       "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8d75687_e09c9996",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T04:33:42Z",
+      "side": 1,
+      "message": "Yeap, except you can move this to the cpp file (under the anonymous namespace), and change the type to bool.",
+      "range": {
+        "startLine": 788,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 54
+      },
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
