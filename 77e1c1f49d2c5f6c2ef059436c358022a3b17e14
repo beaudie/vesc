@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "5e058e68_b4cab4f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T13:03:09Z",
+      "side": 1,
+      "message": "Blocking until we can merge with EVENT/DebugAnnotator.",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8d75687_e09c9996",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
