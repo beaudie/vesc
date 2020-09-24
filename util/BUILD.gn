@@ -6,7 +6,6 @@ import("../gni/angle.gni")
 
 _util_sources = [
   "EGLPlatformParameters.h",
-  "EGLWindow.cpp",
   "EGLWindow.h",
   "Event.h",
   "Matrix.cpp",
@@ -22,8 +21,6 @@ _util_sources = [
   "mouse.h",
   "random_utils.cpp",
   "random_utils.h",
-  "shader_utils.cpp",
-  "shader_utils.h",
   "util_export.h",
   "util_gl.h",
 ]
@@ -145,6 +142,57 @@ config("angle_util_config") {
   }
 }
 
+angle_source_set("angle_util_no_loader") {
+  testonly = true
+  sources = _util_sources
+  public_deps = [
+    ":angle_test_utils",
+    ":angle_util_loader_headers",
+  ]
+  libs = []
+
+  if (is_linux || is_chromeos) {
+    libs += [
+      "rt",
+      "dl",
+    ]
+  }
+
+  if (is_mac) {
+    frameworks = [
+      "AppKit.framework",
+      "QuartzCore.framework",
+    ]
+  }
+
+  if (is_android) {
+    # To prevent linux sources filtering on android
+    set_sources_assignment_filter([])
+    libs += [
+      "android",
+      "log",
+    ]
+  }
+
+  configs += [ "$angle_root:debug_annotations_config" ]
+
+  public_configs += [ ":angle_util_config" ]
+
+  if (is_fuchsia) {
+    public_deps += [
+      "$angle_root/src/common/fuchsia_egl",
+      "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.images",
+      "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.ui.policy",
+      "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.ui.scenic",
+      "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.ui.views",
+      "//third_party/fuchsia-sdk/sdk/pkg/async-loop-cpp",
+      "//third_party/fuchsia-sdk/sdk/pkg/async-loop-default",
+      "//third_party/fuchsia-sdk/sdk/pkg/fdio",
+      "//third_party/fuchsia-sdk/sdk/pkg/scenic_cpp",
+    ]
+  }
+}
+
 foreach(is_shared_library,
         [
           true,
@@ -159,56 +207,14 @@ foreach(is_shared_library,
     library_name = "angle_util_static"
     dep_suffix = "_static"
   }
-
   target(library_type, library_name) {
     testonly = true
-    sources = _util_sources
-    public_deps = [
-      ":angle_test_utils",
-      ":angle_util_loader_headers",
+    sources = [
+      "EGLWindow.cpp",
+      "shader_utils.cpp",
+      "shader_utils.h",
     ]
-    libs = []
-
-    if (is_linux || is_chromeos) {
-      libs += [
-        "rt",
-        "dl",
-      ]
-    }
-
-    if (is_mac) {
-      frameworks = [
-        "AppKit.framework",
-        "QuartzCore.framework",
-      ]
-    }
-
-    if (is_android) {
-      # To prevent linux sources filtering on android
-      set_sources_assignment_filter([])
-      libs += [
-        "android",
-        "log",
-      ]
-    }
-
-    configs += [ "$angle_root:debug_annotations_config" ]
-
-    public_configs += [ ":angle_util_config" ]
-
-    if (is_fuchsia) {
-      public_deps += [
-        "$angle_root/src/common/fuchsia_egl",
-        "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.images",
-        "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.ui.policy",
-        "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.ui.scenic",
-        "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.ui.views",
-        "//third_party/fuchsia-sdk/sdk/pkg/async-loop-cpp",
-        "//third_party/fuchsia-sdk/sdk/pkg/async-loop-default",
-        "//third_party/fuchsia-sdk/sdk/pkg/fdio",
-        "//third_party/fuchsia-sdk/sdk/pkg/scenic_cpp",
-      ]
-    }
+    public_deps = [ ":angle_util_no_loader" ]
 
     if (is_shared_library) {
       defines = [ "LIBANGLE_UTIL_IMPLEMENTATION" ]
