@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "f2824fcb_fa088162",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8513,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T14:51:23Z",
+      "side": 1,
+      "message": "I\u0027d say never toss any code. What\u0027s the point of a capture tool that throws away captures (not even with a \"(truncated)\" warning?)",
+      "parentUuid": "b05aebda_b04ce79b",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d385fe56_fecca41f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
