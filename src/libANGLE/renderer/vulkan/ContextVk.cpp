@@ -302,6 +302,40 @@ vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState)
     // Simplify this check by returning write instead of checking the mask.
     return vk::ResourceAccess::Write;
 }
+
+// Requires that trace is enabled to see the output, which is supported with is_debug=true
+void OutputCumulativePerfCounters(const vk::PerfCounters &perfCounters)
+{
+#if defined(ANGLE_ENABLE_OVERLAY)
+    {
+        INFO() << "Context DS Allocations: ";
+
+        for (size_t pipelineType = 0;
+             pipelineType < perfCounters.contextDescriptorSetsAllocated.size(); ++pipelineType)
+        {
+            uint32_t count = perfCounters.contextDescriptorSetsAllocated[pipelineType];
+            if (count > 0)
+            {
+                INFO() << "    PipelineType " << pipelineType << ": " << count;
+            }
+        }
+    }
+
+    {
+        INFO() << "Utils DS Allocations: ";
+
+        for (size_t function = 0; function < perfCounters.utilsDescriptorSetsAllocated.size();
+             ++function)
+        {
+            uint32_t count = perfCounters.utilsDescriptorSetsAllocated[function];
+            if (count > 0)
+            {
+                INFO() << "    Function " << function << ": " << count;
+            }
+        }
+    }
+#endif  // defined(ANGLE_ENABLE_OVERLAY)
+}
 }  // anonymous namespace
 
 ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
@@ -763,6 +797,8 @@ ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    OutputCumulativePerfCounters(mPerfCounters);
+
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
@@ -3926,6 +3962,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].allocateSetsAndGetInfo(
         this, driverUniforms->descriptorSetLayout.get().ptr(), 1,
         &driverUniforms->descriptorPoolBinding, &driverUniforms->descriptorSet, &newPoolAllocated));
+    mPerfCounters.contextDescriptorSetsAllocated[ToUnderlying(pipelineType)]++;
 
     // Clear descriptor set cache. It may no longer be valid.
     if (newPoolAllocated)

@@ -171,6 +171,14 @@ class ProgramExecutableVk
     friend class ProgramVk;
     friend class ProgramPipelineVk;
 
+    // <DescriptorSetIndex, uint32_t>
+    using DescriptorSetCountList = std::array<uint32_t, DescriptorSetIndex::EnumCount>;
+    // Performance and resource counters.
+    struct PerfCounters
+    {
+        DescriptorSetCountList descriptorSetsAllocated;
+    };
+
     angle::Result allocUniformAndXfbDescriptorSet(ContextVk *contextVk,
                                                   const vk::UniformsAndXfbDesc &xfbBufferDesc,
                                                   bool *newDescriptorSetAllocated);
@@ -223,6 +231,8 @@ class ProgramExecutableVk
                                              DescriptorSetIndex descriptorSetIndex,
                                              VkDescriptorSetLayout descriptorSetLayout);
 
+    void outputCumulativePerfCounters();
+
     // Descriptor sets for uniform blocks and textures for this program.
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
@@ -259,6 +269,8 @@ class ProgramExecutableVk
 
     ProgramVk *mProgram;
     ProgramPipelineVk *mProgramPipeline;
+
+    PerfCounters mPerfCounters;
 };
 
 }  // namespace rx
