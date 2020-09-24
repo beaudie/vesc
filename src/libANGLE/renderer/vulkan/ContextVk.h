@@ -784,6 +784,8 @@ class ContextVk : public ContextImpl, public vk::Context
                                     uint32_t *numIndicesOut);
     angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
 
+    void writeOpenGlApiString(const gl::Context *context, vk::CommandBuffer *commandBuffer);
+
     gl::Rectangle getCorrectedViewport(const gl::Rectangle &viewport) const;
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,
