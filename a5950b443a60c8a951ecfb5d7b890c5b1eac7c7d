@@ -33,6 +33,42 @@
       "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d56e9ba_ee95473a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2020-09-24T00:53:32Z",
+      "side": 1,
+      "message": "We have tests on the chromium side that will run this code (see the linked bug). I\u0027m not familiar with ANGLE internals enough to add a test there.",
+      "parentUuid": "bbc0ee57_484ae3b9",
+      "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96e02b85_88fb8da1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2020-09-24T00:53:32Z",
+      "side": 1,
+      "message": "I\u0027m not an expected there, but as fast I can tell ANGLE may emulate channels when they are not present in the underlying image, see https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/vulkan/vk_format_utils.cpp;drc\u003dee9e7e404e5a3f75a3ca0489aaf80490f625ca27;l\u003d199\n\nThese textures are cleared after initialization, see ImageHelper::stageClearIfEmulatedFormat()",
+      "parentUuid": "b8c49b0b_7e5bd0f3",
+      "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
