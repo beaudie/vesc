@@ -237,6 +237,24 @@
     },
     {
       "key": {
+        "uuid": "8a4c642f_00602e31",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T20:46:18Z",
+      "side": 1,
+      "message": "If we\u0027re just implementing the functionality for the extension, we can defer optimization work until we find a use case for it. Is this work mostly feature completion work Mohan or is there a motivating use case?",
+      "parentUuid": "0c36b903_9a20e562",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db281820_dfe2d813",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
