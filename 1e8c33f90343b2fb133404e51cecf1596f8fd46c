@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2eaf42a0_b4c3a297",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T15:25:13Z",
+      "side": 1,
+      "message": "drive-by typo: assignments",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "1e8c33f90343b2fb133404e51cecf1596f8fd46c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72244a94_1603ab56",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
