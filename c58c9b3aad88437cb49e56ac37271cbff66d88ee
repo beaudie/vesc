@@ -16,6 +16,29 @@
       "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c54168f_0db787ac",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T18:34:28Z",
+      "side": 1,
+      "message": "I think this should actually do:\n\n  ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(MultithreadingTest,\n                                         WithNoVirtualContexts(ES2_VULKAN())\n                                         WithNoVirtualContexts(ES3_OPENGL())\n                                         WithNoVirtualContexts(ES2_OPENGLES())\n                                         WithNoVirtualContexts(ES3_OPENGLES()));\n\nThat gets you everything else, including swiftshader, for free.",
+      "range": {
+        "startLine": 362,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 37
+      },
+      "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
