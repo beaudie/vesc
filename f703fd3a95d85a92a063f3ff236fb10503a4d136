@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "b7a1ce3e_9a17d30f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T20:30:11Z",
+      "side": 1,
+      "message": "Oh, actually it might not be, for the same reason it failed TSAN before.",
+      "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "220a3beb_7dde28a9",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 5
