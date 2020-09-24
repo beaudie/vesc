@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01bf8846_abe405c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T04:09:35Z",
+      "side": 1,
+      "message": "The interaction between optimizations is getting out of hand :(\n\nI can\u0027t say I understood enough to tell how it would look like, but I do wish there was some more encapsulation / better organization of the code to contain this logic and avoid it seeping through to all these places. May be a pipe dream.",
+      "revId": "57bb8fac0b4e16127dd263ad38232b0693ce4234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "efc8756d_5a4e616a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4019,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T04:09:35Z",
+      "side": 1,
+      "message": "If depth access is Unused, what does this return?",
+      "range": {
+        "startLine": 4019,
+        "startChar": 20,
+        "endLine": 4019,
+        "endChar": 60
+      },
+      "revId": "57bb8fac0b4e16127dd263ad38232b0693ce4234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5358d69e_bb299812",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T04:09:35Z",
+      "side": 1,
+      "message": "be",
+      "range": {
+        "startLine": 2566,
+        "startChar": 18,
+        "endLine": 2566,
+        "endChar": 19
+      },
+      "revId": "57bb8fac0b4e16127dd263ad38232b0693ce4234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d9d74c7_0a0497ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T04:09:35Z",
+      "side": 1,
+      "message": "nit: No need to duplicate the comment, just say \"Similar tracking to mDepthAccess but for the stencil aspect\".",
+      "range": {
+        "startLine": 1133,
+        "startChar": 4,
+        "endLine": 1137,
+        "endChar": 39
+      },
+      "revId": "57bb8fac0b4e16127dd263ad38232b0693ce4234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
