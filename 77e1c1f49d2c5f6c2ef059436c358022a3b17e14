@@ -105,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "5765cdc1_4b82a3f2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8513,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-24T15:45:23Z",
+      "side": 1,
+      "message": "The explanation I heard from Tobin for the limit was for pathological cases (e.g. some tests that do all kinds of GL calls, but never draw anything).\n\nI agree that if we do truncate, there should be some message to that effect.\n\nDo we have consensus that we shouldn\u0027t truncate?",
+      "parentUuid": "f2824fcb_fa088162",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d385fe56_fecca41f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -159,6 +177,30 @@
       "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cd7ea2c_ce35c7a9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-24T15:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8d75687_e09c9996",
+      "range": {
+        "startLine": 788,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 54
+      },
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
