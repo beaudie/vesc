@@ -16,6 +16,23 @@
       "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0557f5ce_f6614017",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T18:32:10Z",
+      "side": 1,
+      "message": "I am a bit concerned that these counters are in draw time (as oppsed to per renderpass of other counters) and eating some CPU cycles unnecessarily. Should we guard all the counters in a specific config bit that will disabled in end user build?",
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
