@@ -110,6 +110,87 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::ColorAttachment,
+        ImageMemoryBarrierData{
+            "ColorAttachment",
+            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            ResourceAccess::Write,
+            PipelineStage::ColorAttachmentOutput,
+        },
+    },
+    {
+        ImageLayout::DepthStencilReadOnly,
+        ImageMemoryBarrierData{
+            "DepthStencilReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+            kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::EarlyFragmentTest,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAttachment,
+        ImageMemoryBarrierData{
+            "DepthStencilAttachment",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            ResourceAccess::Write,
+            PipelineStage::EarlyFragmentTest,
+        },
+    },
+    {
+        ImageLayout::DepthStencilResolveAttachment,
+        ImageMemoryBarrierData{
+            "DepthStencilResolveAttachment",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            // Note: depth/stencil resolve uses color output stage and mask!
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            ResourceAccess::Write,
+            PipelineStage::ColorAttachmentOutput,
+        },
+    },
+    {
+        ImageLayout::Present,
+        ImageMemoryBarrierData{
+            "Present",
+            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            // transition to: vkQueuePresentKHR automatically performs the appropriate memory barriers:
+            //
+            // > Any writes to memory backing the images referenced by the pImageIndices and
+            // > pSwapchains members of pPresentInfo, that are available before vkQueuePresentKHR
+            // > is executed, are automatically made visible to the read access performed by the
+            // > presentation engine.
+            0,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::BottomOfPipe,
+        },
+    },
+    {
         ImageLayout::ExternalPreInitialized,
         ImageMemoryBarrierData{
             "ExternalPreInitialized",
@@ -336,87 +417,6 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::Write,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
-        },
-    },
-    {
-        ImageLayout::ColorAttachment,
-        ImageMemoryBarrierData{
-            "ColorAttachment",
-            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            ResourceAccess::Write,
-            PipelineStage::ColorAttachmentOutput,
-        },
-    },
-    {
-        ImageLayout::DepthStencilReadOnly,
-        ImageMemoryBarrierData{
-            "DepthStencilReadOnly",
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
-            kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
-            kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-            // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
-            // Transition from: RAR and WAR don't need memory barrier.
-            0,
-            ResourceAccess::ReadOnly,
-            PipelineStage::EarlyFragmentTest,
-        },
-    },
-    {
-        ImageLayout::DepthStencilAttachment,
-        ImageMemoryBarrierData{
-            "DepthStencilAttachment",
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-            VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
-            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-            ResourceAccess::Write,
-            PipelineStage::EarlyFragmentTest,
-        },
-    },
-    {
-        ImageLayout::DepthStencilResolveAttachment,
-        ImageMemoryBarrierData{
-            "DepthStencilResolveAttachment",
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-            // Note: depth/stencil resolve uses color output stage and mask!
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            ResourceAccess::Write,
-            PipelineStage::ColorAttachmentOutput,
-        },
-    },
-    {
-        ImageLayout::Present,
-        ImageMemoryBarrierData{
-            "Present",
-            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-            // transition to: vkQueuePresentKHR automatically performs the appropriate memory barriers:
-            //
-            // > Any writes to memory backing the images referenced by the pImageIndices and
-            // > pSwapchains members of pPresentInfo, that are available before vkQueuePresentKHR
-            // > is executed, are automatically made visible to the read access performed by the
-            // > presentation engine.
-            0,
-            // Transition from: RAR and WAR don't need memory barrier.
-            0,
-            ResourceAccess::ReadOnly,
-            PipelineStage::BottomOfPipe,
         },
     },
 };
@@ -927,11 +927,13 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     // First, if the attachment is invalidated, skip the store op.
     if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
     {
-        dsOps.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.storeOp       = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.isInvalidated = true;
     }
     if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled))
     {
-        dsOps.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.stencilStoreOp       = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.isStencilInvalidated = true;
     }
 
     // Second, if we are loading or clearing the attachment, but the attachment has not been used,
@@ -950,19 +952,6 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
     ASSERT((mRenderPassDesc.getDepthStencilAccess() != ResourceAccess::ReadOnly) ||
            mDepthAccess != ResourceAccess::Write);
-
-    // Fill out perf counters
-    PerfCounters &counters = contextVk->getPerfCounters();
-
-    counters.depthClears += dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
-    counters.depthLoads += dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
-    counters.depthStores += dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
-    counters.stencilClears += dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
-    counters.stencilLoads += dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
-    counters.stencilStores += dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
-    counters.readOnlyDepthStencilRenderPasses +=
-        static_cast<ImageLayout>(dsOps.finalLayout) == vk::ImageLayout::DepthStencilReadOnly ? 1
-                                                                                             : 0;
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
@@ -1002,12 +991,8 @@ angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
     {
         mCommandBuffer.executeQueuedResetQueryPoolCommands(primary->getHandle());
         // Pull a RenderPass from the cache.
-        RenderPassCache &renderPassCache = contextVk->getRenderPassCache();
-        Serial serial                    = contextVk->getCurrentQueueSerial();
-
         RenderPass *renderPass = nullptr;
-        ANGLE_TRY(renderPassCache.getRenderPassWithOps(contextVk, serial, mRenderPassDesc,
-                                                       mAttachmentOps, &renderPass));
+        ANGLE_TRY(contextVk->getRenderPassWithOps(mRenderPassDesc, mAttachmentOps, &renderPass));
 
         VkRenderPassBeginInfo beginInfo    = {};
         beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;

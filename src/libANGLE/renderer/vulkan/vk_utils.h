@@ -786,6 +786,12 @@ struct PerfCounters
     uint32_t stencilClears;
     uint32_t stencilLoads;
     uint32_t stencilStores;
+    uint32_t colorAttachmentResolves;
+    uint32_t depthAttachmentResolves;
+    uint32_t stencilAttachmentResolves;
+    uint32_t colorAttachmentUnresolves;
+    uint32_t depthAttachmentUnresolves;
+    uint32_t stencilAttachmentUnresolves;
     uint32_t readOnlyDepthStencilRenderPasses;
 };
 

@@ -165,7 +165,8 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
 
 void UnpackColorResolveAttachmentDesc(VkAttachmentDescription *desc,
                                       const vk::Format &format,
-                                      bool usedAsInputAttachment)
+                                      bool usedAsInputAttachment,
+                                      bool isInvalidated)
 {
     // We would only need this flag for duplicated attachments. Apply it conservatively.  In
     // practice it's unlikely any application would use the same image as multiple resolve
@@ -185,11 +186,10 @@ void UnpackColorResolveAttachmentDesc(VkAttachmentDescription *desc,
     // be DONT_CARE as it gets overwritten during resolve.
     //
     // storeOp should be STORE.  If the attachment is invalidated, it would get set to DONT_CARE.
-    // TODO(syoussefi): currently invalidate doesn't affect storeOp of resolve attachment.
     desc->samples = VK_SAMPLE_COUNT_1_BIT;
     desc->loadOp =
         usedAsInputAttachment ? VK_ATTACHMENT_LOAD_OP_LOAD : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    desc->storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
+    desc->storeOp = isInvalidated ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
     desc->stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     desc->stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     desc->initialLayout  = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -199,7 +199,9 @@ void UnpackColorResolveAttachmentDesc(VkAttachmentDescription *desc,
 void UnpackDepthStencilResolveAttachmentDesc(VkAttachmentDescription *desc,
                                              const vk::Format &format,
                                              bool usedAsDepthInputAttachment,
-                                             bool usedAsStencilInputAttachment)
+                                             bool usedAsStencilInputAttachment,
+                                             bool isDepthInvalidated,
+                                             bool isStencilInvalidated)
 {
     // There cannot be simultaneous usages of the depth/stencil resolve image, as depth/stencil
     // resolve currently only comes from depth/stencil renderbuffers.
@@ -210,17 +212,22 @@ void UnpackDepthStencilResolveAttachmentDesc(VkAttachmentDescription *desc,
     const angle::Format &angleFormat = format.intendedFormat();
     ASSERT(angleFormat.depthBits != 0 || angleFormat.stencilBits != 0);
 
+    // Missing aspects are folded in is*Invalidated parameters, so no need to double check.
+    ASSERT(angleFormat.depthBits > 0 || isDepthInvalidated);
+    ASSERT(angleFormat.stencilBits > 0 || isStencilInvalidated);
+
     // Similarly to color resolve attachments, sample count is 1, loadOp is LOAD or DONT_CARE based
-    // on whether unresolve is required, and storeOp is STORE (if aspect exists).
+    // on whether unresolve is required, and storeOp is STORE or DONT_CARE based on whether the
+    // attachment is invalidated or the aspect exists.
     desc->samples = VK_SAMPLE_COUNT_1_BIT;
     desc->loadOp =
         usedAsDepthInputAttachment ? VK_ATTACHMENT_LOAD_OP_LOAD : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     desc->storeOp =
-        angleFormat.depthBits > 0 ? VK_ATTACHMENT_STORE_OP_STORE : VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        isDepthInvalidated ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
     desc->stencilLoadOp =
         usedAsStencilInputAttachment ? VK_ATTACHMENT_LOAD_OP_LOAD : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    desc->stencilStoreOp = angleFormat.stencilBits > 0 ? VK_ATTACHMENT_STORE_OP_STORE
-                                                       : VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    desc->stencilStoreOp =
+        isStencilInvalidated ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
     desc->initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
     desc->finalLayout   = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 }
@@ -731,11 +738,138 @@ angle::Result CreateRenderPass2(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result InitializeRenderPassFromDesc(Context *context,
+void UpdateColorPerfCounters(const VkRenderPassCreateInfo &createInfo,
+                             const VkSubpassDescription &subpass,
+                             PerfCounters *countersOut)
+{
+    // Color resolve counters.
+    if (subpass.pResolveAttachments == nullptr)
+    {
+        return;
+    }
+
+    for (uint32_t colorSubpassIndex = 0; colorSubpassIndex < subpass.colorAttachmentCount;
+         ++colorSubpassIndex)
+    {
+        uint32_t resolveRenderPassIndex = subpass.pResolveAttachments[colorSubpassIndex].attachment;
+
+        if (resolveRenderPassIndex == VK_ATTACHMENT_UNUSED)
+        {
+            continue;
+        }
+
+        ++countersOut->colorAttachmentResolves;
+    }
+}
+
+void UpdateDepthStencilPerfCounters(const VkRenderPassCreateInfo &createInfo,
+                                    const VkSubpassDescription &subpass,
+                                    PerfCounters *countersOut)
+{
+    // Depth/stencil ops counters.
+    if (subpass.pDepthStencilAttachment == nullptr)
+    {
+        return;
+    }
+
+    uint32_t renderPassIndex = subpass.pDepthStencilAttachment->attachment;
+
+    if (renderPassIndex == VK_ATTACHMENT_UNUSED)
+    {
+        return;
+    }
+
+    const VkAttachmentDescription &ds = createInfo.pAttachments[renderPassIndex];
+
+    countersOut->depthClears += ds.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
+    countersOut->depthLoads += ds.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
+    countersOut->depthStores += ds.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
+
+    countersOut->stencilClears += ds.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
+    countersOut->stencilLoads += ds.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
+    countersOut->stencilStores += ds.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
+
+    countersOut->readOnlyDepthStencilRenderPasses +=
+        ds.finalLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ? 1 : 0;
+}
+
+void UpdateDepthStencilResolvePerfCounters(
+    const VkRenderPassCreateInfo &createInfo,
+    const VkSubpassDescriptionDepthStencilResolve &depthStencilResolve,
+    PerfCounters *countersOut)
+{
+    // Depth/stencil resolve counters.
+    if (depthStencilResolve.pDepthStencilResolveAttachment == nullptr)
+    {
+        return;
+    }
+
+    uint32_t resolveRenderPassIndex =
+        depthStencilResolve.pDepthStencilResolveAttachment->attachment;
+
+    if (resolveRenderPassIndex == VK_ATTACHMENT_UNUSED)
+    {
+        return;
+    }
+
+    const VkAttachmentDescription &dsResolve = createInfo.pAttachments[resolveRenderPassIndex];
+
+    countersOut->depthClears += dsResolve.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
+    countersOut->depthLoads += dsResolve.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
+    countersOut->depthStores += dsResolve.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
+
+    countersOut->stencilClears += dsResolve.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
+    countersOut->stencilLoads += dsResolve.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
+    countersOut->stencilStores += dsResolve.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
+
+    if (depthStencilResolve.depthResolveMode != VK_RESOLVE_MODE_NONE)
+    {
+        ++countersOut->depthAttachmentResolves;
+    }
+
+    if (depthStencilResolve.stencilResolveMode != VK_RESOLVE_MODE_NONE)
+    {
+        ++countersOut->stencilAttachmentResolves;
+    }
+}
+
+void UpdateRenderPassPerfCounters(
+    ContextVk *contextVk,
+    const RenderPassDesc &desc,
+    const VkRenderPassCreateInfo &createInfo,
+    const VkSubpassDescriptionDepthStencilResolve &depthStencilResolve)
+{
+    fprintf(stderr, "Update perf counters\n");
+    PerfCounters &counters = contextVk->getPerfCounters();
+
+    for (uint32_t subpassIndex = 0; subpassIndex < createInfo.subpassCount; ++subpassIndex)
+    {
+        const VkSubpassDescription &subpass = createInfo.pSubpasses[subpassIndex];
+
+        // Color counters.
+        UpdateColorPerfCounters(createInfo, subpass, &counters);
+
+        // Depth/stencil counters.
+        UpdateDepthStencilPerfCounters(createInfo, subpass, &counters);
+    }
+
+    UpdateDepthStencilResolvePerfCounters(createInfo, depthStencilResolve, &counters);
+
+    // Determine unresolve counters from the render pass desc, to avoid making guesses from subpass
+    // count etc.
+    counters.colorAttachmentUnresolves += desc.getColorUnresolveAttachmentMask().count();
+    counters.depthAttachmentUnresolves += desc.hasDepthUnresolveAttachment() ? 1 : 0;
+    counters.stencilAttachmentUnresolves += desc.hasStencilUnresolveAttachment() ? 1 : 0;
+}
+
+angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                                            const RenderPassDesc &desc,
                                            const AttachmentOpsArray &ops,
+                                           bool updatePerfCounters,
                                            RenderPass *renderPass)
 {
+    RendererVk *renderer = contextVk->getRenderer();
+
     constexpr VkAttachmentReference kUnusedAttachment   = {VK_ATTACHMENT_UNUSED,
                                                          VK_IMAGE_LAYOUT_UNDEFINED};
     constexpr VkAttachmentReference2 kUnusedAttachment2 = {
@@ -750,6 +884,16 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
 
     // The list of attachments includes all non-resolve and resolve attachments.
     FramebufferAttachmentArray<VkAttachmentDescription> attachmentDescs;
+
+    // Track invalidated attachments so their resolve attachments can be invalidated as well.
+    // Resolve attachments can be removed in that case if the render pass has only one subpass
+    // (which is the case if there are no unresolve attachments).
+    gl::DrawBufferMask isColorInvalidated;
+    bool isDepthInvalidated   = false;
+    bool isStencilInvalidated = false;
+    const bool hasUnresolveAttachments =
+        desc.getColorUnresolveAttachmentMask().any() || desc.hasDepthStencilUnresolveAttachment();
+    const bool canRemoveResolveAttachments = !hasUnresolveAttachments;
 
     // Pack color attachments
     PackedAttachmentIndex attachmentCount(0);
@@ -772,7 +916,7 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
 
         angle::FormatID formatID = desc[colorIndexGL];
         ASSERT(formatID != angle::FormatID::NONE);
-        const vk::Format &format = context->getRenderer()->getFormat(formatID);
+        const vk::Format &format = renderer->getFormat(formatID);
 
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
@@ -782,6 +926,8 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], format, desc.samples(),
                              ops[attachmentCount]);
+
+        isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
 
         ++attachmentCount;
     }
@@ -794,7 +940,7 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
 
         angle::FormatID formatID = desc[depthStencilIndexGL];
         ASSERT(formatID != angle::FormatID::NONE);
-        const vk::Format &format = context->getRenderer()->getFormat(formatID);
+        const vk::Format &format = renderer->getFormat(formatID);
 
         depthStencilAttachmentRef.attachment = attachmentCount.get();
 
@@ -813,6 +959,9 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], format, desc.samples(),
                              ops[attachmentCount]);
 
+        isDepthInvalidated   = ops[attachmentCount].isInvalidated;
+        isStencilInvalidated = ops[attachmentCount].isStencilInvalidated;
+
         ++attachmentCount;
     }
 
@@ -828,16 +977,25 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
 
         ASSERT(desc.isColorAttachmentEnabled(colorIndexGL));
 
-        const vk::Format &format = context->getRenderer()->getFormat(desc[colorIndexGL]);
+        const vk::Format &format = renderer->getFormat(desc[colorIndexGL]);
 
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
         colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-        colorResolveAttachmentRefs.push_back(colorRef);
+        // If color attachment is invalidated, try to remove its resolve attachment altogether.
+        if (canRemoveResolveAttachments && isColorInvalidated.test(colorIndexGL))
+        {
+            colorResolveAttachmentRefs.push_back(kUnusedAttachment);
+        }
+        else
+        {
+            colorResolveAttachmentRefs.push_back(colorRef);
+        }
 
         UnpackColorResolveAttachmentDesc(&attachmentDescs[attachmentCount.get()], format,
-                                         desc.hasColorUnresolveAttachment(colorIndexGL));
+                                         desc.hasColorUnresolveAttachment(colorIndexGL),
+                                         isColorInvalidated.test(colorIndexGL));
 
         ++attachmentCount;
     }
@@ -849,16 +1007,35 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
 
         uint32_t depthStencilIndexGL = static_cast<uint32_t>(desc.depthStencilAttachmentIndex());
 
-        const vk::Format &format = context->getRenderer()->getFormat(desc[depthStencilIndexGL]);
+        const vk::Format &format         = renderer->getFormat(desc[depthStencilIndexGL]);
+        const angle::Format &angleFormat = format.intendedFormat();
+
+        // Threat missing aspect as invalidated for the purpose of the resolve attachment.
+        if (angleFormat.depthBits == 0)
+        {
+            isDepthInvalidated = true;
+        }
+        if (angleFormat.stencilBits == 0)
+        {
+            isStencilInvalidated = true;
+        }
 
         depthStencilResolveAttachmentRef.attachment = attachmentCount.get();
         depthStencilResolveAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-        depthStencilResolveAttachmentRef.aspectMask =
-            VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+        depthStencilResolveAttachmentRef.aspectMask = 0;
 
-        UnpackDepthStencilResolveAttachmentDesc(&attachmentDescs[attachmentCount.get()], format,
-                                                desc.hasDepthUnresolveAttachment(),
-                                                desc.hasStencilUnresolveAttachment());
+        if (!isDepthInvalidated)
+        {
+            depthStencilResolveAttachmentRef.aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        if (!isStencilInvalidated)
+        {
+            depthStencilResolveAttachmentRef.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+
+        UnpackDepthStencilResolveAttachmentDesc(
+            &attachmentDescs[attachmentCount.get()], format, desc.hasDepthUnresolveAttachment(),
+            desc.hasStencilUnresolveAttachment(), isDepthInvalidated, isStencilInvalidated);
 
         ++attachmentCount;
     }
@@ -873,7 +1050,7 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
     VkAttachmentReference unresolveDepthStencilAttachmentRef = kUnusedAttachment;
     FramebufferAttachmentsVector<VkAttachmentReference> unresolveInputAttachmentRefs;
     FramebufferAttachmentsVector<uint32_t> unresolvePreserveAttachmentRefs;
-    if (desc.getColorUnresolveAttachmentMask().any() || desc.hasDepthStencilUnresolveAttachment())
+    if (hasUnresolveAttachments)
     {
         subpassDesc.push_back({});
         InitializeUnresolveSubpass(
@@ -915,11 +1092,19 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
         depthStencilResolve.stencilResolveMode = desc.hasStencilResolveAttachment()
                                                      ? VK_RESOLVE_MODE_SAMPLE_ZERO_BIT
                                                      : VK_RESOLVE_MODE_NONE;
-        depthStencilResolve.pDepthStencilResolveAttachment = &depthStencilResolveAttachmentRef;
+
+        // If depth/stencil attachment is invalidated, try to remove its resolve attachment
+        // altogether.
+        const bool removeDepthStencilResolve =
+            canRemoveResolveAttachments && isDepthInvalidated && isStencilInvalidated;
+        if (!removeDepthStencilResolve)
+        {
+            depthStencilResolve.pDepthStencilResolveAttachment = &depthStencilResolveAttachmentRef;
+        }
     }
 
     std::vector<VkSubpassDependency> subpassDependencies;
-    if (desc.getColorUnresolveAttachmentMask().any() || desc.hasDepthStencilUnresolveAttachment())
+    if (hasUnresolveAttachments)
     {
         InitializeUnresolveSubpassDependencies(
             subpassDesc, desc.getColorUnresolveAttachmentMask().any(),
@@ -944,16 +1129,26 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
 
     // If depth/stencil resolve is used, we need to create the render pass with
     // vkCreateRenderPass2KHR.
-    if (desc.hasDepthStencilResolveAttachment())
+    if (depthStencilResolve.pDepthStencilResolveAttachment != nullptr)
     {
-        ANGLE_TRY(CreateRenderPass2(context, createInfo, depthStencilResolve,
+        ANGLE_TRY(CreateRenderPass2(contextVk, createInfo, depthStencilResolve,
                                     desc.hasDepthUnresolveAttachment(),
                                     desc.hasStencilUnresolveAttachment(), renderPass));
     }
     else
     {
-        ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo));
+        ANGLE_VK_TRY(contextVk, renderPass->init(contextVk->getDevice(), createInfo));
     }
+
+    fprintf(stderr, "Got RP\n");
+    if (updatePerfCounters)
+    {
+        // If requested, update perf counters regarding resolve and unresolve operations.  This
+        // information is taken out of the render pass create info.  Depth/stencil resolve
+        // attachment uses RenderPass2 structures, so it's passed in separately.
+        UpdateRenderPassPerfCounters(contextVk, desc, createInfo, depthStencilResolve);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -2297,6 +2492,7 @@ void AttachmentOpsArray::setOps(PackedAttachmentIndex index,
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.loadOp, loadOp);
     SetBitField(ops.storeOp, storeOp);
+    ops.isInvalidated = false;
 }
 
 void AttachmentOpsArray::setStencilOps(PackedAttachmentIndex index,
@@ -2306,6 +2502,7 @@ void AttachmentOpsArray::setStencilOps(PackedAttachmentIndex index,
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.stencilLoadOp, loadOp);
     SetBitField(ops.stencilStoreOp, storeOp);
+    ops.isStencilInvalidated = false;
 }
 
 void AttachmentOpsArray::setClearOp(PackedAttachmentIndex index)
@@ -2903,14 +3100,24 @@ angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
         ops.initWithLoadStore(colorIndexVk, imageLayout, imageLayout);
     }
 
-    return getRenderPassWithOps(contextVk, serial, desc, ops, renderPassOut);
+    return getRenderPassWithOpsImpl(contextVk, serial, desc, ops, false, renderPassOut);
 }
 
-angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
+angle::Result RenderPassCache::getRenderPassWithOps(ContextVk *contextVk,
                                                     Serial serial,
                                                     const vk::RenderPassDesc &desc,
                                                     const vk::AttachmentOpsArray &attachmentOps,
                                                     vk::RenderPass **renderPassOut)
+{
+    return getRenderPassWithOpsImpl(contextVk, serial, desc, attachmentOps, true, renderPassOut);
+}
+
+angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
+                                                        Serial serial,
+                                                        const vk::RenderPassDesc &desc,
+                                                        const vk::AttachmentOpsArray &attachmentOps,
+                                                        bool updatePerfCounters,
+                                                        vk::RenderPass **renderPassOut)
 {
     auto outerIt = mPayload.find(desc);
     if (outerIt != mPayload.end())
@@ -2934,7 +3141,8 @@ angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
     }
 
     vk::RenderPass newRenderPass;
-    ANGLE_TRY(vk::InitializeRenderPassFromDesc(context, desc, attachmentOps, &newRenderPass));
+    ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps, updatePerfCounters,
+                                               &newRenderPass));
 
     vk::RenderPassAndSerial withSerial(std::move(newRenderPass), serial);
 

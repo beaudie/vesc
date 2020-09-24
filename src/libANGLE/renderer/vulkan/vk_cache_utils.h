@@ -296,10 +296,19 @@ struct PackedAttachmentOpsDesc final
     uint16_t stencilLoadOp : 2;
     uint16_t stencilStoreOp : 1;
 
-    // 5-bits to force pad the structure to exactly 2 bytes.  Note that we currently don't support
+    // If a corresponding resolve attachment exists, storeOp may already be DONT_CARE, and it's
+    // unclear whether the attachment was invalidated or not.  This information is passed along here
+    // so that the resolve attachment's storeOp can be set to DONT_CARE if the attachment is
+    // invalidated, and if possible removed from the list of resolve attachments altogether.  Note
+    // that the latter may not be possible if the render pass has multiple subpasses due to Vulkan
+    // render pass compatibility rules.
+    uint16_t isInvalidated : 1;
+    uint16_t isStencilInvalidated : 1;
+
+    // 4-bits to force pad the structure to exactly 2 bytes.  Note that we currently don't support
     // any of the extension layouts, whose values start at 1'000'000'000.
-    uint16_t initialLayout : 5;
-    uint16_t finalLayout : 5;
+    uint16_t initialLayout : 4;
+    uint16_t finalLayout : 4;
 };
 
 static_assert(sizeof(PackedAttachmentOpsDesc) == 2, "Size check failed");
@@ -1239,7 +1248,7 @@ class RenderPassCache final : angle::NonCopyable
         return addRenderPass(contextVk, serial, desc, renderPassOut);
     }
 
-    angle::Result getRenderPassWithOps(vk::Context *context,
+    angle::Result getRenderPassWithOps(ContextVk *contextVk,
                                        Serial serial,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
@@ -1250,6 +1259,13 @@ class RenderPassCache final : angle::NonCopyable
                                 Serial serial,
                                 const vk::RenderPassDesc &desc,
                                 vk::RenderPass **renderPassOut);
+
+    angle::Result getRenderPassWithOpsImpl(ContextVk *contextVk,
+                                           Serial serial,
+                                           const vk::RenderPassDesc &desc,
+                                           const vk::AttachmentOpsArray &attachmentOps,
+                                           bool updatePerfCounters,
+                                           vk::RenderPass **renderPassOut);
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
     // The second layer caches the attachment load/store ops and initial/final layout.
