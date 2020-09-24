@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e87c7d7_10d29273",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-09-24T21:47:37Z",
+      "side": 1,
+      "message": "I think I updated this for android only for validating back then. Thanks for the change",
+      "revId": "b1cf7fe069181131f12e552d834d649435c0b700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
