@@ -36,6 +36,91 @@
     },
     {
       "key": {
+        "uuid": "9e86aa4e_2711eb9f",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T14:02:57Z",
+      "side": 1,
+      "message": "Should we be outputting the string here? The point at which we know are executing the command?\nHmm, this might be a good reason to include return/error status. User probably wants to see the call they are making regardless, but might be handy to know if there was an error that prevented the call from actually doing anything. May not be necessary, there are other ways for GL app to get notified of errors.\nAfter writing the above, no I don\u0027t think the string should move. We want to indicate that the app issued this command, regardless if there was an error or not.\nIndicating error might be handy to a developer.",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c76d385_22ebde07",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T14:02:57Z",
+      "side": 1,
+      "message": "Do we want to include the return value in the API string?",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b05aebda_b04ce79b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8513,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T14:02:57Z",
+      "side": 1,
+      "message": "what\u0027s the purpose of this limit?\nIf we have to have one, else case should indicate that output was truncated. I would be very frustrated to be expecting to see code but have it not show up and not know why.\nIf we do overflow, probably want to toss out the oldest strings.",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d385fe56_fecca41f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T14:02:57Z",
+      "side": 1,
+      "message": "Why don\u0027t we reset the OglApiString here?\nWe don\u0027t want to send this data again. That would eliminate the need for all the reset calls in the api entry points.",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05f7a3f1_d01cf016",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2117,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T14:02:57Z",
+      "side": 1,
+      "message": "Why can\u0027t this be pulled into ContextVk::writeOpenGlApiString?\nI think I know, we need to emit the Vulkan command and then close the debug marker.\nI know setupDraw/Dispatch is a convenient place for calling ContextVk::writeOpenGlApiString, but I think it would be nice to have it in the draw call. That way you can have matching header \u0026 footer calls in each draw. No mysterious endDebugUtils without visible beginDebugUtils.\nIn fact, would be nice to have something like openglApiStringHeader() and openglApiStringFooter() to make the symmetry more clear.\nOr maybe it could even be an RAII pattern that automatically outputs the footer when the scope of the function closes?",
+      "revId": "77e1c1f49d2c5f6c2ef059436c358022a3b17e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8d75687_e09c9996",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
