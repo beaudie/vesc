@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "fbbb0152_da9b7cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T23:39:19Z",
+      "side": 1,
+      "message": "Charlie - I pasted the descriptor set allocation counts to the chat: https://paste.googleplex.com/4876405205630976\n\nGenerally, there are very few allocations.   However, we suspect atomic counter buffers are allocating tons of descriptors (and may be partially to blame for why MH3.1 is lagging so far behind?).",
+      "parentUuid": "d636d252_51230545",
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7170f50_4a2c25c1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -178,6 +196,30 @@
     },
     {
       "key": {
+        "uuid": "cfe676e1_7bf7595a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T23:39:19Z",
+      "side": 1,
+      "message": "Something like that could work, though I\u0027m not sure how the per-frame counters would be exposed for these particular counters.   There are a lot of programs, and no good way to fill the screen with an unknown number of graphs (~50 for benchmarks, but essentially unbounded), let alone any way to label them in a meaningful way to the user.\n\nOne answer to get a fixed number of graphs would be to add the totals from all of the programs each frame and display that.   We would want to do something similar for UtilsVk, since that has 20 Functions that can allocate.   Maybe even do the same for ContextVk, and end up with just 3 graphs in the overlay.",
+      "parentUuid": "4be0b2f6_3d3dd975",
+      "range": {
+        "startLine": 307,
+        "startChar": 5,
+        "endLine": 307,
+        "endChar": 33
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9684574_ade40176",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
@@ -201,6 +243,30 @@
     },
     {
       "key": {
+        "uuid": "dec30354_27ab3a11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T23:39:19Z",
+      "side": 1,
+      "message": "The counts themselves only make sense per program, for example when trying to determine the sizes of descriptor pools (which are owned by ProgramExecutableVk).\n\nThere are a couple issues that hash maps solve for us nicely:\n1.) We don\u0027t know how many programs there will be.\n2.) We don\u0027t have a way to uniquely ID instances of ProgramExecutableVk.\n\nWe can create a fixed-size array, but that has other downsides:\n- If it\u0027s too small, we lose counts for those extra programs\n- If it\u0027s too large, we waste memory\n\nWe would also need to add some kind of ID to ProgramExecutableVk that increments per instantiation.   For that approach we have a couple options:\n1.) Add a HandleAllocator to ContextVk, which passes the handle to the ProgramVk when it\u0027s created and then is set in the ProgramExecutableVk.\n- This is more robust\n- More complex to implement\n2.) A static variable in ProgramExecutableVk which is incremented during each ProgramExecutableVk construction.\n- Much simpler to implement\n- Allows for multiple ProgramExecutableVks to share the same index since there\u0027s no synchronizations when they are created\n- The values leak across ContextVks, eating up extra entries in the array and reducing the overall number of programs that can be counted\n\nBeing able to easily expose the via GL extensions sounds like a good goal.   Thoughts on a good answer here?   Or should we have some counters that are entirely internal to ANGLE?",
+      "parentUuid": "b9684574_ade40176",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 799,
+        "endChar": 39
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea5709b7_573caffc",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
@@ -212,6 +278,30 @@
       "writtenOn": "2020-09-24T19:02:03Z",
       "side": 1,
       "message": "same here.",
+      "range": {
+        "startLine": 800,
+        "startChar": 4,
+        "endLine": 800,
+        "endChar": 27
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11d9197d_218fb412",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T23:39:19Z",
+      "side": 1,
+      "message": "The context and utils lists can be converted to arrays easily enough, since the enums we index into them with are well defined.\n\nThe only issue is space, since for UtilsVk the Function::EnumCount \u003d 20, which means a lot of counters that are rarely used (and why a hash map is nice here too).",
+      "parentUuid": "ea5709b7_573caffc",
       "range": {
         "startLine": 800,
         "startChar": 4,
