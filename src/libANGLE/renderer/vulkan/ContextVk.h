@@ -761,6 +761,14 @@ class ContextVk : public ContextImpl, public vk::Context
         double cpuTimestampS;
     };
 
+    // Performance Counters specific to this object type
+    using DescriptorSetList =
+        std::array<uint32_t, ToUnderlying(ContextVk::PipelineType::EnumCount)>;
+    struct ObjectPerfCounters
+    {
+        DescriptorSetList descriptorSetsAllocated;
+    };
+
     class ScopedDescriptorSetUpdates;
 
     angle::Result setupDraw(const gl::Context *context,
@@ -982,6 +990,8 @@ class ContextVk : public ContextImpl, public vk::Context
     bool shouldSwitchToReadOnlyDepthFeedbackLoopMode(const gl::Context *context,
                                                      gl::Texture *texture) const;
 
+    void outputCumulativePerfCounters();
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
@@ -1149,6 +1159,7 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // A mix of per-frame and per-run counters.
     vk::PerfCounters mPerfCounters;
+    ObjectPerfCounters mObjectPerfCounters;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
 
