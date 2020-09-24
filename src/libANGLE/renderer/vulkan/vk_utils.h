@@ -70,6 +70,7 @@ namespace rx
 {
 class DisplayVk;
 class ImageVk;
+class ProgramExecutableVk;
 class RenderTargetVk;
 class RendererVk;
 class RenderPassCache;
@@ -775,6 +776,12 @@ class ResourceSerialFactory final : angle::NonCopyable
     std::atomic<uint32_t> mCurrentUniqueSerial;
 };
 
+// Using raw uint32_t due to circular includes
+// ContextVk::PipelineType::EnumCount = 2
+using ContextDescriptorSetList = std::array<uint32_t, 2>;
+// UtilsVk::Function::EnumCount = 20
+using UtilsDescriptorSetList = std::array<uint32_t, 20>;
+
 // Performance and resource counters.
 struct PerfCounters
 {
@@ -790,6 +797,8 @@ struct PerfCounters
     uint32_t stencilLoads;
     uint32_t stencilStores;
     uint32_t readOnlyDepthStencilRenderPasses;
+    ContextDescriptorSetList contextDescriptorSetsAllocated;
+    UtilsDescriptorSetList utilsDescriptorSetsAllocated;
 };
 
 // A Vulkan image level index.
