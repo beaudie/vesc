@@ -70,6 +70,24 @@
       "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f3e8175f_a2ce6ee4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T00:17:42Z",
+      "side": 1,
+      "message": "The steps thing is used to try and calibrate the runs. It\u0027s not part of the test result. A higher number just means the test is running faster. The real number is \"truncated mean\" and in this case lower is better. So post-revert we\u0027re seeing less overhead in this test.",
+      "parentUuid": "520420c8_58e5669a",
+      "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
