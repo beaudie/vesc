@@ -154,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "4be0b2f6_3d3dd975",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T20:32:08Z",
+      "side": 1,
+      "message": "Yeah I\u0027m fine with something that only stores cumulative and the overlay computes the delta or something like that. I was thinking two sets, and adding the \"current frame\" ones to the \"cumulative\" one was basically a way to implement that.",
+      "parentUuid": "d1755d8b_60e1987f",
+      "range": {
+        "startLine": 307,
+        "startChar": 5,
+        "endLine": 307,
+        "endChar": 33
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9684574_ade40176",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
