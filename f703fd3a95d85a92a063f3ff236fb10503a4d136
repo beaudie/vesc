@@ -19,6 +19,60 @@
     },
     {
       "key": {
+        "uuid": "c32805bc_5e477e8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T21:36:53Z",
+      "side": 1,
+      "message": "If this initial fix works, this should too since it\u0027s basically the same thing.\n\nLooking at ResourceSerialFactory, mCurrentUniqueSerial is an atomic:\n\n    // Kept atomic so it can be accessed from multiple Context threads at once.\n    std::atomic\u003cuint32_t\u003e mCurrentUniqueSerial;\n\nSo assuming the assert is checking for wrapping, then the simplified version I provided will work, since there\u0027s only a single read of mCurrentUniqueSerial (which is guaranteed to be atomic) and the checking for wrapping will always catch the error.\n\nTSAN is upset because we are reading twice:\n1. Load the value to check for wrapping\n2. Load the value to increment it\n\nAnother thread could come in between steps (1) and (2) and modify mCurrentUniqueSerial, leading to wrapping without an error.",
+      "parentUuid": "b7a1ce3e_9a17d30f",
+      "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9987205_2689ddd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T21:36:53Z",
+      "side": 1,
+      "message": "If this initial fix works, this should too since it\u0027s basically the same thing.",
+      "parentUuid": "b7a1ce3e_9a17d30f",
+      "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "313370c2_57f15c69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-24T21:36:53Z",
+      "side": 1,
+      "message": "If this initial fix works, this should too since it\u0027s basically the same thing.\n\nLooking at ResourceSerialFactory, mCurrentUniqueSerial is an atomic:\n\n    // Kept atomic so it can be accessed from multiple Context threads at once.\n    std::atomic\u003cuint32_t\u003e mCurrentUniqueSerial;\n\nSo assuming the assert is checking for wrapping, then the simplified version I provided will work, since there\u0027s only a single read of mCurrentUniqueSerial (which is guaranteed to be atomic) and the checking for wrapping will always catch the error.\n\nTSAN is upset because we are reading twice:\n1. Load the value to check for wrapping\n2. Load the value to increment it\n\nAnother thread could come in between steps (1) and (2) and modify mCurrentUniqueSerial, leading to wrapping without an error.",
+      "parentUuid": "b7a1ce3e_9a17d30f",
+      "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "220a3beb_7dde28a9",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 5
