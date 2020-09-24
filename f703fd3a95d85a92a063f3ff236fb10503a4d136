@@ -46,6 +46,30 @@
       "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca9f3367_51d21456",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T20:29:42Z",
+      "side": 1,
+      "message": "+1, that\u0027s definitely a better solution. :)",
+      "parentUuid": "ee3138c8_29f327a0",
+      "range": {
+        "startLine": 767,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 35
+      },
+      "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
