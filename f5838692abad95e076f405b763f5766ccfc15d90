@@ -255,6 +255,24 @@
     },
     {
       "key": {
+        "uuid": "e7b458e0_f00bcd99",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-24T21:06:18Z",
+      "side": 1,
+      "message": "\u003e we can defer optimization work until we find a use case for it\n\n+1\n\n\u003e Is this work mostly feature completion work\n\nyup, purely for feature completion checkbox",
+      "parentUuid": "8a4c642f_00602e31",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db281820_dfe2d813",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
