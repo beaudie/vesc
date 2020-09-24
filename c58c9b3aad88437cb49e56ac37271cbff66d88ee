@@ -39,6 +39,30 @@
       "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c354a356_367665c3",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T20:22:25Z",
+      "side": 1,
+      "message": "You don\u0027t want WithNoVirtualContexts, that\u0027s a GLES backend feature. And you want both ES2_VULKAN and ES3_VULKAN. You could try adding SwS (separately), not sure if it\u0027s tsan-approved. I\u0027m fine either with or without SwS.",
+      "parentUuid": "8c54168f_0db787ac",
+      "range": {
+        "startLine": 362,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 37
+      },
+      "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
