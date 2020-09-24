@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90a99c94_f8986bd8",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-24T19:00:41Z",
+      "side": 0,
+      "message": "We\u0027ll be missing this info, right?\nThe specs say that GL_VERSION is:\nGL - The version number uses one of these forms:\n     major_number.minor_number major_number.minor_number.release_number\n     Vendor-specific information may follow the version number.\nES - \"OpenGL ES N.M vendor-specific information\"\n\nSo, is your goal to add release_number and vendor-specific information to the existing string?\nI don\u0027t see how it helps to add \"underlying driver vendor and version\", since vendors don\u0027t have to pass it in GL_VERSION.",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 287,
+        "endChar": 0
+      },
+      "revId": "1bd71b48fb5cd5bf393f730d3f542e493a1e324f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
