@@ -90,6 +90,30 @@
     },
     {
       "key": {
+        "uuid": "b6c1453b_f5f8dae5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T20:37:35Z",
+      "side": 1,
+      "message": "I will move the assertion to caller.",
+      "parentUuid": "61132fa3_01194c76",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 797,
+        "endChar": 77
+      },
+      "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2dcd2d8_fe9f2852",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 6
