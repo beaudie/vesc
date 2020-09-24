@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dc76a45_aa67f92b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T18:25:41Z",
+      "side": 1,
+      "message": "I think what happened is that even if we nuke the loadOP to dontCare, because the cache still has the previous result in it, belnding still works properly because it reads the cached data. Now I have added another renderpass in between just to serve the purpose of clear the cache. Now if you remove the mRenderPassDesc.packColorUnresolveAttachment(colorIndexGL) call, test fail properly. It also fail properly on top of https://chromium-review.googlesource.com/c/angle/angle/+/2411336.",
+      "revId": "2b6080384677d94969a77ec68c4e294880c59fc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
