@@ -62,6 +62,46 @@
       "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "367c2d82_c4a2be50",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T03:41:36Z",
+      "side": 1,
+      "message": "unused.\n\nAlso feel free to put the test in MultisampledRenderToTextureES3Test, so you have fewer format restrictions. You can use the helper then.",
+      "range": {
+        "startLine": 1270,
+        "startChar": 4,
+        "endLine": 1270,
+        "endChar": 26
+      },
+      "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff754d60_0ebdb6da",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T03:41:36Z",
+      "side": 1,
+      "message": "Does this really fail without the fix? Wasn\u0027t the issue that the \"unresolve\" attachment is what gets removed by mistake? Without the change, the \"resolve\" attachments are still there, so the final draw (green) will make it either way to `texture`.\n\nIIUC, the issue is that the second render pass will lose its unresolve color attachment, right?\n\nThe test should do this then:\n\n- RP 1: draw blue\n- Break RP\n- RP 2: blend red\n- Switch D/S mode\n- blend green\n\nThe test should verify in the end that all three draws were effective (by checking for the blended color). In particular, the lack of blue channel would be the symptom of the bug.",
+      "revId": "816b27affe8aeffb90f85bd538707bf10d45f66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
