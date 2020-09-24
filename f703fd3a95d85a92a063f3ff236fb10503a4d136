@@ -141,6 +141,30 @@
       "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edc4abac_d0f2e6e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T22:40:16Z",
+      "side": 1,
+      "message": "Not sure what the original purpose of the ASSERT was. Jamie added back in \"Vulkan: Move Resource Serial gen into Renderer\" in early august.\nI do wonder about wrapping though. Are we not concerned that these serials may eventually wrap if run long enough?\nI dumped the disassembly and for some reason, even with release build and dcheck off this code generates one extra instruction on x86 vs. original code.\nDecided to go with Tim\u0027s suggestion, was cleaner than using if defined(ANGLE_ENABLE_ASSERTS).",
+      "parentUuid": "ca9f3367_51d21456",
+      "range": {
+        "startLine": 767,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 35
+      },
+      "revId": "f703fd3a95d85a92a063f3ff236fb10503a4d136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
