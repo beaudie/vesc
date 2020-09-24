@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c365963_feff6fa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T20:34:04Z",
+      "side": 1,
+      "message": "Am I wearing you out? The worst of it is over with this change!\n\nSome optimizations with invalidate and initial load are upcoming, but they should be fairly simple.",
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
