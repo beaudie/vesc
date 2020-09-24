@@ -123,6 +123,24 @@
       "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b5bf2455_1390c639",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T16:13:51Z",
+      "side": 1,
+      "message": "Hey Mohan, I\u0027m not planning on trying to remove it. I could take a look at onRead and see if we can inline stuff. It might be already mostly inlined? \n\nWill land this revert for now, thanks.",
+      "parentUuid": "69e5f31e_5c3fd54f",
+      "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
