@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cee8214d_8b34a6a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T16:41:43Z",
+      "side": 1,
+      "message": "Ian: moving to DebugAnnotator might change the design a bit, so it would be nice if we could figure out that proposal.",
+      "revId": "59e1be14b11fb656a5be87165d8acc7aeaa6ad6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
