@@ -16,6 +16,24 @@
       "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e84f46ab_e21c355f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T04:31:01Z",
+      "side": 1,
+      "message": "Actually it looks like the no error extension is already done. See https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d1280#c22\n\nCould you add a test in ContextNoErrorTest.cpp that creates a legitimate PPO and draws with it? Without the validation layer, the link won\u0027t happen and the test should fail. It\u0027s fine by me if you would just file a bug for it and promptly suppress it.",
+      "parentUuid": "c18f8d52_5558001e",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

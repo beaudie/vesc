@@ -173,6 +173,24 @@
       "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e84ef3fd_95efad92",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-24T04:31:01Z",
+      "side": 1,
+      "message": "Could you please add a test based on that scenario so we can be sure it works as intended?\n\n---\n\nEdit: looks like this PS now links the PPO during the second draw, so I believe the test should pass. Still good to have it.",
+      "parentUuid": "da64ea26_d975f741",
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
