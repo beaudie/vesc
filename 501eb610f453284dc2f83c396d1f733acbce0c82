@@ -179,6 +179,30 @@
     },
     {
       "key": {
+        "uuid": "0700244f_981ce447",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T17:06:14Z",
+      "side": 1,
+      "message": "Ack, it\u0027s a bit weird because the Context holds its own resources and they shouldn\u0027t conflict. If it wouldn\u0027t take much time to verify it would be helpful to understand what\u0027s going wrong and document this with a comment.",
+      "parentUuid": "5b76cb79_e13094a0",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 39
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57eada54_ffada0d2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 11
@@ -294,6 +318,30 @@
       "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2f528e5_def60b43",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T17:06:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "80373a02_4ccf47ca",
+      "range": {
+        "startLine": 2318,
+        "startChar": 4,
+        "endLine": 2318,
+        "endChar": 68
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
