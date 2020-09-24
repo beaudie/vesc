@@ -191,6 +191,24 @@
       "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e8aca51_d3823053",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T12:58:31Z",
+      "side": 1,
+      "message": "My bad.. I meant to say getLinkedProgramPipeline. Not executable. You\u0027re right that executables are different. See getLinkedProgram vs getProgram in State.h. We could do the same for ProgramPipeline.",
+      "parentUuid": "e84ef3fd_95efad92",
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

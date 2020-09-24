@@ -34,6 +34,95 @@
       "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a46b214_65999643",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T12:58:31Z",
+      "side": 1,
+      "message": "Looking at the code I\u0027m not even sure Program linking is resolved before we draw.",
+      "parentUuid": "e84f46ab_e21c355f",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e623bfe_c695b1b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T12:58:31Z",
+      "side": 1,
+      "message": "This looks like a strict improvement to me. There\u0027s more we could do, probably, in the future. LGTM, one comment is that we could do something similar to what we did in State.h for pipeline getters.",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52c683e4_b34e7ff3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T12:58:31Z",
+      "side": 1,
+      "message": "Looking at the code I\u0027m not even sure Program linking is resolved before we draw.",
+      "parentUuid": "e84f46ab_e21c355f",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b18c790_f9d741b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T12:58:31Z",
+      "side": 1,
+      "message": "Looking at the code I\u0027m not even sure Program linking is resolved before we draw. Maybe StateCache::updateCanDraw should force the executable update.",
+      "parentUuid": "e84f46ab_e21c355f",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3990270e_8568c8d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T12:58:31Z",
+      "side": 1,
+      "message": "Looking at the code I\u0027m not even sure Program linking is resolved before we draw. Maybe StateCache::updateCanDraw should force the executable update. This can probably be a separate change. Indeed it should be as it could affect draw call overhead more significantly.",
+      "parentUuid": "e84f46ab_e21c355f",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
