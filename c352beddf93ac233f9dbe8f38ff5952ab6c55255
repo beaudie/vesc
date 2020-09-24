@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "c17c81cb_9ccd5c4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-24T00:13:05Z",
+      "side": 1,
+      "message": "I created a CL under my name: https://chromium-review.googlesource.com/c/angle/angle/+/2427557\n\nI also tried to handle recent Shabi\u0027s feedback, though I wasn\u0027t sure how he wanted to do do one thing.\n\nI still need to address Jamie\u0027s desire to implement this differently.",
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f10f661_980b27ed",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 15
@@ -83,6 +100,30 @@
     },
     {
       "key": {
+        "uuid": "ebf5dbed_21bbf703",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 8552,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-24T00:13:05Z",
+      "side": 1,
+      "message": "I\u0027ll do this in my CL",
+      "parentUuid": "11c85a7a_00275b7f",
+      "range": {
+        "startLine": 8552,
+        "startChar": 0,
+        "endLine": 8552,
+        "endChar": 82
+      },
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a40c2660_fd0043e3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -112,6 +153,24 @@
       "side": 1,
       "message": "Yes, good suggestions as the #if are pretty pervasive in this CL.",
       "parentUuid": "a40c2660_fd0043e3",
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49199346_ef993343",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-24T00:13:05Z",
+      "side": 1,
+      "message": "I like the idea, but I\u0027m not sure how you want the constexpr done.  I\u0027ll do something quick, and push my new CL.  Please comment there.",
+      "parentUuid": "786ed8d3_a2c2f600",
       "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -197,6 +256,30 @@
       "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91319a1f_04b1cc31",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-24T00:13:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad12f0bd_29a85b96",
+      "range": {
+        "startLine": 1355,
+        "startChar": 73,
+        "endLine": 1355,
+        "endChar": 80
+      },
+      "revId": "c352beddf93ac233f9dbe8f38ff5952ab6c55255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
