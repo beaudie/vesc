@@ -42,6 +42,14 @@ void GL_APIENTRY MultiDrawArraysIndirectCount(GLenum mode,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiDrawArraysIndirectCount(): context = %d, GLenum mode = %s, const void "
+            "*indirect = 0x%016" PRIxPTR
+            ", GLintptr drawcount = %llu, GLsizei maxdrawcount = %d, GLsizei stride = %d\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), (uintptr_t)indirect,
+            static_cast<unsigned long long>(drawcount), maxdrawcount, stride);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMultiDrawArraysIndirectCount(context, mode, indirect, drawcount,
@@ -72,6 +80,15 @@ void GL_APIENTRY MultiDrawElementsIndirectCount(GLenum mode,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMultiDrawElementsIndirectCount(): context = %d, GLenum mode = %s, GLenum type = %s, "
+            "const void *indirect = 0x%016" PRIxPTR
+            ", GLintptr drawcount = %llu, GLsizei maxdrawcount = %d, GLsizei stride = %d\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode),
+            GLenumToString(GLenumGroup::DefaultGroup, type), (uintptr_t)indirect,
+            static_cast<unsigned long long>(drawcount), maxdrawcount, stride);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMultiDrawElementsIndirectCount(
@@ -95,6 +112,12 @@ void GL_APIENTRY PolygonOffsetClamp(GLfloat factor, GLfloat units, GLfloat clamp
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glPolygonOffsetClamp(): context = %d, GLfloat factor = %f, GLfloat units = %f, "
+            "GLfloat clamp = %f\n",
+            CID(context), factor, units, clamp);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidatePolygonOffsetClamp(context, factor, units, clamp));
@@ -122,6 +145,15 @@ void GL_APIENTRY SpecializeShader(GLuint shader,
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glSpecializeShader(): context = %d, GLuint shader = %u, const GLchar *pEntryPoint = "
+            "0x%016" PRIxPTR
+            ", GLuint numSpecializationConstants = %u, const GLuint *pConstantIndex = "
+            "0x%016" PRIxPTR ", const GLuint *pConstantValue = 0x%016" PRIxPTR "\n",
+            CID(context), shader, (uintptr_t)pEntryPoint, numSpecializationConstants,
+            (uintptr_t)pConstantIndex, (uintptr_t)pConstantValue);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||

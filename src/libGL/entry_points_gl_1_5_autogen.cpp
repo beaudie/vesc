@@ -35,8 +35,13 @@ void GL_APIENTRY BeginQuery(GLenum target, GLuint id)
 
     if (context)
     {
-        QueryType targetPacked                                = FromGL<QueryType>(target);
-        QueryID idPacked                                      = FromGL<QueryID>(id);
+        QueryType targetPacked = FromGL<QueryType>(target);
+        QueryID idPacked       = FromGL<QueryID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBeginQuery(): context = %d, GLenum target = %s, GLuint id = %u\n", CID(context),
+            GLenumToString(GLenumGroup::QueryTarget, target), id);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBeginQuery(context, targetPacked, idPacked));
@@ -56,8 +61,13 @@ void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
 
     if (context)
     {
-        BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+        BufferID bufferPacked      = FromGL<BufferID>(buffer);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindBuffer(): context = %d, GLenum target = %s, GLuint buffer = %u\n", CID(context),
+            GLenumToString(GLenumGroup::BufferTargetARB, target), buffer);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBindBuffer(context, targetPacked, bufferPacked));
@@ -81,8 +91,16 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GL
 
     if (context)
     {
-        BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        BufferUsage usagePacked                               = FromGL<BufferUsage>(usage);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+        BufferUsage usagePacked    = FromGL<BufferUsage>(usage);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBufferData(): context = %d, GLenum target = %s, GLsizeiptr size = %llu, const void "
+            "*data = 0x%016" PRIxPTR ", GLenum usage = %s\n",
+            CID(context), GLenumToString(GLenumGroup::BufferTargetARB, target),
+            static_cast<unsigned long long>(size), (uintptr_t)data,
+            GLenumToString(GLenumGroup::BufferUsageARB, usage));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBufferData(context, targetPacked, size, data, usagePacked));
@@ -106,7 +124,15 @@ void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
 
     if (context)
     {
-        BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBufferSubData(): context = %d, GLenum target = %s, GLintptr offset = %llu, "
+            "GLsizeiptr size = %llu, const void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::BufferTargetARB, target),
+            static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size),
+            (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBufferSubData(context, targetPacked, offset, size, data));
@@ -127,7 +153,13 @@ void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint *buffers)
 
     if (context)
     {
-        const BufferID *buffersPacked                         = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDeleteBuffers(): context = %d, GLsizei n = %d, const GLuint *buffers = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), n, (uintptr_t)buffers);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDeleteBuffers(context, n, buffersPacked));
@@ -147,7 +179,13 @@ void GL_APIENTRY DeleteQueries(GLsizei n, const GLuint *ids)
 
     if (context)
     {
-        const QueryID *idsPacked                              = FromGL<const QueryID *>(ids);
+        const QueryID *idsPacked = FromGL<const QueryID *>(ids);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDeleteQueries(): context = %d, GLsizei n = %d, const GLuint *ids = 0x%016" PRIxPTR
+            "\n",
+            CID(context), n, (uintptr_t)ids);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDeleteQueries(context, n, idsPacked));
@@ -167,7 +205,11 @@ void GL_APIENTRY EndQuery(GLenum target)
 
     if (context)
     {
-        QueryType targetPacked                                = FromGL<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glEndQuery(): context = %d, GLenum target = %s\n",
+                                    CID(context), GLenumToString(GLenumGroup::QueryTarget, target));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEndQuery(context, targetPacked));
         if (isCallValid)
@@ -186,7 +228,12 @@ void GL_APIENTRY GenBuffers(GLsizei n, GLuint *buffers)
 
     if (context)
     {
-        BufferID *buffersPacked                               = FromGL<BufferID *>(buffers);
+        BufferID *buffersPacked = FromGL<BufferID *>(buffers);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGenBuffers(): context = %d, GLsizei n = %d, GLuint *buffers = 0x%016" PRIxPTR "\n",
+            CID(context), n, (uintptr_t)buffers);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGenBuffers(context, n, buffersPacked));
@@ -206,7 +253,12 @@ void GL_APIENTRY GenQueries(GLsizei n, GLuint *ids)
 
     if (context)
     {
-        QueryID *idsPacked                                    = FromGL<QueryID *>(ids);
+        QueryID *idsPacked = FromGL<QueryID *>(ids);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGenQueries(): context = %d, GLsizei n = %d, GLuint *ids = 0x%016" PRIxPTR "\n",
+            CID(context), n, (uintptr_t)ids);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGenQueries(context, n, idsPacked));
         if (isCallValid)
@@ -227,7 +279,14 @@ void GL_APIENTRY GetBufferParameteriv(GLenum target, GLenum pname, GLint *params
 
     if (context)
     {
-        BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetBufferParameteriv(): context = %d, GLenum target = %s, GLenum pname = %s, GLint "
+            "*params = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::BufferTargetARB, target),
+            GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetBufferParameteriv(context, targetPacked, pname, params));
@@ -249,7 +308,14 @@ void GL_APIENTRY GetBufferPointerv(GLenum target, GLenum pname, void **params)
 
     if (context)
     {
-        BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetBufferPointerv(): context = %d, GLenum target = %s, GLenum pname = %s, void "
+            "**params = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::BufferTargetARB, target),
+            GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetBufferPointerv(context, targetPacked, pname, params));
@@ -273,6 +339,14 @@ void GL_APIENTRY GetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr siz
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetBufferSubData(): context = %d, GLenum target = %s, GLintptr offset = %llu, "
+            "GLsizeiptr size = %llu, void *data = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::BufferTargetARB, target),
+            static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size),
+            (uintptr_t)data);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetBufferSubData(context, target, offset, size, data));
@@ -294,7 +368,14 @@ void GL_APIENTRY GetQueryObjectiv(GLuint id, GLenum pname, GLint *params)
 
     if (context)
     {
-        QueryID idPacked                                      = FromGL<QueryID>(id);
+        QueryID idPacked = FromGL<QueryID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetQueryObjectiv(): context = %d, GLuint id = %u, GLenum pname = %s, GLint *params "
+            "= 0x%016" PRIxPTR "\n",
+            CID(context), id, GLenumToString(GLenumGroup::QueryObjectParameterName, pname),
+            (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetQueryObjectiv(context, idPacked, pname, params));
@@ -316,7 +397,14 @@ void GL_APIENTRY GetQueryObjectuiv(GLuint id, GLenum pname, GLuint *params)
 
     if (context)
     {
-        QueryID idPacked                                      = FromGL<QueryID>(id);
+        QueryID idPacked = FromGL<QueryID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetQueryObjectuiv(): context = %d, GLuint id = %u, GLenum pname = %s, GLuint "
+            "*params = 0x%016" PRIxPTR "\n",
+            CID(context), id, GLenumToString(GLenumGroup::QueryObjectParameterName, pname),
+            (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetQueryObjectuiv(context, idPacked, pname, params));
@@ -338,7 +426,14 @@ void GL_APIENTRY GetQueryiv(GLenum target, GLenum pname, GLint *params)
 
     if (context)
     {
-        QueryType targetPacked                                = FromGL<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetQueryiv(): context = %d, GLenum target = %s, GLenum pname = %s, GLint *params = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::QueryTarget, target),
+            GLenumToString(GLenumGroup::QueryParameterName, pname), (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetQueryiv(context, targetPacked, pname, params));
@@ -358,7 +453,11 @@ GLboolean GL_APIENTRY IsBuffer(GLuint buffer)
     GLboolean returnValue;
     if (context)
     {
-        BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
+        BufferID bufferPacked = FromGL<BufferID>(buffer);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glIsBuffer(): context = %d, GLuint buffer = %u\n",
+                                    CID(context), buffer);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIsBuffer(context, bufferPacked));
         if (isCallValid)
@@ -386,7 +485,11 @@ GLboolean GL_APIENTRY IsQuery(GLuint id)
     GLboolean returnValue;
     if (context)
     {
-        QueryID idPacked                                      = FromGL<QueryID>(id);
+        QueryID idPacked = FromGL<QueryID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glIsQuery(): context = %d, GLuint id = %u\n", CID(context),
+                                    id);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIsQuery(context, idPacked));
         if (isCallValid)
@@ -416,7 +519,13 @@ void *GL_APIENTRY MapBuffer(GLenum target, GLenum access)
     void *returnValue;
     if (context)
     {
-        BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glMapBuffer(): context = %d, GLenum target = %s, GLenum access = %s\n", CID(context),
+            GLenumToString(GLenumGroup::BufferTargetARB, target),
+            GLenumToString(GLenumGroup::BufferAccessARB, access));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMapBuffer(context, targetPacked, access));
@@ -446,7 +555,12 @@ GLboolean GL_APIENTRY UnmapBuffer(GLenum target)
     GLboolean returnValue;
     if (context)
     {
-        BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glUnmapBuffer(): context = %d, GLenum target = %s\n",
+                                    CID(context),
+                                    GLenumToString(GLenumGroup::BufferTargetARB, target));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateUnmapBuffer(context, targetPacked));

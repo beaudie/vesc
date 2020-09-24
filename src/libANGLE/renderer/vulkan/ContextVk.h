@@ -784,6 +784,14 @@ class ContextVk : public ContextImpl, public vk::Context
                                     uint32_t *numIndicesOut);
     angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
 
+    // TODO(ianelliott): Handle this constexpr better
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    constexpr static size_t kEnableOpenGLToVulkanMapping = 1;
+#else   // if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    constexpr static size_t kEnableOpenGLToVulkanMapping = 0;
+#endif  // if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+    void writeOpenGlApiString(const gl::Context *context, vk::CommandBuffer *commandBuffer);
+
     gl::Rectangle getCorrectedViewport(const gl::Rectangle &viewport) const;
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,

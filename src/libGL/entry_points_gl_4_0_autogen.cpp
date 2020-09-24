@@ -36,7 +36,13 @@ void GL_APIENTRY BeginQueryIndexed(GLenum target, GLuint index, GLuint id)
 
     if (context)
     {
-        QueryID idPacked                                      = FromGL<QueryID>(id);
+        QueryID idPacked = FromGL<QueryID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBeginQueryIndexed(): context = %d, GLenum target = %s, GLuint index = %u, GLuint id "
+            "= %u\n",
+            CID(context), GLenumToString(GLenumGroup::QueryTarget, target), index, id);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBeginQueryIndexed(context, target, index, idPacked));
@@ -56,7 +62,12 @@ void GL_APIENTRY BindTransformFeedback(GLenum target, GLuint id)
 
     if (context)
     {
-        TransformFeedbackID idPacked                          = FromGL<TransformFeedbackID>(id);
+        TransformFeedbackID idPacked = FromGL<TransformFeedbackID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBindTransformFeedback(): context = %d, GLenum target = %s, GLuint id = %u\n",
+            CID(context), GLenumToString(GLenumGroup::BindTransformFeedbackTarget, target), id);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBindTransformFeedback(context, target, idPacked));
@@ -78,6 +89,13 @@ void GL_APIENTRY BlendEquationSeparatei(GLuint buf, GLenum modeRGB, GLenum modeA
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBlendEquationSeparatei(): context = %d, GLuint buf = %u, GLenum modeRGB = %s, "
+            "GLenum modeAlpha = %s\n",
+            CID(context), buf, GLenumToString(GLenumGroup::BlendEquationModeEXT, modeRGB),
+            GLenumToString(GLenumGroup::BlendEquationModeEXT, modeAlpha));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBlendEquationSeparatei(context, buf, modeRGB, modeAlpha));
@@ -97,6 +115,11 @@ void GL_APIENTRY BlendEquationi(GLuint buf, GLenum mode)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBlendEquationi(): context = %d, GLuint buf = %u, GLenum mode = %s\n", CID(context),
+            buf, GLenumToString(GLenumGroup::BlendEquationModeEXT, mode));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBlendEquationi(context, buf, mode));
@@ -122,6 +145,15 @@ BlendFuncSeparatei(GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GL
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBlendFuncSeparatei(): context = %d, GLuint buf = %u, GLenum srcRGB = %s, GLenum "
+            "dstRGB = %s, GLenum srcAlpha = %s, GLenum dstAlpha = %s\n",
+            CID(context), buf, GLenumToString(GLenumGroup::BlendingFactor, srcRGB),
+            GLenumToString(GLenumGroup::BlendingFactor, dstRGB),
+            GLenumToString(GLenumGroup::BlendingFactor, srcAlpha),
+            GLenumToString(GLenumGroup::BlendingFactor, dstAlpha));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -144,6 +176,12 @@ void GL_APIENTRY BlendFunci(GLuint buf, GLenum src, GLenum dst)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glBlendFunci(): context = %d, GLuint buf = %u, GLenum src = %s, GLenum dst = %s\n",
+            CID(context), buf, GLenumToString(GLenumGroup::BlendingFactor, src),
+            GLenumToString(GLenumGroup::BlendingFactor, dst));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBlendFunci(context, buf, src, dst));
@@ -165,6 +203,12 @@ void GL_APIENTRY DeleteTransformFeedbacks(GLsizei n, const GLuint *ids)
     if (context)
     {
         const TransformFeedbackID *idsPacked = FromGL<const TransformFeedbackID *>(ids);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDeleteTransformFeedbacks(): context = %d, GLsizei n = %d, const GLuint *ids = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), n, (uintptr_t)ids);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDeleteTransformFeedbacks(context, n, idsPacked));
@@ -185,7 +229,13 @@ void GL_APIENTRY DrawArraysIndirect(GLenum mode, const void *indirect)
 
     if (context)
     {
-        PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
+        PrimitiveMode modePacked = FromGL<PrimitiveMode>(mode);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawArraysIndirect(): context = %d, GLenum mode = %s, const void *indirect = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), (uintptr_t)indirect);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateDrawArraysIndirect(context, modePacked, indirect));
@@ -208,8 +258,15 @@ void GL_APIENTRY DrawElementsIndirect(GLenum mode, GLenum type, const void *indi
 
     if (context)
     {
-        PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
-        DrawElementsType typePacked                           = FromGL<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawElementsIndirect(): context = %d, GLenum mode = %s, GLenum type = %s, const "
+            "void *indirect = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode),
+            GLenumToString(GLenumGroup::DrawElementsType, type), (uintptr_t)indirect);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -230,7 +287,12 @@ void GL_APIENTRY DrawTransformFeedback(GLenum mode, GLuint id)
 
     if (context)
     {
-        TransformFeedbackID idPacked                          = FromGL<TransformFeedbackID>(id);
+        TransformFeedbackID idPacked = FromGL<TransformFeedbackID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawTransformFeedback(): context = %d, GLenum mode = %s, GLuint id = %u\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), id);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDrawTransformFeedback(context, mode, idPacked));
@@ -251,7 +313,13 @@ void GL_APIENTRY DrawTransformFeedbackStream(GLenum mode, GLuint id, GLuint stre
 
     if (context)
     {
-        TransformFeedbackID idPacked                          = FromGL<TransformFeedbackID>(id);
+        TransformFeedbackID idPacked = FromGL<TransformFeedbackID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glDrawTransformFeedbackStream(): context = %d, GLenum mode = %s, GLuint id = %u, "
+            "GLuint stream = %u\n",
+            CID(context), GLenumToString(GLenumGroup::PrimitiveType, mode), id, stream);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateDrawTransformFeedbackStream(context, mode, idPacked, stream));
@@ -271,6 +339,11 @@ void GL_APIENTRY EndQueryIndexed(GLenum target, GLuint index)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glEndQueryIndexed(): context = %d, GLenum target = %s, GLuint index = %u\n",
+            CID(context), GLenumToString(GLenumGroup::QueryTarget, target), index);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateEndQueryIndexed(context, target, index));
@@ -291,7 +364,13 @@ void GL_APIENTRY GenTransformFeedbacks(GLsizei n, GLuint *ids)
 
     if (context)
     {
-        TransformFeedbackID *idsPacked                        = FromGL<TransformFeedbackID *>(ids);
+        TransformFeedbackID *idsPacked = FromGL<TransformFeedbackID *>(ids);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGenTransformFeedbacks(): context = %d, GLsizei n = %d, GLuint *ids = 0x%016" PRIxPTR
+            "\n",
+            CID(context), n, (uintptr_t)ids);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGenTransformFeedbacks(context, n, idsPacked));
@@ -319,7 +398,15 @@ void GL_APIENTRY GetActiveSubroutineName(GLuint program,
 
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
+        ShaderProgramID programPacked = FromGL<ShaderProgramID>(program);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetActiveSubroutineName(): context = %d, GLuint program = %u, GLenum shadertype = "
+            "%s, GLuint index = %u, GLsizei bufsize = %d, GLsizei *length = 0x%016" PRIxPTR
+            ", GLchar *name = 0x%016" PRIxPTR "\n",
+            CID(context), program, GLenumToString(GLenumGroup::ShaderType, shadertype), index,
+            bufsize, (uintptr_t)length, (uintptr_t)name);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetActiveSubroutineName(context, programPacked, shadertype,
@@ -350,7 +437,15 @@ void GL_APIENTRY GetActiveSubroutineUniformName(GLuint program,
 
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
+        ShaderProgramID programPacked = FromGL<ShaderProgramID>(program);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetActiveSubroutineUniformName(): context = %d, GLuint program = %u, GLenum "
+            "shadertype = %s, GLuint index = %u, GLsizei bufsize = %d, GLsizei *length = "
+            "0x%016" PRIxPTR ", GLchar *name = 0x%016" PRIxPTR "\n",
+            CID(context), program, GLenumToString(GLenumGroup::ShaderType, shadertype), index,
+            bufsize, (uintptr_t)length, (uintptr_t)name);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetActiveSubroutineUniformName(
@@ -380,7 +475,15 @@ void GL_APIENTRY GetActiveSubroutineUniformiv(GLuint program,
 
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
+        ShaderProgramID programPacked = FromGL<ShaderProgramID>(program);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetActiveSubroutineUniformiv(): context = %d, GLuint program = %u, GLenum "
+            "shadertype = %s, GLuint index = %u, GLenum pname = %s, GLint *values = 0x%016" PRIxPTR
+            "\n",
+            CID(context), program, GLenumToString(GLenumGroup::ShaderType, shadertype), index,
+            GLenumToString(GLenumGroup::SubroutineParameterName, pname), (uintptr_t)values);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetActiveSubroutineUniformiv(context, programPacked, shadertype,
@@ -405,7 +508,14 @@ void GL_APIENTRY GetProgramStageiv(GLuint program, GLenum shadertype, GLenum pna
 
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
+        ShaderProgramID programPacked = FromGL<ShaderProgramID>(program);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetProgramStageiv(): context = %d, GLuint program = %u, GLenum shadertype = %s, "
+            "GLenum pname = %s, GLint *values = 0x%016" PRIxPTR "\n",
+            CID(context), program, GLenumToString(GLenumGroup::ShaderType, shadertype),
+            GLenumToString(GLenumGroup::ProgramStagePName, pname), (uintptr_t)values);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -430,6 +540,13 @@ void GL_APIENTRY GetQueryIndexediv(GLenum target, GLuint index, GLenum pname, GL
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetQueryIndexediv(): context = %d, GLenum target = %s, GLuint index = %u, GLenum "
+            "pname = %s, GLint *params = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::DefaultGroup, target), index,
+            GLenumToString(GLenumGroup::QueryParameterName, pname), (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetQueryIndexediv(context, target, index, pname, params));
@@ -453,7 +570,14 @@ GLuint GL_APIENTRY GetSubroutineIndex(GLuint program, GLenum shadertype, const G
     GLuint returnValue;
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
+        ShaderProgramID programPacked = FromGL<ShaderProgramID>(program);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetSubroutineIndex(): context = %d, GLuint program = %u, GLenum shadertype = %s, "
+            "const GLchar *name = 0x%016" PRIxPTR "\n",
+            CID(context), program, GLenumToString(GLenumGroup::ShaderType, shadertype),
+            (uintptr_t)name);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetSubroutineIndex(context, programPacked, shadertype, name));
@@ -489,7 +613,14 @@ GLint GL_APIENTRY GetSubroutineUniformLocation(GLuint program,
     GLint returnValue;
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
+        ShaderProgramID programPacked = FromGL<ShaderProgramID>(program);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetSubroutineUniformLocation(): context = %d, GLuint program = %u, GLenum "
+            "shadertype = %s, const GLchar *name = 0x%016" PRIxPTR "\n",
+            CID(context), program, GLenumToString(GLenumGroup::ShaderType, shadertype),
+            (uintptr_t)name);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -524,6 +655,13 @@ void GL_APIENTRY GetUniformSubroutineuiv(GLenum shadertype, GLint location, GLui
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetUniformSubroutineuiv(): context = %d, GLenum shadertype = %s, GLint location = "
+            "%d, GLuint *params = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::ShaderType, shadertype), location,
+            (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetUniformSubroutineuiv(context, shadertype, location, params));
@@ -546,8 +684,14 @@ void GL_APIENTRY GetUniformdv(GLuint program, GLint location, GLdouble *params)
 
     if (context)
     {
-        ShaderProgramID programPacked                         = FromGL<ShaderProgramID>(program);
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        ShaderProgramID programPacked  = FromGL<ShaderProgramID>(program);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glGetUniformdv(): context = %d, GLuint program = %u, GLint location = %d, GLdouble "
+            "*params = 0x%016" PRIxPTR "\n",
+            CID(context), program, location, (uintptr_t)params);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetUniformdv(context, programPacked, locationPacked, params));
@@ -567,7 +711,11 @@ GLboolean GL_APIENTRY IsTransformFeedback(GLuint id)
     GLboolean returnValue;
     if (context)
     {
-        TransformFeedbackID idPacked                          = FromGL<TransformFeedbackID>(id);
+        TransformFeedbackID idPacked = FromGL<TransformFeedbackID>(id);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glIsTransformFeedback(): context = %d, GLuint id = %u\n",
+                                    CID(context), id);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateIsTransformFeedback(context, idPacked));
@@ -595,6 +743,10 @@ void GL_APIENTRY MinSampleShading(GLfloat value)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glMinSampleShading(): context = %d, GLfloat value = %f\n",
+                                    CID(context), value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMinSampleShading(context, value));
         if (isCallValid)
@@ -614,6 +766,13 @@ void GL_APIENTRY PatchParameterfv(GLenum pname, const GLfloat *values)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glPatchParameterfv(): context = %d, GLenum pname = %s, const GLfloat *values = "
+            "0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::PatchParameterName, pname),
+            (uintptr_t)values);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePatchParameterfv(context, pname, values));
@@ -633,6 +792,11 @@ void GL_APIENTRY PatchParameteri(GLenum pname, GLint value)
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glPatchParameteri(): context = %d, GLenum pname = %s, GLint value = %d\n",
+            CID(context), GLenumToString(GLenumGroup::PatchParameterName, pname), value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePatchParameteri(context, pname, value));
@@ -651,6 +815,9 @@ void GL_APIENTRY PauseTransformFeedback()
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glPauseTransformFeedback(): context = %d\n", CID(context));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePauseTransformFeedback(context));
         if (isCallValid)
@@ -668,6 +835,9 @@ void GL_APIENTRY ResumeTransformFeedback()
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString("glResumeTransformFeedback(): context = %d\n", CID(context));
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid = (context->skipValidation() || ValidateResumeTransformFeedback(context));
         if (isCallValid)
@@ -686,7 +856,12 @@ void GL_APIENTRY Uniform1d(GLint location, GLdouble x)
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform1d(): context = %d, GLint location = %d, GLdouble x = %f\n", CID(context),
+            location, x);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateUniform1d(context, locationPacked, x));
@@ -708,7 +883,13 @@ void GL_APIENTRY Uniform1dv(GLint location, GLsizei count, const GLdouble *value
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform1dv(): context = %d, GLint location = %d, GLsizei count = %d, const GLdouble "
+            "*value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateUniform1dv(context, locationPacked, count, value));
@@ -728,7 +909,12 @@ void GL_APIENTRY Uniform2d(GLint location, GLdouble x, GLdouble y)
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform2d(): context = %d, GLint location = %d, GLdouble x = %f, GLdouble y = %f\n",
+            CID(context), location, x, y);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateUniform2d(context, locationPacked, x, y));
@@ -750,7 +936,13 @@ void GL_APIENTRY Uniform2dv(GLint location, GLsizei count, const GLdouble *value
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform2dv(): context = %d, GLint location = %d, GLsizei count = %d, const GLdouble "
+            "*value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateUniform2dv(context, locationPacked, count, value));
@@ -771,7 +963,13 @@ void GL_APIENTRY Uniform3d(GLint location, GLdouble x, GLdouble y, GLdouble z)
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform3d(): context = %d, GLint location = %d, GLdouble x = %f, GLdouble y = %f, "
+            "GLdouble z = %f\n",
+            CID(context), location, x, y, z);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateUniform3d(context, locationPacked, x, y, z));
@@ -793,7 +991,13 @@ void GL_APIENTRY Uniform3dv(GLint location, GLsizei count, const GLdouble *value
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform3dv(): context = %d, GLint location = %d, GLsizei count = %d, const GLdouble "
+            "*value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateUniform3dv(context, locationPacked, count, value));
@@ -815,7 +1019,13 @@ void GL_APIENTRY Uniform4d(GLint location, GLdouble x, GLdouble y, GLdouble z, G
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform4d(): context = %d, GLint location = %d, GLdouble x = %f, GLdouble y = %f, "
+            "GLdouble z = %f, GLdouble w = %f\n",
+            CID(context), location, x, y, z, w);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateUniform4d(context, locationPacked, x, y, z, w));
@@ -837,7 +1047,13 @@ void GL_APIENTRY Uniform4dv(GLint location, GLsizei count, const GLdouble *value
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniform4dv(): context = %d, GLint location = %d, GLsizei count = %d, const GLdouble "
+            "*value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateUniform4dv(context, locationPacked, count, value));
@@ -862,7 +1078,13 @@ void GL_APIENTRY UniformMatrix2dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix2dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -889,7 +1111,13 @@ void GL_APIENTRY UniformMatrix2x3dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix2x3dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -916,7 +1144,13 @@ void GL_APIENTRY UniformMatrix2x4dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix2x4dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -943,7 +1177,13 @@ void GL_APIENTRY UniformMatrix3dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix3dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -970,7 +1210,13 @@ void GL_APIENTRY UniformMatrix3x2dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix3x2dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -997,7 +1243,13 @@ void GL_APIENTRY UniformMatrix3x4dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix3x4dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -1024,7 +1276,13 @@ void GL_APIENTRY UniformMatrix4dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix4dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -1051,7 +1309,13 @@ void GL_APIENTRY UniformMatrix4x2dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix4x2dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -1078,7 +1342,13 @@ void GL_APIENTRY UniformMatrix4x3dv(GLint location,
 
     if (context)
     {
-        UniformLocation locationPacked                        = FromGL<UniformLocation>(location);
+        UniformLocation locationPacked = FromGL<UniformLocation>(location);
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformMatrix4x3dv(): context = %d, GLint location = %d, GLsizei count = %d, "
+            "GLboolean transpose = %s, const GLdouble *value = 0x%016" PRIxPTR "\n",
+            CID(context), location, count, GLbooleanToString(transpose), (uintptr_t)value);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
@@ -1103,6 +1373,13 @@ void GL_APIENTRY UniformSubroutinesuiv(GLenum shadertype, GLsizei count, const G
 
     if (context)
     {
+#if defined(ANGLE_ENABLE_OGL_VK_API_MAPPING)
+        context->updateOglApiString(
+            "glUniformSubroutinesuiv(): context = %d, GLenum shadertype = %s, GLsizei count = %d, "
+            "const GLuint *indices = 0x%016" PRIxPTR "\n",
+            CID(context), GLenumToString(GLenumGroup::ShaderType, shadertype), count,
+            (uintptr_t)indices);
+#endif
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateUniformSubroutinesuiv(context, shadertype, count, indices));

@@ -345,6 +345,9 @@ using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
 using QueryMap             = ResourceMap<Query, QueryID>;
 using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>;
 
+// Max number of gl calls to store in mapping string vector.
+constexpr size_t kMaxApiMappingStringSize = 1000;
+
 class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
 {
   public:
@@ -629,6 +632,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const;
     bool noopClearBuffer(GLenum buffer, GLint drawbuffer) const;
+    void updateOglApiString(const char *format, ...);
+    void resetOglApiString() { mApiMappingStrings.clear(); }
+    const std::vector<std::string> *getOglApiStrings() const { return &mApiMappingStrings; }
 
     void addRef() const { mRefCount++; }
     void release() const { mRefCount--; }
@@ -799,6 +805,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     mutable size_t mRefCount;
 
     OverlayType mOverlay;
+    std::vector<std::string> mApiMappingStrings;
 };
 }  // namespace gl
 
