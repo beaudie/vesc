@@ -105,6 +105,24 @@
       "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69e5f31e_5c3fd54f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-24T15:03:33Z",
+      "side": 1,
+      "message": "go ahead jamie, can you cc me on the follow up bug where you are going to try to remove the sharedresourceuse?",
+      "parentUuid": "a4800264_6b42406a",
+      "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
