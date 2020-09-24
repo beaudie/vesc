@@ -155,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "5b76cb79_e13094a0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T17:02:21Z",
+      "side": 1,
+      "message": "I didn\u0027t look to see which were conflicting.",
+      "parentUuid": "6d9aceb2_0b644d46",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 39
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57eada54_ffada0d2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 11
@@ -237,6 +261,30 @@
       "side": 1,
       "message": "The Serial can change between the queueSubmit and this call. There\u0027s no need to make the call in queueSubmit because it already has the lock.",
       "parentUuid": "361d7fd8_6d489f8c",
+      "range": {
+        "startLine": 2318,
+        "startChar": 4,
+        "endLine": 2318,
+        "endChar": 68
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80373a02_4ccf47ca",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T17:02:21Z",
+      "side": 1,
+      "message": "I think you are confusing this with mLastSubmittedQueueSerial. This is the lastCompletedQueueSerial, updated by checkCompletedCommands() not queueSubmit.",
+      "parentUuid": "df7f28d5_aaa7651b",
       "range": {
         "startLine": 2318,
         "startChar": 4,
