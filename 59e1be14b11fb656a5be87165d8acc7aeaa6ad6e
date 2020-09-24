@@ -16,6 +16,24 @@
       "revId": "59e1be14b11fb656a5be87165d8acc7aeaa6ad6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "557a7a7c_49587b46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-24T17:04:23Z",
+      "side": 1,
+      "message": "Yes.  I won\u0027t push anymore changes to this design until I become familiar with that.  \n\nJamie, have you written any specific ideas/proposals besides moving to DebugAnnotator?",
+      "parentUuid": "cee8214d_8b34a6a6",
+      "revId": "59e1be14b11fb656a5be87165d8acc7aeaa6ad6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
