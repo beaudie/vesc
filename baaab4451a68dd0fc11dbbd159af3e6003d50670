@@ -52,6 +52,24 @@
       "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "520420c8_58e5669a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-24T00:03:58Z",
+      "side": 1,
+      "message": "args.gn -\n\ntarget_cpu \u003d \"x64\"\nis_debug \u003d false\nis_clang \u003d true\n\nwith null backend, the variation seems to be larger\n\nbaseline -\nwall_time: 118.47, mean: 119.55, variation: 1.37%, truncated mean: 119.46, variation: 1.05%\nwall_time: 119.26, mean: 119.54, variation: 1.35%, truncated mean: 119.45, variation: 1.03%\nwall_time: 117.12, mean: 119.46, variation: 1.38%, truncated mean: 119.38, variation: 1.05%\n\nafter cherry-picking revert -\nwall_time: 118.35, mean: 117.20, variation: 0.96%, truncated mean: 117.15, variation: 0.58%\nwall_time: 117.08, mean: 117.19, variation: 0.94%, truncated mean: 117.15, variation: 0.56%\nwall_time: 117.77, mean: 117.22, variation: 0.93%, truncated mean: 117.18, variation: 0.56%\n\nNot sure if it matters but i got different logs between the 2 runs -\nbaseline -\nTest name: DrawCallPerfBenchmark.Run/vulkan_null_vbo_cycle\nrunning with 21276 steps.\n\nafter cherry-picking revert -\nTest name: DrawCallPerfBenchmark.Run/vulkan_null_vbo_cycle\nrunning with 21598 steps.",
+      "parentUuid": "a61eb2c1_0b190296",
+      "revId": "baaab4451a68dd0fc11dbbd159af3e6003d50670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
