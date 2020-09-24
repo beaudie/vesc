@@ -773,6 +773,30 @@ class ResourceSerialFactory final : angle::NonCopyable
 };
 
 // Performance and resource counters.
+struct RenderPassPerfCounters
+{
+    // load/storeOps. Includes ops for resolve attachment (hence 2 bits).
+    uint8_t depthClears : 2;
+    uint8_t depthLoads : 2;
+    uint8_t depthStores : 2;
+    uint8_t stencilClears : 2;
+    uint8_t stencilLoads : 2;
+    uint8_t stencilStores : 2;
+    // Number of unresolve and resolve operations.  4 bits for color (based on
+    // gl::IMPLEMENTATION_MAX_DRAW_BUFFERS), 1 bit for depth and stencil each.
+    uint8_t colorAttachmentUnresolves : 4;
+    uint8_t colorAttachmentResolves : 4;
+    uint8_t depthAttachmentUnresolves : 1;
+    uint8_t depthAttachmentResolves : 1;
+    uint8_t stencilAttachmentResolves : 1;
+    uint8_t stencilAttachmentUnresolves : 1;
+    // Whether the depth/stencil attachment is using a read-only layout.
+    uint8_t readOnlyDepthStencil : 1;
+    // For future use.
+    uint8_t padding : 7;
+};
+static_assert(sizeof(RenderPassPerfCounters) == 4, "Size mismatch");
+
 struct PerfCounters
 {
     uint32_t primaryBuffers;
@@ -786,6 +810,12 @@ struct PerfCounters
     uint32_t stencilClears;
     uint32_t stencilLoads;
     uint32_t stencilStores;
+    uint32_t colorAttachmentResolves;
+    uint32_t depthAttachmentResolves;
+    uint32_t stencilAttachmentResolves;
+    uint32_t colorAttachmentUnresolves;
+    uint32_t depthAttachmentUnresolves;
+    uint32_t stencilAttachmentUnresolves;
     uint32_t readOnlyDepthStencilRenderPasses;
 };
 

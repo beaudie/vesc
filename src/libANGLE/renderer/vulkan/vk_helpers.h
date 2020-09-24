@@ -999,6 +999,7 @@ class CommandBufferHelper : angle::NonCopyable
     {
         ASSERT(mIsRenderPassCommandBuffer);
         SetBitField(mAttachmentOps[attachmentIndex].storeOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+        mAttachmentOps[attachmentIndex].isInvalidated = true;
     }
 
     void invalidateRenderPassDepthAttachment(const gl::DepthStencilState &dsState)
@@ -1186,6 +1187,14 @@ class CommandBufferHelper : angle::NonCopyable
 enum class ImageLayout
 {
     Undefined = 0,
+    // Framebuffer attachment layouts are placed first, so they could fit in fewer bits in
+    // PackedAttachmentOpsDesc.
+    ColorAttachment,
+    DepthStencilReadOnly,
+    DepthStencilAttachment,
+    DepthStencilResolveAttachment,
+    Present,
+    // The rest of the layouts.
     ExternalPreInitialized,
     ExternalShadersReadOnly,
     ExternalShadersWrite,
@@ -1201,11 +1210,6 @@ enum class ImageLayout
     ComputeShaderWrite,
     AllGraphicsShadersReadOnly,
     AllGraphicsShadersWrite,
-    ColorAttachment,
-    DepthStencilReadOnly,
-    DepthStencilAttachment,
-    DepthStencilResolveAttachment,
-    Present,
 
     InvalidEnum,
     EnumCount = InvalidEnum,

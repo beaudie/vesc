@@ -114,6 +114,7 @@ template <typename T>
 using FramebufferAttachmentArray = std::array<T, kMaxFramebufferAttachments>;
 template <typename T>
 using FramebufferAttachmentsVector = angle::FixedVector<T, kMaxFramebufferAttachments>;
+using FramebufferAttachmentMask    = angle::BitSet<kMaxFramebufferAttachments>;
 
 constexpr size_t kMaxFramebufferNonResolveAttachments = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1;
 template <typename T>
@@ -296,10 +297,19 @@ struct PackedAttachmentOpsDesc final
     uint16_t stencilLoadOp : 2;
     uint16_t stencilStoreOp : 1;
 
-    // 5-bits to force pad the structure to exactly 2 bytes.  Note that we currently don't support
+    // If a corresponding resolve attachment exists, storeOp may already be DONT_CARE, and it's
+    // unclear whether the attachment was invalidated or not.  This information is passed along here
+    // so that the resolve attachment's storeOp can be set to DONT_CARE if the attachment is
+    // invalidated, and if possible removed from the list of resolve attachments altogether.  Note
+    // that the latter may not be possible if the render pass has multiple subpasses due to Vulkan
+    // render pass compatibility rules.
+    uint16_t isInvalidated : 1;
+    uint16_t isStencilInvalidated : 1;
+
+    // 4-bits to force pad the structure to exactly 2 bytes.  Note that we currently don't support
     // any of the extension layouts, whose values start at 1'000'000'000.
-    uint16_t initialLayout : 5;
-    uint16_t finalLayout : 5;
+    uint16_t initialLayout : 4;
+    uint16_t finalLayout : 4;
 };
 
 static_assert(sizeof(PackedAttachmentOpsDesc) == 2, "Size check failed");
@@ -1210,6 +1220,12 @@ ANGLE_VK_SERIAL_OP(ANGLE_HASH_VK_SERIAL)
 
 namespace rx
 {
+struct RenderPassAndCounters
+{
+    vk::RenderPassAndSerial renderPassAndSerial;
+    vk::RenderPassPerfCounters perfCounters;
+};
+
 // TODO(jmadill): Add cache trimming/eviction.
 class RenderPassCache final : angle::NonCopyable
 {
@@ -1231,21 +1247,28 @@ class RenderPassCache final : angle::NonCopyable
             ASSERT(!innerCache.empty());
 
             // Find the first element and return it.
-            innerCache.begin()->second.updateSerial(serial);
-            *renderPassOut = &innerCache.begin()->second.get();
+            innerCache.begin()->second.renderPassAndSerial.updateSerial(serial);
+            *renderPassOut = &innerCache.begin()->second.renderPassAndSerial.get();
             return angle::Result::Continue;
         }
 
         return addRenderPass(contextVk, serial, desc, renderPassOut);
     }
 
-    angle::Result getRenderPassWithOps(vk::Context *context,
+    angle::Result getRenderPassWithOps(ContextVk *contextVk,
                                        Serial serial,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
                                        vk::RenderPass **renderPassOut);
 
   private:
+    angle::Result getRenderPassWithOpsImpl(ContextVk *contextVk,
+                                           Serial serial,
+                                           const vk::RenderPassDesc &desc,
+                                           const vk::AttachmentOpsArray &attachmentOps,
+                                           bool updatePerfCounters,
+                                           vk::RenderPass **renderPassOut);
+
     angle::Result addRenderPass(ContextVk *contextVk,
                                 Serial serial,
                                 const vk::RenderPassDesc &desc,
@@ -1253,7 +1276,7 @@ class RenderPassCache final : angle::NonCopyable
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
     // The second layer caches the attachment load/store ops and initial/final layout.
-    using InnerCache = std::unordered_map<vk::AttachmentOpsArray, vk::RenderPassAndSerial>;
+    using InnerCache = std::unordered_map<vk::AttachmentOpsArray, RenderPassAndCounters>;
     using OuterCache = std::unordered_map<vk::RenderPassDesc, InnerCache>;
 
     OuterCache mPayload;
