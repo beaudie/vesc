@@ -69,6 +69,24 @@
       "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2db81d8_6ccb13f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T01:25:35Z",
+      "side": 1,
+      "message": "A test is valuable because it would prevent this from regressing in the future. We have tests in src/tests/gl_tests/SemaphoreTest.cpp. If you are unable to write a regression test please open a bug for a regression test with a description of the situation at anglebug.com/new and assign to syousssefi.",
+      "parentUuid": "0d56e9ba_ee95473a",
+      "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
