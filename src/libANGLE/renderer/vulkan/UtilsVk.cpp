@@ -2392,6 +2392,10 @@ angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
             .ptr(),
         1, bindingOut, descriptorSetOut));
     bindingOut->get().updateSerial(contextVk->getCurrentQueueSerial());
+
+    vk::PerfCounters &perfCounters = contextVk->getPerfCounters();
+    perfCounters.utilsDescriptorSetsAllocated[ToUnderlying(function)]++;
+
     return angle::Result::Continue;
 }
 

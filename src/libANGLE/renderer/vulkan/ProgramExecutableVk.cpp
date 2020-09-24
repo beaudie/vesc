@@ -396,6 +396,11 @@ angle::Result ProgramExecutableVk::allocateDescriptorSetAndGetInfo(
         &mDescriptorSets[ToUnderlying(descriptorSetIndex)], newPoolAllocatedOut));
     mEmptyDescriptorSets[ToUnderlying(descriptorSetIndex)] = VK_NULL_HANDLE;
 
+    vk::PerfCounters &perfCounters = contextVk->getPerfCounters();
+    vk::ProgramDescriptorSetCountList &proProgramDescriptorSetCountList =
+        perfCounters.programDescriptorSetsAllocated[this];
+    proProgramDescriptorSetCountList[ToUnderlying(descriptorSetIndex)]++;
+
     return angle::Result::Continue;
 }
 
@@ -1546,6 +1551,11 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
                     contextVk, descriptorSetLayout.ptr(), 1,
                     &mDescriptorPoolBindings[descriptorSetIndex],
                     &mEmptyDescriptorSets[descriptorSetIndex]));
+
+                vk::PerfCounters &perfCounters = contextVk->getPerfCounters();
+                vk::ProgramDescriptorSetCountList &proProgramDescriptorSetCountList =
+                    perfCounters.programDescriptorSetsAllocated[this];
+                proProgramDescriptorSetCountList[descriptorSetIndex]++;
             }
             descSet = mEmptyDescriptorSets[descriptorSetIndex];
         }

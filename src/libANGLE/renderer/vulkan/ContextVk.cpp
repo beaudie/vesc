@@ -302,6 +302,60 @@ vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState)
     // Simplify this check by returning write instead of checking the mask.
     return vk::ResourceAccess::Write;
 }
+
+// Requires that trace is enabled to see the output, which is supported with is_debug=true
+void OutputCumulativePerfCounters(const vk::PerfCounters &perfCounters)
+{
+#if defined(ANGLE_ENABLE_OVERLAY)
+    {
+        std::ostringstream text;
+
+        INFO() << "Context DS Allocations: ";
+
+        for (const auto &it : perfCounters.contextDescriptorSetsAllocated)
+        {
+            uint32_t pipelineType = it.first;
+            uint32_t count        = it.second;
+
+            INFO() << "    PipelineType " << pipelineType << ": " << count;
+        }
+    }
+
+    {
+        std::ostringstream text;
+
+        for (const auto &it : perfCounters.programDescriptorSetsAllocated)
+        {
+            ProgramExecutableVk *programExecutableVk                        = it.first;
+            vk::ProgramDescriptorSetCountList programDescriptorSetCountList = it.second;
+
+            INFO() << "Program: " << programExecutableVk << ":";
+
+            for (const auto &it2 : programDescriptorSetCountList)
+            {
+                uint32_t descriptorSetIndex = it2.first;
+                uint32_t count              = it2.second;
+
+                INFO() << "    DescriptorSetIndex " << descriptorSetIndex << ": " << count;
+            }
+        }
+    }
+
+    {
+        std::ostringstream text;
+
+        INFO() << "Utils DS Allocations: ";
+
+        for (const auto &it : perfCounters.utilsDescriptorSetsAllocated)
+        {
+            uint32_t function = it.first;
+            uint32_t count    = it.second;
+
+            INFO() << "    Function " << function << ": " << count;
+        }
+    }
+#endif  // defined(ANGLE_ENABLE_OVERLAY)
+}
 }  // anonymous namespace
 
 ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
@@ -762,6 +816,8 @@ ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    OutputCumulativePerfCounters(mPerfCounters);
+
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
@@ -3922,6 +3978,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].allocateSetsAndGetInfo(
         this, driverUniforms->descriptorSetLayout.get().ptr(), 1,
         &driverUniforms->descriptorPoolBinding, &driverUniforms->descriptorSet, &newPoolAllocated));
+    mPerfCounters.contextDescriptorSetsAllocated[ToUnderlying(pipelineType)]++;
 
     // Clear descriptor set cache. It may no longer be valid.
     if (newPoolAllocated)
