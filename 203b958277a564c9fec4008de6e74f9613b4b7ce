@@ -90,6 +90,30 @@
       "revId": "203b958277a564c9fec4008de6e74f9613b4b7ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10b897fc_a0d0466d",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1116027
+      },
+      "writtenOn": "2020-09-24T14:19:36Z",
+      "side": 1,
+      "message": "Done. Also filtered \"src/libGL/libGL_autogen.def\" since \"*.def\" file are filtered out if platform is not Windows.",
+      "parentUuid": "cd156de4_f762a8ea",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 539,
+        "endChar": 23
+      },
+      "revId": "203b958277a564c9fec4008de6e74f9613b4b7ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
