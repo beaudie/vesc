@@ -87,6 +87,30 @@
       "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cb77834_71657c36",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T21:07:27Z",
+      "side": 1,
+      "message": "So long story short, Courtney\u0027s CL should be correct as-is. The ES2_AND_ES3 macro will introduce configs that won\u0027t work. Tim ping me offline if you are unsure.",
+      "parentUuid": "1ceb9dd4_16933985",
+      "range": {
+        "startLine": 362,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 37
+      },
+      "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
