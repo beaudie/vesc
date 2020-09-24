@@ -219,6 +219,24 @@
     },
     {
       "key": {
+        "uuid": "0c36b903_9a20e562",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-09-24T17:25:16Z",
+      "side": 1,
+      "message": "BufferVk implicitly assumes host visibility all over the place, see \"getSubData\", \"getIndexRange\" and so on. Making all of those aware of device_local memory is going to be a larger refactor. Any suggestions?",
+      "parentUuid": "f6bf1a9a_1807c048",
+      "revId": "f5838692abad95e076f405b763f5766ccfc15d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db281820_dfe2d813",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
