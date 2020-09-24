@@ -16,6 +16,23 @@
       "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8c49b0b_7e5bd0f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-09-24T00:12:45Z",
+      "side": 1,
+      "message": "What is the emulated format?",
+      "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
