@@ -87,6 +87,24 @@
       "revId": "6405e26847f43fc9bd4d12282a7767d585401052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "29c1e59d_b2198b60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T20:18:46Z",
+      "side": 1,
+      "message": "Trevor, I\u0027m not sure I totally follow the question, but CLs in Gerrit are tracked by the Change-Id rather than the commit hash. So your change won\u0027t be lost. Can you clarify your concern further?",
+      "parentUuid": "a3a94cba_557de27b",
+      "revId": "6405e26847f43fc9bd4d12282a7767d585401052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
