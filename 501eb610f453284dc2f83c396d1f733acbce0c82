@@ -131,6 +131,53 @@
     },
     {
       "key": {
+        "uuid": "6d9aceb2_0b644d46",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T16:39:15Z",
+      "side": 1,
+      "message": "I guess with EGLImages? What resources were conflicting?",
+      "parentUuid": "361b18b1_fe7a25c8",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 39
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57eada54_ffada0d2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T16:39:15Z",
+      "side": 1,
+      "message": "see call here",
+      "range": {
+        "startLine": 2175,
+        "startChar": 14,
+        "endLine": 2175,
+        "endChar": 28
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3cf311dc_0ca262d3",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 11
@@ -166,6 +213,30 @@
       "side": 1,
       "message": "Consistency with what?\nI would just have the caller make the same call.",
       "parentUuid": "3cf311dc_0ca262d3",
+      "range": {
+        "startLine": 2318,
+        "startChar": 4,
+        "endLine": 2318,
+        "endChar": 68
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df7f28d5_aaa7651b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T16:39:15Z",
+      "side": 1,
+      "message": "The Serial can change between the queueSubmit and this call. There\u0027s no need to make the call in queueSubmit because it already has the lock.",
+      "parentUuid": "361d7fd8_6d489f8c",
       "range": {
         "startLine": 2318,
         "startChar": 4,
