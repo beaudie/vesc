@@ -55,6 +55,12 @@ constexpr size_t kDescriptorImageInfosInitialSize  = 4;
 constexpr size_t kDescriptorWriteInfosInitialSize =
     kDescriptorBufferInfosInitialSize + kDescriptorImageInfosInitialSize;
 
+#if defined(ANGLE_ENABLE_OVERLAY)
+constexpr bool kOutputCumulativePerfCounters = ANGLE_ENABLE_OVERLAY;
+#else
+constexpr bool kOutputCumulativePerfCounters = false;
+#endif
+
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
 {
@@ -301,6 +307,43 @@ vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState)
     }
     // Simplify this check by returning write instead of checking the mask.
     return vk::ResourceAccess::Write;
+}
+
+// Requires that trace is enabled to see the output, which is supported with is_debug=true
+void OutputCumulativePerfCounters(const vk::PerfCounters &perfCounters)
+{
+    if (!kOutputCumulativePerfCounters)
+    {
+        return;
+    }
+
+    {
+        INFO() << "Context DS Allocations: ";
+
+        for (size_t pipelineType = 0;
+             pipelineType < perfCounters.contextDescriptorSetsAllocated.size(); ++pipelineType)
+        {
+            uint32_t count = perfCounters.contextDescriptorSetsAllocated[pipelineType];
+            if (count > 0)
+            {
+                INFO() << "    PipelineType " << pipelineType << ": " << count;
+            }
+        }
+    }
+
+    {
+        INFO() << "Utils DS Allocations: ";
+
+        for (size_t function = 0; function < perfCounters.utilsDescriptorSetsAllocated.size();
+             ++function)
+        {
+            uint32_t count = perfCounters.utilsDescriptorSetsAllocated[function];
+            if (count > 0)
+            {
+                INFO() << "    Function " << function << ": " << count;
+            }
+        }
+    }
 }
 }  // anonymous namespace
 
@@ -763,6 +806,8 @@ ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    OutputCumulativePerfCounters(mPerfCounters);
+
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
@@ -3926,6 +3971,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].allocateSetsAndGetInfo(
         this, driverUniforms->descriptorSetLayout.get().ptr(), 1,
         &driverUniforms->descriptorPoolBinding, &driverUniforms->descriptorSet, &newPoolAllocated));
+    mPerfCounters.contextDescriptorSetsAllocated[ToUnderlying(pipelineType)]++;
 
     // Clear descriptor set cache. It may no longer be valid.
     if (newPoolAllocated)

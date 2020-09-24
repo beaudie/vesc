@@ -45,6 +45,12 @@ VkDeviceSize GetShaderBufferBindingSize(const gl::OffsetBindingPointer<gl::Buffe
 }
 }  // namespace
 
+#if defined(ANGLE_ENABLE_OVERLAY)
+constexpr bool kOutputCumulativePerfCounters = ANGLE_ENABLE_OVERLAY;
+#else
+constexpr bool kOutputCumulativePerfCounters = false;
+#endif
+
 DefaultUniformBlock::DefaultUniformBlock() = default;
 
 DefaultUniformBlock::~DefaultUniformBlock() = default;
@@ -159,9 +165,14 @@ ProgramExecutableVk::ProgramExecutableVk()
       mDynamicBufferOffsets{},
       mProgram(nullptr),
       mProgramPipeline(nullptr)
-{}
+{
+    mPerfCounters.descriptorSetsAllocated.fill(0);
+}
 
-ProgramExecutableVk::~ProgramExecutableVk() = default;
+ProgramExecutableVk::~ProgramExecutableVk()
+{
+    outputCumulativePerfCounters();
+}
 
 void ProgramExecutableVk::reset(ContextVk *contextVk)
 {
@@ -395,6 +406,8 @@ angle::Result ProgramExecutableVk::allocateDescriptorSetAndGetInfo(
         &mDescriptorPoolBindings[ToUnderlying(descriptorSetIndex)],
         &mDescriptorSets[ToUnderlying(descriptorSetIndex)], newPoolAllocatedOut));
     mEmptyDescriptorSets[ToUnderlying(descriptorSetIndex)] = VK_NULL_HANDLE;
+
+    ++mPerfCounters.descriptorSetsAllocated[ToUnderlying(descriptorSetIndex)];
 
     return angle::Result::Continue;
 }
@@ -1546,6 +1559,8 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
                     contextVk, descriptorSetLayout.ptr(), 1,
                     &mDescriptorPoolBindings[descriptorSetIndex],
                     &mEmptyDescriptorSets[descriptorSetIndex]));
+
+                ++mPerfCounters.descriptorSetsAllocated[descriptorSetIndex];
             }
             descSet = mEmptyDescriptorSets[descriptorSetIndex];
         }
@@ -1565,6 +1580,46 @@ angle::Result ProgramExecutableVk::updateDescriptorSets(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
+}
+
+// Requires that trace is enabled to see the output, which is supported with is_debug=true
+void ProgramExecutableVk::outputCumulativePerfCounters()
+{
+    if (!kOutputCumulativePerfCounters)
+    {
+        return;
+    }
+
+    {
+        std::ostringstream text;
+
+        for (size_t descriptorSetIndex = 0;
+             descriptorSetIndex < mPerfCounters.descriptorSetsAllocated.size();
+             ++descriptorSetIndex)
+        {
+            uint32_t count = mPerfCounters.descriptorSetsAllocated[descriptorSetIndex];
+            if (count > 0)
+            {
+                text << "    DescriptorSetIndex " << descriptorSetIndex << ": " << count << "\n";
+            }
+        }
+
+        // Only output information for programs that allocated descriptor sets.
+        std::string textStr = text.str();
+        if (!textStr.empty())
+        {
+            INFO() << "ProgramExecutable: " << this << ":";
+
+            // Output each descriptor set allocation on a single line, so they're prefixed with the
+            // INFO information (file, line number, etc.).
+            // https://stackoverflow.com/a/12514641
+            std::istringstream iss(textStr);
+            for (std::string line; std::getline(iss, line);)
+            {
+                INFO() << line;
+            }
+        }
+    }
 }
 
 }  // namespace rx
