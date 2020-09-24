@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbc0ee57_484ae3b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-24T00:10:50Z",
+      "side": 1,
+      "message": "Looks reasonable. A regression test would be welcome if you could. Will land this to unblock Fuchsia.",
+      "revId": "a5950b443a60c8a951ecfb5d7b890c5b1eac7c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
