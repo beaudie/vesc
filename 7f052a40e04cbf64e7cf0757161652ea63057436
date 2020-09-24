@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "d636d252_51230545",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T20:07:07Z",
+      "side": 1,
+      "message": "Tim probably can easily print out the number ContextVk::onDestroy to see. If only a dozen, not real concern. I was under impression it is much bigger.",
+      "parentUuid": "4718c07c_11dcd2c2",
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7170f50_4a2c25c1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -100,6 +118,30 @@
       "writtenOn": "2020-09-24T19:02:03Z",
       "side": 1,
       "message": "regarding cumulative, I was thinking we\u0027d have two sets of counters - per-frame and per-context. and we\u0027d accumulate the per-frame into the per-context counters on flushes.",
+      "range": {
+        "startLine": 307,
+        "startChar": 5,
+        "endLine": 307,
+        "endChar": 33
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1755d8b_60e1987f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-24T20:07:07Z",
+      "side": 1,
+      "message": "The counter clear at flushImpl time always bothers me a bit. I have to be careful that I did not trigger a flush before reading out the counter. Is it possible that  we always maintain the umulative counter. Then in the overlay code, it calculate the delta between two frames for the per frame data? The way it is right now, for example, you would also have issue that manhattan may not display accurate RP counts when we did honor the glFlush call.",
+      "parentUuid": "b7170f50_4a2c25c1",
       "range": {
         "startLine": 307,
         "startChar": 5,
