@@ -16,6 +16,29 @@
       "revId": "6796ccddf8ccfee15933d55f9ebd1acc30cb6388",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "101dd88e_983f3dde",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-24T21:18:44Z",
+      "side": 1,
+      "message": "nit: THREAD_SANITIZER",
+      "range": {
+        "startLine": 66,
+        "startChar": 19,
+        "endLine": 66,
+        "endChar": 34
+      },
+      "revId": "6796ccddf8ccfee15933d55f9ebd1acc30cb6388",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
