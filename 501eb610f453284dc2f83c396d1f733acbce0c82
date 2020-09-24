@@ -203,6 +203,30 @@
     },
     {
       "key": {
+        "uuid": "c5bd7a9f_6fe9dc4a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-24T20:45:08Z",
+      "side": 1,
+      "message": "Of course, cannot repo. Now hitting different error: _LIBCPP_ASSERT \u0027__get_const_db()-\u003e__dereferenceable(this)\u0027 failed. Attempted to dereference a non-dereferenceable iterator\nI don\u0027t think that is threading related as I can see that glslang grabs a lot earlier in the stack.",
+      "parentUuid": "0700244f_981ce447",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 39
+      },
+      "revId": "501eb610f453284dc2f83c396d1f733acbce0c82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57eada54_ffada0d2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 11
