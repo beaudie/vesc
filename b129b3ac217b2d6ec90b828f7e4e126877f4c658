@@ -16,6 +16,126 @@
       "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5ebd98a_13fb7cba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T22:18:39Z",
+      "side": 1,
+      "message": "Looks pretty similar to the last one, though I\u0027m even less familiar with the rules and subtleties of D/S stuff.\n\nThe only thing that stands out is that it seems all of the testing always has a color and D/S attachment when there\u0027s any drawing being done.   Is it possible to draw with just a D/S attachment and then attach a color attachment to verify the D/S contents (or query the D/S attachment directly)?",
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3b43352_39923d8f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2449,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T22:18:39Z",
+      "side": 1,
+      "message": "mini-rant: It would be nice to have these gl::IMPLEMENTATION_MAX_DRAW_BUFFERS [+ 1] depth/stencil index values explicitly defined somewhere, so we can avoid this assumption about where depth/stencil live (and these magic +1s).   Unfortunately, there are a lot of places where the D/S index is determined by looping through all of the color attachments and then +1 to the final count, which some kind of well defined enum value wouldn\u0027t help with.\n\nIn a more perfect world, functions like these set() could even take a typed value, which is defined to contain the color, depth, and stencil attachment indexes, rather than raw uint32_t colorIndexGL that\u0027s used everywhere.\n\nOf course, with more time eventually this will all look more natural and maybe this is all just a non-issue for everyone else.",
+      "range": {
+        "startLine": 2442,
+        "startChar": 0,
+        "endLine": 2449,
+        "endChar": 9
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b428ba70_087c6d6c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T22:18:39Z",
+      "side": 1,
+      "message": "These lines show that the \u0027input_attachment_index\u0027 values are unique for depth and stencil, but the code below reuses the same depthStencilInputIndex.   Which is correct?   My guess is a missing ++input_attachment_index below.",
+      "range": {
+        "startLine": 394,
+        "startChar": 0,
+        "endLine": 395,
+        "endChar": 96
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58b07387_3273b54d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T22:18:39Z",
+      "side": 1,
+      "message": "After looking at this stuff a bit more, I think these hard coded \u00270\u0027 should actually be DescriptorSetIndex::InternalShader.   It\u0027s a bit of a pain to fill out, but I think more correct.",
+      "range": {
+        "startLine": 433,
+        "startChar": 21,
+        "endLine": 433,
+        "endChar": 26
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e1e9cf4_e35c5aff",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2248,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T22:18:39Z",
+      "side": 1,
+      "message": "Can you add an ASSERT(totalBindingCount \u003e 0)?",
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "662246ab_12398012",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T22:18:39Z",
+      "side": 1,
+      "message": "Why is this check necessary?   It looks like everything here is only concerned with color attachments.",
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
