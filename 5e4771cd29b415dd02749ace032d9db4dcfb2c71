@@ -16,6 +16,29 @@
       "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62da7d5b_cdfbdcc8",
+        "filename": "src/tests/angle_system_info_tests_main.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T18:03:39Z",
+      "side": 1,
+      "message": "nit: you can return EXIT_FAILURE from stdlib.h",
+      "range": {
+        "startLine": 62,
+        "startChar": 15,
+        "endLine": 62,
+        "endChar": 16
+      },
+      "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
