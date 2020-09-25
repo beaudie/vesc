@@ -31,6 +31,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/EGLSync.h"
+#include "libANGLE/FrameCapture.h"
 #include "libANGLE/Image.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/Stream.h"
@@ -1464,6 +1465,18 @@ void Display::notifyDeviceLost()
     }
 
     mDeviceLost = true;
+}
+
+void Display::endFrameCapture()
+{
+    // if not enabled, return early
+    // mFrameCaptureEnabled
+
+    for (ContextSet::iterator context = mContextSet.begin(); context != mContextSet.end();
+         context++)
+    {
+        (*context)->getFrameCapture()->finish(*context);
+    }
 }
 
 void Display::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get)

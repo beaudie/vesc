@@ -21,6 +21,7 @@
 #include "common/system_utils.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Query.h"
@@ -4368,6 +4369,25 @@ void FrameCapture::checkForCaptureTrigger()
     }
 }
 
+void FrameCapture::finish(const gl::Context *context)
+{
+    WriteCppReplay(mCompression, mOutDirectory, context, mCaptureLabel, mFrameIndex, mFrameStart,
+                   mFrameEnd, mFrameCalls, mSetupCalls, &mResourceTracker, &mBinaryData,
+                   mSerializeStateEnabled);
+
+    // Save the index files after the last frame.
+    WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameStart,
+                             mFrameEnd, mDrawSurfaceWidth, mDrawSurfaceHeight, mReadBufferSize,
+                             mClientArraySizes, mHasResourceType, mSerializeStateEnabled, false,
+                             context->getConfig(), mBinaryData);
+
+    if (!mBinaryData.empty())
+    {
+        SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel, mBinaryData);
+        mBinaryData.clear();
+    }
+}
+
 void FrameCapture::onEndFrame(const gl::Context *context)
 {
     // On Android, we can trigger a capture during the run
@@ -4398,6 +4418,8 @@ void FrameCapture::onEndFrame(const gl::Context *context)
                 mBinaryData.clear();
             }
             mWroteIndexFile = true;
+
+            context->getDisplay()->endFrameCapture();
         }
     }
 
