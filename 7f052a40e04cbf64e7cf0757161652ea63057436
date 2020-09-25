@@ -309,6 +309,30 @@
     },
     {
       "key": {
+        "uuid": "c2c32de6_5b784a9a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T16:53:27Z",
+      "side": 1,
+      "message": "What are we considering \"per-object\"?   Would these have to correlate to GLES objects, or can they be anything we want?   In particular, the UtilsVk is ANGLE-specific (no corresponding GLES object) but the instance is owned by the ContextVk so we could add it to the list of ContextVk\u0027s counters.\n\nAssuming we have per-object counters, how do we return those to the caller?   For example, the ContextVk doesn\u0027t have a way to iterate through the various Programs (which owns ProgramExecutableVks with the counts), so it can\u0027t respond to any queries for the data.   The front end has a list of programs, so it could query its backend for data, but I\u0027m not sure what the data collection process from the backend objects would look like (would the ContextVk be the central way to the backed, or do we query all objects that have a backend?).\n\nThat\u0027s all beyond the scope of this CL though.\n\nRegarding this CL, the descriptor set allocation counts can be moved into ProgramExecutableVk and output during its dtor easily enough.   Since the ContextVk doesn\u0027t have any way to collect the data per program, we won\u0027t have any per-frame counts, so we\u0027d just stick with outputting them during the ProgramExecutableVk dtor.   That would likely happen at app termination, but I\u0027m not sure of the details of how glDeleteProgram() is handled and if the various objects are destroyed then too (so we could get output in the middle of a run).\n\nIs moving them to ProgramExecutableVk the approach we want here?",
+      "parentUuid": "2505d4e8_34e9288f",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 799,
+        "endChar": 39
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea5709b7_573caffc",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
