@@ -308,6 +308,8 @@ class FrameCapture final : angle::NonCopyable
     void onMakeCurrent(const egl::Surface *drawSurface);
     bool enabled() const { return mEnabled; }
 
+    void finish(const gl::Context *context);
+
     bool isCapturing() const;
     void replay(gl::Context *context);
 
