@@ -357,6 +357,30 @@
     },
     {
       "key": {
+        "uuid": "ed5c8a86_84feaaa3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T17:06:19Z",
+      "side": 1,
+      "message": "\u003e In particular, the UtilsVk is ANGLE-specific (no corresponding GLES object) but the instance is owned by the ContextVk so we could add it to the list of ContextVk\u0027s counters.\n\nNo UtilsVk cannot be per object.\n\n\u003e Assuming we have per-object counters, how do we return those to the caller?\n\nThe same way we get any other per-object information. For example, `glGetProgramInterface` passes in the program, `glGetTexParameter*` looks at the current binding. Ideally we would want the former.",
+      "parentUuid": "af2dd35c_07b6a688",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 799,
+        "endChar": 39
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea5709b7_573caffc",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
