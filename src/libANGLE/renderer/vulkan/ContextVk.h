@@ -556,6 +556,12 @@ class ContextVk : public ContextImpl, public vk::Context
                                         vk::AliasingMode::Allowed, image);
     }
 
+    void onDepthStencilStartNewRenderPass(vk::ImageHelper *image)
+    {
+        ASSERT(mRenderPassCommands->started());
+        mRenderPassCommands->depthStencilImageStartNewRenderPass(&mResourceUseList, image);
+    }
+
     vk::CommandBuffer &getOutsideRenderPassCommandBuffer()
     {
         return mOutsideRenderPassCommands->getCommandBuffer();

@@ -2504,7 +2504,15 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // tracking content valid very loosely here that as long as it is attached, it assumes will
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
-        depthStencilRenderTarget->onDepthStencilDraw(contextVk, mReadOnlyDepthStencilMode);
+        if (depthStencilRenderTarget->hasResolveAttachment())
+        {
+            depthStencilRenderTarget->onDepthStencilDraw(contextVk, false);
+        }
+        else
+        {
+            // The actual layout determination will be deferred until endRenderPass time
+            depthStencilRenderTarget->onDepthStencilStartNewRenderPass(contextVk);
+        }
     }
 
     if (unresolveColorMask.any() || unresolveDepth || unresolveStencil)
