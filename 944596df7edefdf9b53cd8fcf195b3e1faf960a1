@@ -33,6 +33,52 @@
       "revId": "944596df7edefdf9b53cd8fcf195b3e1faf960a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c0882c5c_9481d956",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T15:51:33Z",
+      "side": 1,
+      "message": "You don\u0027t need a pointer to make a copy, this could have stayed const \u0026. If the user doesn\u0027t need the sizes afterwards, you can also take \u0026\u0026 and do std::move().",
+      "range": {
+        "startLine": 1676,
+        "startChar": 41,
+        "endLine": 1676,
+        "endChar": 76
+      },
+      "revId": "944596df7edefdf9b53cd8fcf195b3e1faf960a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94d2a890_69aaa3f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T15:51:33Z",
+      "side": 1,
+      "message": "This is not how multiplication works :D",
+      "range": {
+        "startLine": 1856,
+        "startChar": 24,
+        "endLine": 1856,
+        "endChar": 26
+      },
+      "revId": "944596df7edefdf9b53cd8fcf195b3e1faf960a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
