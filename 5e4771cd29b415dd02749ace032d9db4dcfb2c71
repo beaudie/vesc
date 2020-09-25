@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "627263a5_9258cd6a",
+        "filename": "src/tests/angle_system_info_tests_main.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-25T19:19:33Z",
+      "side": 1,
+      "message": "nit: Maybe worth a warning?",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 25
+      },
+      "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62da7d5b_cdfbdcc8",
         "filename": "src/tests/angle_system_info_tests_main.cpp",
         "patchSetId": 8
@@ -35,6 +58,29 @@
         "startChar": 15,
         "endLine": 62,
         "endChar": 16
+      },
+      "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38949d50_479ded85",
+        "filename": "src/tests/angle_system_info_tests_main.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-25T19:19:33Z",
+      "side": 1,
+      "message": "This won\u0027t work easily on Android.  Can you write it to a file instead?  That or add a TODO, but it will need to be handled very soon.",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 10
       },
       "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
