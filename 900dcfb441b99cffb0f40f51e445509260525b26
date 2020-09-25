@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa23b4fe_d9b49d05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-25T23:02:24Z",
+      "side": 1,
+      "message": "LGTM, will leave it to you to make sure the extension is present on iOS.",
+      "revId": "900dcfb441b99cffb0f40f51e445509260525b26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
