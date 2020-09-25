@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "cbaa7166_ecf0057d",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T15:19:52Z",
+      "side": 1,
+      "message": "Please use std::array, there\u0027s no need for these to be dynamically allocated.\n\nYou can also use angle::FixedVector to get vector like push_back()/size() for depthStencilFormats.",
+      "range": {
+        "startLine": 54,
+        "startChar": 10,
+        "endLine": 54,
+        "endChar": 21
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc020eba_5e7cff81",
         "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
         "patchSetId": 1
