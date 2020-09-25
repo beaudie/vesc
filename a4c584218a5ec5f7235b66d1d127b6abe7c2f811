@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50cc0853_4a9f3bbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T19:18:36Z",
+      "side": 1,
+      "message": "LGTM, not really capable of reviewing the design or Metal details but didn\u0027t see any problematic interactions with the rest of ANGLE.",
+      "revId": "a4c584218a5ec5f7235b66d1d127b6abe7c2f811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
