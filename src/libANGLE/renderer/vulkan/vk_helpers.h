@@ -268,6 +268,7 @@ class DescriptorPoolHelper
     Serial getSerial() const { return mMostRecentSerial; }
 
   private:
+    uint32_t mInitialPoolSize;
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
     Serial mMostRecentSerial;

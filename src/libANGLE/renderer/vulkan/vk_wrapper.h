@@ -590,6 +590,7 @@ class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPo
 {
   public:
     DescriptorPool() = default;
+    void reset(VkDevice device);
     void destroy(VkDevice device);
 
     VkResult init(VkDevice device, const VkDescriptorPoolCreateInfo &createInfo);
@@ -1669,13 +1670,17 @@ ANGLE_INLINE VkResult DescriptorSetLayout::init(VkDevice device,
 }
 
 // DescriptorPool implementation.
+ANGLE_INLINE void DescriptorPool::reset(VkDevice device)
+{
+    ASSERT(valid());
+    vkResetDescriptorPool(device, mHandle, 0);
+}
+
 ANGLE_INLINE void DescriptorPool::destroy(VkDevice device)
 {
-    if (valid())
-    {
-        vkDestroyDescriptorPool(device, mHandle, nullptr);
-        mHandle = VK_NULL_HANDLE;
-    }
+    ASSERT(valid());
+    vkDestroyDescriptorPool(device, mHandle, nullptr);
+    mHandle = VK_NULL_HANDLE;
 }
 
 ANGLE_INLINE VkResult DescriptorPool::init(VkDevice device,

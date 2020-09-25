@@ -1662,7 +1662,7 @@ void DynamicShadowBuffer::reset()
 }
 
 // DescriptorPoolHelper implementation.
-DescriptorPoolHelper::DescriptorPoolHelper() : mFreeDescriptorSets(0) {}
+DescriptorPoolHelper::DescriptorPoolHelper() : mInitialPoolSize(0), mFreeDescriptorSets(0) {}
 
 DescriptorPoolHelper::~DescriptorPoolHelper() = default;
 
@@ -1677,8 +1677,22 @@ angle::Result DescriptorPoolHelper::init(ContextVk *contextVk,
 {
     if (mDescriptorPool.valid())
     {
-        // This could be improved by recycling the descriptor pool.
-        mDescriptorPool.destroy(contextVk->getDevice());
+        if (mInitialPoolSize == maxSets)
+        {
+            // Since the pool is already the correct size, we just need to reset it:
+            // Resetting a descriptor pool recycles all of the resources from all of the descriptor
+            // sets allocated from the descriptor pool back to the descriptor pool, and the
+            // descriptor sets are implicitly freed.
+            mDescriptorPool.reset(contextVk->getDevice());
+            mFreeDescriptorSets = maxSets;
+            return angle::Result::Continue;
+        }
+        else
+        {
+            // The new pool will be a different size, so we need to destroy the old pool before
+            // creating the new one.
+            mDescriptorPool.destroy(contextVk->getDevice());
+        }
     }
 
     VkDescriptorPoolCreateInfo descriptorPoolInfo = {};
@@ -1688,6 +1702,7 @@ angle::Result DescriptorPoolHelper::init(ContextVk *contextVk,
     descriptorPoolInfo.poolSizeCount              = static_cast<uint32_t>(poolSizes.size());
     descriptorPoolInfo.pPoolSizes                 = poolSizes.data();
 
+    mInitialPoolSize    = maxSets;
     mFreeDescriptorSets = maxSets;
 
     ANGLE_VK_TRY(contextVk, mDescriptorPool.init(contextVk->getDevice(), descriptorPoolInfo));
@@ -1697,7 +1712,12 @@ angle::Result DescriptorPoolHelper::init(ContextVk *contextVk,
 
 void DescriptorPoolHelper::destroy(VkDevice device)
 {
-    mDescriptorPool.destroy(device);
+    if (mDescriptorPool.valid())
+    {
+        mDescriptorPool.destroy(device);
+        mInitialPoolSize    = 0;
+        mFreeDescriptorSets = 0;
+    }
 }
 
 void DescriptorPoolHelper::release(ContextVk *contextVk)
