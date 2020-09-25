@@ -135,6 +135,17 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, bool isReadOnly)
     mContentDefined = true;
 }
 
+void RenderTargetVk::onDepthStencilStartNewRenderPass(ContextVk *contextVk)
+{
+    const angle::Format &format = mImage->getFormat().actualImageFormat();
+    ASSERT(format.hasDepthOrStencilBits());
+
+    contextVk->onDepthStencilStartNewRenderPass(mImage, mResolveImage);
+    retainImageViews(contextVk);
+
+    mContentDefined = true;
+}
+
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
 {
     ASSERT(mImage && mImage->valid());

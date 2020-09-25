@@ -561,6 +561,13 @@ class ContextVk : public ContextImpl, public vk::Context
         }
     }
 
+    void onDepthStencilStartNewRenderPass(vk::ImageHelper *image, vk::ImageHelper *resolveImage)
+    {
+        ASSERT(mRenderPassCommands->started());
+        mRenderPassCommands->depthStencilImageStartNewRenderPass(&mResourceUseList, image,
+                                                                 resolveImage);
+    }
+
     vk::CommandBuffer &getOutsideRenderPassCommandBuffer()
     {
         return mOutsideRenderPassCommands->getCommandBuffer();

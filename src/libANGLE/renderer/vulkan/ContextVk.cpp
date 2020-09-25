@@ -4042,7 +4042,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 
             if (hasStartedRenderPass())
             {
-                if (!mDrawFramebuffer->isReadOnlyDepthMode())
+                if (!mRenderPassCommands->isReadOnlyDepthMode())
                 {
                     // To enter depth feedback loop, we must flush and start a new renderpass.
                     // Otherwise it will stick with writable layout and cause validation error.
@@ -4050,8 +4050,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
                 }
                 else
                 {
-                    ANGLE_TRY(mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(
-                        this, mRenderPassCommands));
+                    mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
                 }
             }
 
@@ -4636,21 +4635,17 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 {
     mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
 
-    // We always start renderpass with proper depth stencil read only mode based on the current
-    // depth stencil state.
-    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
-    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
-    bool readOnlyDepthMode =
-        depthAccess != vk::ResourceAccess::Write && stencilAccess != vk::ResourceAccess::Write;
-
-    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, readOnlyDepthMode, renderArea,
-                                                   &mRenderPassCommandBuffer));
+    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
 
     ANGLE_TRY(resumeOcclusionQueryIfActive());
 
+    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
+    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
     mRenderPassCommands->onDepthAccess(depthAccess);
     mRenderPassCommands->onStencilAccess(stencilAccess);
+
+    mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
 
     if (commandBufferOut)
     {
@@ -5088,8 +5083,7 @@ angle::Result ContextVk::updateRenderPassDepthStencilAccess()
                 mDrawFramebuffer->restoreDepthStencilDefinedContents();
             }
 
-            ANGLE_TRY(
-                mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands));
+            mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
         }
     }
 
