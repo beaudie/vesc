@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e38cced6_3c32ff62",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T16:47:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b5f189b_a78006b8",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 30
+      },
+      "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "339a0aef_2de31540",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -106,6 +130,24 @@
       "writtenOn": "2020-09-11T17:15:38Z",
       "side": 1,
       "message": "LGTM, but it seems there are some tests failing on Android:\n\nI  329.531s run_tests_on_device(HT7BG1A04081)  [ RUN      ] OcclusionQueriesTest.ClearNotCounted/ES2_Vulkan\nI  329.531s run_tests_on_device(HT7BG1A04081)  ../../third_party/angle/src/tests/gl_tests/OcclusionQueriesTest.cpp:190: Failure\nI  329.531s run_tests_on_device(HT7BG1A04081)  Expected equality of these values:\nI  329.531s run_tests_on_device(HT7BG1A04081)    static_cast\u003cGLboolean\u003e(0)\nI  329.531s run_tests_on_device(HT7BG1A04081)      Which is: \u0027\\0\u0027\nI  329.532s run_tests_on_device(HT7BG1A04081)    (result[0])\nI  329.532s run_tests_on_device(HT7BG1A04081)      Which is: 1",
+      "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e932153_dcf6c3c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T16:47:36Z",
+      "side": 1,
+      "message": "Fixed by previous change.",
+      "parentUuid": "2d2d0e57_747aece3",
       "revId": "fec0cd4f1a43786bdd577468d518551dc6331d31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
