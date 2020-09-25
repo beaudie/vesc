@@ -16,6 +16,23 @@
       "revId": "82ef7a8072b6943805df41829ad79c25d3bf8492",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "132f19fa_d1b4b7fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T14:29:17Z",
+      "side": 1,
+      "message": "Trevor: I gave you CQ+2 privileges. Please feel free to land your CLs that are +2ed by other reviewers (e.g. this one).",
+      "revId": "82ef7a8072b6943805df41829ad79c25d3bf8492",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
