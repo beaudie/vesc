@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "f2c2325c_3a62bb19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T20:40:12Z",
+      "side": 1,
+      "message": "Filed http://anglebug.com/5103 and left TODO.",
+      "parentUuid": "4e84e36b_203fcba5",
+      "revId": "3687c23043ace960ca4933b682f80281861fbbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b1bd4b5_14b146be",
         "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
         "patchSetId": 7
@@ -97,6 +115,30 @@
       "revId": "3687c23043ace960ca4933b682f80281861fbbee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4b42ea2_fefbdbeb",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T20:40:12Z",
+      "side": 1,
+      "message": "You guys are right. It was a mistake left in from a partially reverted refactor. Done.",
+      "parentUuid": "97db0e14_257a0fff",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 42
+      },
+      "revId": "3687c23043ace960ca4933b682f80281861fbbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
