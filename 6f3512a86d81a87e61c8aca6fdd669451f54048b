@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7ea22448_c80ea82b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-09-25T20:40:54Z",
+      "side": 1,
+      "message": "The code in question is forbidding an ES3 context from supporting EXT_color_buffer_half_float if it doesn\u0027t also support EXT_color_buffer_float.",
+      "parentUuid": "6394c0a6_dbf8e40e",
+      "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0a74c49_a001ae32",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 3
