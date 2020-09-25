@@ -51,6 +51,24 @@
       "revId": "606b0c253f8bc7bec280216973c6361106b5a9ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5170e489_7c6d5c6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-25T19:10:42Z",
+      "side": 1,
+      "message": "I was thinking that when Brian updates the version used by Chromium, we\u0027d also want to get it.\nIsn\u0027t it the same with the other CIPD packages?",
+      "parentUuid": "09ed8a0b_3257e746",
+      "revId": "606b0c253f8bc7bec280216973c6361106b5a9ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
