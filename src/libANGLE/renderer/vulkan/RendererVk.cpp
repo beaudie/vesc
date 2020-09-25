@@ -497,6 +497,8 @@ void RendererVk::onDestroy()
         mCommandProcessor.shutdown(&mCommandProcessorThread);
     }
 
+    mAnnotator.release();
+
     // Force all commands to finish by flushing all queues.
     for (VkQueue queue : mQueues)
     {
@@ -890,11 +892,15 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Initialize the format table.
     mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
 
+    mAnnotator.initialize();
+    gl::InitializeDebugAnnotations(&mAnnotator);
+
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
         mCommandProcessorThread =
             std::thread(&CommandProcessor::processCommandProcessorTasks, &mCommandProcessor);
     }
+
     return angle::Result::Continue;
 }
 

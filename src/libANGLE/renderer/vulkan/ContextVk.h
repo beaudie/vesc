@@ -249,6 +249,10 @@ class ContextVk : public ContextImpl, public vk::Context
                                  const std::string &message) override;
     angle::Result popDebugGroup(const gl::Context *context) override;
 
+    // Log GL calls for debuggers
+    void addOglApiString(const char *apiString);
+    void writeOpenGlApiString(const gl::Context *context, vk::CommandBuffer *commandBuffer);
+
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
     // When the device/surface is rotated such that the surface's aspect ratio is different than
@@ -1136,6 +1140,9 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::DynamicBuffer mStagingBuffer;
 
     std::vector<std::string> mCommandBufferDiagnostics;
+
+    // Log GL calls for debuggers
+    std::vector<std::string> mApiMappingStrings;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
