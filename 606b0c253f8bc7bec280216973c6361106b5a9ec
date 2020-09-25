@@ -33,6 +33,24 @@
       "revId": "606b0c253f8bc7bec280216973c6361106b5a9ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "09ed8a0b_3257e746",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T18:57:55Z",
+      "side": 1,
+      "message": "I was wondering about that. I was wondering if we should have a separate roller for it, as it doesn\u0027t use any aspect of chromium/src.",
+      "parentUuid": "f6dff0bf_f0963075",
+      "revId": "606b0c253f8bc7bec280216973c6361106b5a9ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
