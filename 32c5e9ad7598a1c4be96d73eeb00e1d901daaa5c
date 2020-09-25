@@ -209,6 +209,24 @@
       "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7718e516_e8e3b366",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T17:17:02Z",
+      "side": 1,
+      "message": "Good test in the new PS, but can you also add the test in this thread? It has nothing to do with no-validation.",
+      "parentUuid": "6e8aca51_d3823053",
+      "revId": "32c5e9ad7598a1c4be96d73eeb00e1d901daaa5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
