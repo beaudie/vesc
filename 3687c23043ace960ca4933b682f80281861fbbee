@@ -33,6 +33,29 @@
       "revId": "3687c23043ace960ca4933b682f80281861fbbee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b1bd4b5_14b146be",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-25T18:32:37Z",
+      "side": 1,
+      "message": "Why change the logic here?\nPrevious version looks safer.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 42
+      },
+      "revId": "3687c23043ace960ca4933b682f80281861fbbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
