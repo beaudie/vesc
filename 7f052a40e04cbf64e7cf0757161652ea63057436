@@ -267,6 +267,30 @@
     },
     {
       "key": {
+        "uuid": "2505d4e8_34e9288f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T16:16:19Z",
+      "side": 1,
+      "message": "Why not have per object perf counters? The extension could query global or per-object perf counters.",
+      "parentUuid": "dec30354_27ab3a11",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 799,
+        "endChar": 39
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea5709b7_573caffc",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
