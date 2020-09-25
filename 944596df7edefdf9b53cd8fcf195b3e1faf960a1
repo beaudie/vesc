@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "dd7bbc82_3feb32ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T17:23:16Z",
+      "side": 1,
+      "message": "Oh, cool.    That\u0027s what I get for assuming it would be upset about a non-const copy, but I suppose doing whatever we want with the copy doesn\u0027t affect the original, so it makes sense.",
+      "parentUuid": "c0882c5c_9481d956",
+      "range": {
+        "startLine": 1676,
+        "startChar": 41,
+        "endLine": 1676,
+        "endChar": 76
+      },
+      "revId": "944596df7edefdf9b53cd8fcf195b3e1faf960a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94d2a890_69aaa3f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -79,6 +103,30 @@
       "revId": "944596df7edefdf9b53cd8fcf195b3e1faf960a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd506a27_16e37ead",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T17:23:16Z",
+      "side": 1,
+      "message": "So close...",
+      "parentUuid": "94d2a890_69aaa3f5",
+      "range": {
+        "startLine": 1856,
+        "startChar": 24,
+        "endLine": 1856,
+        "endChar": 26
+      },
+      "revId": "944596df7edefdf9b53cd8fcf195b3e1faf960a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
