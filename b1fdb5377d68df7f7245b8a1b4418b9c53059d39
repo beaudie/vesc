@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92bfd521_c89f20b6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T22:50:08Z",
+      "side": 1,
+      "message": "Not entirely related to this change, but can/should we get more specific here to see if it\u0027s clearing D/S: mDeferredClears.testDepth() || mDeferredClears.testStencil() ?\n\nCould this be doing more work if they are just clearing color attachments?   Or is there an interaction there I\u0027m missing?",
+      "range": {
+        "startLine": 1717,
+        "startChar": 0,
+        "endLine": 1721,
+        "endChar": 5
+      },
+      "revId": "b1fdb5377d68df7f7245b8a1b4418b9c53059d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
