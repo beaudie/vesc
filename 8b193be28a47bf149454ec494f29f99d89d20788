@@ -42,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "0ff0108c_ac2c1774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T12:56:35Z",
+      "side": 1,
+      "message": "Charlie: I\u0027m wondering if we should move this into ",
+      "revId": "8b193be28a47bf149454ec494f29f99d89d20788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "743d41bf_558ebd97",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 9
@@ -76,6 +93,30 @@
       "writtenOn": "2020-09-25T12:52:21Z",
       "side": 1,
       "message": "doesn\u0027t this affect RenderPass creation here? just looking at CL description.",
+      "range": {
+        "startLine": 1807,
+        "startChar": 24,
+        "endLine": 1807,
+        "endChar": 50
+      },
+      "revId": "8b193be28a47bf149454ec494f29f99d89d20788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76a6c6f0_959b6686",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T12:56:35Z",
+      "side": 1,
+      "message": "I am thinking that maybe the fix is to somehow make this a part of AttachmentOpsArray, moving the logic out of addRenderPass and updating the code in FramebufferVk.",
+      "parentUuid": "268c73c0_ed321e20",
       "range": {
         "startLine": 1807,
         "startChar": 24,
