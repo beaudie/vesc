@@ -31,6 +31,7 @@
 namespace gl
 {
 class Context;
+class FrameCapture;
 class TextureManager;
 class SemaphoreManager;
 }  // namespace gl
@@ -193,6 +194,7 @@ class Display final : public LabeledObject,
     bool isDeviceLost() const;
     bool testDeviceLost();
     void notifyDeviceLost();
+    void endFrameCapture();
 
     void setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get);
     bool areBlobCacheFuncsSet() const { return mBlobCache.areBlobCacheFuncsSet(); }
