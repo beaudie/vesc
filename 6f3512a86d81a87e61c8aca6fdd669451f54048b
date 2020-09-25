@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "d88c08ae_ff8408eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-09-25T22:31:23Z",
+      "side": 1,
+      "message": "It passes the conformance test I wrote on their bots but that doesn\u0027t prove that the extension is available. WebKit doesn\u0027t have extension availability tests, unfortunately. I\u0027ll modify the test to fail if the extension isn\u0027t exposed and run that through their bots; that will check both the simulator and real iOS devices.",
+      "parentUuid": "8a098bf4_2430b4b3",
+      "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0a74c49_a001ae32",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 3
