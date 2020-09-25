@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "10bd2c1b_9ad7df25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T12:52:21Z",
+      "side": 1,
+      "message": "wording",
+      "range": {
+        "startLine": 9,
+        "startChar": 61,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "8b193be28a47bf149454ec494f29f99d89d20788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ece567f_a02ed79e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
@@ -35,6 +58,29 @@
         "startChar": 9,
         "endLine": 1625,
         "endChar": 39
+      },
+      "revId": "8b193be28a47bf149454ec494f29f99d89d20788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "268c73c0_ed321e20",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T12:52:21Z",
+      "side": 1,
+      "message": "doesn\u0027t this affect RenderPass creation here? just looking at CL description.",
+      "range": {
+        "startLine": 1807,
+        "startChar": 24,
+        "endLine": 1807,
+        "endChar": 50
       },
       "revId": "8b193be28a47bf149454ec494f29f99d89d20788",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
