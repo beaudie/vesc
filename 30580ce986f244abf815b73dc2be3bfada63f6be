@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "976fde5a_aadd26f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T19:03:37Z",
+      "side": 1,
+      "message": "nit: mPadding, and please make sure to initialize it to zero and copy it around properly to avoid undefined behaviour due to uninitialized memory.\n\nAlso please use the struct padding warnings in debug.h around this struct to catch future errors, if you could.",
+      "range": {
+        "startLine": 1082,
+        "startChar": 12,
+        "endLine": 1082,
+        "endChar": 19
+      },
+      "revId": "30580ce986f244abf815b73dc2be3bfada63f6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
