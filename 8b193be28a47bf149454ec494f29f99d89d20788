@@ -173,6 +173,30 @@
       "revId": "8b193be28a47bf149454ec494f29f99d89d20788",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e923fb45_ac47bf12",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-25T15:00:09Z",
+      "side": 1,
+      "message": "No, unresolve adds a subpass. Actually let\u0027s talk about this later today. This must be correct as needing unresolve or not doesn\u0027t affect serials, but each unresolve bit here changes the description of the initial subpass (thus making the render pass incompatible)\n\nHad a moment of self-doubt seeing this change last night!",
+      "parentUuid": "6d88d926_14cace55",
+      "range": {
+        "startLine": 1083,
+        "startChar": 0,
+        "endLine": 1086,
+        "endChar": 53
+      },
+      "revId": "8b193be28a47bf149454ec494f29f99d89d20788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
