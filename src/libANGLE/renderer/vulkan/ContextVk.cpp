@@ -4042,7 +4042,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 
             if (hasStartedRenderPass())
             {
-                if (!mDrawFramebuffer->isReadOnlyDepthMode())
+                if (!mRenderPassCommands->isReadOnlyDepthMode())
                 {
                     // To enter depth feedback loop, we must flush and start a new renderpass.
                     // Otherwise it will stick with writable layout and cause validation error.
@@ -4050,8 +4050,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
                 }
                 else
                 {
-                    ANGLE_TRY(mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(
-                        this, mRenderPassCommands));
+                    mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
                 }
             }
 
@@ -4573,12 +4572,16 @@ angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
     ASSERT(!image->isReleasedToExternal());
     ASSERT(image->getImageSerial().valid());
 
+    // This assertion is no longer valid due to we defer the depth stencil image layout transition.
+    // But we could add it back once we tracks all attachments in the render pass.
+#if 0
     // Layout transitions for images used in the render pass are handled especially.  This function
     // is only called when the image is used outside the render pass.  As such, if the image is used
     // inside the render pass, its layout is necessarily different from imageLayout, and thus a
     // layout transition is necessary (and the render pass has to break).
     ASSERT(image->isReadBarrierNecessary(imageLayout) ||
            !(mRenderPassCommands->started() && mRenderPassCommands->usesImageInRenderPass(*image)));
+#endif
 
     // Note that different read methods are not compatible. A shader read uses a different layout
     // than a transfer read. So we cannot support simultaneous read usage as easily as for Buffers.
@@ -4636,21 +4639,17 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 {
     mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
 
-    // We always start renderpass with proper depth stencil read only mode based on the current
-    // depth stencil state.
-    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
-    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
-    bool readOnlyDepthMode =
-        depthAccess != vk::ResourceAccess::Write && stencilAccess != vk::ResourceAccess::Write;
-
-    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, readOnlyDepthMode, renderArea,
-                                                   &mRenderPassCommandBuffer));
+    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
 
     ANGLE_TRY(resumeOcclusionQueryIfActive());
 
+    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
+    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
     mRenderPassCommands->onDepthAccess(depthAccess);
     mRenderPassCommands->onStencilAccess(stencilAccess);
+
+    mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
 
     if (commandBufferOut)
     {
@@ -5088,8 +5087,7 @@ angle::Result ContextVk::updateRenderPassDepthStencilAccess()
                 mDrawFramebuffer->restoreDepthStencilDefinedContents();
             }
 
-            ANGLE_TRY(
-                mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands));
+            mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
         }
     }
 
