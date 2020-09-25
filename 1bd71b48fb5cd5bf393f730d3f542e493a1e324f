@@ -22,6 +22,30 @@
       "revId": "1bd71b48fb5cd5bf393f730d3f542e493a1e324f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e163d6_927f1d2b",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-25T20:48:01Z",
+      "side": 0,
+      "message": "This function is used for GL_RENDERER, not GL_VERSION.\n\nI\u0027m not sure why drivers pass the vendor and version info in GL_VERSION if the spec doesn\u0027t enforce it, but it looks like Chrome uses only GL_VERSION to get this info reliably: https://source.chromium.org/chromium/chromium/src/+/master:ui/gl/gl_version_info.cc;l\u003d86?q\u003dgl_version_info.cc\u0026ss\u003dchromium\n\nMy goal is to add GL_VERSION info to ANGLE\u0027s GL_RENDERER so that Chrome can continue parsing \"GL_VERSION\" in the exact same way",
+      "parentUuid": "90a99c94_f8986bd8",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 287,
+        "endChar": 0
+      },
+      "revId": "1bd71b48fb5cd5bf393f730d3f542e493a1e324f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
