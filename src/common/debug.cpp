@@ -29,6 +29,7 @@
 #include "common/Optional.h"
 #include "common/angleutils.h"
 #include "common/system_utils.h"
+#include "libANGLE/Context.h"
 
 namespace gl
 {
@@ -119,7 +120,8 @@ std::mutex &GetDebugMutex()
     return *g_debugMutex;
 }
 
-ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...) : mFunctionName(nullptr)
+ScopedPerfEventHelper::ScopedPerfEventHelper(gl::Context *context, const char *format, ...)
+    : mFunctionName(nullptr)
 {
     bool dbgTrace = DebugAnnotationsActive();
 #if !defined(ANGLE_ENABLE_DEBUG_TRACE)
@@ -139,7 +141,7 @@ ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...) : mFunctio
     va_end(vararg);
     if (dbgTrace)
     {
-        g_debugAnnotator->beginEvent(mFunctionName, buffer.data());
+        g_debugAnnotator->beginEvent(context, mFunctionName, buffer.data());
     }
 }
 
