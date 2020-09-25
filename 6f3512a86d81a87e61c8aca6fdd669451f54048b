@@ -33,6 +33,57 @@
       "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c82b0de_1addfcea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-25T13:25:37Z",
+      "side": 1,
+      "message": "I think it\u0027s likely you will hit this case: https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/Context.cpp;l\u003d3208;drc\u003d68a5baeb5ba08575c2a3a6e31a0bd8eb4b39d4de and the extension will be disabled on iOS because colorBufferFloat is not present.",
+      "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0a74c49_a001ae32",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-25T13:25:37Z",
+      "side": 1,
+      "message": "Could you add comments to some of these new validation cases? Especially if they are WebGL specific, it will be hard to remember why we allow certain formats.",
+      "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e407e84e_cd7d8c7f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-25T13:25:37Z",
+      "side": 1,
+      "message": "Do you remember why you needed to modify this file? It should only be called when validating ES2 contexts. Missing WebGL1 validation?",
+      "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
