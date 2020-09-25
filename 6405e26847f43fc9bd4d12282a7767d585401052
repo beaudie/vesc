@@ -105,6 +105,24 @@
       "revId": "6405e26847f43fc9bd4d12282a7767d585401052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1231e7d0_9a814b70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T00:33:09Z",
+      "side": 1,
+      "message": "I\u0027m not sure what your full workflow is, but I use:\n\ngit rebase-update\n\nThat may have more side effects than you\u0027re used to, but it works well for me.",
+      "parentUuid": "29c1e59d_b2198b60",
+      "revId": "6405e26847f43fc9bd4d12282a7767d585401052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
