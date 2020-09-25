@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "bea482d5_ef30e2fb",
+        "filename": "src/tests/angle_system_info_tests_main.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T22:18:20Z",
+      "side": 1,
+      "message": "Actually this isn\u0027t an error condition really. I removed it.",
+      "parentUuid": "627263a5_9258cd6a",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 25
+      },
+      "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62da7d5b_cdfbdcc8",
         "filename": "src/tests/angle_system_info_tests_main.cpp",
         "patchSetId": 8
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "2b1467a1_5d3e13c8",
+        "filename": "src/tests/angle_system_info_tests_main.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T22:18:20Z",
+      "side": 1,
+      "message": "Done, removed, but did use the codes elsewhere.",
+      "parentUuid": "62da7d5b_cdfbdcc8",
+      "range": {
+        "startLine": 62,
+        "startChar": 15,
+        "endLine": 62,
+        "endChar": 16
+      },
+      "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38949d50_479ded85",
         "filename": "src/tests/angle_system_info_tests_main.cpp",
         "patchSetId": 8
@@ -85,6 +133,30 @@
       "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1033e14_838faed7",
+        "filename": "src/tests/angle_system_info_tests_main.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T22:18:20Z",
+      "side": 1,
+      "message": "I made it work on Android. PTAL. Tested locally with the restricted trace script in a future patch set.",
+      "parentUuid": "38949d50_479ded85",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 10
+      },
+      "revId": "5e4771cd29b415dd02749ace032d9db4dcfb2c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
