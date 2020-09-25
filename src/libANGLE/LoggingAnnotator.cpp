@@ -18,7 +18,7 @@ bool LoggingAnnotator::getStatus()
     return false;
 }
 
-void LoggingAnnotator::beginEvent(const char *eventName, const char *eventMessage)
+void LoggingAnnotator::beginEvent(void *context, const char *eventName, const char *eventMessage)
 {
     ANGLE_TRACE_EVENT_BEGIN0("gpu.angle", eventName);
 }
