@@ -601,7 +601,6 @@ CommandBufferHelper::CommandBufferHelper()
       mCounter(0),
       mClearValues{},
       mRenderPassStarted(false),
-      mForceIndividualBarriers(false),
       mTransformFeedbackCounterBuffers{},
       mValidTransformFeedbackBufferCount(0),
       mRebindTransformFeedbackBuffers(false),
@@ -612,7 +611,8 @@ CommandBufferHelper::CommandBufferHelper()
       mDepthCmdSizeDisabled(kInfiniteCmdSize),
       mStencilCmdSizeInvalidated(kInfiniteCmdSize),
       mStencilCmdSizeDisabled(kInfiniteCmdSize),
-      mDepthStencilAttachmentIndex(kAttachmentIndexInvalid)
+      mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
+      mDepthStencilImage(nullptr)
 {}
 
 CommandBufferHelper::~CommandBufferHelper()
@@ -751,6 +751,22 @@ void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
     }
 }
 
+void CommandBufferHelper::depthStencilImageStartNewRenderPass(ResourceUseList *resourceUseList,
+                                                              ImageHelper *image)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(!usesImageInRenderPass(*image));
+
+    image->retain(resourceUseList);
+    mDepthStencilImage = image;
+    // Assume the worst here by erasing memory of the last clear operation. This will ensure next
+    // glClear call will not get dropped because we thought we just did the clear with the exact
+    // same value.
+    mDepthStencilImage->onWrite();
+
+    mRenderPassUsedImages.insert(image->getImageSerial().getValue());
+}
+
 bool CommandBufferHelper::onDepthAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
@@ -821,20 +837,7 @@ void CommandBufferHelper::executeBarriers(ContextVk *contextVk, PrimaryCommandBu
         return;
     }
 
-    if (mForceIndividualBarriers)
-    {
-        // Note: ideally we could merge double barriers into a single barrier (or even completely
-        // eliminate them in some cases). This is a bit trickier to manage than splitting barriers
-        // into single calls. It should only affect Framebuffer transitions.
-        // TODO: Investigate merging barriers. http://anglebug.com/4976
-        for (PipelineStage pipelineStage : mask)
-        {
-            PipelineBarrier &barrier = mPipelineBarriers[pipelineStage];
-            barrier.executeIndividually(primary);
-        }
-        mForceIndividualBarriers = false;
-    }
-    else if (contextVk->getFeatures().preferAggregateBarrierCalls.enabled)
+    if (contextVk->getFeatures().preferAggregateBarrierCalls.enabled)
     {
         PipelineStagesMask::Iterator iter = mask.begin();
         PipelineBarrier &barrier          = mPipelineBarriers[*iter];
@@ -870,10 +873,9 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mFramebuffer.setHandle(framebuffer.getHandle());
-    mRenderArea              = renderArea;
-    mClearValues             = clearValues;
-    *commandBufferOut        = &mCommandBuffer;
-    mForceIndividualBarriers = false;
+    mRenderArea       = renderArea;
+    mClearValues      = clearValues;
+    *commandBufferOut = &mCommandBuffer;
 
     mRenderPassStarted = true;
     mCounter++;
@@ -891,9 +893,6 @@ void CommandBufferHelper::updateStartedRenderPassWithDepthMode(const Framebuffer
         readOnlyDepth ? ImageLayout::DepthStencilReadOnly : ImageLayout::DepthStencilAttachment;
     mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, depthStencilLayout, depthStencilLayout);
     mFramebuffer.setHandle(framebuffer.getHandle());
-
-    // Barrier aggregation messes up with RenderPass restarting.
-    mForceIndividualBarriers = true;
 }
 
 void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
@@ -903,8 +902,43 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
         return;
     }
 
-    PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
+    // Do depth stencil layout change.
+    if (mDepthStencilImage)
+    {
+        ImageLayout imageLayout;
+        bool barrierRequired;
 
+        if (mRenderPassDesc.getDepthStencilAccess() == ResourceAccess::ReadOnly)
+        {
+            imageLayout     = ImageLayout::DepthStencilReadOnly;
+            barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
+        }
+        else
+        {
+            // Write always requires a barrier
+            imageLayout     = ImageLayout::DepthStencilAttachment;
+            barrierRequired = true;
+        }
+
+        if (barrierRequired)
+        {
+            const angle::Format &format = mDepthStencilImage->getFormat().actualImageFormat();
+            ASSERT(format.hasDepthOrStencilBits());
+            VkImageAspectFlags aspectFlags = GetDepthStencilAspectFlags(format);
+
+            PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
+            ASSERT(barrierIndex != PipelineStage::InvalidEnum);
+            PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
+            if (mDepthStencilImage->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier))
+            {
+                mPipelineBarrierMask.set(barrierIndex);
+            }
+        }
+
+        mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, imageLayout, imageLayout);
+    }
+
+    PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
     // Depth/Stencil buffer optimizations:
     //
     // First, if the attachment is invalidated, skip the store op.
@@ -1151,6 +1185,7 @@ void CommandBufferHelper::reset()
         mStencilCmdSizeDisabled            = kInfiniteCmdSize;
         mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
         mRenderPassUsedImages.clear();
+        mDepthStencilImage = nullptr;
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);

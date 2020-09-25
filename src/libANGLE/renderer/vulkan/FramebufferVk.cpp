@@ -2413,11 +2413,11 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                 VK_ATTACHMENT_LOAD_OP_CLEAR;
         setReadOnlyDepthMode(depthStencilReadOnly);
 
-        vk::ImageLayout dsLayout = mReadOnlyDepthStencilMode
-                                       ? vk::ImageLayout::DepthStencilReadOnly
-                                       : vk::ImageLayout::DepthStencilAttachment;
-
-        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex, dsLayout, dsLayout);
+        // Initialize layout with vk::ImageLayout::DepthStencilAttachment. This will updated at end
+        // of render pass.
+        renderPassAttachmentOps.setLayouts(depthStencilAttachmentIndex,
+                                           vk::ImageLayout::DepthStencilAttachment,
+                                           vk::ImageLayout::DepthStencilAttachment);
     }
 
     // If render pass description is changed, the previous render pass desc is no longer compatible.
@@ -2455,7 +2455,15 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // tracking content valid very loosely here that as long as it is attached, it assumes will
         // have valid content. The only time it has undefined content is between swap and
         // startNewRenderPass
-        depthStencilRenderTarget->onDepthStencilDraw(contextVk, mReadOnlyDepthStencilMode);
+        if (depthStencilRenderTarget->hasResolveAttachment())
+        {
+            depthStencilRenderTarget->onDepthStencilDraw(contextVk, false);
+        }
+        else
+        {
+            // The actual layout determination will be deferred until endRenderPass time
+            depthStencilRenderTarget->onDepthStencilStartNewRenderPass(contextVk);
+        }
     }
 
     if (unresolveMask.any())
