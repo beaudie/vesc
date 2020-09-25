@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "6394c0a6_dbf8e40e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-09-25T20:37:20Z",
+      "side": 1,
+      "message": "I didn\u0027t know about the blitting functionality that EXT_color_buffer_float supplies but EXT_color_buffer_half_float doesn\u0027t.\n\nWhy does this make EXT_color_buffer_half_float redundant for ES3 contexts though? Without some analogue of it, there\u0027s no way to render to FP16 targets in ES3 contexts that support EXT_color_buffer_half_float but not EXT_color_buffer_float.",
+      "parentUuid": "5d949fa8_e4399829",
+      "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0a74c49_a001ae32",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 3
