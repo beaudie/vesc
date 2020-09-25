@@ -22,6 +22,30 @@
       "revId": "b1fdb5377d68df7f7245b8a1b4418b9c53059d39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76fb3bad_c9fad3ef",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-25T23:11:56Z",
+      "side": 1,
+      "message": "I think you have a valid point. will update before landing.",
+      "parentUuid": "92bfd521_c89f20b6",
+      "range": {
+        "startLine": 1717,
+        "startChar": 0,
+        "endLine": 1721,
+        "endChar": 5
+      },
+      "revId": "b1fdb5377d68df7f7245b8a1b4418b9c53059d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
