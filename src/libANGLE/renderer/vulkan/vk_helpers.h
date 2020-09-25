@@ -946,6 +946,8 @@ class CommandBufferHelper : angle::NonCopyable
                     AliasingMode aliasingMode,
                     ImageHelper *image);
 
+    void depthStencilImageStartNewRenderPass(ResourceUseList *resourceUseList, ImageHelper *image);
+
     CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
     angle::Result flushToPrimary(ContextVk *contextVk, PrimaryCommandBuffer *primary);
@@ -1115,7 +1117,6 @@ class CommandBufferHelper : angle::NonCopyable
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;
     bool mRenderPassStarted;
-    bool mForceIndividualBarriers;
 
     // Transform feedback state
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
@@ -1147,6 +1148,8 @@ class CommandBufferHelper : angle::NonCopyable
     // Images have unique layouts unlike buffers therefore we don't support multi-read.
     angle::FastIntegerMap<BufferAccess> mUsedBuffers;
     angle::FastIntegerSet mRenderPassUsedImages;
+
+    ImageHelper *mDepthStencilImage;
 };
 
 // Imagine an image going through a few layout transitions:
