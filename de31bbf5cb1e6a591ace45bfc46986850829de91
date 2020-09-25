@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e69b38e_54eae72c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-25T19:50:32Z",
+      "side": 1,
+      "message": "PTAL. 3 commits\n1. EGL stencil8 config support - needed first because extension requires Surface with that config for texture test.\n2. Extension GL_OES_texture_stencil8 - stencil8 textures, adds implementation for Vulkan\n3. Autogen files for extension. registry_xml.py + all the resulting autogen for extension.",
+      "revId": "de31bbf5cb1e6a591ace45bfc46986850829de91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
