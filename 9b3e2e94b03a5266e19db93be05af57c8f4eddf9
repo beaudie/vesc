@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc67f790_8dbcd313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T20:42:42Z",
+      "side": 1,
+      "message": "Thanks for all the feedback. One of us should capture this discussion as there were some good points.",
+      "revId": "9b3e2e94b03a5266e19db93be05af57c8f4eddf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
