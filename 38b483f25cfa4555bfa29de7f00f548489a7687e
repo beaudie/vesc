@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ee6950c_92851462",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-25T15:04:11Z",
+      "side": 1,
+      "message": "PTAL\nDivided into \n1. stencil8 for EGL configs - needed to be first because required by tests for second.\n2. And second Stencil_index8 texture extension + all the related autogen files.",
+      "revId": "38b483f25cfa4555bfa29de7f00f548489a7687e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
