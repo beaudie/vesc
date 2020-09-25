@@ -46,6 +46,30 @@
       "revId": "30580ce986f244abf815b73dc2be3bfada63f6be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53f41cf2_b479085f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-25T22:17:46Z",
+      "side": 1,
+      "message": "Done. I have to do zero init to get rid of the unused variable warning anyway.",
+      "parentUuid": "5994c18c_f8fc36b0",
+      "range": {
+        "startLine": 1082,
+        "startChar": 12,
+        "endLine": 1082,
+        "endChar": 19
+      },
+      "revId": "30580ce986f244abf815b73dc2be3bfada63f6be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
