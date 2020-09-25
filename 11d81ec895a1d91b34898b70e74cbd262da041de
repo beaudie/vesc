@@ -193,6 +193,24 @@
       "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54c9015e_ec25e80a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T17:12:49Z",
+      "side": 1,
+      "message": "As I said earlier, I honestly wonder if the same bug persists for normal programs. Anyway happy to address these issues in other CLs.",
+      "parentUuid": "9b0f8f76_d6080d0a",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
