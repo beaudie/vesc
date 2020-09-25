@@ -175,6 +175,24 @@
       "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b0f8f76_d6080d0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T17:11:01Z",
+      "side": 1,
+      "message": "I added the test ContextNoErrorTest31.DrawWithPPO and opened http://anglebug.com/5102 to track fixing it.\n\nAs an experiment, I tried the following:\n1.) Run the test on ToT master (without this fix): PASS\n2.) Run the test with this fix: FAIL\n3.) Hack this fix to link the PPO in ContextVk::setupDraw(): PASS\n\nSo it seems the rest of ANGLE works well enough for this very simple PPO draw test, we just need to find a good way to link when that extension is enabled.",
+      "parentUuid": "7fecfe25_7a5ff112",
+      "revId": "11d81ec895a1d91b34898b70e74cbd262da041de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
