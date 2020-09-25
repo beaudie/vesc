@@ -333,6 +333,30 @@
     },
     {
       "key": {
+        "uuid": "af2dd35c_07b6a688",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T16:58:12Z",
+      "side": 1,
+      "message": "Well, what you\u0027re proposing is basically per-object counters. Looking at existing perf counter extensions:\n\nhttps://www.khronos.org/registry/OpenGL/extensions/INTEL/INTEL_performance_query.txt\nhttps://www.khronos.org/registry/OpenGL/extensions/AMD/AMD_performance_monitor.txt\n\nThese don\u0027t have object associations. Presumably tool integration is not easy with object associations. Can we figure out how to get useful data without involving object identifiers? I\u0027d be surprised if there was no way we could accomplish the same goals.",
+      "parentUuid": "c2c32de6_5b784a9a",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 799,
+        "endChar": 39
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea5709b7_573caffc",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
