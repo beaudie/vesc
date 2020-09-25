@@ -135,6 +135,30 @@
       "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ff899f5_1eb4149c",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T20:46:52Z",
+      "side": 1,
+      "message": "angle_end2end_tests is back on the TSAN bot and is green!\n\nhttps://ci.chromium.org/p/chromium/builders/ci/Linux%20FYI%20GPU%20TSAN%20Release/92750\n\nI am going to trigger a run on this CL. Courtney in the future you can use this bot to get CQ coverage with TSAN. Feel free to land if we get a green run.",
+      "parentUuid": "4262dfe4_d005199a",
+      "range": {
+        "startLine": 362,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 37
+      },
+      "revId": "c58c9b3aad88437cb49e56ac37271cbff66d88ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
