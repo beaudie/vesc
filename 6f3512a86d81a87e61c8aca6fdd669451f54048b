@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "8a098bf4_2430b4b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-09-25T20:47:33Z",
+      "side": 1,
+      "message": "Understood. That restriction would have to be relaxed for ES3 contexts in WebGL compatibility mode.\n\nDid this patch when deployed on the iOS Simulator in WebKit pass the EXT_color_buffer_half_float rendering tests?",
+      "parentUuid": "7ea22448_c80ea82b",
+      "revId": "6f3512a86d81a87e61c8aca6fdd669451f54048b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0a74c49_a001ae32",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 3
