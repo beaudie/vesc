@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "4e84e36b_203fcba5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-25T18:44:52Z",
+      "side": 1,
+      "message": "LGTM.\n\nNow that VK_KHR_driver_properties exists, we should also use it if provided (follow-on CL is fine).",
+      "revId": "3687c23043ace960ca4933b682f80281861fbbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b1bd4b5_14b146be",
         "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
         "patchSetId": 7
@@ -47,6 +64,30 @@
       "writtenOn": "2020-09-25T18:32:37Z",
       "side": 1,
       "message": "Why change the logic here?\nPrevious version looks safer.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 42
+      },
+      "revId": "3687c23043ace960ca4933b682f80281861fbbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97db0e14_257a0fff",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-25T18:44:52Z",
+      "side": 1,
+      "message": "I wondered about that too.\n\nThe old logic matches more the way I wrote the spec.  However, given that instanceVersion is set to 1.0 on line 61, either version of the logic should yield the same result (instanceVersion will be 1.0 if the instance isn\u0027t 1.1+).",
+      "parentUuid": "5b1bd4b5_14b146be",
       "range": {
         "startLine": 65,
         "startChar": 0,
