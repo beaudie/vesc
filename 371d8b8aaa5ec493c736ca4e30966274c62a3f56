@@ -33,6 +33,24 @@
       "revId": "371d8b8aaa5ec493c736ca4e30966274c62a3f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "964ef7f9_384182a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-25T18:56:26Z",
+      "side": 1,
+      "message": "Yeah, the initial counts were captured for on screen.   I got new numbers for off screen and posted them to the chat.   They\u0027re mostly the same, except for t-rex jumping a lot.\n\nI don\u0027t think it changes anything here though, since we\u0027ll still be creating fewer pools overall by growing them to 512 (vs 128), so it should still be better than the current implementation.",
+      "parentUuid": "b2487a9f_32be4c51",
+      "revId": "371d8b8aaa5ec493c736ca4e30966274c62a3f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
