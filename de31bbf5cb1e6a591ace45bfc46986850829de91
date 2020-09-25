@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9fe42427_24752d31",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-25T19:51:26Z",
+      "side": 1,
+      "message": "nit: can you fix the desc?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 26
+      },
+      "revId": "de31bbf5cb1e6a591ace45bfc46986850829de91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e69b38e_54eae72c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
