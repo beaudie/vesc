@@ -16,6 +16,23 @@
       "revId": "371d8b8aaa5ec493c736ca4e30966274c62a3f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2487a9f_32be4c51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-25T17:31:30Z",
+      "side": 1,
+      "message": "Assume your number is based on onscreen benchmark. Have you checked the offscreen numbers? ",
+      "revId": "371d8b8aaa5ec493c736ca4e30966274c62a3f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
