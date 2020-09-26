@@ -1679,6 +1679,7 @@ TEST_P(BlitFramebufferTest, NonZeroBaseDestinationStencil)
 {
     // http://anglebug.com/5001
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD() && IsOSX());
     // http://anglebug.com/5003
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsWindows());
 
@@ -1749,6 +1750,7 @@ TEST_P(BlitFramebufferTest, NonZeroBaseDestinationStencilStretch)
 
     // http://anglebug.com/5001
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD() && IsOSX());
 
     ANGLE_GL_PROGRAM(drawRed, essl3_shaders::vs::Simple(), essl3_shaders::fs::Red());
 
@@ -2373,4 +2375,6 @@ ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_METAL(),
                        WithNoShaderStencilOutput(ES2_METAL()));
 
-ANGLE_INSTANTIATE_TEST_ES3(BlitFramebufferTest);
+ANGLE_INSTANTIATE_TEST_ES3_AND(BlitFramebufferTest,
+                               ES3_METAL(),
+                               WithNoShaderStencilOutput(ES3_METAL()));
