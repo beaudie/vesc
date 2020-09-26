@@ -100,9 +100,10 @@ GLint GetSliceOrDepth(const gl::ImageIndex &index)
 angle::Result InitializeTextureContents(const gl::Context *context,
                                         const TextureRef &texture,
                                         const Format &textureObjFormat,
-                                        const gl::ImageIndex &index)
+                                        const ImageIndexLegalizer &indexLegalizer)
 {
     ASSERT(texture && texture->valid());
+    const gl::ImageIndex &index = indexLegalizer.getNativeIndex();
     // Only one slice can be initialized at a time.
     ASSERT(!index.isLayered() || index.getType() == gl::TextureType::_3D);
     ContextMtl *contextMtl = mtl::GetImpl(context);
@@ -116,7 +117,7 @@ angle::Result InitializeTextureContents(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    gl::Extents size = texture->size(index);
+    gl::Extents size = texture->size(indexLegalizer);
 
     // Intiialize the content to black
     GLint layer, startDepth;
@@ -161,14 +162,14 @@ angle::Result InitializeTextureContents(const gl::Context *context,
                 mtlRowRegion.origin.y = r;
 
                 // Upload to texture
-                texture->replace2DRegion(contextMtl, mtlRowRegion, index.getLevelIndex(), layer,
-                                         conversionRow.data(), dstRowPitch);
+                texture->replace2DRegion(contextMtl, mtlRowRegion, indexLegalizer.getNativeLevel(),
+                                         layer, conversionRow.data(), dstRowPitch);
             }
         }
     }
     else
     {
-        ANGLE_TRY(InitializeTextureContentsGPU(context, texture, textureObjFormat, index,
+        ANGLE_TRY(InitializeTextureContentsGPU(context, texture, textureObjFormat, indexLegalizer,
                                                MTLColorWriteMaskAll));
     }
 
@@ -178,19 +179,25 @@ angle::Result InitializeTextureContents(const gl::Context *context,
 angle::Result InitializeTextureContentsGPU(const gl::Context *context,
                                            const TextureRef &texture,
                                            const Format &textureObjFormat,
-                                           const gl::ImageIndex &index,
+                                           const ImageIndexLegalizer &indexLegalizer,
                                            MTLColorWriteMask channelsToInit)
 {
+    const gl::ImageIndex &index = indexLegalizer.getNativeIndex();
     // Only one slice can be initialized at a time.
     ASSERT(!index.isLayered() || index.getType() == gl::TextureType::_3D);
     if (index.isLayered() && index.getType() == gl::TextureType::_3D)
     {
-        gl::ImageIndexIterator ite = index.getLayerIterator(texture->depth(index.getLevelIndex()));
+        gl::ImageIndexIterator ite =
+            index.getLayerIterator(texture->depth(indexLegalizer.getNativeLevel()));
         while (ite.hasNext())
         {
             gl::ImageIndex depthLayerIndex = ite.next();
+            // depthLayerIndex already contains native level, so no need for passing base level
+            // to ImageIndexLegalizer()
+            ImageIndexLegalizer depthLayerIndexLegalizer =
+                ImageIndexLegalizer::FromNativeIndex(depthLayerIndex);
             ANGLE_TRY(InitializeTextureContentsGPU(context, texture, textureObjFormat,
-                                                   depthLayerIndex, MTLColorWriteMaskAll));
+                                                   depthLayerIndexLegalizer, MTLColorWriteMaskAll));
         }
 
         return angle::Result::Continue;
@@ -199,7 +206,8 @@ angle::Result InitializeTextureContentsGPU(const gl::Context *context,
     if (textureObjFormat.hasDepthOrStencilBits())
     {
         // Depth stencil texture needs dedicated function.
-        return InitializeDepthStencilTextureContentsGPU(context, texture, textureObjFormat, index);
+        return InitializeDepthStencilTextureContentsGPU(context, texture, textureObjFormat,
+                                                        indexLegalizer);
     }
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
@@ -207,7 +215,7 @@ angle::Result InitializeTextureContentsGPU(const gl::Context *context,
 
     // Use clear render command
     RenderTargetMtl tempRtt;
-    tempRtt.set(texture, index.getLevelIndex(), sliceOrDepth, textureObjFormat);
+    tempRtt.set(texture, indexLegalizer.getNativeLevel(), sliceOrDepth, textureObjFormat);
 
     MTLClearColor blackColor = {};
     if (!textureObjFormat.intendedAngleFormat().alphaBits)
@@ -234,9 +242,9 @@ angle::Result InitializeTextureContentsGPU(const gl::Context *context,
 
         ClearRectParams clearParams;
         clearParams.clearColor     = blackColor;
-        clearParams.dstTextureSize = texture->size();
+        clearParams.dstTextureSize = texture->sizeAt0();
         clearParams.enabledBuffers.set(0);
-        clearParams.clearArea = gl::Rectangle(0, 0, texture->width(), texture->height());
+        clearParams.clearArea = gl::Rectangle(0, 0, texture->widthAt0(), texture->heightAt0());
 
         ANGLE_TRY(
             contextMtl->getDisplay()->getUtils().clearWithDraw(context, encoder, clearParams));
@@ -252,8 +260,10 @@ angle::Result InitializeTextureContentsGPU(const gl::Context *context,
 angle::Result InitializeDepthStencilTextureContentsGPU(const gl::Context *context,
                                                        const TextureRef &texture,
                                                        const Format &textureObjFormat,
-                                                       const gl::ImageIndex &index)
+                                                       const ImageIndexLegalizer &indexLegalizer)
 {
+    const gl::ImageIndex &index    = indexLegalizer.getNativeIndex();
+    const MipmapNativeLevel &level = indexLegalizer.getNativeLevel();
     // Use clear operation
     ContextMtl *contextMtl           = mtl::GetImpl(context);
     const angle::Format &angleFormat = textureObjFormat.actualAngleFormat();
@@ -266,7 +276,7 @@ angle::Result InitializeDepthStencilTextureContentsGPU(const gl::Context *contex
     if (angleFormat.depthBits)
     {
         rpDesc.depthAttachment.texture      = texture;
-        rpDesc.depthAttachment.level        = index.getLevelIndex();
+        rpDesc.depthAttachment.level        = level;
         rpDesc.depthAttachment.sliceOrDepth = layer;
         rpDesc.depthAttachment.loadAction   = MTLLoadActionClear;
         rpDesc.depthAttachment.clearDepth   = 1.0;
@@ -274,7 +284,7 @@ angle::Result InitializeDepthStencilTextureContentsGPU(const gl::Context *contex
     if (angleFormat.stencilBits)
     {
         rpDesc.stencilAttachment.texture      = texture;
-        rpDesc.stencilAttachment.level        = index.getLevelIndex();
+        rpDesc.stencilAttachment.level        = level;
         rpDesc.stencilAttachment.sliceOrDepth = layer;
         rpDesc.stencilAttachment.loadAction   = MTLLoadActionClear;
     }
@@ -292,7 +302,7 @@ angle::Result ReadTexturePerSliceBytes(const gl::Context *context,
                                        const TextureRef &texture,
                                        size_t bytesPerRow,
                                        const gl::Rectangle &fromRegion,
-                                       uint32_t mipLevel,
+                                       const MipmapNativeLevel &mipLevel,
                                        uint32_t sliceOrDepth,
                                        uint8_t *dataOut)
 {
@@ -325,7 +335,7 @@ angle::Result ReadTexturePerSliceBytesToBuffer(const gl::Context *context,
                                                const TextureRef &texture,
                                                size_t bytesPerRow,
                                                const gl::Rectangle &fromRegion,
-                                               uint32_t mipLevel,
+                                               const MipmapNativeLevel &mipLevel,
                                                uint32_t sliceOrDepth,
                                                uint32_t dstOffset,
                                                const BufferRef &dstBuffer)
@@ -824,6 +834,17 @@ gl::Box MTLRegionToGLBox(const MTLRegion &mtlRegion)
     return gl::Box(static_cast<int>(mtlRegion.origin.x), static_cast<int>(mtlRegion.origin.y),
                    static_cast<int>(mtlRegion.origin.z), static_cast<int>(mtlRegion.size.width),
                    static_cast<int>(mtlRegion.size.height), static_cast<int>(mtlRegion.size.depth));
+}
+
+MipmapNativeLevel GetNativeMipLevel(GLuint level, GLuint base)
+{
+    ASSERT(level >= base);
+    return MipmapNativeLevel(level - base);
+}
+
+GLuint GetGLMipLevel(const MipmapNativeLevel &nativeLevel, GLuint base)
+{
+    return nativeLevel.get() + base;
 }
 
 }  // namespace mtl

@@ -22,6 +22,7 @@
 #include "common/angleutils.h"
 #include "common/apple_platform_utils.h"
 #include "libANGLE/Constants.h"
+#include "libANGLE/ImageIndex.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/angletypes.h"
 
@@ -338,6 +339,38 @@ using SharedEventRef = AutoObjCPtr<id<MTLSharedEvent>>;
 #    define ANGLE_MTL_EVENT_AVAILABLE 0
 using SharedEventRef                                       = AutoObjCObj<NSObject>;
 #endif
+
+// The native image index used by Metal back-end,  the image index uses native mipmap level instead
+// of "virtual" level modified by OpenGL's base level.
+using MipmapNativeLevel = gl::LevelIndexWrapper<uint32_t>;
+
+constexpr MipmapNativeLevel kZeroNativeMipLevel(0);
+
+class ImageIndexLegalizer final
+{
+  public:
+    ImageIndexLegalizer() = delete;
+    ImageIndexLegalizer(const gl::ImageIndex &src, GLint baseLevel)
+    {
+        mNativeIndex = gl::ImageIndex::MakeFromType(src.getType(), src.getLevelIndex() - baseLevel,
+                                                    src.getLayerIndex(), src.getLayerCount());
+    }
+
+    const gl::ImageIndex &getNativeIndex() const { return mNativeIndex; }
+
+    static ImageIndexLegalizer FromNativeIndex(const gl::ImageIndex &src)
+    {
+        return ImageIndexLegalizer(src, 0);
+    }
+
+    MipmapNativeLevel getNativeLevel() const
+    {
+        return MipmapNativeLevel(mNativeIndex.getLevelIndex());
+    }
+
+  private:
+    gl::ImageIndex mNativeIndex;
+};
 
 struct ClearOptions
 {
