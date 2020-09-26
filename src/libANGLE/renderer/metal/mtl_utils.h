@@ -141,6 +141,8 @@ bool IsFormatEmulated(const mtl::Format &mtlFormat);
 // has alpha channel.
 MTLClearColor EmulatedAlphaClearColor(MTLClearColor color, MTLColorWriteMask colorMask);
 
+MTLClearColor ToMTLClearColor(const ClearColorValue &clearValue);
+
 gl::Box MTLRegionToGLBox(const MTLRegion &mtlRegion);
 
 MipmapNativeLevel GetNativeMipLevel(GLuint level, GLuint base);
