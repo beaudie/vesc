@@ -22,6 +22,7 @@
 #include "common/angleutils.h"
 #include "common/apple_platform_utils.h"
 #include "libANGLE/Constants.h"
+#include "libANGLE/ImageIndex.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/angletypes.h"
 
@@ -336,6 +337,74 @@ using SharedEventRef = AutoObjCPtr<id<MTLSharedEvent>>;
 #else
 using SharedEventRef                                       = AutoObjCObj<NSObject>;
 #endif
+
+// The native image index used by Metal back-end,  the image index uses native mipmap level instead
+// of "virtual" level modified by OpenGL's base level.
+class MipmapNativeLevel final : public gl::LevelIndex
+{
+  public:
+    constexpr MipmapNativeLevel() : gl::LevelIndex(0) {}
+    constexpr MipmapNativeLevel(GLint glLevel, GLint baseLevel)
+        : gl::LevelIndex(glLevel - baseLevel)
+    {}
+
+    constexpr MipmapNativeLevel(const gl::LevelIndex &src) : gl::LevelIndex(src) {}
+
+    MipmapNativeLevel &operator=(const gl::LevelIndex &src)
+    {
+        gl::LevelIndex::operator=(src);
+        return *this;
+    }
+
+    using gl::LevelIndex::operator+;
+    using gl::LevelIndex::operator==;
+    using gl::LevelIndex::operator<;
+    using gl::LevelIndex::operator>;
+    using gl::LevelIndex::operator<=;
+    using gl::LevelIndex::operator>=;
+
+    bool operator==(GLint rhs) const { return get() == rhs; }
+    bool operator<(GLint rhs) const { return get() < rhs; }
+    bool operator>(GLint rhs) const { return get() > rhs; }
+    bool operator<=(GLint rhs) const { return get() <= rhs; }
+    bool operator>=(GLint rhs) const { return get() >= rhs; }
+
+    bool operator==(uint32_t rhs) const { return get() == static_cast<GLint>(rhs); }
+    bool operator<(uint32_t rhs) const { return get() < static_cast<GLint>(rhs); }
+    bool operator>(uint32_t rhs) const { return get() > static_cast<GLint>(rhs); }
+    bool operator<=(uint32_t rhs) const { return get() <= static_cast<GLint>(rhs); }
+    bool operator>=(uint32_t rhs) const { return get() >= static_cast<GLint>(rhs); }
+
+    GLint getWithBase(GLint base) const { return get() + base; }
+};
+
+constexpr MipmapNativeLevel kZeroNativeMipLevel;
+
+class ImageIndexLegalizer final
+{
+  public:
+    ImageIndexLegalizer() = delete;
+    ImageIndexLegalizer(const gl::ImageIndex &src, GLint baseLevel)
+    {
+        mNativeIndex = gl::ImageIndex::MakeFromType(src.getType(), src.getLevelIndex() - baseLevel,
+                                                    src.getLayerIndex(), src.getLayerCount());
+    }
+
+    const gl::ImageIndex &getNativeIndex() const { return mNativeIndex; }
+
+    static ImageIndexLegalizer FromNativeIndex(const gl::ImageIndex &src)
+    {
+        return ImageIndexLegalizer(src, 0);
+    }
+
+    MipmapNativeLevel getNativeLevel() const
+    {
+        return MipmapNativeLevel(mNativeIndex.getLevelIndex(), 0);
+    }
+
+  private:
+    gl::ImageIndex mNativeIndex;
+};
 
 struct ClearOptions
 {
