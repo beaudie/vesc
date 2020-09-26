@@ -706,6 +706,9 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), hasTextureSwizzle,
                             isMetal2_2 && supportsEitherGPUFamily(1, 2));
 
+    // http://anglebug.com/5100
+    ANGLE_FEATURE_CONDITION((&mFeatures), explicitZeroizeOcclusionQueryBuffer, isNVIDIA());
+
 #if !TARGET_OS_MACCATALYST && (TARGET_OS_IOS || TARGET_OS_TV)
     // Base Vertex drawing is only supported since GPU family 3.
     ANGLE_FEATURE_CONDITION((&mFeatures), hasBaseVertexInstancedDraw, supportsIOSGPUFamily(3));

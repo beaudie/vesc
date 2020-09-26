@@ -1276,6 +1276,20 @@ mtl::RenderCommandEncoder *ContextMtl::getRenderPassCommandEncoder(const mtl::Re
     // Need to re-apply everything on next draw call.
     mDirtyBits.set();
 
+    if (getDisplay()->getFeatures().explicitZeroizeOcclusionQueryBuffer.enabled &&
+        mOcclusionQueryPool.getNumRenderPassAllocatedQueries() > 0)
+    {
+        mtl::BlitCommandEncoder *blitEncoder = getBlitCommandEncoder();
+        const mtl::BufferRef &queryPoolBuffer =
+            mOcclusionQueryPool.getRenderPassVisibilityPoolBuffer();
+        blitEncoder->fillBuffer(
+            queryPoolBuffer,
+            NSMakeRange(0, mOcclusionQueryPool.getNumRenderPassAllocatedQueries() *
+                               mtl::kOcclusionQueryResultSize),
+            0);
+        endEncoding(false);
+    }
+
     return &mRenderEncoder.restart(desc);
 }
 

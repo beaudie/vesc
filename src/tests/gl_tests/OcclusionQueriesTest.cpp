@@ -235,9 +235,6 @@ TEST_P(OcclusionQueriesTest, CopyNotCounted)
     // http://anglebug.com/4925
     ANGLE_SKIP_TEST_IF(IsD3D());
 
-    // http://anglebug.com/5100
-    ANGLE_SKIP_TEST_IF(IsMetal());
-
     GLuint query = 0;
     glGenQueriesEXT(1, &query);
 
@@ -387,9 +384,6 @@ TEST_P(OcclusionQueriesTest, MultiQueries)
 
     // http://anglebug.com/4925
     ANGLE_SKIP_TEST_IF(IsOpenGL() || IsD3D11());
-
-    // http://anglebug.com/4925
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsNVIDIA());
 
     GLuint query[5] = {};
     glGenQueriesEXT(5, query);
