@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb3e9862_92f656a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-26T00:29:56Z",
+      "side": 1,
+      "message": "I enabled for vulkan based on support for the optional format. Yes its a GLES extension, is that what you mean?",
+      "parentUuid": "a893390d_2bed26d0",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49706c7f_20340d66",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -87,6 +111,41 @@
       "writtenOn": "2020-09-26T00:25:18Z",
       "side": 1,
       "message": "Jeff : can you make this top of the patch stack?",
+      "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "67354603_da52039a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-26T00:29:56Z",
+      "side": 1,
+      "message": "Reply",
+      "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "34cfb7ba_3472be43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-26T00:29:56Z",
+      "side": 1,
+      "message": "It appears that way to me. Its in my git log as such too.",
+      "parentUuid": "c3e3d9ae_834899ae",
       "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
