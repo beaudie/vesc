@@ -120,6 +120,7 @@ class FramebufferMtl : public FramebufferImpl
 
   private:
     void reset();
+    bool checkPackedDepthStencilAttachment() const;
     angle::Result invalidateImpl(ContextMtl *contextMtl, size_t count, const GLenum *attachments);
     angle::Result blitWithDraw(const gl::Context *context,
                                FramebufferMtl *srcFrameBuffer,
@@ -184,6 +185,9 @@ class FramebufferMtl : public FramebufferImpl
     RenderTargetMtl *mDepthRenderTarget   = nullptr;
     RenderTargetMtl *mStencilRenderTarget = nullptr;
     mtl::RenderPassDesc mRenderPassDesc;
+
+    const mtl::Format *mRenderPassFirstColorAttachmentFormat = nullptr;
+    bool mRenderPassAttachmentsSameColorType                 = false;
 
     // Flag indicating the render pass start is a clean start or a resume from interruption such
     // as by a compute pass.
