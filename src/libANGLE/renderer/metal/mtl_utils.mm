@@ -217,17 +217,18 @@ angle::Result InitializeTextureContentsGPU(const gl::Context *context,
     RenderTargetMtl tempRtt;
     tempRtt.set(texture, indexLegalizer.getNativeLevel(), sliceOrDepth, textureObjFormat);
 
-    MTLClearColor blackColor = {};
+    int clearAlpha = 0;
     if (!textureObjFormat.intendedAngleFormat().alphaBits)
     {
         // if intended format doesn't have alpha, set it to 1.0.
-        blackColor.alpha = kEmulatedAlphaValue;
+        clearAlpha = kEmulatedAlphaValue;
     }
 
     RenderCommandEncoder *encoder;
     if (channelsToInit == MTLColorWriteMaskAll)
     {
         // If all channels will be initialized, use clear loadOp.
+        Optional<MTLClearColor> blackColor = MTLClearColorMake(0, 0, 0, clearAlpha);
         encoder = contextMtl->getRenderTargetCommandEncoderWithClear(tempRtt, blackColor);
     }
     else
@@ -240,8 +241,26 @@ angle::Result InitializeTextureContentsGPU(const gl::Context *context,
         // If there are some channels don't need to be initialized, we must use clearWithDraw.
         encoder = contextMtl->getRenderTargetCommandEncoder(tempRtt);
 
+        const angle::Format &angleFormat = textureObjFormat.actualAngleFormat();
+
         ClearRectParams clearParams;
-        clearParams.clearColor     = blackColor;
+        ClearColorValue clearColor = {.red = 0, .green = 0, .blue = 0};
+        if (angleFormat.isSint())
+        {
+            clearColor.type   = PixelType::Int;
+            clearColor.alphaI = clearAlpha;
+        }
+        else if (angleFormat.isUint())
+        {
+            clearColor.type   = PixelType::UInt;
+            clearColor.alphaU = clearAlpha;
+        }
+        else
+        {
+            clearColor.type  = PixelType::Float;
+            clearColor.alpha = clearAlpha;
+        }
+        clearParams.clearColor     = clearColor;
         clearParams.dstTextureSize = texture->sizeAt0();
         clearParams.enabledBuffers.set(0);
         clearParams.clearArea = gl::Rectangle(0, 0, texture->widthAt0(), texture->heightAt0());
@@ -827,6 +846,25 @@ MTLClearColor EmulatedAlphaClearColor(MTLClearColor color, MTLColorWriteMask col
     }
 
     return re;
+}
+
+MTLClearColor ToMTLClearColor(const ClearColorValue &clearValue)
+{
+    switch (clearValue.type)
+    {
+        case PixelType::Int:
+            return MTLClearColorMake(clearValue.redI, clearValue.greenI, clearValue.blueI,
+                                     clearValue.alphaI);
+        case PixelType::UInt:
+            return MTLClearColorMake(clearValue.redU, clearValue.greenU, clearValue.blueU,
+                                     clearValue.alphaU);
+        case PixelType::Float:
+            return MTLClearColorMake(clearValue.red, clearValue.green, clearValue.blue,
+                                     clearValue.alpha);
+        default:
+            UNREACHABLE();
+            return MTLClearColorMake(0, 0, 0, 0);
+    }
 }
 
 gl::Box MTLRegionToGLBox(const MTLRegion &mtlRegion)
