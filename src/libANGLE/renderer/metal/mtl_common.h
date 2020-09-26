@@ -156,7 +156,7 @@ constexpr uint32_t kStencilMaskAll = 0xff;  // Only 8 bits stencil is supported
 constexpr MTLVertexStepFunction kVertexStepFunctionInvalid =
     static_cast<MTLVertexStepFunction>(0xff);
 
-constexpr float kEmulatedAlphaValue = 1.0f;
+constexpr int kEmulatedAlphaValue = 1;
 
 constexpr size_t kOcclusionQueryResultSize = sizeof(uint64_t);
 
@@ -404,11 +404,25 @@ class ImageNativeIndexIterator final
     gl::ImageIndexIterator mNativeIndexIte;
 };
 
-struct ClearOptions
+struct ClearColorValue
 {
-    Optional<MTLClearColor> clearColor;
-    Optional<float> clearDepth;
-    Optional<uint32_t> clearStencil;
+    PixelType type = PixelType::Float;
+
+    union
+    {
+        struct
+        {
+            float red, green, blue, alpha;
+        };
+        struct
+        {
+            int32_t redI, greenI, blueI, alphaI;
+        };
+        struct
+        {
+            uint32_t redU, greenU, blueU, alphaU;
+        };
+    };
 };
 
 class CommandQueue;
