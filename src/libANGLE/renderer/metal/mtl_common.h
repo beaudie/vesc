@@ -22,6 +22,7 @@
 #include "common/angleutils.h"
 #include "common/apple_platform_utils.h"
 #include "libANGLE/Constants.h"
+#include "libANGLE/ImageIndex.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/angletypes.h"
 
@@ -338,6 +339,65 @@ using SharedEventRef = AutoObjCPtr<id<MTLSharedEvent>>;
 #    define ANGLE_MTL_EVENT_AVAILABLE 0
 using SharedEventRef                                       = AutoObjCObj<NSObject>;
 #endif
+
+// The native image index used by Metal back-end,  the image index uses native mipmap level instead
+// of "virtual" level modified by OpenGL's base level.
+using MipmapNativeLevel = gl::LevelIndexWrapper<uint32_t>;
+
+constexpr MipmapNativeLevel kZeroNativeMipLevel(0);
+
+class ImageNativeIndexIterator;
+
+class ImageNativeIndex final
+{
+  public:
+    ImageNativeIndex() = delete;
+    ImageNativeIndex(const gl::ImageIndex &src, GLint baseLevel)
+    {
+        mGLIndex = gl::ImageIndex::MakeFromType(src.getType(), src.getLevelIndex() - baseLevel,
+                                                src.getLayerIndex(), src.getLayerCount());
+    }
+
+    static ImageNativeIndex FromBaseZeroGLIndex(const gl::ImageIndex &src)
+    {
+        return ImageNativeIndex(src, 0);
+    }
+
+    MipmapNativeLevel getNativeLevel() const { return MipmapNativeLevel(mGLIndex.getLevelIndex()); }
+
+    gl::TextureType getType() const { return mGLIndex.getType(); }
+    GLint getLayerIndex() const { return mGLIndex.getLayerIndex(); }
+    GLint getLayerCount() const { return mGLIndex.getLayerCount(); }
+    GLint cubeMapFaceIndex() const { return mGLIndex.cubeMapFaceIndex(); }
+
+    bool isLayered() const { return mGLIndex.isLayered(); }
+    bool hasLayer() const { return mGLIndex.hasLayer(); }
+    bool has3DLayer() const { return mGLIndex.has3DLayer(); }
+    bool usesTex3D() const { return mGLIndex.usesTex3D(); }
+
+    bool valid() const { return mGLIndex.valid(); }
+
+    ImageNativeIndexIterator getLayerIterator(GLint layerCount) const;
+
+  private:
+    gl::ImageIndex mGLIndex;
+};
+
+class ImageNativeIndexIterator final
+{
+  public:
+    ImageNativeIndex next() { return ImageNativeIndex(mGLIte.next(), 0); }
+    ImageNativeIndex current() const { return ImageNativeIndex(mGLIte.current(), 0); }
+    bool hasNext() const { return mGLIte.hasNext(); }
+
+  private:
+    // This class is only constructable from ImageNativeIndex
+    friend class ImageNativeIndex;
+
+    explicit ImageNativeIndexIterator(const gl::ImageIndexIterator &src) : mGLIte(src) {}
+
+    gl::ImageIndexIterator mGLIte;
+};
 
 struct ClearOptions
 {
