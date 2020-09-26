@@ -165,8 +165,7 @@ uint32_t GetCoverageSampleCount(const gl::State &glState, FramebufferVk *drawFra
     }
 
     // Get a fraction of the samples based on the coverage parameters.
-    return static_cast<uint32_t>(
-        std::round(glState.getSampleCoverageValue() * drawFramebuffer->getSamples()));
+    return static_cast<uint32_t>(glState.getSampleCoverageValue() * drawFramebuffer->getSamples());
 }
 
 void ApplySampleCoverage(const gl::State &glState,
