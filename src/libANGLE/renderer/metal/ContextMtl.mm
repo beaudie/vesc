@@ -1125,7 +1125,7 @@ void ContextMtl::invalidateRenderPipeline()
     mDirtyBits.set(DIRTY_BIT_RENDER_PIPELINE);
 }
 
-const MTLClearColor &ContextMtl::getClearColorValue() const
+const mtl::ClearColorValue &ContextMtl::getClearColorValue() const
 {
     return mClearColor;
 }
