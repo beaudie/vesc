@@ -63,6 +63,12 @@ struct FeaturesMtl : FeatureSetBase
     Feature allowGenMultipleMipsPerPass = {
         "gen_multiple_mips_per_pass", FeatureCategory::MetalFeatures,
         "The renderer supports generating multiple mipmaps per pass", &members};
+
+    Feature explicitZeroizeOcclusionQueryBuffer = {
+        "explicit_zeroize_occlusion_query_buffer", FeatureCategory::MetalFeatures,
+        "Work-around for some GPUs not implicitly zeroizing the occlusion query pool buffer when "
+        "starting a render pass",
+        &members};
 };
 
 }  // namespace angle

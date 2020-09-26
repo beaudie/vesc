@@ -235,9 +235,6 @@ TEST_P(OcclusionQueriesTest, CopyNotCounted)
     // http://anglebug.com/4925
     ANGLE_SKIP_TEST_IF(IsD3D());
 
-    // http://anglebug.com/5100
-    ANGLE_SKIP_TEST_IF(IsMetal());
-
     GLuint query = 0;
     glGenQueriesEXT(1, &query);
 
@@ -246,6 +243,12 @@ TEST_P(OcclusionQueriesTest, CopyNotCounted)
 
     // Copy to a texture with a different format from backbuffer
     glBeginQueryEXT(GL_ANY_SAMPLES_PASSED_EXT, query);
+
+    // There is a bug on Metal back-end NVIDIA driver when query is activated and there is no draw
+    // call afterwards, so force a draw call with masked clear here.
+    glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_TRUE);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     GLTexture tex;
     glBindTexture(GL_TEXTURE_2D, tex);
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, getWindowWidth(), getWindowHeight(), 0);
@@ -387,9 +390,6 @@ TEST_P(OcclusionQueriesTest, MultiQueries)
 
     // http://anglebug.com/4925
     ANGLE_SKIP_TEST_IF(IsOpenGL() || IsD3D11());
-
-    // http://anglebug.com/4925
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsNVIDIA());
 
     GLuint query[5] = {};
     glGenQueriesEXT(5, query);
