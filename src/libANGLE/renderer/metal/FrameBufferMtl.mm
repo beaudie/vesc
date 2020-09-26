@@ -41,6 +41,8 @@ void FramebufferMtl::reset()
         rt = nullptr;
     }
     mDepthRenderTarget = mStencilRenderTarget = nullptr;
+
+    mRenderPassFirstColorAttachmentFormat = nullptr;
 }
 
 void FramebufferMtl::destroy(const gl::Context *context)
@@ -67,9 +69,11 @@ angle::Result FramebufferMtl::invalidateSub(const gl::Context *context,
                                             const GLenum *attachments,
                                             const gl::Rectangle &area)
 {
-    // NOTE(hqle): ES 3.0 feature.
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    if (area.encloses(getCompleteRenderArea()))
+    {
+        return invalidateImpl(mtl::GetImpl(context), count, attachments);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result FramebufferMtl::clear(const gl::Context *context, GLbitfield mask)
@@ -105,27 +109,71 @@ angle::Result FramebufferMtl::clearBufferfv(const gl::Context *context,
                                             GLint drawbuffer,
                                             const GLfloat *values)
 {
-    // NOTE(hqle): ES 3.0 feature.
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    mtl::ClearRectParams clearOpts;
+
+    gl::DrawBufferMask clearColorBuffers;
+    if (buffer == GL_DEPTH)
+    {
+        clearOpts.clearDepth = values[0];
+    }
+    else
+    {
+        clearColorBuffers.set(drawbuffer);
+        clearOpts.clearColor = {
+            .type  = mtl::PixelType::Float,
+            .red   = values[0],
+            .green = values[1],
+            .blue  = values[2],
+            .alpha = values[3],
+        };
+    }
+
+    return clearImpl(context, clearColorBuffers, &clearOpts);
 }
 angle::Result FramebufferMtl::clearBufferuiv(const gl::Context *context,
                                              GLenum buffer,
                                              GLint drawbuffer,
                                              const GLuint *values)
 {
-    // NOTE(hqle): ES 3.0 feature.
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    gl::DrawBufferMask clearColorBuffers;
+    clearColorBuffers.set(drawbuffer);
+
+    mtl::ClearRectParams clearOpts;
+    clearOpts.clearColor = {
+        .type   = mtl::PixelType::UInt,
+        .redU   = values[0],
+        .greenU = values[1],
+        .blueU  = values[2],
+        .alphaU = values[3],
+    };
+
+    return clearImpl(context, clearColorBuffers, &clearOpts);
 }
 angle::Result FramebufferMtl::clearBufferiv(const gl::Context *context,
                                             GLenum buffer,
                                             GLint drawbuffer,
                                             const GLint *values)
 {
-    // NOTE(hqle): ES 3.0 feature.
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    mtl::ClearRectParams clearOpts;
+
+    gl::DrawBufferMask clearColorBuffers;
+    if (buffer == GL_STENCIL)
+    {
+        clearOpts.clearStencil = gl::clamp(values[0], 0, static_cast<GLint>(mtl::kStencilMaskAll));
+    }
+    else
+    {
+        clearColorBuffers.set(drawbuffer);
+        clearOpts.clearColor = {
+            .type   = mtl::PixelType::Int,
+            .redI   = values[0],
+            .greenI = values[1],
+            .blueI  = values[2],
+            .alphaI = values[3],
+        };
+    }
+
+    return clearImpl(context, clearColorBuffers, &clearOpts);
 }
 angle::Result FramebufferMtl::clearBufferfi(const gl::Context *context,
                                             GLenum buffer,
@@ -133,9 +181,11 @@ angle::Result FramebufferMtl::clearBufferfi(const gl::Context *context,
                                             GLfloat depth,
                                             GLint stencil)
 {
-    // NOTE(hqle): ES 3.0 feature.
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    mtl::ClearRectParams clearOpts;
+    clearOpts.clearDepth   = depth;
+    clearOpts.clearStencil = gl::clamp(stencil, 0, static_cast<GLint>(mtl::kStencilMaskAll));
+
+    return clearImpl(context, gl::DrawBufferMask(), &clearOpts);
 }
 
 const gl::InternalFormat &FramebufferMtl::getImplementationColorReadFormat(
@@ -188,6 +238,13 @@ angle::Result FramebufferMtl::readPixels(const gl::Context *context,
 
     PackPixelsParams params(flippedArea, angleFormat, outputPitch, pack.reverseRowOrder, packBuffer,
                             0);
+
+    if (params.packBuffer)
+    {
+        // If PBO is active, pixels is treated as offset.
+        params.offset = reinterpret_cast<ptrdiff_t>(pixels);
+    }
+
     if (mFlipY)
     {
         params.reverseRowOrder = !params.reverseRowOrder;
@@ -410,8 +467,8 @@ angle::Result FramebufferMtl::blitWithDraw(const gl::Context *context,
         colorBlitParams.filter         = filter;
         colorBlitParams.dstLuminance   = srcColorRt->getFormat()->actualAngleFormat().isLUMA();
 
-        ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitColorWithDraw(context, renderEncoder,
-                                                                         colorBlitParams));
+        ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitColorWithDraw(
+            context, renderEncoder, srcColorRt->getFormat()->actualAngleFormat(), colorBlitParams));
     }
 
     return angle::Result::Continue;
@@ -431,16 +488,43 @@ bool FramebufferMtl::checkStatus(const gl::Context *context) const
         return false;
     }
 
-    if (mState.getStencilAttachment() &&
-        mState.getStencilAttachment()->getFormat().info->depthBits &&
-        mState.getStencilAttachment()->getFormat().info->stencilBits &&
-        mState.hasSeparateDepthAndStencilAttachments())
+    if (mState.getDepthAttachment() && mState.getDepthAttachment()->getFormat().info->depthBits &&
+        mState.getDepthAttachment()->getFormat().info->stencilBits)
     {
-        // If stencil attachment has depth & stencil bits, it must refer to the same texture
-        // as depth attachment.
-        return false;
+        return checkPackedDepthStencilAttachment();
     }
 
+    if (mState.getStencilAttachment() &&
+        mState.getStencilAttachment()->getFormat().info->depthBits &&
+        mState.getStencilAttachment()->getFormat().info->stencilBits)
+    {
+        return checkPackedDepthStencilAttachment();
+    }
+
+    return true;
+}
+
+bool FramebufferMtl::checkPackedDepthStencilAttachment() const
+{
+    if (ANGLE_APPLE_AVAILABLE_XCI(10.14, 13.0, 12.0))
+    {
+        // If depth/stencil attachment has depth & stencil bits, then depth & stencil must not have
+        // separate attachment. i.e. They must be the same texture or one of them has no
+        // attachement.
+        if (mState.hasSeparateDepthAndStencilAttachments())
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // Metal 2.0 and below doesn't allow packed depth stencil texture to be attached only as
+        // depth or stencil buffer. i.e. None of the depth & stencil attachment can be null.
+        if (!mState.getDepthStencilAttachment())
+        {
+            return false;
+        }
+    }
     return true;
 }
 
@@ -735,6 +819,8 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
 {
     mtl::RenderPassDesc &desc = *pDescOut;
 
+    mRenderPassFirstColorAttachmentFormat = nullptr;
+    mRenderPassAttachmentsSameColorType   = true;
     uint32_t maxColorAttachments = static_cast<uint32_t>(mState.getColorAttachments().size());
     desc.numColorAttachments     = 0;
     desc.sampleCount             = 1;
@@ -751,6 +837,21 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
 
             desc.numColorAttachments = std::max(desc.numColorAttachments, colorIndexGL + 1);
             desc.sampleCount = std::max(desc.sampleCount, colorRenderTarget->getRenderSamples());
+
+            if (!mRenderPassFirstColorAttachmentFormat)
+            {
+                mRenderPassFirstColorAttachmentFormat = colorRenderTarget->getFormat();
+            }
+            else if (colorRenderTarget->getFormat())
+            {
+                if (mRenderPassFirstColorAttachmentFormat->actualAngleFormat().isSint() !=
+                        colorRenderTarget->getFormat()->actualAngleFormat().isSint() ||
+                    mRenderPassFirstColorAttachmentFormat->actualAngleFormat().isUint() !=
+                        colorRenderTarget->getFormat()->actualAngleFormat().isUint())
+                {
+                    mRenderPassAttachmentsSameColorType = false;
+                }
+            }
         }
         else
         {
@@ -905,10 +1006,48 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
     ContextMtl *contextMtl = mtl::GetImpl(context);
     DisplayMtl *display    = contextMtl->getDisplay();
 
-    // Start new render encoder if not already.
-    mtl::RenderCommandEncoder *encoder = ensureRenderPassStarted(context, mRenderPassDesc);
+    if (mRenderPassAttachmentsSameColorType || !clearColorBuffers.any() ||
+        !clearOpts.clearColor.valid())
+    {
+        // Start new render encoder if not already.
+        mtl::RenderCommandEncoder *encoder = ensureRenderPassStarted(context, mRenderPassDesc);
 
-    return display->getUtils().clearWithDraw(context, encoder, clearOpts);
+        return display->getUtils().clearWithDraw(context, encoder, clearOpts);
+    }
+    else
+    {
+        // Not all attachments have the same color type.
+        // Clear the attachment one by one.
+        mtl::ClearRectParams overrideClearOps = clearOpts;
+        overrideClearOps.enabledBuffers.reset();
+        overrideClearOps.enabledBuffers.set(0);
+        for (size_t drawbuffer : clearColorBuffers)
+        {
+            if (drawbuffer >= mRenderPassDesc.numColorAttachments)
+            {
+                continue;
+            }
+            RenderTargetMtl *renderTarget = mColorRenderTargets[drawbuffer];
+            if (!renderTarget || !renderTarget->getTexture())
+            {
+                continue;
+            }
+            const mtl::Format &format     = *renderTarget->getFormat();
+            mtl::PixelType clearColorType = overrideClearOps.clearColor.value().type;
+            if ((clearColorType == mtl::PixelType::Int && !format.actualAngleFormat().isSint()) ||
+                (clearColorType == mtl::PixelType::UInt && !format.actualAngleFormat().isUint()) ||
+                (clearColorType == mtl::PixelType::Float && format.actualAngleFormat().isInt()))
+            {
+                continue;
+            }
+
+            mtl::RenderCommandEncoder *encoder =
+                contextMtl->getRenderTargetCommandEncoder(*renderTarget);
+            ANGLE_TRY(display->getUtils().clearWithDraw(context, encoder, overrideClearOps));
+        }
+
+        return angle::Result::Continue;
+    }
 }
 
 angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
@@ -928,6 +1067,7 @@ angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
     const gl::Rectangle renderArea(0, 0, mState.getDimensions().width,
                                    mState.getDimensions().height);
 
+    clearOpts.colorFormat    = mRenderPassFirstColorAttachmentFormat;
     clearOpts.dstTextureSize = mState.getExtents();
     clearOpts.clearArea      = ClipRectToScissor(contextMtl->getState(), renderArea, false);
     clearOpts.flipY          = mFlipY;
