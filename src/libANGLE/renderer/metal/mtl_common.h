@@ -173,10 +173,12 @@ constexpr MTLBlitOption kBlitOptionRowLinearPVRTC          = MTLBlitOptionRowLin
 #endif
 
 #if defined(__IPHONE_13_0) || defined(__MAC_10_15)
+using TextureSwizzleChannels                   = MTLTextureSwizzleChannels;
 using RenderStages                             = MTLRenderStages;
 constexpr MTLRenderStages kRenderStageVertex   = MTLRenderStageVertex;
 constexpr MTLRenderStages kRenderStageFragment = MTLRenderStageFragment;
 #else
+using TextureSwizzleChannels                               = int;
 using RenderStages                                         = int;
 constexpr RenderStages kRenderStageVertex                  = 1;
 constexpr RenderStages kRenderStageFragment                = 2;

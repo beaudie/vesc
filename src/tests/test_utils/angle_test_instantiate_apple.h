@@ -13,6 +13,8 @@ namespace angle
 {
 
 bool IsMetalRendererAvailable();
+// Check whether texture swizzle is natively supported on Metal device.
+bool IsMetalTextureSwizzleAvailable();
 
 }  // namespace angle
 
