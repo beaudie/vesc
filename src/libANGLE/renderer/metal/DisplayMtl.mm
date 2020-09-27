@@ -235,7 +235,12 @@ ShareGroupImpl *DisplayMtl::createShareGroup()
 
 gl::Version DisplayMtl::getMaxSupportedESVersion() const
 {
-    return mtl::kMaxSupportedGLVersion;
+    // NOTE(hqle): Supports GLES 3.0 on iOS GPU family 4+ for now.
+    if (supportsEitherGPUFamily(4, 1))
+    {
+        return mtl::kMaxSupportedGLVersion;
+    }
+    return gl::Version(2, 0);
 }
 
 gl::Version DisplayMtl::getMaxConformantESVersion() const
