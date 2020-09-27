@@ -78,6 +78,8 @@ struct EGLPlatformParameters
     EGLint emulateCopyTexImage2DFromRenderbuffers = EGL_DONT_CARE;
     EGLint shaderStencilOutputFeature             = EGL_DONT_CARE;
     EGLint genMultipleMipsPerPassFeature          = EGL_DONT_CARE;
+    EGLint hasExplicitMemBarrierFeature           = EGL_DONT_CARE;
+    EGLint breakRenderPassIsCheapFeature          = EGL_DONT_CARE;
     angle::PlatformMethods *platformMethods       = nullptr;
 };
 
