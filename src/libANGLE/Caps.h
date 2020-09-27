@@ -706,6 +706,10 @@ struct Limitations
 
     // D3D does not support vertex attribute aliasing
     bool noVertexAttributeAliasing = false;
+
+    // Renderer doesn't support GL_TEXTURE_COMPARE_MODE=GL_NONE.
+    // TODO: add validation code to front-end.
+    bool noShadowSamplerCompareModeNone = false;
 };
 
 struct TypePrecision
