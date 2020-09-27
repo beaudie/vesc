@@ -24,4 +24,15 @@ bool IsMetalRendererAvailable()
     return false;
 }
 
+bool IsMetalTextureSwizzleAvailable()
+{
+    // NOTE(hqle): This might not be accurate, since the capabilities also depend on underlying
+    // hardwares, however, it is OK for testing.
+    if (ANGLE_APPLE_AVAILABLE_XCI(10.15, 13.0, 13))
+    {
+        return true;
+    }
+    return false;
+}
+
 }  // namespace angle
