@@ -709,14 +709,19 @@ void DisplayMtl::initializeFeatures()
     // default values:
     mFeatures.hasBaseVertexInstancedDraw.enabled        = true;
     mFeatures.hasDepthTextureFiltering.enabled          = false;
+    mFeatures.hasExplicitMemBarrier.enabled             = false;
     mFeatures.hasNonUniformDispatch.enabled             = true;
     mFeatures.hasStencilOutput.enabled                  = false;
     mFeatures.hasTextureSwizzle.enabled                 = false;
     mFeatures.allowSeparatedDepthStencilBuffers.enabled = false;
     mFeatures.allowGenMultipleMipsPerPass.enabled       = true;
+    mFeatures.breakRenderPassIsCheap.enabled            = false;
 
     ANGLE_FEATURE_CONDITION((&mFeatures), hasDepthTextureFiltering,
                             TARGET_OS_OSX || TARGET_OS_MACCATALYST);
+    ANGLE_FEATURE_CONDITION(
+        (&mFeatures), hasExplicitMemBarrier,
+        isMetal2_1 && (TARGET_OS_OSX || TARGET_OS_MACCATALYST) && !ANGLE_MTL_ARM);
     ANGLE_FEATURE_CONDITION((&mFeatures), hasDepthAutoResolve, supportsEitherGPUFamily(3, 2));
     ANGLE_FEATURE_CONDITION((&mFeatures), hasStencilAutoResolve, supportsEitherGPUFamily(5, 2));
     ANGLE_FEATURE_CONDITION((&mFeatures), allowMultisampleStoreAndResolve,
@@ -729,6 +734,9 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), hasTextureSwizzle,
                             isMetal2_2 && supportsEitherGPUFamily(1, 2));
+
+    ANGLE_FEATURE_CONDITION((&mFeatures), breakRenderPassIsCheap,
+                            (TARGET_OS_OSX || TARGET_OS_MACCATALYST) && !ANGLE_MTL_ARM);
 
 #if !TARGET_OS_MACCATALYST && (TARGET_OS_IOS || TARGET_OS_TV)
     // Base Vertex drawing is only supported since GPU family 3.
