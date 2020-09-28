@@ -113,6 +113,29 @@
     },
     {
       "key": {
+        "uuid": "80f141ca_dc713110",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-28T21:12:15Z",
+      "side": 1,
+      "message": "It makes more sense to me to query GL_VERSION in Renderer and not in Display.\nQuering EGL_VENDOR above feels appropriate in Display, contrary to GL_VERSION below.\nI also wonder if EGL_VENDOR and GL_VENDOR can be different.\nFor example, on Android the first might be Google while the second Qualcomm.",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 0
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "967c19db_945599a3",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 5
