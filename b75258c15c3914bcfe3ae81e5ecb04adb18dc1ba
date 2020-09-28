@@ -16,6 +16,23 @@
       "revId": "b75258c15c3914bcfe3ae81e5ecb04adb18dc1ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de27ed01_f882b85f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T14:23:06Z",
+      "side": 1,
+      "message": "LGTM so long as it works",
+      "revId": "b75258c15c3914bcfe3ae81e5ecb04adb18dc1ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
