@@ -112,6 +112,11 @@ BufferPool::~BufferPool() {}
 
 bool BufferPool::shouldAllocateInSharedMem(ContextMtl *contextMtl) const
 {
+    if (ANGLE_UNLIKELY(contextMtl->getDisplay()->getFeatures().forceBufferGPUStorage.enabled))
+    {
+        return false;
+    }
+
     switch (mMemPolicy)
     {
         case BufferPoolMemPolicy::AlwaysSharedMem:
@@ -173,7 +178,8 @@ angle::Result BufferPool::allocate(ContextMtl *contextMtl,
 {
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
 
-    angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
+    angle::base::CheckedNumeric<size_t> checkedNextWriteOffset =
+        roundUp<size_t>(mNextAllocationOffset, mAlignment);
     checkedNextWriteOffset += sizeToAllocate;
 
     if (!mBuffer || !checkedNextWriteOffset.IsValid() ||
@@ -324,13 +330,7 @@ void BufferPool::updateAlignment(Context *context, size_t alignment)
     ASSERT(alignment > 0);
 
     // NOTE(hqle): May check additional platform limits.
-
-    // If alignment has changed, make sure the next allocation is done at an aligned offset.
-    if (alignment != mAlignment)
-    {
-        mNextAllocationOffset = roundUp(mNextAllocationOffset, static_cast<uint32_t>(alignment));
-        mAlignment            = alignment;
-    }
+    mAlignment = alignment;
 }
 
 void BufferPool::reset()
