@@ -33,6 +33,24 @@
       "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c47dcf_72c947d6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-28T20:57:23Z",
+      "side": 1,
+      "message": "\u003e Right now you could detect the API by searching a dictionary of strings for the event name (const char *eventName). Alternately you could ...\n\nHow open are you to landing this CL and addressing this issue in a follow-on CL (so that the AGI team can start testing this)?\n\n\nIn terms of moving the control to DebugAnnotatorVk, wouldn\u0027t it add CPU overhead?  For every GL call (including draw/dispatch calls), we\u0027d search to see if it is a draw/dispatch.  In the end, the same writeOpenGlApiString() and endDebugUtilsLabelEXT() calls will happen for each draw/dispatch, plus we\u0027ll add per-GL-call overhead.  Isn\u0027t that a net-increase in overhead?",
+      "parentUuid": "18675bcf_4b9d3ddc",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
