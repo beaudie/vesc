@@ -22,6 +22,30 @@
       "revId": "d444951648c7e45a9e6099731c5792140db3ff83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73bfec96_e9088b60",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-28T20:16:10Z",
+      "side": 1,
+      "message": "Wasn\u0027t needed, removed.",
+      "parentUuid": "e31c2e99_eff6cf19",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "d444951648c7e45a9e6099731c5792140db3ff83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
