@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff79385f_52ba9211",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T21:22:58Z",
+      "side": 1,
+      "message": "Sorry I haven\u0027t got to this yet. I\u0027m still thinking we can squash the counters. Might be better to ping Tim offline to make sure we\u0027re on the same page.",
+      "revId": "33d615ef9c931995cc9a0e8c52c580da758bea2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
