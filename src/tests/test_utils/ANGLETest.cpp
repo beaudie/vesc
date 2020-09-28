@@ -611,7 +611,7 @@ void ANGLETestBase::ANGLETestTearDown()
         return;
     }
 
-    swapBuffers();
+    // swapBuffers();
     mFixture->osWindow->messageLoop();
 
     if (mFixture->eglWindow)

@@ -24,7 +24,7 @@ ResourceTracker::~ResourceTracker() {}
 FrameCapture::FrameCapture() {}
 FrameCapture::~FrameCapture() {}
 
-void FrameCapture::finish(const gl::Context* context) {}
+void FrameCapture::finish(const gl::Context *context) {}
 
 void FrameCapture::onEndFrame(const gl::Context *context) {}
 void FrameCapture::onMakeCurrent(const egl::Surface *drawSurface) {}
