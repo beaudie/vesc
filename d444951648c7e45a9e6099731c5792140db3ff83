@@ -46,6 +46,30 @@
       "revId": "d444951648c7e45a9e6099731c5792140db3ff83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27ea4d6f_aafa4309",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T20:31:22Z",
+      "side": 1,
+      "message": "right, you shouldn\u0027t need to understand what a Context is here. you can predeclare it.",
+      "parentUuid": "73bfec96_e9088b60",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "d444951648c7e45a9e6099731c5792140db3ff83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
