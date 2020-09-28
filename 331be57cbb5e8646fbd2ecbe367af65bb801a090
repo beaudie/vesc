@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2469eb0b_451bf137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-28T16:21:12Z",
+      "side": 1,
+      "message": "PTAL\n\nI think this should work, but I\u0027m not sure how to test this locally within a Skia build.",
+      "revId": "331be57cbb5e8646fbd2ecbe367af65bb801a090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
