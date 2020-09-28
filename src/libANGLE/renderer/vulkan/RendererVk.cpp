@@ -1304,6 +1304,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Select additional features to be enabled.
     VkPhysicalDeviceFeatures2KHR enabledFeatures = {};
     enabledFeatures.sType                        = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+    // Used to support cubemap array:
+    enabledFeatures.features.imageCubeArray = mPhysicalDeviceFeatures.imageCubeArray;
     // Used to support framebuffers with multiple attachments:
     enabledFeatures.features.independentBlend = mPhysicalDeviceFeatures.independentBlend;
     // Used to support robust buffer access:

@@ -427,6 +427,7 @@ VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
     switch (textureType)
     {
         case gl::TextureType::CubeMap:
+        case gl::TextureType::CubeMapArray:
             return VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
 
         case gl::TextureType::_3D:
