@@ -46,8 +46,6 @@ enum CustomTask
     OneOffQueueSubmit,
     FinishToSerial,
     Present,
-    QueueWaitIdle,
-    DeviceWaitIdle,
     ClearAllGarbage,
     Exit,
 };
@@ -81,13 +79,6 @@ class CommandProcessorTask
           mWorkerCommand(vk::CustomTask::Present),
           mSemaphore(nullptr),
           mPresentInfo(presentInfo),
-          mPriority(priority)
-    {}
-    CommandProcessorTask(egl::ContextPriority priority)
-        : mContextVk(nullptr),
-          mCommandBuffer(nullptr),
-          mWorkerCommand(vk::CustomTask::QueueWaitIdle),
-          mSemaphore(nullptr),
           mPriority(priority)
     {}
     CommandProcessorTask(Serial serial)
@@ -225,8 +216,6 @@ class CommandWorkQueue : public vk::Context
                               const Serial &queueSerial);
 
     vk::Shared<vk::Fence> getLastSubmittedFence(const VkDevice device) const;
-    angle::Result queueWaitIdle(egl::ContextPriority priority);
-    angle::Result deviceWaitIdle();
 
     // Check to see which batches have finished completion (forward progress for
     // mLastCompletedQueueSerial, for example for when the application busy waits on a query
@@ -277,19 +266,24 @@ class CommandProcessor : angle::NonCopyable
     void waitForWorkComplete();
     Serial getCurrentQueueSerial();
     Serial getLastSubmittedSerial();
-    void clearAllGarbage() { mCommandWorkQueue.clearAllGarbage(mRenderer); }
-    angle::Result checkCompletedCommands()
-    {
-        return mCommandWorkQueue.checkCompletedCommands(mRenderer);
-    }
-    angle::Result finishToSerial(Serial serial)
-    {
-        return mCommandWorkQueue.finishToSerial(mRenderer, serial);
-    }
+
     vk::Shared<vk::Fence> getLastSubmittedFence() const;
-    bool hasInFlightCommandBuffers() { return mCommandWorkQueue.hasInFlightCommands(); }
-    void handleDeviceLost() { mCommandWorkQueue.handleDeviceLost(); }
-    bool hasPendingError() const { return mCommandWorkQueue.hasError(); }
+    bool hasInFlightCommandBuffers()
+    {
+        // This is referencing worker thread data, need to lock.
+        return mCommandWorkQueue.hasInFlightCommands();
+    }
+    void handleDeviceLost()
+    {
+        // This is accessing worker thread data, need to lock. Probably need other stuff here as
+        // well to unstick worker thread.
+        mCommandWorkQueue.handleDeviceLost();
+    }
+    bool hasPendingError() const
+    {
+        // Accessing worker thread data, need to lock.
+        return mCommandWorkQueue.hasError();
+    }
     vk::ErrorDetails getAndClearPendingError() { return mCommandWorkQueue.getAndClearError(); }
     // Stop the command processor loop
     void shutdown(std::thread *commandProcessorThread);

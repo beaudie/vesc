@@ -316,6 +316,14 @@ class RendererVk : angle::NonCopyable
         mCommandProcessor.queueCommand(command);
     }
     bool hasPendingError() const { return mCommandProcessor.hasPendingError(); }
+    void processPendingError(vk::Context *context)
+    {
+        if (hasPendingError())
+        {
+            vk::ErrorDetails error = getAndClearPendingError();
+            context->handleError(error.errorCode, error.file, error.function, error.line);
+        }
+    }
     vk::ErrorDetails getAndClearPendingError()
     {
         return mCommandProcessor.getAndClearPendingError();

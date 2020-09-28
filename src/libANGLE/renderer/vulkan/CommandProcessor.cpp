@@ -364,16 +364,6 @@ angle::Result CommandWorkQueue::submitFrame(RendererVk *renderer,
     return angle::Result::Continue;
 }
 
-angle::Result CommandWorkQueue::queueWaitIdle(egl::ContextPriority priority)
-{
-    return mRenderer->queueWaitIdle(this, priority);
-}
-
-angle::Result CommandWorkQueue::deviceWaitIdle()
-{
-    return mRenderer->deviceWaitIdle(this);
-}
-
 vk::Shared<vk::Fence> CommandWorkQueue::getLastSubmittedFence(const VkDevice device) const
 {
     vk::Shared<vk::Fence> fence;
@@ -552,16 +542,6 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
                 }
                 break;
             }
-            case vk::CustomTask::DeviceWaitIdle:
-            {
-                ANGLE_TRY(mCommandWorkQueue.deviceWaitIdle());
-                break;
-            }
-            case vk::CustomTask::QueueWaitIdle:
-            {
-                ANGLE_TRY(mCommandWorkQueue.queueWaitIdle(task.mPriority));
-                break;
-            }
             case vk::CustomTask::FlushToPrimary:
             {
                 ASSERT(!task.mCommandBuffer->empty());
@@ -573,7 +553,7 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
             }
             case vk::CustomTask::ClearAllGarbage:
             {
-                clearAllGarbage();
+                mCommandWorkQueue.clearAllGarbage(mRenderer);
                 break;
             }
             default:
@@ -600,8 +580,6 @@ void CommandProcessor::shutdown(std::thread *commandProcessorThread)
 {
     vk::CommandProcessorTask finishToSerial(Serial::Infinite());
     queueCommand(&finishToSerial);
-    vk::CommandProcessorTask deviceWaitIdle(vk::CustomTask::DeviceWaitIdle);
-    queueCommand(&deviceWaitIdle);
     vk::CommandProcessorTask clearAllGarbage(vk::CustomTask::ClearAllGarbage);
     queueCommand(&clearAllGarbage);
     waitForWorkComplete();
