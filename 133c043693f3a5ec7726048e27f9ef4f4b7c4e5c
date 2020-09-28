@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "12216459_be7f10c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-28T21:25:32Z",
+      "side": 1,
+      "message": "Any ideas on why mac-angle-rel is getting crashes?  The stack trace indicates that SecondaryCommandBuffer::executeCommands() is calling free().  It doesn\u0027t.",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18675bcf_4b9d3ddc",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -66,6 +83,24 @@
       "side": 1,
       "message": "Yeah, we would be when the tracing is enabled. The advantage is that the tracing overhead would be entirely separated from the hot path we care about - real applications. The trace overhead with the enum wouldn\u0027t be all that bad - essentially a bitset lookup over all the GL APIs.\n\nIn the long term we could re-implement this as a GL layer.\n\nI\u0027d be fine if we could pursue this in a follow-up as long as we didn\u0027t leave the overhead in for a protracted period of time.",
       "parentUuid": "79c47dcf_72c947d6",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c5f4bcc_5e72384d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-28T21:25:32Z",
+      "side": 1,
+      "message": "\u003e Yeah, we would be when the tracing is enabled. The advantage is that the tracing overhead would be entirely separated from the hot path we care about - real applications.\n\nGot it!\n\n\u003e I\u0027d be fine if we could pursue this in a follow-up as long as we didn\u0027t leave the overhead in for a protracted period of time.\n\nDefinitely.  I was hoping to get them something official quickly, and will work through remaining issues quickly.",
+      "parentUuid": "39225dfb_e5c1a181",
       "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
