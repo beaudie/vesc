@@ -2157,12 +2157,12 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
 }
 
-angle::Result RendererVk::queueSubmit(vk::Context *context,
-                                      egl::ContextPriority priority,
-                                      const VkSubmitInfo &submitInfo,
-                                      vk::ResourceUseList *resourceList,
-                                      const vk::Fence *fence,
-                                      Serial *serialOut)
+angle::Result RendererVk::XXqueueSubmit(vk::Context *context,
+                                        egl::ContextPriority priority,
+                                        const VkSubmitInfo &submitInfo,
+                                        vk::ResourceUseList *resourceList,
+                                        const vk::Fence *fence,
+                                        Serial *serialOut)
 {
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
@@ -2208,11 +2208,11 @@ angle::Result RendererVk::commandProcessorThreadQueueSubmit(vk::Context *context
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
-                                            vk::PrimaryCommandBuffer &&primary,
-                                            egl::ContextPriority priority,
-                                            const vk::Fence *fence,
-                                            Serial *serialOut)
+angle::Result RendererVk::XXqueueSubmitOneOff(vk::Context *context,
+                                              vk::PrimaryCommandBuffer &&primary,
+                                              egl::ContextPriority priority,
+                                              const vk::Fence *fence,
+                                              Serial *serialOut)
 {
     ASSERT(!getFeatures().enableCommandProcessingThread.enabled);
 
@@ -2246,9 +2246,23 @@ angle::Result RendererVk::commandProcessorThreadQueueSubmitOneOff(
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
 {
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
+        waitForCommandProcessorIdle();
+        processPendingError(context);
+    }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueues[priority]));
+    }
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // TODO? Move this to cleanupGarbage. Will need new worker task that cleans to
+        // getLastCompletedQueueSerial()
+        vk::CommandProcessorTask cleanAllGarbage(vk::CustomTask::ClearAllGarbage);
+        queueCommand(&cleanAllGarbage);
+        waitForCommandProcessorIdle();
     }
 
     ANGLE_TRY(cleanupGarbage(false));
@@ -2258,9 +2272,23 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 
 angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
+        waitForCommandProcessorIdle();
+        processPendingError(context);
+    }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkDeviceWaitIdle(mDevice));
+    }
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // TODO? Move this to cleanupGarbage. Will need new worker task that cleans to
+        // getLastCompletedQueueSerial()
+        vk::CommandProcessorTask cleanAllGarbage(vk::CustomTask::ClearAllGarbage);
+        queueCommand(&cleanAllGarbage);
+        waitForCommandProcessorIdle();
     }
 
     ANGLE_TRY(cleanupGarbage(false));

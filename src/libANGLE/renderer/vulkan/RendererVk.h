@@ -167,12 +167,12 @@ class RendererVk : angle::NonCopyable
     }
 
     // Queue submit that originates from the main thread
-    angle::Result queueSubmit(vk::Context *context,
-                              egl::ContextPriority priority,
-                              const VkSubmitInfo &submitInfo,
-                              vk::ResourceUseList *resourceList,
-                              const vk::Fence *fence,
-                              Serial *serialOut);
+    angle::Result XXqueueSubmit(vk::Context *context,
+                                egl::ContextPriority priority,
+                                const VkSubmitInfo &submitInfo,
+                                vk::ResourceUseList *resourceList,
+                                const vk::Fence *fence,
+                                Serial *serialOut);
     // Queue submit that originates from the worker thread
     angle::Result commandProcessorThreadQueueSubmit(vk::Context *context,
                                                     egl::ContextPriority priority,
@@ -191,11 +191,11 @@ class RendererVk : angle::NonCopyable
 
     // Fire off a single command buffer immediately with default priority.
     // Command buffer must be allocated with getCommandBufferOneOff and is reclaimed.
-    angle::Result queueSubmitOneOff(vk::Context *context,
-                                    vk::PrimaryCommandBuffer &&primary,
-                                    egl::ContextPriority priority,
-                                    const vk::Fence *fence,
-                                    Serial *serialOut);
+    angle::Result XXqueueSubmitOneOff(vk::Context *context,
+                                      vk::PrimaryCommandBuffer &&primary,
+                                      egl::ContextPriority priority,
+                                      const vk::Fence *fence,
+                                      Serial *serialOut);
     angle::Result commandProcessorThreadQueueSubmitOneOff(vk::Context *context,
                                                           vk::PrimaryCommandBuffer &&primary,
                                                           egl::ContextPriority priority);
@@ -302,6 +302,14 @@ class RendererVk : angle::NonCopyable
         mCommandProcessor.queueCommand(command);
     }
     bool hasPendingError() const { return mCommandProcessor.hasPendingError(); }
+    void processPendingError(vk::Context *context)
+    {
+        if (hasPendingError())
+        {
+            vk::ErrorDetails error = getAndClearPendingError();
+            context->handleError(error.errorCode, error.file, error.function, error.line);
+        }
+    }
     vk::ErrorDetails getAndClearPendingError()
     {
         return mCommandProcessor.getAndClearPendingError();
