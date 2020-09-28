@@ -535,9 +535,6 @@ void RendererVk::onDestroy()
         mFenceRecycler.destroy(mDevice);
     }
 
-    mPipelineLayoutCache.destroy(mDevice);
-    mDescriptorSetLayoutCache.destroy(mDevice);
-
     mPipelineCache.destroy(mDevice);
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
@@ -2043,24 +2040,29 @@ const gl::Limitations &RendererVk::getNativeLimitations() const
     return mNativeLimitations;
 }
 
+ShareGroupVk *RendererVk::getShareGroupVk(ContextVk *context)
+{
+    return reinterpret_cast<ShareGroupVk *>(
+        context->getState().getShareGroup()->getImplementation());
+}
+
 angle::Result RendererVk::getDescriptorSetLayout(
     ContextVk *context,
     const vk::DescriptorSetLayoutDesc &desc,
     vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
 {
-    std::lock_guard<decltype(mDescriptorSetLayoutCacheMutex)> lock(mDescriptorSetLayoutCacheMutex);
-    return mDescriptorSetLayoutCache.getDescriptorSetLayout(context, desc, descriptorSetLayoutOut);
+    return getShareGroupVk(context)->mDescriptorSetLayoutCache.getDescriptorSetLayout(
+        context, desc, descriptorSetLayoutOut);
 }
 
 angle::Result RendererVk::getPipelineLayout(
-    vk::Context *context,
+    ContextVk *context,
     const vk::PipelineLayoutDesc &desc,
     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
-    std::lock_guard<decltype(mPipelineLayoutCacheMutex)> lock(mPipelineLayoutCacheMutex);
-    return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
-                                                  pipelineLayoutOut);
+    return getShareGroupVk(context)->mPipelineLayoutCache.getPipelineLayout(
+        context, desc, descriptorSetLayouts, pipelineLayoutOut);
 }
 
 angle::Result RendererVk::getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut)

@@ -619,11 +619,13 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mFramebufferManager->release(this);
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
-    mState.mShareGroup->release(this);
 
     mThreadPool.reset();
 
     mImplementation->onDestroy(this);
+
+    // backend requires implementation to be destroyed first to close down all the objects
+    mState.mShareGroup->release(this);
 
     mOverlay.destroy(this);
 

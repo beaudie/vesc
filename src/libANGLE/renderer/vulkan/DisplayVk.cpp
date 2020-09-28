@@ -155,7 +155,7 @@ ImageImpl *DisplayVk::createImage(const egl::ImageState &state,
 
 ShareGroupImpl *DisplayVk::createShareGroup()
 {
-    return new ShareGroupVk();
+    return new ShareGroupVk(mRenderer);
 }
 
 ContextImpl *DisplayVk::createContext(const gl::State &state,
@@ -288,5 +288,11 @@ bool DisplayVk::isRobustResourceInitEnabled() const
 {
     // We return true if any surface was created with robust resource init enabled.
     return mHasSurfaceWithRobustInit;
+}
+
+ShareGroupVk::~ShareGroupVk()
+{
+    mPipelineLayoutCache.destroy(mRenderer->getDevice());
+    mDescriptorSetLayoutCache.destroy(mRenderer->getDevice());
 }
 }  // namespace rx
