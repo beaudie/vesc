@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e31c2e99_eff6cf19",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-28T19:55:57Z",
+      "side": 1,
+      "message": "FYI ... this line caused a presubmit warning:\n\nRunning presubmit upload checks ...\nC:\\src\\depot_tools\\presubmit_support.py:735: UserWarning: Use files_to_check in FilterSourceFile\n  warn(\u0027Use files_to_check in FilterSourceFile\u0027)\n\n** Presubmit Warnings **\nexport_targets.py failed, this may just be due to your local checkout: Importing graph\n  (\u0027gn\u0027, \u0027desc\u0027, \u0027--format\u003djson\u0027, \u0027c:\\\\src\\\\temp\\\\tmpmjqgpz\u0027, \u0027*\u0027)\n\nProcessing graph\n  shared_library //:libEGL\n  static_library //:angle_common\nWarning in //:angle_common: src\\common\\debug.cpp: Invalid include: b\u0027libANGLE/Context.h\u0027\nTraceback (most recent call last):\n  File \"C:\\src\\angle\\scripts\\export_targets.py\", line 311, in \u003cmodule\u003e\n    libraries \u003d gather_libraries(ROOTS, descs)\n  File \"C:\\src\\angle\\scripts\\export_targets.py\", line 306, in gather_libraries\n    dag_traverse(roots, fn)\n  File \"C:\\src\\angle\\scripts\\export_targets.py\", line 114, in dag_traverse\n    recurse(x)\n  File \"C:\\src\\angle\\scripts\\export_targets.py\", line 107, in recurse\n    recurse(x)\n  File \"C:\\src\\angle\\scripts\\export_targets.py\", line 99, in recurse\n    t \u003d pre_recurse_func(key)\n  File \"C:\\src\\angle\\scripts\\export_targets.py\", line 300, in fn\n    assert has_all_includes(target_name, descs), target_name\nAssertionError: //:angle_common",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "d444951648c7e45a9e6099731c5792140db3ff83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
