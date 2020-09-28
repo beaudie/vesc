@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc567dfe_4887aa0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T20:38:23Z",
+      "side": 1,
+      "message": "Will take another look.",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18675bcf_4b9d3ddc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T20:38:23Z",
+      "side": 1,
+      "message": "Everything in this file adds a small but measurable CPU overhead. Likely you can reproduce with angle_perftests and the most basic draw calloverhead test.\n\nYou could completely solve that by moving all the control to DebugAnnotatorVk.\n\nIn beginEvent - check the API and if it\u0027s one of the \"draw\" or \"dispatch\" APIs enabled here you write out the GL markers. Essentially trigger writeOpenGlApiString.\n\nIn endEvent - you end the debug utils label.\n\nRight now you could detect the API by searching a dictionary of strings for the event name (const char *eventName). Alternately you could pass down an enum of the call to the event functions. We already have such an enum in entry_points_enum_autogen.h.",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
