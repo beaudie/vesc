@@ -364,16 +364,6 @@ angle::Result CommandWorkQueue::submitFrame(RendererVk *renderer,
     return angle::Result::Continue;
 }
 
-angle::Result CommandWorkQueue::queueWaitIdle(egl::ContextPriority priority)
-{
-    return mRenderer->queueWaitIdle(this, priority);
-}
-
-angle::Result CommandWorkQueue::deviceWaitIdle()
-{
-    return mRenderer->deviceWaitIdle(this);
-}
-
 vk::Shared<vk::Fence> CommandWorkQueue::getLastSubmittedFence(const VkDevice device) const
 {
     vk::Shared<vk::Fence> fence;
@@ -487,103 +477,98 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
         vk::CommandProcessorTask task(std::move(mCommandsQueue.front()));
         mCommandsQueue.pop();
         lock.unlock();
-        switch (task.mWorkerCommand)
-        {
-            case vk::CustomTask::Exit:
-            {
-                *exitThread = true;
-                // Shutting down so cleanup
-                mCommandWorkQueue.destroy(mRenderer->getDevice());
-                mCommandPool.destroy(mRenderer->getDevice());
-                mPrimaryCommandBuffer.destroy(mRenderer->getDevice());
-                mWorkerThreadIdle = true;
-                mWorkerIdleCondition.notify_one();
-                return angle::Result::Continue;
-            }
-            case vk::CustomTask::FlushAndQueueSubmit:
-            {
-                // End command buffer
-                ANGLE_VK_TRY(mCommandWorkQueue.getPointer(), mPrimaryCommandBuffer.end());
-                // 1. Create submitInfo
-                VkSubmitInfo submitInfo = {};
-                InitializeSubmitInfo(&submitInfo, mPrimaryCommandBuffer, task.mWaitSemaphores,
-                                     &task.mWaitSemaphoreStageMasks, task.mSemaphore);
-                // 2. Call submitFrame()
-                ANGLE_TRY(mRenderer->getNextSubmitFence(&mFence));
-                ANGLE_TRY(mCommandWorkQueue.submitFrame(
-                    mRenderer, task.mPriority, submitInfo, mFence, &task.mCurrentGarbage,
-                    &mCommandPool, std::move(mPrimaryCommandBuffer), task.mSerial));
-                // 3. Allocate & begin new primary command buffer
-                ANGLE_TRY(mCommandWorkQueue.allocatePrimaryCommandBuffer(&mPrimaryCommandBuffer));
-                ANGLE_VK_TRY(mCommandWorkQueue.getPointer(),
-                             mPrimaryCommandBuffer.begin(beginInfo));
-                // TODO: This is hacky to prevent double fence use.
-                //  Also not sure I'm getting fence reuse doing this.
-                mRenderer->resetSharedFence(&mFence);
-                mRenderer->resetNextSharedFence();
-                ASSERT(task.mCurrentGarbage.empty());
-                break;
-            }
-            case vk::CustomTask::OneOffQueueSubmit:
-            {
-                VkSubmitInfo submitInfo       = {};
-                submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-                submitInfo.commandBufferCount = 1;
-                submitInfo.pCommandBuffers    = &task.mOneOffCommandBufferVk;
-                ANGLE_TRY(mRenderer->commandProcessorThreadQueueSubmit(
-                    &mCommandWorkQueue, task.mPriority, submitInfo, nullptr));
-                break;
-            }
-            case vk::CustomTask::FinishToSerial:
-            {
-                ANGLE_TRY(mCommandWorkQueue.finishToSerial(mRenderer, task.mSerial));
-                break;
-            }
-            case vk::CustomTask::Present:
-            {
-                VkResult result = mCommandWorkQueue.present(task.mPriority, task.mPresentInfo);
-                if (ANGLE_UNLIKELY(result != VK_SUCCESS))
-                {
-                    // Save the error so that we can handle it (e.g. VK_OUT_OF_DATE)
-                    // Don't leave processing loop, don't consider errors from present to be fatal.
-                    // TODO: This needs to improve to properly parallelize present
-                    mCommandWorkQueue.getPointer()->handleError(result, __FILE__, __FUNCTION__,
-                                                                __LINE__);
-                }
-                break;
-            }
-            case vk::CustomTask::DeviceWaitIdle:
-            {
-                ANGLE_TRY(mCommandWorkQueue.deviceWaitIdle());
-                break;
-            }
-            case vk::CustomTask::QueueWaitIdle:
-            {
-                ANGLE_TRY(mCommandWorkQueue.queueWaitIdle(task.mPriority));
-                break;
-            }
-            case vk::CustomTask::FlushToPrimary:
-            {
-                ASSERT(!task.mCommandBuffer->empty());
-                ANGLE_TRY(
-                    task.mCommandBuffer->flushToPrimary(task.mContextVk, &mPrimaryCommandBuffer));
-                ASSERT(task.mCommandBuffer->empty());
-                task.mCommandBuffer->releaseToContextQueue(task.mContextVk);
-                break;
-            }
-            case vk::CustomTask::ClearAllGarbage:
-            {
-                clearAllGarbage();
-                break;
-            }
-            default:
-                UNREACHABLE();
-                break;
-        }
+        ANGLE_TRY(processTask(task));
     }
 
     UNREACHABLE();
     return angle::Result::Stop;
+}
+
+angle::Result CommandProcessor::processTask(const vk::CommandProcessorTask &task)
+{
+    switch (task.mWorkerCommand)
+    {
+        case vk::CustomTask::Exit:
+        {
+            *exitThread = true;
+            // Shutting down so cleanup
+            mCommandWorkQueue.destroy(mRenderer->getDevice());
+            mCommandPool.destroy(mRenderer->getDevice());
+            mPrimaryCommandBuffer.destroy(mRenderer->getDevice());
+            mWorkerThreadIdle = true;
+            mWorkerIdleCondition.notify_one();
+            return angle::Result::Continue;
+        }
+        case vk::CustomTask::FlushAndQueueSubmit:
+        {
+            // End command buffer
+            ANGLE_VK_TRY(mCommandWorkQueue.getPointer(), mPrimaryCommandBuffer.end());
+            // 1. Create submitInfo
+            VkSubmitInfo submitInfo = {};
+            InitializeSubmitInfo(&submitInfo, mPrimaryCommandBuffer, task.mWaitSemaphores,
+                                 &task.mWaitSemaphoreStageMasks, task.mSemaphore);
+            // 2. Call submitFrame()
+            ANGLE_TRY(mRenderer->getNextSubmitFence(&mFence));
+            ANGLE_TRY(mCommandWorkQueue.submitFrame(
+                mRenderer, task.mPriority, submitInfo, mFence, &task.mCurrentGarbage, &mCommandPool,
+                std::move(mPrimaryCommandBuffer), task.mSerial));
+            // 3. Allocate & begin new primary command buffer
+            ANGLE_TRY(mCommandWorkQueue.allocatePrimaryCommandBuffer(&mPrimaryCommandBuffer));
+            ANGLE_VK_TRY(mCommandWorkQueue.getPointer(), mPrimaryCommandBuffer.begin(beginInfo));
+            // TODO: This is hacky to prevent double fence use.
+            //  Also not sure I'm getting fence reuse doing this.
+            mRenderer->resetSharedFence(&mFence);
+            mRenderer->resetNextSharedFence();
+            ASSERT(task.mCurrentGarbage.empty());
+            break;
+        }
+        case vk::CustomTask::OneOffQueueSubmit:
+        {
+            VkSubmitInfo submitInfo       = {};
+            submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers    = &task.mOneOffCommandBufferVk;
+            ANGLE_TRY(mRenderer->commandProcessorThreadQueueSubmit(
+                &mCommandWorkQueue, task.mPriority, submitInfo, nullptr));
+            break;
+        }
+        case vk::CustomTask::FinishToSerial:
+        {
+            ANGLE_TRY(mCommandWorkQueue.finishToSerial(mRenderer, task.mSerial));
+            break;
+        }
+        case vk::CustomTask::Present:
+        {
+            VkResult result = mCommandWorkQueue.present(task.mPriority, task.mPresentInfo);
+            if (ANGLE_UNLIKELY(result != VK_SUCCESS))
+            {
+                // Save the error so that we can handle it (e.g. VK_OUT_OF_DATE)
+                // Don't leave processing loop, don't consider errors from present to be fatal.
+                // TODO: This needs to improve to properly parallelize present
+                mCommandWorkQueue.getPointer()->handleError(result, __FILE__, __FUNCTION__,
+                                                            __LINE__);
+            }
+            break;
+        }
+        case vk::CustomTask::FlushToPrimary:
+        {
+            ASSERT(!task.mCommandBuffer->empty());
+            ANGLE_TRY(task.mCommandBuffer->flushToPrimary(task.mContextVk, &mPrimaryCommandBuffer));
+            ASSERT(task.mCommandBuffer->empty());
+            task.mCommandBuffer->releaseToContextQueue(task.mContextVk);
+            break;
+        }
+        case vk::CustomTask::ClearAllGarbage:
+        {
+            mCommandWorkQueue.clearAllGarbage(mRenderer);
+            break;
+        }
+        default:
+            UNREACHABLE();
+            break;
+    }
+
+    return angle::Result::Continue;
 }
 
 void CommandProcessor::waitForWorkComplete()
@@ -600,8 +585,6 @@ void CommandProcessor::shutdown(std::thread *commandProcessorThread)
 {
     vk::CommandProcessorTask finishToSerial(Serial::Infinite());
     queueCommand(&finishToSerial);
-    vk::CommandProcessorTask deviceWaitIdle(vk::CustomTask::DeviceWaitIdle);
-    queueCommand(&deviceWaitIdle);
     vk::CommandProcessorTask clearAllGarbage(vk::CustomTask::ClearAllGarbage);
     queueCommand(&clearAllGarbage);
     waitForWorkComplete();

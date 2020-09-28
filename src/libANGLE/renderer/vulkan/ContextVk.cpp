@@ -4229,13 +4229,13 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         // 1. Create submitInfo
         // 2. Call submitFrame()
         // 3. Allocate new primary command buffer
-        vk::CommandProcessorTask flushData(mWaitSemaphores, mWaitSemaphoreStageMasks,
-                                           signalSemaphore, mContextPriority, mCurrentGarbage,
-                                           mResourceUseList);
+        vk::CommandProcessorTask flushAndQueueSubmit(mWaitSemaphores, mWaitSemaphoreStageMasks,
+                                                     signalSemaphore, mContextPriority,
+                                                     mCurrentGarbage, mResourceUseList);
 
         // TODO: How to set up semaphores for submit. Should Context send them to worker?
         //  Should worker thread have those on its end? Need to explore.
-        syncAnyErrorAndQueueCommandToProcessorThread(&flushData);
+        syncAnyErrorAndQueueCommandToProcessorThread(&flushAndQueueSubmit);
         // Some tasks from ContextVk::submitFrame() that run after CommandQueue::submitFrame()
         onRenderPassFinished();
         mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
