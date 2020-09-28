@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "de849e68_5c120ef1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-28T23:12:00Z",
+      "side": 1,
+      "message": "I\u0027m not seeing a good way to present per-frame counters for these values.   There are too many descriptor set types to present the data in a valuable way per frame, unless we only care that descriptor sets were allocated (and not which type or by whom).",
+      "parentUuid": "cfe676e1_7bf7595a",
+      "range": {
+        "startLine": 307,
+        "startChar": 5,
+        "endLine": 307,
+        "endChar": 33
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9684574_ade40176",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
@@ -369,6 +393,30 @@
       "side": 1,
       "message": "\u003e In particular, the UtilsVk is ANGLE-specific (no corresponding GLES object) but the instance is owned by the ContextVk so we could add it to the list of ContextVk\u0027s counters.\n\nNo UtilsVk cannot be per object.\n\n\u003e Assuming we have per-object counters, how do we return those to the caller?\n\nThe same way we get any other per-object information. For example, `glGetProgramInterface` passes in the program, `glGetTexParameter*` looks at the current binding. Ideally we would want the former.",
       "parentUuid": "af2dd35c_07b6a688",
+      "range": {
+        "startLine": 798,
+        "startChar": 4,
+        "endLine": 799,
+        "endChar": 39
+      },
+      "revId": "7f052a40e04cbf64e7cf0757161652ea63057436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba6a9f89_0beaf052",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-28T23:12:00Z",
+      "side": 1,
+      "message": "I\u0027ve removed the hash maps by converting all of the counters to std::arrays.   I also moved the program allocations to ProgramExecutableVk::PerfCounters, which are output during ProgramExecutableVk::~ProgramExecutableVk().",
+      "parentUuid": "ed5c8a86_84feaaa3",
       "range": {
         "startLine": 798,
         "startChar": 4,
