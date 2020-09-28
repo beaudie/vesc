@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "b365f7e0_ed360777",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T19:00:07Z",
+      "side": 1,
+      "message": "I see. Will do.",
+      "parentUuid": "7d2c1235_cd99d55f",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49706c7f_20340d66",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -170,6 +194,23 @@
       "side": 1,
       "message": "It appears that way to me. Its in my git log as such too.",
       "parentUuid": "c3e3d9ae_834899ae",
+      "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a623c49f_24cbdbb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T19:00:07Z",
+      "side": 1,
+      "message": "Confirm, will change commit message.",
       "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
