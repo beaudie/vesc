@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bee408aa_abfb191a",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-28T14:50:03Z",
+      "side": 1,
+      "message": "Ack. Will update. Just curious about this stuff, what\u0027s wrong with it? A lot of open source projects also using (c). I don\u0027t know much about this tbh.",
+      "parentUuid": "7edd3c51_f1d244a6",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "3a6706cf467ca059ed1bd62ee68d08821783312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe4fef44_78c45db0",
         "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
         "patchSetId": 2
