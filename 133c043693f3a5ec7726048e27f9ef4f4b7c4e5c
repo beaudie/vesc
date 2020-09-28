@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "cf4fe03e_b072b0ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-28T22:01:10Z",
+      "side": 1,
+      "message": "I was trying to determine why Tobin\u0027s CL didn\u0027t have this problem, and it\u0027s because I got rid of the #ifdef\u0027s (per Shabi\u0027s review feedback).  Apparently, ANGLE is using the Vulkan back-end on Mac, which I didn\u0027t think was possible, and that Vulkan implementation doesn\u0027t have the extension.\n\nPerhaps I will do what you\u0027re asking for Jamie (sooner than later), so that I can land this cleanly.",
+      "parentUuid": "7cd9a68b_c14cbb13",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18675bcf_4b9d3ddc",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
