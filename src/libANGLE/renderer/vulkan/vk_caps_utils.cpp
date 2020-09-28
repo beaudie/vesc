@@ -203,6 +203,10 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeExtensions.textureFilteringCHROMIUM = getFeatures().supportsFilteringPrecision.enabled;
 
+    // Only expose texture cubemap array if the physical device supports it.
+    mNativeExtensions.textureCubeMapArrayOES = (mPhysicalDeviceFeatures.imageCubeArray == VK_TRUE);
+    mNativeExtensions.textureCubeMapArrayEXT = (mPhysicalDeviceFeatures.imageCubeArray == VK_TRUE);
+
     mNativeExtensions.shadowSamplersEXT = true;
 
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
