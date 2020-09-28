@@ -22,6 +22,30 @@
       "revId": "52ee81cfdc13d3f44c1b5db041b14f236c57188c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26ee810d_cb73690d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T14:36:48Z",
+      "side": 0,
+      "message": "Yeah, I don\u0027t think this code path was ever traveled or it surely would have triggered test failures.\n\nI blamed it back to a change I made when I implemented the ResourceManager tracking class way back.",
+      "parentUuid": "3396a652_ad8bbf85",
+      "range": {
+        "startLine": 664,
+        "startChar": 45,
+        "endLine": 664,
+        "endChar": 73
+      },
+      "revId": "52ee81cfdc13d3f44c1b5db041b14f236c57188c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
