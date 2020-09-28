@@ -36,6 +36,42 @@
     },
     {
       "key": {
+        "uuid": "a19aee16_f05d1755",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T16:03:43Z",
+      "side": 1,
+      "message": "ICYMI",
+      "parentUuid": "2b140de6_74841aba",
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e716b0be_c04471bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T16:03:43Z",
+      "side": 1,
+      "message": "ICYMI",
+      "parentUuid": "a243fe77_a8f8a020",
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbaa7166_ecf0057d",
         "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
         "patchSetId": 1
@@ -47,6 +83,30 @@
       "writtenOn": "2020-09-25T15:19:52Z",
       "side": 1,
       "message": "Please use std::array, there\u0027s no need for these to be dynamically allocated.\n\nYou can also use angle::FixedVector to get vector like push_back()/size() for depthStencilFormats.",
+      "range": {
+        "startLine": 54,
+        "startChar": 10,
+        "endLine": 54,
+        "endChar": 21
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e353602_62244079",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T16:03:43Z",
+      "side": 1,
+      "message": "ICYMI",
+      "parentUuid": "cbaa7166_ecf0057d",
       "range": {
         "startLine": 54,
         "startChar": 10,
