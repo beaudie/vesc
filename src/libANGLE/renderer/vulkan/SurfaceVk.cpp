@@ -504,23 +504,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // flush the pipe.
-    if (renderer->getFeatures().enableCommandProcessingThread.enabled)
-    {
-        // Note: All queue operations are owned by the command processor thread
-        vk::CommandProcessorTask task(vk::CustomTask::DeviceWaitIdle);
-        // Sync any outstanding worker thread error before submitting task
-        if (renderer->hasPendingError())
-        {
-            vk::ErrorDetails error = renderer->getAndClearPendingError();
-            displayVk->handleError(error.errorCode, error.file, error.function, error.line);
-        }
-        renderer->queueCommand(&task);
-        renderer->waitForCommandProcessorIdle();
-    }
-    else
-    {
-        (void)renderer->deviceWaitIdle(displayVk);
-    }
+    (void)renderer->deviceWaitIdle(displayVk);
 
     destroySwapChainImages(displayVk);
 
@@ -776,18 +760,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         static constexpr size_t kMaxOldSwapchains = 5;
         if (mOldSwapchains.size() > kMaxOldSwapchains)
         {
-            if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
-            {
-                vk::CommandProcessorTask task(contextVk->getPriority());
-                contextVk->syncAnyErrorAndQueueCommandToProcessorThread(&task);
-                // Stall here for command thread to complete
-                contextVk->getRenderer()->waitForCommandProcessorIdle();
-            }
-            else
-            {
-                ANGLE_TRY(
-                    contextVk->getRenderer()->queueWaitIdle(contextVk, contextVk->getPriority()));
-            }
+            ANGLE_TRY(contextVk->getRenderer()->queueWaitIdle(contextVk, contextVk->getPriority()));
             for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
             {
                 oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
