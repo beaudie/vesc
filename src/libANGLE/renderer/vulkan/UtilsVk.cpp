@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapperVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
@@ -536,8 +537,6 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
                                                   size_t setSizesCount,
                                                   size_t pushConstantsSize)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     vk::DescriptorSetLayoutDesc descriptorSetDesc;
     bool isCompute = function >= Function::ComputeStartIndex;
     const VkShaderStageFlags descStages =
@@ -551,7 +550,7 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
         ++currentBinding;
     }
 
-    ANGLE_TRY(renderer->getDescriptorSetLayout(
+    ANGLE_TRY(contextVk->getShareGroupVk()->mDescriptorSetLayoutCache.getDescriptorSetLayout(
         contextVk, descriptorSetDesc,
         &mDescriptorSetLayouts[function][ToUnderlying(DescriptorSetIndex::InternalShader)]));
 
@@ -594,9 +593,9 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
                                                    static_cast<uint32_t>(pushConstantsSize));
     }
 
-    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc,
-                                          mDescriptorSetLayouts[function],
-                                          &mPipelineLayouts[function]));
+    ANGLE_TRY(contextVk->getShareGroupVk()->mPipelineLayoutCache.getPipelineLayout(
+        contextVk, pipelineLayoutDesc, mDescriptorSetLayouts[function],
+        &mPipelineLayouts[function]));
 
     return angle::Result::Continue;
 }
