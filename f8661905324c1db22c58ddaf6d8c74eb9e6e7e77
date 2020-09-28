@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c2548ba_a46b2dea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T13:37:33Z",
+      "side": 1,
+      "message": "We recently did the same in vulkan/. Have you noticed gl::LevelIndex?",
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
