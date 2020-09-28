@@ -73,6 +73,12 @@ struct FeaturesMtl : FeatureSetBase
 
     Feature breakRenderPassIsCheap = {"break_render_pass_is_cheap", FeatureCategory::MetalFeatures,
                                       "Breaking render pass is a cheap operation", &members};
+
+    Feature forceBufferGPUStorage = {
+        "force_buffer_gpu_storage", FeatureCategory::MetalFeatures,
+        "On systems that support both buffer' memory allocation on GPU and shared memory (such as "
+        "macOS), force using GPU memory allocation for buffers everytime or not.",
+        &members};
 };
 
 }  // namespace angle
