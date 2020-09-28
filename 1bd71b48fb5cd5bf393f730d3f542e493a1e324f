@@ -70,6 +70,30 @@
       "revId": "1bd71b48fb5cd5bf393f730d3f542e493a1e324f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6fef2b9_9428d900",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-09-28T15:16:47Z",
+      "side": 0,
+      "message": "The compatability/core distinction isn\u0027t too useful to pass on, we always request core profile above GL 3.2. No workarounds/version detection uses it so I\u0027m not too concerned losing that info.",
+      "parentUuid": "c5669f57_250680be",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 287,
+        "endChar": 0
+      },
+      "revId": "1bd71b48fb5cd5bf393f730d3f542e493a1e324f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
