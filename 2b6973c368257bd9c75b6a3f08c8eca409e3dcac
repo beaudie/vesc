@@ -33,6 +33,58 @@
       "revId": "2b6973c368257bd9c75b6a3f08c8eca409e3dcac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "675b3769_43073c27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T20:33:08Z",
+      "side": 1,
+      "message": "Whoops, nevermind this.",
+      "parentUuid": "20a1b27e_c6e4119e",
+      "revId": "2b6973c368257bd9c75b6a3f08c8eca409e3dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "932cef3c_fbe0297f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T20:33:08Z",
+      "side": 1,
+      "message": "This LGTM. There\u0027s some concern in the next CL you\u0027re adding overhead to draw that could be mitigated by also passing in more to EVENT. If you\u0027re okay with it though we can land this then move on to the next CL and discuss it there.",
+      "revId": "2b6973c368257bd9c75b6a3f08c8eca409e3dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c09a44ff_94913e9e",
+        "filename": "src/libANGLE/LoggingAnnotator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T20:33:08Z",
+      "side": 1,
+      "message": "nit: closing namespace comment",
+      "revId": "2b6973c368257bd9c75b6a3f08c8eca409e3dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
