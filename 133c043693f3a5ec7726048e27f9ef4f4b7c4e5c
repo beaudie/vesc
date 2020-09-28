@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3fe3131f_d72a6b5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T21:32:08Z",
+      "side": 1,
+      "message": "Are you able to read the logs? It is this ASSERT:\n\n                    ASSERT(vkCmdEndDebugUtilsLabelEXT);\n\nPlease give them a look so you can get familiar with parsing data from the logs. Do you have the Chromium flake linker extension installed? This is basically mandatory for working with buildbucket/milo.\n\nLink: https://chromium.googlesource.com/angle/angle/+/master/infra/ANGLEWrangling.md#angle-wrangling",
+      "parentUuid": "12216459_be7f10c1",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18675bcf_4b9d3ddc",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
