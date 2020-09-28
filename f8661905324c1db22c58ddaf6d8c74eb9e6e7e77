@@ -16,6 +16,24 @@
       "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6fdd8993_7a51284c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-28T13:51:49Z",
+      "side": 1,
+      "message": "Yes, I made MipmapNativeLevel a subclass of gl::LevelIndex with extra methods for convenient",
+      "parentUuid": "2c2548ba_a46b2dea",
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
