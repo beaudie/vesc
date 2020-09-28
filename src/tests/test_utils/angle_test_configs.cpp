@@ -244,6 +244,11 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_NoCheapRenderPass";
     }
 
+    if (pp.eglParameters.forceGPUBufferFeature == EGL_TRUE)
+    {
+        stream << "_ForceGPUOnlyBuffers";
+    }
+
     return stream;
 }
 
