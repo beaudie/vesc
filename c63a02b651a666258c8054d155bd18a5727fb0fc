@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6efd4945_95cf8f88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-28T20:46:53Z",
+      "side": 1,
+      "message": "After talking with Geoff I actually changed this a lot.\n\nNow each backend passes its version of GL_VENDOR, GL_RENDERER, and GL_VERSION to the frontend, which wraps them all in ( , , )\nTested in chrome for the GL backend, and it works.\n\nI also cleaned up some old paths that were actually unused, like the ContextGL::getVendorString, etc\n\nPTAL again",
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81e4c28d_fc93f256",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-28T20:46:53Z",
+      "side": 1,
+      "message": "todo, although on windows we populate SystemInfo correctly so it\u0027t not urgent",
+      "range": {
+        "startLine": 118,
+        "startChar": 11,
+        "endLine": 118,
+        "endChar": 25
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "967c19db_945599a3",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-28T20:46:53Z",
+      "side": 1,
+      "message": "todo",
+      "range": {
+        "startLine": 142,
+        "startChar": 11,
+        "endLine": 142,
+        "endChar": 25
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b50b5ef_a4a8dd23",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-28T20:46:53Z",
+      "side": 1,
+      "message": "todo",
+      "range": {
+        "startLine": 1537,
+        "startChar": 11,
+        "endLine": 1537,
+        "endChar": 25
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
