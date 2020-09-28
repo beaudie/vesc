@@ -18,13 +18,13 @@
   "src/libANGLE/renderer/metal/shaders/format_autogen.h":
     "b1d6512b904a7eb151b0095b7898b0e5",
   "src/libANGLE/renderer/metal/shaders/gen_indices.metal":
-    "add45aa44305b1a64c4bb8ece1e3d2fc",
+    "06e2b6f259fe019b46e2a9710eb11bff",
   "src/libANGLE/renderer/metal/shaders/gen_mipmap.metal":
     "54dca94c48bead446624079070b9b309",
   "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py":
     "9f538745533b6bb14fbbc9e4252f31e0",
   "src/libANGLE/renderer/metal/shaders/mtl_default_shaders_src_autogen.inc":
-    "29a7ebb3e6fa09a11506ccda7211f96f",
+    "89061a1ab12e00728b59b4bfe2c21dbc",
   "src/libANGLE/renderer/metal/shaders/visibility.metal":
     "b82aa740cf4b0aed606aacef1024beea"
 }
