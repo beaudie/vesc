@@ -186,6 +186,7 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
 
         case gl::TextureType::_2DArray:
         case gl::TextureType::_2DMultisampleArray:
+        case gl::TextureType::CubeMapArray:
             *layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
             *layerCount = image->getLayerCount();
             return;
@@ -1486,8 +1487,15 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     region.imageOffset.z                   = sourceArea.z;
     region.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     region.imageSubresource.baseArrayLayer = layerIndex;
-    region.imageSubresource.layerCount     = layerCount;
+    region.imageSubresource.layerCount     = index.getLayerCount();
     region.imageSubresource.mipLevel       = mImage->toVkLevel(level).get();
+
+    if (gl::IsArrayTextureType(index.getType()))
+    {
+        region.imageSubresource.baseArrayLayer = sourceArea.z;
+        region.imageOffset.z                   = 0;
+        region.imageExtent.depth               = 1;
+    }
 
     commandBuffer.copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
                                     mImage->getCurrentLayout(), 1, &region);
