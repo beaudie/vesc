@@ -120,6 +120,30 @@
       "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaf4f0e6_193db6dd",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T14:32:48Z",
+      "side": 1,
+      "message": "you\u0027d need to call it rx::LevelIndex in that case. Which would be fine. Suggest a split change for that.",
+      "parentUuid": "f329ab6a_db794ebd",
+      "range": {
+        "startLine": 366,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 84
+      },
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
