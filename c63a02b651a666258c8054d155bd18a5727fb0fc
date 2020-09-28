@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "acba4afc_5f7ed30c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T20:48:55Z",
+      "side": 1,
+      "message": "Hm, I was definitely okay with changing the GL back-end. This is surely more consistent but I am concerned about changing the renderer string and side effects this could have down the line. Please provide some examples in the CL description. I\u0027d for sure be okay with moving back to a GL-back-end specific solution.",
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e4c28d_fc93f256",
         "filename": "src/libANGLE/renderer/d3d/RendererD3D.cpp",
         "patchSetId": 5
