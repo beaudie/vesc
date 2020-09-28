@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc242f59_a0f48dbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-28T18:47:46Z",
+      "side": 1,
+      "message": "It still looks at angle_abseil_config, even if the only thing that uses it is inside the angle_enable_abseil check, so its contents need to be in a conditional too.",
+      "revId": "1c1ebfb87b0950786bbe5de734ab08a6b438c3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
