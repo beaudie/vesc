@@ -16,6 +16,23 @@
       "revId": "331be57cbb5e8646fbd2ecbe367af65bb801a090",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0623fd30_0af38d32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T16:27:11Z",
+      "side": 1,
+      "message": "LGTM, would be a decent idea to build skia. You can follow the instructions here:\n\nhttps://skia.org/user/build\n\nIt\u0027s a bit different from the ANGLE setup b/c they don\u0027t integrate their toolchain automatically. However if you can set skia_use_angle \u003d true and pass GN gen that should be good enough.",
+      "revId": "331be57cbb5e8646fbd2ecbe367af65bb801a090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
