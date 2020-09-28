@@ -72,6 +72,42 @@
     },
     {
       "key": {
+        "uuid": "93c4b554_494d1f58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:53:12Z",
+      "side": 1,
+      "message": "See response to above, it needed to be in this order so that tests will pass with each.",
+      "parentUuid": "a19aee16_f05d1755",
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "75b6c9c5_f0a93547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:53:12Z",
+      "side": 1,
+      "message": "Hi, With commits stacked gerrit operates in ways I din\u0027t anticipate. I needed to CQ each gerrit, which I did make sure they were complete. But I also did not see most of these comments.\n\n\"Jamie: Please also add this to registry_xml.py.\"\nWhat is that that needs to be added? the extensions string? that causes all the autogen.\n\nI need to clarify on order of commits. It would make sense that first the GLES stencil8 extension added, then the autogen for that, then last the EGL stencil8 configs change. However, when testing these:\ndEQP-GLES31.functional.stencil_texturing.format.stencil_index8_2d\ndEQP-GLES31.functional.stencil_texturing.format.stencil_index8_2d_array\ndEQP-GLES31.functional.stencil_texturing.format.stencil_index8_cube\nThey required a config with stencil8 - so I moved the EGL configs change first. Then the extension and then the autogen, the autogen could be second or third in this list.",
+      "parentUuid": "e716b0be_c04471bb",
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbaa7166_ecf0057d",
         "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
         "patchSetId": 1
@@ -119,6 +155,54 @@
     },
     {
       "key": {
+        "uuid": "9cb32150_174b44f9",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:53:12Z",
+      "side": 1,
+      "message": "I will investigate FixedVector for a replacement.",
+      "parentUuid": "3e353602_62244079",
+      "range": {
+        "startLine": 54,
+        "startChar": 10,
+        "endLine": 54,
+        "endChar": 21
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf0050d4_fc3eade1",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:53:12Z",
+      "side": 1,
+      "message": "OK. I didn\u0027t want to change this, but the only nice way to make stencil8 for configs optional was this. Tried a few ways. Yes, all I needed was a push_back and size function. I\u0027ll look into FixedVector,I/we are not as familiar with all the utility classes/functions.",
+      "parentUuid": "3e353602_62244079",
+      "range": {
+        "startLine": 54,
+        "startChar": 10,
+        "endLine": 54,
+        "endChar": 21
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc020eba_5e7cff81",
         "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
         "patchSetId": 1
@@ -130,6 +214,30 @@
       "writtenOn": "2020-09-25T15:07:40Z",
       "side": 1,
       "message": "what\u0027s with all the test expectations changes? can you leave a comment in the issue description?",
+      "range": {
+        "startLine": 52,
+        "startChar": 20,
+        "endLine": 52,
+        "endChar": 30
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "156b1725_52f84a7e",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:53:12Z",
+      "side": 1,
+      "message": "So what I was testing to start all this off, was that many (~300) dEQP-EGL tests were failing for us because of missing formats (linux is limited to RGBA8888, and no stencil8 for configs). So enabling these locally so that we could verify passing. But the expectations file was SKIPing or FAILing several. SO, I marked any of the \".other\" - as SKIP because of all the years I\u0027ve does this, I\u0027ve never found a format that qualifies, so its always a skip. Pixmap is only applicable to Linux with x11. So everything (that I was testing) with \"_pixmap\" on windows and android I marked SKIP. This should be more precise for these sets for tests. So it looks like so much. I was testing 13 sets of dEQP-EGL. I also alphabetized them.",
+      "parentUuid": "fc020eba_5e7cff81",
       "range": {
         "startLine": 52,
         "startChar": 20,
