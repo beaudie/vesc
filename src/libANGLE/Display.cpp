@@ -471,10 +471,21 @@ void ShareGroup::addRef()
     mRefCount++;
 }
 
+void ShareGroup::onDestroy(const gl::Context *context)
+{
+    // In tests, mImplementation might be null.
+    if (mImplementation)
+        mImplementation->onDestroy(context);
+}
+
 void ShareGroup::release(const gl::Context *context)
 {
     if (--mRefCount == 0)
     {
+        if (mImplementation)
+        {
+            mImplementation->onDestroy(context);
+        }
         delete this;
     }
 }

@@ -230,6 +230,9 @@ class ContextVk : public ContextImpl, public vk::Context
                                                                    const GLuint *baseInstances,
                                                                    GLsizei drawcount) override;
 
+    // ShareGroup
+    ShareGroupVk *getShareGroupVk() { return mShareGroupVk; }
+
     // Device loss
     gl::GraphicsResetStatus getResetStatus() override;
 
