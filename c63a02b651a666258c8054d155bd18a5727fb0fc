@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "b6e76c23_6bfbf18e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-28T20:55:59Z",
+      "side": 1,
+      "message": "Yeah I understand that, but I\u0027m not sure this string is parsed anywhere else anyway. The reason for changing all the backends is because we now have Chrome trying to parse ANGLE\u0027s GL_RENDERER string (https://chromium-review.googlesource.com/c/chromium/src/+/2427032) and we need it to be consistent.\nFYI this has been a long standing issue, but the effects were hidden by the fact that Windows SystemInfo library works, while linux/mac/other platforms don\u0027t.\n\n\nmetal before\nMetal Renderer: AMD Radeon Pro 560X\nafter\nANGLE (Google Inc. Metal Renderer: AMD Radeon Pro 560X, Metal Renderer: AMD Radeon Pro 560X, )\n\n(^ in this case we should change the first part to ATI Technologies Inc. in the metal backend, and add the new driver version part)\n\nGL before\nANGLE (ATI Technologies Inc., AMD Radeon Pro 560X OpenGL Engine, OpenGL 4.1 core)\nafter\nANGLE (ATI Technologies Inc., AMD Radeon Pro 560X OpenGL Engine, 4.1 ATI-3.8.24)\n\nI\u0027ll test this on a few more platforms and give more examples",
+      "parentUuid": "84891428_a8933367",
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e4c28d_fc93f256",
         "filename": "src/libANGLE/renderer/d3d/RendererD3D.cpp",
         "patchSetId": 5
