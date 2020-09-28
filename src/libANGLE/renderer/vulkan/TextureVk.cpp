@@ -186,6 +186,7 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
 
         case gl::TextureType::_2DArray:
         case gl::TextureType::_2DMultisampleArray:
+        case gl::TextureType::CubeMapArray:
             *layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
             *layerCount = index.hasLayer() ? image->getLayerCount() : 1;
             return;
@@ -1454,16 +1455,8 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     ASSERT((offset & (kBufferOffsetMultiple - 1)) == 0);
 
     gl::LevelIndex level = gl::LevelIndex(index.getLevelIndex());
-    GLuint layerCount    = 0;
-    GLuint layerIndex    = 0;
-    GetRenderTargetLayerCountAndIndex(mImage, index, &layerCount, &layerIndex);
-
-    GLuint depth = sourceArea.depth;
-    if (index.getType() == gl::TextureType::_2DArray)
-    {
-        layerCount = depth;
-        depth      = 1;
-    }
+    GLuint layerCount    = index.getLayerCount();
+    GLuint layerIndex    = index.hasLayer() ? index.getLayerIndex() : 0;
 
     // Make sure the source is initialized and its images are flushed.
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
@@ -1480,7 +1473,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     region.bufferImageHeight               = imageHeight;
     region.imageExtent.width               = sourceArea.width;
     region.imageExtent.height              = sourceArea.height;
-    region.imageExtent.depth               = depth;
+    region.imageExtent.depth               = sourceArea.depth;
     region.imageOffset.x                   = sourceArea.x;
     region.imageOffset.y                   = sourceArea.y;
     region.imageOffset.z                   = sourceArea.z;
@@ -1488,6 +1481,13 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     region.imageSubresource.baseArrayLayer = layerIndex;
     region.imageSubresource.layerCount     = layerCount;
     region.imageSubresource.mipLevel       = mImage->toVkLevel(level).get();
+
+    if (gl::IsArrayTextureType(index.getType()))
+    {
+        region.imageSubresource.baseArrayLayer = sourceArea.z;
+        region.imageOffset.z                   = 0;
+        region.imageExtent.depth               = 1;
+    }
 
     commandBuffer.copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
                                     mImage->getCurrentLayout(), 1, &region);
