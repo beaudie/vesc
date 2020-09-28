@@ -23,6 +23,9 @@
 
 namespace rx
 {
+
+class ContextMtl;
+
 namespace mtl
 {
 
@@ -142,6 +145,12 @@ bool IsFormatEmulated(const mtl::Format &mtlFormat);
 MTLClearColor EmulatedAlphaClearColor(MTLClearColor color, MTLColorWriteMask colorMask);
 
 gl::Box MTLRegionToGLBox(const MTLRegion &mtlRegion);
+
+angle::Result TriangleFanBoundCheck(ContextMtl *context, size_t numTris);
+
+angle::Result GetTriangleFanIndicesCount(ContextMtl *context,
+                                         GLsizei vetexCount,
+                                         uint32_t *numElemsOut);
 
 NS_ASSUME_NONNULL_END
 }  // namespace mtl
