@@ -251,6 +251,13 @@ inline PlatformParameters WithMemoryBarrierAndCheapRenderPass(const PlatformPara
     return re;
 }
 
+inline PlatformParameters WithGPUBuffersOnly(const PlatformParameters &params)
+{
+    PlatformParameters re                  = params;
+    re.eglParameters.forceGPUBufferFeature = EGL_TRUE;
+    return re;
+}
+
 inline PlatformParameters WithRobustness(const PlatformParameters &params)
 {
     PlatformParameters withRobustness       = params;
