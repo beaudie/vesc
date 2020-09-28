@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "96e504ca_3c0e1e02",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-28T19:06:38Z",
+      "side": 1,
+      "message": "I noticed in one of Charlie\u0027s CLs that we are disabling the D/S read-only mode if there are any deferred clears, rather than checking if we are clearing D/S specifically.   Presumably this means that we are disabling D/S read-only mode even if we are only clearing color attachments, which could be too aggressive.\n\nI wanted to get some feedback in case there are some other subtleties I\u0027m missing before opening a bug.",
+      "parentUuid": "72835c66_cccd2344",
+      "revId": "3ec9142cabd2ffe651f4aa894985ff20d46453fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "971128a1_41f1b46a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -65,6 +83,30 @@
       "writtenOn": "2020-09-28T18:20:54Z",
       "side": 1,
       "message": "Thanks Tim for follow up. I remember you mentioned this in my CL review, but I may slipped this one somehow.\n\nI am wondering if this whole four lines code should be deleted. The read/write mode is updated at the renderpass start time. If there is a deferred clear, the renderpass start time should pick up and disqualify it for readOnly layout.",
+      "range": {
+        "startLine": 1732,
+        "startChar": 4,
+        "endLine": 1736,
+        "endChar": 5
+      },
+      "revId": "3ec9142cabd2ffe651f4aa894985ff20d46453fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cea8301a_328f2d88",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1736,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-28T19:06:38Z",
+      "side": 1,
+      "message": "I updated this CL to see how CQ responds to removing this and the priorReadOnlyDepthStencilMode checking below.",
+      "parentUuid": "f659a71c_8f9e6292",
       "range": {
         "startLine": 1732,
         "startChar": 4,
