@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7d2c1235_cd99d55f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T16:06:55Z",
+      "side": 1,
+      "message": "Just drop the Vulkan: tag, since this affects the front-end only",
+      "parentUuid": "fb3e9862_92f656a9",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "98bdf96c3899a92869c75f66bc6e277712a0a439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49706c7f_20340d66",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
