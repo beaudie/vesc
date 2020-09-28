@@ -88,6 +88,42 @@
     },
     {
       "key": {
+        "uuid": "fcbc07b5_57d0f005",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:57:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbf34837_e9ae8aa0",
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2dc9871c_1c098706",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:57:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd0bd1f5_c5b79e79",
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d0a60a5_12157a7c",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 23
@@ -171,6 +207,30 @@
       "side": 1,
       "message": "As Shabi said: For the reviewers, it makes the job of identifying important changes since it reduces on clutter in the review.\n\nFor the test integration, splitting functional changes from large refactoring changes also allows us to iterate faster on the functionality changes separate from the boilerplate. e.g. a revert of the functional change would keep the boilerplate in place.\n\nNo particular need for the split to happen a specific way, Shabi\u0027s ordering is fine for me. Generally you\u0027d want the auto-gen changes separated.",
       "parentUuid": "1891b375_0fb8f674",
+      "range": {
+        "startLine": 648,
+        "startChar": 0,
+        "endLine": 649,
+        "endChar": 31
+      },
+      "revId": "6f6330043eecf5e28b9589cbc28e1f7cb7318f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6db0988e_c8cb521a",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:57:37Z",
+      "side": 1,
+      "message": "I split into 3 commits that are stand alone - meaning any biforcation and test between any of these will not result in failures.",
+      "parentUuid": "6a2510a1_51951cf8",
       "range": {
         "startLine": 648,
         "startChar": 0,

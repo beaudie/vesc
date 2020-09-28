@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fea6a5d3_e0567331",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T18:57:37Z",
+      "side": 1,
+      "message": "I don\u0027t think I\u0027m using this response mechanism quite right - lots of duplicates and I\u0027m not sure when to mark resolved.",
+      "revId": "77bcae5565746d44dac7fbd252b97ab3ed0c6c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
