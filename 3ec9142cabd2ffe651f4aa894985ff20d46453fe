@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ee734279_cf9c608c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-28T17:33:54Z",
+      "side": 1,
+      "message": "I need to open a bug for this change, but I wanted some feedback before doing that.",
+      "revId": "3ec9142cabd2ffe651f4aa894985ff20d46453fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "971128a1_41f1b46a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
