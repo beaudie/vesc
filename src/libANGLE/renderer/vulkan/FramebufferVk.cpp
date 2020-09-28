@@ -1729,8 +1729,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         ANGLE_TRY(flushDeferredClears(contextVk, rotatedScissoredRenderArea));
     }
 
-    // We cannot use read-only depth mode for clears.
-    if (mDeferredClears.any())
+    // We cannot use read-only depth/stencil mode for clears.
+    if (mDeferredClears.testDepth() || mDeferredClears.testStencil())
     {
         mReadOnlyDepthStencilMode = false;
     }
