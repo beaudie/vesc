@@ -756,7 +756,7 @@ angle::Result Buffer::resetWithSharedMemOpt(ContextMtl *context,
 
     options = 0;
 #if TARGET_OS_OSX || TARGET_OS_MACCATALYST
-    if (!forceUseSharedMem)
+    if (!forceUseSharedMem || context->getDisplay()->getFeatures().forceBufferGPUStorage.enabled)
     {
         options |= MTLResourceStorageModeManaged;
     }
@@ -861,7 +861,9 @@ void Buffer::flush(ContextMtl *context, size_t offsetWritten, size_t sizeWritten
     {
         if (get().storageMode == MTLStorageModeManaged)
         {
-            [get() didModifyRange:NSMakeRange(offsetWritten, sizeWritten)];
+            size_t startOffset = std::min(offsetWritten, size());
+            size_t endOffset   = std::min(offsetWritten + sizeWritten, size());
+            [get() didModifyRange:NSMakeRange(startOffset, endOffset - startOffset)];
         }
     }
 #endif
