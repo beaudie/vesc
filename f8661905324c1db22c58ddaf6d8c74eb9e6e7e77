@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "93e33052_50ba9c93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T14:18:12Z",
+      "side": 1,
+      "message": "Context: https://chromium-review.googlesource.com/c/angle/angle/+/2380232",
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edb9b3ad_12796ff5",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
         "patchSetId": 2
@@ -76,6 +93,29 @@
         "startChar": 29,
         "endLine": 343,
         "endChar": 32
+      },
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f329ab6a_db794ebd",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T14:18:12Z",
+      "side": 1,
+      "message": "Ok I see. FYI, we explicitly avoided these, so that we don\u0027t accidentally end up comparing a gl::LevelIndex with a native index (vk::LevelIndex), which I would also recommend here. For conversion between the two indices, we have vk_gl::GetLevelIndex and gl_vk::GetLevelIndex. I personally think you can do without this class and use gl::LevelIndex directly.\n\nFeel free to move vk::LevelIndex and *::GetLevelIndex to renderer/ so both backends could use them.",
+      "range": {
+        "startLine": 366,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 84
       },
       "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
