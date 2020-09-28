@@ -78,7 +78,7 @@ struct IndexConversionUniform
 {
     uint32_t srcOffset;
     uint32_t indexCount;
-    uint32_t padding[2];
+    uint32_t padding[2] = {};
 };
 
 // See libANGLE/renderer/metal/shaders/visibility.metal
