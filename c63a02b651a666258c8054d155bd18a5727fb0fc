@@ -160,6 +160,30 @@
     },
     {
       "key": {
+        "uuid": "a3b661ae_96adff0a",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-09-28T21:17:10Z",
+      "side": 1,
+      "message": "But, for GL we have 3 Displays and only 1 Renderer?\nVulkan looks like an exception.",
+      "parentUuid": "7c8a305c_b89b086e",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 0
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "967c19db_945599a3",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 5
