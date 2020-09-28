@@ -34,6 +34,52 @@
       "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "edb9b3ad_12796ff5",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T14:01:03Z",
+      "side": 1,
+      "message": "in general, can you try to restructure your new classes to use composition instead of inheritance? this is both a consistency thing (we try to do this everywhere in ANGLE) and a code quality thing:\n\nhttps://en.wikipedia.org/wiki/Composition_over_inheritance#:~:text\u003dTo%20favor%20composition%20over%20inheritance,and%20creating%20a%20family%20tree.\n\nThis isn\u0027t a strict rule for every class. In this case it would make sense.",
+      "range": {
+        "startLine": 31,
+        "startChar": 26,
+        "endLine": 31,
+        "endChar": 28
+      },
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f1d0aba_d4f1df4a",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T14:01:03Z",
+      "side": 1,
+      "message": "same comment here",
+      "range": {
+        "startLine": 343,
+        "startChar": 29,
+        "endLine": 343,
+        "endChar": 32
+      },
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
