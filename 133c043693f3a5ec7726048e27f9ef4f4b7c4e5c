@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "7cd9a68b_c14cbb13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-28T21:41:28Z",
+      "side": 1,
+      "message": "Yes!  What is that ASSERT looking for--the existence of the function from the linker?\n\nI do have the flake linker extension installed.  Unfortunately, I was looking too low to notice the assert (had a narrow window ...).  \n\nHere\u0027s a pointer to a run with the crash: https://ci.chromium.org/p/chromium/builders/try/mac-angle-rel/10678?",
+      "parentUuid": "12216459_be7f10c1",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18675bcf_4b9d3ddc",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
