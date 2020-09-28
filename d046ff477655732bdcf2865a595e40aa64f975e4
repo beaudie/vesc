@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2bb56a5_c68fde1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-28T20:29:33Z",
+      "side": 1,
+      "message": "Updated with angle::FixedVector, replaced std::vector.\n\nNot sure what change is needed for registry_xml.py - as I said the order looks reverse because the texture tests for GL_OES_texture_stencil8 required a EGL surface with config that had stencil8. So they went first.",
+      "revId": "d046ff477655732bdcf2865a595e40aa64f975e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
