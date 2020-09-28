@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6f32947_1b5c57f2",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T15:11:51Z",
+      "side": 1,
+      "message": "nit: else is unnecessary",
+      "range": {
+        "startLine": 1021,
+        "startChar": 0,
+        "endLine": 1022,
+        "endChar": 5
+      },
+      "revId": "c278312d3d42f0e2a7047ee26ee74cc6dfe12488",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd3a0d40_2415d9ae",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T15:11:51Z",
+      "side": 1,
+      "message": "nit: can you extract this and make it a helper function? no need for it to be a member.",
+      "range": {
+        "startLine": 429,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 6
+      },
+      "revId": "c278312d3d42f0e2a7047ee26ee74cc6dfe12488",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
