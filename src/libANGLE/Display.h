@@ -73,6 +73,8 @@ class ShareGroup final : angle::NonCopyable
 
     void addRef();
 
+    void onDestroy(const gl::Context *context);
+
     void release(const gl::Context *context);
 
     rx::ShareGroupImpl *getImplementation() const { return mImplementation; }

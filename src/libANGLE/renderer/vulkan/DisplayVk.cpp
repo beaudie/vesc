@@ -289,4 +289,12 @@ bool DisplayVk::isRobustResourceInitEnabled() const
     // We return true if any surface was created with robust resource init enabled.
     return mHasSurfaceWithRobustInit;
 }
+
+void ShareGroupVk::onDestroy(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    mPipelineLayoutCache.destroy(contextVk->getDevice());
+    mDescriptorSetLayoutCache.destroy(contextVk->getDevice());
+}
 }  // namespace rx
