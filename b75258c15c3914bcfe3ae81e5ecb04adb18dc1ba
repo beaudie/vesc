@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6d8ae68_0fbbe7a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T13:45:09Z",
+      "side": 1,
+      "message": "PTAL at the diff between 1/7 for the re-land.",
+      "revId": "b75258c15c3914bcfe3ae81e5ecb04adb18dc1ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
