@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "24414605_63d2d6a8",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T14:53:37Z",
+      "side": 1,
+      "message": "Having inconsistencies affects how tools audit/parse the license files. See http://anglebug.com/3811 . Whether we use (c) or not isn\u0027t itself important, it\u0027s more about using a standard pattern everywhere in ANGLE.",
+      "parentUuid": "bee408aa_abfb191a",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "3a6706cf467ca059ed1bd62ee68d08821783312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe4fef44_78c45db0",
         "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
         "patchSetId": 2
