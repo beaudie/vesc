@@ -9,6 +9,7 @@
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
+#include "util/OSWindow.h"
 
 #include <atomic>
 #include <mutex>
@@ -16,6 +17,8 @@
 
 namespace angle
 {
+
+constexpr EGLint kPBufferSize = 256;
 
 class MultithreadingTest : public ANGLETest
 {
@@ -39,8 +42,6 @@ class MultithreadingTest : public ANGLETest
         EGLWindow *window = getEGLWindow();
         EGLDisplay dpy    = window->getDisplay();
         EGLConfig config  = window->getConfig();
-
-        constexpr EGLint kPBufferSize = 256;
 
         std::vector<std::thread> threads(threadCount);
         for (size_t threadIdx = 0; threadIdx < threadCount; threadIdx++)
@@ -87,6 +88,9 @@ class MultithreadingTest : public ANGLETest
             thread.join();
         }
     }
+
+    // void loadAssets(EGLContext ctx);
+    // GLProgram level2Program;
 };
 
 // Test that it's possible to make one context current on different threads
@@ -360,12 +364,104 @@ TEST_P(MultithreadingTest, MultiCreateContext)
     EXPECT_EGL_SUCCESS();
 }
 
+void loadAssets(EGLWindow *window, EGLContext ctx, GLProgram &level2Program)
+{
+    EGLDisplay dpy   = window->getDisplay();
+    EGLConfig config = window->getConfig();
+
+    // Initialize the pbuffer and context
+    EGLint pbufferAttributes[] = {
+        EGL_WIDTH, kPBufferSize, EGL_HEIGHT, kPBufferSize, EGL_NONE, EGL_NONE,
+    };
+    EGLSurface surface = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
+    EXPECT_EGL_SUCCESS();
+
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
+    EXPECT_EGL_SUCCESS();
+
+    // Load a program
+    level2Program.makeRaster(essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    ASSERT_TRUE(level2Program.valid());
+
+    // Force a sync
+    glFinish();
+
+    // Technically we don't need to free up the context and surface in this thread... it could be
+    // done on app shutdown. But for now, give it a try.
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    EXPECT_EGL_SUCCESS();
+
+    eglDestroySurface(dpy, surface);
+    eglDestroyContext(dpy, ctx);
+}
+
+// Test that assets loaded on a shared context can be used from multiple threads
+TEST_P(MultithreadingTest, MultiContextLoading)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
+    OSWindow *osWindow = getOSWindow();
+    setWindowVisible(osWindow, true);
+
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay dpy     = window->getDisplay();
+    EGLSurface surface = window->getSurface();
+    EGLContext ctx     = window->getContext();
+
+    // Create second context, use first as shared
+    EGLContext ctx2 = window->createContext(ctx);
+
+    // Fork a thread and run the second context, loading assets
+    GLProgram level2Program;
+    std::thread loadingThread(loadAssets, window, ctx2, std::ref(level2Program));
+
+    // Using the first context on main thread, put up a "loading screen" of sorts.
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
+    EXPECT_EGL_SUCCESS();
+
+    // Draw a quad
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(program);
+    GLint colorLocation = glGetUniformLocation(program, essl1_shaders::ColorUniform());
+    auto quadVertices   = GetQuadVertices();
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * 6, quadVertices.data(), GL_STATIC_DRAW);
+    GLint positionLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+    glEnableVertexAttribArray(positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // Render blue as a "loading screen"
+    const GLColor color(0, 0, 255, 255);
+    const angle::Vector4 floatColor = color.toNormalizedVector();
+    glUniform4fv(colorLocation, 1, floatColor.data());
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, color);
+
+    // Show it
+    EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+    EXPECT_EGL_SUCCESS();
+
+    // When loading thread finishes, start using the assets on the main thread.
+    loadingThread.join();
+
+    // Load up the program to draw green
+    glUseProgram(level2Program.get());
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Show it
+    EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+    EXPECT_EGL_SUCCESS();
+}
+
 // TODO(geofflang): Test sharing a program between multiple shared contexts on multiple threads
 
 ANGLE_INSTANTIATE_TEST(MultithreadingTest,
                        WithNoVirtualContexts(ES2_OPENGL()),
                        WithNoVirtualContexts(ES3_OPENGL()),
                        WithNoVirtualContexts(ES2_OPENGLES()),
-                       WithNoVirtualContexts(ES3_OPENGLES()));
+                       WithNoVirtualContexts(ES3_OPENGLES()),
+                       WithNoVirtualContexts(ES3_VULKAN()));
 
 }  // namespace angle
