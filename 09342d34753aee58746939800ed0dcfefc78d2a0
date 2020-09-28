@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "840365f2_cdc359c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-28T23:54:19Z",
+      "side": 1,
+      "message": "Note: I only moved the caches directly implicated in the TSN error I was seeing. It may make sense to move other caches in RendererVk as well. Depends if the objects will need to be accessed by the command processor thread or not.",
+      "revId": "09342d34753aee58746939800ed0dcfefc78d2a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
