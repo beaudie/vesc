@@ -51,6 +51,24 @@
       "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39225dfb_e5c1a181",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-28T21:10:13Z",
+      "side": 1,
+      "message": "Yeah, we would be when the tracing is enabled. The advantage is that the tracing overhead would be entirely separated from the hot path we care about - real applications. The trace overhead with the enum wouldn\u0027t be all that bad - essentially a bitset lookup over all the GL APIs.\n\nIn the long term we could re-implement this as a GL layer.\n\nI\u0027d be fine if we could pursue this in a follow-up as long as we didn\u0027t leave the overhead in for a protracted period of time.",
+      "parentUuid": "79c47dcf_72c947d6",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
