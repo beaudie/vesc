@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97c4aa02_d2fe3a06",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T14:06:59Z",
+      "side": 1,
+      "message": "Will this actually result in a compile error if this condition is false? If not, please use a FeaturesMtl.h feature and avoid `#if`.",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6927801_7f9823a6",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-28T14:06:59Z",
+      "side": 1,
+      "message": "These kinds of exceptions are hard to maintain. If the platform doesn\u0027t support Swizzle, the metal backend should simply not expose ES3 in the first place.\n\nWe do have a bug in the way the tests are instantiated in that if ES3_METAL is specified, but the platform doesn\u0027t support it, end2end tests crash instead of skipping the tests. There was a discussion about this, but I can\u0027t seem to find it now. The idea is to silently skip unsupported configurations, but have an end2end test that makes sure platforms that should be supported do actually work.",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
