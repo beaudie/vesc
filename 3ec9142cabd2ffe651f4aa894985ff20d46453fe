@@ -164,6 +164,30 @@
       "revId": "3ec9142cabd2ffe651f4aa894985ff20d46453fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7697e8e4_0c329b51",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1736,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T00:34:08Z",
+      "side": 1,
+      "message": "Almost certainly. Never seen that particular failure before.",
+      "parentUuid": "3b984cb2_1a2fa1ec",
+      "range": {
+        "startLine": 1732,
+        "startChar": 4,
+        "endLine": 1736,
+        "endChar": 5
+      },
+      "revId": "3ec9142cabd2ffe651f4aa894985ff20d46453fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
