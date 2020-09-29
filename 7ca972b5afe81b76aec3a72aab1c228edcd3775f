@@ -51,6 +51,133 @@
       "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a8349d3_4e754bdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:34:18Z",
+      "side": 1,
+      "message": "Discussed follow-up with Ian to use dirty bits more. Can land this with the cleanups below and feedback from other reviewers.",
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4b98f0e_3daa7513",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:34:18Z",
+      "side": 1,
+      "message": "Yeah, I had looked before commenting.",
+      "parentUuid": "6f4cd10e_b3d4ed82",
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c599ded_2fb4356a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:34:18Z",
+      "side": 1,
+      "message": "nit: ANGLE_ prefix for all macros",
+      "range": {
+        "startLine": 307,
+        "startChar": 12,
+        "endLine": 307,
+        "endChar": 38
+      },
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e75a2b26_66a04377",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:34:18Z",
+      "side": 1,
+      "message": "pretty sure this can be private. As for terminology, \"Ogl API string\" is not usually how we refer to these guys. Maybe we can call these EventLog or EventStrings?",
+      "range": {
+        "startLine": 254,
+        "startChar": 9,
+        "endLine": 254,
+        "endChar": 29
+      },
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71718481_e94fbf61",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:34:18Z",
+      "side": 1,
+      "message": "and this",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3498872_27641bad",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:34:18Z",
+      "side": 1,
+      "message": "would remove this for now. probably not needed.",
+      "range": {
+        "startLine": 36,
+        "startChar": 20,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
