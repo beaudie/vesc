@@ -16,6 +16,23 @@
       "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df418da3_dbbca668",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T15:51:44Z",
+      "side": 1,
+      "message": "I\u0027m not actually that keen on a bunch of conditionally compiled code. It gets harder to maintain. Runtime decisions are preferable if possible. Even if it\u0027s controlled at the top level by a compile-time decision.",
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
