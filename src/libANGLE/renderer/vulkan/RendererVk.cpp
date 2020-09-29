@@ -909,6 +909,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         mCommandProcessorThread =
             std::thread(&CommandProcessor::processCommandProcessorTasks, &mCommandProcessor);
     }
+
     return angle::Result::Continue;
 }
 
@@ -2382,7 +2383,7 @@ void RendererVk::setGlobalDebugAnnotator()
     // OpenGL ES commands that are used, for debuggers (e.g. AGI).
     if (vkCmdBeginDebugUtilsLabelEXT)
     {
-        // gl::InitializeDebugAnnotations(&mAnnotator);
+        gl::InitializeDebugAnnotations(&mAnnotator);
     }
 }
 
