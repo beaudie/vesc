@@ -42,6 +42,29 @@
     },
     {
       "key": {
+        "uuid": "cf1d2a02_4c9ba74d",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T00:52:08Z",
+      "side": 1,
+      "message": "please don\u0027t cache the renderer. This is a specific design goal.",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 25
+      },
+      "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56ba6ff4_68d7efe0",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -53,6 +76,30 @@
       "writtenOn": "2020-09-29T00:26:38Z",
       "side": 1,
       "message": "I know people generally object to caching variables. But shareGroup pointer is immutable during life time of contextVK. Can we cache it in context to improve the performance?",
+      "range": {
+        "startLine": 2045,
+        "startChar": 4,
+        "endLine": 2046,
+        "endChar": 66
+      },
+      "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3c7d214_93d491ba",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T00:52:08Z",
+      "side": 1,
+      "message": "It certainly doesn\u0027t make sense to make this a member of RendererVk. Also to convert from ShareGroup to ShareGroupVk we want to use:\n\n  vk::GetImpl(shareGroup) -\u003e ShareGroupVk",
+      "parentUuid": "56ba6ff4_68d7efe0",
       "range": {
         "startLine": 2045,
         "startChar": 4,
@@ -88,6 +135,30 @@
     },
     {
       "key": {
+        "uuid": "1e2790f9_7abde0a7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T00:52:08Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "5d6b7008_e1dd71b8",
+      "range": {
+        "startLine": 2049,
+        "startChar": 14,
+        "endLine": 2049,
+        "endChar": 48
+      },
+      "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1eb5b855_8594ae73",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -99,6 +170,30 @@
       "writtenOn": "2020-09-29T00:26:38Z",
       "side": 1,
       "message": "Can you get rid of this function completely? There is no point to call into RendererVk with your CL.",
+      "range": {
+        "startLine": 2058,
+        "startChar": 14,
+        "endLine": 2058,
+        "endChar": 44
+      },
+      "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3c1ba9_64964ba4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2058,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T00:52:08Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "1eb5b855_8594ae73",
       "range": {
         "startLine": 2058,
         "startChar": 14,
