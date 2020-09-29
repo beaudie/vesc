@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ff87ebc_9882da4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T03:40:23Z",
+      "side": 1,
+      "message": "If you defer the layout changes for all the attachments, you could also implement anglebug.com/4984 trivially!",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "87bc7e9273dc7338694def7c69ced5ec96083364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
