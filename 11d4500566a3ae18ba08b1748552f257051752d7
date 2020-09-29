@@ -69,6 +69,259 @@
       "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1c1a1ce2_6a5a8356",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 24
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: Pretty sure this should be under \"data\" since :goldctl doesn\u0027t end up compiling anything.",
+      "range": {
+        "startLine": 85,
+        "startChar": 6,
+        "endLine": 85,
+        "endChar": 13
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d1441d_d90e3570",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 24
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: It might be better in the long term (in case you end up adding more pixel tests in a different suite at a later time) to have these two data entries + \"goldctl\" in a group like \"gold_test_dependencies\".",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 32
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca083371_3ba58778",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: Not necessary since the session manager defaults to using the instance name for the corpus if no corpus is provided, and in this case, both are \"angle\".",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 16
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1922e86_e88843de",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: Add these to a mutually exclusive group like we do for the instrumentation tests https://source.chromium.org/chromium/chromium/src/+/master:build/android/test_runner.py;l\u003d606?q\u003dtest_runner.py\u0026ss\u003dchromium",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 62
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7af43b12_79affbcc",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: !\u003d 0 is unnecessary.",
+      "range": {
+        "startLine": 203,
+        "startChar": 77,
+        "endLine": 203,
+        "endChar": 81
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c788c680_b741fdeb",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: Consider caching this so that you don\u0027t have to read a file multiple times if you happen to call get_skia_gold_keys() multiple times.",
+      "range": {
+        "startLine": 214,
+        "startChar": 8,
+        "endLine": 214,
+        "endChar": 17
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08ebde59_c838d581",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: Can be shortened to:\n\nlen(json_data.get(\u0027gpus\u0027, [])) \u003d\u003d 0",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 61
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73b515fc_c83962cd",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "This seems dangerous, or at the very least not very general, to be assuming that whatever is being passed in will be prefixed with DEFAULT_SCREENSHOT_PREFIX.\n\nHow about instead of passing in the screenshot directory, pass in a filepath? Whatever calls this can find the filepath more generally be looking for a PNG in the screenshot directory that contains the image name.",
+      "range": {
+        "startLine": 271,
+        "startChar": 4,
+        "endLine": 271,
+        "endChar": 97
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c36ddecf_d3d14834",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: Move after the early return.",
+      "range": {
+        "startLine": 275,
+        "startChar": 4,
+        "endLine": 276,
+        "endChar": 46
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49629790_76a81af0",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "There\u0027s inconsistency between returning a value and raising an exception when comparison fails. Probably best to stick with one or the other.",
+      "range": {
+        "startLine": 296,
+        "startChar": 8,
+        "endLine": 296,
+        "endChar": 20
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0da3e359_82991317",
+        "filename": "src/tests/restricted_traces/skia_gold/angle_skia_gold_properties.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T22:38:12Z",
+      "side": 1,
+      "message": "Nit: Move this boilerplate to some common file that gets imported. Alternatively, you could do it as part of __init__.py so you don\u0027t even have to import anything.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 59
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
