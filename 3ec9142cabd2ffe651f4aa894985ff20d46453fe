@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "14cb892b_141c8a78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-29T15:15:37Z",
+      "side": 1,
+      "message": "We have VulkanPerformanceCounterTest::ReadOnlyDepthBufferLayout().   Is that what you\u0027re looking for?\n\nBased on Charlie\u0027s explanation, setting this flag here is redundant since we set the value in FramebufferVk::startNewRenderPass(), so updating it when we change framebuffers also isn\u0027t necessary.\n\nThis is all of the ways we get to FramebufferVk::setReadOnlyDepthMode():\n\n    FramebufferVk::setReadOnlyDepthMode\n        FramebufferVk::startNewRenderPass\n            ContextVk::startRenderPass\n            UtilsVk::blitResolveImpl\n        FramebufferVk::updateRenderPassReadOnlyDepthMode\n            ContextVk::updateActiveTextures\n            ContextVk::updateRenderPassDepthStencilAccess\n            FramebufferVk::clearWithCommand\n            FramebufferVk::clearWithLoadOp\n            UtilsVk::clearFramebuffer\n\nWhile it\u0027s (relatively) straightforward to know when we aren\u0027t updating the read/write state correctly, I\u0027m not sure how we could write a test to detect redundant updates to mReadOnlyDepthStencilMode.",
+      "parentUuid": "cc5badae_41fc9aa6",
+      "revId": "3ec9142cabd2ffe651f4aa894985ff20d46453fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "971128a1_41f1b46a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
