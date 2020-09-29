@@ -87,6 +87,24 @@
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4b7873a_4386f7ad",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T12:20:18Z",
+      "side": 1,
+      "message": "Actually, one thing you could do is implement IsMetalTextureSwizzleAvailable on non-Apple platforms (return false). Then you could get rid of the ifdefs.\n\nAlso try to use ANGLE_SKIP_TEST_IF instead of if (...) GTEST_SKIP",
+      "parentUuid": "cb83abd7_cfcd961c",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
