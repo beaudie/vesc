@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4ae04e87_84be0836",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-29T16:58:39Z",
+      "side": 1,
+      "message": "Looks like onDestroy gets called every time context is destroyed. Is that intended behavior? Shouldn\u0027t the cache linger around until the all shared context goes away?",
+      "range": {
+        "startLine": 628,
+        "startChar": 4,
+        "endLine": 628,
+        "endChar": 40
+      },
+      "revId": "a85d9dc395d1eeb2dec8d27a4b1aebd5708ecdb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31373ed8_2ce9bfba",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
