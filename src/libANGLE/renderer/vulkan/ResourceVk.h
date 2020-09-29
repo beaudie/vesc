@@ -184,6 +184,8 @@ class Resource : angle::NonCopyable
 
     // Adds the resource to a resource use list.
     void retain(ResourceUseList *resourceUseList);
+    // Adds the resource to a resource use list once.
+    void retainOnce(ResourceUseList *resourceUseList);
 
   protected:
     Resource();
@@ -197,6 +199,15 @@ ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList)
 {
     // Store reference in resource list.
     resourceUseList->add(mUse);
+}
+
+ANGLE_INLINE void Resource::retainOnce(ResourceUseList *resourceUseList)
+{
+    // Only store reference in resource list once per command.
+    if (!mUse.usedInRecordedCommands())
+    {
+        resourceUseList->add(mUse);
+    }
 }
 }  // namespace vk
 }  // namespace rx
