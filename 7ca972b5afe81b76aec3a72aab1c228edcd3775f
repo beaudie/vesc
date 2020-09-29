@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f0b5aae_7436e5de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-29T15:35:52Z",
+      "side": 1,
+      "message": "I addressed the \"hot path\" concern, and the issue with the extension not being defined.  I think we can land this version now.",
+      "revId": "7ca972b5afe81b76aec3a72aab1c228edcd3775f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
