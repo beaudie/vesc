@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "842f2173_2d2775e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:26:42Z",
+      "side": 1,
+      "message": "LGTM, sorry for not thoroughly reviewing this CL. Didn\u0027t see any obvious errors.",
+      "revId": "fc63f22cc85b3e3701eb791eaff4d4e057b1bbfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
