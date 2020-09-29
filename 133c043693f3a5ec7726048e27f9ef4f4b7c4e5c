@@ -176,6 +176,24 @@
       "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6603d456_c075b4ec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T00:44:07Z",
+      "side": 1,
+      "message": "They can access them through the ContextVk. (getOutsideRenderPassCommandBuffer/getStartedRenderPassCommands) And you have access to a gl::Context which can give you the ContextVk. So you do have access to a vk::CommandBuffer pointer.\n\nWhat you don\u0027t have is a guarantee the RP is started before you append these messages.\n\nI guess another way to figure this out is to use a ContextVk dirty bit to flush the debug group messages instead of including the call in ContextVk::setupDraw explicitly. That seems better.",
+      "parentUuid": "e4f6bb1e_8aa80586",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
