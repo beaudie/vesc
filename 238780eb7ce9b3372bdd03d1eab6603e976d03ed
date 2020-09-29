@@ -16,6 +16,24 @@
       "revId": "238780eb7ce9b3372bdd03d1eab6603e976d03ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8800384_c89547dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-29T15:30:41Z",
+      "side": 1,
+      "message": "There are definitely redundant entries in the new renderer descriptions. I\u0027ll clean this up so the actual vendor is reported instead of Google (except in the case of swiftshader) and I\u0027ll add GL_VERSION-like strings to the other backends",
+      "parentUuid": "85a04da2_cd3ad9a5",
+      "revId": "238780eb7ce9b3372bdd03d1eab6603e976d03ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
