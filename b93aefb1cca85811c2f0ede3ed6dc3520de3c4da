@@ -226,6 +226,30 @@
     },
     {
       "key": {
+        "uuid": "8798686f_4287441a",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-29T15:27:52Z",
+      "side": 1,
+      "message": "Yes, very cool. At first I thought only trailing * would work. While tweaking this I hit wildcard exclusion overlap a couple times, causing fails, and reverted to individual tests. I will go back and simplify while resolving rebase.",
+      "parentUuid": "a87ebc8d_4fe9616c",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 71
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc020eba_5e7cff81",
         "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
         "patchSetId": 1
