@@ -33,6 +33,24 @@
       "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "31ee0491_89c409bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-29T21:17:21Z",
+      "side": 1,
+      "message": "Appears to be due to the file disappearing before Gold can compare it:\n\n Gold comparison failed: Error running command: \u0027\u0027loading file c:\\b\\s\\w\\ioqujjw9\\angle_vulkan_manhattan_10.png: open c:\\b\\s\\w\\ioqujjw9\\angle_vulkan_manhattan_10.png: The system cannot find the file specified.",
+      "parentUuid": "16cdd452_4303e763",
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
