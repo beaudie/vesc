@@ -86,7 +86,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
 
     // Defaults to one step per run loop. Can be changed in any test.
     void setStepsPerRunLoopStep(int stepsPerRunLoop);
-    void doRunLoop(double maxRunTime);
+    void doRunLoop(double maxRunTime, int maxStepsToRun);
 
     // Overriden in trace perf tests.
     virtual void saveScreenshot(const std::string &screenshotName) {}
@@ -107,6 +107,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     int mStepsPerRunLoopStep;
     int mIterationsPerStep;
     bool mRunning;
+    std::vector<double> mTestTrialResults;
 };
 
 enum class SurfaceType
