@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cf456c3_dbf8f9ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-29T23:29:23Z",
+      "side": 1,
+      "message": "PTAL\nExpectations file a bit fussy about overlapping skip rules.",
+      "revId": "f28df2641d6812b46b816a450ec29f337ddbe3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
