@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "2a8121b9_64411199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-29T00:32:40Z",
+      "side": 1,
+      "message": "Drive-by comment.",
+      "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b44499a5_0e8211a2",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 2
@@ -88,6 +105,23 @@
         "endLine": 2058,
         "endChar": 44
       },
+      "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f5a45ff_974adb0a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-29T00:32:40Z",
+      "side": 1,
+      "message": "Looks like deleting this got missed.",
       "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
