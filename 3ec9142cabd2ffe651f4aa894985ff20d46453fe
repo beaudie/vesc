@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "a29f3ae3_ea2eadbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-29T15:50:32Z",
+      "side": 1,
+      "message": "Yeah, I wasn\u0027t entirely sure initially either, which is why I asked for some feedback.\n\nLooks like CQ is happy so far, so I updated the bug to use the same buganizer that Charlie used for the read only implementation (unfortunately, it\u0027s not visible externally):\nb/168953278: Use DepthStencilReadOnly layout if depth stencil access is read only",
+      "parentUuid": "10d1bcbd_e6d4e8d4",
+      "revId": "3ec9142cabd2ffe651f4aa894985ff20d46453fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "971128a1_41f1b46a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
