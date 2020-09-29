@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "939ebc4b_7dcd9f4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-29T20:58:11Z",
+      "side": 1,
+      "message": "LGTM with one additional comment.",
+      "revId": "70de6ff130cf341e1a964b6522dcf940ad87cfff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a0710a3_f2b9f4e3",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-29T20:58:11Z",
+      "side": 1,
+      "message": "I can see that most onDestroy takes context as argument. But this one is a bit special that it get called from context::onDestroy. The context is already at the end of its life. I am slightly worried someone gets tripped here by passing an almost deleted object here. Should we just pass the renderer object here instead of context, since that is really what needed?",
+      "range": {
+        "startLine": 293,
+        "startChar": 29,
+        "endLine": 293,
+        "endChar": 55
+      },
+      "revId": "70de6ff130cf341e1a964b6522dcf940ad87cfff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
