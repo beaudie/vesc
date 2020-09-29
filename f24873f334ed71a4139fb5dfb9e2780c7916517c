@@ -112,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "56b2e3e2_92f75196",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-09-29T00:58:43Z",
+      "side": 1,
+      "message": "Good catch. Should be ContextVk method. I was referring to cache ShareGroupVk in ContextVk.",
+      "parentUuid": "f3c7d214_93d491ba",
+      "range": {
+        "startLine": 2045,
+        "startChar": 4,
+        "endLine": 2046,
+        "endChar": 66
+      },
+      "revId": "f24873f334ed71a4139fb5dfb9e2780c7916517c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d6b7008_e1dd71b8",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
