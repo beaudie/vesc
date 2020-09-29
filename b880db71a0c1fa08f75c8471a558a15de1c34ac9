@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5befee10_45353a27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-29T23:30:58Z",
+      "side": 1,
+      "message": "PTAL. ready when prerequisite EGL: add stencil8 to configs is merged.",
+      "revId": "b880db71a0c1fa08f75c8471a558a15de1c34ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
