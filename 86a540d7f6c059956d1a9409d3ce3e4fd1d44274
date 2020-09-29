@@ -51,6 +51,24 @@
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7690f74b_5a86ba72",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-29T08:10:28Z",
+      "side": 1,
+      "message": "This is a complicated situation. If I completely disabled ES3 when swizzle is not available then ES3_METAL()\u0027s other features wouldn\u0027t be tested on any bot since there is no bot that supports Metal swizzle feature atm. Intel bot\u0027s GPU doesn\u0027t support Metal swizzle and AMD bot\u0027s macOS version is below 10.15.\n\nIf I simply skipped ES3_METAL() from SwizzleTest.cpp then the swizzle testing on Metal would be missed when the bots are updated (i.e. to 10.15) in future.\n\nThe other solution is implementing swizzle in software (inserting to shader via compiler. But that would be in another CL and this solution makes non-swizzled textures\u0027 sampling become slower.\n\nMaybe we could create a task tracker for this line.",
+      "parentUuid": "b6927801_7f9823a6",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
