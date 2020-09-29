@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31373ed8_2ce9bfba",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T16:31:41Z",
+      "side": 1,
+      "message": "you can call onDestroy in here in the --mRefCount \u003d\u003d 0 case.",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 481,
+        "endChar": 52
+      },
+      "revId": "a85d9dc395d1eeb2dec8d27a4b1aebd5708ecdb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b49c24ff_052c07a3",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T16:31:41Z",
+      "side": 1,
+      "message": "please use private storage for class members.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 55
+      },
+      "revId": "a85d9dc395d1eeb2dec8d27a4b1aebd5708ecdb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
