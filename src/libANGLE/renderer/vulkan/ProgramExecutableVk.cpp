@@ -352,6 +352,10 @@ angle::Result ProgramExecutableVk::allocUniformAndXfbDescriptorSet(
     {
         mDescriptorSets[ToUnderlying(DescriptorSetIndex::UniformsAndXfb)] = iter->second;
         *newDescriptorSetAllocated                                        = false;
+        Serial currentSerial = contextVk->getCurrentQueueSerial();
+        mDescriptorPoolBindings[ToUnderlying(DescriptorSetIndex::UniformsAndXfb)]
+            .get()
+            .updateSerial(currentSerial);
         return angle::Result::Continue;
     }
 
@@ -1380,6 +1384,9 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
     if (iter != mTextureDescriptorsCache.end())
     {
         mDescriptorSets[ToUnderlying(DescriptorSetIndex::Texture)] = iter->second;
+        Serial currentSerial = contextVk->getCurrentQueueSerial();
+        mDescriptorPoolBindings[ToUnderlying(DescriptorSetIndex::Texture)].get().updateSerial(
+            currentSerial);
         return angle::Result::Continue;
     }
 

@@ -562,8 +562,13 @@ bool IsShaderReadOnlyLayout(const ImageMemoryBarrierData &imageLayout)
 }  // anonymous namespace
 
 // This is an arbitrary max. We can change this later if necessary.
+#if 0  // TIMTIM
 uint32_t DynamicDescriptorPool::mMaxSetsPerPool           = 16;
 uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier = 2;
+#else
+uint32_t DynamicDescriptorPool::mMaxSetsPerPool           = 1;
+uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier = 1;
+#endif
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
 {
