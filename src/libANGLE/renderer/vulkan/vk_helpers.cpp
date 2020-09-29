@@ -1866,7 +1866,7 @@ angle::Result DescriptorPoolHelper::init(ContextVk *contextVk,
 {
     if (mDescriptorPool.valid())
     {
-        // This could be improved by recycling the descriptor pool.
+        ASSERT(!isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()));
         mDescriptorPool.destroy(contextVk->getDevice());
     }
 
@@ -1919,6 +1919,9 @@ angle::Result DescriptorPoolHelper::allocateSets(ContextVk *contextVk,
     ANGLE_VK_TRY(contextVk, mDescriptorPool.allocateDescriptorSets(contextVk->getDevice(),
                                                                    allocInfo, descriptorSetsOut));
 
+    // The pool is still in use every time a new descriptor set is allocated from it.
+    retain(&contextVk->getResourceUseList());
+
     return angle::Result::Continue;
 }
 
@@ -1960,6 +1963,7 @@ void DynamicDescriptorPool::destroy(VkDevice device)
     }
 
     mDescriptorPools.clear();
+    mCurrentPoolIndex          = 0;
     mCachedDescriptorSetLayout = VK_NULL_HANDLE;
 }
 
@@ -1973,6 +1977,7 @@ void DynamicDescriptorPool::release(ContextVk *contextVk)
     }
 
     mDescriptorPools.clear();
+    mCurrentPoolIndex          = 0;
     mCachedDescriptorSetLayout = VK_NULL_HANDLE;
 }
 
@@ -1997,15 +2002,6 @@ angle::Result DynamicDescriptorPool::allocateSetsAndGetInfo(
             *newPoolAllocatedOut = true;
         }
 
-        // Make sure the old binding knows the descriptor sets can still be in-use. We only need
-        // to update the serial when we move to a new pool. This is because we only check serials
-        // when we move to a new pool.
-        if (bindingOut->valid())
-        {
-            Serial currentSerial = contextVk->getCurrentQueueSerial();
-            bindingOut->get().updateSerial(currentSerial);
-        }
-
         bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
     }
 
@@ -2017,10 +2013,11 @@ angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
 {
     bool found = false;
 
+    Serial lastCompletedSerial = contextVk->getLastCompletedQueueSerial();
     for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size(); ++poolIndex)
     {
         if (!mDescriptorPools[poolIndex]->isReferenced() &&
-            !contextVk->isSerialInUse(mDescriptorPools[poolIndex]->get().getSerial()))
+            !mDescriptorPools[poolIndex]->get().isCurrentlyInUse(lastCompletedSerial))
         {
             mCurrentPoolIndex = poolIndex;
             found             = true;

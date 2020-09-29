@@ -198,6 +198,7 @@ ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList)
     // Store reference in resource list.
     resourceUseList->add(mUse);
 }
+
 }  // namespace vk
 }  // namespace rx
 

@@ -2625,7 +2625,6 @@ angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
             .get()
             .ptr(),
         1, bindingOut, descriptorSetOut));
-    bindingOut->get().updateSerial(contextVk->getCurrentQueueSerial());
     return angle::Result::Continue;
 }
 
