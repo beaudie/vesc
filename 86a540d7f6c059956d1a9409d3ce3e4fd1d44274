@@ -69,6 +69,24 @@
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb83abd7_cfcd961c",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T12:18:37Z",
+      "side": 1,
+      "message": "Yes, keeping a task tracked for enforcing this feature limit is fine. We do that for the Vulkan back-end. No sense in disabling ES3 everywhere or implementing a fallback that isn\u0027t that impactful. However if Swizzle isn\u0027t available I just recommend skipping this test suite always if it\u0027s Apple instead of doing a more complex suppression with #ifdefs and conditional includes.",
+      "parentUuid": "7690f74b_5a86ba72",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
