@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "b56e979a_b5099bb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T03:20:37Z",
+      "side": 1,
+      "message": "I haven\u0027t checked if the code is still the same way, but reading this comment, it means that the `constexpr bool` that I suggested wouldn\u0027t be `constexpr` with tracing enabled and instead take its value from whether the extension exists.\n\nIf the code is completely different now, ignore the above! I\u0027ll get back to this CL later.",
+      "parentUuid": "cf4fe03e_b072b0ff",
+      "revId": "133c043693f3a5ec7726048e27f9ef4f4b7c4e5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18675bcf_4b9d3ddc",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
