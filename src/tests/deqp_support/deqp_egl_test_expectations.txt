@@ -205,3 +205,5 @@
 // EGL images with the GL back-ends are not supported
 4606 OPENGL : dEQP-EGL.functional.image.api.create_image_gles2_* = FAIL
 4606 GLES : dEQP-EGL.functional.image.api.create_image_gles2_* = FAIL
+
+5030 VULKAN : dEQP-EGL.functional.sharing.gles2.multithread.* = FAIL

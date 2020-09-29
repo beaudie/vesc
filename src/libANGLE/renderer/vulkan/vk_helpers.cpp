@@ -562,8 +562,13 @@ bool IsShaderReadOnlyLayout(const ImageMemoryBarrierData &imageLayout)
 }  // anonymous namespace
 
 // This is an arbitrary max. We can change this later if necessary.
+#if 0  // TIMTIM
 uint32_t DynamicDescriptorPool::mMaxSetsPerPool           = 16;
 uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier = 2;
+#else
+uint32_t DynamicDescriptorPool::mMaxSetsPerPool           = 1;
+uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier = 1;
+#endif
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
 {
@@ -1733,6 +1738,10 @@ angle::Result DescriptorPoolHelper::allocateSets(ContextVk *contextVk,
     ANGLE_VK_TRY(contextVk, mDescriptorPool.allocateDescriptorSets(contextVk->getDevice(),
                                                                    allocInfo, descriptorSetsOut));
 
+    // The pool is still in use every time a new descriptor set is allocated from it.
+    Serial currentSerial = contextVk->getCurrentQueueSerial();
+    updateSerial(currentSerial);
+
     return angle::Result::Continue;
 }
 
@@ -1809,15 +1818,6 @@ angle::Result DynamicDescriptorPool::allocateSetsAndGetInfo(
         {
             ANGLE_TRY(allocateNewPool(contextVk));
             *newPoolAllocatedOut = true;
-        }
-
-        // Make sure the old binding knows the descriptor sets can still be in-use. We only need
-        // to update the serial when we move to a new pool. This is because we only check serials
-        // when we move to a new pool.
-        if (bindingOut->valid())
-        {
-            Serial currentSerial = contextVk->getCurrentQueueSerial();
-            bindingOut->get().updateSerial(currentSerial);
         }
 
         bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);

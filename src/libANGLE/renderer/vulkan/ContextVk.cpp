@@ -3916,6 +3916,8 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     if (driverUniforms->descriptorSetCache.get(bufferSerial.getValue(),
                                                &driverUniforms->descriptorSet))
     {
+        Serial currentSerial = getCurrentQueueSerial();
+        driverUniforms->descriptorPoolBinding.get().updateSerial(currentSerial);
         return angle::Result::Continue;
     }
 
