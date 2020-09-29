@@ -33,6 +33,63 @@
       "revId": "dd62d8af817c094fadd35e7146c44e8e1d2cb90a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "485b7ba5_32b5f247",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T03:08:01Z",
+      "side": 1,
+      "message": "While you\u0027re at it, it would be nice to have the same test but for color. Currently, we close the RP on color invalidate, but it would be nice to have the test ready if/when that gets optimized.",
+      "revId": "dd62d8af817c094fadd35e7146c44e8e1d2cb90a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "552f1522_7558a221",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T03:08:01Z",
+      "side": 1,
+      "message": "If this is not going to set contents defined, can you ASSERT that it\u0027s already defined?",
+      "revId": "dd62d8af817c094fadd35e7146c44e8e1d2cb90a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ab280e9_4e58e73c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T03:08:01Z",
+      "side": 1,
+      "message": "How about marking this function as nodiscard, so that we won\u0027t miss it in the future? That\u0027s assuming the return value always needs a reaction.",
+      "range": {
+        "startLine": 2206,
+        "startChar": 32,
+        "endLine": 2206,
+        "endChar": 45
+      },
+      "revId": "dd62d8af817c094fadd35e7146c44e8e1d2cb90a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
