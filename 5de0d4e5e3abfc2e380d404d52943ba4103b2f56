@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "876d28b8_35a8ecc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-09-29T22:16:45Z",
+      "side": 1,
+      "message": "Made one change in renderergl_utils.cpp to fix the extension on iOS. GL_EXT_texture_rg shouldn\u0027t be required to enable renderability of GL_R16F etc on GLES 3, but that makes the full constraint too complex to be expressed by SupportRequirement, so I added a bit of code in renderergl_utils.cpp for that.",
+      "revId": "5de0d4e5e3abfc2e380d404d52943ba4103b2f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
