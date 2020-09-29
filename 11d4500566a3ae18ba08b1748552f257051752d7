@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "322409a6_b44bb628",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-29T21:10:51Z",
+      "side": 1,
+      "message": "Cody/Brian PTAL. Yuly FYI, feel free to review if you like.",
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
