@@ -174,10 +174,14 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     void releaseOwnershipOfImage(const gl::Context *context);
 
-    const vk::ImageView &getReadImageViewAndRecordUse(ContextVk *contextVk) const;
+    const vk::ImageView &getReadImageViewAndRecordUse(ContextVk *contextVk,
+                                                      bool useLinearColorspace) const;
+
     // A special view for cube maps as a 2D array, used with shaders that do texelFetch() and for
     // seamful cube map emulation.
-    const vk::ImageView &getFetchImageViewAndRecordUse(ContextVk *contextVk) const;
+    const vk::ImageView &getFetchImageViewAndRecordUse(ContextVk *contextVk,
+                                                       bool useLinearColorspace) const;
+
     // A special view used for texture copies that shouldn't perform swizzle.
     const vk::ImageView &getCopyImageViewAndRecordUse(ContextVk *contextVk) const;
     angle::Result getStorageImageView(ContextVk *contextVk,
@@ -214,7 +218,20 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     ANGLE_INLINE bool hasBeenBoundAsImage() const { return mState.hasBeenBoundAsImage(); }
 
+    ANGLE_INLINE bool hasSRGBViews() const { return mRequiresSRGBViews; }
+
+    bool shouldUseLinearColorspaceWithSampler(const SamplerVk *samplerVk) const;
+    bool shouldUseLinearColorspaceWithTexelFetch(bool colorspaceWithSampler,
+                                                 bool texelFetchForcesDecodeOn) const;
+
   private:
+    ANGLE_INLINE bool formatShouldUseLinearColorspace() const
+    {
+        ASSERT(mImage->valid());
+        // Nonlinear formats with no linear counterpart will also be counted as "linear" for
+        // imageview selection purposes
+        return !vk::ConvertToLinear(mImage->getFormat().vkImageFormat);
+    }
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
     gl::ImageIndex getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const;
