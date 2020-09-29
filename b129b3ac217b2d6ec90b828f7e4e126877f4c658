@@ -118,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "245226d7_9c5dfa1d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2449,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-29T23:17:59Z",
+      "side": 1,
+      "message": "Yeah, nothing in this CL needs to change regarding this.   I certainly don\u0027t have a good answer for any of this, it\u0027s just something that stands out whenever I see it.",
+      "parentUuid": "0bb8f393_1b9e0e7e",
+      "range": {
+        "startLine": 2442,
+        "startChar": 0,
+        "endLine": 2449,
+        "endChar": 9
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91f0404d_4c4755ea",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
