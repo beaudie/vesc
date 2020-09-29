@@ -358,15 +358,11 @@ angle_static_library("angle_gpu_info_util") {
     ":angle_backend_config",
   ]
   public_deps = [ ":angle_common" ]
-  sources = libangle_gpu_info_util_sources
-  deps = []
+  sources =
+      libangle_gpu_info_util_sources + libangle_gpu_info_util_vulkan_sources
+  deps = [ "$angle_root/third_party/vulkan-headers/src:vulkan_headers" ]
   libs = []
   defines = []
-
-  if (angle_enable_vulkan) {
-    sources += libangle_gpu_info_util_vulkan_sources
-    deps += [ "$angle_root/third_party/vulkan-headers/src:vulkan_headers" ]
-  }
 
   if (is_android) {
     sources += libangle_gpu_info_util_android_sources

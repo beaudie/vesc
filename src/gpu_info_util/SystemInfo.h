@@ -83,9 +83,8 @@ struct SystemInfo
 // be filled with partial information.
 bool GetSystemInfo(SystemInfo *info);
 
-#if defined(ANGLE_ENABLE_VULKAN)
+// Note: may not work as expected on some platforms (e.g. Mac).
 bool GetSystemInfoVulkan(SystemInfo *info);
-#endif
 
 // Known PCI vendor IDs
 constexpr VendorID kVendorID_AMD      = 0x1002;
