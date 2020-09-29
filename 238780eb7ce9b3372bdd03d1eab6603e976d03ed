@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85a04da2_cd3ad9a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-29T15:28:46Z",
+      "side": 1,
+      "message": "I updated the description with examples of the change.\n\nI also found another bug in the process that this will help fix:\nOn Windows, even when running on GL, vulkan, or swiftshader, we only report the D3D driver version to Chrome. This makes diagnosing crashes, implementing workarounds, or skipping tests on these backends much more difficult.\nAfter these changes we can modify Chrome to not use SystemInfo for driver version.",
+      "revId": "238780eb7ce9b3372bdd03d1eab6603e976d03ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
