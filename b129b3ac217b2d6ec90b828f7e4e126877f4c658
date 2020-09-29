@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "48056107_e422d585",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T16:54:05Z",
+      "side": 1,
+      "message": "Added a test.",
+      "parentUuid": "e5ebd98a_13fb7cba",
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3b43352_39923d8f",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -73,6 +91,53 @@
       "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bb8f393_1b9e0e7e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T16:54:05Z",
+      "side": 1,
+      "message": "You have a point. I don\u0027t immediately see a good way though, as you said, sometimes D/S is right after the last color, sometimes it has a fixed index. In UtilsVk, the flags set 2*MAX_DRAW and 2*MAX_DRAW+1.\n\nI\u0027m thinking of renaming and reusing kClearValueDepthIndex and kClearValueStencilIndex. Do you mind if I follow up in a separate CL for that?",
+      "parentUuid": "b3b43352_39923d8f",
+      "range": {
+        "startLine": 2442,
+        "startChar": 0,
+        "endLine": 2449,
+        "endChar": 9
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91f0404d_4c4755ea",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T16:54:05Z",
+      "side": 1,
+      "message": "FYI. Caught a bug here and added test. These should have been set on bits 16 and 17 unconditionally, otherwise they were aliasing color attachment N+1.",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 5
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +164,30 @@
     },
     {
       "key": {
+        "uuid": "06cea9f6_bfba90c5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T16:54:05Z",
+      "side": 1,
+      "message": "I originally had one attachment per aspect, but then merged them into a single attachment. Forgot to update this comment. Done.",
+      "parentUuid": "b428ba70_087c6d6c",
+      "range": {
+        "startLine": 394,
+        "startChar": 0,
+        "endLine": 395,
+        "endChar": 96
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58b07387_3273b54d",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -122,6 +211,30 @@
     },
     {
       "key": {
+        "uuid": "e833130c_1fa6bf43",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T16:54:05Z",
+      "side": 1,
+      "message": "True, done.",
+      "parentUuid": "58b07387_3273b54d",
+      "range": {
+        "startLine": 433,
+        "startChar": 21,
+        "endLine": 433,
+        "endChar": 26
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e1e9cf4_e35c5aff",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 6
@@ -139,6 +252,24 @@
     },
     {
       "key": {
+        "uuid": "c5711e85_1a63c1d0",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T16:54:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e1e9cf4_e35c5aff",
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "662246ab_12398012",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 6
@@ -153,6 +284,24 @@
       "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6e29e0e_dd253450",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-29T16:54:05Z",
+      "side": 1,
+      "message": "If color doesn\u0027t need resolve but depth/stencil does, we still have an initial subpass, so we need to adjust blendState.attachmentCount for that initial subpass (which is 0 in that case).\n\nAdded a test. It does\u0027t actually trigger a VVL warning, which is a bug I\u0027m going to report.",
+      "parentUuid": "662246ab_12398012",
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
