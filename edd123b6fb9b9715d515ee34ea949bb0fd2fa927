@@ -22,6 +22,30 @@
       "revId": "edd123b6fb9b9715d515ee34ea949bb0fd2fa927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94bdc844_1718392b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "The reason for this is so that Chrome parsing always has the same format.\n\nI added strings to all the backends (except metal, I need feedback but I want to do that in this CL too) so it should be irrelevant",
+      "parentUuid": "adc94274_11f74524",
+      "range": {
+        "startLine": 18,
+        "startChar": 54,
+        "endLine": 18,
+        "endChar": 56
+      },
+      "revId": "edd123b6fb9b9715d515ee34ea949bb0fd2fa927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

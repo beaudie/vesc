@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c18652fb_7838e5f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "The original string is in the middle section. Would you feel more comfortable if we started with that string?\n\nI fixed the GL_VENDOR part of it to be consistent",
+      "parentUuid": "fb2336b4_0dba8d4c",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 100
+      },
+      "revId": "238780eb7ce9b3372bdd03d1eab6603e976d03ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3da57a57_86a01d66",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -59,6 +83,30 @@
       "writtenOn": "2020-09-29T15:31:40Z",
       "side": 1,
       "message": "this is a bit weird (Google Inc. NVIDIA) .. maybe use () or another word to clarify it\u0027s a layered vendor?",
+      "range": {
+        "startLine": 63,
+        "startChar": 7,
+        "endLine": 63,
+        "endChar": 25
+      },
+      "revId": "238780eb7ce9b3372bdd03d1eab6603e976d03ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4270662_127c4153",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Cleaned these up. Now it shows the actual vendor inside ANGLE() in the GL_RENDERER string, but when queried separately as GL_VENDOR it\u0027s wrapped in Google Inc. (\u003cvendor\u003e)",
+      "parentUuid": "097b00c6_b2fe0f01",
       "range": {
         "startLine": 63,
         "startChar": 7,

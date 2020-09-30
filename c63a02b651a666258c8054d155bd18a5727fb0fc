@@ -113,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "0c2e1194_53f2503b",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81e4c28d_fc93f256",
+      "range": {
+        "startLine": 118,
+        "startChar": 11,
+        "endLine": 118,
+        "endChar": 25
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80f141ca_dc713110",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
         "patchSetId": 5
@@ -231,6 +255,30 @@
     },
     {
       "key": {
+        "uuid": "3f952b00_9cda8cd8",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "967c19db_945599a3",
+      "range": {
+        "startLine": 142,
+        "startChar": 11,
+        "endLine": 142,
+        "endChar": 25
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b50b5ef_a4a8dd23",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -251,6 +299,30 @@
       "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b617d69b_e2368cae",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b50b5ef_a4a8dd23",
+      "range": {
+        "startLine": 1537,
+        "startChar": 11,
+        "endLine": 1537,
+        "endChar": 25
+      },
+      "revId": "c63a02b651a666258c8054d155bd18a5727fb0fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

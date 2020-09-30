@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "366a8e68_1e2fdd70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Is it ok that I hard coded \"Apple Inc.\" for the metal vendor?",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 17
+      },
+      "revId": "afdbbf0720e0fc173807ef3a408e1410f8d7c53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f1f3e1e_baeedb1d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Need to figure out what \"version\" to put here. Is there anything that will be useful?",
+      "range": {
+        "startLine": 18,
+        "startChar": 55,
+        "endLine": 18,
+        "endChar": 56
+      },
+      "revId": "afdbbf0720e0fc173807ef3a408e1410f8d7c53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e789da0_1a18e03e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "This is swiftshader\u0027s version. Should I use the driver name instead of \"Vulkan\"? It looks a bit confusing with Vulkan in front",
+      "range": {
+        "startLine": 28,
+        "startChar": 72,
+        "endLine": 28,
+        "endChar": 84
+      },
+      "revId": "afdbbf0720e0fc173807ef3a408e1410f8d7c53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd809c33_a1637abb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "I clearly messed this up. I\u0027m trying to use driverVersion from D3DADAPTER_IDENTIFIER9/mRenderer11DeviceCaps, which is a LARGE_INTEGER. How should I parse this as a string?",
+      "range": {
+        "startLine": 38,
+        "startChar": 67,
+        "endLine": 38,
+        "endChar": 81
+      },
+      "revId": "afdbbf0720e0fc173807ef3a408e1410f8d7c53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90ec574d_1aac2465",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Again, this is the vulkan driver version. Does this look like a reasonable number?",
+      "range": {
+        "startLine": 46,
+        "startChar": 64,
+        "endLine": 46,
+        "endChar": 80
+      },
+      "revId": "afdbbf0720e0fc173807ef3a408e1410f8d7c53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f3d29e0_5eb1eaa1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-09-30T18:18:05Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 66,
+        "startChar": 65,
+        "endLine": 66,
+        "endChar": 81
+      },
+      "revId": "afdbbf0720e0fc173807ef3a408e1410f8d7c53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
