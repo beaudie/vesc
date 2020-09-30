@@ -2786,6 +2786,8 @@ angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
         {
             // Update the serial before we return.
             // TODO(jmadill): Could possibly use an MRU cache here.
+            // TODO: Need to change this so that we get the actual serial used when this work is
+            // submitted.
             innerIt->second.updateSerial(serial);
             *renderPassOut = &innerIt->second.get();
             return angle::Result::Continue;

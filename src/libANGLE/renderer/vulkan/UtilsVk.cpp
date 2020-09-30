@@ -888,6 +888,7 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
         vk::PipelineAndSerial *pipelineAndSerial;
         program->setShader(gl::ShaderType::Compute, fsCsShader);
         ANGLE_TRY(program->getComputePipeline(contextVk, pipelineLayout.get(), &pipelineAndSerial));
+        // TODO: Update serial handling.
         pipelineAndSerial->updateSerial(serial);
         commandBuffer->bindComputePipeline(pipelineAndSerial->get());
     }
