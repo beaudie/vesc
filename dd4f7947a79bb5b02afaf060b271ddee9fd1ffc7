@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "a5f590a3_d6e5bda3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce0a1a92_518441ac",
         "filename": "/COMMIT_MSG",
         "patchSetId": 10
@@ -202,6 +225,23 @@
     },
     {
       "key": {
+        "uuid": "098bc7c1_31625e0c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Why don\u0027t we want this event recorded if there aren\u0027t any dirty bits?",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45df19b7_e938f011",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -316,6 +356,172 @@
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "67d44194_693f5ac8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2649,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Can this be inlined in the header file?",
+      "range": {
+        "startLine": 2646,
+        "startChar": 0,
+        "endLine": 2649,
+        "endChar": 1
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f92fc25_0bd28ea6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Why is getting a pointer to the variable helpful?   It looks like this can be removed and mEventLog can be used directly.",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af201ac1_c89f1d69",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2677,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "nit: OpenGL ES Commands",
+      "range": {
+        "startLine": 2677,
+        "startChar": 31,
+        "endLine": 2677,
+        "endChar": 46
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4bcfab5_e3e566ae",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Does oglCmds live long enough that recording a pointer to it is safe?",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e0ddf08_c0dd7b80",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2683,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Similar to the above.   Does C++ keep these strings around forever, so you can record pointers to them after the vector is cleared?",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd78bca8_0e0b47e6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2686,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Even though the bug is only visible internally to Google, should probably still use https://issuetracker.google.com.\n\nAlso, does this need to be tracked with an internal buganizer, or is there somewhere externally visible we can open a bug?",
+      "range": {
+        "startLine": 2686,
+        "startChar": 28,
+        "endLine": 2686,
+        "endChar": 39
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2459e94_deb0dc04",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Do you need to override these if you\u0027re just calling back into angle::LoggingAnnotator()?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26e7a799_42d16f83",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-09-30T19:03:47Z",
+      "side": 1,
+      "message": "Are there any concerns about serializing access to mAnnotator across multiple threads?   Looking at DebugAnnotator11, that only logs for a single thread:\n\n    bool DebugAnnotator11::loggingEnabledForThisThread() const\n    {\n        return mUserDefinedAnnotation !\u003d nullptr \u0026\u0026 std::this_thread::get_id() \u003d\u003d mAnnotationThread;\n    }\n\nAdmittedly, I\u0027m not familiar with the annotator stuff at all.   I do see g_debugMutex used by LogMessage, but haven\u0027t dug deep enough to know if that\u0027s the answer or not.",
+      "range": {
+        "startLine": 910,
+        "startChar": 0,
+        "endLine": 911,
+        "endChar": 48
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
