@@ -16,6 +16,63 @@
       "revId": "57490f6fd5468a4bde8f8564b4467a15c491b379",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01999513_d249fa31",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T15:16:51Z",
+      "side": 1,
+      "message": "Same comment",
+      "revId": "57490f6fd5468a4bde8f8564b4467a15c491b379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08192a3f_32ee59a2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T15:16:51Z",
+      "side": 1,
+      "message": "Weird dependency, also doesn\u0027t match the comment above the file.\n\nCan you instead do this?\n\n    // Top of file\n    constexpr bool kOutputCumulativePerfCounters \u003d false;\n\n    // Here\n    if (!kOutputCumulativePerfCounters)\n    {\n        return;\n    }\n\nThis avoids accidentally breaking compilation of this piece of code. If this is ever needed for debugging, you can set the variable to true locally.",
+      "revId": "57490f6fd5468a4bde8f8564b4467a15c491b379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a948ee98_d05e992a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T15:16:51Z",
+      "side": 1,
+      "message": "I prefer to see this next to PerfCounters in vk_utils.h (and named ProgramExecutablePerfCounters). I added a RenderPassPerfCounters there too, and eventually we should probably move them all to their own file.",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 6
+      },
+      "revId": "57490f6fd5468a4bde8f8564b4467a15c491b379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
