@@ -56,6 +56,29 @@
       "revId": "6c524e62cc0402946161bb2d4832b2865199d62a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56c80b93_44c403d0",
+        "filename": "src/tests/restricted_traces/skia_gold/__init__.py",
+        "patchSetId": 27
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-30T19:50:29Z",
+      "side": 1,
+      "message": "Nit: I\u0027d prefer to have these imports in the files that actually need them rather than importing them for everything.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 30
+      },
+      "revId": "6c524e62cc0402946161bb2d4832b2865199d62a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

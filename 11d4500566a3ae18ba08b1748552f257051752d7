@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2f837510_703ed3db",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 24
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-30T19:50:29Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure that\u0027s indicative of Chromium not using it properly, too. According to the GN documentation, data_deps is used for targets that need to be compiled but not linked into the current target, e.g. for helper programs. goldctl is already compiled, so it can go under \"data\" https://gn.googlesource.com/gn/+/refs/heads/master/docs/reference.md#var_data",
+      "parentUuid": "cf92e2f3_a738206d",
+      "range": {
+        "startLine": 85,
+        "startChar": 6,
+        "endLine": 85,
+        "endChar": 13
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45d1441d_d90e3570",
         "filename": "src/tests/restricted_traces/BUILD.gn",
         "patchSetId": 24
@@ -163,6 +187,30 @@
       "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de085948_53f71d79",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 24
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-30T19:50:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9169c92_2fa9a2c4",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 32
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -354,6 +402,30 @@
     },
     {
       "key": {
+        "uuid": "fc11d4b8_f13f50e5",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-30T19:50:29Z",
+      "side": 1,
+      "message": "Once ever would be pretty easy, as you can actually store/access fields on functions, which ends up working similar to a static variable in C++. However, if you need to call it once per test, then you\u0027ll have to make sure that you reset that variable after each test run.\n\nFailing to find an example in Chromium even though I know I\u0027ve used it before, but this is how you have static method variables https://stackoverflow.com/a/279586",
+      "parentUuid": "277b9e93_e4b20a08",
+      "range": {
+        "startLine": 214,
+        "startChar": 8,
+        "endLine": 214,
+        "endChar": 17
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08ebde59_c838d581",
         "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
         "patchSetId": 24
@@ -448,6 +520,30 @@
     },
     {
       "key": {
+        "uuid": "e06fa1d7_50620580",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-30T19:50:29Z",
+      "side": 1,
+      "message": "I still think it\u0027s a concern, but I\u0027m fine with leaving as-is for now. I think a safer solution would be to just go over every file in screenshot_dir, which will also handle the case of batching tests on Android.",
+      "parentUuid": "5d1e2a10_30ccda83",
+      "range": {
+        "startLine": 271,
+        "startChar": 4,
+        "endLine": 271,
+        "endChar": 97
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c36ddecf_d3d14834",
         "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
         "patchSetId": 24
@@ -495,6 +591,30 @@
     },
     {
       "key": {
+        "uuid": "c8da28ba_1cc40a2a",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-30T19:50:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a76019a3_5641cd2b",
+      "range": {
+        "startLine": 275,
+        "startChar": 4,
+        "endLine": 276,
+        "endChar": 46
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49629790_76a81af0",
         "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
         "patchSetId": 24
@@ -539,6 +659,30 @@
       "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d3c0781_0400acce",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-09-30T19:50:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2cf52eaf_9323acd2",
+      "range": {
+        "startLine": 296,
+        "startChar": 8,
+        "endLine": 296,
+        "endChar": 20
+      },
+      "revId": "11d4500566a3ae18ba08b1748552f257051752d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
