@@ -318,6 +318,30 @@
       "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8857b4cd_4440321d",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-30T17:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d237ab1_0bcf9987",
+      "range": {
+        "startLine": 52,
+        "startChar": 20,
+        "endLine": 52,
+        "endChar": 30
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
