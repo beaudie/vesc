@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79bb06bd_c1157e7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T17:11:31Z",
+      "side": 1,
+      "message": "Nearly done with MSRTT!",
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
