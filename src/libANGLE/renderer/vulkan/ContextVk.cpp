@@ -402,6 +402,7 @@ angle::Result CommandQueue::checkCompletedCommands(vk::Context *context)
         }
         ANGLE_VK_TRY(context, result);
 
+        WARN() << "completed serial: " << batch.serial.getValue();
         renderer->onCompletedSerial(batch.serial);
 
         renderer->resetSharedFence(&batch.fence);

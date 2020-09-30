@@ -101,6 +101,7 @@ angle::Result CommandWorkQueue::init()
 
 angle::Result CommandWorkQueue::checkCompletedCommands(RendererVk *renderer)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandWorkQueue::checkCompletedCommands");
     VkDevice device = renderer->getDevice();
 
     int finishedCount = 0;
@@ -114,6 +115,7 @@ angle::Result CommandWorkQueue::checkCompletedCommands(RendererVk *renderer)
         }
         ANGLE_VK_TRY(this, result);
 
+        WARN() << "completed serial: " << batch.serial.getValue();
         renderer->onCompletedSerial(batch.serial);
 
         renderer->resetSharedFence(&batch.fence);
@@ -416,6 +418,8 @@ void CommandProcessor::queueCommand(vk::CommandProcessorTask *command)
             command->mResourceUseList.releaseResourceUsesAndUpdateSerials(command->mSerial);
         }
 
+        WARN() << "Queue task: " << command->mWorkerCommand
+               << ", serial: " << command->mSerial.getValue();
         mCommandsQueue.emplace(std::move(*command));
         mWorkAvailableCondition.notify_one();
     }
@@ -478,6 +482,8 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
         vk::CommandProcessorTask task(std::move(mCommandsQueue.front()));
         mCommandsQueue.pop();
         lock.unlock();
+        WARN() << "process task: " << task.mWorkerCommand
+               << ", serial: " << task.mSerial.getValue();
         switch (task.mWorkerCommand)
         {
             case vk::CustomTask::Exit:
