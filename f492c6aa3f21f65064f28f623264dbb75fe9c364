@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "c6542522_3500ac79",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T21:37:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec199768_be5ea858",
+      "range": {
+        "startLine": 2647,
+        "startChar": 2,
+        "endLine": 2648,
+        "endChar": 5
+      },
+      "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46618d34_c5196eb8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
@@ -99,6 +123,30 @@
     },
     {
       "key": {
+        "uuid": "8e3f8931_9f77d363",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T21:37:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46618d34_c5196eb8",
+      "range": {
+        "startLine": 253,
+        "startChar": 30,
+        "endLine": 253,
+        "endChar": 39
+      },
+      "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e1f0b27_ef602f57",
         "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.h",
         "patchSetId": 13
@@ -119,6 +167,30 @@
       "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d2441c9_c3bada79",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T21:37:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e1f0b27_ef602f57",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 21
+      },
+      "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

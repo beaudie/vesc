@@ -671,6 +671,30 @@
     },
     {
       "key": {
+        "uuid": "5abb6cb1_68d29f92",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2686,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T21:37:11Z",
+      "side": 1,
+      "message": "I created a TODO to track this in the follow-on CL.  I can then talk with the AGI team on how they\u0027d like to handle this.",
+      "parentUuid": "e662ad4d_3e79f3cc",
+      "range": {
+        "startLine": 2686,
+        "startChar": 28,
+        "endLine": 2686,
+        "endChar": 39
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2459e94_deb0dc04",
         "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.cpp",
         "patchSetId": 10
@@ -825,6 +849,30 @@
       "side": 1,
       "message": "Sounds like it\u0027s worth adding a comment to DebugAnnotatorVk to avoid adding any member variables.",
       "parentUuid": "75e67fb6_9e84fce1",
+      "range": {
+        "startLine": 910,
+        "startChar": 0,
+        "endLine": 911,
+        "endChar": 48
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26bfdd3b_cdefa4f0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T21:37:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57662267_e34e3e12",
       "range": {
         "startLine": 910,
         "startChar": 0,
