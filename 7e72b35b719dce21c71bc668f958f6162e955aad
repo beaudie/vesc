@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32eef21c_8474dbc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003232
+      },
+      "writtenOn": "2020-09-30T22:47:00Z",
+      "side": 1,
+      "message": "As noted, I don\u0027t think you actually have to remove this to unblock my CL, but my CL does need to land before you can actually remove the flag.",
+      "revId": "7e72b35b719dce21c71bc668f958f6162e955aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
