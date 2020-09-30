@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e229018d_1adf89a7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T18:39:33Z",
+      "side": 1,
+      "message": "On Android, ANGLE is not finding the debug utils extension.  AGI provides it.  The ANGLE-tree-built tests (with VVL build) provides it.  Games don\u0027t.\n\nThe way Tobin designed building this CL, the debug utils extension is required.  Games don\u0027t typically have it.\n\nThe thing we discussed in the \"stand-up\" meeting is for me to look to see if the extension was found.  If not, disable DebugAnnotatorVk.  There\u0027s going to be more to it than that (e.g. can\u0027t add the end marker as well).\n\nIt makes sense to do this in the follow-up CL that moves more to DebugAnnotatorVk (e.g. adding the end marker).",
+      "parentUuid": "f9ba72ea_b13dab86",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 17
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e3969ca_e1e991c4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -83,6 +107,23 @@
       "writtenOn": "2020-09-30T16:29:38Z",
       "side": 1,
       "message": "Courtney \u0026 Tim, PTAL.  Fran and I have both tested this and it looks great!\n\nI figured out what Android needed, and that an application will only work with the built ANGLE APK if launched by AGI (which provides the needed debug utils extension), or if the game itself is built with the debug utils extension.",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "416f9924_eb8eb702",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T18:39:33Z",
+      "side": 1,
+      "message": "Pushing comments now.  Code changes being tested on Android ... new patchset coming shortly.",
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -112,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "00cb2e0a_2b0df06b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T18:39:33Z",
+      "side": 1,
+      "message": "Done\n\nThanks!  I think I introduced this bug.  I looked broader and found another problem or two that Tobin didn\u0027t originally see).",
+      "parentUuid": "45df19b7_e938f011",
+      "range": {
+        "startLine": 2121,
+        "startChar": 0,
+        "endLine": 2121,
+        "endChar": 39
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8fe5ca9b_1f11c16e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -129,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "050b9f71_323650f1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T18:39:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fe5ca9b_1f11c16e",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b29ae37_b4973bff",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -143,6 +226,24 @@
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dc336e3_d5262612",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2284,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T18:39:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b29ae37_b4973bff",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
