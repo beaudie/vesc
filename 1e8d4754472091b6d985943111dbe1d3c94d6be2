@@ -33,6 +33,23 @@
       "revId": "1e8d4754472091b6d985943111dbe1d3c94d6be2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "42f7199d_cd20425f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T21:08:31Z",
+      "side": 1,
+      "message": "Tim, can you add a regression test that fails on ToT and passes with this CL? LGTM with that.",
+      "revId": "1e8d4754472091b6d985943111dbe1d3c94d6be2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
