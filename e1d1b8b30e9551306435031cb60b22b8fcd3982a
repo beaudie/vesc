@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8f82b7f_5442cc2d",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T17:36:32Z",
+      "side": 0,
+      "message": "do you still use this? can you initialize your fixedVector using this?",
+      "range": {
+        "startLine": 55,
+        "startChar": 58,
+        "endLine": 55,
+        "endChar": 84
+      },
+      "revId": "e1d1b8b30e9551306435031cb60b22b8fcd3982a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca736b8d_66c12ba2",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T17:36:32Z",
+      "side": 0,
+      "message": "same comment here.",
+      "range": {
+        "startLine": 139,
+        "startChar": 58,
+        "endLine": 139,
+        "endChar": 84
+      },
+      "revId": "e1d1b8b30e9551306435031cb60b22b8fcd3982a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d4cb0c_d4352b95",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/DisplayVkXcb.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T17:36:32Z",
+      "side": 0,
+      "message": "same comment here.",
+      "range": {
+        "startLine": 91,
+        "startChar": 58,
+        "endLine": 91,
+        "endChar": 84
+      },
+      "revId": "e1d1b8b30e9551306435031cb60b22b8fcd3982a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
