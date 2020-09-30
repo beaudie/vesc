@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "55b8617b_c4b62a09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5f590a3_d6e5bda3",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce0a1a92_518441ac",
         "filename": "/COMMIT_MSG",
         "patchSetId": 10
@@ -242,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "833373d9_c38e019d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure why Tobin put it here.  The follow-on CL is going to have DebugAnnotatorVk add a dirty bit, and have this call triggered by that dirty bit.  I\u0027ll leave it here for this CL.",
+      "parentUuid": "098bc7c1_31625e0c",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45df19b7_e938f011",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -382,6 +424,30 @@
     },
     {
       "key": {
+        "uuid": "107f9e7d_e734361f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2649,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67d44194_693f5ac8",
+      "range": {
+        "startLine": 2646,
+        "startChar": 0,
+        "endLine": 2649,
+        "endChar": 1
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f92fc25_0bd28ea6",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -396,6 +462,24 @@
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d840438a_c62c4526",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "Not sure why Tobin did it this way (I wondered the same thing).  Gone now, thanks.",
+      "parentUuid": "4f92fc25_0bd28ea6",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -422,6 +506,30 @@
     },
     {
       "key": {
+        "uuid": "7d6b6260_a30f8e2c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2677,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af201ac1_c89f1d69",
+      "range": {
+        "startLine": 2677,
+        "startChar": 31,
+        "endLine": 2677,
+        "endChar": 46
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4bcfab5_e3e566ae",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -436,6 +544,24 @@
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72eece0a_4db46538",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "It\u0027s memcpy\u0027d by commandBuffer-\u003ebeginDebugUtilsLabelEXT()",
+      "parentUuid": "d4bcfab5_e3e566ae",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -456,6 +582,24 @@
     },
     {
       "key": {
+        "uuid": "a02143a9_478d003f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2683,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "Same ... It\u0027s memcpy\u0027d by commandBuffer-\u003ebeginDebugUtilsLabelEXT()",
+      "parentUuid": "9e0ddf08_c0dd7b80",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd78bca8_0e0b47e6",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
@@ -467,6 +611,30 @@
       "writtenOn": "2020-09-30T19:03:47Z",
       "side": 1,
       "message": "Even though the bug is only visible internally to Google, should probably still use https://issuetracker.google.com.\n\nAlso, does this need to be tracked with an internal buganizer, or is there somewhere externally visible we can open a bug?",
+      "range": {
+        "startLine": 2686,
+        "startChar": 28,
+        "endLine": 2686,
+        "endChar": 39
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde415df_adf583f0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2686,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "The bug is in a private (non-public) AGI group.\n\nNot sure what your 2nd question is asking",
+      "parentUuid": "dd78bca8_0e0b47e6",
       "range": {
         "startLine": 2686,
         "startChar": 28,
@@ -502,6 +670,30 @@
     },
     {
       "key": {
+        "uuid": "2a8ed861_e7f02e6f",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "Good point.  We don\u0027t need setMarker().  A follow-on CL is going to add to endEvent(), and so I\u0027ll keep that one.",
+      "parentUuid": "e2459e94_deb0dc04",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26e7a799_42d16f83",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 10
@@ -522,6 +714,30 @@
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c05e0bf0_78c91667",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-09-30T19:39:55Z",
+      "side": 1,
+      "message": "I originally copied that, and Jamie didn\u0027t see a need for it with DebugAnnotatorVk, even with our multi-threading solution.",
+      "parentUuid": "26e7a799_42d16f83",
+      "range": {
+        "startLine": 910,
+        "startChar": 0,
+        "endLine": 911,
+        "endChar": 48
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
