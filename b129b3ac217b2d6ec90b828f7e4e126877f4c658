@@ -352,6 +352,30 @@
     },
     {
       "key": {
+        "uuid": "400b7dc4_90de5535",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T02:11:15Z",
+      "side": 1,
+      "message": "Still one bit left! I wonder who\u0027s going to claim that!\n\nNo they are not compatible. The unresolve subpass will have different input/color/depth/stencil attachments. That\u0027s also why unresolve mask is part of FramebufferDesc.",
+      "parentUuid": "7d6fe48f_23a68233",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 282,
+        "endChar": 58
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3dfd3e61_e951eff8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -372,6 +396,30 @@
       "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "466a65d9_dcd5506e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T02:11:15Z",
+      "side": 1,
+      "message": "Early fragment tests is the stage, see a few lines above!",
+      "parentUuid": "3dfd3e61_e951eff8",
+      "range": {
+        "startLine": 364,
+        "startChar": 11,
+        "endLine": 364,
+        "endChar": 84
+      },
+      "revId": "b129b3ac217b2d6ec90b828f7e4e126877f4c658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
