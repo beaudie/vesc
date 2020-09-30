@@ -203,6 +203,30 @@
     },
     {
       "key": {
+        "uuid": "67011bb3_7a9ef13c",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T22:11:44Z",
+      "side": 1,
+      "message": "Shabi, would you be okay with going back to std::vector to enable easier code re-use?",
+      "parentUuid": "bf0050d4_fc3eade1",
+      "range": {
+        "startLine": 54,
+        "startChar": 10,
+        "endLine": 54,
+        "endChar": 21
+      },
+      "revId": "b93aefb1cca85811c2f0ede3ed6dc3520de3c4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a87ebc8d_4fe9616c",
         "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
         "patchSetId": 1
