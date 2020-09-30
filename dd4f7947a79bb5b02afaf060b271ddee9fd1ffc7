@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "722a7467_c09d6162",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-30T17:57:59Z",
+      "side": 1,
+      "message": "typo, remove",
+      "range": {
+        "startLine": 10,
+        "startChar": 55,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce0a1a92_518441ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-30T17:57:59Z",
+      "side": 1,
+      "message": "Do/can we want to make this smarter?\nE.g. if missing the extension disable the feature and print warning that Vulkan debug extension is not present. That would allow us to have one ANGLE build we use for both normal debug and AGI debugging.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 17
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e3969ca_e1e991c4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -16,6 +62,63 @@
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45df19b7_e938f011",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-30T17:57:59Z",
+      "side": 1,
+      "message": "Need to get rid of this to be able to hit logging below.",
+      "range": {
+        "startLine": 2121,
+        "startChar": 0,
+        "endLine": 2121,
+        "endChar": 39
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fe5ca9b_1f11c16e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-30T17:57:59Z",
+      "side": 1,
+      "message": "here as well.",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b29ae37_b4973bff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2284,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-09-30T17:57:59Z",
+      "side": 1,
+      "message": "Need to remove this.",
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
