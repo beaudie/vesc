@@ -105,6 +105,7 @@ angle::Result CommandWorkQueue::checkCompletedCommands(RendererVk *renderer)
 
     int finishedCount = 0;
 
+    // TODO: protect mInFlightCommands
     for (vk::CommandBatch &batch : mInFlightCommands)
     {
         VkResult result = batch.fence.get().getStatus(device);
@@ -268,12 +269,16 @@ bool CommandWorkQueue::isRobustResourceInitEnabled() const
 
 bool CommandWorkQueue::hasInFlightCommands() const
 {
+    // Need to protect mInFlightCommands
     return !mInFlightCommands.empty();
 }
 
+// This doesn't seem right. Why block the worker thread? We should be blocking in the main thread,
+// that's where we are waiting for the work.
 angle::Result CommandWorkQueue::finishToSerial(RendererVk *renderer, Serial serial)
 {
     uint64_t timeout = renderer->getMaxFenceWaitTimeNs();
+    // TODO: protect mInFlightCommands
     if (mInFlightCommands.empty())
     {
         return angle::Result::Continue;
@@ -367,6 +372,7 @@ angle::Result CommandWorkQueue::submitFrame(RendererVk *renderer,
 vk::Shared<vk::Fence> CommandWorkQueue::getLastSubmittedFence(const VkDevice device) const
 {
     vk::Shared<vk::Fence> fence;
+    // TODO: Need to protect mInFlightCommands with mutex
     if (!mInFlightCommands.empty())
     {
         fence.copy(device, mInFlightCommands.back().fence);
@@ -542,8 +548,12 @@ angle::Result CommandProcessor::processTask(vk::CommandProcessorTask &task)
             submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers    = &task.mOneOffCommandBufferVk;
+
+            // TODO: vkQueueSubmit should be owned by CommandWorkQueue to ensure proper
+            // synchronization
             ANGLE_TRY(mRenderer->commandProcessorThreadQueueSubmit(
                 &mCommandWorkQueue, task.mPriority, submitInfo, task.mFence));
+            ANGLE_TRY(mCommandWorkQueue.checkCompletedCommands(mRenderer));
             break;
         }
         case vk::CustomTask::FinishToSerial:
