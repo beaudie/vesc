@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cc725f2f_6d5e6d40",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-30T20:10:21Z",
+      "side": 0,
+      "message": "I tried several things to use that but compiler didn\u0027t like any.\n\nYou can initialize std::vector with an array - but looks like this (verbose):\nstd::vector\u003cGLenum\u003e depthAndStencil(egl_vk::kConfigDepthStencilFormats,\n        egl_vk::kConfigDepthStencilFormats + \n        (sizeof(egl_vk::kConfigDepthStencilFormats)/sizeof(GLenum)));\nAnd std::vector we decided against.\n\nI haven\u0027t figured out a way to make into a std::initialize_list so that it can be used to initialize a FixedVector.\n\nIf I change the kConfigDepthStencilFormats to this:\n    constexpr std::initializer_list\u003cGLenum\u003e kConfigDepthStencilFormats2 \u003d {GL_NONE, \n        GL_DEPTH24_STENCIL8, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT16};\nthen I can do this:\n    angle::FixedVector\u003cGLenum, egl_vk::kConfigDepthStencilFormats2.size()+1\u003e \n         depthAndStencil2(egl_vk::kConfigDepthStencilFormats2);\nBut, I would have to up date fuchsia, ggp and mac DisplayVk*.cpp files with this new definition - which would be OK.",
+      "parentUuid": "e8f82b7f_5442cc2d",
+      "range": {
+        "startLine": 55,
+        "startChar": 58,
+        "endLine": 55,
+        "endChar": 84
+      },
+      "revId": "e1d1b8b30e9551306435031cb60b22b8fcd3982a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ca736b8d_66c12ba2",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 11
