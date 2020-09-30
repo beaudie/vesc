@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "99322810_818950c3",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-09-30T22:05:37Z",
+      "side": 0,
+      "message": "Agreed. I think the reason for the \"constexpr GLenum kConfigDepthStencilFormats[]\" was the sexy templated GenerateConfigs that would use the static size. But inflexible for adding an entry dynamically.",
+      "parentUuid": "9d9a88b6_ba1d1e7a",
+      "range": {
+        "startLine": 55,
+        "startChar": 58,
+        "endLine": 55,
+        "endChar": 84
+      },
+      "revId": "e1d1b8b30e9551306435031cb60b22b8fcd3982a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ca736b8d_66c12ba2",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 11
