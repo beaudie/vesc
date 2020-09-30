@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "72705ebd_5dcada93",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T17:17:19Z",
+      "side": 1,
+      "message": "The question is, do you need this information unconditionally when overlay is enabled? Aren\u0027t they for debugging only? I suggested modifying `kOutputCumulativePerfCounters` to true if and when it\u0027s necessary to debug this, because it seems to me that normally (even with overlay) you wouldn\u0027t want to see this output. Correct me if I\u0027m wrong.",
+      "parentUuid": "c39bf4e2_6335f181",
+      "revId": "57490f6fd5468a4bde8f8564b4467a15c491b379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a948ee98_d05e992a",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 4
