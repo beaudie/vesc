@@ -738,6 +738,30 @@
       "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7acecdd_7c1bf8ed",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T19:44:06Z",
+      "side": 1,
+      "message": "As long as the annotator itself stores the state in ContextVk it shouldn\u0027t be a problem. If DebugAnnotatorVk itself stored member variables there could be data races. So we should try to avoid that.",
+      "parentUuid": "c05e0bf0_78c91667",
+      "range": {
+        "startLine": 910,
+        "startChar": 0,
+        "endLine": 911,
+        "endChar": 48
+      },
+      "revId": "dd4f7947a79bb5b02afaf060b271ddee9fd1ffc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
