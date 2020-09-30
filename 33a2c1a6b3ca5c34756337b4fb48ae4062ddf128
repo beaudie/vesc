@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bd257a1_415d1557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T20:15:49Z",
+      "side": 1,
+      "message": "Noticed this bug thanks to VVL when trying out a webgl test on Chrome.",
+      "revId": "33a2c1a6b3ca5c34756337b4fb48ae4062ddf128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb42a644_0bd6810a",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T20:15:49Z",
+      "side": 1,
+      "message": "I wrote/modified the other two tests before I figured out the issue. This test is the one that actually failed.",
+      "revId": "33a2c1a6b3ca5c34756337b4fb48ae4062ddf128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
