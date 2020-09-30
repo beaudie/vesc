@@ -647,6 +647,9 @@ struct Extensions
 
     // GL_EXT_buffer_storage
     bool bufferStorageEXT = false;
+
+    // GL_EXT_copy_image
+    bool copyImage = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct

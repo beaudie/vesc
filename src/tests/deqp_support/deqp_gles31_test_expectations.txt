@@ -243,3 +243,22 @@
 4371 VULKAN ANDROID : dEQP-GLES31.functional.shaders.implicit_conversions.es31.arithmetic.input_before_literal.add.int_to_vec3_vertex = FAIL
 4371 VULKAN ANDROID : dEQP-GLES31.functional.shaders.implicit_conversions.es31.arithmetic.input_before_literal.add.int_to_uvec3_vertex = FAIL
 4371 SWIFTSHADER : dEQP-GLES31.functional.shaders.implicit_conversions.* = FAIL
+
+// TEXTURE_3D target requires HDR astc support
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.compressed.viewclass_astc*texture3d* = SKIP
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32*_astc_*_khr.*texture3d* = SKIP
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.*astc_*_khr_rgba32*.*texture3d* = SKIP
+
+// Renderbuffers don't work
+3593 VULKAN : dEQP-GLES31.functional.copy_image.*renderbuffer* = FAIL
+
+// Swiftshader fails to create a correct source/destination srgb8_alpha8_astc image before copy, however 5x4 is correct
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr*texture2d*to_texture2d* = PASS
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr*texture2d*to_cubemap = PASS
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr*cubemap_to_texture2d* = PASS
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr*cubemap_to_cubemap = PASS
+
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_*_khr*texture2d*to_texture2d* = FAIL
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_*_khr*texture2d*to_cubemap = FAIL
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_*_khr*cubemap_to_texture2d* = FAIL
+3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_*_khr*cubemap_to_cubemap = FAIL
