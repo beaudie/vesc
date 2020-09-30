@@ -16,6 +16,92 @@
       "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40a833a9_3bae5620",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T21:12:29Z",
+      "side": 1,
+      "message": "LGTM, couple last nits noticed.",
+      "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec199768_be5ea858",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T21:12:29Z",
+      "side": 1,
+      "message": "nit: you can flip this to return early and flatten the code indent.",
+      "range": {
+        "startLine": 2647,
+        "startChar": 2,
+        "endLine": 2648,
+        "endChar": 5
+      },
+      "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46618d34_c5196eb8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T21:12:29Z",
+      "side": 1,
+      "message": "nit: eventString",
+      "range": {
+        "startLine": 253,
+        "startChar": 30,
+        "endLine": 253,
+        "endChar": 39
+      },
+      "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e1f0b27_ef602f57",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-09-30T21:12:29Z",
+      "side": 1,
+      "message": "nit: remove?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 21
+      },
+      "revId": "f492c6aa3f21f65064f28f623264dbb75fe9c364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
