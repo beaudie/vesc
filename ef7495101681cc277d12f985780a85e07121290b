@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d595b96c_460b2732",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-09-30T23:14:39Z",
+      "side": 1,
+      "message": "Jamie, I haven\u0027t had a chance to test these with your CL, but can later tonight.",
+      "revId": "ef7495101681cc277d12f985780a85e07121290b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
