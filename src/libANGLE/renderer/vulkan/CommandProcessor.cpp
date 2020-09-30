@@ -206,6 +206,7 @@ angle::Result CommandTaskProcessor::checkCompletedCommands(vk::Context *context)
         }
         ANGLE_VK_TRY(context, result);
 
+        WARN() << "completed serial: " << batch.serial.getValue();
         rendererVk->onCompletedSerial(batch.serial);
 
         rendererVk->resetSharedFence(&batch.fence);
@@ -517,6 +518,7 @@ void CommandProcessor::queueCommand(vk::Context *context, vk::CommandProcessorTa
             command->mResourceUseList.releaseResourceUsesAndUpdateSerials(command->mSerial);
         }
 
+        WARN() << "Queue task: " << command->mTask << ", serial: " << command->mSerial.getValue();
         mTasks.emplace(std::move(*command));
         mWorkAvailableCondition.notify_one();
     }
@@ -580,6 +582,7 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
         vk::CommandProcessorTask task(std::move(mTasks.front()));
         mTasks.pop();
         lock.unlock();
+        WARN() << "process task: " << task.mTask << ", serial: " << task.mSerial.getValue();
         switch (task.mTask)
         {
             case vk::CustomTask::Exit:
