@@ -33,6 +33,23 @@
       "revId": "4f90189ab78ed06f88e9c92f31c099fbdb4674b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb5887dc_9f57115c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-09-30T20:21:28Z",
+      "side": 1,
+      "message": "I had commented on the bug. It looks to me like round() is closer to the intent of the spec (despite the language being vague). Have you considered making the deqp test more robust instead?",
+      "revId": "4f90189ab78ed06f88e9c92f31c099fbdb4674b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
