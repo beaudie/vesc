@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "6da5a499_eb1c21cb",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-30T10:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24414605_63d2d6a8",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "3a6706cf467ca059ed1bd62ee68d08821783312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe4fef44_78c45db0",
         "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
         "patchSetId": 2
@@ -93,6 +117,30 @@
       "revId": "3a6706cf467ca059ed1bd62ee68d08821783312b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0966385b_7e41acdc",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-30T10:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe4fef44_78c45db0",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "3a6706cf467ca059ed1bd62ee68d08821783312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
