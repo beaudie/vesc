@@ -77,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "fa33c450_819f3f96",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-30T10:56:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edb9b3ad_12796ff5",
+      "range": {
+        "startLine": 31,
+        "startChar": 26,
+        "endLine": 31,
+        "endChar": 28
+      },
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f1d0aba_d4f1df4a",
         "filename": "src/libANGLE/renderer/metal/mtl_common.h",
         "patchSetId": 2
@@ -97,6 +121,30 @@
       "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33fecb7c_9efb9712",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-30T10:56:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f1d0aba_d4f1df4a",
+      "range": {
+        "startLine": 343,
+        "startChar": 29,
+        "endLine": 343,
+        "endChar": 32
+      },
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +192,30 @@
       "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f552f17b_1a60b05b",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-09-30T10:56:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eaf4f0e6_193db6dd",
+      "range": {
+        "startLine": 366,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 84
+      },
+      "revId": "f8661905324c1db22c58ddaf6d8c74eb9e6e7e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
