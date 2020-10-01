@@ -50,6 +50,23 @@
       "revId": "4f90189ab78ed06f88e9c92f31c099fbdb4674b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54e01b69_f4752709",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-01T07:17:14Z",
+      "side": 1,
+      "message": "Maybe add a comment with an excerpt from our discussion.",
+      "revId": "4f90189ab78ed06f88e9c92f31c099fbdb4674b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
