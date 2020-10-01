@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9158d5a_b3a2c0bf",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2020-10-01T00:22:11Z",
+      "side": 1,
+      "message": "Nit, although fine to do in a follow-up to avoid having to do yet another CQ run: Move the PASS/FAIL/SKIP strings into constants and replace usage of the raw strings with them.",
+      "range": {
+        "startLine": 286,
+        "startChar": 15,
+        "endLine": 286,
+        "endChar": 21
+      },
+      "revId": "e8d329df61f0579ad176d509a0231e8c82cb6f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
