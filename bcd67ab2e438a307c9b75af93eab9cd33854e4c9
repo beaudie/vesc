@@ -22,6 +22,30 @@
       "revId": "bcd67ab2e438a307c9b75af93eab9cd33854e4c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bc9dac0_348f8271",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-01T15:01:12Z",
+      "side": 1,
+      "message": "No, I removed them from the skip list, tried the following filter:\n\n--gtest_filter\u003d*ShaderLength*/ES2_Vulkan\n\nAnd got this output:\n\nSkipped: Skipping replay since capture didn\u0027t produce necessary trace files\n        GLSLTest.FixedShaderLength/ES2_Vulkan\n        GLSLTest.NegativeShaderLength/ES2_Vulkan\n        GLSLTest.MixedShaderLengths/ES2_Vulkan\n        GLSLTest.ZeroShaderLength/ES2_Vulkan",
+      "parentUuid": "6e80b267_d41599d1",
+      "range": {
+        "startLine": 667,
+        "startChar": 4,
+        "endLine": 667,
+        "endChar": 17
+      },
+      "revId": "bcd67ab2e438a307c9b75af93eab9cd33854e4c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
