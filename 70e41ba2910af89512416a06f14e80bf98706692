@@ -16,6 +16,230 @@
       "revId": "70e41ba2910af89512416a06f14e80bf98706692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66cf0285_387cdbdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "This looks WAY better, thanks for clearing out those dirty bits. Still a few snags to resolve, comments below.",
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8aaf345d_3b57ee3c",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "can you remove this? see comment in queryutils.",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 541,
+        "endChar": 0
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67ed23bf_261e26c8",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "can you merge this with void State::invalidateTexture(TextureType type) and just rename that function to invalidateTextureBindings()",
+      "range": {
+        "startLine": 690,
+        "startChar": 0,
+        "endLine": 691,
+        "endChar": 92
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "149e3401_73f600d8",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "this should be handled via Context::onSubjectStateChange. Imagine the texture is shared between contexts. you\u0027d want the notification in both. (We might not have full testing for this, that\u0027s OK).\n\n            if (index \u003c kTextureMaxSubjectIndex)\n            {\n                if (message !\u003d angle::SubjectMessage::ContentsChanged \u0026\u0026\n                    message !\u003d angle::SubjectMessage::BindingChanged)\n                {\n                    mState.onActiveTextureStateChange(this, index);\n                    mStateCache.onActiveTextureChange(this);\n                }\n            }\n\nThis will be DirtyBitsFlagged and it will invalidate the caches. At least try without it and see if it messes up somewhere.",
+      "range": {
+        "startLine": 437,
+        "startChar": 12,
+        "endLine": 437,
+        "endChar": 44
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66b55d09_3bfe53ed",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "This pattern doesn\u0027t line up with how we use syncState (you shouldn\u0027t ever call it from a back-end). We\u0027ll need to do this another way. Can you try passing more info to Texturevk::ensureImageInitialized?",
+      "range": {
+        "startLine": 4139,
+        "startChar": 0,
+        "endLine": 4145,
+        "endChar": 9
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c725162_411fbdf1",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "nit: could be part of gl::Sampler as well.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 95
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b172ff14_80395187",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "see header comment. thinking this can be front-end.",
+      "range": {
+        "startLine": 2236,
+        "startChar": 0,
+        "endLine": 2288,
+        "endChar": 1
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "891fc58b_da0d38dc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "see header comment. thinking this can be front-end.",
+      "range": {
+        "startLine": 2290,
+        "startChar": 0,
+        "endLine": 2327,
+        "endChar": 0
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49a22728_18afff7f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "This looks like this should be a part of angle::Format, as isSRGB. Didn\u0027t catch this before when it went in. We have a slough of isThis and isThat properties in angle::Format. This is exactly what that structure is for.",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 5
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4298c87_19d83b5a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:43:42Z",
+      "side": 1,
+      "message": "tiny nit: for consistency use a namespace {} block instead of static.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "70e41ba2910af89512416a06f14e80bf98706692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
