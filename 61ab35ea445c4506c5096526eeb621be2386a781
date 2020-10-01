@@ -39,6 +39,30 @@
       "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1acd815c_b82a9e04",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:28:27Z",
+      "side": 1,
+      "message": "Check for no-op draws/dispatches. See the Context.",
+      "parentUuid": "b4e43a1a_0e3ae670",
+      "range": {
+        "startLine": 2691,
+        "startChar": 0,
+        "endLine": 2695,
+        "endChar": 0
+      },
+      "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
