@@ -688,6 +688,8 @@ class State : angle::NonCopyable
     void setTextureDirty(size_t textureUnitIndex);
     void setSamplerDirty(size_t samplerIndex);
 
+    ANGLE_INLINE void setTextureUnitsDirty() { mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS); }
+
     ANGLE_INLINE void setReadFramebufferDirty()
     {
         mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
