@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "def36ac8_e49431a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-01T16:53:33Z",
+      "side": 1,
+      "message": "This didn\u0027t work in initial testing on Android.  That is, when NBA 2K20 was started from AGI, this was apparently not called (no GLES markers were seen by AGI).\n\nI found that the debug-utils entrypoints seem to be available from VOLK.  I replaced this code with something in the original position, that seems to work well on Android.",
+      "range": {
+        "startLine": 797,
+        "startChar": 0,
+        "endLine": 798,
+        "endChar": 52
+      },
+      "revId": "2878102762346cbc4f91f7f618ea9376ad6ef4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

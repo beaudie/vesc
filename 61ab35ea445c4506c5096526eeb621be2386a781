@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03e71292_0ae96031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-01T16:53:33Z",
+      "side": 1,
+      "message": "I implemented what I think Jamie proposed.  There\u0027s a problem with command buffers no longer being valid the end of the front-end draw call.\n\nI also tried to address some of the other feedback with the other CL.  For example, this will work for games that are not launched by AGI.  Logging GLES entrypoints is done whenever the debug-utils function calls are available.  Not sure if that\u0027s what we want, but it does allow one ANGLE APK to be built that will work with games both with and without AGI.",
+      "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4e43a1a_0e3ae670",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-01T16:53:33Z",
+      "side": 1,
+      "message": "Before I commended it out, this assert is hit fairly frequently during NBA 2K20 startup (not after game play starts).  In checking, there are times that mRenderPassCommandBuffer is nullptr.  That seems to indicate that the render pass is no longer valid by the time the front-end draw command exits (something must have ended the renderpass while in the Vulkan back-end).\n\nI\u0027ll investigate more, but I am wondering if we can continue with this approach of having DebugAnnotatorVk::endEvent() end the debug-utils label (i.e. off the \"hot path\").",
+      "range": {
+        "startLine": 2691,
+        "startChar": 0,
+        "endLine": 2695,
+        "endChar": 0
+      },
+      "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
