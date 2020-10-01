@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "d94595ee_766a58a0",
+        "filename": "include/platform/FrontendFeatures.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-01T16:34:49Z",
+      "side": 1,
+      "message": "To avoid rounding issues, I suggest fractions that play well with typical sizes (like 1920x1080). Assuming every screen size has dimensions that are at least multiple of 8, you could make the ratios like:\n\n- 7/8 (87.5%)\n- 6/8 (75%)\n- 5/8 (62.5%)\n- 4/8 (50%)\n- 3/8 (37.5%) (I personally wouldn\u0027t even go below 50%, but never hurts to have the option)\n\nYou will end up with 5 options instead of 6. I don\u0027t know if this would be good for aliasing or bad, so you could try it out and see if visually it makes things better or worse.\n\n---\n\nEdit: I also see some issues with float later in the change (like scissor and viewport scaling). With the above change, you also don\u0027t need to do anything in floating point.",
+      "range": {
+        "startLine": 75,
+        "startChar": 94,
+        "endLine": 75,
+        "endChar": 96
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455acf8c_9b811d01",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-01T16:34:49Z",
+      "side": 1,
+      "message": "Suggest moving to cpp file",
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3326ed88_8556bcdc",
         "filename": "src/libANGLE/feature_utils.cpp",
         "patchSetId": 6
