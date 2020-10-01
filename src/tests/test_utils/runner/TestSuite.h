@@ -119,7 +119,7 @@ class TestSuite
     ~TestSuite();
 
     int run();
-    void onCrashOrTimeout(TestResultType crashOrTimeout);
+    void onCrash();
 
   private:
     bool parseSingleArg(const char *argument);
@@ -152,6 +152,7 @@ class TestSuite
     std::map<TestIdentifier, FileLine> mTestFileLines;
     std::vector<ProcessInfo> mCurrentProcesses;
     std::thread mWatchdogThread;
+    bool mWatchdogTimeout;
 };
 
 bool GetTestResultsFromFile(const char *fileName, TestResults *resultsOut);

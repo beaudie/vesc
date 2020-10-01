@@ -765,7 +765,8 @@ TestSuite::TestSuite(int *argc, char **argv)
       mTotalResultCount(0),
       mMaxProcesses(NumberOfProcessors()),
       mTestTimeout(kDefaultTestTimeout),
-      mBatchTimeout(kDefaultBatchTimeout)
+      mBatchTimeout(kDefaultBatchTimeout),
+      mWatchdogTimeout(false)
 {
     Optional<int> filterArgIndex;
     bool alsoRunDisabledTests = false;
@@ -775,7 +776,7 @@ TestSuite::TestSuite(int *argc, char **argv)
 #endif
 
     // Note that the crash callback must be owned and not use global constructors.
-    mCrashCallback = [this]() { onCrashOrTimeout(TestResultType::Crash); };
+    mCrashCallback = [this]() { onCrash(); };
     InitCrashHandler(&mCrashCallback);
 
     if (*argc <= 0)
@@ -944,7 +945,7 @@ TestSuite::TestSuite(int *argc, char **argv)
         mResultsFile = resultFileName.str();
     }
 
-    if (!mResultsFile.empty() || !mHistogramJsonFile.empty())
+    if (!mBotMode)
     {
         testing::TestEventListeners &listeners = testing::UnitTest::GetInstance()->listeners();
         listeners.Append(new TestEventListener(mResultsFile, mHistogramJsonFile,
@@ -985,12 +986,13 @@ bool TestSuite::parseSingleArg(const char *argument)
             ParseFlag("--debug-test-groups", argument, &mDebugTestGroups));
 }
 
-void TestSuite::onCrashOrTimeout(TestResultType crashOrTimeout)
+void TestSuite::onCrash()
 {
+    std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
     if (mTestResults.currentTest.valid())
     {
-        TestResult &result        = mTestResults.results[mTestResults.currentTest];
-        result.type               = crashOrTimeout;
+        TestResult &result = mTestResults.results[mTestResults.currentTest];
+        result.type        = mWatchdogTimeout ? TestResultType::Timeout : TestResultType::Crash;
         result.elapsedTimeSeconds = mTestResults.currentTestTimer.getElapsedTime();
     }
 
@@ -1191,12 +1193,7 @@ int TestSuite::run()
             mTestResults.allDone = true;
         }
 
-        for (int tries = 0; tries < 10; ++tries)
-        {
-            if (!mWatchdogThread.joinable())
-                break;
-            angle::Sleep(100);
-        }
+        mWatchdogThread.join();
         return retVal;
     }
 
@@ -1333,16 +1330,17 @@ void TestSuite::startWatchdog()
                 if (mTestResults.currentTestTimer.getElapsedTime() >
                     static_cast<double>(mTestTimeout))
                 {
-                    onCrashOrTimeout(TestResultType::Timeout);
-                    exit(2);
+                    mWatchdogTimeout = true;
+                    break;
                 }
 
                 if (mTestResults.allDone)
                     return;
             }
 
-            angle::Sleep(1000);
+            angle::Sleep(500);
         } while (true);
+        std::terminate();
     };
     mWatchdogThread = std::thread(watchdogMain);
 }
