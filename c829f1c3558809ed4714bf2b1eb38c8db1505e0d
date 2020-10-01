@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0ebbb93_2c09c028",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-01T02:59:34Z",
+      "side": 1,
+      "message": "Maybe GetVendorString(mMetalDeviceVendorId) ?",
+      "range": {
+        "startLine": 127,
+        "startChar": 11,
+        "endLine": 127,
+        "endChar": 23
+      },
+      "revId": "c829f1c3558809ed4714bf2b1eb38c8db1505e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6724259f_72d4f82d",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-01T02:59:34Z",
+      "side": 1,
+      "message": "Metal is tied to OS version, maybe we can return OS version instead:\nANGLE_MTL_OBJC_SCOPE\n{\n   NSProcessInfo *procInfo \u003d [NSProcessInfo processInfo];\n   return procInfo.operatingSystemVersionString.UTF8String;\n}",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 25
+      },
+      "revId": "c829f1c3558809ed4714bf2b1eb38c8db1505e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
