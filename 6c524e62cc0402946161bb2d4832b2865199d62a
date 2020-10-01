@@ -96,6 +96,30 @@
       "revId": "6c524e62cc0402946161bb2d4832b2865199d62a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15bc029d_d43babe6",
+        "filename": "src/tests/restricted_traces/skia_gold/__init__.py",
+        "patchSetId": 27
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T00:11:26Z",
+      "side": 1,
+      "message": "Done. Thanks for catching, was an artifact of a refactor that got left behind.",
+      "parentUuid": "56c80b93_44c403d0",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 30
+      },
+      "revId": "6c524e62cc0402946161bb2d4832b2865199d62a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
