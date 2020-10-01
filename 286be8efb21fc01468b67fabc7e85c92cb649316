@@ -16,6 +16,23 @@
       "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb7a5486_f1078384",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-01T23:23:36Z",
+      "side": 1,
+      "message": "im a little confused about the order, if adding stencil8 to EGL config depends on availability of support for GLES stencil8 textures, which is the first one that needs to land @jeff?",
+      "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
