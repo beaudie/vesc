@@ -987,6 +987,8 @@ class CommandBufferHelper : angle::NonCopyable
         return mRenderPassStarted;
     }
 
+    void onImageHelperRelease(const vk::ImageHelper *image);
+
     void beginRenderPass(const Framebuffer &framebuffer,
                          const gl::Rectangle &renderArea,
                          const RenderPassDesc &renderPassDesc,
@@ -1317,7 +1319,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                                           GLint samples,
                                                           const ImageHelper &resolveImage);
 
-    void releaseImage(RendererVk *rendererVk);
+    void releaseImage(RendererVk *renderer, ContextVk *contextVk);
     void releaseStagingBuffer(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }

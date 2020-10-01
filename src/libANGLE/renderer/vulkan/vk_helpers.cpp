@@ -872,6 +872,12 @@ void CommandBufferHelper::executeBarriers(ContextVk *contextVk, PrimaryCommandBu
     mPipelineBarrierMask.reset();
 }
 
+void CommandBufferHelper::onImageHelperRelease(const vk::ImageHelper *image)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    // ToDo: b/168953278 We will use this to finalize image layout transition
+}
+
 void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const gl::Rectangle &renderArea,
                                           const RenderPassDesc &renderPassDesc,
@@ -3042,8 +3048,17 @@ angle::Result ImageHelper::initExternal(Context *context,
     return angle::Result::Continue;
 }
 
-void ImageHelper::releaseImage(RendererVk *renderer)
+void ImageHelper::releaseImage(RendererVk *renderer, ContextVk *contextVk)
 {
+    if (contextVk && mImageSerial.valid())
+    {
+        ShareContextSet &shareContextSet = *contextVk->getShareGroupVk()->getShareContextSet();
+        for (auto ctx : shareContextSet)
+        {
+            ctx->onImageHelperRelease(this);
+        }
+    }
+
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
     mImageSerial = kInvalidImageSerial;
 }
@@ -5315,7 +5330,8 @@ void ImageHelper::SubresourceUpdate::release(RendererVk *renderer)
 {
     if (updateSource == UpdateSource::Image)
     {
-        image.image->releaseImage(renderer);
+        // Staging images cant be used in renderpass for other purposes.
+        image.image->releaseImage(renderer, nullptr);
         image.image->releaseStagingBuffer(renderer);
         SafeDelete(image.image);
     }

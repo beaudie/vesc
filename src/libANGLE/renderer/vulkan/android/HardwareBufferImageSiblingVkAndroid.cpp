@@ -313,7 +313,9 @@ void HardwareBufferImageSiblingVkAndroid::release(RendererVk *renderer)
 {
     if (mImage != nullptr)
     {
-        mImage->releaseImage(renderer);
+        // ToDo: We need to handle the case that EGLImage used in two context that aren't shared.
+        // http://b/169868803
+        mImage->releaseImage(renderer, nullptr);
         mImage->releaseStagingBuffer(renderer);
         SafeDelete(mImage);
     }
