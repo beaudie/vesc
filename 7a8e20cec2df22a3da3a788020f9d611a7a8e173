@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "cae763d7_4159bb4d",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-01T23:17:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1e618cd2_69ff5d7a",
+      "range": {
+        "startLine": 231,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 13
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96f6c45f_89ecc586",
         "filename": "src/compiler/translator/ShaderVars.cpp",
         "patchSetId": 2
@@ -688,6 +712,30 @@
     },
     {
       "key": {
+        "uuid": "c7d167e8_892d6b72",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-01T23:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "120b09f8_97099984",
+      "range": {
+        "startLine": 3191,
+        "startChar": 0,
+        "endLine": 3216,
+        "endChar": 1
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33fdbc4e_b68b38b9",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
@@ -827,6 +875,30 @@
       "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45e92c73_902a93ea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-01T23:17:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5323c746_64fc231b",
+      "range": {
+        "startLine": 1125,
+        "startChar": 41,
+        "endLine": 1125,
+        "endChar": 71
+      },
+      "revId": "7a8e20cec2df22a3da3a788020f9d611a7a8e173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
