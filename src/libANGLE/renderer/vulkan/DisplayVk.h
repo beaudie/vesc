@@ -19,10 +19,12 @@ namespace rx
 {
 class RendererVk;
 
+using ShareContextSet = std::set<ContextVk *>;
+
 class ShareGroupVk : public ShareGroupImpl
 {
   public:
-    ShareGroupVk() {}
+    ShareGroupVk() : mShareContextSet() {}
     void onDestroy(const egl::Display *display) override;
 
     // PipelineLayoutCache and DescriptorSetLayoutCache can be shared between multiple threads
@@ -30,6 +32,7 @@ class ShareGroupVk : public ShareGroupImpl
     // synchronous update to the caches.
     PipelineLayoutCache &getPipelineLayoutCache() { return mPipelineLayoutCache; }
     DescriptorSetLayoutCache &getDescriptorSetLayoutCache() { return mDescriptorSetLayoutCache; }
+    ShareContextSet *getShareContextSet() { return &mShareContextSet; }
 
   private:
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
@@ -37,6 +40,9 @@ class ShareGroupVk : public ShareGroupImpl
 
     // DescriptorSetLayouts are also managed in a cache.
     DescriptorSetLayoutCache mDescriptorSetLayoutCache;
+
+    // The list of contexts within the share group
+    ShareContextSet mShareContextSet;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context

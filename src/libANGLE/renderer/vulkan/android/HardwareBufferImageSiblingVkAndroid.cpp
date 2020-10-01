@@ -313,7 +313,7 @@ void HardwareBufferImageSiblingVkAndroid::release(RendererVk *renderer)
 {
     if (mImage != nullptr)
     {
-        mImage->releaseImage(renderer);
+        mImage->releaseImage(renderer, nullptr);
         mImage->releaseStagingBuffer(renderer);
         SafeDelete(mImage);
     }
