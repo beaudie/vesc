@@ -596,6 +596,8 @@ class ContextVk : public ContextImpl, public vk::Context
     // TODO(https://anglebug.com/4968): Support multiple open render passes.
     void restoreFinishedRenderPass(vk::Framebuffer *framebuffer);
 
+    angle::Result endRenderPassIfImageUsed(const vk::ImageHelper &image);
+
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
     angle::Result startRenderPass(gl::Rectangle renderArea, vk::CommandBuffer **commandBufferOut);
     void startNextSubpass();
@@ -934,8 +936,6 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // Pull an available CBH ptr from the CBH queue and set to specified hasRenderPass state
     void getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer, bool hasRenderPass);
-
-    angle::Result endRenderPassIfImageUsed(const vk::ImageHelper &image);
 
     angle::Result endRenderPassIfTransformFeedbackBuffer(const vk::BufferHelper *buffer);
 
