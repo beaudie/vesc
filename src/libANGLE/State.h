@@ -247,6 +247,11 @@ class State : angle::NonCopyable
     void setMultisampling(bool enabled);
     bool isMultisamplingEnabled() const { return mMultiSampling; }
 
+    void setSampleShading(bool enabled);
+    bool isSampleShading() const { return mSampleShading; }
+    void setMinSampleShading(float value);
+    float getMinSampleShading() const { return mMinSampleShading; }
+
     // Scissor test state toggle & query
     bool isScissorTestEnabled() const { return mScissorTest; }
     void setScissorTest(bool enabled);
@@ -642,6 +647,7 @@ class State : angle::NonCopyable
         DIRTY_BIT_CURRENT_VALUES,
         DIRTY_BIT_PROVOKING_VERTEX,
         DIRTY_BIT_EXTENDED,  // clip distances, mipmap generation hint, derivative hint.
+        DIRTY_BIT_SAMPLE_SHADING,
         DIRTY_BIT_INVALID,
         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };
@@ -961,6 +967,8 @@ class State : angle::NonCopyable
     bool mSampleMask;
     GLuint mMaxSampleMaskWords;
     std::array<GLbitfield, MAX_SAMPLE_MASK_WORDS> mSampleMaskValues;
+    bool mSampleShading;
+    float mMinSampleShading;
 
     DepthStencilState mDepthStencil;
     GLint mStencilRef;
