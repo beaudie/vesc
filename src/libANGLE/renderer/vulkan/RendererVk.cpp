@@ -902,7 +902,12 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Initialize the format table.
     mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
 
-    gl::InitializeDebugAnnotations(&mAnnotator);
+    // If the vkCmd*DebugUtilsLabelEXT functions exist, initialize DebugAnnotatorVk to log the
+    // OpenGL ES commands that are used, for debuggers (e.g. AGI).
+    if (vkCmdBeginDebugUtilsLabelEXT)
+    {
+        gl::InitializeDebugAnnotations(&mAnnotator);
+    }
 
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
