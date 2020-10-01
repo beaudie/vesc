@@ -276,7 +276,7 @@ void TextureSamplingMutableFormatBenchmark::initializeBenchmark()
 {
     if (!IsGLExtensionEnabled("GL_EXT_texture_sRGB_override"))
     {
-        FAIL() << "GL_EXT_texture_sRGB_override not supported!" << std::endl;
+        GTEST_SKIP() << "GL_EXT_texture_sRGB_override not supported!" << std::endl;
     }
     TextureSamplingBenchmark::initializeBenchmark();
     initTextures();
