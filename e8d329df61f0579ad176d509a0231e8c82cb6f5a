@@ -22,6 +22,30 @@
       "revId": "e8d329df61f0579ad176d509a0231e8c82cb6f5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26d292e2_e3f3d893",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T00:39:00Z",
+      "side": 1,
+      "message": "Done. CQ is moving fast tonight (20 mins completion on this CL) so not a problem.",
+      "parentUuid": "d9158d5a_b3a2c0bf",
+      "range": {
+        "startLine": 286,
+        "startChar": 15,
+        "endLine": 286,
+        "endChar": 21
+      },
+      "revId": "e8d329df61f0579ad176d509a0231e8c82cb6f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
