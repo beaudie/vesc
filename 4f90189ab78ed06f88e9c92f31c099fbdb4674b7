@@ -67,6 +67,24 @@
       "revId": "4f90189ab78ed06f88e9c92f31c099fbdb4674b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a0544e7_69134d67",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-01T15:42:14Z",
+      "side": 1,
+      "message": "Brandon please add following note as a comment -\n\n// There are multiple ways to obtain an integer value from a float -\n//     floor, ceil and round\n//\n// round() provides a more even distribution of values but doesn\u0027t seem to play well\n// with all vendors (AMD). A way to work around this is to increase the comparison threshold\n// of deqp tests. Though this takes care of deqp tests other apps would still have issues.\n//\n// floor() provides and uneven distribution near the edges of the interval but seems to\n// play well with all vendors.\n//\n// We are going with floor() for expediency.",
+      "parentUuid": "54e01b69_f4752709",
+      "revId": "4f90189ab78ed06f88e9c92f31c099fbdb4674b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
