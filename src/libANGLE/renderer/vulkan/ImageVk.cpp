@@ -34,7 +34,7 @@ void ImageVk::onDestroy(const egl::Display *display)
 
     if (mImage != nullptr && mOwnsImage)
     {
-        mImage->releaseImage(renderer);
+        mImage->releaseImage(renderer, nullptr);
         mImage->releaseStagingBuffer(renderer);
         SafeDelete(mImage);
     }

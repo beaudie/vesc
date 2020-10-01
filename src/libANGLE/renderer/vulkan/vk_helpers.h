@@ -1317,7 +1317,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                                           GLint samples,
                                                           const ImageHelper &resolveImage);
 
-    void releaseImage(RendererVk *rendererVk);
+    void releaseImage(RendererVk *renderer, ShareGroupVk *shareGroupVk);
     void releaseStagingBuffer(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }

@@ -227,7 +227,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 
     if (mImage && mOwnsImage)
     {
-        mImage->releaseImage(renderer);
+        mImage->releaseImage(renderer, contextVk->getShareGroupVk());
         mImage->releaseStagingBuffer(renderer);
     }
     else
@@ -240,7 +240,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 
     if (mMultisampledImage.valid())
     {
-        mMultisampledImage.releaseImage(renderer);
+        mMultisampledImage.releaseImage(renderer, nullptr);
     }
     mMultisampledImageViews.release(renderer);
 }
