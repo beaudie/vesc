@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "463a6d83_89f26b2c",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:04:41Z",
+      "side": 1,
+      "message": "can you make this a virtual method in FramebufferAttachmentObject?",
+      "range": {
+        "startLine": 1597,
+        "startChar": 0,
+        "endLine": 1608,
+        "endChar": 5
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0062b38d_2565c987",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-01T23:04:41Z",
+      "side": 1,
+      "message": "this seems to stick out. will have to think if there\u0027s a way to make this nicer. if you think of a way to merge this into other dirty bit/object handling, that would be welcome.",
+      "range": {
+        "startLine": 3184,
+        "startChar": 0,
+        "endLine": 3186,
+        "endChar": 38
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "455acf8c_9b811d01",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 6
