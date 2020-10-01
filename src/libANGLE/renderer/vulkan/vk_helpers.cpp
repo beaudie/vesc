@@ -3042,8 +3042,21 @@ angle::Result ImageHelper::initExternal(Context *context,
     return angle::Result::Continue;
 }
 
-void ImageHelper::releaseImage(RendererVk *renderer)
+void ImageHelper::releaseImage(RendererVk *renderer, ShareGroupVk *shareGroupVk)
 {
+    if (shareGroupVk && mImageSerial.valid())
+    {
+        ShareContextSet &shareContextSet = *shareGroupVk->getShareContextSet();
+        for (ShareContextSet::iterator ctx = shareContextSet.begin(); ctx != shareContextSet.end();
+             ctx++)
+        {
+            if (ANGLE_UNLIKELY(IsError((*ctx)->endRenderPassIfImageUsed(*this))))
+            {
+                WARN() << "Internal error while closing render pass";
+            }
+        }
+    }
+
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
     mImageSerial = kInvalidImageSerial;
 }
@@ -5315,7 +5328,7 @@ void ImageHelper::SubresourceUpdate::release(RendererVk *renderer)
 {
     if (updateSource == UpdateSource::Image)
     {
-        image.image->releaseImage(renderer);
+        image.image->releaseImage(renderer, nullptr);
         image.image->releaseStagingBuffer(renderer);
         SafeDelete(image.image);
     }
