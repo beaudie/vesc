@@ -119,7 +119,7 @@ class TestSuite
     ~TestSuite();
 
     int run();
-    void onCrashOrTimeout(TestResultType crashOrTimeout);
+    void onCrashOrTimeout(TestResultType resultType);
 
   private:
     bool parseSingleArg(const char *argument);

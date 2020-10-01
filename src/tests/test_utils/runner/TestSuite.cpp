@@ -944,7 +944,7 @@ TestSuite::TestSuite(int *argc, char **argv)
         mResultsFile = resultFileName.str();
     }
 
-    if (!mResultsFile.empty() || !mHistogramJsonFile.empty())
+    if (!mBotMode)
     {
         testing::TestEventListeners &listeners = testing::UnitTest::GetInstance()->listeners();
         listeners.Append(new TestEventListener(mResultsFile, mHistogramJsonFile,
@@ -985,12 +985,13 @@ bool TestSuite::parseSingleArg(const char *argument)
             ParseFlag("--debug-test-groups", argument, &mDebugTestGroups));
 }
 
-void TestSuite::onCrashOrTimeout(TestResultType crashOrTimeout)
+void TestSuite::onCrashOrTimeout(TestResultType resultType)
 {
+    std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
     if (mTestResults.currentTest.valid())
     {
         TestResult &result        = mTestResults.results[mTestResults.currentTest];
-        result.type               = crashOrTimeout;
+        result.type               = resultType;
         result.elapsedTimeSeconds = mTestResults.currentTestTimer.getElapsedTime();
     }
 
@@ -1191,12 +1192,7 @@ int TestSuite::run()
             mTestResults.allDone = true;
         }
 
-        for (int tries = 0; tries < 10; ++tries)
-        {
-            if (!mWatchdogThread.joinable())
-                break;
-            angle::Sleep(100);
-        }
+        mWatchdogThread.join();
         return retVal;
     }
 
@@ -1333,16 +1329,17 @@ void TestSuite::startWatchdog()
                 if (mTestResults.currentTestTimer.getElapsedTime() >
                     static_cast<double>(mTestTimeout))
                 {
-                    onCrashOrTimeout(TestResultType::Timeout);
-                    exit(2);
+                    break;
                 }
 
                 if (mTestResults.allDone)
                     return;
             }
 
-            angle::Sleep(1000);
+            angle::Sleep(500);
         } while (true);
+        onCrashOrTimeout(TestResultType::Timeout);
+        std::quick_exit(1);
     };
     mWatchdogThread = std::thread(watchdogMain);
 }
