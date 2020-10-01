@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1d1d3c36_7c9e15f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-01T15:26:49Z",
+      "side": 1,
+      "message": "LGTM with the last couple fixups mentioned!\n\nThis is awesome, we finally have a nicely refactored renderer string generation that is parsable. ",
+      "revId": "c829f1c3558809ed4714bf2b1eb38c8db1505e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0ebbb93_2c09c028",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 14
