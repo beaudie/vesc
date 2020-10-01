@@ -793,6 +793,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
         ANGLE_VK_TRY(displayVk, vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, nullptr,
                                                                &mDebugUtilsMessenger));
+
+        // Only use DebugAnnotatorVk if EXT_debug_utils exists.
+        gl::InitializeDebugAnnotations(&mAnnotator);
     }
     else if (enableDebugReport)
     {
@@ -901,8 +904,6 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     // Initialize the format table.
     mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
-
-    gl::InitializeDebugAnnotations(&mAnnotator);
 
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
