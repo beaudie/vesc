@@ -16,6 +16,98 @@
       "revId": "bc7427b993de4459c27455bf3549e602591a06e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fac13e36_de4a468a",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-01T20:01:12Z",
+      "side": 1,
+      "message": "It\u0027s fine for the one that needs to be changed, but this can be std::array.",
+      "range": {
+        "startLine": 54,
+        "startChar": 15,
+        "endLine": 54,
+        "endChar": 21
+      },
+      "revId": "bc7427b993de4459c27455bf3549e602591a06e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "154bc4d8_700e896f",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-01T20:01:12Z",
+      "side": 1,
+      "message": "Use ArraySize(egl_vk::kConfigDepthStencilFormats) instead.",
+      "range": {
+        "startLine": 59,
+        "startChar": 12,
+        "endLine": 59,
+        "endChar": 73
+      },
+      "revId": "bc7427b993de4459c27455bf3549e602591a06e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44949ea7_f5ed771c",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-01T20:01:12Z",
+      "side": 1,
+      "message": "Same comments",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 75
+      },
+      "revId": "bc7427b993de4459c27455bf3549e602591a06e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59187a16_d70df644",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/DisplayVkXcb.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-01T20:01:12Z",
+      "side": 1,
+      "message": "Same comments",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 75
+      },
+      "revId": "bc7427b993de4459c27455bf3549e602591a06e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
