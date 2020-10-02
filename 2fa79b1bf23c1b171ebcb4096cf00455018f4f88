@@ -16,6 +16,207 @@
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ddde7a6a_1e3e55d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "Please separate out the performance counter changes from the invalidated attachment code.\n\nWhile being able to skip storing resolve attachments improves performance, these counters feel a lot more like white box testing than performance counter testing.   Incrementing counters is relatively cheap, but all of that branching will start to add up.\n\nAlso, CC\u0027ing Courntey since this touches some manual Serial tracking code, which will need to be fixed as part of the threading work.",
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fe3be54_cac2ee5a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "nit: it is set",
+      "range": {
+        "startLine": 188,
+        "startChar": 67,
+        "endLine": 188,
+        "endChar": 83
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb4e99f0_79b64967",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "Why don\u0027t these use the same ternary operator pattern as above?",
+      "range": {
+        "startLine": 828,
+        "startChar": 0,
+        "endLine": 837,
+        "endChar": 5
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b934f456_9dac46cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "Are you referring to there not being any perf tests that verify the counts match expected values?   Or that no one is using them to do performance tuning?\n\nRegardless, it seems like we should try and make these accurate, or at least open a bug to track fixing them, so we don\u0027t lead anyone down a bad path with inaccurate data.",
+      "range": {
+        "startLine": 854,
+        "startChar": 28,
+        "endLine": 855,
+        "endChar": 46
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0827634_47cbbb96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "Why are we coupling color and D/S when checking if we can remove a resolve attachment?   Why do we need to keep the D/S resolve attachment to handle unresolving a color attachment (and vice-versa)?",
+      "range": {
+        "startLine": 917,
+        "startChar": 0,
+        "endLine": 919,
+        "endChar": 70
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceb5f541_15c3601a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1036,
+        "startChar": 11,
+        "endLine": 1036,
+        "endChar": 17
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b2419e0_1cdb29f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "nit: can",
+      "range": {
+        "startLine": 1190,
+        "startChar": 64,
+        "endLine": 1190,
+        "endChar": 69
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "880e2a00_8c032124",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "nit: swap to match the others",
+      "range": {
+        "startLine": 791,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 44
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98495a3f_fd2b3cb5",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1697,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T00:31:15Z",
+      "side": 1,
+      "message": "Can you explain where all of these counts come from?   We can see what you\u0027re expecting, but that doesn\u0027t help debug how you got to those values if there\u0027s an error in the future.",
+      "range": {
+        "startLine": 1692,
+        "startChar": 0,
+        "endLine": 1697,
+        "endChar": 86
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
