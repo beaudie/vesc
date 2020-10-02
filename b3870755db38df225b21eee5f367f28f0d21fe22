@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc9ae9d7_26a9fc39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-02T18:47:46Z",
+      "side": 1,
+      "message": "I wish we\u0027d run each backend in its own test suite.\nWould make it simpler to re-enable this when we qualify new AMD card (different set of suites for old and new builders).",
+      "revId": "b3870755db38df225b21eee5f367f28f0d21fe22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
