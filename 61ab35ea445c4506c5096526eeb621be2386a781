@@ -111,6 +111,30 @@
       "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d022c0c4_3cc42329",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T15:47:11Z",
+      "side": 1,
+      "message": "FYI, there could be a situation where mRenderPassCommands-\u003estarted() but mRenderPassCommandBuffer \u003d\u003d nullptr. That\u0027s when UtilsVk starts a render pass.",
+      "parentUuid": "2c334362_a1ae6913",
+      "range": {
+        "startLine": 2691,
+        "startChar": 0,
+        "endLine": 2695,
+        "endChar": 0
+      },
+      "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
