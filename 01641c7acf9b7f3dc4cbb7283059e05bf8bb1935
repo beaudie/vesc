@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f77300f8_8999cd94",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T16:49:18Z",
+      "side": 1,
+      "message": "Should this be moved into GraphicsPipelineDesc::initDefaults() so everyone gets the right subpass?\n\nThere are a few other UtilsVk functions that define their own GraphicsPipelineDesc:\n\nFunction::BlitResolve\nFunction::ImageCopy\nFunction::Unresolve1Attachment\n\nThe blit and unresolve functions probably won\u0027t/can\u0027t happen with MSRTT, but I\u0027m not sure about ImageCopy needing a similar fix.",
+      "revId": "01641c7acf9b7f3dc4cbb7283059e05bf8bb1935",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
