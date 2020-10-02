@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a5e5756_a7d55bb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T21:07:04Z",
+      "side": 1,
+      "message": "Thanks Jonah.",
+      "revId": "d4eddd5f2261eaef70a1aca514df6be44c144f29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e85416c8_b701df0b",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T21:07:04Z",
+      "side": 1,
+      "message": "nit: wrap 100\n\nAlso please mention these tests are extremely flaky right now so a WontFix resolution is often appropriate.",
+      "range": {
+        "startLine": 148,
+        "startChar": 32,
+        "endLine": 148,
+        "endChar": 103
+      },
+      "revId": "d4eddd5f2261eaef70a1aca514df6be44c144f29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
