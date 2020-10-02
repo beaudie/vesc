@@ -33,6 +33,41 @@
       "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d11fdeae_ab1191e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-02T00:11:27Z",
+      "side": 1,
+      "message": "The OES_stencil_index8 extension will cause dEQP-GLES31.functional.stencil_texturing.format.stencil_index8_2d to be tested. However this test will try to create a EGL Surface with config stencil8 and fail. So the EGL configs must come first otherwise the extension commit will not land.",
+      "parentUuid": "cb7a5486_f1078384",
+      "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4eda0a3_c53be30e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-02T00:11:27Z",
+      "side": 1,
+      "message": "Ready for land",
+      "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
