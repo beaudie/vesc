@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aff51b88_229e53b8",
+        "filename": "include/platform/FrontendFeatures.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-02T18:05:35Z",
+      "side": 1,
+      "message": "Done. Good call on the 1/8 faction, especially since 0.1 isn\u0027t representable in float.\n\nThe precision issues are really only an issue for some of our tests that use MAX_INT viewports so I\u0027m not sure it\u0027s a big deal.",
+      "parentUuid": "d94595ee_766a58a0",
+      "range": {
+        "startLine": 75,
+        "startChar": 94,
+        "endLine": 75,
+        "endChar": 96
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "463a6d83_89f26b2c",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "160f8536_9b55de8d",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-02T18:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "463a6d83_89f26b2c",
+      "range": {
+        "startLine": 1597,
+        "startChar": 0,
+        "endLine": 1608,
+        "endChar": 5
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "13dfac2d_d7015d30",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-02T18:05:35Z",
+      "side": 1,
+      "message": "I\u0027m not sure of a better place to put it yet, this is the generic callback for a changed framebuffer binding or framebuffer state, right?\n\nI\u0027m not too keen on a new dirty bit for something like this.",
+      "parentUuid": "0062b38d_2565c987",
+      "range": {
+        "startLine": 3184,
+        "startChar": 0,
+        "endLine": 3186,
+        "endChar": 38
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "455acf8c_9b811d01",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 6
@@ -85,6 +157,24 @@
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53a0fd0f_2597b9ff",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-02T18:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "455acf8c_9b811d01",
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
