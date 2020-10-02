@@ -30,7 +30,7 @@ namespace gl
 void GL_APIENTRY ActiveTexture(GLenum texture)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glActiveTexture", "context = %d, GLenum texture = %s", CID(context),
+    EVENT("glActiveTexture", "context = %d, GLenum texture = %s", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, texture));
 
     if (context)
@@ -48,7 +48,7 @@ void GL_APIENTRY ActiveTexture(GLenum texture)
 void GL_APIENTRY ClientActiveTexture(GLenum texture)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glClientActiveTexture", "context = %d, GLenum texture = %s", CID(context),
+    EVENT("glClientActiveTexture", "context = %d, GLenum texture = %s", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, texture));
 
     if (context)
@@ -73,7 +73,7 @@ void GL_APIENTRY CompressedTexImage1D(GLenum target,
                                       const void *data)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glCompressedTexImage1D",
+    EVENT("glCompressedTexImage1D",
           "context = %d, GLenum target = %s, GLint level = %d, GLenum internalformat = %s, GLsizei "
           "width = %d, GLint border = %d, GLsizei imageSize = %d, const void *data = 0x%016" PRIxPTR
           "",
@@ -107,7 +107,7 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target,
                                       const void *data)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glCompressedTexImage2D",
+    EVENT("glCompressedTexImage2D",
           "context = %d, GLenum target = %s, GLint level = %d, GLenum internalformat = %s, GLsizei "
           "width = %d, GLsizei height = %d, GLint border = %d, GLsizei imageSize = %d, const void "
           "*data = 0x%016" PRIxPTR "",
@@ -144,7 +144,7 @@ void GL_APIENTRY CompressedTexImage3D(GLenum target,
                                       const void *data)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glCompressedTexImage3D",
+    EVENT("glCompressedTexImage3D",
           "context = %d, GLenum target = %s, GLint level = %d, GLenum internalformat = %s, GLsizei "
           "width = %d, GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLsizei "
           "imageSize = %d, const void *data = 0x%016" PRIxPTR "",
@@ -179,7 +179,7 @@ void GL_APIENTRY CompressedTexSubImage1D(GLenum target,
                                          const void *data)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glCompressedTexSubImage1D",
+    EVENT("glCompressedTexSubImage1D",
           "context = %d, GLenum target = %s, GLint level = %d, GLint xoffset = %d, GLsizei width = "
           "%d, GLenum format = %s, GLsizei imageSize = %d, const void *data = 0x%016" PRIxPTR "",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset, width,
@@ -212,7 +212,7 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target,
                                          const void *data)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glCompressedTexSubImage2D",
+    EVENT("glCompressedTexSubImage2D",
           "context = %d, GLenum target = %s, GLint level = %d, GLint xoffset = %d, GLint yoffset = "
           "%d, GLsizei width = %d, GLsizei height = %d, GLenum format = %s, GLsizei imageSize = "
           "%d, const void *data = 0x%016" PRIxPTR "",
@@ -251,7 +251,7 @@ void GL_APIENTRY CompressedTexSubImage3D(GLenum target,
                                          const void *data)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glCompressedTexSubImage3D",
+    EVENT("glCompressedTexSubImage3D",
           "context = %d, GLenum target = %s, GLint level = %d, GLint xoffset = %d, GLint yoffset = "
           "%d, GLint zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, "
           "GLenum format = %s, GLsizei imageSize = %d, const void *data = 0x%016" PRIxPTR "",
@@ -280,7 +280,7 @@ void GL_APIENTRY CompressedTexSubImage3D(GLenum target,
 void GL_APIENTRY GetCompressedTexImage(GLenum target, GLint level, void *img)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glGetCompressedTexImage",
+    EVENT("glGetCompressedTexImage",
           "context = %d, GLenum target = %s, GLint level = %d, void *img = 0x%016" PRIxPTR "",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, (uintptr_t)img);
 
@@ -300,7 +300,7 @@ void GL_APIENTRY GetCompressedTexImage(GLenum target, GLint level, void *img)
 void GL_APIENTRY LoadTransposeMatrixd(const GLdouble *m)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glLoadTransposeMatrixd", "context = %d, const GLdouble *m = 0x%016" PRIxPTR "",
+    EVENT("glLoadTransposeMatrixd", "context = %d, const GLdouble *m = 0x%016" PRIxPTR "",
           CID(context), (uintptr_t)m);
 
     if (context)
@@ -318,7 +318,7 @@ void GL_APIENTRY LoadTransposeMatrixd(const GLdouble *m)
 void GL_APIENTRY LoadTransposeMatrixf(const GLfloat *m)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glLoadTransposeMatrixf", "context = %d, const GLfloat *m = 0x%016" PRIxPTR "",
+    EVENT("glLoadTransposeMatrixf", "context = %d, const GLfloat *m = 0x%016" PRIxPTR "",
           CID(context), (uintptr_t)m);
 
     if (context)
@@ -336,7 +336,7 @@ void GL_APIENTRY LoadTransposeMatrixf(const GLfloat *m)
 void GL_APIENTRY MultTransposeMatrixd(const GLdouble *m)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultTransposeMatrixd", "context = %d, const GLdouble *m = 0x%016" PRIxPTR "",
+    EVENT("glMultTransposeMatrixd", "context = %d, const GLdouble *m = 0x%016" PRIxPTR "",
           CID(context), (uintptr_t)m);
 
     if (context)
@@ -354,7 +354,7 @@ void GL_APIENTRY MultTransposeMatrixd(const GLdouble *m)
 void GL_APIENTRY MultTransposeMatrixf(const GLfloat *m)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultTransposeMatrixf", "context = %d, const GLfloat *m = 0x%016" PRIxPTR "",
+    EVENT("glMultTransposeMatrixf", "context = %d, const GLfloat *m = 0x%016" PRIxPTR "",
           CID(context), (uintptr_t)m);
 
     if (context)
@@ -372,8 +372,8 @@ void GL_APIENTRY MultTransposeMatrixf(const GLfloat *m)
 void GL_APIENTRY MultiTexCoord1d(GLenum target, GLdouble s)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1d", "context = %d, GLenum target = %s, GLdouble s = %f",
-          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s);
+    EVENT("glMultiTexCoord1d", "context = %d, GLenum target = %s, GLdouble s = %f", CID(context),
+          GLenumToString(GLenumGroup::TextureUnit, target), s);
 
     if (context)
     {
@@ -391,7 +391,7 @@ void GL_APIENTRY MultiTexCoord1d(GLenum target, GLdouble s)
 void GL_APIENTRY MultiTexCoord1dv(GLenum target, const GLdouble *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1dv",
+    EVENT("glMultiTexCoord1dv",
           "context = %d, GLenum target = %s, const GLdouble *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -411,8 +411,8 @@ void GL_APIENTRY MultiTexCoord1dv(GLenum target, const GLdouble *v)
 void GL_APIENTRY MultiTexCoord1f(GLenum target, GLfloat s)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1f", "context = %d, GLenum target = %s, GLfloat s = %f",
-          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s);
+    EVENT("glMultiTexCoord1f", "context = %d, GLenum target = %s, GLfloat s = %f", CID(context),
+          GLenumToString(GLenumGroup::TextureUnit, target), s);
 
     if (context)
     {
@@ -430,7 +430,7 @@ void GL_APIENTRY MultiTexCoord1f(GLenum target, GLfloat s)
 void GL_APIENTRY MultiTexCoord1fv(GLenum target, const GLfloat *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1fv",
+    EVENT("glMultiTexCoord1fv",
           "context = %d, GLenum target = %s, const GLfloat *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -450,8 +450,8 @@ void GL_APIENTRY MultiTexCoord1fv(GLenum target, const GLfloat *v)
 void GL_APIENTRY MultiTexCoord1i(GLenum target, GLint s)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1i", "context = %d, GLenum target = %s, GLint s = %d",
-          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s);
+    EVENT("glMultiTexCoord1i", "context = %d, GLenum target = %s, GLint s = %d", CID(context),
+          GLenumToString(GLenumGroup::TextureUnit, target), s);
 
     if (context)
     {
@@ -469,7 +469,7 @@ void GL_APIENTRY MultiTexCoord1i(GLenum target, GLint s)
 void GL_APIENTRY MultiTexCoord1iv(GLenum target, const GLint *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1iv",
+    EVENT("glMultiTexCoord1iv",
           "context = %d, GLenum target = %s, const GLint *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -489,8 +489,8 @@ void GL_APIENTRY MultiTexCoord1iv(GLenum target, const GLint *v)
 void GL_APIENTRY MultiTexCoord1s(GLenum target, GLshort s)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1s", "context = %d, GLenum target = %s, GLshort s = %d",
-          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s);
+    EVENT("glMultiTexCoord1s", "context = %d, GLenum target = %s, GLshort s = %d", CID(context),
+          GLenumToString(GLenumGroup::TextureUnit, target), s);
 
     if (context)
     {
@@ -508,7 +508,7 @@ void GL_APIENTRY MultiTexCoord1s(GLenum target, GLshort s)
 void GL_APIENTRY MultiTexCoord1sv(GLenum target, const GLshort *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord1sv",
+    EVENT("glMultiTexCoord1sv",
           "context = %d, GLenum target = %s, const GLshort *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -528,9 +528,8 @@ void GL_APIENTRY MultiTexCoord1sv(GLenum target, const GLshort *v)
 void GL_APIENTRY MultiTexCoord2d(GLenum target, GLdouble s, GLdouble t)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2d",
-          "context = %d, GLenum target = %s, GLdouble s = %f, GLdouble t = %f", CID(context),
-          GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+    EVENT("glMultiTexCoord2d", "context = %d, GLenum target = %s, GLdouble s = %f, GLdouble t = %f",
+          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
 
     if (context)
     {
@@ -548,7 +547,7 @@ void GL_APIENTRY MultiTexCoord2d(GLenum target, GLdouble s, GLdouble t)
 void GL_APIENTRY MultiTexCoord2dv(GLenum target, const GLdouble *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2dv",
+    EVENT("glMultiTexCoord2dv",
           "context = %d, GLenum target = %s, const GLdouble *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -568,9 +567,8 @@ void GL_APIENTRY MultiTexCoord2dv(GLenum target, const GLdouble *v)
 void GL_APIENTRY MultiTexCoord2f(GLenum target, GLfloat s, GLfloat t)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2f",
-          "context = %d, GLenum target = %s, GLfloat s = %f, GLfloat t = %f", CID(context),
-          GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+    EVENT("glMultiTexCoord2f", "context = %d, GLenum target = %s, GLfloat s = %f, GLfloat t = %f",
+          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
 
     if (context)
     {
@@ -588,7 +586,7 @@ void GL_APIENTRY MultiTexCoord2f(GLenum target, GLfloat s, GLfloat t)
 void GL_APIENTRY MultiTexCoord2fv(GLenum target, const GLfloat *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2fv",
+    EVENT("glMultiTexCoord2fv",
           "context = %d, GLenum target = %s, const GLfloat *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -608,9 +606,8 @@ void GL_APIENTRY MultiTexCoord2fv(GLenum target, const GLfloat *v)
 void GL_APIENTRY MultiTexCoord2i(GLenum target, GLint s, GLint t)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2i",
-          "context = %d, GLenum target = %s, GLint s = %d, GLint t = %d", CID(context),
-          GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+    EVENT("glMultiTexCoord2i", "context = %d, GLenum target = %s, GLint s = %d, GLint t = %d",
+          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
 
     if (context)
     {
@@ -628,7 +625,7 @@ void GL_APIENTRY MultiTexCoord2i(GLenum target, GLint s, GLint t)
 void GL_APIENTRY MultiTexCoord2iv(GLenum target, const GLint *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2iv",
+    EVENT("glMultiTexCoord2iv",
           "context = %d, GLenum target = %s, const GLint *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -648,9 +645,8 @@ void GL_APIENTRY MultiTexCoord2iv(GLenum target, const GLint *v)
 void GL_APIENTRY MultiTexCoord2s(GLenum target, GLshort s, GLshort t)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2s",
-          "context = %d, GLenum target = %s, GLshort s = %d, GLshort t = %d", CID(context),
-          GLenumToString(GLenumGroup::TextureUnit, target), s, t);
+    EVENT("glMultiTexCoord2s", "context = %d, GLenum target = %s, GLshort s = %d, GLshort t = %d",
+          CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t);
 
     if (context)
     {
@@ -668,7 +664,7 @@ void GL_APIENTRY MultiTexCoord2s(GLenum target, GLshort s, GLshort t)
 void GL_APIENTRY MultiTexCoord2sv(GLenum target, const GLshort *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord2sv",
+    EVENT("glMultiTexCoord2sv",
           "context = %d, GLenum target = %s, const GLshort *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -688,7 +684,7 @@ void GL_APIENTRY MultiTexCoord2sv(GLenum target, const GLshort *v)
 void GL_APIENTRY MultiTexCoord3d(GLenum target, GLdouble s, GLdouble t, GLdouble r)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3d",
+    EVENT("glMultiTexCoord3d",
           "context = %d, GLenum target = %s, GLdouble s = %f, GLdouble t = %f, GLdouble r = %f",
           CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
 
@@ -708,7 +704,7 @@ void GL_APIENTRY MultiTexCoord3d(GLenum target, GLdouble s, GLdouble t, GLdouble
 void GL_APIENTRY MultiTexCoord3dv(GLenum target, const GLdouble *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3dv",
+    EVENT("glMultiTexCoord3dv",
           "context = %d, GLenum target = %s, const GLdouble *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -728,7 +724,7 @@ void GL_APIENTRY MultiTexCoord3dv(GLenum target, const GLdouble *v)
 void GL_APIENTRY MultiTexCoord3f(GLenum target, GLfloat s, GLfloat t, GLfloat r)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3f",
+    EVENT("glMultiTexCoord3f",
           "context = %d, GLenum target = %s, GLfloat s = %f, GLfloat t = %f, GLfloat r = %f",
           CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
 
@@ -748,7 +744,7 @@ void GL_APIENTRY MultiTexCoord3f(GLenum target, GLfloat s, GLfloat t, GLfloat r)
 void GL_APIENTRY MultiTexCoord3fv(GLenum target, const GLfloat *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3fv",
+    EVENT("glMultiTexCoord3fv",
           "context = %d, GLenum target = %s, const GLfloat *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -768,7 +764,7 @@ void GL_APIENTRY MultiTexCoord3fv(GLenum target, const GLfloat *v)
 void GL_APIENTRY MultiTexCoord3i(GLenum target, GLint s, GLint t, GLint r)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3i",
+    EVENT("glMultiTexCoord3i",
           "context = %d, GLenum target = %s, GLint s = %d, GLint t = %d, GLint r = %d",
           CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
 
@@ -788,7 +784,7 @@ void GL_APIENTRY MultiTexCoord3i(GLenum target, GLint s, GLint t, GLint r)
 void GL_APIENTRY MultiTexCoord3iv(GLenum target, const GLint *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3iv",
+    EVENT("glMultiTexCoord3iv",
           "context = %d, GLenum target = %s, const GLint *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -808,7 +804,7 @@ void GL_APIENTRY MultiTexCoord3iv(GLenum target, const GLint *v)
 void GL_APIENTRY MultiTexCoord3s(GLenum target, GLshort s, GLshort t, GLshort r)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3s",
+    EVENT("glMultiTexCoord3s",
           "context = %d, GLenum target = %s, GLshort s = %d, GLshort t = %d, GLshort r = %d",
           CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r);
 
@@ -828,7 +824,7 @@ void GL_APIENTRY MultiTexCoord3s(GLenum target, GLshort s, GLshort t, GLshort r)
 void GL_APIENTRY MultiTexCoord3sv(GLenum target, const GLshort *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord3sv",
+    EVENT("glMultiTexCoord3sv",
           "context = %d, GLenum target = %s, const GLshort *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -848,7 +844,7 @@ void GL_APIENTRY MultiTexCoord3sv(GLenum target, const GLshort *v)
 void GL_APIENTRY MultiTexCoord4d(GLenum target, GLdouble s, GLdouble t, GLdouble r, GLdouble q)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord4d",
+    EVENT("glMultiTexCoord4d",
           "context = %d, GLenum target = %s, GLdouble s = %f, GLdouble t = %f, GLdouble r = %f, "
           "GLdouble q = %f",
           CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
@@ -869,7 +865,7 @@ void GL_APIENTRY MultiTexCoord4d(GLenum target, GLdouble s, GLdouble t, GLdouble
 void GL_APIENTRY MultiTexCoord4dv(GLenum target, const GLdouble *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord4dv",
+    EVENT("glMultiTexCoord4dv",
           "context = %d, GLenum target = %s, const GLdouble *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -889,7 +885,7 @@ void GL_APIENTRY MultiTexCoord4dv(GLenum target, const GLdouble *v)
 void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord4f",
+    EVENT("glMultiTexCoord4f",
           "context = %d, GLenum target = %s, GLfloat s = %f, GLfloat t = %f, GLfloat r = %f, "
           "GLfloat q = %f",
           CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
@@ -910,7 +906,7 @@ void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r,
 void GL_APIENTRY MultiTexCoord4fv(GLenum target, const GLfloat *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord4fv",
+    EVENT("glMultiTexCoord4fv",
           "context = %d, GLenum target = %s, const GLfloat *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -931,7 +927,7 @@ void GL_APIENTRY MultiTexCoord4i(GLenum target, GLint s, GLint t, GLint r, GLint
 {
     Context *context = GetValidGlobalContext();
     EVENT(
-        context, "glMultiTexCoord4i",
+        "glMultiTexCoord4i",
         "context = %d, GLenum target = %s, GLint s = %d, GLint t = %d, GLint r = %d, GLint q = %d",
         CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
 
@@ -951,7 +947,7 @@ void GL_APIENTRY MultiTexCoord4i(GLenum target, GLint s, GLint t, GLint r, GLint
 void GL_APIENTRY MultiTexCoord4iv(GLenum target, const GLint *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord4iv",
+    EVENT("glMultiTexCoord4iv",
           "context = %d, GLenum target = %s, const GLint *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -971,7 +967,7 @@ void GL_APIENTRY MultiTexCoord4iv(GLenum target, const GLint *v)
 void GL_APIENTRY MultiTexCoord4s(GLenum target, GLshort s, GLshort t, GLshort r, GLshort q)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord4s",
+    EVENT("glMultiTexCoord4s",
           "context = %d, GLenum target = %s, GLshort s = %d, GLshort t = %d, GLshort r = %d, "
           "GLshort q = %d",
           CID(context), GLenumToString(GLenumGroup::TextureUnit, target), s, t, r, q);
@@ -992,7 +988,7 @@ void GL_APIENTRY MultiTexCoord4s(GLenum target, GLshort s, GLshort t, GLshort r,
 void GL_APIENTRY MultiTexCoord4sv(GLenum target, const GLshort *v)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glMultiTexCoord4sv",
+    EVENT("glMultiTexCoord4sv",
           "context = %d, GLenum target = %s, const GLshort *v = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::TextureUnit, target), (uintptr_t)v);
 
@@ -1012,7 +1008,7 @@ void GL_APIENTRY MultiTexCoord4sv(GLenum target, const GLshort *v)
 void GL_APIENTRY SampleCoverage(GLfloat value, GLboolean invert)
 {
     Context *context = GetValidGlobalContext();
-    EVENT(context, "glSampleCoverage", "context = %d, GLfloat value = %f, GLboolean invert = %s",
+    EVENT("glSampleCoverage", "context = %d, GLfloat value = %f, GLboolean invert = %s",
           CID(context), value, GLbooleanToString(invert));
 
     if (context)
