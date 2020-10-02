@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e30efdd0_9228fab7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T13:25:09Z",
+      "side": 1,
+      "message": "Thanks for splitting off the counters. That one needs a bit more thought than the fixes.",
+      "revId": "665882918b9b209b9ff651d1cf85a1ae22123698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
