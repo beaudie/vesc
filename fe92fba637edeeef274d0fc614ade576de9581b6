@@ -16,6 +16,46 @@
       "revId": "fe92fba637edeeef274d0fc614ade576de9581b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f82e8e27_7d7dbcb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T21:54:21Z",
+      "side": 1,
+      "message": "Nice test! re-LGTM.",
+      "revId": "fe92fba637edeeef274d0fc614ade576de9581b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9fcc25a_cfe6799c",
+        "filename": "src/tests/gl_tests/BlendIntegerTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T21:54:21Z",
+      "side": 1,
+      "message": "nit: please use http://anglebug.com/### for the skip comments.",
+      "range": {
+        "startLine": 309,
+        "startChar": 6,
+        "endLine": 309,
+        "endChar": 42
+      },
+      "revId": "fe92fba637edeeef274d0fc614ade576de9581b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
