@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc739593_c031b613",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T01:03:20Z",
+      "side": 1,
+      "message": "1 line fix, 400 lines of tests. Nice.",
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7bcb686f_b0573117",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2655,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T01:03:20Z",
+      "side": 1,
+      "message": "Can this be inlined in the header?",
+      "range": {
+        "startLine": 2652,
+        "startChar": 0,
+        "endLine": 2655,
+        "endChar": 1
+      },
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76585f7d_7d37a90e",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T01:03:20Z",
+      "side": 1,
+      "message": "Missing a glClearColor()?",
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0fabcd6_abbded30",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T01:03:20Z",
+      "side": 1,
+      "message": "Why?   What\u0027s being unresolved if it\u0027s the first draw?",
+      "range": {
+        "startLine": 1536,
+        "startChar": 94,
+        "endLine": 1537,
+        "endChar": 45
+      },
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0772a17_503d52e8",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T01:03:20Z",
+      "side": 1,
+      "message": "How does this add another mip to the texture?   It looks like they\u0027re both level 0 and the same size.",
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
