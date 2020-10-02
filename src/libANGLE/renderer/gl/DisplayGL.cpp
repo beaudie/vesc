@@ -22,12 +22,15 @@
 namespace rx
 {
 
-DisplayGL::DisplayGL(const egl::DisplayState &state) : DisplayImpl(state) {}
+DisplayGL::DisplayGL(const egl::DisplayState &state) : DisplayImpl(state), mDisplay(nullptr) {}
 
 DisplayGL::~DisplayGL() {}
 
 egl::Error DisplayGL::initialize(egl::Display *display)
 {
+    // Keep a pointer to, for installing the global DebugAnnotator
+    mDisplay = display;
+
     return egl::NoError();
 }
 
@@ -59,6 +62,13 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface,
                                   egl::Surface *readSurface,
                                   gl::Context *context)
 {
+    if (mDisplay)
+    {
+        // Ensure that the correct global DebugAnnotator is installed when the end2end tests change
+        // the ANGLE back-end (done frequently).
+        mDisplay->setGlobalDebugAnnotator();
+    }
+
     if (!context)
     {
         return egl::NoError();

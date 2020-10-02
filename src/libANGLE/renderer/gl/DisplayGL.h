@@ -54,6 +54,9 @@ class DisplayGL : public DisplayImpl
 
   private:
     virtual egl::Error makeCurrentSurfaceless(gl::Context *context);
+
+    // Keep a pointer to, for installing the global DebugAnnotator
+    egl::Display *mDisplay;
 };
 
 }  // namespace rx

@@ -786,7 +786,7 @@ Error Display::initialize()
         mBlobCache.resize(1024 * 1024);
     }
 
-    gl::InitializeDebugAnnotations(&mAnnotator);
+    setGlobalDebugAnnotator();
 
     gl::InitializeDebugMutexIfNeeded();
 
