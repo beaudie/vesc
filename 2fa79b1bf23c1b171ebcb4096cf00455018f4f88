@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7daa7c41_9768f5ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T05:21:29Z",
+      "side": 1,
+      "message": "Broke the change in 4. Haven\u0027t got around to addressing the comments yet.\n\n\u003e Incrementing counters is relatively cheap, but all of that branching will start to add up.\n\nWhich is why I was hoping to compile them out for the end user. Without the counters, it\u0027s kind of hard to verify this change. I guess just looking at load/store ops we can have _some_ confidence in it.\n\nI could remove those counters if that\u0027s how everyone feels towards this.",
+      "parentUuid": "ddde7a6a_1e3e55d5",
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fe3be54_cac2ee5a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
