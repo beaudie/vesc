@@ -16,6 +16,24 @@
       "revId": "c488f0c909e256c68962c3f098199228696aaef1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6367254e_98e55e09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T21:17:57Z",
+      "side": 1,
+      "message": "We don\u0027t have plans to support Win/GL for any of our customers. So I don\u0027t have a mandate to investigate unless it\u0027s necessary to keep the bot green. The test is stable except for this one failure so I figured it would be safe to suppress. WDYT?",
+      "parentUuid": "20f84546_702a20d4",
+      "revId": "c488f0c909e256c68962c3f098199228696aaef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
