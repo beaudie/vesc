@@ -235,7 +235,8 @@ void DisplayCGL::terminate()
     }
 }
 
-egl::Error DisplayCGL::makeCurrent(egl::Surface *drawSurface,
+egl::Error DisplayCGL::makeCurrent(egl::Display *display,
+                                   egl::Surface *drawSurface,
                                    egl::Surface *readSurface,
                                    gl::Context *context)
 {
