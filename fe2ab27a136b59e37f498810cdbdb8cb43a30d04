@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d07215b_589c6c90",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T05:28:13Z",
+      "side": 1,
+      "message": "This looks too far up now, but will end up here in the next change either way.",
+      "revId": "fe2ab27a136b59e37f498810cdbdb8cb43a30d04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
