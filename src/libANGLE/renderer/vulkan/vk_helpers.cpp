@@ -927,11 +927,13 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     // First, if the attachment is invalidated, skip the store op.
     if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
     {
-        dsOps.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.storeOp       = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.isInvalidated = true;
     }
     if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled))
     {
-        dsOps.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.stencilStoreOp       = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.isStencilInvalidated = true;
     }
 
     // Second, if we are loading or clearing the attachment, but the attachment has not been used,
