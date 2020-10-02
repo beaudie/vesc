@@ -86,6 +86,23 @@
       "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77b5afbd_da36251b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-02T17:14:00Z",
+      "side": 1,
+      "message": "all other patches have merged, landing this one now",
+      "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
