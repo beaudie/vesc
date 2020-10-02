@@ -54,6 +54,10 @@ egl::Error DisplayVk::makeCurrent(egl::Surface * /*drawSurface*/,
                                   egl::Surface * /*readSurface*/,
                                   gl::Context * /*context*/)
 {
+    // Ensure the appropriate global DebugAnnotator is used
+    ASSERT(mRenderer);
+    mRenderer->setGlobalDebugAnnotator();
+
     return egl::NoError();
 }
 
