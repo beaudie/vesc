@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "b858f02c_39da03f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T01:30:06Z",
+      "side": 1,
+      "message": "Again, nice to have the equivalent test for color invalidate.",
+      "parentUuid": "485b7ba5_32b5f247",
+      "revId": "dd62d8af817c094fadd35e7146c44e8e1d2cb90a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "552f1522_7558a221",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
@@ -156,6 +174,30 @@
       "revId": "dd62d8af817c094fadd35e7146c44e8e1d2cb90a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf887277_5f3a7466",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T01:30:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9a56d7b5_421f2ada",
+      "range": {
+        "startLine": 2206,
+        "startChar": 32,
+        "endLine": 2206,
+        "endChar": 45
+      },
+      "revId": "dd62d8af817c094fadd35e7146c44e8e1d2cb90a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
