@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffaeea1a_9927f657",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T01:01:20Z",
+      "side": 1,
+      "message": "Looks like some test issues. Not sure why.",
+      "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "918c3c6b_da7015bf",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T01:01:20Z",
+      "side": 1,
+      "message": "nit: clamp01. also you can clamp outside the \u0027if\u0027.",
+      "range": {
+        "startLine": 1086,
+        "startChar": 0,
+        "endLine": 1094,
+        "endChar": 0
+      },
+      "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9140fa8_408a87bc",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T01:01:20Z",
+      "side": 1,
+      "message": "nit: isSampleShadingEnabled would read well",
+      "range": {
+        "startLine": 1353,
+        "startChar": 19,
+        "endLine": 1353,
+        "endChar": 34
+      },
+      "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
