@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d42e45d8_96d33c02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T18:28:10Z",
+      "side": 1,
+      "message": "Is there any whitebox testing can be added which enables this feature with some simple clears/draws to make sure the easy path works?",
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3450b6eb_e705f03d",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T18:28:10Z",
+      "side": 1,
+      "message": "Any ideas on how big of a restriction these are?   Are most apps not affected?",
+      "range": {
+        "startLine": 1165,
+        "startChar": 0,
+        "endLine": 1168,
+        "endChar": 5
+      },
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8e8aa57_deed0892",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T18:28:10Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af149484_2983960c",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T18:28:10Z",
+      "side": 1,
+      "message": "Missing:\n\n    mState.setDownscaled(false);\n\nProbably not entirely necessary since you\u0027re crashing ERR()\u0027ing anyway, but the other cases have it.",
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "388b3fa2_fe442ec5",
+        "filename": "src/libANGLE/feature_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T18:28:10Z",
+      "side": 1,
+      "message": "It looks like this can be simplified to:\n\n    float scale \u003d 1.0f;\n    IsDownscaleBackbufferTextureEnabled(features, \u0026scale);\n    return scale;",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 5
+      },
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

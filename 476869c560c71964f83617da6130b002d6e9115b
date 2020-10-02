@@ -96,6 +96,29 @@
     },
     {
       "key": {
+        "uuid": "fcc390e8_387fef83",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T18:28:10Z",
+      "side": 1,
+      "message": "Why don\u0027t we allow un-downscaling renderbuffers and textures?",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 5
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0062b38d_2565c987",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 6
