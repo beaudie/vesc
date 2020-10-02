@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "0220f538_3e214536",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-02T16:11:39Z",
+      "side": 1,
+      "message": "Looks straightforward.\n\nAre the Windows failures similar to the perf test failures?",
+      "revId": "c4a79df9345ebe7e5350a185ce46aefea782816e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d02ca21c_97d2b7f9",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
