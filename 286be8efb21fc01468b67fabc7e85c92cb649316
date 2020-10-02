@@ -68,6 +68,24 @@
       "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27789684_9e404f90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-02T00:23:16Z",
+      "side": 1,
+      "message": "ok, will wait for +2 on https://chromium-review.googlesource.com/c/angle/angle/+/2430191/",
+      "parentUuid": "d11fdeae_ab1191e9",
+      "revId": "286be8efb21fc01468b67fabc7e85c92cb649316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
