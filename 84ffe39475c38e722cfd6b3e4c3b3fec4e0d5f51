@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "09196568_a6804dfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T16:09:07Z",
+      "side": 1,
+      "message": "The new bit is not handled in the other backends\u0027 syncState()s.",
+      "parentUuid": "ffaeea1a_9927f657",
+      "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "918c3c6b_da7015bf",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 2
@@ -58,6 +76,69 @@
         "startChar": 19,
         "endLine": 1353,
         "endChar": 34
+      },
+      "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e603efa_635a82c8",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T16:09:07Z",
+      "side": 1,
+      "message": "nit: let\u0027s keep DIRTY_BIT_EXTENDED as the last bit. You can move its comment to above it to make it somewhat distinct.",
+      "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1512d7ce_f6da8d28",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T16:09:07Z",
+      "side": 1,
+      "message": "mIsSampleShadingEnabled",
+      "range": {
+        "startLine": 970,
+        "startChar": 9,
+        "endLine": 970,
+        "endChar": 10
+      },
+      "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6739bb04_6bd009ae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T16:09:07Z",
+      "side": 1,
+      "message": "nit: `enable \u003d\u003d true` is the same thing as `enable`; enable ? value : 1.0f.",
+      "range": {
+        "startLine": 1876,
+        "startChar": 62,
+        "endLine": 1876,
+        "endChar": 76
       },
       "revId": "84ffe39475c38e722cfd6b3e4c3b3fec4e0d5f51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
