@@ -63,6 +63,30 @@
       "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24bd4d8d_42144494",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-02T00:00:14Z",
+      "side": 1,
+      "message": "Doing some debugging on Android, I can see that the CommandBuffer is not being deleted, but mRenderPassCommandBuffer is being set to nullptr during the draw.\n\nI created a pointer that ContextVk::handleDirtyGraphicsEventLog() sets and ContextVk::endEventLog() uses/clears.",
+      "parentUuid": "1acd815c_b82a9e04",
+      "range": {
+        "startLine": 2691,
+        "startChar": 0,
+        "endLine": 2695,
+        "endChar": 0
+      },
+      "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
