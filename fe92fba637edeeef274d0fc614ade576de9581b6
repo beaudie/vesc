@@ -56,6 +56,30 @@
       "revId": "fe92fba637edeeef274d0fc614ade576de9581b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fbf66d2_5f91b3e6",
+        "filename": "src/tests/gl_tests/BlendIntegerTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-02T22:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9fcc25a_cfe6799c",
+      "range": {
+        "startLine": 309,
+        "startChar": 6,
+        "endLine": 309,
+        "endChar": 42
+      },
+      "revId": "fe92fba637edeeef274d0fc614ade576de9581b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
