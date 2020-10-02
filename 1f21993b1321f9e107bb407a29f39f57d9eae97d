@@ -16,6 +16,23 @@
       "revId": "1f21993b1321f9e107bb407a29f39f57d9eae97d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3e411fc_0f0cda4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-02T00:08:02Z",
+      "side": 1,
+      "message": "Ready for land",
+      "revId": "1f21993b1321f9e107bb407a29f39f57d9eae97d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
