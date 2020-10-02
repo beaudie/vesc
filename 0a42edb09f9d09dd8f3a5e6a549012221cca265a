@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d36fec99_6758f379",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-02T16:57:37Z",
+      "side": 1,
+      "message": "Can you add a comment which references the bug?",
+      "range": {
+        "startLine": 382,
+        "startChar": 24,
+        "endLine": 382,
+        "endChar": 40
+      },
+      "revId": "0a42edb09f9d09dd8f3a5e6a549012221cca265a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
