@@ -43,7 +43,7 @@ if (build_with_chromium) {
   import("//build/config/ozone.gni")
 
   # TODO(crbug.com/1129223): Remove reference to ui/ozone/ozone.gni once its
-  # content is moved to renamed to build/config/ozone.gni.
+  # content is moved to build/config/ozone.gni.
   import("//ui/ozone/ozone.gni")
 } else {
   declare_args() {
