@@ -22,6 +22,30 @@
       "revId": "87bc7e9273dc7338694def7c69ced5ec96083364",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f10e8cd7_27fa9acf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-02T00:19:04Z",
+      "side": 1,
+      "message": "Right. That will require we keep a list of all active texturs used in the render pass as well, so it is a bit more involved. But certainly I can try to make this CL to keep that in mind as well.",
+      "parentUuid": "5ff87ebc_9882da4f",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "87bc7e9273dc7338694def7c69ced5ec96083364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
