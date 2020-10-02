@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d02ca21c_97d2b7f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T05:26:53Z",
+      "side": 1,
+      "message": "If needs be, these could be packed much more later. First of all, 3 bits is enough for them with our current layouts. Second, I think finalLayout \u003d\u003d initialLayout except when finalLayout \u003d\u003d Present, so basically finalLayout could just take one bit, or otherwise folded into initialLayout.",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 29
+      },
+      "revId": "c4a79df9345ebe7e5350a185ce46aefea782816e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
