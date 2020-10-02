@@ -34,6 +34,23 @@
       "revId": "c488f0c909e256c68962c3f098199228696aaef1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02f531d7_a8070c12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-02T21:30:19Z",
+      "side": 1,
+      "message": "If the failure disappears after this suppression, LGTM.\nI was worried about it shifting into another test.",
+      "revId": "c488f0c909e256c68962c3f098199228696aaef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
