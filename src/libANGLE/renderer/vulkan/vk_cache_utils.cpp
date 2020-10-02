@@ -731,12 +731,155 @@ angle::Result CreateRenderPass2(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result InitializeRenderPassFromDesc(Context *context,
+// Helper macro to increment perf counters and verify no overflow.  Implements: lhs += rhs;
+#define IncrementBitField(lhs, rhs) SetBitField(lhs, lhs + (rhs))
+
+void UpdateColorPerfCounters(const VkRenderPassCreateInfo &createInfo,
+                             const VkSubpassDescription &subpass,
+                             vk::RenderPassPerfCounters *countersOut)
+{
+    // Color resolve counters.
+    if (subpass.pResolveAttachments == nullptr)
+    {
+        return;
+    }
+
+    for (uint32_t colorSubpassIndex = 0; colorSubpassIndex < subpass.colorAttachmentCount;
+         ++colorSubpassIndex)
+    {
+        uint32_t resolveRenderPassIndex = subpass.pResolveAttachments[colorSubpassIndex].attachment;
+
+        if (resolveRenderPassIndex == VK_ATTACHMENT_UNUSED)
+        {
+            continue;
+        }
+
+        IncrementBitField(countersOut->colorAttachmentResolves, 1);
+    }
+}
+
+void UpdateDepthStencilPerfCounters(const VkRenderPassCreateInfo &createInfo,
+                                    size_t renderPassIndex,
+                                    vk::RenderPassPerfCounters *countersOut)
+{
+    ASSERT(renderPassIndex != VK_ATTACHMENT_UNUSED);
+
+    // Depth/stencil ops counters.
+    const VkAttachmentDescription &ds = createInfo.pAttachments[renderPassIndex];
+
+    IncrementBitField(countersOut->depthClears, ds.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0);
+    IncrementBitField(countersOut->depthLoads, ds.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0);
+    IncrementBitField(countersOut->depthStores, ds.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0);
+
+    IncrementBitField(countersOut->stencilClears,
+                      ds.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0);
+    IncrementBitField(countersOut->stencilLoads,
+                      ds.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0);
+    IncrementBitField(countersOut->stencilStores,
+                      ds.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0);
+
+    // Depth/stencil read-only mode.
+    IncrementBitField(countersOut->readOnlyDepthStencil,
+                      ds.finalLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ? 1 : 0);
+}
+
+void UpdateDepthStencilResolvePerfCounters(
+    const VkRenderPassCreateInfo &createInfo,
+    const VkSubpassDescriptionDepthStencilResolve &depthStencilResolve,
+    vk::RenderPassPerfCounters *countersOut)
+{
+    if (depthStencilResolve.pDepthStencilResolveAttachment == nullptr)
+    {
+        return;
+    }
+
+    uint32_t resolveRenderPassIndex =
+        depthStencilResolve.pDepthStencilResolveAttachment->attachment;
+
+    if (resolveRenderPassIndex == VK_ATTACHMENT_UNUSED)
+    {
+        return;
+    }
+
+    const VkAttachmentDescription &dsResolve = createInfo.pAttachments[resolveRenderPassIndex];
+
+    // Resolve depth/stencil ops counters.
+    IncrementBitField(countersOut->depthClears,
+                      dsResolve.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0);
+    IncrementBitField(countersOut->depthLoads,
+                      dsResolve.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0);
+    IncrementBitField(countersOut->depthStores,
+                      dsResolve.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0);
+
+    IncrementBitField(countersOut->stencilClears,
+                      dsResolve.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0);
+    IncrementBitField(countersOut->stencilLoads,
+                      dsResolve.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0);
+    IncrementBitField(countersOut->stencilStores,
+                      dsResolve.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0);
+
+    // Depth/stencil resolve counters.
+    IncrementBitField(countersOut->depthAttachmentResolves,
+                      depthStencilResolve.depthResolveMode != VK_RESOLVE_MODE_NONE ? 1 : 0);
+    IncrementBitField(countersOut->stencilAttachmentResolves,
+                      depthStencilResolve.stencilResolveMode != VK_RESOLVE_MODE_NONE ? 1 : 0);
+}
+
+void UpdateRenderPassPerfCounters(
+    const RenderPassDesc &desc,
+    const VkRenderPassCreateInfo &createInfo,
+    const VkSubpassDescriptionDepthStencilResolve &depthStencilResolve,
+    vk::RenderPassPerfCounters *countersOut)
+{
+    // Accumulate depth/stencil attachment indices in all subpasses to avoid double-counting
+    // counters.
+    vk::FramebufferAttachmentMask depthStencilAttachmentIndices;
+
+    for (uint32_t subpassIndex = 0; subpassIndex < createInfo.subpassCount; ++subpassIndex)
+    {
+        const VkSubpassDescription &subpass = createInfo.pSubpasses[subpassIndex];
+
+        // Color counters.  Note: currently there are no counters for load/store ops of color
+        // attachments, so there's no risk of double counting.
+        UpdateColorPerfCounters(createInfo, subpass, countersOut);
+
+        // Record index of depth/stencil attachment.
+        if (subpass.pDepthStencilAttachment != nullptr)
+        {
+            uint32_t attachmentRenderPassIndex = subpass.pDepthStencilAttachment->attachment;
+            if (attachmentRenderPassIndex != VK_ATTACHMENT_UNUSED)
+            {
+                depthStencilAttachmentIndices.set(attachmentRenderPassIndex);
+            }
+        }
+    }
+
+    // Depth/stencil counters.  Currently, both subpasses use the same depth/stencil attachment (if
+    // any).
+    ASSERT(depthStencilAttachmentIndices.count() <= 1);
+    for (size_t attachmentRenderPassIndex : depthStencilAttachmentIndices)
+    {
+        UpdateDepthStencilPerfCounters(createInfo, attachmentRenderPassIndex, countersOut);
+    }
+
+    UpdateDepthStencilResolvePerfCounters(createInfo, depthStencilResolve, countersOut);
+
+    // Determine unresolve counters from the render pass desc, to avoid making guesses from subpass
+    // count etc.
+    IncrementBitField(countersOut->colorAttachmentUnresolves,
+                      desc.getColorUnresolveAttachmentMask().count());
+    IncrementBitField(countersOut->depthAttachmentUnresolves,
+                      desc.hasDepthUnresolveAttachment() ? 1 : 0);
+    IncrementBitField(countersOut->stencilAttachmentUnresolves,
+                      desc.hasStencilUnresolveAttachment() ? 1 : 0);
+}
+
+angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                                            const RenderPassDesc &desc,
                                            const AttachmentOpsArray &ops,
-                                           RenderPass *renderPass)
+                                           vk::RenderPassHelper *renderPassHelper)
 {
-    RendererVk *renderer = context->getRenderer();
+    RendererVk *renderer = contextVk->getRenderer();
 
     constexpr VkAttachmentReference kUnusedAttachment   = {VK_ATTACHMENT_UNUSED,
                                                          VK_IMAGE_LAYOUT_UNDEFINED};
@@ -951,15 +1094,52 @@ angle::Result InitializeRenderPassFromDesc(Context *context,
     // vkCreateRenderPass2KHR.
     if (desc.hasDepthStencilResolveAttachment())
     {
-        ANGLE_TRY(CreateRenderPass2(context, createInfo, depthStencilResolve,
-                                    desc.hasDepthUnresolveAttachment(),
-                                    desc.hasStencilUnresolveAttachment(), renderPass));
+        ANGLE_TRY(CreateRenderPass2(
+            contextVk, createInfo, depthStencilResolve, desc.hasDepthUnresolveAttachment(),
+            desc.hasStencilUnresolveAttachment(), &renderPassHelper->getRenderPass()));
     }
     else
     {
-        ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo));
+        ANGLE_VK_TRY(contextVk,
+                     renderPassHelper->getRenderPass().init(contextVk->getDevice(), createInfo));
     }
+
+    // Calculate perf counters associated with this render pass, such as load/store ops, unresolve
+    // and resolve operations etc.  This information is taken out of the render pass create info.
+    // Depth/stencil resolve attachment uses RenderPass2 structures, so it's passed in separately.
+    UpdateRenderPassPerfCounters(desc, createInfo, depthStencilResolve,
+                                 &renderPassHelper->getPerfCounters());
+
     return angle::Result::Continue;
+}
+
+void GetRenderPassAndUpdateSerial(ContextVk *contextVk,
+                                  Serial serial,
+                                  bool updatePerfCounters,
+                                  vk::RenderPassHelper *renderPassHelper,
+                                  vk::RenderPass **renderPassOut)
+{
+    renderPassHelper->updateSerial(serial);
+    *renderPassOut = &renderPassHelper->getRenderPass();
+    if (updatePerfCounters)
+    {
+        PerfCounters &counters                   = contextVk->getPerfCounters();
+        const RenderPassPerfCounters &rpCounters = renderPassHelper->getPerfCounters();
+
+        counters.depthClears += rpCounters.depthClears;
+        counters.depthLoads += rpCounters.depthLoads;
+        counters.depthStores += rpCounters.depthStores;
+        counters.stencilClears += rpCounters.stencilClears;
+        counters.stencilLoads += rpCounters.stencilLoads;
+        counters.stencilStores += rpCounters.stencilStores;
+        counters.colorAttachmentUnresolves += rpCounters.colorAttachmentUnresolves;
+        counters.colorAttachmentResolves += rpCounters.colorAttachmentResolves;
+        counters.depthAttachmentUnresolves += rpCounters.depthAttachmentUnresolves;
+        counters.depthAttachmentResolves += rpCounters.depthAttachmentResolves;
+        counters.stencilAttachmentUnresolves += rpCounters.stencilAttachmentUnresolves;
+        counters.stencilAttachmentResolves += rpCounters.stencilAttachmentResolves;
+        counters.readOnlyDepthStencilRenderPasses += rpCounters.readOnlyDepthStencil;
+    }
 }
 
 void InitializeSpecializationInfo(
@@ -2860,6 +3040,53 @@ SamplerHelper &SamplerHelper::operator=(SamplerHelper &&rhs)
     std::swap(mSamplerSerial, rhs.mSamplerSerial);
     return *this;
 }
+
+// RenderPassHelper implementation.
+RenderPassHelper::RenderPassHelper() : mPerfCounters{} {}
+
+RenderPassHelper::~RenderPassHelper() = default;
+
+RenderPassHelper::RenderPassHelper(RenderPassHelper &&other)
+{
+    *this = std::move(other);
+}
+
+RenderPassHelper &RenderPassHelper::operator=(RenderPassHelper &&other)
+{
+    mRenderPassAndSerial = std::move(other.mRenderPassAndSerial);
+    mPerfCounters        = std::move(other.mPerfCounters);
+    return *this;
+}
+
+void RenderPassHelper::destroy(VkDevice device)
+{
+    mRenderPassAndSerial.destroy(device);
+}
+
+const RenderPass &RenderPassHelper::getRenderPass() const
+{
+    return mRenderPassAndSerial.get();
+}
+
+RenderPass &RenderPassHelper::getRenderPass()
+{
+    return mRenderPassAndSerial.get();
+}
+
+void RenderPassHelper::updateSerial(Serial serial)
+{
+    mRenderPassAndSerial.updateSerial(serial);
+}
+
+const RenderPassPerfCounters &RenderPassHelper::getPerfCounters() const
+{
+    return mPerfCounters;
+}
+
+RenderPassPerfCounters &RenderPassHelper::getPerfCounters()
+{
+    return mPerfCounters;
+}
 }  // namespace vk
 
 // RenderPassCache implementation.
@@ -2876,7 +3103,7 @@ void RenderPassCache::destroy(VkDevice device)
     {
         for (auto &innerIt : outerIt.second)
         {
-            innerIt.second.get().destroy(device);
+            innerIt.second.destroy(device);
         }
     }
     mPayload.clear();
@@ -2923,14 +3150,24 @@ angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
         ops.initWithLoadStore(colorIndexVk, imageLayout, imageLayout);
     }
 
-    return getRenderPassWithOps(contextVk, serial, desc, ops, renderPassOut);
+    return getRenderPassWithOpsImpl(contextVk, serial, desc, ops, false, renderPassOut);
 }
 
-angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
+angle::Result RenderPassCache::getRenderPassWithOps(ContextVk *contextVk,
                                                     Serial serial,
                                                     const vk::RenderPassDesc &desc,
                                                     const vk::AttachmentOpsArray &attachmentOps,
                                                     vk::RenderPass **renderPassOut)
+{
+    return getRenderPassWithOpsImpl(contextVk, serial, desc, attachmentOps, true, renderPassOut);
+}
+
+angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
+                                                        Serial serial,
+                                                        const vk::RenderPassDesc &desc,
+                                                        const vk::AttachmentOpsArray &attachmentOps,
+                                                        bool updatePerfCounters,
+                                                        vk::RenderPass **renderPassOut)
 {
     auto outerIt = mPayload.find(desc);
     if (outerIt != mPayload.end())
@@ -2942,8 +3179,8 @@ angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
         {
             // Update the serial before we return.
             // TODO(jmadill): Could possibly use an MRU cache here.
-            innerIt->second.updateSerial(serial);
-            *renderPassOut = &innerIt->second.get();
+            vk::GetRenderPassAndUpdateSerial(contextVk, serial, updatePerfCounters,
+                                             &innerIt->second, renderPassOut);
             return angle::Result::Continue;
         }
     }
@@ -2953,14 +3190,13 @@ angle::Result RenderPassCache::getRenderPassWithOps(vk::Context *context,
         outerIt            = emplaceResult.first;
     }
 
-    vk::RenderPass newRenderPass;
-    ANGLE_TRY(vk::InitializeRenderPassFromDesc(context, desc, attachmentOps, &newRenderPass));
-
-    vk::RenderPassAndSerial withSerial(std::move(newRenderPass), serial);
+    vk::RenderPassHelper newRenderPass;
+    ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps, &newRenderPass));
 
     InnerCache &innerCache = outerIt->second;
-    auto insertPos         = innerCache.emplace(attachmentOps, std::move(withSerial));
-    *renderPassOut         = &insertPos.first->second.get();
+    auto insertPos         = innerCache.emplace(attachmentOps, std::move(newRenderPass));
+    vk::GetRenderPassAndUpdateSerial(contextVk, serial, updatePerfCounters,
+                                     &insertPos.first->second, renderPassOut);
 
     // TODO(jmadill): Trim cache, and pre-populate with the most common RPs on startup.
     return angle::Result::Continue;
