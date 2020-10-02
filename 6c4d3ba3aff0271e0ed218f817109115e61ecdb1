@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9fe85b30_01d842ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T02:03:20Z",
+      "side": 1,
+      "message": "Sigh, it took me 5 minutes to fix the bug, and add an ASSERT to catch it. And ~4 hours to finally have a test reproduce the behavior that resulted in a VVL error when running in Chrome. It was easy to make the ASSERT fire, but it was quite hard to make a test actually fail.",
+      "parentUuid": "dc739593_c031b613",
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bcb686f_b0573117",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "6a75748a_17af25bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2655,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T02:03:20Z",
+      "side": 1,
+      "message": "Only used in ASSERT, so better not pollute the header.",
+      "parentUuid": "7bcb686f_b0573117",
+      "range": {
+        "startLine": 2652,
+        "startChar": 0,
+        "endLine": 2655,
+        "endChar": 1
+      },
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76585f7d_7d37a90e",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
@@ -56,6 +98,24 @@
       "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15a82dca_afd8d656",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T02:03:20Z",
+      "side": 1,
+      "message": "No, it uses the default value. It doesn\u0027t really matter what the clear value is as the draw overwrites it. The point is to avoid unresolve in this draw call.",
+      "parentUuid": "76585f7d_7d37a90e",
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "3392fa32_543e3875",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T02:03:20Z",
+      "side": 1,
+      "message": "See the test itself, the texture is given initial data. Will update the comment.",
+      "parentUuid": "b0fabcd6_abbded30",
+      "range": {
+        "startLine": 1536,
+        "startChar": 94,
+        "endLine": 1537,
+        "endChar": 45
+      },
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0772a17_503d52e8",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
@@ -96,6 +180,24 @@
       "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05a850e1_f6588435",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-02T02:03:20Z",
+      "side": 1,
+      "message": "Outdated comment!",
+      "parentUuid": "c0772a17_503d52e8",
+      "revId": "6c4d3ba3aff0271e0ed218f817109115e61ecdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
