@@ -16,6 +16,23 @@
       "revId": "26586ab3e1d2d352110f9bd9ed3544d4ca7ffb38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "db679798_20bc2bb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-02T23:06:34Z",
+      "side": 1,
+      "message": "LGTM as long as the CQ stays green.",
+      "revId": "26586ab3e1d2d352110f9bd9ed3544d4ca7ffb38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
