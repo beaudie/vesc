@@ -212,7 +212,12 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
         ANGLE_TRY(contextVk->syncExternalMemory());
     }
 
-    return contextVk->flushImpl(&mSemaphore);
+    angle::Result result = contextVk->flushImpl(&mSemaphore);
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
+    }
+    return result;
 }
 
 angle::Result SemaphoreVk::importOpaqueFd(ContextVk *contextVk, GLint fd)
