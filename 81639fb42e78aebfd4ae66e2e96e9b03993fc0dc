@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3562d194_4977c9e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-03T03:21:25Z",
+      "side": 1,
+      "message": "Does mContentDefined stuff apply to resolve attachment as well? If yes, it will still useful to  keep the pointer in the render pass so that it can set the mContentDefine properly in future CL, as well as making code consistent.",
+      "parentUuid": "daadeb54_0949728f",
+      "range": {
+        "startLine": 930,
+        "startChar": 75,
+        "endLine": 930,
+        "endChar": 86
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87b78cdd_c73525cb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
