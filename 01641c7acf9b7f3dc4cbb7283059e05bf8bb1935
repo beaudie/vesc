@@ -16,6 +16,24 @@
       "revId": "01641c7acf9b7f3dc4cbb7283059e05bf8bb1935",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ae3dc0c_98e7ebef",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-03T01:30:15Z",
+      "side": 1,
+      "message": "\u003e Should this be moved into GraphicsPipelineDesc::initDefaults() so everyone gets the right subpass?\n\nThat would serve only UtilsVk, and only one function here needs it. Maybe?\n\nClear is the only UtilsVk function that doesn\u0027t start a new render pass. The fix for occlusion queries also only affected Clear. I do wish there was a better way to deal with Clear so all these mistakes would be caught. I don\u0027t have a solution yet.",
+      "parentUuid": "f77300f8_8999cd94",
+      "revId": "01641c7acf9b7f3dc4cbb7283059e05bf8bb1935",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
