@@ -32,6 +32,10 @@ SyncHelper::~SyncHelper() {}
 void SyncHelper::releaseToRenderer(RendererVk *renderer)
 {
     renderer->collectGarbageAndReinit(&mUse, &mEvent);
+    // printf("SyncHelper fence %p in releaseToRenderer\n", mFence.get().getHandle());
+    // TODO: Currently just stalling on worker thread here to try and avoid race
+    //  condition. If this works, need some alternate solution
+    renderer->waitForCommandProcessorIdle();
     mFence.reset(renderer->getDevice());
 }
 
@@ -48,7 +52,16 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
 
     DeviceScoped<Event> event(device);
     ANGLE_VK_TRY(contextVk, event.get().init(device, eventCreateInfo));
-    ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
+    // TODO: For now wait for worker thread to finish then get next fence from renderer
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+        ANGLE_TRY(contextVk->getRenderer()->getNextSubmitFence(&mFence, false));
+    }
+    else
+    {
+        ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
+    }
 
     mEvent = event.release();
 
@@ -90,9 +103,17 @@ angle::Result SyncHelper::clientWait(Context *context,
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }
 
+    // If we're submitting on a separate thread, need to make sure worker is complete
+    //  to avoid a race condition here where we access fence in both threads
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+    }
+
     // Wait on the fence that's expected to be signaled on the first vkQueueSubmit after
     // `initialize` was called. The first fence is the fence created to signal this sync.
     ASSERT(mFence.get().valid());
+    // TODO: Wait could be command to worker
     VkResult status = mFence.get().wait(renderer->getDevice(), timeout);
 
     // Check for errors, but don't consider timeout as such.
@@ -189,11 +210,22 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
 
         retain(&contextVk->getResourceUseList());
 
-        Serial serialOut;
-        VkSubmitInfo submitInfo = {};
-        submitInfo.sType        = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        ANGLE_TRY(renderer->queueSubmit(contextVk, contextVk->getPriority(), submitInfo, nullptr,
-                                        &fence.get(), &serialOut));
+        if (renderer->getFeatures().enableCommandProcessingThread.enabled)
+        {
+            CommandProcessorTask oneOffQueueSubmit(VK_NULL_HANDLE, contextVk->getPriority(),
+                                                   &fence.get());
+            renderer->queueCommand(&oneOffQueueSubmit);
+            renderer->waitForCommandProcessorIdle();
+        }
+        else
+        {
+            Serial serialOut;
+            VkSubmitInfo submitInfo = {};
+            submitInfo.sType        = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+            ANGLE_TRY(renderer->queueSubmit(contextVk, contextVk->getPriority(), submitInfo,
+                                            nullptr, &fence.get(), &serialOut));
+        }
 
         VkFenceGetFdInfoKHR fenceGetFdInfo = {};
         fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
