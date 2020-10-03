@@ -1193,6 +1193,7 @@ void WriteCppReplayIndexFiles(bool compression,
                               bool serializeStateEnabled,
                               bool writeResetContextCall,
                               const egl::Config *config,
+                              const ResourceTracker &resourceTracker,
                               std::vector<uint8_t> &binaryData)
 {
 
@@ -1231,14 +1232,18 @@ void WriteCppReplayIndexFiles(bool compression,
     }
     header << "// Replay functions\n";
     header << "\n";
-    header << "// Maps from <captured Program ID, captured location> to run-time location.\n";
-    header
-        << "using LocationsMap = std::unordered_map<GLuint, std::unordered_map<GLint, GLint>>;\n";
-    header << "extern LocationsMap gUniformLocations;\n";
-    header << "extern GLuint gCurrentProgram;\n";
-    header << "void UpdateUniformLocation(GLuint program, const char *name, GLint location);\n";
-    header << "void DeleteUniformLocations(GLuint program);\n";
-    header << "void UpdateCurrentProgram(GLuint program);\n";
+    if (resourceTracker.getMaxShaderPrograms() > 0)
+    {
+        header << "// Maps from <captured Program ID, captured location> to run-time location.\n";
+        header << "using LocationsMap = GLint *[" << resourceTracker.getMaxShaderPrograms()
+               << "];\n";
+        header << "extern LocationsMap gUniformLocations;\n";
+        header << "extern GLuint gCurrentProgram;\n";
+        header << "void UpdateUniformLocation(GLuint program, const char *name, GLint location);\n";
+        header << "void ReserveUniformLocations(GLuint program, GLint maxLocation);\n";
+        header << "void DeleteUniformLocations(GLuint program);\n";
+        header << "void UpdateCurrentProgram(GLuint program);\n";
+    }
     header << "\n";
     header << "// Maps from captured Resource ID to run-time Resource ID.\n";
     header << "class ResourceMap\n\n";
@@ -1338,21 +1343,31 @@ void WriteCppReplayIndexFiles(bool compression,
     source << "const char *gBinaryDataDir = \".\";\n";
     source << "}  // namespace\n";
     source << "\n";
-    source << "LocationsMap gUniformLocations;\n";
-    source << "GLuint gCurrentProgram = 0;\n";
-    source << "\n";
-    source << "void UpdateUniformLocation(GLuint program, const char *name, GLint location)\n";
-    source << "{\n";
-    source << "    gUniformLocations[program][location] = glGetUniformLocation(program, name);\n";
-    source << "}\n";
-    source << "void DeleteUniformLocations(GLuint program)\n";
-    source << "{\n";
-    source << "    gUniformLocations.erase(program);\n";
-    source << "}\n";
-    source << "void UpdateCurrentProgram(GLuint program)\n";
-    source << "{\n";
-    source << "    gCurrentProgram = program;\n";
-    source << "}\n";
+    if (resourceTracker.getMaxShaderPrograms() > 0)
+    {
+        source << "LocationsMap gUniformLocations;\n";
+        source << "GLuint gCurrentProgram = 0;\n";
+        source << "\n";
+        source << "void UpdateUniformLocation(GLuint program, const char *name, GLint location)\n";
+        source << "{\n";
+        source
+            << "    gUniformLocations[program][location] = glGetUniformLocation(program, name);\n";
+        source << "}\n";
+        source << "void ReserveUniformLocations(GLuint program, GLint maxLocation)\n";
+        source << "{\n";
+        source << "    gUniformLocations[program] = new GLint[maxLocation];\n";
+        source << "    memset(gUniformLocations[program], 0, sizeof(GLint) * maxLocation);\n";
+        source << "}\n";
+        source << "void DeleteUniformLocations(GLuint program)\n";
+        source << "{\n";
+        source << "    delete [] gUniformLocations[program];\n";
+        source << "    gUniformLocations[program] = nullptr;\n";
+        source << "}\n";
+        source << "void UpdateCurrentProgram(GLuint program)\n";
+        source << "{\n";
+        source << "    gCurrentProgram = program;\n";
+        source << "}\n";
+    }
     source << "\n";
 
     source << "uint8_t *gBinaryData = nullptr;\n";
@@ -1608,6 +1623,9 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
     const std::vector<gl::LinkedUniform> &uniforms     = program->getState().getUniforms();
     const std::vector<gl::VariableLocation> &locations = program->getUniformLocations();
 
+    std::vector<CallCapture> updateUniformCalls;
+    GLint maxLocation = 0;
+
     for (GLint location = 0; location < static_cast<GLint>(locations.size()); ++location)
     {
         const gl::VariableLocation &locationVar = locations[location];
@@ -1655,7 +1673,22 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
         params.addParam(std::move(nameParam));
 
         params.addValueParam("location", ParamType::TGLint, location);
-        callsOut->emplace_back("UpdateUniformLocation", std::move(params));
+        updateUniformCalls.emplace_back("UpdateUniformLocation", std::move(params));
+
+        maxLocation = std::max(maxLocation, location);
+    }
+
+    if (maxLocation >= 0)
+    {
+        ParamBuffer params;
+        params.addValueParam("program", ParamType::TShaderProgramID, program->id());
+        params.addValueParam("maxLocation", ParamType::TGLint, maxLocation + 1);
+        callsOut->emplace_back("ReserveUniformLocations", std::move(params));
+    }
+
+    for (CallCapture &call : updateUniformCalls)
+    {
+        callsOut->push_back(std::move(call));
     }
 }
 
@@ -4405,10 +4438,11 @@ void FrameCapture::onEndFrame(const gl::Context *context)
         if (mFrameIndex == mFrameEnd)
         {
             // Save the index files after the last frame.
-            WriteCppReplayIndexFiles(
-                mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameStart, mFrameEnd,
-                mDrawSurfaceWidth, mDrawSurfaceHeight, mReadBufferSize, mClientArraySizes,
-                mHasResourceType, mSerializeStateEnabled, false, context->getConfig(), mBinaryData);
+            WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel,
+                                     mFrameStart, mFrameEnd, mDrawSurfaceWidth, mDrawSurfaceHeight,
+                                     mReadBufferSize, mClientArraySizes, mHasResourceType,
+                                     mSerializeStateEnabled, false, context->getConfig(),
+                                     mResourceTracker, mBinaryData);
             if (!mBinaryData.empty())
             {
                 SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel,
@@ -4460,7 +4494,8 @@ void FrameCapture::onDestroyContext(const gl::Context *context)
         WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel,
                                  mFrameStart, mFrameEnd, mDrawSurfaceWidth, mDrawSurfaceHeight,
                                  mReadBufferSize, mClientArraySizes, mHasResourceType,
-                                 mSerializeStateEnabled, true, context->getConfig(), mBinaryData);
+                                 mSerializeStateEnabled, true, context->getConfig(),
+                                 mResourceTracker, mBinaryData);
         if (!mBinaryData.empty())
         {
             SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel, mBinaryData);
