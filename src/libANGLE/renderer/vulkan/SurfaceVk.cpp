@@ -1316,6 +1316,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     }
 
     // Update the swap history for this presentation
+    // TODO: https://issuetracker.google.com/issues/170312581 - this will force us to flush worker
+    // queue to get the fence.
     swap.sharedFence = contextVk->getLastSubmittedFence();
     ASSERT(!mAcquireImageSemaphore.valid());
 
@@ -1323,7 +1325,40 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
-    VkResult result = contextVk->getRenderer()->queuePresent(contextVk->getPriority(), presentInfo);
+    VkResult result;
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        vk::CommandProcessorTask present;
+        present.initPresent(contextVk->getPriority(), presentInfo);
+
+        // Make sure everything has been submitted (and errors handled)
+        contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
+
+        // Submit queuePresent all by itself (ignoring interference from other threads for now)
+        contextVk->getRenderer()->queueCommand(contextVk, &present);
+        // TODO: https://issuetracker.google.com/issues/170329600 - Just stalling here for now, but
+        // really want to let main thread continue
+        // need to figure out how to handle work below off-thread and sync to main
+        // Also, need to fix lifetime of presentInfo data when main thread continues.
+        // There is a bunch of work happening after present to deal with swapchain recreation.
+        // Will that require moving a large chunk of swapImpl to the CommandProcessor?
+        // That will likely require serializing access to the WindowSurfaceVk object in order
+        // to have current content.
+        result = VK_SUCCESS;
+
+        // wait for the queuePresent to be submitted and intentionally set the context to nullptr so
+        // that we can catch any error
+        contextVk->getRenderer()->waitForCommandProcessorIdle(nullptr);
+        if (contextVk->getRenderer()->hasPendingError())
+        {
+            vk::Error error = contextVk->getRenderer()->getAndClearPendingError();
+            result          = error.mErrorCode;
+        }
+    }
+    else
+    {
+        result = contextVk->getRenderer()->queuePresent(contextVk->getPriority(), presentInfo);
+    }
 
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
