@@ -105,7 +105,6 @@ angle::Result PersistentCommandPool::allocateCommandBuffer(vk::Context *context)
 
     return angle::Result::Continue;
 }
-
 }  // namespace vk
 
 }  // namespace rx
