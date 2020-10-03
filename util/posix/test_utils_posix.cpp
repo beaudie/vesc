@@ -58,33 +58,47 @@ struct ScopedPipe
     };
 };
 
-bool ReadFromFile(int fd, std::string *out)
+enum class ReadResult
 {
-    char buffer[256];
+    EndOfFile,
+    GotData,
+    NoData,
+};
+
+ReadResult ReadFromFile(int fd, std::string *out)
+{
+    constexpr size_t kBufSize = 2048;
+    char buffer[kBufSize];
     ssize_t bytesRead = read(fd, buffer, sizeof(buffer));
 
-    // If interrupted, retry.
+    // No data available, or interrupted.
     if (bytesRead < 0 && errno == EINTR)
     {
-        return true;
+        return ReadResult::NoData;
     }
 
-    // If failed, or nothing to read, we are done.
+    // Nothing to read, we are done.
     if (bytesRead <= 0)
     {
-        return false;
+        return ReadResult::EndOfFile;
     }
 
+    // Read some data.
     out->append(buffer, bytesRead);
-    return true;
+    return ReadResult::GotData;
 }
 
-void ReadEntireFile(int fd, std::string *out)
+void ReadFromFileBlocking(int fd, std::string *out)
 {
-    while (true)
+    while (ReadFromFile(fd, out) != ReadResult::EndOfFile)
     {
-        if (!ReadFromFile(fd, out))
-            break;
+    }
+}
+
+void ReadFromFileNonBlocking(int fd, std::string *out)
+{
+    while (ReadFromFile(fd, out) == ReadResult::GotData)
+    {
     }
 }
 
@@ -244,12 +258,12 @@ class PosixProcess : public Process
 
         if (mStdoutPipe.valid())
         {
-            ReadFromFile(mStdoutPipe.fds[0], &mStdout);
+            ReadFromFileNonBlocking(mStdoutPipe.fds[0], &mStdout);
         }
 
         if (mStderrPipe.valid())
         {
-            ReadFromFile(mStderrPipe.fds[0], &mStderr);
+            ReadFromFileNonBlocking(mStderrPipe.fds[0], &mStderr);
         }
 
         return false;
@@ -279,11 +293,11 @@ class PosixProcess : public Process
         // Then read back the output of the child.
         if (mStdoutPipe.valid())
         {
-            ReadEntireFile(mStdoutPipe.fds[0], &mStdout);
+            ReadFromFileBlocking(mStdoutPipe.fds[0], &mStdout);
         }
         if (mStderrPipe.valid())
         {
-            ReadEntireFile(mStderrPipe.fds[0], &mStderr);
+            ReadFromFileBlocking(mStderrPipe.fds[0], &mStderr);
         }
     }
 
