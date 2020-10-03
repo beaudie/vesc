@@ -58,33 +58,46 @@ struct ScopedPipe
     };
 };
 
-bool ReadFromFile(int fd, std::string *out)
+enum class ReadResult
 {
-    char buffer[256];
+    Interrupted,
+    Done,
+    GotData,
+};
+
+ReadResult ReadFromFile(int fd, std::string *out)
+{
+    constexpr size_t kBufSize = 2048;
+    char buffer[kBufSize];
     ssize_t bytesRead = read(fd, buffer, sizeof(buffer));
 
     // If interrupted, retry.
     if (bytesRead < 0 && errno == EINTR)
     {
-        return true;
+        return ReadResult::Interrupted;
     }
 
     // If failed, or nothing to read, we are done.
     if (bytesRead <= 0)
     {
-        return false;
+        return ReadResult::Done;
     }
 
     out->append(buffer, bytesRead);
-    return true;
+    return ReadResult::GotData;
 }
 
 void ReadEntireFile(int fd, std::string *out)
 {
-    while (true)
+    while (ReadFromFile(fd, out) != ReadResult::Done)
     {
-        if (!ReadFromFile(fd, out))
-            break;
+    }
+}
+
+void ReadAvailableFileData(int fd, std::string *out)
+{
+    while (ReadFromFile(fd, out) == ReadResult::GotData)
+    {
     }
 }
 
@@ -244,12 +257,12 @@ class PosixProcess : public Process
 
         if (mStdoutPipe.valid())
         {
-            ReadFromFile(mStdoutPipe.fds[0], &mStdout);
+            ReadAvailableFileData(mStdoutPipe.fds[0], &mStdout);
         }
 
         if (mStderrPipe.valid())
         {
-            ReadFromFile(mStderrPipe.fds[0], &mStderr);
+            ReadAvailableFileData(mStderrPipe.fds[0], &mStderr);
         }
 
         return false;
