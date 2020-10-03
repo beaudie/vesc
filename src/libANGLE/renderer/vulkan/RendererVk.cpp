@@ -467,6 +467,7 @@ RendererVk::RendererVk()
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
+      mCommandProcessor(this),
       mGlslangInitialized(false)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -536,6 +537,10 @@ void RendererVk::onDestroy()
         std::lock_guard<std::mutex> lock(mFenceRecyclerMutex);
         mFenceRecycler.destroy(mDevice);
     }
+    {
+        std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
+        mNextSubmitFence.reset(mDevice);
+    }
 
     mPipelineCache.destroy(mDevice);
     mSamplerCache.destroy(this);
@@ -580,7 +585,7 @@ void RendererVk::notifyDeviceLost()
 {
     {
         std::lock_guard<std::mutex> lock(mQueueSerialMutex);
-        mLastCompletedQueueSerial = mLastSubmittedQueueSerial;
+        mLastCompletedQueueSerial = getLastSubmittedQueueSerial();
     }
     mDeviceLost = true;
     mDisplay->notifyDeviceLost();
@@ -908,8 +913,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
-        mCommandProcessorThread =
-            std::thread(&CommandProcessor::processCommandProcessorTasks, &mCommandProcessor);
+        mCommandProcessorThread = std::thread(&CommandProcessor::processTasks, &mCommandProcessor);
+        mCommandProcessor.waitForWorkComplete(nullptr);
     }
 
     return angle::Result::Continue;
@@ -1905,7 +1910,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, isNvidia || isAMD || isIntel);
 
     // Currently disabled by default: http://anglebug.com/4324
-    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, true);
+
+    // Currently disabled by default: http://anglebug.com/4324
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableParallelCommandProcessing, true);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsYUVSamplerConversion,
                             mSamplerYcbcrConversionFeatures.samplerYcbcrConversion != VK_FALSE);
@@ -2180,6 +2188,17 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
 }
 
+void RendererVk::outputVmaStatString()
+{
+    // Output the VMA stats string
+    // This JSON string can be passed to VmaDumpVis.py to generate a visualization of the
+    // allocations the VMA has performed.
+    char *statsString;
+    mAllocator.buildStatsString(&statsString, true);
+    INFO() << std::endl << statsString << std::endl;
+    mAllocator.freeStatsString(statsString);
+}
+
 angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       egl::ContextPriority priority,
                                       const VkSubmitInfo &submitInfo,
@@ -2189,23 +2208,11 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
 {
     if (kOutputVmaStatsString)
     {
-        // Output the VMA stats string
-        // This JSON string can be passed to VmaDumpVis.py to generate a visualization of the
-        // allocations the VMA has performed.
-        char *statsString;
-        mAllocator.buildStatsString(&statsString, true);
-        INFO() << std::endl << statsString << std::endl;
-        mAllocator.freeStatsString(statsString);
+        outputVmaStatString();
     }
 
-    if (getFeatures().enableCommandProcessingThread.enabled)
-    {
-        // For initial threading phase 1 code make sure any outstanding command processing
-        //  is complete.
-        // TODO: b/153666475 For phase2 investigate if this is required as most submits will take
-        //  place through worker thread except for one-off submits below.
-        mCommandProcessor.waitForWorkComplete();
-    }
+    ASSERT(!getFeatures().enableCommandProcessingThread.enabled);
+
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         std::lock_guard<std::mutex> serialLock(mQueueSerialMutex);
@@ -2232,12 +2239,26 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             const vk::Fence *fence,
                                             Serial *serialOut)
 {
-    VkSubmitInfo submitInfo       = {};
-    submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers    = primary.ptr();
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        vk::CommandProcessorTask oneOffQueueSubmit;
+        oneOffQueueSubmit.initOneOffQueueSubmit(primary.getHandle(), priority, fence);
+        queueCommand(context, &oneOffQueueSubmit);
+        waitForCommandProcessorIdle(context);
+        *serialOut = getLastSubmittedQueueSerial();
 
-    ANGLE_TRY(queueSubmit(context, priority, submitInfo, nullptr, fence, serialOut));
+        ANGLE_TRY(cleanupGarbage(false));
+    }
+    else
+    {
+
+        VkSubmitInfo submitInfo       = {};
+        submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers    = primary.ptr();
+
+        ANGLE_TRY(queueSubmit(context, priority, submitInfo, nullptr, fence, serialOut));
+    }
 
     mPendingOneOffCommands.push_back({*serialOut, std::move(primary)});
 
@@ -2248,12 +2269,17 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 {
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
-        // First make sure command processor is complete when waiting for queue idle.
-        mCommandProcessor.waitForWorkComplete();
+        // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
+        waitForCommandProcessorIdle(context);
     }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueues[priority]));
+    }
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Let worker clean up any leftover garbage
+        mCommandProcessor.clearAllGarbage(context);
     }
 
     ANGLE_TRY(cleanupGarbage(false));
@@ -2265,12 +2291,17 @@ angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
-        // First make sure command processor is complete when waiting for device idle.
-        mCommandProcessor.waitForWorkComplete();
+        // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
+        waitForCommandProcessorIdle(context);
     }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkDeviceWaitIdle(mDevice));
+    }
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Let worker clean up any leftover garbage
+        mCommandProcessor.clearAllGarbage(context);
     }
 
     ANGLE_TRY(cleanupGarbage(false));
@@ -2283,12 +2314,7 @@ VkResult RendererVk::queuePresent(egl::ContextPriority priority,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
 
-    if (getFeatures().enableCommandProcessingThread.enabled)
-    {
-        // First make sure command processor is complete before queue present as
-        //  present may have dependencies on that thread.
-        mCommandProcessor.waitForWorkComplete();
-    }
+    ASSERT(!getFeatures().enableCommandProcessingThread.enabled);
 
     std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
 
@@ -2323,6 +2349,30 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
         ANGLE_VK_TRY(context, fence.init(mDevice, fenceCreateInfo));
     }
     sharedFenceOut->assign(mDevice, std::move(fence));
+    return angle::Result::Continue;
+}
+
+// Return a shared fence to be used for the next submit
+// Fence may be shared with a Sync object.
+// reset indicates that nextSubmitFence should be reset before returning. This ensures that the next
+// request for a submit fence gets a fresh fence.
+// TODO: https://issuetracker.google.com/issues/170312581 - move to CommandProcessor as part of
+// fence ownership follow-up task.
+angle::Result RendererVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut, bool reset)
+{
+    std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
+    if (!mNextSubmitFence.isReferenced())
+    {
+        ANGLE_TRY(newSharedFence(&mCommandProcessor, &mNextSubmitFence));
+    }
+
+    ASSERT(!sharedFenceOut->isReferenced());
+    sharedFenceOut->copy(getDevice(), mNextSubmitFence);
+
+    if (reset)
+    {
+        resetSharedFence(&mNextSubmitFence);
+    }
     return angle::Result::Continue;
 }
 
