@@ -19,7 +19,7 @@ void InitTestHarness(int *argc, char **argv);
 
 int main(int argc, char **argv)
 {
-    angle::InitTestHarness(&argc, argv);
     angle::TestSuite testSuite(&argc, argv);
+    angle::InitTestHarness(&argc, argv);
     return testSuite.run();
 }
