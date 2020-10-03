@@ -119,7 +119,10 @@ std::mutex &GetDebugMutex()
     return *g_debugMutex;
 }
 
-ScopedPerfEventHelper::ScopedPerfEventHelper(gl::Context *context, const char *format, ...)
+ScopedPerfEventHelper::ScopedPerfEventHelper(gl::Context *context,
+                                             const char *function,
+                                             const char *format,
+                                             ...)
     : mFunctionName(nullptr)
 {
     bool dbgTrace = DebugAnnotationsActive();
@@ -130,14 +133,15 @@ ScopedPerfEventHelper::ScopedPerfEventHelper(gl::Context *context, const char *f
     }
 #endif  // !ANGLE_ENABLE_DEBUG_TRACE
 
+    // Pull function name from variable args
+    mFunctionName = function;
+
     va_list vararg;
     va_start(vararg, format);
+
     std::vector<char> buffer(512);
     size_t len = FormatStringIntoVector(format, vararg, buffer);
     ANGLE_LOG(EVENT) << std::string(&buffer[0], len);
-    // Pull function name from variable args
-    mFunctionName = va_arg(vararg, const char *);
-    va_end(vararg);
     if (dbgTrace)
     {
         g_debugAnnotator->beginEvent(context, mFunctionName, buffer.data());
