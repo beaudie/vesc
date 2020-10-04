@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9d00cda9_1ff2f53b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-04T01:15:16Z",
+      "side": 1,
+      "message": "Yes, it does apply. SGTM to set the layout here (as long as it\u0027s the correct layout)",
+      "parentUuid": "3562d194_4977c9e0",
+      "range": {
+        "startLine": 930,
+        "startChar": 75,
+        "endLine": 930,
+        "endChar": 86
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87b78cdd_c73525cb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
