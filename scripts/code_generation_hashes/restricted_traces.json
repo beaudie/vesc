@@ -3,20 +3,34 @@
     "e029ca2a15934ba1e6bc2d4aef9f2112",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "44fc5437c4a84012e338b3da4b6fc28a",
+  "src/tests/restricted_traces/angry_birds_2_1500_include_autogen.h":
+    "7f9cf4beba9aeced725c73ead8a7fef8",
   "src/tests/restricted_traces/candy_crush_500.tar.gz.sha1":
     "55de8a400b02e570ff2380436bda269d",
+  "src/tests/restricted_traces/candy_crush_500_include_autogen.h":
+    "f6d635f1c4666bf46b604d1499b2c927",
   "src/tests/restricted_traces/cod_mobile.tar.gz.sha1":
     "dffd3bed0d0e53481f43b414309bf152",
+  "src/tests/restricted_traces/cod_mobile_include_autogen.h":
+    "d9bd2cd2a26ebd636b50172848c30c23",
   "src/tests/restricted_traces/egypt_1500.tar.gz.sha1":
     "1d80caa37b937f83c95cd053b1bdd4ac",
+  "src/tests/restricted_traces/egypt_1500_include_autogen.h":
+    "6caad492436841a76be38c08f4675a48",
   "src/tests/restricted_traces/gen_restricted_traces.py":
-    "a520ef50175b1b9a20383a884e293b54",
+    "01e4b3306e51a8fafe4257cb1288b415",
   "src/tests/restricted_traces/manhattan_10.tar.gz.sha1":
     "752781119592a190cc02b773adf38fc3",
+  "src/tests/restricted_traces/manhattan_10_include_autogen.h":
+    "e3ce14e9cdcee464c52de776401068bf",
   "src/tests/restricted_traces/mobile_legends.tar.gz.sha1":
     "a3fe48a3acc2165a7fb3eb6cf01b441f",
+  "src/tests/restricted_traces/mobile_legends_include_autogen.h":
+    "d9ac5677dfde1f4e443aa3d47e4b630b",
   "src/tests/restricted_traces/nba2k20_800.tar.gz.sha1":
     "03df0dcf41c18bc59edfc0b088ca4a87",
+  "src/tests/restricted_traces/nba2k20_800_include_autogen.h":
+    "c10fbbb4a2989526a1cd5a06a97fa414",
   "src/tests/restricted_traces/restricted_traces.json":
     "7ce556105923b7bcf5d81ee99625a040",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
@@ -24,9 +38,13 @@
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
     "2e79405fce094f458c9f36defecfa2cd",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "86dc00986d282c3b032fbbb0a81662b6",
+    "04cf9af54a6c34b6bdbde101e89010c0",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
     "77475b0186ee0380eeb9db47433d0457",
+  "src/tests/restricted_traces/temple_run_300_include_autogen.h":
+    "67505764e456a643b2407b9493302b0b",
   "src/tests/restricted_traces/trex_200.tar.gz.sha1":
-    "ca2d91a527f4a4317f944afc96c35268"
+    "ca2d91a527f4a4317f944afc96c35268",
+  "src/tests/restricted_traces/trex_200_include_autogen.h":
+    "987031c913e215ca69b3a9a1ae48a1c0"
 }
