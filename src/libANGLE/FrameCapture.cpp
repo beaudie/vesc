@@ -2799,8 +2799,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     const gl::ResourceMap<gl::Program, gl::ShaderProgramID> &programs =
         shadersAndPrograms.getProgramsForCapture();
 
-    // Capture Program binary state. Use shader ID 1 as a temporary shader ID.
-    gl::ShaderProgramID tempShaderID = {1};
+    // Capture Program binary state. Use max ID as a temporary shader ID.
+    gl::ShaderProgramID tempShaderID = {resourceTracker->getMaxShaderPrograms()};
     for (const auto &programIter : programs)
     {
         gl::ShaderProgramID id     = {programIter.first};
@@ -2874,6 +2874,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         cap(CaptureLinkProgram(replayState, true, id));
         CaptureUpdateUniformLocations(program, setupCalls);
         CaptureUpdateUniformValues(replayState, context, program, setupCalls);
+
+        resourceTracker->onShaderProgramAccess(id);
     }
 
     // Handle shaders.
@@ -3396,6 +3398,20 @@ bool SkipCall(gl::EntryPoint entryPoint)
 
         default:
             break;
+    }
+
+    return false;
+}
+
+bool FindShaderProgramIDInCall(const CallCapture &call, gl::ShaderProgramID *idOut)
+{
+    for (const ParamCapture &param : call.params.getParamCaptures())
+    {
+        if (param.type == ParamType::TShaderProgramID && param.name == "programPacked")
+        {
+            *idOut = param.value.ShaderProgramIDVal;
+            return true;
+        }
     }
 
     return false;
@@ -4169,6 +4185,13 @@ void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call)
     maybeCaptureClientData(context, call);
 
     mReadBufferSize = std::max(mReadBufferSize, call.params.getReadBufferSize());
+
+    gl::ShaderProgramID shaderProgramID;
+    if (FindShaderProgramIDInCall(call, &shaderProgramID))
+    {
+        mResourceTracker.onShaderProgramAccess(shaderProgramID);
+    }
+
     mFrameCalls.emplace_back(std::move(call));
 
     maybeCapturePostCallUpdates(context);
@@ -4540,6 +4563,11 @@ void ResourceTracker::setBufferUnmapped(gl::BufferID id)
     }
 }
 
+void ResourceTracker::onShaderProgramAccess(gl::ShaderProgramID shaderProgramID)
+{
+    mMaxShaderPrograms = std::max(mMaxShaderPrograms, shaderProgramID.value + 1);
+}
+
 bool FrameCapture::isCapturing() const
 {
     // Currently we will always do a capture up until the last frame. In the future we could improve
@@ -4832,20 +4860,6 @@ void WriteParamValueReplay<ParamType::TVertexArrayID>(std::ostream &os,
                                                       gl::VertexArrayID value)
 {
     os << "gVertexArrayMap[" << value.value << "]";
-}
-
-bool FindShaderProgramIDInCall(const CallCapture &call, gl::ShaderProgramID *idOut)
-{
-    for (const ParamCapture &param : call.params.getParamCaptures())
-    {
-        if (param.type == ParamType::TShaderProgramID && param.name == "programPacked")
-        {
-            *idOut = param.value.ShaderProgramIDVal;
-            return true;
-        }
-    }
-
-    return false;
 }
 
 template <>
