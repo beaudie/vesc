@@ -1223,19 +1223,8 @@ void WriteCppReplayIndexFiles(bool compression,
     }
     header << "\n";
     header << "// Maps from captured Resource ID to run-time Resource ID.\n";
-    header << "class ResourceMap\n\n";
-    header << "{\n";
-    header << "  public:\n";
-    header << "    ResourceMap() {}\n";
-    header << "    GLuint &operator[](GLuint index)\n";
-    header << "    {\n";
-    header << "        if (mIDs.size() <= static_cast<size_t>(index))\n";
-    header << "            mIDs.resize(index + 1, 0);\n";
-    header << "        return mIDs[index];\n";
-    header << "    }\n";
-    header << "  private:\n";
-    header << "    std::vector<GLuint> mIDs;\n";
-    header << "};\n";
+    // kludge
+    header << "using ResourceMap = GLuint[1000];\n\n";
     header << "\n";
     header << "constexpr uint32_t kReplayFrameStart = " << frameStart << ";\n";
     header << "constexpr uint32_t kReplayFrameEnd = " << frameEnd << ";\n";
