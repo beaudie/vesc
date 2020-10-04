@@ -2977,6 +2977,13 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     for (const auto &xfbIter : xfbMap)
     {
         gl::TransformFeedbackID xfbID = {xfbIter.first};
+
+        // Do not capture the default XFB object.
+        if (xfbID.value == 0)
+        {
+            continue;
+        }
+
         cap(CaptureGenTransformFeedbacks(replayState, true, 1, &xfbID));
         MaybeCaptureUpdateResourceIDs(setupCalls);
 
