@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c50cd3f_9ec0ec40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T23:54:47Z",
+      "side": 1,
+      "message": "This CL splits out more preparatory changes for redoing Tobin\u0027s CL.",
+      "revId": "81474b0705c7b20e4010750f3ed2022f32f88c9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
