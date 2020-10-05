@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "0e77ec90_e659c459",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-05T21:39:17Z",
+      "side": 1,
+      "message": "Great find (I was hitting this with Subway Surfers but didn\u0027t dig in).",
+      "revId": "437a7b9b5700ab263f6c6e0b1f226ae728b84f86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4816792e_459bb425",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -30,6 +47,30 @@
       "writtenOn": "2020-10-05T21:15:16Z",
       "side": 1,
       "message": "Is that the ID of the last shader or ID+1?\nWhere does getMaxShaderPrograms() come from?",
+      "range": {
+        "startLine": 2803,
+        "startChar": 57,
+        "endLine": 2803,
+        "endChar": 77
+      },
+      "revId": "437a7b9b5700ab263f6c6e0b1f226ae728b84f86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a97d6ae6_9c4e2298",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2803,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-05T21:39:17Z",
+      "side": 1,
+      "message": "Yeah, I think we\u0027re missing something.  This series doesn\u0027t compile:\n\n  ../../third_party/angle/src/libANGLE/FrameCapture.cpp:2803:58: error: no member named \u0027getMaxShaderPrograms\u0027 in \u0027angle::ResourceTracker\u0027\n    gl::ShaderProgramID tempShaderID \u003d {resourceTracker-\u003egetMaxShaderPrograms()};",
+      "parentUuid": "4816792e_459bb425",
       "range": {
         "startLine": 2803,
         "startChar": 57,
