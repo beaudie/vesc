@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7a9b031_b14db7bd",
+        "filename": "src/tests/test_utils/angle_test_instantiate_apple.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-05T22:04:21Z",
+      "side": 1,
+      "message": "Just for reference, here\u0027s how Apple\u0027s WWDC\u002719 \"Modern Rendering with Metal\" lists GPU families:\n\nMac Family 1:\n- Intel HD Graphics 4000\n- Intel Iris, Iris Pro\n- Intel Iris Graphics 6100\n- Nvidia GeForce GT\n\nMac Family 2:\n- Intel HD Graphics 5xx\n- Intel Iris Plus Graphics 6xx\n- AMD Radeon, Radeon Pro, FirePro\n\nGiven that it\u0027s more of an issue with test bots that have older GPUs than with Intel in general, the tests should have a way to know Metal GPU family.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 47
+      },
+      "revId": "13fe6aefe5398b4656e314c248dabe7e722f04ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
