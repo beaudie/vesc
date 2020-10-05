@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "d5b61a2d_363d04b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4584,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b2901b6_6c89c9d6",
+      "range": {
+        "startLine": 4575,
+        "startChar": 0,
+        "endLine": 4584,
+        "endChar": 6
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a20fcc73_21efbd54",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -59,6 +83,24 @@
       "writtenOn": "2020-10-05T18:45:05Z",
       "side": 1,
       "message": "Can this be called by startNewRenderPass()?   Seems a little odd to start the RP and then immediately update it.",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a6a614_6bcc793e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4652,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "The problem is that this has to be updated after depthStencil access update (line 4649 and 4650).",
+      "parentUuid": "a20fcc73_21efbd54",
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -88,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "0c8a3dfc_06fb0852",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "It can be anything. It really doesn\u0027t matter since it will be updated at the end. Write is the most common access.",
+      "parentUuid": "ee61cbb2_ab5ceddb",
+      "range": {
+        "startLine": 1818,
+        "startChar": 0,
+        "endLine": 1820,
+        "endChar": 39
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe28477b_c846f262",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 8
@@ -105,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "9d170043_ed39ac4e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "It is called in ContextVk.cpp line 4652 (where your other comment are). updateRenderPassReadOnlyDepthMode has to be caled after depth stencil access been set.",
+      "parentUuid": "fe28477b_c846f262",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8469d19b_1eb0d6dc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -116,6 +200,24 @@
       "writtenOn": "2020-10-05T18:45:05Z",
       "side": 1,
       "message": "Why doesn\u0027t UpdateAccess() these need to update mReadOnlyDepthStencilMode when we move from ReadOnly -\u003e Write?",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "408464cc_4efbd939",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "Caller is doing that. It can\u0027t be done here because the the readonly logic depends on theattachment\u0027s loadOp as well, which is owned by FramebufferVk, which we don\u0027t have access here.",
+      "parentUuid": "8469d19b_1eb0d6dc",
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -166,6 +268,30 @@
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88d665e7_ecabbdb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b53e9451_6ebdfb28",
+      "range": {
+        "startLine": 901,
+        "startChar": 8,
+        "endLine": 901,
+        "endChar": 23
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -240,6 +366,30 @@
     },
     {
       "key": {
+        "uuid": "921360b3_94c0e6b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d00cda9_1ff2f53b",
+      "range": {
+        "startLine": 930,
+        "startChar": 75,
+        "endLine": 930,
+        "endChar": 86
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87b78cdd_c73525cb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -260,6 +410,30 @@
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9223c992_c449c68c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87b78cdd_c73525cb",
+      "range": {
+        "startLine": 944,
+        "startChar": 8,
+        "endLine": 944,
+        "endChar": 79
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -286,6 +460,30 @@
     },
     {
       "key": {
+        "uuid": "5b820cf7_c21aa044",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "Actually I am trying to keep it consistent with other APIs here, imageRead/imageWrite/bufferRead/bufferDraw. If I change it to onDepthStencilImageDraw, it looks a bit odd compare to the other four APIs.",
+      "parentUuid": "70e91854_3989431f",
+      "range": {
+        "startLine": 953,
+        "startChar": 9,
+        "endLine": 953,
+        "endChar": 31
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ddb4bf54_d4a1baac",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8
@@ -297,6 +495,30 @@
       "writtenOn": "2020-10-05T18:45:05Z",
       "side": 1,
       "message": "How do all of these interact now?   Can we check mDepthAccess and mStencilAccess are both ResourceAccess::ReadOnly, rather than adding a new boolean?",
+      "range": {
+        "startLine": 1154,
+        "startChar": 0,
+        "endLine": 1163,
+        "endChar": 34
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "442ebee5_5e40bd3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T22:10:52Z",
+      "side": 1,
+      "message": "mReadOnlyDepthStencilMode is based on a few conditions combined togetehr: The mDepthAccess/mStencil/Access, the attachment loadOPs that owned by FrambufferVk object. The way it works right now is that FrambufferVk object makes the decision based on these information and tell RenderPassCommands to set mReadOnlyDepthStencilMode.",
+      "parentUuid": "ddb4bf54_d4a1baac",
       "range": {
         "startLine": 1154,
         "startChar": 0,
