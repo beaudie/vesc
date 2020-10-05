@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "675b3488_adabb613",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T22:14:19Z",
+      "side": 1,
+      "message": "nit: bug isn\u0027t with the test infrastructure, it\u0027s with the test runner.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 48
+      },
+      "revId": "601b0f9ff8fc5549da2b4dc44353f5a85b695460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5b049e2_8f64872d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T22:14:19Z",
+      "side": 1,
+      "message": "nit: can remove this.",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "601b0f9ff8fc5549da2b4dc44353f5a85b695460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "941d8582_135fe96a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T22:14:19Z",
+      "side": 1,
+      "message": "nit: runner",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "601b0f9ff8fc5549da2b4dc44353f5a85b695460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9379f937_8a4140c9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -16,6 +85,46 @@
       "revId": "601b0f9ff8fc5549da2b4dc44353f5a85b695460",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb7be431_0a17e947",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T22:14:19Z",
+      "side": 1,
+      "message": "LGTM. Happy you had a chance to fix this Ian.",
+      "revId": "601b0f9ff8fc5549da2b4dc44353f5a85b695460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f7b5fa7_8a4adc64",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T22:14:19Z",
+      "side": 1,
+      "message": "probably should take out the empty if and leave a TODO with the bug link.",
+      "range": {
+        "startLine": 2381,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "601b0f9ff8fc5549da2b4dc44353f5a85b695460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
