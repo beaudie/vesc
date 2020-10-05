@@ -157,6 +157,24 @@
       "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "37b62810_2bba8d0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T18:10:39Z",
+      "side": 1,
+      "message": "Got it. I used this:\n\nANGLE_CAPTURE_FRAME_START\u003d0 ANGLE_CAPTURE_FRAME_END\u003d10 ../bin/testfw_app -b $TFW_PACKAGE_DIR --gfx egl -w 3000 -h 2000 -t gl_trex_off --ei -frame_step_time\u003d20\n\nyou can capture more frames. the sample messes up because it doesn\u0027t reset the GL state between iterations.",
+      "parentUuid": "da8796ff_a09662c6",
+      "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
