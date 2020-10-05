@@ -39,6 +39,30 @@
       "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "012c0af8_d21cc2f9",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T21:45:45Z",
+      "side": 1,
+      "message": "Leaving the vector uninitialized SGTM, done.",
+      "parentUuid": "8b4b9317_9b0dfbe5",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 73
+      },
+      "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
