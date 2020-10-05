@@ -16,6 +16,23 @@
       "revId": "81c01abef8ad20723ffb63873513e930ff9bafe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aca19f0_13854b82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-05T15:13:03Z",
+      "side": 1,
+      "message": "Jamie, how are you running the script?  I get the following when I test out this CL:\n\npython3 src/tests/capture_replay_tests.py --use-goma --gtest_filter\u003d*/ES2_Vulkan --keep-temp-files --output-to-file --batch-count\u003d64\n\nDone. Made 438 targets from 151 files in 2584ms\n\"C:\\Users\\path\\to\\depot_tools\\ninja.exe\" angle_end2end_tests.exe -C out/CaptureTest -j 480\nninja: Entering directory `out/CaptureTest\u0027\n[712/712] LINK angle_end2end_tests.exe angle_end2end_tests.exe.pdb\nTraceback (most recent call last):\n  File \"src/tests/capture_replay_tests.py\", line 1086, in \u003cmodule\u003e\n    sys.exit(main(args))\n  File \"src/tests/capture_replay_tests.py\", line 902, in main\n    batch.AddTest(\n  File \"src/tests/capture_replay_tests.py\", line 632, in AddTest\n    assert len(self.tests) \u003c\u003d self.batch_count\nTypeError: \u0027\u003c\u003d\u0027 not supported between instances of \u0027int\u0027 and \u0027str\u0027",
+      "revId": "81c01abef8ad20723ffb63873513e930ff9bafe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
