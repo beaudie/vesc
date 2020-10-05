@@ -16,6 +16,29 @@
       "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b4b9317_9b0dfbe5",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-05T15:38:05Z",
+      "side": 1,
+      "message": "The caller is initializing the vector with size 512. It\u0027s perfectly fine to attempt to print into it and hope the size was ok:\n\n    int len \u003d vsnprintf(outBuffer.data(), outBuffer.size(), fmt, vararg);\n    va_end(vararg);\n\n    if (len \u003e\u003d outBuffer.size())\n    {\n        outBuffer.resize(len + 1, 0);\n\n        int lenAgain \u003d vsnprintf(outBuffer.data(), outBuffer.size(), fmt, varargCopy);\n        ASSERT(len \u003d\u003d lenAgain);\n    }\n\nAlternatively, you can leave the vector uninitialized in the caller.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 73
+      },
+      "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
