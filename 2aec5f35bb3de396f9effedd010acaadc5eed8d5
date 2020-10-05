@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a7e9a2c_de976d1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T19:58:54Z",
+      "side": 1,
+      "message": "This is now a stand-alone CL that fixes the infrastructure/architecture problem of:\n\n1) The DebugAnnotator to use for a given back-end is pointed to by a global variable\n\n2) The end2end tests switch back-ends without updating the global variable\n\nWith Shabi\u0027s feedback, this is now pretty large.  Therefore, I\u0027d like it to land separately.",
+      "revId": "2aec5f35bb3de396f9effedd010acaadc5eed8d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
