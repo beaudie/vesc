@@ -866,6 +866,9 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_EXTENDED:
                 updateExtendedState(glState);
                 break;
+            case gl::State::DIRTY_BIT_SAMPLE_SHADING:
+                // NOTE: MSSA feature.
+                break;
             default:
                 UNREACHABLE();
                 break;
