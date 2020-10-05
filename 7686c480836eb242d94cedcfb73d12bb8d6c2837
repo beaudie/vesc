@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49940ac3_93dfd807",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T20:23:37Z",
+      "side": 1,
+      "message": "Fixing a Mac issue ... PTAL",
+      "revId": "7686c480836eb242d94cedcfb73d12bb8d6c2837",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
