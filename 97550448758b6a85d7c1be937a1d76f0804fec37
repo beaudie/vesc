@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef2f0fc3_9dc6f06d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T16:46:49Z",
+      "side": 1,
+      "message": "This is a CL to re-land the debug labels for AGI.\n\nBefore landing, I will combine it with another CL (https://chromium-review.googlesource.com/c/angle/angle/+/2444095) that contains the work-arounds needed for the unfortunate combination of end2end tests + use of a global-variable DebugAnnotator pointer.  I\u0027m keeping that CL separate for the moment so that the changes are easy to see.",
+      "revId": "97550448758b6a85d7c1be937a1d76f0804fec37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
