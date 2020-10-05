@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1f9635f6_6c71e448",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-05T21:18:24Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 10,
+        "startChar": 21,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "17c495fffef16ff7b928ff84fb068364148425df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb9501e0_a580de24",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
