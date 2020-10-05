@@ -131,6 +131,24 @@
     },
     {
       "key": {
+        "uuid": "d017d186_2cb8d15d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4652,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T23:07:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e6a6a614_6bcc793e",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee61cbb2_ab5ceddb",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 8
@@ -245,6 +263,24 @@
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d07d7968_86b89f1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T23:07:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "408464cc_4efbd939",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -552,6 +588,30 @@
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abeeaa8d_b1cbf2b8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T23:07:40Z",
+      "side": 1,
+      "message": "I can\u0027t say I understand all of these dependencies, but this looks like a good change overall.",
+      "parentUuid": "442ebee5_5e40bd3f",
+      "range": {
+        "startLine": 1154,
+        "startChar": 0,
+        "endLine": 1163,
+        "endChar": 34
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
