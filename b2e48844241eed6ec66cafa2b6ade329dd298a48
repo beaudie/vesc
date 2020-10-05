@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1347d063_78448de9",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-05T20:07:00Z",
+      "side": 0,
+      "message": "Looks like you\u0027re the one who added this in https://chromium-review.googlesource.com/c/angle/angle/+/407802, so I trust you this doesn\u0027t break anything.",
+      "range": {
+        "startLine": 650,
+        "startChar": 0,
+        "endLine": 650,
+        "endChar": 44
+      },
+      "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
