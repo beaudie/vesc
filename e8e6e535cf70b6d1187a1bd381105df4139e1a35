@@ -139,6 +139,24 @@
       "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da8796ff_a09662c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-05T17:55:14Z",
+      "side": 1,
+      "message": "To clarify, I tested with all three CL\u0027s that were under review at the time.",
+      "parentUuid": "6f1c8b2a_045d608f",
+      "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
