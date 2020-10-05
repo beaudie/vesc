@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f06d3b29_63003e51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T17:04:35Z",
+      "side": 1,
+      "message": "I\u0027ll change the comment. There are two modes for reading: blocking and non-blocking. We call the non-blocking version once every few seconds to check on child process progress. This change update the non-blocking path. Previously we would read one buffer of bytes. Now it reads as many bytes are available until it hits the end of the available stream, but not EOF. EOF is handled differently in both cases.",
+      "parentUuid": "0b8749f0_305ec570",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "d042483a074c5b6bdbb6ba278527172f907c07cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0fb3f46_40b0af38",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
