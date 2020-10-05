@@ -33,6 +33,24 @@
       "revId": "81c01abef8ad20723ffb63873513e930ff9bafe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "382a5947_6a194389",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T17:49:54Z",
+      "side": 1,
+      "message": "Was a bug with batch count. Fixed. You shouldn\u0027t need to specify --keep-temp-files for most uses now BTW.",
+      "parentUuid": "5aca19f0_13854b82",
+      "revId": "81c01abef8ad20723ffb63873513e930ff9bafe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
