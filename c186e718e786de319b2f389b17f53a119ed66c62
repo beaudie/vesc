@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c498d2b3_5c9ba1db",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-05T20:23:54Z",
+      "side": 1,
+      "message": "Can you update this line with the correct way to run the test now?\n\nAlso, I tried running with and without --keep-temp-files and I\u0027m not seeing any files retained under angle\\src\\tests\\capture_replay_tests (if that\u0027s the right place to look).",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 131
+      },
+      "revId": "c186e718e786de319b2f389b17f53a119ed66c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

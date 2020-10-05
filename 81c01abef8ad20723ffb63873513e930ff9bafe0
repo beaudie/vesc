@@ -51,6 +51,24 @@
       "revId": "81c01abef8ad20723ffb63873513e930ff9bafe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44f71af7_13f30b54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-05T20:23:54Z",
+      "side": 1,
+      "message": "Confirmed, no more python complaints.",
+      "parentUuid": "382a5947_6a194389",
+      "revId": "81c01abef8ad20723ffb63873513e930ff9bafe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
