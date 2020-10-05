@@ -7256,7 +7256,7 @@ void Context::deleteSamplers(GLsizei count, const SamplerID *samplers)
 
 void Context::minSampleShading(GLfloat value)
 {
-    UNIMPLEMENTED();
+    mState.setMinSampleShading(value);
 }
 
 void Context::getInternalformativ(GLenum target,

@@ -2059,6 +2059,9 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 // TODO(jmadill): handle mipmap generation hint
                 // TODO(jmadill): handle shader derivative hint
                 break;
+            case gl::State::DIRTY_BIT_SAMPLE_SHADING:
+                // TODO: handle OES_sample_shading.
+                break;
             default:
                 UNREACHABLE();
                 break;
