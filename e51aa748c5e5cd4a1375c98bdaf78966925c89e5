@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49e0cee4_5a8b3305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-05T19:15:17Z",
+      "side": 1,
+      "message": "I figure this might take a couple rounds, so starting review now.\nI\u0027d be happy to do a walk through to cover the highlights. Let me know if that\u0027s interesting to you.",
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
