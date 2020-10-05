@@ -39,6 +39,30 @@
       "revId": "5366a5a4ccc211be82e3e6da6859a477d7d5c6c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78269e37_38848981",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T23:52:26Z",
+      "side": 1,
+      "message": "Sigh.  I think I understand your motivation, but it took extra time to shuffle things around.\n\nCan we land these 2 new CLs quickly please?",
+      "parentUuid": "fa0925c2_cc67f1e2",
+      "range": {
+        "startLine": 22,
+        "startChar": 38,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "5366a5a4ccc211be82e3e6da6859a477d7d5c6c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

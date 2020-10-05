@@ -135,6 +135,30 @@
       "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fdabb8f_60636263",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T23:52:26Z",
+      "side": 1,
+      "message": "\u003e You can also use mRenderPassCommands instead mRenderPassCommandBuffer. That may be better than a cache.\n\nIt is, thanks.",
+      "parentUuid": "d022c0c4_3cc42329",
+      "range": {
+        "startLine": 2691,
+        "startChar": 0,
+        "endLine": 2695,
+        "endChar": 0
+      },
+      "revId": "61ab35ea445c4506c5096526eeb621be2386a781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
