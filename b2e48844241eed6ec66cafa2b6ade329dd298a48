@@ -22,6 +22,30 @@
       "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb439fd7_09f6970f",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T21:45:58Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "1347d063_78448de9",
+      "range": {
+        "startLine": 650,
+        "startChar": 0,
+        "endLine": 650,
+        "endChar": 44
+      },
+      "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
