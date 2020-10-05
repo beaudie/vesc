@@ -16,6 +16,29 @@
       "revId": "c0484b504862e3327e0e1c9d843d159f8bf2088a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea520981_2a75f874",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-05T18:13:22Z",
+      "side": 1,
+      "message": "default value should be 0, per spec",
+      "range": {
+        "startLine": 331,
+        "startChar": 6,
+        "endLine": 331,
+        "endChar": 29
+      },
+      "revId": "c0484b504862e3327e0e1c9d843d159f8bf2088a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
