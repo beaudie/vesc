@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a60d8e7a_976ad40b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T23:55:42Z",
+      "side": 1,
+      "message": "PTAL\n\nAnother test I did for this CL was to force a new descriptor pool for each descriptor set by hacking the following:\n\n  uint32_t DynamicDescriptorPool::mMaxSetsPerPool           \u003d 1;\n  uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier \u003d 1;\n\nWith that, this CL is able to pass linux_angle_deqp_rel_ng and most of linux-angle-rel (some perf tests get upset).\n\nUnfortunately, linux-swangle-try-tot-angle-x64 still fails, but I can\u0027t recreate the failures locally. \n  Regardless of that, I think this is in a good enough place to land and should at least fix up most of the bugs.",
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
