@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "1a2d25ba_f56af463",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T19:33:10Z",
+      "side": 1,
+      "message": "Comment back to Shabi (below).  I\u0027m going to make this a stand-alone CL that comes before the \"Re-land\" CL that I was going to fold this into (since it\u0027s getting rather large).",
+      "revId": "7fb8b6b80dc1cb01bfd62545039caf88225e085a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0aed5f9_be77e5cb",
         "filename": "src/libANGLE/renderer/gl/DisplayGL.cpp",
         "patchSetId": 2
@@ -33,6 +50,24 @@
       "revId": "7fb8b6b80dc1cb01bfd62545039caf88225e085a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c6b0683_cadbc58f",
+        "filename": "src/libANGLE/renderer/gl/DisplayGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T19:33:10Z",
+      "side": 1,
+      "message": "Okay, but that makes this CL pretty large.  I\u0027ll probably re-order and land this CL before re-landing the other CL I was going to fold this into.",
+      "parentUuid": "f0aed5f9_be77e5cb",
+      "revId": "7fb8b6b80dc1cb01bfd62545039caf88225e085a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
