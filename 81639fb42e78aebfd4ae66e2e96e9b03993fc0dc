@@ -25,6 +25,103 @@
     },
     {
       "key": {
+        "uuid": "5b2901b6_6c89c9d6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4584,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T18:45:05Z",
+      "side": 1,
+      "message": "Remove, since if-0\u0027ed code will rot.   If there\u0027s a bug tracking adding tracking all attachments in the render pass, then this can be added as a comment there.",
+      "range": {
+        "startLine": 4575,
+        "startChar": 0,
+        "endLine": 4584,
+        "endChar": 6
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a20fcc73_21efbd54",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4652,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T18:45:05Z",
+      "side": 1,
+      "message": "Can this be called by startNewRenderPass()?   Seems a little odd to start the RP and then immediately update it.",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee61cbb2_ab5ceddb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T18:45:05Z",
+      "side": 1,
+      "message": "Why are we defaulting to ResourceAccess::Write here?",
+      "range": {
+        "startLine": 1818,
+        "startChar": 0,
+        "endLine": 1820,
+        "endChar": 39
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe28477b_c846f262",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T18:45:05Z",
+      "side": 1,
+      "message": "Call updateRenderPassReadOnlyDepthMode() here too?",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8469d19b_1eb0d6dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T18:45:05Z",
+      "side": 1,
+      "message": "Why doesn\u0027t UpdateAccess() these need to update mReadOnlyDepthStencilMode when we move from ReadOnly -\u003e Write?",
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3005570c_669daad7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -158,6 +255,29 @@
         "startChar": 9,
         "endLine": 953,
         "endChar": 31
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddb4bf54_d4a1baac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-05T18:45:05Z",
+      "side": 1,
+      "message": "How do all of these interact now?   Can we check mDepthAccess and mStencilAccess are both ResourceAccess::ReadOnly, rather than adding a new boolean?",
+      "range": {
+        "startLine": 1154,
+        "startChar": 0,
+        "endLine": 1163,
+        "endChar": 34
       },
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
