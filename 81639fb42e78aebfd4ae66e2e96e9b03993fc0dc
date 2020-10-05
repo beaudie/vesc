@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "b53e9451_6ebdfb28",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-05T18:49:31Z",
+      "side": 1,
+      "message": "Right, that is what I understand from reading the spec. And with this CL, I am already updating the attachmentOps with proper layout (see line 912 bellow). So we could simply just remove the access information from RenderPassDesc. Filed https://issuetracker.google.com/170134600 to track.",
+      "parentUuid": "3005570c_669daad7",
+      "range": {
+        "startLine": 901,
+        "startChar": 8,
+        "endLine": 901,
+        "endChar": 23
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "daadeb54_0949728f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
