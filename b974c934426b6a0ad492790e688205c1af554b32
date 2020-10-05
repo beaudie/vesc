@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ba7f5d7_d34bf8e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T22:15:17Z",
+      "side": 1,
+      "message": "actually, not LGTM. There\u0027s no testing for the debug-only macros. Think we should squash this with the next patch.",
+      "revId": "b974c934426b6a0ad492790e688205c1af554b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
