@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e83c89e_75687c6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-05T16:51:18Z",
+      "side": 1,
+      "message": "This CL will be combined into: https://chromium-review.googlesource.com/c/angle/angle/+/2450449\n\nThis CL contains a \"fix\" (really a work-around) for test failures caused by the combination of:\n\n1) A global-variable that points to a DebugAnnotator\n\n2) end2end tests that don\u0027t cause that global pointer to change when the tests change which back-end is used.\n\nThe basic approach is that whenever a new test starts using a different back-end, it switches to a different context; and so the MakeCurrent for a given back-end will install the appropriate DebugAnnotator as the global DebugAnnotator.  This is only done for the back-ends that will have such contention (D3D9, D3D11, GL, Vulkan).",
+      "revId": "7fb8b6b80dc1cb01bfd62545039caf88225e085a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
