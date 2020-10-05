@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bf47194b_d3a6c282",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-05T14:43:54Z",
+      "side": 1,
+      "message": "We do allow it but I wanted a strong message when that happens. It probably means that the feature isn\u0027t working as expected.",
+      "parentUuid": "fcc390e8_387fef83",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 5
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0062b38d_2565c987",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 6

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5b39f73a_eb7f081f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-05T14:43:54Z",
+      "side": 1,
+      "message": "Good idea, I\u0027ll work on that next.",
+      "parentUuid": "d42e45d8_96d33c02",
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3450b6eb_e705f03d",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 7
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "939039d6_60f9cb8e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-05T14:43:54Z",
+      "side": 1,
+      "message": "It means that the application tried to upload data to a downscaled texture but the sizes wont match and bad things will happen. It\u0027s mostly an indicator to us that this feature either doesn\u0027t work for this application or the conditions need to be tweaked.\n\nThinking about it more though, we can remove these checks because they would fail validation before getting here.",
+      "parentUuid": "3450b6eb_e705f03d",
+      "range": {
+        "startLine": 1165,
+        "startChar": 0,
+        "endLine": 1168,
+        "endChar": 5
+      },
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8e8aa57_deed0892",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 7
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "d2ff1336_2d34a294",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-05T14:43:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8e8aa57_deed0892",
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af149484_2983960c",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 7
@@ -73,6 +133,24 @@
       "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3218cc33_42fe4074",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-05T14:43:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af149484_2983960c",
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -96,6 +174,30 @@
       "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47a0f3f2_f803216e",
+        "filename": "src/libANGLE/feature_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-05T14:43:54Z",
+      "side": 1,
+      "message": "Done, small fear of depending on a function writing sane things in the negative case but it\u0027s right there sooo it\u0027s fine.",
+      "parentUuid": "388b3fa2_fe442ec5",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 5
+      },
+      "revId": "597b79668dc29dcea7a3ef0373834bcbe2603b8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
