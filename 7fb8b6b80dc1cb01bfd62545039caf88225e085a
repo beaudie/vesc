@@ -16,6 +16,23 @@
       "revId": "7fb8b6b80dc1cb01bfd62545039caf88225e085a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0aed5f9_be77e5cb",
+        "filename": "src/libANGLE/renderer/gl/DisplayGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-05T17:37:39Z",
+      "side": 1,
+      "message": "Better to pass the display to `DisplayGL::makeCurrent` instead of caching it here.",
+      "revId": "7fb8b6b80dc1cb01bfd62545039caf88225e085a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
