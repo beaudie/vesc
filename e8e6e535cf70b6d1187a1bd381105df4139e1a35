@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3bfb5336_91e96212",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T17:40:37Z",
+      "side": 1,
+      "message": "Stack overflow as well.",
+      "parentUuid": "7805175e_d7a90481",
+      "range": {
+        "startLine": 10,
+        "startChar": 17,
+        "endLine": 11,
+        "endChar": 19
+      },
+      "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18a64f86_de7546d6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -77,6 +101,41 @@
       "writtenOn": "2020-10-05T14:59:59Z",
       "side": 1,
       "message": "Verified locally, nice work!\n\nA local Debug build of trex_offscreen for Android took a long time.  I didn\u0027t time it, I went for coffee.",
+      "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f1c8b2a_045d608f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T17:40:37Z",
+      "side": 1,
+      "message": "This change doesn\u0027t actually split the replay functions, it\u0027s a refactor only. The next CL does the functional change.\n\nEven with that I had to use special arguments to get offscreen to capture.",
+      "parentUuid": "8e3133df_be8aae2d",
+      "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae981add_b9510cc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T17:40:37Z",
+      "side": 1,
+      "message": "Thanks!",
       "revId": "e8e6e535cf70b6d1187a1bd381105df4139e1a35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
