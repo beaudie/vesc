@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "14b65f9b_381d6a36",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T18:09:36Z",
+      "side": 1,
+      "message": "nit: is deleted",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3005570c_669daad7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T18:09:36Z",
+      "side": 1,
+      "message": "Did we determine that this state is not part of the \"renderPass compatiblity\" definition? Can you file a bug to take it out of mRenderPassDesc and into AttachmentOps?",
+      "range": {
+        "startLine": 901,
+        "startChar": 8,
+        "endLine": 901,
+        "endChar": 23
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "daadeb54_0949728f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -89,6 +135,29 @@
         "startChar": 8,
         "endLine": 944,
         "endChar": 79
+      },
+      "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70e91854_3989431f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-05T18:09:36Z",
+      "side": 1,
+      "message": "nit: can you make this start with a verb or condition (e.g. \u0027on\u0027)?",
+      "range": {
+        "startLine": 953,
+        "startChar": 9,
+        "endLine": 953,
+        "endChar": 31
       },
       "revId": "81639fb42e78aebfd4ae66e2e96e9b03993fc0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
