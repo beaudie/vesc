@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af484ac3_16ee371d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T18:24:13Z",
+      "side": 1,
+      "message": "Seems like Multithreading is not the right way to repro. More likely it would be creating a bunch of contexts and having them submit some work serially, right? Then the delete in an earlier context would happen at the wrong time.\n\nPossibly you could do this in one context just by submitting a bunch of frames after ensuring the pool gets deleted each submit. I guess by deleting and recreating a program?",
+      "parentUuid": "ef2916bf_ee8c92ec",
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "775a2a0c_48ef90fb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
