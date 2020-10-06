@@ -2271,7 +2271,6 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                               ResourceTracker *resourceTracker,
                               const ShaderSourceMap &cachedShaderSources,
                               const ProgramSourceMap &cachedProgramSources,
-                              const TextureLevelDataMap &cachedTextureLevelData,
                               FrameCapture *frameCapture)
 {
     const gl::State &apiState = context->getState();
@@ -2583,16 +2582,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             {
                 // For compressed images, we've tracked a copy of the incoming data, so we can
                 // use that rather than try to read data back that may have been converted.
-
-                // Look up the data for the requested texture
-                const auto &foundTextureLevels = cachedTextureLevelData.find(texture->id());
-                ASSERT(foundTextureLevels != cachedTextureLevelData.end());
-
-                // For that texture, look up the data for the given level
-                GLint level                   = index.getLevelIndex();
-                const auto &foundTextureLevel = foundTextureLevels->second.find(level);
-                ASSERT(foundTextureLevel != foundTextureLevels->second.end());
-                const std::vector<uint8_t> &capturedTextureLevel = foundTextureLevel->second;
+                const std::vector<uint8_t> &capturedTextureLevel =
+                    context->getDisplay()->retrieveCachedTextureLevel(texture->id(),
+                                                                      index.getLevelIndex());
 
                 // Use the shadow copy of the data to populate the call
                 CaptureTextureContents(setupCalls, &replayState, texture, index, desc,
@@ -3755,37 +3747,9 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
     ASSERT(texture);
 
     // Record the data, indexed by textureID and level
-    GLint level             = call.params.getParam("level", ParamType::TGLint, 1).value.GLintVal;
-    auto foundTextureLevels = mCachedTextureLevelData.find(texture->id());
-    if (foundTextureLevels == mCachedTextureLevelData.end())
-    {
-        // Initialize the texture ID data.
-        auto emplaceResult = mCachedTextureLevelData.emplace(texture->id(), TextureLevels());
-        ASSERT(emplaceResult.second);
-        foundTextureLevels = emplaceResult.first;
-    }
-
-    // Get the format of the texture for use with the compressed block size math.
-    const gl::InternalFormat &format = *texture->getFormat(targetPacked, level).info;
-
-    TextureLevels &foundLevels = foundTextureLevels->second;
-    auto foundLevel            = foundLevels.find(level);
-
-    // Divide dimensions according to block size.
-    const gl::Extents &levelExtents = texture->getExtents(targetPacked, level);
-
-    if (foundLevel == foundLevels.end())
-    {
-        // Initialize texture rectangle data. Default init to zero for stability.
-        GLuint sizeInBytes;
-        bool result = format.computeCompressedImageSize(levelExtents, &sizeInBytes);
-        ASSERT(result);
-
-        std::vector<uint8_t> newPixelData(sizeInBytes, 0);
-        auto emplaceResult = foundLevels.emplace(level, std::move(newPixelData));
-        ASSERT(emplaceResult.second);
-        foundLevel = emplaceResult.first;
-    }
+    GLint level = call.params.getParam("level", ParamType::TGLint, 1).value.GLintVal;
+    std::vector<uint8_t> &levelData =
+        context->getDisplay()->getTextureLevelCache(texture, targetPacked, level);
 
     // Unpack the various pixel rectangle parameters.
     ASSERT(widthParamOffset != -1);
@@ -3823,6 +3787,12 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
             call.params.getParam("zoffset", ParamType::TGLint, zoffsetParamOffset).value.GLintVal;
     }
 
+    // Get the format of the texture for use with the compressed block size math.
+    const gl::InternalFormat &format = *texture->getFormat(targetPacked, level).info;
+
+    // Divide dimensions according to block size.
+    const gl::Extents &levelExtents = texture->getExtents(targetPacked, level);
+
     // Scale down the width/height pixel offsets to reflect block size
     int widthScale  = static_cast<int>(format.compressedBlockWidth);
     int heightScale = static_cast<int>(format.compressedBlockHeight);
@@ -3831,9 +3801,6 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
     pixelHeight /= heightScale;
     xoffset /= widthScale;
     yoffset /= heightScale;
-
-    // Update pixel data.
-    std::vector<uint8_t> &levelData = foundLevel->second;
 
     GLint pixelBytes = static_cast<GLint>(format.pixelBytes);
 
@@ -4075,12 +4042,7 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
             for (int32_t i = 0; i < n; ++i)
             {
                 // Look it up in the cache, and delete it if found
-                const auto &foundTextureLevels = mCachedTextureLevelData.find(textureIDs[i]);
-                if (foundTextureLevels != mCachedTextureLevelData.end())
-                {
-                    // Delete all texture levels at once
-                    mCachedTextureLevelData.erase(foundTextureLevels);
-                }
+                context->getDisplay()->deleteCachedTextureLevelData(textureIDs[i]);
             }
             break;
         }
@@ -4418,8 +4380,6 @@ void FrameCapture::onEndFrame(const gl::Context *context)
                 mBinaryData.clear();
             }
             mWroteIndexFile = true;
-
-            context->getDisplay()->endFrameCapture();
         }
     }
 
@@ -4444,7 +4404,7 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     {
         mSetupCalls.clear();
         CaptureMidExecutionSetup(context, &mSetupCalls, &mResourceTracker, mCachedShaderSources,
-                                 mCachedProgramSources, mCachedTextureLevelData, this);
+                                 mCachedProgramSources, this);
     }
 }
 
