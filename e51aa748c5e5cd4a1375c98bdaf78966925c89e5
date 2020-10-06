@@ -400,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "e6f9e8fb_fadd3c5a",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T16:58:55Z",
+      "side": 1,
+      "message": "I retract that statement.\nFurther discussion yields the following spec statement:\nMore precisely, Vulkan commands use simple stores to update the state of Vulkan objects. A parameter declared as externally synchronized may have its contents updated at any time during the host execution of the command. If two commands operate on the same object and at least one of the commands declares the object to be externally synchronized, then the caller must guarantee not only that the commands do not execute simultaneously, but also that the two commands are separated by an appropriate memory barrier (if needed).\n\nI think that makes it pretty clear that the wait and queueSubmit require explicit synchronization. We can\u0027t wait on a separate thread until the work has been submitted.\n\nThis means we really shouldn\u0027t be issuing wait command directly in ContextVk or RendererVk they all need to go through the CommandProcessor to ensure that we maintain proper synchronization.",
+      "parentUuid": "1f504bf6_b4180d22",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 107,
+        "endChar": 13
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04160988_79bf7f18",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 45
