@@ -16,6 +16,24 @@
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b8dda2f_2b9aea78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T03:24:36Z",
+      "side": 1,
+      "message": "Actually, the \"len \u003c 0\" check is bad, too.\nShould be:\n\n{\n    // The state of the va_list passed to vsnprintf is undefined after the call, do a copy in case\n    // we need to grow the buffer.\n    va_list varargCopy;\n    va_copy(varargCopy, vararg);\n    // Attempt to just print to the current buffer\n    int len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n    va_end(varargCopy);\n    ASSERT(len \u003e\u003d 0);\n\n    if (static_cast\u003csize_t\u003e(len) \u003e\u003d outBuffer.size())\n    {\n        // Buffer was not large enough, resize the buffer\n        outBuffer.resize(len + 1);\n        // Print again\n        va_copy(varargCopy, vararg);\n        len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n        va_end(varargCopy);\n        ASSERT(len \u003e\u003d 0);\n    }\n    return static_cast\u003csize_t\u003e(len);\n}",
+      "parentUuid": "c81f21ae_fa88f033",
+      "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
