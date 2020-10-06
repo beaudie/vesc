@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f17f0167_16b45935",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T14:37:00Z",
+      "side": 1,
+      "message": "LGTM - can you confirm the read-only layout is correctly set in the attachment ops?",
+      "revId": "636440e048c3d5caf85120ecf0c5530f9c0208a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
