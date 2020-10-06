@@ -51,6 +51,24 @@
       "parentUuid": "ed29a78c_ff759007",
       "revId": "08142700a841adff0081581df2920ef3ea8b211d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2f74dca_3cdac2c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T18:19:41Z",
+      "side": 1,
+      "message": "It is a process thing. If you wanted to add a section under ContributingCode.md for reland/revert process it would be welcome.",
+      "parentUuid": "1a2e2172_fa3be38c",
+      "revId": "08142700a841adff0081581df2920ef3ea8b211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
