@@ -88,6 +88,24 @@
       "parentUuid": "6a3f7f3a_e34507e4",
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0ec8b8_37add822",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T19:15:32Z",
+      "side": 1,
+      "message": "OK, will wait for Yuly\u0027s response.",
+      "parentUuid": "65c6bc0b_d0487bf7",
+      "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
