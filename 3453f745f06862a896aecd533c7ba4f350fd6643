@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17d68423_59fadfef",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T14:34:39Z",
+      "side": 0,
+      "message": "can you revert all the whitespace and refactor changes to these functions? there\u0027s a bunch.",
+      "revId": "3453f745f06862a896aecd533c7ba4f350fd6643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
