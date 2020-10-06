@@ -70,6 +70,24 @@
       "parentUuid": "70d24145_0addaea2",
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65c6bc0b_d0487bf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T19:14:29Z",
+      "side": 1,
+      "message": "I had missed the change in PS#7. That PS is correct actually, if you feel like un-abandoning and submitting this.\n\nYou can un-initialize the vector in src/gpu_info_util/SystemInfo_vulkan.cpp too if you get around to changing that.",
+      "parentUuid": "6a3f7f3a_e34507e4",
+      "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
