@@ -132,9 +132,24 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
-        ImageLayout::DepthStencilReadOnly,
-        ImageMemoryBarrierData{
-            "DepthStencilReadOnly",
+        ImageLayout::DepthStencilFragmentShaderReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilFragmentShaderReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::EarlyFragmentTest,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAllShadersReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilAllShadersReadOnly",
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
@@ -144,6 +159,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAttachmentReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilAttachmentReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::EarlyFragmentTest,
         },
     },
     {
@@ -578,7 +608,8 @@ bool IsExternalQueueFamily(uint32_t queueFamilyIndex)
 
 bool IsShaderReadOnlyLayout(const ImageMemoryBarrierData &imageLayout)
 {
-    return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ||
+           imageLayout.layout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 }
 
 bool IsAnySubresourceContentDefined(const gl::TexLevelArray<angle::BitSet8<8>> &contentDefined)
@@ -640,6 +671,7 @@ CommandBufferHelper::CommandBufferHelper()
       mRebindTransformFeedbackBuffers(false),
       mIsRenderPassCommandBuffer(false),
       mReadOnlyDepthStencilMode(false),
+      mReadOnlyDepthFeedbackLoopMode(false),
       mDepthAccess(ResourceAccess::Unused),
       mStencilAccess(ResourceAccess::Unused),
       mDepthCmdSizeInvalidated(kInfiniteCmdSize),
@@ -754,6 +786,21 @@ void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
         if (!usesImageInRenderPass(*image))
         {
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
+        }
+        else if (image == mDepthStencilImage)
+        {
+            // If the image is also used as depth stencil attachment, this is called feedback loop.
+            // Without feedback loop, the depthstencil image layout is determined at
+            // finalizeDepthStencilImageLayout call, which get called by endRenderPass. But with
+            // feedback loop, we already picked the layout (because descriptor set needs it). To
+            // prevent finalizeDepthStencilImageLayout try to pick layout again which might be
+            // different from what the texture code already picked, we set mDepthStencilImage to
+            // null here.
+            mReadOnlyDepthFeedbackLoopMode = true;
+        }
+        else
+        {
+            ASSERT(image != mDepthStencilResolveImage);
         }
     }
 }
@@ -956,7 +1003,15 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
 
     if (mReadOnlyDepthStencilMode)
     {
-        imageLayout     = ImageLayout::DepthStencilReadOnly;
+        if (mReadOnlyDepthFeedbackLoopMode)
+        {
+            // If there is a feedback loop, the image layout already determined by texture code.
+            imageLayout = mDepthStencilImage->getCurrentImageLayout();
+        }
+        else
+        {
+            imageLayout = ImageLayout::DepthStencilAttachmentReadOnly;
+        }
         barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
     }
     else
@@ -1120,6 +1175,21 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
     ASSERT(!mReadOnlyDepthStencilMode || mDepthAccess != ResourceAccess::Write);
+
+    // Fill out perf counters
+    PerfCounters &counters = contextVk->getPerfCounters();
+
+    counters.depthClears += dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
+    counters.depthLoads += dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
+    counters.depthStores += dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
+    counters.stencilClears += dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
+    counters.stencilLoads += dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
+    counters.stencilStores += dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
+    counters.readOnlyDepthStencilRenderPasses +=
+        kImageMemoryBarrierData[static_cast<ImageLayout>(dsOps.finalLayout)].type ==
+                ResourceAccess::ReadOnly
+            ? 1
+            : 0;
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
@@ -1326,9 +1396,10 @@ void CommandBufferHelper::reset()
         mStencilCmdSizeDisabled            = kInfiniteCmdSize;
         mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
         mRenderPassUsedImages.clear();
-        mDepthStencilImage        = nullptr;
-        mDepthStencilResolveImage = nullptr;
-        mReadOnlyDepthStencilMode = false;
+        mDepthStencilImage             = nullptr;
+        mDepthStencilResolveImage      = nullptr;
+        mReadOnlyDepthStencilMode      = false;
+        mReadOnlyDepthFeedbackLoopMode = false;
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
