@@ -16,6 +16,23 @@
       "revId": "cad1dee6fa3ba9fe447faeaf78fcb5f91e3288a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "876f1d8a_6e054797",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T14:47:57Z",
+      "side": 1,
+      "message": "Alternately if you want to do the counters indexed by slot, arrays are fine, but the UtilsVk counters need to be flattened somehow. 20 is too many.",
+      "revId": "cad1dee6fa3ba9fe447faeaf78fcb5f91e3288a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
