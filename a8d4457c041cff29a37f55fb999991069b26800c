@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "c8076c1e_3f0878ac",
         "filename": "util/posix/test_utils_posix.cpp",
@@ -20,10 +21,10 @@
         "endChar": 0
       },
       "revId": "a8d4457c041cff29a37f55fb999991069b26800c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "614c0ee4_21a616e4",
         "filename": "util/posix/test_utils_posix.cpp",
@@ -44,10 +45,10 @@
         "endChar": 0
       },
       "revId": "a8d4457c041cff29a37f55fb999991069b26800c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "d5fc26ac_a21f3198",
         "filename": "util/posix/test_utils_posix.cpp",
@@ -68,8 +69,31 @@
         "endChar": 0
       },
       "revId": "a8d4457c041cff29a37f55fb999991069b26800c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5bcf49_ccadaf6c",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T19:23:16Z",
+      "side": 0,
+      "message": "\u003e Not sure why Shabi added this case originally.\n\nI don\u0027t remember, but probably because the man page says EINTR can happen. I prefer it stays there, you never know when it might happen.",
+      "parentUuid": "d5fc26ac_a21f3198",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 0
+      },
+      "revId": "a8d4457c041cff29a37f55fb999991069b26800c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
