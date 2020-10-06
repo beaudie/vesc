@@ -1218,7 +1218,9 @@ enum class ImageLayout
     // Framebuffer attachment layouts are placed first, so they could fit in fewer bits in
     // PackedAttachmentOpsDesc.
     ColorAttachment,
-    DepthStencilReadOnly,
+    DepthStencilFragmentShaderReadOnly,
+    DepthStencilAllShadersReadOnly,
+    DepthStencilAttachmentReadOnly,
     DepthStencilAttachment,
     DepthStencilResolveAttachment,
     Present,
