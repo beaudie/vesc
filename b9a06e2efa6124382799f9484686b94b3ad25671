@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "c81f21ae_fa88f033",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "My main objection to this CL is:\n1. Per http://www.cplusplus.com/reference/cstdarg/va_start/\n   \"A function that invokes va_start, shall also invoke va_end before it returns.\"\n2. This CL moves va_end call from the function that invoked va_start to another function - FormatStringIntoVector().\n3. Someone can modify FormatStringIntoVector and stop calling va_end there (e.g. because it doesn\u0027t have a matching va_start)\n4. The contract will be violated\n\nAnother example why having va_start and va_end in different functions is bad is the (probably minor) bug that this CL introduces - va_end is being called twice in other callers of FormatStringIntoVector.\n\nCould we please take Shabi\u0027s suggestion in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d5131#c1? It should fix the bug without introducing new issues.\n\nBasically, change FormatStringIntoVector() to:\n{\n    // The state of the va_list passed to vsnprintf is undefined after the call, do a copy in case\n    // we need to grow the buffer.\n    va_list varargCopy;\n    va_copy(varargCopy, vararg);\n\n    // Attempt to just print to the current buffer\n    int len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n    va_end(varargCopy);\n\n    if (len \u003c 0 || static_cast\u003csize_t\u003e(len) \u003e\u003d outBuffer.size())\n    {\n        // Buffer was not large enough, resize the buffer\n        outBuffer.resize(len + 1);\n\n        // Print again\n        va_copy(varargCopy, vararg);\n        len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n        va_end(varargCopy);\n    }\n    ASSERT(len \u003e\u003d 0);\n    return static_cast\u003csize_t\u003e(len);\n}\n\nNo changes to other files are necessary.\nJamie, could you please verify if this fixes the bug?",
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "6b8dda2f_2b9aea78",
         "filename": "/PATCHSET_LEVEL",
@@ -32,10 +33,10 @@
       "message": "Actually, the \"len \u003c 0\" check is bad, too.\nShould be:\n\n{\n    // The state of the va_list passed to vsnprintf is undefined after the call, do a copy in case\n    // we need to grow the buffer.\n    va_list varargCopy;\n    va_copy(varargCopy, vararg);\n    // Attempt to just print to the current buffer\n    int len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n    va_end(varargCopy);\n    ASSERT(len \u003e\u003d 0);\n\n    if (static_cast\u003csize_t\u003e(len) \u003e\u003d outBuffer.size())\n    {\n        // Buffer was not large enough, resize the buffer\n        outBuffer.resize(len + 1);\n        // Print again\n        va_copy(varargCopy, vararg);\n        len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n        va_end(varargCopy);\n        ASSERT(len \u003e\u003d 0);\n    }\n    return static_cast\u003csize_t\u003e(len);\n}",
       "parentUuid": "c81f21ae_fa88f033",
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "70d24145_0addaea2",
         "filename": "/PATCHSET_LEVEL",
@@ -50,8 +51,25 @@
       "message": "You\u0027re right about va_end not being called in the right places. I fixed that. We\u0027re getting a little out of scope for this tiny CL, can we land it now that I fixed the obvious bug? Efficiency is not a goal for this function as it\u0027s only used for tracing or debugging. Happy if someone else wants to take it up. To repro you can use a very small initial buffer size.",
       "parentUuid": "6b8dda2f_2b9aea78",
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a3f7f3a_e34507e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T19:05:52Z",
+      "side": 1,
+      "message": "I agree with Yuly. Jamie, you should be able to put va_end back in the caller, and add make two va_copy calls. Note that the va_copy calls are pretty cheap.",
+      "parentUuid": "70d24145_0addaea2",
+      "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
