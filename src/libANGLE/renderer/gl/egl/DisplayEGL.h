@@ -137,6 +137,9 @@ class DisplayEGL : public DisplayGL
     };
     std::unordered_map<std::thread::id, CurrentNativeContext> mCurrentNativeContexts;
 
+    bool mHasEXTCreateContextRobustness;
+    bool mHasNVRobustnessVideoMemoryPurge;
+
   private:
     void generateCaps(egl::Caps *outCaps) const override;
 
