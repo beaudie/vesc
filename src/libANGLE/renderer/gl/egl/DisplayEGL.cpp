@@ -27,6 +27,12 @@
 namespace
 {
 
+EGLBoolean GetRobustnessVideoMemoryPurge(const egl::AttributeMap &attribs)
+{
+    return static_cast<EGLBoolean>(
+        attribs.get(EGL_GENERATE_RESET_ON_VIDEO_MEMORY_PURGE_NV, GL_FALSE));
+}
+
 EGLint ESBitFromPlatformAttrib(const rx::FunctionsEGL *egl, const EGLAttrib platformAttrib)
 {
     EGLint esBit = EGL_NONE;
@@ -103,7 +109,11 @@ namespace rx
 {
 
 DisplayEGL::DisplayEGL(const egl::DisplayState &state)
-    : DisplayGL(state), mRenderer(nullptr), mEGL(nullptr), mConfig(EGL_NO_CONFIG_KHR)
+    : DisplayGL(state),
+      mRenderer(nullptr),
+      mEGL(nullptr),
+      mConfig(EGL_NO_CONFIG_KHR),
+      mHasNVRobustnessVideoMemoryPurge(false)
 {}
 
 DisplayEGL::~DisplayEGL() {}
@@ -147,6 +157,16 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                   "Minor Version define should match");
 
     std::vector<native_egl::AttributeVector> contextAttribLists;
+
+    contextAttribLists.push_back(
+        {EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY, EGL_LOSE_CONTEXT_ON_RESET, EGL_NONE});
+
+    if (mHasNVRobustnessVideoMemoryPurge)
+    {
+        contextAttribLists.push_back(
+            {EGL_GENERATE_RESET_ON_VIDEO_MEMORY_PURGE_NV, GL_TRUE, EGL_NONE});
+    }
+
     if (eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_create_context"))
     {
         if (initializeRequested)
@@ -226,6 +246,8 @@ egl::Error DisplayEGL::initialize(egl::Display *display)
             return egl::EglNotInitialized() << "need " << ext;
         }
     }
+
+    mHasNVRobustnessVideoMemoryPurge = mEGL->hasExtension("EGL_NV_robustness_video_memory_purge");
 
     const EGLAttrib platformAttrib = mDisplayAttributes.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, 0);
     EGLint esBit                   = ESBitFromPlatformAttrib(mEGL, platformAttrib);
@@ -356,7 +378,8 @@ ContextImpl *DisplayEGL::createContext(const gl::State &state,
         return nullptr;
     }
 
-    return new ContextEGL(state, errorSet, renderer);
+    bool robustnessVideoMemoryPurgeRequested = GetRobustnessVideoMemoryPurge(attribs);
+    return new ContextEGL(state, errorSet, renderer, robustnessVideoMemoryPurgeRequested);
 }
 
 template <typename T>
@@ -682,6 +705,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->imageDmaBufImportModifiersEXT =
         mEGL->hasExtension("EGL_EXT_image_dma_buf_import_modifiers");
+
+    outExtensions->robustnessVideoMemoryPurgeNV = mHasNVRobustnessVideoMemoryPurge;
 
     DisplayGL::generateExtensions(outExtensions);
 }

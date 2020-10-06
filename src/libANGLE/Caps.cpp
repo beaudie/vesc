@@ -1032,6 +1032,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_EXT_EGL_image_array"] = enableableExtension(&Extensions::eglImageArray);
         map["GL_EXT_buffer_storage"] = enableableExtension(&Extensions::bufferStorageEXT);
         map["GL_OES_texture_stencil8"] = enableableExtension(&Extensions::stencilIndex8);
+        map["GL_NV_robustness_video_memory_purge"] = enableableExtension(&Extensions::robustnessVideoMemoryPurgeNV);
         // GLES1 extensions
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArrayOES);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMapOES);
@@ -1415,6 +1416,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_EXT_image_dma_buf_import",                        imageDmaBufImportEXT,               &extensionStrings);
     InsertExtensionString("EGL_EXT_image_dma_buf_import_modifiers",              imageDmaBufImportModifiersEXT,      &extensionStrings);
     InsertExtensionString("EGL_NOK_texture_from_pixmap",                         textureFromPixmapNOK,               &extensionStrings);
+    InsertExtensionString("EGL_NV_robustness_video_memory_purge",                robustnessVideoMemoryPurgeNV,               &extensionStrings);
     // clang-format on
 
     return extensionStrings;
