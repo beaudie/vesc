@@ -1569,7 +1569,15 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 {
                     if (image.hasRenderPassUsageFlag(vk::RenderPassUsage::ReadOnlyAttachment))
                     {
-                        textureLayout = vk::ImageLayout::DepthStencilReadOnly;
+                        if (firstShader == gl::ShaderType::Fragment)
+                        {
+                            ASSERT(!remainingShaderBits.any());
+                            textureLayout = vk::ImageLayout::DepthStencilFragmentShaderReadOnly;
+                        }
+                        else
+                        {
+                            textureLayout = vk::ImageLayout::DepthStencilAllShadersReadOnly;
+                        }
                     }
                     else
                     {
@@ -1604,7 +1612,15 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 // split a RenderPass to transition a depth texture from shader-read to read-only.
                 // This improves performance in Manhattan. Future optimizations are likely possible
                 // here including using specialized barriers without breaking the RenderPass.
-                textureLayout = vk::ImageLayout::DepthStencilReadOnly;
+                if (firstShader == gl::ShaderType::Fragment)
+                {
+                    ASSERT(!remainingShaderBits.any());
+                    textureLayout = vk::ImageLayout::DepthStencilFragmentShaderReadOnly;
+                }
+                else
+                {
+                    textureLayout = vk::ImageLayout::DepthStencilAllShadersReadOnly;
+                }
             }
             else
             {
