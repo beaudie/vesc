@@ -614,20 +614,24 @@ void WriteBufferDescriptorSetBinding(const vk::BufferHelper &buffer,
     ASSERT(writeInfoOut->pBufferInfo[0].buffer != VK_NULL_HANDLE);
 }
 
-void ProgramExecutableVk::updateEarlyFragmentTestsOptimization(ContextVk *contextVk)
+bool ProgramExecutableVk::updateEarlyFragmentTestsOptimization(ContextVk *contextVk)
 {
     const gl::State &glState = contextVk->getState();
+    ProgramVk *programVk     = getShaderProgram(glState, gl::ShaderType::Fragment);
+    ASSERT(programVk);
+    bool earlyFragmentTest = programVk->getState().hasEarlyFragmentTestsOptimization();
 
     mTransformOptionBits[ProgramTransformOption::RemoveEarlyFragmentTestsOptimization] = false;
     if (!glState.canEnableEarlyFragmentTestsOptimization())
     {
-        ProgramVk *programVk = getShaderProgram(glState, gl::ShaderType::Fragment);
-        if (programVk && programVk->getState().hasEarlyFragmentTestsOptimization())
+        if (earlyFragmentTest)
         {
             mTransformOptionBits[ProgramTransformOption::RemoveEarlyFragmentTestsOptimization] =
                 true;
+            earlyFragmentTest = false;
         }
     }
+    return earlyFragmentTest;
 }
 
 angle::Result ProgramExecutableVk::getGraphicsPipeline(
