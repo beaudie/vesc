@@ -34,6 +34,24 @@
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70d24145_0addaea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T13:37:10Z",
+      "side": 1,
+      "message": "You\u0027re right about va_end not being called in the right places. I fixed that. We\u0027re getting a little out of scope for this tiny CL, can we land it now that I fixed the obvious bug? Efficiency is not a goal for this function as it\u0027s only used for tracing or debugging. Happy if someone else wants to take it up. To repro you can use a very small initial buffer size.",
+      "parentUuid": "6b8dda2f_2b9aea78",
+      "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
