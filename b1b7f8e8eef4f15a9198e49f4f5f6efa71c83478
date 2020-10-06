@@ -16,6 +16,29 @@
       "message": "LGTM if the crash reproed without your CL and fixed with your CL",
       "revId": "b1b7f8e8eef4f15a9198e49f4f5f6efa71c83478",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b15d4f10_de34108a",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T20:10:05Z",
+      "side": 1,
+      "message": "nit: No real reason for it. A function call given a va_list is expected to modify it (for example vsnprintf :) ).So the first `vsnprintf` could legitimately use `vararg`.\n\nIt\u0027s fine with me either way though.",
+      "range": {
+        "startLine": 53,
+        "startChar": 17,
+        "endLine": 53,
+        "endChar": 85
+      },
+      "revId": "b1b7f8e8eef4f15a9198e49f4f5f6efa71c83478",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
