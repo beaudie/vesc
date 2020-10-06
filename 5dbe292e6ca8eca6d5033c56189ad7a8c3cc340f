@@ -46,6 +46,30 @@
       "revId": "5dbe292e6ca8eca6d5033c56189ad7a8c3cc340f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fe0e508_9da010fa",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T03:50:41Z",
+      "side": 1,
+      "message": "I would have been right if finished() called ReadEntireFile(), I didn\u0027t notice it was actually ReadFromFile(). Well, after reading the latest patch set I finally understand why it was slow before.",
+      "parentUuid": "fb27e05c_459c0464",
+      "range": {
+        "startLine": 98,
+        "startChar": 5,
+        "endLine": 98,
+        "endChar": 28
+      },
+      "revId": "5dbe292e6ca8eca6d5033c56189ad7a8c3cc340f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

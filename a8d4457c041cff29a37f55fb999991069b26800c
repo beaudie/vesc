@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8076c1e_3f0878ac",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T03:50:41Z",
+      "side": 0,
+      "message": "I\u0027ve traced this down to\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1452534/15/src/common/system_utils_posix.cpp\nNot sure why Shabi added this case originally.\n\nMy guess is if the child process is killed, we might lose some output if this is omitted.\nWhat if you return ReadResult::GotData here?\nShould be rare enough to not cause problems in normal test runs.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 0
+      },
+      "revId": "a8d4457c041cff29a37f55fb999991069b26800c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
