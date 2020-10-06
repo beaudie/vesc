@@ -52,6 +52,24 @@
       "parentUuid": "9e87a90e_452a0122",
       "revId": "636440e048c3d5caf85120ecf0c5530f9c0208a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca0dc92c_a85468d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-06T22:04:02Z",
+      "side": 1,
+      "message": "Yes, the two tests I mentioned above does that. I just manually verified it just in case.",
+      "parentUuid": "6111ccf6_e44defa5",
+      "revId": "636440e048c3d5caf85120ecf0c5530f9c0208a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
