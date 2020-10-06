@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "f17f0167_16b45935",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "LGTM - can you confirm the read-only layout is correctly set in the attachment ops?",
       "revId": "636440e048c3d5caf85120ecf0c5530f9c0208a0",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "9e87a90e_452a0122",
         "filename": "/PATCHSET_LEVEL",
@@ -32,8 +33,25 @@
       "message": "Thanks Jamie. Yes, I verified with gdb with both ReadOnlyDepthBufferLayout and  ReadOnlyDepthStencilFeedbackLoopUsesSingleRenderPass tests.",
       "parentUuid": "f17f0167_16b45935",
       "revId": "636440e048c3d5caf85120ecf0c5530f9c0208a0",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6111ccf6_e44defa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T20:50:35Z",
+      "side": 1,
+      "message": "Isn\u0027t there a perf counter based regression test for this?",
+      "parentUuid": "9e87a90e_452a0122",
+      "revId": "636440e048c3d5caf85120ecf0c5530f9c0208a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
