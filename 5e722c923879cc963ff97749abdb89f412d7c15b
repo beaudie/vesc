@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "396a247c_debae8b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T14:39:48Z",
+      "side": 1,
+      "message": "Alexey: is this ready to land? can you rebase one more time and let us know when it\u0027s good to land?",
+      "revId": "5e722c923879cc963ff97749abdb89f412d7c15b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
