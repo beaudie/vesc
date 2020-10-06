@@ -36,6 +36,41 @@
     },
     {
       "key": {
+        "uuid": "73d381e0_45b9dfe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "I split off a small piece, but rest is all necessary to work.\nIf you\u0027d like we can talk through it in a meeting.",
+      "parentUuid": "3584082e_ece4c0d8",
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71a5f973_a9d8de78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "Following up on Shabi\u0027s questions.",
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1185dace_0c53b0eb",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 45
@@ -47,6 +82,30 @@
       "writtenOn": "2020-10-06T01:52:12Z",
       "side": 1,
       "message": "Suggest using no-op constructors, followed by `initX` calls with distinct names.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 6
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ff3d021_5626d6e9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 45
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "Yeah, I was expecting that. I really like that the cost of constructing the task object includes filling in the data, with separate init it costs more though I expect this is not likely a hot path.",
+      "parentUuid": "1185dace_0c53b0eb",
       "range": {
         "startLine": 68,
         "startChar": 0,
@@ -82,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "c7235b87_bbffcb75",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "Yeah, have to go back and remove unnecessary waits. Wanted to get something that works out and then refine.",
+      "parentUuid": "7b5b0df8_7caa5f29",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 9
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6b934f8b_d7e06869",
         "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
         "patchSetId": 45
@@ -93,6 +176,30 @@
       "writtenOn": "2020-10-06T01:52:12Z",
       "side": 1,
       "message": "Why wait?",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 5
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c774189d_95993516",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "Wasn\u0027t passing tests without it. At least at the time. May not need it now that other fixes went in.",
+      "parentUuid": "6b934f8b_d7e06869",
       "range": {
         "startLine": 214,
         "startChar": 0,
@@ -128,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "afb39a8a_dac12bb6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "I\u0027ll look at that.\nThis is basically getting the fence created for the last queueSubmit. In non-threaded code that was an easy thing to do :-)",
+      "parentUuid": "6e7326f7_193ba599",
+      "range": {
+        "startLine": 1297,
+        "startChar": 32,
+        "endLine": 1297,
+        "endChar": 70
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4fb20441_e4425dbd",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 45
@@ -139,6 +270,30 @@
       "writtenOn": "2020-10-06T01:52:12Z",
       "side": 1,
       "message": "The code that follows checks the result for OUT_OF_DATE/SUBOPTIMAL, and later uses that information to tell if it can defer acquire or not. If OOD, it will recreate the swapchain immediately.\n\nProbably what you can do here is to *not* look at the result and always defer acquire. Later, when acquire wants to check the result you can do the wait.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 0,
+        "endLine": 1318,
+        "endChar": 37
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2868b4f0_67672adf",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "Good idea. This is probably the most important area to fix up, see big gap waiting on queuePresent in the trace.",
+      "parentUuid": "4fb20441_e4425dbd",
       "range": {
         "startLine": 1312,
         "startChar": 0,
@@ -185,6 +340,30 @@
       "writtenOn": "2020-10-06T01:52:12Z",
       "side": 1,
       "message": "Do we really? Vulkan lists objects that need to be externally synchronized. For fences, that is:\n\n- The fence parameter in vkQueueSubmit\n- The fence parameter in vkQueueBindSparse\n- The fence parameter in vkDestroyFence\n- The fence parameter in vkAcquireNextImageKHR\n\nIt does mention `vkQueueSubmit`, but it doesn\u0027t mention `vkWaitForFences`. I\u0027m not sure, but maybe it\u0027s safe to wait on the fence even though the flush thread may not have gotten around to submitting the work yet.",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 107,
+        "endChar": 13
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00171d93_1c42bdcc",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T15:24:39Z",
+      "side": 1,
+      "message": "I checked with Jesse on this. From Jesse:\nIn vkQueueSubmit\u0027s Host Synchronization block:\n\u003e Host access to fence must be externally synchronized\nSo you can\u0027t have one thread waiting in vkWaitForFences with fence at the same time that you pass fence to vkQueueSubmit.\nThis is a tricky area so we may be mistaken.\nPractically speaking I\u0027m pretty sure things do not work if I let this wait before the submit happens. I\u0027ll look in more detail.",
+      "parentUuid": "c26de682_ba1023a2",
       "range": {
         "startLine": 106,
         "startChar": 7,
