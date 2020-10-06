@@ -1816,8 +1816,7 @@ void FramebufferVk::updateRenderPassDesc()
     if (depthStencilRenderTarget)
     {
         mRenderPassDesc.packDepthStencilAttachment(
-            depthStencilRenderTarget->getImageForRenderPass().getFormat().intendedFormatID,
-            vk::ResourceAccess::Write);
+            depthStencilRenderTarget->getImageForRenderPass().getFormat().intendedFormatID);
 
         // Add the resolve attachment, if any.
         if (depthStencilRenderTarget->hasResolveAttachment())
