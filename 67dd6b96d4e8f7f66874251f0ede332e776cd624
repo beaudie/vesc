@@ -62,6 +62,30 @@
       "revId": "67dd6b96d4e8f7f66874251f0ede332e776cd624",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e5a6ad6_f6fdc519",
+        "filename": "src/tests/test_utils/runner/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T04:08:48Z",
+      "side": 1,
+      "message": "Yeah for sure. The host basically acts like the server process. The only downside is you can\u0027t execute multiple tests at once. That may be a fine thing anyway seeing as Android phones aren\u0027t really meant for heavy multi-core execution. :)\n\nI think at some point it will behoove us to write our own Android test launcher.",
+      "parentUuid": "2aed0751_3eebee4c",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 48
+      },
+      "revId": "67dd6b96d4e8f7f66874251f0ede332e776cd624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
