@@ -125,14 +125,44 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
-        ImageLayout::DepthStencilReadOnly,
-        ImageMemoryBarrierData{
-            "DepthStencilReadOnly",
+        ImageLayout::DepthStencilFragmentShaderReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilFragmentShaderReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::EarlyFragmentTest,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAllShadersReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilAllShadersReadOnly",
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
             kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
             kAllShadersPipelineStageFlags | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
             // Transition to: all reads must happen after barrier.
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::EarlyFragmentTest,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAttachmentReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilAttachmentReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+             VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -897,8 +927,19 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
 
     if (mReadOnlyDepthStencilMode)
     {
-        imageLayout     = ImageLayout::DepthStencilReadOnly;
-        barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
+        // If this is used by texture already, then lets just use the layout picked by
+        // ContextVk::handleDirtyTexturesImpl, since they have inserted layout transition already.
+        // Otherwise we get to pick our own layout.
+        if (usesImageInRenderPass(*mDepthStencilImage))
+        {
+            imageLayout     = mDepthStencilImage->getCurrentImageLayout();
+            barrierRequired = false;
+        }
+        else
+        {
+            imageLayout     = ImageLayout::DepthStencilAttachmentReadOnly;
+            barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
+        }
     }
     else
     {
@@ -1043,8 +1084,10 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     counters.stencilLoads += dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
     counters.stencilStores += dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
     counters.readOnlyDepthStencilRenderPasses +=
-        static_cast<ImageLayout>(dsOps.finalLayout) == vk::ImageLayout::DepthStencilReadOnly ? 1
-                                                                                             : 0;
+        kImageMemoryBarrierData[static_cast<ImageLayout>(dsOps.finalLayout)].type ==
+                ResourceAccess::ReadOnly
+            ? 1
+            : 0;
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
