@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "776674e8_ee1a96b1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2803,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T14:23:52Z",
+      "side": 1,
+      "message": "Do we want this to be +1 to get the ID after the last one used by the app?\nNope not needed here, you did it in ResourceTracker::onShaderProgramAccess below.",
+      "range": {
+        "startLine": 2803,
+        "startChar": 40,
+        "endLine": 2803,
+        "endChar": 79
+      },
+      "revId": "caa542868827e7ccfde88d3e2b7d211d25b5da6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
