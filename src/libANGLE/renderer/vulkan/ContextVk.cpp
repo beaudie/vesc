@@ -1569,7 +1569,15 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 {
                     if (image.hasRenderPassUsageFlag(vk::RenderPassUsage::ReadOnlyAttachment))
                     {
-                        textureLayout = vk::ImageLayout::DepthStencilReadOnly;
+                        if (firstShader == gl::ShaderType::Fragment)
+                        {
+                            ASSERT(!remainingShaderBits.any());
+                            textureLayout = vk::ImageLayout::DepthStencilFragmentShaderReadOnly;
+                        }
+                        else
+                        {
+                            textureLayout = vk::ImageLayout::DepthStencilAllShadersReadOnly;
+                        }
                     }
                     else
                     {
@@ -1604,19 +1612,23 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 // split a RenderPass to transition a depth texture from shader-read to read-only.
                 // This improves performance in Manhattan. Future optimizations are likely possible
                 // here including using specialized barriers without breaking the RenderPass.
-                textureLayout = vk::ImageLayout::DepthStencilReadOnly;
+                if (firstShader == gl::ShaderType::Fragment)
+                {
+                    ASSERT(!remainingShaderBits.any());
+                    textureLayout = vk::ImageLayout::DepthStencilFragmentShaderReadOnly;
+                }
+                else
+                {
+                    textureLayout = vk::ImageLayout::DepthStencilAllShadersReadOnly;
+                }
             }
             else
             {
-                // We barrier against either:
-                // - Vertex only
-                // - Fragment only
-                // - Pre-fragment only (vertex, geometry and tessellation together)
-                if (remainingShaderBits.any() || firstShader != lastShader)
+                // If we have multiple shader accessing it, we barrier against all shader stage read
+                // given that we only support vertex/frag shaders
+                if (remainingShaderBits.any())
                 {
-                    textureLayout = lastShader == gl::ShaderType::Fragment
-                                        ? vk::ImageLayout::AllGraphicsShadersReadOnly
-                                        : vk::ImageLayout::PreFragmentShadersReadOnly;
+                    textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
                 }
                 else
                 {

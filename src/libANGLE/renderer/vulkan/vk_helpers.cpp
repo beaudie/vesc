@@ -207,9 +207,24 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
-        ImageLayout::DepthStencilReadOnly,
-        ImageMemoryBarrierData{
-            "DepthStencilReadOnly",
+        ImageLayout::DepthStencilFragmentShaderReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilFragmentShaderReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::EarlyFragmentTest,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAllShadersReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilAllShadersReadOnly",
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
@@ -219,6 +234,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAttachmentReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilAttachmentReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::EarlyFragmentTest,
         },
     },
     {
@@ -697,7 +727,8 @@ bool IsExternalQueueFamily(uint32_t queueFamilyIndex)
 
 bool IsShaderReadOnlyLayout(const ImageMemoryBarrierData &imageLayout)
 {
-    return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ||
+           imageLayout.layout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 }
 
 bool IsAnySubresourceContentDefined(const gl::TexLevelArray<angle::BitSet8<8>> &contentDefined)
@@ -1036,6 +1067,22 @@ void CommandBufferHelper::imageRead(ContextVk *contextVk,
         {
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         }
+        else if (image == mDepthStencilImage)
+        {
+            // If the image is also used as depth stencil attachment, this is called feedback loop.
+            // Without feedback loop, the depthstencil image layout is determined at
+            // finalizeDepthStencilImageLayout call, which get called by endRenderPass. But with
+            // feedback loop, we already picked the layout (because descriptor set needs it). To
+            // prevent finalizeDepthStencilImageLayout try to pick layout again which might be
+            // different from what the texture code already picked, we set mDepthStencilImage to
+            // null here.
+            mDepthStencilImage = nullptr;
+            mAttachmentOps.setLayouts(mDepthStencilAttachmentIndex, imageLayout, imageLayout);
+        }
+        else
+        {
+            ASSERT(image != mDepthStencilResolveImage);
+        }
     }
 }
 
@@ -1362,14 +1409,16 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
         imageLayout = mDepthStencilImage->getCurrentImageLayout();
         ASSERT(imageLayout == ImageLayout::DepthStencilAttachmentAndFragmentShaderRead ||
                imageLayout == ImageLayout::DepthStencilAttachmentAndAllShadersRead ||
-               imageLayout == ImageLayout::DepthStencilReadOnly);
-        barrierRequired = imageLayout == ImageLayout::DepthStencilReadOnly
+               imageLayout == ImageLayout::DepthStencilFragmentShaderReadOnly ||
+               imageLayout == ImageLayout::DepthStencilAllShadersReadOnly);
+        barrierRequired = (imageLayout == ImageLayout::DepthStencilFragmentShaderReadOnly ||
+                           imageLayout == ImageLayout::DepthStencilAllShadersReadOnly)
                               ? mDepthStencilImage->isReadBarrierNecessary(imageLayout)
                               : true;
     }
     else if (mDepthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment))
     {
-        imageLayout     = ImageLayout::DepthStencilReadOnly;
+        imageLayout     = ImageLayout::DepthStencilAttachmentReadOnly;
         barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
     }
     else
@@ -1472,7 +1521,10 @@ void CommandBufferHelper::finalizeDepthStencilLoadStore(Context *context)
     ASSERT(dsOps.initialLayout != static_cast<uint16_t>(ImageLayout::Undefined));
 
     // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
-    ASSERT(dsOps.initialLayout != static_cast<uint16_t>(ImageLayout::DepthStencilReadOnly) ||
+    ASSERT((dsOps.initialLayout !=
+                static_cast<uint16_t>(ImageLayout::DepthStencilFragmentShaderReadOnly) &&
+            dsOps.initialLayout !=
+                static_cast<uint16_t>(ImageLayout::DepthStencilAllShadersReadOnly)) ||
            (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
 
     // If the attachment is invalidated, skip the store op.  If we are not loading or clearing the
@@ -1508,7 +1560,10 @@ void CommandBufferHelper::finalizeDepthStencilLoadStore(Context *context)
 
     // For read only depth stencil, we can use StoreOpNone if available. DONT_CARE is still
     // preferred, so do this after finish the DONT_CARE handling.
-    if (dsOps.initialLayout == static_cast<uint16_t>(ImageLayout::DepthStencilReadOnly) &&
+    if ((dsOps.initialLayout ==
+             static_cast<uint16_t>(ImageLayout::DepthStencilFragmentShaderReadOnly) ||
+         dsOps.initialLayout ==
+             static_cast<uint16_t>(ImageLayout::DepthStencilAllShadersReadOnly)) &&
         context->getRenderer()->getFeatures().supportsRenderPassStoreOpNoneQCOM.enabled)
     {
         if (dsOps.storeOp == RenderPassStoreOp::Store)
