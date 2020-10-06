@@ -16,6 +16,207 @@
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3584082e_ece4c0d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "I haven\u0027t looked at ContextVk.cpp and CommandProcessor.cpp. Is there a way to split this change so it would be easier to review?",
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1185dace_0c53b0eb",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 45
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "Suggest using no-op constructors, followed by `initX` calls with distinct names.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 6
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b5b0df8_7caa5f29",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "Probably no need to wait. flushImpl() should work in such a way that the `hasPendingWork`s below return false. In other words, the caller shouldn\u0027t need to care about the flush being handed to another thread and hasn\u0027t yet happened (the same way it doesn\u0027t care if the CB is handed to the GPU but hasn\u0027t run on the hardware yet).",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 9
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b934f8b_d7e06869",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "Why wait?",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 5
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e7326f7_193ba599",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "I haven\u0027t reviewed the guts of the change, but sounds like the problem is that the fence is created by the worker thread. I think it should be created by ContextVk, cached and handed to the worker thread. Then `contextVk-\u003egetLastSubmittedFence()` doesn\u0027t need to wait on worker thread.",
+      "range": {
+        "startLine": 1297,
+        "startChar": 32,
+        "endLine": 1297,
+        "endChar": 70
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fb20441_e4425dbd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "The code that follows checks the result for OUT_OF_DATE/SUBOPTIMAL, and later uses that information to tell if it can defer acquire or not. If OOD, it will recreate the swapchain immediately.\n\nProbably what you can do here is to *not* look at the result and always defer acquire. Later, when acquire wants to check the result you can do the wait.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 0,
+        "endLine": 1318,
+        "endChar": 37
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c41afd0a_b4fc509f",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "Same comment applies here. If ContextVk creates the submit fence and passes it to the worker, no need to wait. Also, why is it getting the fence from the renderer?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 64
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c26de682_ba1023a2",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "Do we really? Vulkan lists objects that need to be externally synchronized. For fences, that is:\n\n- The fence parameter in vkQueueSubmit\n- The fence parameter in vkQueueBindSparse\n- The fence parameter in vkDestroyFence\n- The fence parameter in vkAcquireNextImageKHR\n\nIt does mention `vkQueueSubmit`, but it doesn\u0027t mention `vkWaitForFences`. I\u0027m not sure, but maybe it\u0027s safe to wait on the fence even though the flush thread may not have gotten around to submitting the work yet.",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 107,
+        "endChar": 13
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04160988_79bf7f18",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:52:12Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 5
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
