@@ -46,6 +46,30 @@
       "revId": "500704812409749c6a6bd0e4fbddf03a60a07cb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7790c52_fa8dd45c",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T03:20:28Z",
+      "side": 0,
+      "message": "I didn\u0027t realize this is called in other places.\nWell, now you have va_end() called twice, like in\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/gpu_info_util/SystemInfo_vulkan.cpp;l\u003d122",
+      "parentUuid": "20b6b720_55f15ac9",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 19
+      },
+      "revId": "500704812409749c6a6bd0e4fbddf03a60a07cb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

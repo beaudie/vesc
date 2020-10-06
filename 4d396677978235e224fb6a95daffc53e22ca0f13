@@ -46,6 +46,30 @@
       "revId": "4d396677978235e224fb6a95daffc53e22ca0f13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9935e0a3_8cf92c38",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T03:20:28Z",
+      "side": 0,
+      "message": "Since this is debug code anyway, we can have the buffer size to be arbitrarily large.\nBut nevermind, I\u0027ve found https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d5131#c1 and I like it better.",
+      "parentUuid": "85134050_da7caac2",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 5
+      },
+      "revId": "4d396677978235e224fb6a95daffc53e22ca0f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

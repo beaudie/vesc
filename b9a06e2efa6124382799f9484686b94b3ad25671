@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c81f21ae_fa88f033",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T03:20:28Z",
+      "side": 1,
+      "message": "My main objection to this CL is:\n1. Per http://www.cplusplus.com/reference/cstdarg/va_start/\n   \"A function that invokes va_start, shall also invoke va_end before it returns.\"\n2. This CL moves va_end call from the function that invoked va_start to another function - FormatStringIntoVector().\n3. Someone can modify FormatStringIntoVector and stop calling va_end there (e.g. because it doesn\u0027t have a matching va_start)\n4. The contract will be violated\n\nAnother example why having va_start and va_end in different functions is bad is the (probably minor) bug that this CL introduces - va_end is being called twice in other callers of FormatStringIntoVector.\n\nCould we please take Shabi\u0027s suggestion in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d5131#c1? It should fix the bug without introducing new issues.\n\nBasically, change FormatStringIntoVector() to:\n{\n    // The state of the va_list passed to vsnprintf is undefined after the call, do a copy in case\n    // we need to grow the buffer.\n    va_list varargCopy;\n    va_copy(varargCopy, vararg);\n\n    // Attempt to just print to the current buffer\n    int len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n    va_end(varargCopy);\n\n    if (len \u003c 0 || static_cast\u003csize_t\u003e(len) \u003e\u003d outBuffer.size())\n    {\n        // Buffer was not large enough, resize the buffer\n        outBuffer.resize(len + 1);\n\n        // Print again\n        va_copy(varargCopy, vararg);\n        len \u003d vsnprintf(\u0026(outBuffer.front()), outBuffer.size(), fmt, varargCopy);\n        va_end(varargCopy);\n    }\n    ASSERT(len \u003e\u003d 0);\n    return static_cast\u003csize_t\u003e(len);\n}\n\nNo changes to other files are necessary.\nJamie, could you please verify if this fixes the bug?",
+      "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

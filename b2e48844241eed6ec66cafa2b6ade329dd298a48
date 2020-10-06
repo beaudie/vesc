@@ -204,6 +204,30 @@
       "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45626aa0_c40a4f72",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T03:20:28Z",
+      "side": 1,
+      "message": "I hoped changing\n\"%s(\" message \")\"\nto\n#function \"(\" message \")\"\nwould work.\n\nBut nevermind, if you just stop destroying vararg in FormatStringIntoVector(), you don\u0027t need to make any changes here from the base version.",
+      "parentUuid": "44f1a8d1_858f508a",
+      "range": {
+        "startLine": 253,
+        "startChar": 25,
+        "endLine": 253,
+        "endChar": 62
+      },
+      "revId": "b2e48844241eed6ec66cafa2b6ade329dd298a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
