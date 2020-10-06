@@ -1480,15 +1480,6 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
                                                     : vk::ImageLayout::AllGraphicsShadersWrite;
         }
-        else if (image.isDepthOrStencil())
-        {
-            // We always use a depth-stencil read-only layout for any depth Textures to simplify our
-            // implementation's handling of depth-stencil read-only mode. We don't have to split a
-            // RenderPass to transition a depth texture from shader-read to read-only. This improves
-            // performance in Manhattan. Future optimizations are likely possible here including
-            // using specialized barriers without breaking the RenderPass.
-            textureLayout = vk::ImageLayout::DepthStencilReadOnly;
-        }
         else
         {
             gl::ShaderBitSet remainingShaderBits =
@@ -1496,15 +1487,36 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             ASSERT(remainingShaderBits.any());
             gl::ShaderType firstShader = remainingShaderBits.first();
             remainingShaderBits.reset(firstShader);
-            // If we have multiple shader accessing it, we barrier against all shader stage read
-            // given that we only support vertex/frag shaders
-            if (remainingShaderBits.any())
+
+            if (image.isDepthOrStencil())
             {
-                textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+                // We always use a depth-stencil read-only layout for any depth Textures to simplify
+                // our implementation's handling of depth-stencil read-only mode. We don't have to
+                // split a RenderPass to transition a depth texture from shader-read to read-only.
+                // This improves performance in Manhattan. Future optimizations are likely possible
+                // here including using specialized barriers without breaking the RenderPass.
+                if (firstShader == gl::ShaderType::Fragment)
+                {
+                    ASSERT(!remainingShaderBits.any());
+                    textureLayout = vk::ImageLayout::DepthStencilFragmentShaderReadOnly;
+                }
+                else
+                {
+                    textureLayout = vk::ImageLayout::DepthStencilAllShadersReadOnly;
+                }
             }
             else
             {
-                textureLayout = kShaderReadOnlyImageLayouts[firstShader];
+                // If we have multiple shader accessing it, we barrier against all shader stage read
+                // given that we only support vertex/frag shaders
+                if (remainingShaderBits.any())
+                {
+                    textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+                }
+                else
+                {
+                    textureLayout = kShaderReadOnlyImageLayouts[firstShader];
+                }
             }
         }
         // Ensure the image is in read-only layout
