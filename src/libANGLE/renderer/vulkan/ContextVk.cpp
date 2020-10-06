@@ -2934,6 +2934,11 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
 
         ASSERT(mExecutable);
         mExecutable->updateEarlyFragmentTestsOptimization(this);
+        if (hasStartedRenderPass())
+        {
+            mRenderPassCommands->updateStartedRenderPassWithEarlyFragmentTest(
+                mExecutable->hasEarlyFragmentTestsOptimization(this));
+        }
     }
 
     return angle::Result::Continue;
@@ -4723,7 +4728,11 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
     vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
     mRenderPassCommands->onDepthAccess(depthAccess);
     mRenderPassCommands->onStencilAccess(stencilAccess);
-
+    if (mExecutable)
+    {
+        mRenderPassCommands->updateStartedRenderPassWithEarlyFragmentTest(
+            mExecutable->hasEarlyFragmentTestsOptimization(this));
+    }
     mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
 
     if (commandBufferOut)
