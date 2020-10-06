@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9de32fa7_a9a74f6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-06T15:44:54Z",
+      "side": 1,
+      "message": "Verified the fixes locally, thanks Jamie.",
+      "revId": "6b730de8623241fd06fb92186b0254cb7e57a54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb61043b_65624c8f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4193,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-06T15:44:54Z",
+      "side": 1,
+      "message": "nit: I think this would be better in maybeCaptureClientData to keep this function clean.  That function could be renamed maybeCapturePreCallUpdates.",
+      "range": {
+        "startLine": 4189,
+        "startChar": 0,
+        "endLine": 4193,
+        "endChar": 5
+      },
+      "revId": "6b730de8623241fd06fb92186b0254cb7e57a54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
