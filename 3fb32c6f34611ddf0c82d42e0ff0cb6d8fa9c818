@@ -122,6 +122,30 @@
       },
       "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e4c144c_d8090548",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T18:21:52Z",
+      "side": 1,
+      "message": "I think keeping them in ContextVk is fine. We aren\u0027t really concerned about multi-context performance right now.",
+      "parentUuid": "26b0be14_c2718131",
+      "range": {
+        "startLine": 1847,
+        "startChar": 43,
+        "endLine": 1847,
+        "endChar": 59
+      },
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
