@@ -21,7 +21,7 @@ ContextCGL::ContextCGL(DisplayCGL *display,
                        gl::ErrorSet *errorSet,
                        const std::shared_ptr<RendererGL> &renderer,
                        bool usesDiscreteGPU)
-    : ContextGL(state, errorSet, renderer),
+    : ContextGL(state, errorSet, renderer, false),
       mUsesDiscreteGpu(usesDiscreteGPU),
       mReleasedDiscreteGpu(false)
 {
