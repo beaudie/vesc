@@ -29,6 +29,12 @@
 namespace
 {
 
+EGLBoolean GetRobustnessVideoMemoryPurge(const egl::AttributeMap &attribs)
+{
+    return static_cast<EGLBoolean>(
+        attribs.get(GLX_GENERATE_RESET_ON_VIDEO_MEMORY_PURGE_NV, GL_FALSE));
+}
+
 bool HasParallelShaderCompileExtension(const rx::FunctionsGL *functions)
 {
     return functions->maxShaderCompilerThreadsKHR != nullptr ||
@@ -76,6 +82,7 @@ DisplayGLX::DisplayGLX(const egl::DisplayState &state)
       mHasARBCreateContextProfile(false),
       mHasARBCreateContextRobustness(false),
       mHasEXTCreateContextES2Profile(false),
+      mHasNVRobustnessVideoMemoryPurge(false),
       mSwapControl(SwapControl::Absent),
       mMinSwapInterval(0),
       mMaxSwapInterval(0),
@@ -115,8 +122,9 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
     mHasMultisample             = mGLX.minorVersion > 3 || mGLX.hasExtension("GLX_ARB_multisample");
     mHasARBCreateContext        = mGLX.hasExtension("GLX_ARB_create_context");
     mHasARBCreateContextProfile = mGLX.hasExtension("GLX_ARB_create_context_profile");
-    mHasARBCreateContextRobustness = mGLX.hasExtension("GLX_ARB_create_context_robustness");
-    mHasEXTCreateContextES2Profile = mGLX.hasExtension("GLX_EXT_create_context_es2_profile");
+    mHasARBCreateContextRobustness   = mGLX.hasExtension("GLX_ARB_create_context_robustness");
+    mHasEXTCreateContextES2Profile   = mGLX.hasExtension("GLX_EXT_create_context_es2_profile");
+    mHasNVRobustnessVideoMemoryPurge = mGLX.hasExtension("GLX_NV_robustness_video_memory_purge");
 
     std::string clientVendor = mGLX.getClientString(GLX_VENDOR);
     mIsMesa                  = clientVendor.find("Mesa") != std::string::npos;
@@ -475,7 +483,8 @@ ContextImpl *DisplayGLX::createContext(const gl::State &state,
                                        const gl::Context *shareContext,
                                        const egl::AttributeMap &attribs)
 {
-    return new ContextGL(state, errorSet, mRenderer);
+    bool robustnessVideoMemoryPurgeRequested = GetRobustnessVideoMemoryPurge(attribs);
+    return new ContextGL(state, errorSet, mRenderer, robustnessVideoMemoryPurgeRequested);
 }
 
 DeviceImpl *DisplayGLX::createDevice()
@@ -892,6 +901,8 @@ void DisplayGLX::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->textureFromPixmapNOK = mGLX.hasExtension("GLX_EXT_texture_from_pixmap");
 
+    outExtensions->robustnessVideoMemoryPurgeNV = mHasNVRobustnessVideoMemoryPurge;
+
     DisplayGL::generateExtensions(outExtensions);
 }
 
@@ -927,6 +938,11 @@ egl::Error DisplayGLX::createContextAttribs(glx::FBConfig,
         mAttribs.push_back(GLX_CONTEXT_ROBUST_ACCESS_BIT_ARB);
         mAttribs.push_back(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
         mAttribs.push_back(GLX_LOSE_CONTEXT_ON_RESET_ARB);
+        if (mHasNVRobustnessVideoMemoryPurge)
+        {
+            mAttribs.push_back(GLX_GENERATE_RESET_ON_VIDEO_MEMORY_PURGE_NV);
+            mAttribs.push_back(GL_TRUE);
+        }
     }
 
     if (version.valid())
