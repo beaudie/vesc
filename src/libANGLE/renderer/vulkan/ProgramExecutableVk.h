@@ -154,7 +154,9 @@ class ProgramExecutableVk
 
     angle::Result updateDescriptorSets(ContextVk *contextVk, vk::CommandBuffer *commandBuffer);
 
+    // Returns true if early fragment test remains enabled
     void updateEarlyFragmentTestsOptimization(ContextVk *contextVk);
+    bool hasEarlyFragmentTestsOptimization(ContextVk *contextVk) const;
 
     void setProgram(ProgramVk *program)
     {
