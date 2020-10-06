@@ -22,6 +22,30 @@
       "revId": "005569fcd337d498429937a44d2a50845af8df97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de2a1c5c_3045a89a",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T00:36:07Z",
+      "side": 1,
+      "message": "Don\u0027t quite follow. As said in the other comment, I\u0027m sure this works, because it\u0027s based on the canonical example in the ref pages.",
+      "parentUuid": "1989e89c_a8c3c522",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 0
+      },
+      "revId": "005569fcd337d498429937a44d2a50845af8df97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

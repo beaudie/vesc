@@ -22,6 +22,30 @@
       "revId": "4d396677978235e224fb6a95daffc53e22ca0f13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85134050_da7caac2",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T00:36:07Z",
+      "side": 0,
+      "message": "That solution has issues in picking the size of the buffer. This works and is basically copied from an official cpp reference: https://stackoverflow.com/a/52350271 . Efficiency is not an issue for debugging code of this scale. Can we keep it?",
+      "parentUuid": "dddc830b_50e8bbca",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 5
+      },
+      "revId": "4d396677978235e224fb6a95daffc53e22ca0f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

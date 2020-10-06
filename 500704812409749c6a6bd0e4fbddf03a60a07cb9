@@ -22,6 +22,30 @@
       "revId": "500704812409749c6a6bd0e4fbddf03a60a07cb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20b6b720_55f15ac9",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T00:36:07Z",
+      "side": 0,
+      "message": "At this point I\u0027m not keen on moving it because it would deviate from the known working state. The reason the code looks like this is because it matches the canonical example where va_end is called immediately after the size estimation. FormatStringIntoVector is called in several places and changing that API is outside of what I wanted to do here.",
+      "parentUuid": "9dabcff3_0412c353",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 19
+      },
+      "revId": "500704812409749c6a6bd0e4fbddf03a60a07cb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
