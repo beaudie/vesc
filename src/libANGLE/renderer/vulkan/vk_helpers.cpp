@@ -170,6 +170,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::DepthStencilAttachmentLateReadOnly,
+            ImageMemoryBarrierData{
+            "DepthStencilAttachmentLateReadOnly",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::LateFragmentTest,
+        },
+    },
+    {
         ImageLayout::DepthStencilAttachment,
         ImageMemoryBarrierData{
             "DepthStencilAttachment",
@@ -182,6 +197,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::Write,
             PipelineStage::EarlyFragmentTest,
+        },
+    },
+    {
+        ImageLayout::DepthStencilAttachmentLate,
+        ImageMemoryBarrierData{
+            "DepthStencilAttachmentLate",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            ResourceAccess::Write,
+            PipelineStage::LateFragmentTest,
         },
     },
     {
@@ -651,6 +681,7 @@ CommandBufferHelper::CommandBufferHelper()
       mTransformFeedbackCounterBuffers{},
       mValidTransformFeedbackBufferCount(0),
       mRebindTransformFeedbackBuffers(false),
+      mEarlyFragmentTestEverEnabled(false),
       mIsRenderPassCommandBuffer(false),
       mReadOnlyDepthStencilMode(false),
       mDepthAccess(ResourceAccess::Unused),
@@ -943,13 +974,16 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
 
     if (mReadOnlyDepthStencilMode)
     {
-        imageLayout     = ImageLayout::DepthStencilAttachmentReadOnly;
+        imageLayout = mEarlyFragmentTestEverEnabled
+                          ? ImageLayout::DepthStencilAttachmentReadOnly
+                          : ImageLayout::DepthStencilAttachmentLateReadOnly;
         barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
     }
     else
     {
         // Write always requires a barrier
-        imageLayout     = ImageLayout::DepthStencilAttachment;
+        imageLayout = mEarlyFragmentTestEverEnabled ? ImageLayout::DepthStencilAttachment
+                                                    : ImageLayout::DepthStencilAttachmentLate;
         barrierRequired = true;
     }
 
@@ -1294,9 +1328,10 @@ void CommandBufferHelper::reset()
         mStencilCmdSizeDisabled            = kInfiniteCmdSize;
         mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
         mRenderPassUsedImages.clear();
-        mDepthStencilImage        = nullptr;
-        mDepthStencilResolveImage = nullptr;
-        mReadOnlyDepthStencilMode = false;
+        mDepthStencilImage            = nullptr;
+        mDepthStencilResolveImage     = nullptr;
+        mReadOnlyDepthStencilMode     = false;
+        mEarlyFragmentTestEverEnabled = false;
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
