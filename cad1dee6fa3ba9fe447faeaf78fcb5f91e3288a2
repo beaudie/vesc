@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7241cb44_6f6ab268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T14:46:20Z",
+      "side": 1,
+      "message": "Tim: OK. I have a proposal.\n\nIf you want to put per-object counters in something, store them in the object itself. Once per swap we iterate the set of profiled objects and accumulate into a cumulative counter in PerfCounters. Everything in PerfCounters should be specific to a whole context, not indexed to an object. You can iterate the list of programs by repurposing getProgramsForCapture into a read-only iteration function.\n\nWe can keep the printf logging you have here also using the resource manager iteration.",
+      "revId": "cad1dee6fa3ba9fe447faeaf78fcb5f91e3288a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
