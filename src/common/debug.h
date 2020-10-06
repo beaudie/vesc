@@ -34,8 +34,8 @@ class Context;
 class ScopedPerfEventHelper : angle::NonCopyable
 {
   public:
-    ANGLE_FORMAT_PRINTF(3, 4)
-    ScopedPerfEventHelper(gl::Context *context, const char *format, ...);
+    ANGLE_FORMAT_PRINTF(4, 5)
+    ScopedPerfEventHelper(gl::Context *context, const char *function, const char *format, ...);
     ~ScopedPerfEventHelper();
 
   private:
@@ -248,13 +248,13 @@ std::ostream &FmtHex(std::ostream &os, T value)
 // A macro to log a performance event around a scope.
 #if defined(ANGLE_TRACE_ENABLED)
 #    if defined(_MSC_VER)
-#        define EVENT(context, function, message, ...)                                            \
-            gl::ScopedPerfEventHelper scopedPerfEventHelper##__LINE__(context, "%s(" message ")", \
-                                                                      function, __VA_ARGS__)
+#        define EVENT(context, function, message, ...)                 \
+            gl::ScopedPerfEventHelper scopedPerfEventHelper##__LINE__( \
+                context, function, "%s(" message ")", function, __VA_ARGS__)
 #    else
 #        define EVENT(context, function, message, ...)                                            \
-            gl::ScopedPerfEventHelper scopedPerfEventHelper(context, "%s(" message ")", function, \
-                                                            ##__VA_ARGS__)
+            gl::ScopedPerfEventHelper scopedPerfEventHelper(context, function, "%s(" message ")", \
+                                                            function, ##__VA_ARGS__)
 #    endif  // _MSC_VER
 #else
 #    define EVENT(message, ...) (void(0))
