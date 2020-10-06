@@ -80,6 +80,30 @@
       "revId": "437a7b9b5700ab263f6c6e0b1f226ae728b84f86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b52f75a_c4a61385",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2803,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T00:22:07Z",
+      "side": 1,
+      "message": "Whoopsie. My rebase lost the precondition patch changes. I moved them into this CL. Should be fixed now.",
+      "parentUuid": "a97d6ae6_9c4e2298",
+      "range": {
+        "startLine": 2803,
+        "startChar": 57,
+        "endLine": 2803,
+        "endChar": 77
+      },
+      "revId": "437a7b9b5700ab263f6c6e0b1f226ae728b84f86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
