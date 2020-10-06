@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "49e0cee4_5a8b3305",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "I figure this might take a couple rounds, so starting review now.\nI\u0027d be happy to do a walk through to cover the highlights. Let me know if that\u0027s interesting to you.",
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "3584082e_ece4c0d8",
         "filename": "/PATCHSET_LEVEL",
@@ -31,10 +32,10 @@
       "side": 1,
       "message": "I haven\u0027t looked at ContextVk.cpp and CommandProcessor.cpp. Is there a way to split this change so it would be easier to review?",
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "73d381e0_45b9dfe6",
         "filename": "/PATCHSET_LEVEL",
@@ -49,10 +50,10 @@
       "message": "I split off a small piece, but rest is all necessary to work.\nIf you\u0027d like we can talk through it in a meeting.",
       "parentUuid": "3584082e_ece4c0d8",
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "71a5f973_a9d8de78",
         "filename": "/PATCHSET_LEVEL",
@@ -66,10 +67,27 @@
       "side": 1,
       "message": "Following up on Shabi\u0027s questions.",
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "417061f4_785e2dcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T21:41:00Z",
+      "side": 1,
+      "message": "FYI - added Jamie, PTAL.",
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "1185dace_0c53b0eb",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
@@ -89,10 +107,10 @@
         "endChar": 6
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "9ff3d021_5626d6e9",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
@@ -113,10 +131,10 @@
         "endChar": 6
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "7b5b0df8_7caa5f29",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
@@ -136,10 +154,10 @@
         "endChar": 9
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c7235b87_bbffcb75",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
@@ -160,10 +178,10 @@
         "endChar": 9
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "6b934f8b_d7e06869",
         "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
@@ -183,10 +201,10 @@
         "endChar": 5
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c774189d_95993516",
         "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
@@ -207,10 +225,10 @@
         "endChar": 5
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "6e7326f7_193ba599",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
@@ -230,10 +248,10 @@
         "endChar": 70
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "afb39a8a_dac12bb6",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
@@ -254,10 +272,10 @@
         "endChar": 70
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "4fb20441_e4425dbd",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
@@ -277,10 +295,10 @@
         "endChar": 37
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "2868b4f0_67672adf",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
@@ -301,10 +319,10 @@
         "endChar": 37
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c41afd0a_b4fc509f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
@@ -324,10 +342,10 @@
         "endChar": 64
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c26de682_ba1023a2",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
@@ -347,10 +365,10 @@
         "endChar": 13
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "00171d93_1c42bdcc",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
@@ -371,10 +389,10 @@
         "endChar": 13
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "1f504bf6_b4180d22",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
@@ -395,10 +413,10 @@
         "endChar": 13
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e6f9e8fb_fadd3c5a",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
@@ -419,10 +437,10 @@
         "endChar": 13
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "04160988_79bf7f18",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
@@ -442,8 +460,7 @@
         "endChar": 5
       },
       "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
