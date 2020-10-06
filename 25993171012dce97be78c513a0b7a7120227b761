@@ -34,6 +34,24 @@
       "parentUuid": "48bc2730_4b3b7d4b",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6895cfc9_f7e8ad90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T23:48:47Z",
+      "side": 1,
+      "message": "Tested with Manhattan trace, got these results in VTune: https://imgur.com/a/S3KT55m\n\nThroughput went up slightly (maybe 3-4%).",
+      "parentUuid": "b726c4bf_987e0b6b",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
