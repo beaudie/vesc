@@ -22,6 +22,30 @@
       "revId": "5dbe292e6ca8eca6d5033c56189ad7a8c3cc340f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb27e05c_459c0464",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T01:34:49Z",
+      "side": 1,
+      "message": "You\u0027re right actually. We just need one call, and I was wrong about blocking and non-blocking. The fix really worked, but it can be simpler, as in the latest patch set. PTAL.",
+      "parentUuid": "b6b35e30_bdaf521f",
+      "range": {
+        "startLine": 98,
+        "startChar": 5,
+        "endLine": 98,
+        "endChar": 28
+      },
+      "revId": "5dbe292e6ca8eca6d5033c56189ad7a8c3cc340f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
