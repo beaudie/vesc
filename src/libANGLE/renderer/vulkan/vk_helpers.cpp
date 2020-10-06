@@ -1008,21 +1008,28 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
     // Depth/Stencil buffer optimizations:
-    //
-    // First, if the attachment is invalidated, skip the store op.
-    if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
+
+    // If the attachment is invalidated, skip the store op.  If we are not loading or clearing the
+    // attachment and the attachment has not been used, auto-invalidate it.
+    const bool depthNotLoaded = dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
+                                !mRenderPassDesc.hasDepthUnresolveAttachment();
+    if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled) ||
+        (depthNotLoaded && mDepthAccess == ResourceAccess::Unused))
     {
         dsOps.storeOp       = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         dsOps.isInvalidated = true;
     }
-    if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled))
+    const bool stencilNotLoaded = dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
+                                  !mRenderPassDesc.hasStencilUnresolveAttachment();
+    if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled) ||
+        (stencilNotLoaded && mStencilAccess == ResourceAccess::Unused))
     {
         dsOps.stencilStoreOp       = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         dsOps.isStencilInvalidated = true;
     }
 
-    // Second, if we are loading or clearing the attachment, but the attachment has not been used,
-    // and the data has also not been stored back into attachment, then just skip the load/clear op.
+    // If we are loading or clearing the attachment, but the attachment has not been used, and the
+    // data has also not been stored back into attachment, then just skip the load/clear op.
     if (mDepthAccess == ResourceAccess::Unused && dsOps.storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
     {
         dsOps.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -1035,8 +1042,8 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     }
 
     // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
-    ASSERT((mRenderPassDesc.getDepthStencilAccess() != ResourceAccess::ReadOnly) ||
-           mDepthAccess != ResourceAccess::Write);
+    ASSERT(mRenderPassDesc.getDepthStencilAccess() != ResourceAccess::ReadOnly ||
+           (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
