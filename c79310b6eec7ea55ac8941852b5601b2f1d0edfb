@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "7eb36d34_8fa8defa",
         "filename": "/PATCHSET_LEVEL",
@@ -14,8 +15,25 @@
       "side": 1,
       "message": "Courtney: any updates here?",
       "revId": "c79310b6eec7ea55ac8941852b5601b2f1d0edfb",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf157a06_33590b78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 43
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T17:46:10Z",
+      "side": 1,
+      "message": "Considering the threading issue I\u0027m not sure it\u0027s worth messing with. It\u0027s just an aid during debugging, I don\u0027t want to add additional complexity to ANGLE for it.",
+      "parentUuid": "7eb36d34_8fa8defa",
+      "revId": "c79310b6eec7ea55ac8941852b5601b2f1d0edfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
