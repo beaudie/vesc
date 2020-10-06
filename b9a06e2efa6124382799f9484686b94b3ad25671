@@ -106,6 +106,24 @@
       "parentUuid": "65c6bc0b_d0487bf7",
       "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "374024f3_6e1ccf8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T21:13:36Z",
+      "side": 1,
+      "message": "PS#7 looks good to me, too, with a nit to assert that len \u003e\u003d 0.\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2453930 should be slightly faster since it won\u0027t resize the buffer every time.\nCan we land it, and maybe you can then add the change to GLenum utils from here.\nI also like it how you get the function name from entryPoint instead of vararg.",
+      "parentUuid": "6b0ec8b8_37add822",
+      "revId": "b9a06e2efa6124382799f9484686b94b3ad25671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
