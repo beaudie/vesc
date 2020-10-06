@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6b35e30_bdaf521f",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T01:11:11Z",
+      "side": 1,
+      "message": "So, the only difference from the \"Blocking\" version is that this function will not continue to call read() if it was interrupted.\nWhich I guess would happen if the child was killed or crashed.\nI do not understand why this would cause less waiting.\n\nFrom the commit message:\n\"For non-blocking readback, ANGLE would only read one chunk\nof available data at a time. And then wait period of time\nbefore reading the next chunk.\"\n\nThis is not what should happen in the old code per my understanding of POSIX.\nThe only reason to exit \"while (true)\" and reach the Sleep() call is if ReadFromFile() returned \"false\".\nAnd this would happen if there was an error other than EINTR.\nWhich would not happen if there is data to read - i.e. the old code reads all the available data.",
+      "range": {
+        "startLine": 98,
+        "startChar": 5,
+        "endLine": 98,
+        "endChar": 28
+      },
+      "revId": "5dbe292e6ca8eca6d5033c56189ad7a8c3cc340f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
