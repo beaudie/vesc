@@ -16,6 +16,63 @@
       "revId": "6844d523ec39130ff73fe26eb99a31361c3849a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b36db2c_43c0f35f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:59:26Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "6844d523ec39130ff73fe26eb99a31361c3849a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec5cd33f_8222199a",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2063,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:59:26Z",
+      "side": 1,
+      "message": "Instead of TODO, you can say:\n\n    // Nothing to do until OES_sample_shading is implemented.",
+      "revId": "6844d523ec39130ff73fe26eb99a31361c3849a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c452ef79_499da997",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T01:59:26Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 870,
+        "startChar": 16,
+        "endLine": 870,
+        "endChar": 38
+      },
+      "revId": "6844d523ec39130ff73fe26eb99a31361c3849a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
