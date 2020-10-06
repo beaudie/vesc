@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "a60d8e7a_976ad40b",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "PTAL\n\nAnother test I did for this CL was to force a new descriptor pool for each descriptor set by hacking the following:\n\n  uint32_t DynamicDescriptorPool::mMaxSetsPerPool           \u003d 1;\n  uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier \u003d 1;\n\nWith that, this CL is able to pass linux_angle_deqp_rel_ng and most of linux-angle-rel (some perf tests get upset).\n\nUnfortunately, linux-swangle-try-tot-angle-x64 still fails, but I can\u0027t recreate the failures locally. \n  Regardless of that, I think this is in a good enough place to land and should at least fix up most of the bugs.",
       "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "2b4925c9_0e2a4530",
         "filename": "/PATCHSET_LEVEL",
@@ -31,10 +32,28 @@
       "side": 1,
       "message": "LGTM but can you please add a regresssion test for the bug?",
       "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2916bf_ee8c92ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-06T17:42:13Z",
+      "side": 1,
+      "message": "I tried adding the following tests, but they don\u0027t hit any errors without the fix:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2451957\n\nI\u0027m only able to hit errors when running the full test suites with the limited descriptor set sizes.   In those cases, it was typically a pool that was created during one test incorrectly being deleted 5-10 tests later due to the Serial not being updated correctly.   I\u0027m not sure how to recreate that with a regression test.\n\nAny ideas on ways to hit this?",
+      "parentUuid": "2b4925c9_0e2a4530",
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "775a2a0c_48ef90fb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
@@ -54,8 +73,31 @@
         "endChar": 59
       },
       "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f32912e1_659d7baa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-06T17:42:13Z",
+      "side": 1,
+      "message": "I don\u0027t think so.\n\nThe DynamicDescriptorPools are specific to each ContextVk and each ProgramExecutableVk (per Program), which can\u0027t be accessed simultaneously by multiple threads (as far as I know).\n\nOne thought was to allow for more sharing of descriptor pools that are allocated for the same descriptor set layout by moving them into the ShareGroupVk.   I\u0027m not exactly sure what that would look like, but that should be thread-safe also.",
+      "parentUuid": "775a2a0c_48ef90fb",
+      "range": {
+        "startLine": 1847,
+        "startChar": 43,
+        "endLine": 1847,
+        "endChar": 59
+      },
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
