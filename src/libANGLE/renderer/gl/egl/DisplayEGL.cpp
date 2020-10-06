@@ -27,6 +27,12 @@
 namespace
 {
 
+EGLBoolean GetRobustnessVideoMemoryPurge(const egl::AttributeMap &attribs)
+{
+    return static_cast<EGLBoolean>(
+        attribs.get(EGL_GENERATE_RESET_ON_VIDEO_MEMORY_PURGE_NV, GL_FALSE));
+}
+
 EGLint ESBitFromPlatformAttrib(const rx::FunctionsEGL *egl, const EGLAttrib platformAttrib)
 {
     EGLint esBit = EGL_NONE;
@@ -103,7 +109,12 @@ namespace rx
 {
 
 DisplayEGL::DisplayEGL(const egl::DisplayState &state)
-    : DisplayGL(state), mRenderer(nullptr), mEGL(nullptr), mConfig(EGL_NO_CONFIG_KHR)
+    : DisplayGL(state),
+      mRenderer(nullptr),
+      mEGL(nullptr),
+      mConfig(EGL_NO_CONFIG_KHR),
+      mHasEXTCreateContextRobustness(false),
+      mHasNVRobustnessVideoMemoryPurge(false)
 {}
 
 DisplayEGL::~DisplayEGL() {}
@@ -152,7 +163,7 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
         if (initializeRequested)
         {
             contextAttribLists.push_back({EGL_CONTEXT_MAJOR_VERSION, requestedMajor,
-                                          EGL_CONTEXT_MINOR_VERSION, requestedMinor, EGL_NONE});
+                                          EGL_CONTEXT_MINOR_VERSION, requestedMinor});
         }
         else
         {
@@ -169,7 +180,7 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
             {
                 contextAttribLists.push_back(
                     {EGL_CONTEXT_MAJOR_VERSION, static_cast<EGLint>(version.major),
-                     EGL_CONTEXT_MINOR_VERSION, static_cast<EGLint>(version.minor), EGL_NONE});
+                     EGL_CONTEXT_MINOR_VERSION, static_cast<EGLint>(version.minor)});
             }
         }
     }
@@ -179,12 +190,23 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
         {
             return egl::EglBadAttribute() << "Unsupported requested context version";
         }
-        contextAttribLists.push_back({EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE});
+        contextAttribLists.push_back({EGL_CONTEXT_CLIENT_VERSION, 2});
     }
 
     EGLContext context = EGL_NO_CONTEXT;
-    for (const auto &attribList : contextAttribLists)
+    for (auto &attribList : contextAttribLists)
     {
+        if (mHasEXTCreateContextRobustness)
+        {
+            attribList.push_back(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY);
+            attribList.push_back(EGL_LOSE_CONTEXT_ON_RESET);
+            if (mHasNVRobustnessVideoMemoryPurge)
+            {
+                attribList.push_back(EGL_GENERATE_RESET_ON_VIDEO_MEMORY_PURGE_NV);
+                attribList.push_back(EGL_NONE);
+            }
+        }
+        attribList.push_back(GL_NONE);
         context = mEGL->createContext(mConfig, shareContext, attribList.data());
         if (context != EGL_NO_CONTEXT)
         {
@@ -226,6 +248,9 @@ egl::Error DisplayEGL::initialize(egl::Display *display)
             return egl::EglNotInitialized() << "need " << ext;
         }
     }
+
+    mHasEXTCreateContextRobustness   = mEGL->hasExtension("EGL_EXT_create_context_robustness");
+    mHasNVRobustnessVideoMemoryPurge = mEGL->hasExtension("EGL_NV_robustness_video_memory_purge");
 
     const EGLAttrib platformAttrib = mDisplayAttributes.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, 0);
     EGLint esBit                   = ESBitFromPlatformAttrib(mEGL, platformAttrib);
@@ -356,7 +381,8 @@ ContextImpl *DisplayEGL::createContext(const gl::State &state,
         return nullptr;
     }
 
-    return new ContextEGL(state, errorSet, renderer);
+    bool robustnessVideoMemoryPurgeRequested = GetRobustnessVideoMemoryPurge(attribs);
+    return new ContextEGL(state, errorSet, renderer, robustnessVideoMemoryPurgeRequested);
 }
 
 template <typename T>
@@ -616,8 +642,7 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
 
-    outExtensions->createContextRobustness =
-        mEGL->hasExtension("EGL_EXT_create_context_robustness");
+    outExtensions->createContextRobustness = mHasEXTCreateContextRobustness;
 
     outExtensions->postSubBuffer    = false;  // Since SurfaceEGL::postSubBuffer is not implemented
     outExtensions->presentationTime = mEGL->hasExtension("EGL_ANDROID_presentation_time");
@@ -682,6 +707,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->imageDmaBufImportModifiersEXT =
         mEGL->hasExtension("EGL_EXT_image_dma_buf_import_modifiers");
+
+    outExtensions->robustnessVideoMemoryPurgeNV = mHasNVRobustnessVideoMemoryPurge;
 
     DisplayGL::generateExtensions(outExtensions);
 }
