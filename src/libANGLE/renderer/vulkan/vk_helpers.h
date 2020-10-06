@@ -1010,6 +1010,13 @@ class CommandBufferHelper : angle::NonCopyable
         mReadOnlyDepthStencilMode = readOnlyDepthStencilMode;
     }
 
+    void updateStartedRenderPassWithEarlyFragmentTest(bool earlyFragmentTest)
+    {
+        ASSERT(mIsRenderPassCommandBuffer);
+        ASSERT(mRenderPassStarted);
+        mEarlyFragmentTestEverEnabled = mEarlyFragmentTestEverEnabled || earlyFragmentTest;
+    }
+
     void beginTransformFeedback(size_t validBufferCount,
                                 const VkBuffer *counterBuffers,
                                 bool rebindBuffers);
@@ -1150,7 +1157,7 @@ class CommandBufferHelper : angle::NonCopyable
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
     uint32_t mValidTransformFeedbackBufferCount;
     bool mRebindTransformFeedbackBuffers;
-
+    bool mEarlyFragmentTestEverEnabled;
     bool mIsRenderPassCommandBuffer;
     bool mReadOnlyDepthStencilMode;
 
@@ -1221,7 +1228,9 @@ enum class ImageLayout
     DepthStencilFragmentShaderReadOnly,
     DepthStencilAllShadersReadOnly,
     DepthStencilAttachmentReadOnly,
+    DepthStencilAttachmentLateReadOnly,
     DepthStencilAttachment,
+    DepthStencilAttachmentLate,
     DepthStencilResolveAttachment,
     Present,
     // The rest of the layouts.
