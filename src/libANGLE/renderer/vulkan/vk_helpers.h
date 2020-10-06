@@ -1141,6 +1141,7 @@ class CommandBufferHelper : angle::NonCopyable
 
     bool mIsRenderPassCommandBuffer;
     bool mReadOnlyDepthStencilMode;
+    bool mReadOnlyDepthFeedbackLoopMode;
 
     // State tracking for the maximum (Write been the highest) depth access during the entire
     // renderpass. Note that this does not include VK_ATTACHMENT_LOAD_OP_CLEAR which is tracked
@@ -1210,7 +1211,9 @@ enum class ImageLayout
     // Framebuffer attachment layouts are placed first, so they can fit in fewer bits in
     // PackedAttachmentOpsDesc.
     ColorAttachment,
-    DepthStencilReadOnly,
+    DepthStencilFragmentShaderReadOnly,
+    DepthStencilAllShadersReadOnly,
+    DepthStencilAttachmentReadOnly,
     DepthStencilAttachment,
     DepthStencilResolveAttachment,
     Present,
