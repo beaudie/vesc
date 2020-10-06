@@ -10,8 +10,10 @@ namespace rx
 {
 ContextEGL::ContextEGL(const gl::State &state,
                        gl::ErrorSet *errorSet,
-                       const std::shared_ptr<RendererEGL> &renderer)
-    : ContextGL(state, errorSet, renderer), mRendererEGL(renderer)
+                       const std::shared_ptr<RendererEGL> &renderer,
+                       bool robustnessVideoMemoryPurgeRequested)
+    : ContextGL(state, errorSet, renderer, robustnessVideoMemoryPurgeRequested),
+      mRendererEGL(renderer)
 {}
 
 ContextEGL::~ContextEGL() {}

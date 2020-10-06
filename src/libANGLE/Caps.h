@@ -650,6 +650,9 @@ struct Extensions
 
     // GL_OES_texture_stencil8
     bool stencilIndex8 = false;
+
+    // GL_NV_robustness_video_memory_purge
+    bool robustnessVideoMemoryPurgeNV = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct
@@ -1113,6 +1116,9 @@ struct DisplayExtensions
 
     // EGL_NOK_texture_from_pixmap
     bool textureFromPixmapNOK = false;
+
+    // EGL_NV_robustness_video_memory_purge
+    bool robustnessVideoMemoryPurgeNV = false;
 };
 
 struct DeviceExtensions
