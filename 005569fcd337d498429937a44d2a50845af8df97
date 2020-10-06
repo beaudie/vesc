@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1989e89c_a8c3c522",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T00:01:55Z",
+      "side": 1,
+      "message": "I\u0027d prefer a 2nd copy of vararg and va_end() in the caller instead.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 0
+      },
+      "revId": "005569fcd337d498429937a44d2a50845af8df97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

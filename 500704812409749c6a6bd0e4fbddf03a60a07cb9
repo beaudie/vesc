@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dabcff3_0412c353",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T00:01:55Z",
+      "side": 0,
+      "message": "I like it here better than in FormatStringIntoVector",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 19
+      },
+      "revId": "500704812409749c6a6bd0e4fbddf03a60a07cb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
