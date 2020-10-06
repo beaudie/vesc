@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed29a78c_ff759007",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-06T05:31:59Z",
+      "side": 1,
+      "message": "Ian, when you reland CLs, PS1 should be the original (reverted) CL, and the fixes in PS2.\nAlso please retain the history of the revert in commit message and have \"Reland: \" in the title.",
+      "revId": "08142700a841adff0081581df2920ef3ea8b211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
