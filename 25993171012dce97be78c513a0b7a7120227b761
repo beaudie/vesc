@@ -52,6 +52,24 @@
       "parentUuid": "b726c4bf_987e0b6b",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac016f99_56e9e5d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T23:52:35Z",
+      "side": 1,
+      "message": "Cool!\nI\u0027ve got an AGI trace from manhattan (some random early frame) that shows two threads issuing Vulkan commands. I posted screenshot in the Threading doc.\ngo/angle-vk-threading\nI know there is additional work needed to get more parallelism. Wanted to get a baseline in that works and at least has similar perf and work from there.",
+      "parentUuid": "6895cfc9_f7e8ad90",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
