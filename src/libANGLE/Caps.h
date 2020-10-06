@@ -647,6 +647,18 @@ struct Extensions
 
     // GL_EXT_buffer_storage
     bool bufferStorageEXT = false;
+<<<<<<< HEAD   (64eb64 Roll SPIRV-Tools from fcb22ecf0f7e to 615fbe6cbc78 (6 revisi)
+=======
+
+    // GL_OES_texture_stencil8
+    bool stencilIndex8 = false;
+
+    // GL_OES_sample_shading
+    bool sampleShadingOES = false;
+
+    // GL_NV_robustness_video_memory_purge
+    bool robustnessVideoMemoryPurgeNV = false;
+>>>>>>> CHANGE (96a49a GLX, EGL: Support NV_robustness_video_memory_purge)
 };
 
 // Pointer to a boolean memeber of the Extensions struct
@@ -1107,6 +1119,9 @@ struct DisplayExtensions
 
     // EGL_NOK_texture_from_pixmap
     bool textureFromPixmapNOK = false;
+
+    // EGL_NV_robustness_video_memory_purge
+    bool robustnessVideoMemoryPurgeNV = false;
 };
 
 struct DeviceExtensions

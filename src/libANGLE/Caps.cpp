@@ -1020,6 +1020,12 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_APPLE_clip_distance"] = enableableExtension(&Extensions::clipDistanceAPPLE);
         map["GL_EXT_EGL_image_array"] = enableableExtension(&Extensions::eglImageArray);
         map["GL_EXT_buffer_storage"] = enableableExtension(&Extensions::bufferStorageEXT);
+<<<<<<< HEAD   (64eb64 Roll SPIRV-Tools from fcb22ecf0f7e to 615fbe6cbc78 (6 revisi)
+=======
+        map["GL_OES_texture_stencil8"] = enableableExtension(&Extensions::stencilIndex8);
+        map["GL_OES_sample_shading"] = enableableExtension(&Extensions::sampleShadingOES);
+        map["GL_NV_robustness_video_memory_purge"] = esOnlyExtension(&Extensions::robustnessVideoMemoryPurgeNV);
+>>>>>>> CHANGE (96a49a GLX, EGL: Support NV_robustness_video_memory_purge)
         // GLES1 extensions
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArrayOES);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMapOES);
@@ -1403,6 +1409,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_EXT_image_dma_buf_import",                        imageDmaBufImportEXT,               &extensionStrings);
     InsertExtensionString("EGL_EXT_image_dma_buf_import_modifiers",              imageDmaBufImportModifiersEXT,      &extensionStrings);
     InsertExtensionString("EGL_NOK_texture_from_pixmap",                         textureFromPixmapNOK,               &extensionStrings);
+    InsertExtensionString("EGL_NV_robustness_video_memory_purge",                robustnessVideoMemoryPurgeNV,               &extensionStrings);
     // clang-format on
 
     return extensionStrings;
