@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "ed29a78c_ff759007",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Ian, when you reland CLs, PS1 should be the original (reverted) CL, and the fixes in PS2.\nAlso please retain the history of the revert in commit message and have \"Reland: \" in the title.",
       "revId": "08142700a841adff0081581df2920ef3ea8b211d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "f6163544_98d9f0e0",
         "filename": "/PATCHSET_LEVEL",
@@ -31,8 +32,25 @@
       "side": 1,
       "message": "Ian, next time you upload a re-land with a fix, please upload the original CL first then the re-land second, so the reviewers can see the diff.",
       "revId": "08142700a841adff0081581df2920ef3ea8b211d",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a2e2172_fa3be38c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-06T17:28:46Z",
+      "side": 1,
+      "message": "Sorry!  Is this process (and the format of the commit message) described somewhere?  I just did a Moma search (\"angle how to reland commit\") and didn\u0027t find instructions.  I did stumble upon an old \"Reland\" commit that I did: https://chromium-review.googlesource.com/c/chromium/tools/build/+/1803722\n\nIs this what you want in the message?  Does the PS1 commit have the new commit message (with a new Change-Id and the old one)?",
+      "parentUuid": "ed29a78c_ff759007",
+      "revId": "08142700a841adff0081581df2920ef3ea8b211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
