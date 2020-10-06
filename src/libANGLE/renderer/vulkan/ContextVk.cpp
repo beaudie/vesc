@@ -2910,6 +2910,11 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
 
         ASSERT(mExecutable);
         mExecutable->updateEarlyFragmentTestsOptimization(this);
+        if (hasStartedRenderPass())
+        {
+            mRenderPassCommands->updateStartedRenderPassWithEarlyFragmentTest(
+                hasEarlyFragmentTestsOptimization());
+        }
     }
 
     return angle::Result::Continue;
@@ -4685,6 +4690,26 @@ angle::Result ContextVk::beginNewRenderPass(
     return angle::Result::Continue;
 }
 
+bool ContextVk::hasEarlyFragmentTestsOptimization() const
+{
+    bool earlyFragmentTestsEnabled = false;
+    // We have to use the front end state here because this may get called without state been
+    // synced.
+    if (mState.canEnableEarlyFragmentTestsOptimization())
+    {
+        gl::Program *fragProgram = mState.getProgram() ? mState.getProgram() : nullptr;
+        if (!fragProgram && mState.getProgramPipeline())
+        {
+            fragProgram = mState.getProgramPipeline()->getShaderProgram(gl::ShaderType::Fragment);
+        }
+        if (fragProgram)
+        {
+            earlyFragmentTestsEnabled = fragProgram->getState().hasEarlyFragmentTestsOptimization();
+        }
+    }
+    return earlyFragmentTestsEnabled;
+}
+
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
                                          vk::CommandBuffer **commandBufferOut)
 {
@@ -4701,6 +4726,11 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
     mRenderPassCommands->onStencilAccess(stencilAccess);
 
     mDrawFramebuffer->updateRenderPassReadOnlyDepthMode(this, mRenderPassCommands);
+
+    if (hasEarlyFragmentTestsOptimization())
+    {
+        mRenderPassCommands->updateStartedRenderPassWithEarlyFragmentTest(true);
+    }
 
     if (commandBufferOut)
     {
