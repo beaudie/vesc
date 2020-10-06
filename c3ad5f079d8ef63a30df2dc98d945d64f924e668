@@ -16,6 +16,24 @@
       "revId": "c3ad5f079d8ef63a30df2dc98d945d64f924e668",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6fc7b27e_65e1ed78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-06T16:42:07Z",
+      "side": 1,
+      "message": "Actually, it was done in preceding CLs:-).\n\nThe new approach is not as explicit/obvious in how it works as with Tobin\u0027s original CL.  Here\u0027s a high-level description (should I add to design doc or md file?):\n\n1) The EVENT() macro that\u0027s at the start of each GLES (not EGL) auto-generated entrypoint creates an RAII (ScopedPerfEventHelper) class.\n\n2) The ScopedPerfEventHelper ctor calls the DebugAnnotator::beginEvent() method with a string about the GLES command that was called.  DebugAnnotorVk causes this to be saved in ContextVk, which also sets a dirty bit.\n\n3) During the setup for a draw/dispatch, the dirty bit processing creates the debug-util being-end pairs for the preceding GLES commands.  There\u0027s a hierachy of begin-end pairs still, and the final end for the draw/dispatch is done later ...\n\n4) The ScopedPerfEventHelper\u0027s dtor calls the DebugAnnotator::endEvent() method.  DebugAnnotorVk::endEvent() causes the final debug-util end to occur.",
+      "parentUuid": "cc1500e6_ab485095",
+      "revId": "c3ad5f079d8ef63a30df2dc98d945d64f924e668",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
