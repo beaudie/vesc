@@ -92,6 +92,10 @@ class ShareGroup final : angle::NonCopyable
 // Constant coded here as a reasonable limit.
 constexpr EGLAttrib kProgramCacheSizeAbsoluteMax = 0x4000000;
 
+// Map from textureID to level and data
+using TextureLevels       = std::map<GLint, std::vector<uint8_t>>;
+using TextureLevelDataMap = std::map<gl::TextureID, TextureLevels>;
+
 class Display final : public LabeledObject,
                       public angle::ObserverInterface,
                       public angle::NonCopyable
@@ -264,6 +268,12 @@ class Display final : public LabeledObject,
     // their own DebugAnnotator.
     void setGlobalDebugAnnotator() { gl::InitializeDebugAnnotations(&mAnnotator); }
 
+    const std::vector<uint8_t> &getCachedTextureLevel(gl::TextureID id, GLint level);
+    std::vector<uint8_t> &getCachedTextureLevel(gl::Texture *texture,
+                                                gl::TextureTarget target,
+                                                GLint level);
+    void deleteCachedTextureLevelData(gl::TextureID id);
+
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
@@ -335,6 +345,11 @@ class Display final : public LabeledObject,
 
     std::mutex mDisplayGlobalMutex;
     std::mutex mProgramCacheMutex;
+
+    // Cache a shadow copy of texture level data
+    std::mutex mCachedTextureLevelDataMutex;
+    TextureLevels mCachedTextureLevels;
+    TextureLevelDataMap mCachedTextureLevelData;
 };
 
 }  // namespace egl
