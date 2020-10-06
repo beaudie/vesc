@@ -240,8 +240,9 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
                                                  uint32_t deferredClearIndex)
 {
     // This function is called when the framebuffer is notified of an update to the attachment's
-    // contents.  Therefore, set mContentDefined so that the next render pass will have loadOp=LOAD.
-    mContentDefined = true;
+    // contents, as well as when the image is newly attached.  Set mContentDefined if the image is
+    // not in UNDEFINED layout, so that the next render pass will have loadOp=LOAD.
+    mContentDefined = mImage->getCurrentImageLayout() != vk::ImageLayout::Undefined;
 
     ASSERT(mImage->valid() && (!isResolveImageOwnerOfData() || mResolveImage->valid()));
 
@@ -269,6 +270,10 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
     {
         return angle::Result::Continue;
     }
+
+    // If there are staged updates, set mContentDefined as the image will end up having valid
+    // contents right away.
+    mContentDefined = true;
 
     return image->flushSingleSubresourceStagedUpdates(contextVk, mLevelIndexGL, layerIndex,
                                                       deferredClears, deferredClearIndex);
