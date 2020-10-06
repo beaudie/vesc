@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4deefa8_adebcb5f",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-10-06T22:51:25Z",
+      "side": 1,
+      "message": "Should this really be an enableable extension? EXT_robustness higher up in the list is an \"esOnlyExtension\". I think this should be turned on all the time if the driver supports it.\n\nSeparately, is EXT_robustness correctly categorized as an esOnlyExtension? What about KHR_robustness?",
+      "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f68e733a_2aff200e",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-10-06T22:51:25Z",
+      "side": 1,
+      "message": "Could you consider taking an enum argument so that all call sites don\u0027t have a new \"true/false\" argument whose semantic needs to be looked up?",
+      "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
