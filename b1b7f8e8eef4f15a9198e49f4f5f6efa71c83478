@@ -63,6 +63,30 @@
       },
       "revId": "b1b7f8e8eef4f15a9198e49f4f5f6efa71c83478",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "012f2b62_12569058",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-06T21:10:57Z",
+      "side": 1,
+      "message": "Ah right. I liked Jamie\u0027s change that passed the function explicitly to avoid retrieving it out of the var arg. Anyway, that change is not relevant to this fix.",
+      "parentUuid": "fd33a70a_d5049ce8",
+      "range": {
+        "startLine": 53,
+        "startChar": 17,
+        "endLine": 53,
+        "endChar": 85
+      },
+      "revId": "b1b7f8e8eef4f15a9198e49f4f5f6efa71c83478",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
