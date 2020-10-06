@@ -125,6 +125,10 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
                << "eglChooseConfig failed with " << egl::Error(mEGL->getError());
     }
 
+    // DisplayEGL members that need to be initialized here
+    mHasEXTCreateContextRobustness   = mEGL->hasExtension("EGL_EXT_create_context_robustness");
+    mHasNVRobustnessVideoMemoryPurge = mEGL->hasExtension("EGL_NV_robustness_video_memory_purge");
+
     // A mock pbuffer is only needed if surfaceless contexts are not supported.
     mSupportsSurfaceless = mEGL->hasExtension("EGL_KHR_surfaceless_context");
     if (!mSupportsSurfaceless)
@@ -229,7 +233,8 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
         }
     }
 
-    return new ContextEGL(state, errorSet, renderer);
+    return new ContextEGL(state, errorSet, renderer,
+                          RobustnessVideoMemoryPurgeStatus::NOT_REQUESTED);
 }
 
 bool DisplayAndroid::isValidNativeWindow(EGLNativeWindowType window) const
