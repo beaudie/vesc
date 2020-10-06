@@ -376,6 +376,30 @@
     },
     {
       "key": {
+        "uuid": "1f504bf6_b4180d22",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-06T16:12:44Z",
+      "side": 1,
+      "message": "Looked some more. Found some discussions on fences in Gitlab issues but obviously answered the question. However, the Vulkan CTS test basicOneFenceCase basically does this. It creates a fence, waits on the fence with a timeout and then issues the vkQueueSubmit to trigger the fence.\nThis is all happening on a single thread, but considering that vkWaitForFences is not listed as requiring external synchronization I\u0027m going to say that it is okay to wait on a fence in one thread before the vkQueueSubmit triggering the fence has been issued.",
+      "parentUuid": "00171d93_1c42bdcc",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 107,
+        "endChar": 13
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04160988_79bf7f18",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 45
