@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "7c219171_2f0888a5",
         "filename": "/PATCHSET_LEVEL",
@@ -14,8 +15,53 @@
       "side": 1,
       "message": "Split from https://chromium-review.googlesource.com/c/angle/angle/+/2437506",
       "revId": "739a03a5ac34b78259b65529098c660546946a4e",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa02ba92_847b5c4c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1221,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T15:01:52Z",
+      "side": 1,
+      "message": "This means we need to make a RenderPassHelper class like we do for the other Vk objects. You can merge AndSerial and AndCounters together.",
+      "range": {
+        "startLine": 1221,
+        "startChar": 7,
+        "endLine": 1221,
+        "endChar": 28
+      },
+      "revId": "739a03a5ac34b78259b65529098c660546946a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b32a49b0_5c4938f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T15:01:52Z",
+      "side": 1,
+      "message": "just remove all the bit packing stuff. This isn\u0027t used as a hash or memcmp key.",
+      "range": {
+        "startLine": 776,
+        "startChar": 7,
+        "endLine": 776,
+        "endChar": 29
+      },
+      "revId": "739a03a5ac34b78259b65529098c660546946a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
