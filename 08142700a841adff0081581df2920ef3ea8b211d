@@ -16,6 +16,23 @@
       "revId": "08142700a841adff0081581df2920ef3ea8b211d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6163544_98d9f0e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-06T12:30:50Z",
+      "side": 1,
+      "message": "Ian, next time you upload a re-land with a fix, please upload the original CL first then the re-land second, so the reviewers can see the diff.",
+      "revId": "08142700a841adff0081581df2920ef3ea8b211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
