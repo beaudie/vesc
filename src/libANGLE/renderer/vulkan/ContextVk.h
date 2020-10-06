@@ -1058,6 +1058,9 @@ class ContextVk : public ContextImpl, public vk::Context
     // RewriteStructSamplers pass.
     bool mUseOldRewriteStructSamplers;
 
+    // True if early fragment tets is current enabled
+    bool mEarlyFragmentTestEnabled;
+
     angle::PackedEnumMap<PipelineType, DriverUniformsDescriptorSet> mDriverUniforms;
 
     // This cache should also probably include the texture index (shader location) and array
