@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ddcfc7d_67f5b05b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T15:53:12Z",
+      "side": 1,
+      "message": "Yeah, I struggled with whether to refactor this code a bit.  You could technically merge the two.  The main complication is we don\u0027t have the texture target during MEC, so looking up details gets messy.  I kept them separate with the asserts and (hopefully) clearer names to indicate their uses.  I\u0027ll take another pass to clarify more.",
+      "parentUuid": "bd37c18b_eb802829",
+      "range": {
+        "startLine": 1486,
+        "startChar": 31,
+        "endLine": 1486,
+        "endChar": 51
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5268dd6b_0201d665",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
@@ -54,6 +78,24 @@
       "writtenOn": "2020-10-07T14:06:16Z",
       "side": 1,
       "message": "All these first\u0027s \u0026 second\u0027s make it tricky to see what\u0027s going on.",
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aaa49a6_6af3721e",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T15:53:12Z",
+      "side": 1,
+      "message": "Much of this was brought over verbatim.  I\u0027ll take a pass at cleaning it up, clarifying.",
+      "parentUuid": "69a13ac0_ecc57df2",
       "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -118,6 +160,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "564c986a_e456e01c",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 48
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b4b84f7_f29ec2fa",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T15:53:12Z",
+      "side": 1,
+      "message": "Ah, good idea.  Will hook that up.",
+      "parentUuid": "497f3105_89ee4e71",
       "range": {
         "startLine": 348,
         "startChar": 0,
