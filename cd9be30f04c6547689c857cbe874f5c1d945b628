@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40db795b_39fca5ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-07T20:03:12Z",
+      "side": 1,
+      "message": "Patchset 1 is a start.\n\nWould it be okay if I create a dummy CL that I land, revert, and reland, just so that I make sure that I correctly document things.",
+      "revId": "cd9be30f04c6547689c857cbe874f5c1d945b628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
