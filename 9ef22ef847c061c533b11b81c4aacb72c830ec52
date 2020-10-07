@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c65721_309f74de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T18:40:53Z",
+      "side": 1,
+      "message": "Unfortunately AGI still not working with Manhattan on S20, so I am not able to look at AGI. But I found this by adding some logic in the code to detect the 3D to TA depdency and this pops up. I probably should turn that into a perf warning.",
+      "revId": "9ef22ef847c061c533b11b81c4aacb72c830ec52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
