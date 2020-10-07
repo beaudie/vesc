@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65e639c6_268f0b22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T18:31:06Z",
+      "side": 1,
+      "message": "It was a much tinier change than I thought.",
+      "parentUuid": "e77daefc_9fae9d6a",
+      "revId": "1d3e764a979f432cbbe71d48c700fe992be3b537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e68fe01_c3b749de",
@@ -79,6 +97,30 @@
       "side": 1,
       "message": "Yeah ObjectAndSerial can eventually go away, and we can inherit these guys from vk::Resource. For now just not using ObjectAndSerial would be welcome to make it consistent with how I laid out the other classes (and to help eventually get rid of it)",
       "parentUuid": "90b36065_c38a95d0",
+      "range": {
+        "startLine": 1168,
+        "startChar": 4,
+        "endLine": 1168,
+        "endChar": 23
+      },
+      "revId": "1d3e764a979f432cbbe71d48c700fe992be3b537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2bc9cbe_d6423aea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T18:31:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e30e33f0_9b5b9bbe",
       "range": {
         "startLine": 1168,
         "startChar": 4,
