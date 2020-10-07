@@ -2184,7 +2184,8 @@ angle::Result FramebufferVk::clearWithCommand(
     const VkClearColorValue &clearColorValue,
     const VkClearDepthStencilValue &clearDepthStencilValue)
 {
-    gl::DrawBuffersVector<VkClearAttachment> attachments;
+    gl::AttachmentVector<VkClearAttachment> attachments;
+
     // Go through clearColorBuffers and add them to the list of attachments to clear.
     for (size_t colorIndexGL : clearColorBuffers)
     {
