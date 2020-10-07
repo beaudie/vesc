@@ -712,6 +712,7 @@ class ClearValuesArray final
     const VkClearValue *data() const { return mValues.data(); }
     bool empty() const { return mEnabled.none(); }
     bool any() const { return mEnabled.any(); }
+    bool anyColor() const;
 
   private:
     gl::AttachmentArray<VkClearValue> mValues;
