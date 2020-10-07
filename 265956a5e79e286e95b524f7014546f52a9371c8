@@ -127,6 +127,24 @@
       "parentUuid": "5a61c8dc_45d3dfdc",
       "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c608913_caad3310",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:33:54Z",
+      "side": 1,
+      "message": "Ok. Can you ASSERT that `image` is not `mDepthStencilResolveImage`?\n\n        if (!usesImageInRenderPass(*image))\n        {\n            mRenderPassUsedImages.insert(image-\u003egetImageSerial().getValue());\n        }\n        else\n        {\n            // Feedback loop for multisampled-render-to-texture depth/stencil doesn\u0027t make sense.  Renderbuffers cannot be bound as samplers, and depth/stencil textures are entirely transient.\n            ASSERT(image !\u003d mDepthStencilResolveImage);\n            if (image \u003d\u003d mDepthStencilImage) {...}\n        }\n\nDespite what the comment (that I added above) says, MSRTT depth/stencil textures _could_ form a feedback loop, but that\u0027s contrived given that they can\u0027t possibly have meaningful data.",
+      "parentUuid": "240a468d_459a4666",
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
