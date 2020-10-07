@@ -70,6 +70,24 @@
       "parentUuid": "6895cfc9_f7e8ad90",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a1b5af2_ba9baa43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T00:11:03Z",
+      "side": 1,
+      "message": "I ran an experiment where I shut down all Chrome \u0026 background processes, then used scripts/perf_test_runner.py to generate a ton of data, discard the outliers, and compute the mean. I found an average of 2.14-2.15 ms / frame before your patches and 2.18-2.19 after. So a regression, unfortunately. My earlier numbers were a quick few runs with a bunch of background noise so probably that skewed the results.",
+      "parentUuid": "ac016f99_56e9e5d4",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
