@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f33ec2d_3a00670a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T01:55:47Z",
+      "side": 1,
+      "message": "You should be able to ASSERT this. If firstShader is Fragment, there can\u0027t be any other stages!",
+      "range": {
+        "startLine": 1498,
+        "startChar": 63,
+        "endLine": 1498,
+        "endChar": 89
+      },
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5b6979a_85eae1ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T01:55:47Z",
+      "side": 1,
+      "message": "Didn\u0027t you say that specifying early fragment tests is having a negative effect?",
+      "range": {
+        "startLine": 132,
+        "startChar": 52,
+        "endLine": 132,
+        "endChar": 94
+      },
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc32aee6_ac2fcb87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T01:55:47Z",
+      "side": 1,
+      "message": "It feels like this is rather redundant. If dstStage is EARLY_FRAGMENT_TESTS, it probably doesn\u0027t matter to anyone if it also includes FRAGMENT. In other words, I *think* any usage of this can be replaced with DepthStencilFragmentShaderReadOnly and there wouldn\u0027t be any practical difference.",
+      "range": {
+        "startLine": 158,
+        "startChar": 21,
+        "endLine": 158,
+        "endChar": 51
+      },
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a61c8dc_45d3dfdc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T01:55:47Z",
+      "side": 1,
+      "message": "Could you explain this change a bit more? It looks unrelated to this CL. Is it fixing something? Optimizing something?",
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
