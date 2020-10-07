@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62929774_dd6c7d96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-07T22:24:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e43aba7d_069a30fa",
+      "range": {
+        "startLine": 771,
+        "startChar": 0,
+        "endLine": 779,
+        "endChar": 94
+      },
+      "revId": "395752ca52b4fb2ab69a2274e1a16fc08387245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf576582_d7ccc17e",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "If it is used by shader, that is the feedback loop, which is handled by line 778 (where your previous comment located).",
       "parentUuid": "bf576582_d7ccc17e",
+      "revId": "395752ca52b4fb2ab69a2274e1a16fc08387245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e3748c_9da00e1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-07T22:24:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5202b1ce_30bdc348",
       "revId": "395752ca52b4fb2ab69a2274e1a16fc08387245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
