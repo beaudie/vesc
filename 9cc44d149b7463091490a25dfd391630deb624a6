@@ -39,6 +39,30 @@
       },
       "revId": "9cc44d149b7463091490a25dfd391630deb624a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ca30898_1ea6a6cc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2872,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T17:14:36Z",
+      "side": 1,
+      "message": "This API is only called from getCompatibileRenderPass. It doesn\u0027t matter here because what we are looking for is a compatible render pass and the spec says the layout does not matter for render pass compatibility. The compatible renderpass is used to create pipeline program. I have reworded the comment.",
+      "parentUuid": "f978b1d9_46bc7d96",
+      "range": {
+        "startLine": 2872,
+        "startChar": 35,
+        "endLine": 2872,
+        "endChar": 92
+      },
+      "revId": "9cc44d149b7463091490a25dfd391630deb624a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
