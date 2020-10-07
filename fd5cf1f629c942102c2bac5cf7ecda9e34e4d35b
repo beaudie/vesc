@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9752291b_b66b6bc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-07T21:58:24Z",
+      "side": 1,
+      "message": "PTAL\n\nJust suppressing the test for now since there isn\u0027t an obvious CL that caused the regression.",
+      "revId": "fd5cf1f629c942102c2bac5cf7ecda9e34e4d35b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
