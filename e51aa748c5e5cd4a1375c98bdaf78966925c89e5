@@ -466,6 +466,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "664a9dec_38fa531c",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T15:36:08Z",
+      "side": 1,
+      "message": "Thanks for digging into this. It sounds like then the `waitForCommandProcessorIdle` should turn into something similar to `finishToSerial`, where we wait for the command processor to submit the relevant submission, not get entirely idle.",
+      "parentUuid": "e6f9e8fb_fadd3c5a",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 107,
+        "endChar": 13
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04160988_79bf7f18",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 45
