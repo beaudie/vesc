@@ -33,6 +33,46 @@
       "message": "Could you consider taking an enum argument so that all call sites don\u0027t have a new \"true/false\" argument whose semantic needs to be looked up?",
       "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c609790_5be05424",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-07T14:49:54Z",
+      "side": 1,
+      "message": "contextAttribLists is a list of lists, you want to insert this into every element.\n\nThis code is a bit messy though, we add EGL_NONE to the end at every push_back which indicates the end of the list.\n\nI would remove all the EGL_NONE entries, add these plus the EGL_NONE just before calling eglCreateContext. Around ref.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 5
+      },
+      "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "411d8ee3_c8509338",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-07T14:49:54Z",
+      "side": 1,
+      "message": "ref",
+      "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
