@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "79bb06bd_c1157e7d",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Nearly done with MSRTT!",
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "ddde7a6a_1e3e55d5",
         "filename": "/PATCHSET_LEVEL",
@@ -31,10 +32,10 @@
       "side": 1,
       "message": "Please separate out the performance counter changes from the invalidated attachment code.\n\nWhile being able to skip storing resolve attachments improves performance, these counters feel a lot more like white box testing than performance counter testing.   Incrementing counters is relatively cheap, but all of that branching will start to add up.\n\nAlso, CC\u0027ing Courntey since this touches some manual Serial tracking code, which will need to be fixed as part of the threading work.",
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "7daa7c41_9768f5ed",
         "filename": "/PATCHSET_LEVEL",
@@ -49,10 +50,10 @@
       "message": "Broke the change in 4. Haven\u0027t got around to addressing the comments yet.\n\n\u003e Incrementing counters is relatively cheap, but all of that branching will start to add up.\n\nWhich is why I was hoping to compile them out for the end user. Without the counters, it\u0027s kind of hard to verify this change. I guess just looking at load/store ops we can have _some_ confidence in it.\n\nI could remove those counters if that\u0027s how everyone feels towards this.",
       "parentUuid": "ddde7a6a_1e3e55d5",
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "9fe3be54_cac2ee5a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
@@ -72,10 +73,34 @@
         "endChar": 83
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd6ea5f_923e04fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fe3be54_cac2ee5a",
+      "range": {
+        "startLine": 188,
+        "startChar": 67,
+        "endLine": 188,
+        "endChar": 83
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "cb4e99f0_79b64967",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
@@ -95,10 +120,34 @@
         "endChar": 5
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3cb63e4_344a4e4a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Done (in split change).",
+      "parentUuid": "cb4e99f0_79b64967",
+      "range": {
+        "startLine": 828,
+        "startChar": 0,
+        "endLine": 837,
+        "endChar": 5
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "b934f456_9dac46cf",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
@@ -118,10 +167,34 @@
         "endChar": 46
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a101925c_94c7e18c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Clarified (in split change). We simply don\u0027t have perf counters for color loadOp/storeOp.",
+      "parentUuid": "b934f456_9dac46cf",
+      "range": {
+        "startLine": 854,
+        "startChar": 28,
+        "endLine": 855,
+        "endChar": 46
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "b0827634_47cbbb96",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
@@ -141,10 +214,34 @@
         "endChar": 70
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e1b5f3f_a69e30e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Because the existence of either implies that we have an additional subpass. When we have an additional subpass, we can\u0027t remove resolve attachments because of render pass compatibility rules.\n\nI want to improve the comment above it, but I feel like it already answers your question.",
+      "parentUuid": "b0827634_47cbbb96",
+      "range": {
+        "startLine": 917,
+        "startChar": 0,
+        "endLine": 919,
+        "endChar": 70
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "ceb5f541_15c3601a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
@@ -164,10 +261,34 @@
         "endChar": 17
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd17ce0d_8b9e8c63",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceb5f541_15c3601a",
+      "range": {
+        "startLine": 1036,
+        "startChar": 11,
+        "endLine": 1036,
+        "endChar": 17
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "7b2419e0_1cdb29f7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
@@ -187,10 +308,34 @@
         "endChar": 69
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7c783bf_928da948",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b2419e0_1cdb29f7",
+      "range": {
+        "startLine": 1190,
+        "startChar": 64,
+        "endLine": 1190,
+        "endChar": 69
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "880e2a00_8c032124",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
@@ -210,10 +355,34 @@
         "endChar": 44
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d531472c_02141f0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Done (in split change).",
+      "parentUuid": "880e2a00_8c032124",
+      "range": {
+        "startLine": 791,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 44
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "98495a3f_fd2b3cb5",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
@@ -233,8 +402,31 @@
         "endChar": 86
       },
       "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3437f66b_f86a833f",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1697,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:05:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98495a3f_fd2b3cb5",
+      "range": {
+        "startLine": 1692,
+        "startChar": 0,
+        "endLine": 1697,
+        "endChar": 86
+      },
+      "revId": "2fa79b1bf23c1b171ebcb4096cf00455018f4f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
