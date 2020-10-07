@@ -8,9 +8,9 @@
   "src/compiler/translator/ParseContext_complete_autogen.h":
     "272d913f6a057fe1ebce884a6bd2bb73",
   "src/compiler/translator/SymbolTable_ESSL_autogen.cpp":
-    "017b7c00d55b9ec4edf084e87847f1d9",
+    "664dcb11199c120c25006e575db768e8",
   "src/compiler/translator/SymbolTable_autogen.cpp":
-    "ef071b17834742f56397bc63d531bb5f",
+    "442d1f24b0e779649e7c505ee32c62bf",
   "src/compiler/translator/SymbolTable_autogen.h":
     "2d8bed6ff5debc6546199a2add316a66",
   "src/compiler/translator/builtin_function_declarations.txt":
@@ -18,7 +18,7 @@
   "src/compiler/translator/builtin_variables.json":
     "98d347a6ed181eca3d89bfd73193d787",
   "src/compiler/translator/gen_builtin_symbols.py":
-    "a538e53475983ae9643afd5b36056347",
+    "387a9c20d1e691edc8ae9520d54f0911",
   "src/compiler/translator/tree_util/BuiltIn_ESSL_autogen.h":
     "fa72b4b824dd85feeda5f984866a017f",
   "src/compiler/translator/tree_util/BuiltIn_complete_autogen.h":
