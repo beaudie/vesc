@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5542dfe_ceb6c393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-07T14:14:09Z",
+      "side": 1,
+      "message": "I don\u0027t see anything obviously wrong in the code but appears to have a failure on Android.",
+      "revId": "7ed460ace321a8e658f880cd733c3d283ac8885e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
