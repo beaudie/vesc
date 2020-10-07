@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00eb2363_c1d4bab0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T20:29:19Z",
+      "side": 1,
+      "message": "Slightly different approach.  Going through egl::ShareGroup now, but moved the caching support to a new class that remains in FrameCapture.cpp so it can be mocked and keep minimal impact.",
+      "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

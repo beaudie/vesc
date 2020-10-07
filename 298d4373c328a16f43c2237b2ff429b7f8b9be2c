@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ec46b5d_56baaebf",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T20:29:19Z",
+      "side": 1,
+      "message": "Trying out getTextureLevelCacheLocation with a comment as to why.",
+      "parentUuid": "8ddcfc7d_67f5b05b",
+      "range": {
+        "startLine": 1486,
+        "startChar": 31,
+        "endLine": 1486,
+        "endChar": 51
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5268dd6b_0201d665",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
@@ -61,6 +85,24 @@
       "writtenOn": "2020-10-07T14:06:16Z",
       "side": 1,
       "message": "Move to 1522?",
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd8cabd2_ccb48ad1",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T20:29:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5268dd6b_0201d665",
       "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -102,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "240b4327_638deb4f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T20:29:19Z",
+      "side": 1,
+      "message": "Tried to resolve with comments, but still hard to follow.  Could move to additional variable creation to clarify what they are, but that can lead to bugs.",
+      "parentUuid": "3aaa49a6_6af3721e",
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f56917a1_32ada976",
         "filename": "src/libANGLE/Display.h",
         "patchSetId": 3
@@ -113,6 +173,30 @@
       "writtenOn": "2020-10-07T14:06:16Z",
       "side": 1,
       "message": "textureID unique among all contexts?",
+      "range": {
+        "startLine": 95,
+        "startChar": 12,
+        "endLine": 95,
+        "endChar": 21
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea4d058f_680ccadc",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T20:29:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f56917a1_32ada976",
       "range": {
         "startLine": 95,
         "startChar": 12,
@@ -184,6 +268,30 @@
       "side": 1,
       "message": "Ah, good idea.  Will hook that up.",
       "parentUuid": "497f3105_89ee4e71",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 48
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3664e73a_c4e46fd6",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T20:29:19Z",
+      "side": 1,
+      "message": "Moved the access to egl::ShareGroup and I also isolated the FrameCapture additions to their respective files.  Jamie LMKWYT.  I didn\u0027t see a good way to restrict access to the cache without moving it to its own class.  We could instead give egl::ShareGroup its own instance of FrameCapture, but we need a way to force cache accesses to go through the ShareGroup.",
+      "parentUuid": "7b4b84f7_f29ec2fa",
       "range": {
         "startLine": 348,
         "startChar": 0,
