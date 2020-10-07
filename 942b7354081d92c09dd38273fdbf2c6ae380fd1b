@@ -16,6 +16,92 @@
       "message": "I made all of Jamie\u0027s changes (thanks!) and added some more details/examples.",
       "revId": "942b7354081d92c09dd38273fdbf2c6ae380fd1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec389251_493ba3b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T21:27:18Z",
+      "side": 1,
+      "message": "LGTM, but a couple more suggestions before landing.",
+      "revId": "942b7354081d92c09dd38273fdbf2c6ae380fd1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a8a3797_99e561d0",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T21:27:18Z",
+      "side": 1,
+      "message": "see this",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 19
+      },
+      "revId": "942b7354081d92c09dd38273fdbf2c6ae380fd1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29949898_fd947c6c",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T21:27:18Z",
+      "side": 1,
+      "message": "nit: use the syntax like above to make this link easier to maintain",
+      "range": {
+        "startLine": 206,
+        "startChar": 72,
+        "endLine": 206,
+        "endChar": 161
+      },
+      "revId": "942b7354081d92c09dd38273fdbf2c6ae380fd1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1435ab6_7d3a2673",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T21:27:18Z",
+      "side": 1,
+      "message": "how about instead of putting in example text we link to \"good\" CLs as a basis? I can help find some if you\u0027re on board with that.",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 3
+      },
+      "revId": "942b7354081d92c09dd38273fdbf2c6ae380fd1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
