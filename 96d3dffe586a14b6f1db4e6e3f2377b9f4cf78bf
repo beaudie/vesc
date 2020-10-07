@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "386d4f91_27041aa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T04:25:44Z",
+      "side": 1,
+      "message": "I ended up not actually needing this, but the change is at least a clean up.",
+      "revId": "96d3dffe586a14b6f1db4e6e3f2377b9f4cf78bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
