@@ -39,6 +39,30 @@
       },
       "revId": "1d3e764a979f432cbbe71d48c700fe992be3b537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90b36065_c38a95d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T14:31:58Z",
+      "side": 1,
+      "message": "That would basically be reimplementing ObjectAndSerial again here. Is that really what you intended?\n\nI made the interface of this class look like it\u0027s flattened, and reused the implementation of ObjectAndSerial internally.",
+      "parentUuid": "8e68fe01_c3b749de",
+      "range": {
+        "startLine": 1168,
+        "startChar": 4,
+        "endLine": 1168,
+        "endChar": 23
+      },
+      "revId": "1d3e764a979f432cbbe71d48c700fe992be3b537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
