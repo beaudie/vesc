@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc200cd_acd3a28d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T16:27:53Z",
+      "side": 1,
+      "message": "I suspect we may have to disable threaded-submit due to bugs/efficiency/etc in the future based on a feature. What I always thought the code would look like is\n\n- Pretend it\u0027s threaded everywhere\n- Inside CommandProcessor::queueCommand() immediately process the task if not threaded.\n\n---\n\nEdit: and I just checked and that\u0027s exactly what\u0027s happening now. With the current change that code is never exercised because there\u0027s also a check for threaded-submit before queuing tasks, but it will eventually do the job.",
+      "parentUuid": "9a78ce6c_e7675592",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78185827_c1ca2ac4",
@@ -339,6 +357,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26c744d2_1ffe854d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T16:27:53Z",
+      "side": 1,
+      "message": "It would be nice if the thread ids of the two threads are stored, with each function ASSERTing that it\u0027s called from the right thread. When not multi-threading, the two thread ids would be the same.",
+      "parentUuid": "e7bfedac_0b3501bd",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc8cb12c_3456b06a",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 46
@@ -425,6 +461,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1af240c_9b774a3a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T16:27:53Z",
+      "side": 1,
+      "message": "Right, this is missing a call to `processCommandProcessorTasks()`.",
+      "parentUuid": "6f60a16c_17201ee9",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7945f48_3dd9d543",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 46
@@ -453,6 +507,30 @@
       "writtenOn": "2020-10-07T01:53:13Z",
       "side": 1,
       "message": "This should probably have an UNREACHABLE() at the least, so we can get some visibility into any cases that hit this.",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 71
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d692300_8fd6845f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T16:27:53Z",
+      "side": 1,
+      "message": "Probably the best course of action is to keep the result around and drop every command that follows. Next time the main thread synchronizes with this thread it can ANGLE_VK_TRY the result which will lead to a device loss.\n\nThat mirrors the behavior we currently have.",
+      "parentUuid": "09b32f47_cb3e5155",
       "range": {
         "startLine": 446,
         "startChar": 0,
@@ -894,6 +972,24 @@
       "writtenOn": "2020-10-07T01:53:13Z",
       "side": 1,
       "message": "Why is this necessary?   I see it used as:\n\n  ANGLE_VK_TRY(mCommandWorkQueue.getPointer(), mPrimaryCommandBuffer.end());\n\nWhy can\u0027t that be:\n\n  ANGLE_VK_TRY(\u0026mCommandWorkQueue, mPrimaryCommandBuffer.end());\n\n?\n\nOh, looks like it\u0027s an operator precedence issue?\n\n    #define ANGLE_VK_TRY(context, command)                                                 \\\n        do                                                                                 \\\n        {                                                                                  \\\n            auto ANGLE_LOCAL_VAR \u003d command;                                                \\\n            if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR !\u003d VK_SUCCESS))                             \\\n            {                                                                              \\\n                context-\u003ehandleError(ANGLE_LOCAL_VAR, __FILE__, ANGLE_FUNCTION, __LINE__); \\\n                return angle::Result::Stop;                                                \\\n            }                                                                              \\\n        } while (0)\n\nIs that fixable with (context)-\u003ehandleError, or does that break everything else?",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03cf8f6b_9b807b5c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T16:27:53Z",
+      "side": 1,
+      "message": "(context)-\u003ehandleError is the right answer",
+      "parentUuid": "c0e21c5e_2951cf67",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
