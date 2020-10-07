@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38dee488_b73a4d8d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T02:21:39Z",
+      "side": 1,
+      "message": "If there is no shader bit, specifying early fragment test will block fragment shader from start until previous late fragment shader stage finishes. This is addressed in next CL crrev.com/c/2454509",
+      "parentUuid": "c5b6979a_85eae1ac",
+      "range": {
+        "startLine": 132,
+        "startChar": 52,
+        "endLine": 132,
+        "endChar": 94
+      },
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bc32aee6_ac2fcb87",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -83,6 +107,24 @@
       "writtenOn": "2020-10-07T01:55:47Z",
       "side": 1,
       "message": "Could you explain this change a bit more? It looks unrelated to this CL. Is it fixing something? Optimizing something?",
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "240a468d_459a4666",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T02:21:39Z",
+      "side": 1,
+      "message": "This is required. Maybe my comment is not clear enough. The way it works right now is that if there is no feedback loop, the layout is determined at endRenderPass time. But if there is feedback loop, then the texture handling code will pick layout and insert barrier, because updateDescriptorSet needs image\u0027s layout information. Then we should not let endRenderPass to pick layout again (it may pick a different layout because it does not have information of it been used as texture and at which shader stage it is used). This two lines of code is essentially doing that.",
+      "parentUuid": "5a61c8dc_45d3dfdc",
       "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
