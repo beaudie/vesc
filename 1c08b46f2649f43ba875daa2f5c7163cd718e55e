@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ade06689_6b3bdc98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T16:49:28Z",
+      "side": 1,
+      "message": "Yuke, \"Roll\" I think is exempt from this check, so we can call this:\n\n\"Roll Chromium manually from...\"",
+      "revId": "1c08b46f2649f43ba875daa2f5c7163cd718e55e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
