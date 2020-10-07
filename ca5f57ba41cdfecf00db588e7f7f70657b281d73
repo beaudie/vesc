@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5bdb315_e206a7da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-07T05:41:04Z",
+      "side": 1,
+      "message": "Courtney: Jamie and I have discussed using Display as the location to coordinate between contexts.  This CL is a step in that direction, moving one piece of data that needs to be updated from multiple contexts.\n\nI\u0027m open on ideas on how to structure this better.  For the moment, I\u0027ve just added the code directly to Display.",
+      "revId": "ca5f57ba41cdfecf00db588e7f7f70657b281d73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
