@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "094c31ce_e3a7b6d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-07T21:22:29Z",
+      "side": 1,
+      "message": "I made all of Jamie\u0027s changes (thanks!) and added some more details/examples.",
+      "revId": "942b7354081d92c09dd38273fdbf2c6ae380fd1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
