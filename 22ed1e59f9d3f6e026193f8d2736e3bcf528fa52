@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0ca6608_8c385d48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T18:49:05Z",
+      "side": 0,
+      "message": "can you remove this type if you haven\u0027t already?",
+      "range": {
+        "startLine": 1259,
+        "startChar": 70,
+        "endLine": 1259,
+        "endChar": 89
+      },
+      "revId": "22ed1e59f9d3f6e026193f8d2736e3bcf528fa52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

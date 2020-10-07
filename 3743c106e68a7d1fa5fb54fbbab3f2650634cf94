@@ -16,6 +16,69 @@
       "message": "Anything else Tim?",
       "revId": "3743c106e68a7d1fa5fb54fbbab3f2650634cf94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "405919cb_b349150c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T18:49:05Z",
+      "side": 1,
+      "message": "still lgtm, more nits.",
+      "revId": "3743c106e68a7d1fa5fb54fbbab3f2650634cf94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5c5d388_e4902e3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T18:49:05Z",
+      "side": 1,
+      "message": "nit: I think you can remove this function entirely.",
+      "range": {
+        "startLine": 735,
+        "startChar": 8,
+        "endLine": 735,
+        "endChar": 25
+      },
+      "revId": "3743c106e68a7d1fa5fb54fbbab3f2650634cf94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab165c98_56b9bcb7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T18:49:05Z",
+      "side": 1,
+      "message": "nit: include \"RP\" in the name here probably.",
+      "range": {
+        "startLine": 737,
+        "startChar": 5,
+        "endLine": 737,
+        "endChar": 28
+      },
+      "revId": "3743c106e68a7d1fa5fb54fbbab3f2650634cf94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
