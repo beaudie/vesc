@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e43aba7d_069a30fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T22:21:15Z",
+      "side": 1,
+      "message": "The problem is that isReadOnlyDepthFeedbackLoopMode() information is in FramebufferVk object that we does not have access here. For feedback loop, it is a bit special here that we can not really delay the layout until endRenderPass. As I explained in the comment, the updateDescriptorSet requires the layout information.",
+      "parentUuid": "9f2da645_2cb4c0ff",
+      "range": {
+        "startLine": 771,
+        "startChar": 0,
+        "endLine": 779,
+        "endChar": 94
+      },
+      "revId": "395752ca52b4fb2ab69a2274e1a16fc08387245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf576582_d7ccc17e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -37,6 +61,24 @@
       "writtenOn": "2020-10-07T20:52:19Z",
       "side": 1,
       "message": "How do we know the attachment isn\u0027t being used by any shaders?   Why not DepthStencilAllShadersReadOnly here?",
+      "revId": "395752ca52b4fb2ab69a2274e1a16fc08387245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5202b1ce_30bdc348",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T22:21:15Z",
+      "side": 1,
+      "message": "If it is used by shader, that is the feedback loop, which is handled by line 778 (where your previous comment located).",
+      "parentUuid": "bf576582_d7ccc17e",
       "revId": "395752ca52b4fb2ab69a2274e1a16fc08387245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
