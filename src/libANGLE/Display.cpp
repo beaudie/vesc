@@ -31,6 +31,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/EGLSync.h"
+#include "libANGLE/FrameCapture.h"
 #include "libANGLE/Image.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/Stream.h"
@@ -1464,6 +1465,79 @@ void Display::notifyDeviceLost()
     }
 
     mDeviceLost = true;
+}
+
+const std::vector<uint8_t> &Display::retrieveCachedTextureLevel(gl::TextureID id, GLint level)
+{
+    std::lock_guard<std::mutex> lock(mCachedTextureLevelDataMutex);
+
+    // Look up the data for the requested texture
+    const auto &foundTextureLevels = mCachedTextureLevelData.find(id);
+    ASSERT(foundTextureLevels != mCachedTextureLevelData.end());
+
+    // For that texture, look up the data for the given level
+    const auto &foundTextureLevel = foundTextureLevels->second.find(level);
+    ASSERT(foundTextureLevel != foundTextureLevels->second.end());
+    const std::vector<uint8_t> &capturedTextureLevel = foundTextureLevel->second;
+
+    return capturedTextureLevel;
+}
+
+std::vector<uint8_t> &Display::getTextureLevelCache(gl::Texture *texture,
+                                                    gl::TextureTarget target,
+                                                    GLint level)
+{
+    std::lock_guard<std::mutex> lock(mCachedTextureLevelDataMutex);
+
+    auto foundTextureLevels = mCachedTextureLevelData.find(texture->id());
+    if (foundTextureLevels == mCachedTextureLevelData.end())
+    {
+        // If we haven't cached this texture, initialize the texture ID data.
+        auto emplaceResult = mCachedTextureLevelData.emplace(texture->id(), TextureLevels());
+        ASSERT(emplaceResult.second);
+        foundTextureLevels = emplaceResult.first;
+    }
+
+    TextureLevels &foundLevels         = foundTextureLevels->second;
+    TextureLevels::iterator foundLevel = foundLevels.find(level);
+    if (foundLevel != foundLevels.end())
+    {
+        // If we have a cache for this level, return it now
+        return foundLevel->second;
+    }
+
+    // Otherwise, create an appropriately sized cache for this level
+
+    // Get the format of the texture for use with the compressed block size math.
+    const gl::InternalFormat &format = *texture->getFormat(target, level).info;
+
+    // Divide dimensions according to block size.
+    const gl::Extents &levelExtents = texture->getExtents(target, level);
+
+    // Initialize texture rectangle data. Default init to zero for stability.
+    GLuint sizeInBytes;
+    bool result = format.computeCompressedImageSize(levelExtents, &sizeInBytes);
+    ASSERT(result);
+
+    std::vector<uint8_t> newPixelData(sizeInBytes, 0);
+    auto emplaceResult = foundLevels.emplace(level, std::move(newPixelData));
+    ASSERT(emplaceResult.second);
+
+    foundLevel = emplaceResult.first;
+
+    return foundLevel->second;
+}
+
+void Display::deleteCachedTextureLevelData(gl::TextureID id)
+{
+    std::lock_guard<std::mutex> lock(mCachedTextureLevelDataMutex);
+
+    const auto &foundTextureLevels = mCachedTextureLevelData.find(id);
+    if (foundTextureLevels != mCachedTextureLevelData.end())
+    {
+        // Delete all texture levels at once
+        mCachedTextureLevelData.erase(foundTextureLevels);
+    }
 }
 
 void Display::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get)
