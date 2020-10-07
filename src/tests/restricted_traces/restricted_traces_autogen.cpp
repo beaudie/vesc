@@ -12,6 +12,7 @@
 #include "common/PackedEnums.h"
 
 #include "angry_birds_2_1500/angry_birds_2_1500_capture_context2.h"
+#include "asphalt_8/asphalt_8_capture_context2.h"
 #include "candy_crush_500/candy_crush_500_capture_context1.h"
 #include "cod_mobile/cod_mobile_capture_context4.h"
 #include "egypt_1500/egypt_1500_capture_context6.h"
@@ -30,6 +31,9 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {angry_birds_2_1500::kReplayFrameStart, angry_birds_2_1500::kReplayFrameEnd,
       angry_birds_2_1500::kReplayDrawSurfaceWidth, angry_birds_2_1500::kReplayDrawSurfaceHeight,
       "angry_birds_2_1500"}},
+    {RestrictedTraceID::asphalt_8,
+     {asphalt_8::kReplayFrameStart, asphalt_8::kReplayFrameEnd, asphalt_8::kReplayDrawSurfaceWidth,
+      asphalt_8::kReplayDrawSurfaceHeight, "asphalt_8"}},
     {RestrictedTraceID::candy_crush_500,
      {candy_crush_500::kReplayFrameStart, candy_crush_500::kReplayFrameEnd,
       candy_crush_500::kReplayDrawSurfaceWidth, candy_crush_500::kReplayDrawSurfaceHeight,
@@ -72,6 +76,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::angry_birds_2_1500:
             angry_birds_2_1500::ReplayContext2Frame(frameIndex);
             break;
+        case RestrictedTraceID::asphalt_8:
+            asphalt_8::ReplayContext2Frame(frameIndex);
+            break;
         case RestrictedTraceID::candy_crush_500:
             candy_crush_500::ReplayContext1Frame(frameIndex);
             break;
@@ -109,6 +116,9 @@ void ResetReplay(RestrictedTraceID traceID)
     {
         case RestrictedTraceID::angry_birds_2_1500:
             angry_birds_2_1500::ResetContext2Replay();
+            break;
+        case RestrictedTraceID::asphalt_8:
+            asphalt_8::ResetContext2Replay();
             break;
         case RestrictedTraceID::candy_crush_500:
             candy_crush_500::ResetContext1Replay();
@@ -148,6 +158,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::angry_birds_2_1500:
             angry_birds_2_1500::SetupContext2Replay();
             break;
+        case RestrictedTraceID::asphalt_8:
+            asphalt_8::SetupContext2Replay();
+            break;
         case RestrictedTraceID::candy_crush_500:
             candy_crush_500::SetupContext1Replay();
             break;
@@ -186,6 +199,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::angry_birds_2_1500:
             angry_birds_2_1500::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::asphalt_8:
+            asphalt_8::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::candy_crush_500:
             candy_crush_500::SetBinaryDataDir(dataDir);
             break;
@@ -223,6 +239,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
     {
         case RestrictedTraceID::angry_birds_2_1500:
             angry_birds_2_1500::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::asphalt_8:
+            asphalt_8::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::candy_crush_500:
             candy_crush_500::SetBinaryDataDecompressCallback(callback);
