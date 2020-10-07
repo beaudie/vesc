@@ -16,6 +16,92 @@
       "message": "Nice! Where you able to reproduce the issue? Did this really resolve it?",
       "revId": "96946bd5c6d2e3f035c48fc19fb9fe0cee79329d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5fc1639_f6e6dce8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T12:51:20Z",
+      "side": 1,
+      "message": "LGTM with nits. Is there any difference with this CL in the AGI trace?",
+      "revId": "96946bd5c6d2e3f035c48fc19fb9fe0cee79329d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f6c8a5d_6b6447ff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4731,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T12:51:20Z",
+      "side": 1,
+      "message": "You can query this from mExecutable or pass it into this function if you need to isolate UtilsVk. +1 to not caching things if we don\u0027t need them.",
+      "range": {
+        "startLine": 4731,
+        "startChar": 70,
+        "endLine": 4731,
+        "endChar": 95
+      },
+      "revId": "96946bd5c6d2e3f035c48fc19fb9fe0cee79329d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bcde111_27b4e62d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T12:51:20Z",
+      "side": 1,
+      "message": "In this class you can add a query function that return this as a bool.",
+      "range": {
+        "startLine": 629,
+        "startChar": 12,
+        "endLine": 629,
+        "endChar": 94
+      },
+      "revId": "96946bd5c6d2e3f035c48fc19fb9fe0cee79329d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd7e44cf_29cc1fe1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T12:51:20Z",
+      "side": 1,
+      "message": "nit: don\u0027t use binary ops with bool. c++ lacks ||\u003d, so in this case you\u0027d go mEarlyFragmentsTests \u003d mEarly || early.",
+      "range": {
+        "startLine": 1017,
+        "startChar": 38,
+        "endLine": 1017,
+        "endChar": 40
+      },
+      "revId": "96946bd5c6d2e3f035c48fc19fb9fe0cee79329d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
