@@ -149,6 +149,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f7ab20c_3b2705d0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4003,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T14:31:55Z",
+      "side": 1,
+      "message": "Are they always context-specific and not shared?\n\nI was thinking in general a ResourceVk could have a bit mask of the ContextVks that use it, based on some indexing scheme. This would potentially limit us to 64 max active contexts at a time.",
+      "parentUuid": "26dbb112_e510604a",
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "775a2a0c_48ef90fb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
