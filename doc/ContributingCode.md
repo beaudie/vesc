@@ -200,6 +200,31 @@ about the process.
 
 [TBR]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#tbr-to-be-reviewed
 
+### Reverting a CL
+
+Sometimes a change will cause an unforseen problem (e.g. on a platform that's not tested with
+pre-submit testing).  In those cases, a CL may be reverted; often by a "Wrangler" (an engineer who
+is looking after the overall health of ANGLE).  That is, another change is created that undoes the
+original change.  The best and easiest way to create a revert change is with Gerrit's **REVERT**
+button, in the upper-right corner of the original change.
+
+### Relanding a reverted CL
+
+If your CL is reverted, you will typically work to understand and fix the problem.  If the fix is
+small enough, you will want to "reland" your CL.  This is really a new CL, which has the following
+characteristics:
+
+ * The CL title will be the original title, preceded with "Reland: ".
+ * The CL commit message will contain history from the original CL.
+ * The CL will have a unique Change-Id (i.e. different from either the original or revert CL).
+ * Patchset 1 will be the contents of the original CL.
+ * Patchset 2 will be the fixed contents that you want to reland.
+
+The best and easiest way to create a reland CL is with Gerrit's **CREATE RELAND** button, in the
+upper-right corner of the original change.  This may not work if other, more-recent changes conflict
+with the reland CL.  In that case, you will need to create and upload a change in a similar manner
+to your original CL.  Please make sure that it has the characteristics mentioned above.
+
 ### Committer status
 
 Similar to [Chromium's committer status][Committer-status], long-term contributors to the ANGLE
