@@ -16,6 +16,24 @@
       "message": "Yuke, \"Roll\" I think is exempt from this check, so we can call this:\n\n\"Roll Chromium manually from...\"",
       "revId": "1c08b46f2649f43ba875daa2f5c7163cd718e55e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f650ed54_8d6f4cc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1164104
+      },
+      "writtenOn": "2020-10-07T16:51:18Z",
+      "side": 1,
+      "message": "Got it, thanks!",
+      "parentUuid": "ade06689_6b3bdc98",
+      "revId": "1c08b46f2649f43ba875daa2f5c7163cd718e55e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
