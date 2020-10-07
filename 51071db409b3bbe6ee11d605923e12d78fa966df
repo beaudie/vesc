@@ -50,6 +50,23 @@
       "message": "N/m, I guess my idea doesn\u0027t make sense. Will have to reflect a bit to see if we can do it without including too much mock stuff.",
       "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bf93a98_f8d63bf9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4602,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-07T23:07:48Z",
+      "side": 1,
+      "message": "You may not need this anymore now that you are part of the ShareGroup. That should force any contexts to serialize access to the ShareGroup.",
+      "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
