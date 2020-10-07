@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a49427fd_c10ff361",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T18:20:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1abf5c2_76d929a9",
+      "range": {
+        "startLine": 1498,
+        "startChar": 63,
+        "endLine": 1498,
+        "endChar": 89
+      },
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5b6979a_85eae1ac",
@@ -161,6 +185,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e52ddc3c_a5b9782b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T18:20:04Z",
+      "side": 1,
+      "message": "dstStage is EARLY_FRAGMENT_TESTS or FRAGMENT probably does not matter much. But this layout specifically says that shader is not using it, so it does not have VK_ACCESS_SHADER_READ_BIT which may avoid unnecessary cache invalidation on the shader core. I don\u0027t know how much difference it may have, probably depends on GPU architecture as well. And there is almost no cost for us to have this layout to describe the exact usage, so I think still worth it.",
+      "parentUuid": "81214682_f4320052",
+      "range": {
+        "startLine": 158,
+        "startChar": 21,
+        "endLine": 158,
+        "endChar": 51
+      },
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5a61c8dc_45d3dfdc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -208,6 +256,24 @@
       "side": 1,
       "message": "Ok. Can you ASSERT that `image` is not `mDepthStencilResolveImage`?\n\n        if (!usesImageInRenderPass(*image))\n        {\n            mRenderPassUsedImages.insert(image-\u003egetImageSerial().getValue());\n        }\n        else\n        {\n            // Feedback loop for multisampled-render-to-texture depth/stencil doesn\u0027t make sense.  Renderbuffers cannot be bound as samplers, and depth/stencil textures are entirely transient.\n            ASSERT(image !\u003d mDepthStencilResolveImage);\n            if (image \u003d\u003d mDepthStencilImage) {...}\n        }\n\nDespite what the comment (that I added above) says, MSRTT depth/stencil textures _could_ form a feedback loop, but that\u0027s contrived given that they can\u0027t possibly have meaningful data.",
       "parentUuid": "240a468d_459a4666",
+      "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3367aaaf_2efa32aa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-07T18:20:04Z",
+      "side": 1,
+      "message": "Done. Also reworded the comment with more detail.",
+      "parentUuid": "5c608913_caad3310",
       "revId": "265956a5e79e286e95b524f7014546f52a9371c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
