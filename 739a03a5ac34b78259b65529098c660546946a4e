@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d09bef69_66caff29",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T03:56:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa02ba92_847b5c4c",
+      "range": {
+        "startLine": 1221,
+        "startChar": 7,
+        "endLine": 1221,
+        "endChar": 28
+      },
+      "revId": "739a03a5ac34b78259b65529098c660546946a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b32a49b0_5c4938f5",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-06T15:01:52Z",
       "side": 1,
       "message": "just remove all the bit packing stuff. This isn\u0027t used as a hash or memcmp key.",
+      "range": {
+        "startLine": 776,
+        "startChar": 7,
+        "endLine": 776,
+        "endChar": 29
+      },
+      "revId": "739a03a5ac34b78259b65529098c660546946a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17433c54_7cf0ea3a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T03:56:10Z",
+      "side": 1,
+      "message": "Done. I kept them in bits for CPU-cache-related reasons, but all being uint8_t still makes this fit in a cache line so works either way.",
+      "parentUuid": "b32a49b0_5c4938f5",
       "range": {
         "startLine": 776,
         "startChar": 7,
