@@ -3,6 +3,86 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd37c18b_eb802829",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-07T14:06:16Z",
+      "side": 1,
+      "message": "getTextureLevelDataCache?\nI first thought this would return a pointer to the cache of levels, not the data for a specific cache.",
+      "range": {
+        "startLine": 1486,
+        "startChar": 31,
+        "endLine": 1486,
+        "endChar": 51
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5268dd6b_0201d665",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-07T14:06:16Z",
+      "side": 1,
+      "message": "Move to 1522?",
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69a13ac0_ecc57df2",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-07T14:06:16Z",
+      "side": 1,
+      "message": "All these first\u0027s \u0026 second\u0027s make it tricky to see what\u0027s going on.",
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f56917a1_32ada976",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-07T14:06:16Z",
+      "side": 1,
+      "message": "textureID unique among all contexts?",
+      "range": {
+        "startLine": 95,
+        "startChar": 12,
+        "endLine": 95,
+        "endChar": 21
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "564c986a_e456e01c",
         "filename": "src/libANGLE/Display.h",
         "patchSetId": 3
@@ -14,6 +94,30 @@
       "writtenOn": "2020-10-07T12:37:13Z",
       "side": 1,
       "message": "You\u0027re going to potentially run into problems with TextureID collisions between non-shared Contexts. Maybe the solution here is to move it into egl::ShareGroup.",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 48
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497f3105_89ee4e71",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-07T14:06:16Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "564c986a_e456e01c",
       "range": {
         "startLine": 348,
         "startChar": 0,
