@@ -46,6 +46,30 @@
       },
       "revId": "6db0b6f0f644a7e5953938f0deaf6982ee9030d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdc20bd9_7c725768",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-07T18:22:01Z",
+      "side": 1,
+      "message": "Ah, you\u0027re right that it could be turning it off unintentionally too, so the fully inlined version would be something like:\n\n    isDepthInvalidated \u003d isDepthInvalidated || angleFormat.depthBits \u003d\u003d 0;\n    isStencilInvalidated \u003d isStencilInvalidated || angleFormat.stencilBits \u003d\u003d 0;\n\nI\u0027m not sure how much better that is beyond condensing 6 lines to 2.",
+      "parentUuid": "e7dc4f1a_1aa9146a",
+      "range": {
+        "startLine": 1032,
+        "startChar": 0,
+        "endLine": 1039,
+        "endChar": 9
+      },
+      "revId": "6db0b6f0f644a7e5953938f0deaf6982ee9030d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
