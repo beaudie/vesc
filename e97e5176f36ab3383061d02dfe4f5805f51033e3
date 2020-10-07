@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a120bf6_0d9bdff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1164104
+      },
+      "writtenOn": "2020-10-07T16:42:00Z",
+      "side": 1,
+      "message": "ptal, this CL tries to manually roll https://chromium-review.googlesource.com/c/angle/angle/+/2455272, which failed to roll, and the fix is in the //gni/angle.gni file.",
+      "revId": "e97e5176f36ab3383061d02dfe4f5805f51033e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
