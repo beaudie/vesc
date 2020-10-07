@@ -1,10 +1,12 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "9a6a9f26f3750cff76eaf33d18b19bb6",
+    "3c263f5751fb09c28ae87e243b9ef4ef",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "44fc5437c4a84012e338b3da4b6fc28a",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
     "d271919091590d490ea68b9223b7eb06",
+  "src/tests/restricted_traces/asphalt_8.tar.gz.sha1":
+    "9ab1908fd26e6cc35a7b954c854adc73",
   "src/tests/restricted_traces/brawl_stars.tar.gz.sha1":
     "a6b023409f36ca174b890dbeb842da7e",
   "src/tests/restricted_traces/candy_crush_500.tar.gz.sha1":
@@ -26,13 +28,13 @@
   "src/tests/restricted_traces/nba2k20_800.tar.gz.sha1":
     "03df0dcf41c18bc59edfc0b088ca4a87",
   "src/tests/restricted_traces/restricted_traces.json":
-    "e4fa352dd32f652de145dfed92834ba4",
+    "0c6172fee17d7d7aadd79d072e71f074",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "476bec9c73190471956d3134cde42d94",
+    "1ca5c97c755cc536a38e2f37b4bf4c50",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "507920f0624312991898f98fb4714be0",
+    "60f490b59c244165f0054c666ea08f8b",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "379a6d4c67e374065a696a925f7ea027",
+    "6aae33ed571753674598bbb9109174f0",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
     "77475b0186ee0380eeb9db47433d0457",
   "src/tests/restricted_traces/trex_200.tar.gz.sha1":
