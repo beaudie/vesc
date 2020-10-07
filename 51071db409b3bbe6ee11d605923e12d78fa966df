@@ -16,6 +16,23 @@
       "message": "Slightly different approach.  Going through egl::ShareGroup now, but moved the caching support to a new class that remains in FrameCapture.cpp so it can be mocked and keep minimal impact.",
       "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01b2d492_2f42c49b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T20:37:43Z",
+      "side": 1,
+      "message": "Not sure I like this direction Cody. I think we just want to move FrameCapture to display.",
+      "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
