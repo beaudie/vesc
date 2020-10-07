@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "564c986a_e456e01c",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T12:37:13Z",
+      "side": 1,
+      "message": "You\u0027re going to potentially run into problems with TextureID collisions between non-shared Contexts. Maybe the solution here is to move it into egl::ShareGroup.",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 48
+      },
+      "revId": "298d4373c328a16f43c2237b2ff429b7f8b9be2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
