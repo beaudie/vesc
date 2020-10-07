@@ -200,6 +200,72 @@ about the process.
 
 [TBR]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#tbr-to-be-reviewed
 
+### Reverting a CL
+
+Sometimes a change will cause an unforseen problem, e.g. on a platform that's not tested with
+pre-submit testing.  In those cases, a CL may be reverted; often by a "[Wrangler](https://chromium.googlesource.com/angle/angle/+/master/infra/ANGLEWrangling.md)", who is
+an engineer who keeps the testing infrastructure healthy/green.
+
+The best and easiest way to create a revert change is with Gerrit's **REVERT** button, in the
+upper-right corner of the original change.  Pressing this will pop up a dialog with a template
+commit message, and an optional checkbox for automatically sending the revert CL to CQ.  Please edit
+the commit message with the reason for the revert.  When satisfied, press the dialog's **REVERT**
+button.  It is wise to add the author and reviewers of the original CL as reviewers of the revert
+CL.  If it's been less than 24 hours since the original CL landed, the revert Cl will land
+immediately and bypass the try bots.
+
+If you cannot use Gerrit's **REVERT** button, you can create a revert CL with the "git revert"
+command.  If doing so, please format the commit message as follows:
+
+```
+Revert "<original CL's title>"
+
+This reverts commit <commit hash>
+
+Reason for revert: <INSERT REASONING HERE>
+
+Original change's description:
+> <original CL's title>
+>
+> Another line from original CL's commit message
+> Yet another line from original CL's commit message
+
+TBR=<comma-separated emails of author/reviewers>
+
+Bug: <new bug or bug from the original CL>
+```
+
+### Relanding a reverted CL
+
+When you re-land a reverted CL, follow this process:
+
+ * Prefix the CL title with "Reland: ".
+ * Keep the commit message of the original CL and add a description of what changed in the re-land.
+ * Ensure the re-land CL has a unique Change-Id.
+ * First upload the reverted CL as Patch Set 1 with no changes applied.
+ * Then, apply your fixes, and upload your CL as a new patch set. The reviewers will be able to see
+   the diff between patch set 1 and the fixed patch.
+
+Here is an example reland commit message:
+```
+Reland "<original CL's title>"
+
+This is a reland of <commit hash>
+
+Original change's description:
+> <original CL's title>
+>
+> Another line from original CL's commit message
+> Yet another line from original CL's commit message
+> ...
+
+Bug: <new bug or bug from the original CL>
+Change-Id: <unique>
+```
+
+If you do not need to make any changes to your CL to re-land, you can instead use Gerrit's **CREATE
+RELAND** button.
+
 ### Committer status
 
 Similar to [Chromium's committer status][Committer-status], long-term contributors to the ANGLE
