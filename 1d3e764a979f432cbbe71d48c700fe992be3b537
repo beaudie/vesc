@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e77daefc_9fae9d6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T12:34:22Z",
+      "side": 1,
+      "message": "LGTM, one semi-large request though.",
+      "revId": "1d3e764a979f432cbbe71d48c700fe992be3b537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e68fe01_c3b749de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-07T12:34:22Z",
+      "side": 1,
+      "message": "to expand on my previous idea: just flatten this class into RenderPassHelper and remove RenderPassAndSerial.",
+      "range": {
+        "startLine": 1168,
+        "startChar": 4,
+        "endLine": 1168,
+        "endChar": 23
+      },
+      "revId": "1d3e764a979f432cbbe71d48c700fe992be3b537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
