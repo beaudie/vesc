@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "eddf0ecc_dc55f8a7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T03:44:53Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 22,
+        "startChar": 44,
+        "endLine": 22,
+        "endChar": 46
+      },
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a60d8e7a_976ad40b",
@@ -67,6 +90,23 @@
       "side": 1,
       "message": "Seems like Multithreading is not the right way to repro. More likely it would be creating a bunch of contexts and having them submit some work serially, right? Then the delete in an earlier context would happen at the wrong time.\n\nPossibly you could do this in one context just by submitting a bunch of frames after ensuring the pool gets deleted each submit. I guess by deleting and recreating a program?",
       "parentUuid": "ef2916bf_ee8c92ec",
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55432315_f2d618db",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4003,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T03:44:53Z",
+      "side": 1,
+      "message": "Driver uniforms probably update hundreds of times every frame. I suggest gathering some quick statistics on how many times the same pool is retained. If it turns out that on real applications every pool is excessively retained, there may be a need to optimize that to avoid a CPU perf regression.",
       "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
