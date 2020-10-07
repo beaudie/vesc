@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "a381bd23_033fbf62",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Code looks good, some requests for cleaning up the macro usage.",
       "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "9ee4964d_a51274f9",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.h",
@@ -37,10 +38,34 @@
         "endChar": 50
       },
       "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "548ad27c_30a84594",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-07T17:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ee4964d_a51274f9",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 151,
+        "endChar": 50
+      },
+      "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "e0a1db83_b459465c",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
@@ -60,10 +85,34 @@
         "endChar": 52
       },
       "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "461e2b48_20a3a62b",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-07T17:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0a1db83_b459465c",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 271,
+        "endChar": 52
+      },
+      "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "f23d89a8_a4fbb95c",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
@@ -83,10 +132,34 @@
         "endChar": 50
       },
       "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8342de1e_41306f65",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-07T17:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f23d89a8_a4fbb95c",
+      "range": {
+        "startLine": 706,
+        "startChar": 4,
+        "endLine": 706,
+        "endChar": 50
+      },
+      "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "1605b25a_295217a3",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
@@ -106,10 +179,34 @@
         "endChar": 61
       },
       "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1441c124_c6ce79df",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-07T17:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1605b25a_295217a3",
+      "range": {
+        "startLine": 713,
+        "startChar": 0,
+        "endLine": 713,
+        "endChar": 61
+      },
+      "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "965e45a7_6359c3d2",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
@@ -123,8 +220,25 @@
       "side": 1,
       "message": "Same as above function.",
       "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e57fc8b7_c0f7da58",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-07T17:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "965e45a7_6359c3d2",
+      "revId": "1b841979bdc6efc86e5bdfb51aef094628358ba8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
