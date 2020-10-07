@@ -39,6 +39,30 @@
       },
       "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "227e3669_48066d71",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-07T23:15:37Z",
+      "side": 1,
+      "message": "We\u0027re in the middle of a blit to get here, and this is executing from the perspective of the destination FramebufferVk.   Since we are blitting to this FramebufferVk, I agree that indicating we are writing to it seems like the right thing.\n\nShabi questioned if this line was necessary.   Without an onImageRenderPass[Read|Write] here, there are VVL errors:\n\n\u003e ERR: RendererVk.cpp:336 (DebugUtilsMessenger): [ UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout ] Validation Error: [ UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout ] Object 0: handle \u003d 0x5642b22a2ba0, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; | MessageID \u003d 0x4dae5635 | Submitted command buffer expects VkImage 0x250000000025[] (subresource: aspectMask 0x1 array layer 0, mip level 0) to be in layout VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL--instead, current layout is VK_IMAGE_LAYOUT_UNDEFINED.\n\nBoth versions solve the layout issue, but one of them is doing the wrong barrier.\n\nI\u0027m probably overthinking it and conflating readRenderTarget with needing onImageRenderPassRead(), but wanted to get a second opinion.",
+      "parentUuid": "fb895dee_e76a33e6",
+      "range": {
+        "startLine": 1312,
+        "startChar": 4,
+        "endLine": 1314,
+        "endChar": 81
+      },
+      "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
