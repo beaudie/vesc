@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "5646a31b8d02dd658001a3e1ae16930cbf573170",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48786a1d_eb511ae1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-07T18:19:41Z",
+      "side": 1,
+      "message": "Ok this doesn\u0027t work, and it\u0027s just luckily passing tests. The next change exposes the issue in this change.\n\nThe problem is the way D/S layout change is deferred to the end of render pass. Basically the ImageHelper::mLayout is not set at the beginning of RP, so the render target thinks contents are undefined (through FramebufferVk::syncState) before it ends the render pass (in the same function) and starts a new one.\n\nI\u0027m going to bite the bullet and just move mContentDefined to ImageHelper to avoid hackishly fixing this.",
+      "revId": "5646a31b8d02dd658001a3e1ae16930cbf573170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
