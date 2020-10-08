@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72a54fb1_48c32097",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T12:55:49Z",
+      "side": 1,
+      "message": "nit: a legalizer sounds like something that does an action instead of a piece of data. Not sure I have a better suggestion. mtl::ImageIndex would be my first option.",
+      "range": {
+        "startLine": 349,
+        "startChar": 6,
+        "endLine": 349,
+        "endChar": 25
+      },
+      "revId": "5d420070f1dd75c98b6ce53d24272a7c26faf982",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
