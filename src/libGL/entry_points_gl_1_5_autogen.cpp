@@ -38,7 +38,7 @@ void GL_APIENTRY BeginQuery(GLenum target, GLuint id)
     {
         QueryType targetPacked                                = FromGL<QueryType>(target);
         QueryID idPacked                                      = FromGL<QueryID>(id);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBeginQuery(context, targetPacked, idPacked));
         if (isCallValid)
@@ -64,7 +64,7 @@ void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
         BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBindBuffer(context, targetPacked, bufferPacked));
         if (isCallValid)
@@ -93,7 +93,7 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GL
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
         BufferUsage usagePacked                               = FromGL<BufferUsage>(usage);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBufferData(context, targetPacked, size, data, usagePacked));
         if (isCallValid)
@@ -121,7 +121,7 @@ void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
     if (context)
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateBufferSubData(context, targetPacked, offset, size, data));
         if (isCallValid)
@@ -146,7 +146,7 @@ void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint *buffers)
     if (context)
     {
         const BufferID *buffersPacked                         = FromGL<const BufferID *>(buffers);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDeleteBuffers(context, n, buffersPacked));
         if (isCallValid)
@@ -171,7 +171,7 @@ void GL_APIENTRY DeleteQueries(GLsizei n, const GLuint *ids)
     if (context)
     {
         const QueryID *idsPacked                              = FromGL<const QueryID *>(ids);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateDeleteQueries(context, n, idsPacked));
         if (isCallValid)
@@ -195,7 +195,7 @@ void GL_APIENTRY EndQuery(GLenum target)
     if (context)
     {
         QueryType targetPacked                                = FromGL<QueryType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEndQuery(context, targetPacked));
         if (isCallValid)
         {
@@ -219,7 +219,7 @@ void GL_APIENTRY GenBuffers(GLsizei n, GLuint *buffers)
     if (context)
     {
         BufferID *buffersPacked                               = FromGL<BufferID *>(buffers);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGenBuffers(context, n, buffersPacked));
         if (isCallValid)
@@ -244,7 +244,7 @@ void GL_APIENTRY GenQueries(GLsizei n, GLuint *ids)
     if (context)
     {
         QueryID *idsPacked                                    = FromGL<QueryID *>(ids);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGenQueries(context, n, idsPacked));
         if (isCallValid)
         {
@@ -269,7 +269,7 @@ void GL_APIENTRY GetBufferParameteriv(GLenum target, GLenum pname, GLint *params
     if (context)
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetBufferParameteriv(context, targetPacked, pname, params));
         if (isCallValid)
@@ -295,7 +295,7 @@ void GL_APIENTRY GetBufferPointerv(GLenum target, GLenum pname, void **params)
     if (context)
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetBufferPointerv(context, targetPacked, pname, params));
         if (isCallValid)
@@ -322,7 +322,7 @@ void GL_APIENTRY GetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr siz
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetBufferSubData(context, target, offset, size, data));
         if (isCallValid)
@@ -348,7 +348,7 @@ void GL_APIENTRY GetQueryObjectiv(GLuint id, GLenum pname, GLint *params)
     if (context)
     {
         QueryID idPacked                                      = FromGL<QueryID>(id);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetQueryObjectiv(context, idPacked, pname, params));
         if (isCallValid)
@@ -372,7 +372,7 @@ void GL_APIENTRY GetQueryObjectuiv(GLuint id, GLenum pname, GLuint *params)
     if (context)
     {
         QueryID idPacked                                      = FromGL<QueryID>(id);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetQueryObjectuiv(context, idPacked, pname, params));
         if (isCallValid)
@@ -398,7 +398,7 @@ void GL_APIENTRY GetQueryiv(GLenum target, GLenum pname, GLint *params)
     if (context)
     {
         QueryType targetPacked                                = FromGL<QueryType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetQueryiv(context, targetPacked, pname, params));
         if (isCallValid)
@@ -423,7 +423,7 @@ GLboolean GL_APIENTRY IsBuffer(GLuint buffer)
     if (context)
     {
         BufferID bufferPacked                                 = FromGL<BufferID>(buffer);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIsBuffer(context, bufferPacked));
         if (isCallValid)
         {
@@ -453,7 +453,7 @@ GLboolean GL_APIENTRY IsQuery(GLuint id)
     if (context)
     {
         QueryID idPacked                                      = FromGL<QueryID>(id);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIsQuery(context, idPacked));
         if (isCallValid)
         {
@@ -485,7 +485,7 @@ void *GL_APIENTRY MapBuffer(GLenum target, GLenum access)
     if (context)
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMapBuffer(context, targetPacked, access));
         if (isCallValid)
@@ -516,7 +516,7 @@ GLboolean GL_APIENTRY UnmapBuffer(GLenum target)
     if (context)
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateUnmapBuffer(context, targetPacked));
         if (isCallValid)
