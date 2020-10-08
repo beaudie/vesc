@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b0a0f0e_2d0d82ae",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:03:23Z",
+      "side": 1,
+      "message": "nit: the quotes and ) got messed up here.",
+      "range": {
+        "startLine": 206,
+        "startChar": 69,
+        "endLine": 206,
+        "endChar": 94
+      },
+      "revId": "5df9bb68b99f75f655e707d980784ba8abc46adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee6c815f_1441782f",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:03:23Z",
+      "side": 1,
+      "message": "nit: minor preference to use a relative link.",
+      "range": {
+        "startLine": 209,
+        "startChar": 12,
+        "endLine": 209,
+        "endChar": 90
+      },
+      "revId": "5df9bb68b99f75f655e707d980784ba8abc46adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4105d1b_9d9dad27",
         "filename": "doc/ContributingCode.md",
         "patchSetId": 3
