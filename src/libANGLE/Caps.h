@@ -653,6 +653,9 @@ struct Extensions
 
     // GL_OES_sample_shading
     bool sampleShadingOES = false;
+
+    // GL_EXT_copy_image
+    bool copyImage = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct
