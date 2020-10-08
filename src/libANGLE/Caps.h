@@ -656,6 +656,9 @@ struct Extensions
 
     // GL_NV_robustness_video_memory_purge
     bool robustnessVideoMemoryPurgeNV = false;
+
+    // GL_EXT_copy_image
+    bool copyImage = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct
