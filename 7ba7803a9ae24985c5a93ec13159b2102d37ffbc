@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "771377d3_8648afa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T18:04:16Z",
+      "side": 1,
+      "message": "Drive by review: this looks like another intermediate step towards handling the old mContentDefined better.  Thanks!",
+      "revId": "7ba7803a9ae24985c5a93ec13159b2102d37ffbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9b56846_28836b12",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T18:04:16Z",
+      "side": 1,
+      "message": "Cool!  Because of tracking them separately, there\u0027s no load done for stencil!",
+      "range": {
+        "startLine": 502,
+        "startChar": 79,
+        "endLine": 502,
+        "endChar": 85
+      },
+      "revId": "7ba7803a9ae24985c5a93ec13159b2102d37ffbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf490b39_fda25e86",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T18:04:16Z",
+      "side": 1,
+      "message": "I\u0027m looking forward to this or a follow-on CL taking care of this.",
+      "range": {
+        "startLine": 712,
+        "startChar": 7,
+        "endLine": 730,
+        "endChar": 64
+      },
+      "revId": "7ba7803a9ae24985c5a93ec13159b2102d37ffbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
