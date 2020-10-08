@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c068b491_51573ce2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2895,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T22:03:34Z",
+      "side": 1,
+      "message": "Not related to this CL, but since you\u0027re in here can you clean up the following:\n\n1.) Move the ASSERT(mExecutable) from inside the else to after the declaration of \u0027executable\u0027.\n2.) Update this to:\n    if (executable-\u003eisCompute())\n\nThat conditional is always dereferencing the pointer, so it would be nicer to assert than segfault if there is a problem some day.",
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93b0d976_2f8e217d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2917,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T22:03:34Z",
+      "side": 1,
+      "message": "Since updateEarlyFragmentTestsOptimization() already takes a ContextVk, it looks like this can move into there so they are always paired.",
+      "range": {
+        "startLine": 2913,
+        "startChar": 0,
+        "endLine": 2917,
+        "endChar": 9
+      },
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a018d07d_9f55fd2e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4696,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T22:03:34Z",
+      "side": 1,
+      "message": "Which state are you referring to here?",
+      "range": {
+        "startLine": 4696,
+        "startChar": 83,
+        "endLine": 4696,
+        "endChar": 88
+      },
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5be3dc0_0ac14a80",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4708,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T22:03:34Z",
+      "side": 1,
+      "message": "Couple options here:\n\n1.) Move mEarlyFramentTestsOptimization into ProgramExecutable so we can avoid having to do this checking in the back end.\n\nFor Programs, that should essentially be a straightforward refactor to move that member.   However, for ProgramPipelines, it\u0027ll need to be updated as part of ProgramPipeline::updateExecutable() so we get a fresh value whenever a new fragement shader is attached.\n\n2.) Let getShaderProgram() handle the program/PPO work for you:\n\n    ProgramVk *fragProgramVk \u003d getShaderProgram(glState, gl::ShaderType::Fragment);\n    if (fragProgramVk)\n    {\n        earlyFragmentTestsEnabled \u003d fragProgramVk-\u003egetState().hasEarlyFragmentTestsOptimization();\n    }\n\nUsing getShaderProgram() is obviously easier here, at the cost of having to spend the CPU cycles to do the program/PPO checking whenever this is called at the start of every render pass.",
+      "range": {
+        "startLine": 4700,
+        "startChar": 0,
+        "endLine": 4708,
+        "endChar": 9
+      },
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dee6be54_47ad3719",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T22:03:34Z",
+      "side": 1,
+      "message": "Is this a valid layout?   Looking at the vulkan spec:\n\n\u003e VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT specifies the stage of the pipeline where early fragment tests (depth and stencil tests before fragment shading) are performed. This stage also includes subpass load operations for framebuffer attachments with a depth/stencil format.\n\n\u003e VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT specifies the stage of the pipeline where late fragment tests (depth and stencil tests after fragment shading) are performed. This stage also includes subpass store operations for framebuffer attachments with a depth/stencil format.\n\nMy reading of that is that and loads of the D/S attachment should have VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT, especially since this is a read-only attachment (versus just blindly overwriting what\u0027s in there with a loadOp\u003dDONT_CARE).",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 6
+      },
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
