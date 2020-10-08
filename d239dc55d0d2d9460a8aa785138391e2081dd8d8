@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9b57f7a_6d775ea7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:08:25Z",
+      "side": 1,
+      "message": "Can you add a test for the chronically bad case where the content is defined in a texture level like 1000 ?",
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cddc534b_be958fbb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:08:25Z",
+      "side": 1,
+      "message": "this is a bit fishy - array textures can have much more than 8 layers. In fact up to 2048. what\u0027s your game plan for that?\n\nI think you should probably use two data structures - one for non-array textures, which can be quite compact, and then an unordered_map type thing for array textures.",
+      "range": {
+        "startLine": 1819,
+        "startChar": 0,
+        "endLine": 1820,
+        "endChar": 71
+      },
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
