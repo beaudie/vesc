@@ -1035,6 +1035,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_sample_shading"] = enableableExtension(&Extensions::sampleShadingOES);
         map["GL_NV_robustness_video_memory_purge"] = esOnlyExtension(&Extensions::robustnessVideoMemoryPurgeNV);
         map["GL_ANGLE_get_tex_level_parameter"] = enableableExtension(&Extensions::getTexLevelParameterANGLE);
+        map["GL_EXT_copy_image"] = enableableExtension(&Extensions::copyImage);
         // GLES1 extensions
         map["GL_OES_point_size_array"] = enableableExtension(&Extensions::pointSizeArrayOES);
         map["GL_OES_texture_cube_map"] = enableableExtension(&Extensions::textureCubeMapOES);

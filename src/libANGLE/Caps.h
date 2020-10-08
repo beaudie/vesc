@@ -659,6 +659,9 @@ struct Extensions
 
     // GL_ANGLE_get_tex_level_parameter
     bool getTexLevelParameterANGLE = false;
+
+    // GL_EXT_copy_image
+    bool copyImage = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct

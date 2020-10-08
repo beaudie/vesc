@@ -90,6 +90,21 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
                                         MultisamplingMode mode);
     angle::Result setStorageEGLImageTarget(const Context *context, egl::Image *imageTarget);
 
+    template <typename T>
+    angle::Result copyImageSubData(Context *context,
+                                   const T *srcBuffer,
+                                   GLint srcLevel,
+                                   GLint srcX,
+                                   GLint srcY,
+                                   GLint srcZ,
+                                   GLint dstLevel,
+                                   GLint dstX,
+                                   GLint dstY,
+                                   GLint dstZ,
+                                   GLsizei srcWidth,
+                                   GLsizei srcHeight,
+                                   GLsizei srcDepth);
+
     rx::RenderbufferImpl *getImplementation() const;
 
     GLsizei getWidth() const;
