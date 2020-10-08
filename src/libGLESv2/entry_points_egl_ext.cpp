@@ -453,6 +453,8 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_DestroyImageKHR(EGLDisplay dpy, EGLImage
                (uintptr_t)dpy, (uintptr_t)image);
     Thread *thread = egl::GetCurrentThread();
 
+#if !defined(ANGLE_ALWAYS_GLOBAL_LOCK)
+
     egl::Display *display = static_cast<egl::Display *>(dpy);
     Image *img            = static_cast<Image *>(image);
 
@@ -464,6 +466,7 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_DestroyImageKHR(EGLDisplay dpy, EGLImage
     }
 
     display->destroyImage(img);
+#endif
 
     thread->setSuccess();
     return EGL_TRUE;

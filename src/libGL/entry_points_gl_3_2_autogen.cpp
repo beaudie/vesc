@@ -40,7 +40,7 @@ GLenum GL_APIENTRY ClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeou
     GLenum returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateClientWaitSync(context, sync, flags, timeout));
         if (isCallValid)
@@ -69,7 +69,7 @@ void GL_APIENTRY DeleteSync(GLsync sync)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDeleteSync(context, sync));
         if (isCallValid)
         {
@@ -100,7 +100,7 @@ void GL_APIENTRY DrawElementsBaseVertex(GLenum mode,
     {
         PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
         DrawElementsType typePacked                           = FromGL<DrawElementsType>(type);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateDrawElementsBaseVertex(context, modePacked, count, typePacked,
                                                            indices, basevertex));
@@ -137,7 +137,7 @@ void GL_APIENTRY DrawElementsInstancedBaseVertex(GLenum mode,
     {
         PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
         DrawElementsType typePacked                           = FromGL<DrawElementsType>(type);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDrawElementsInstancedBaseVertex(
                                                              context, modePacked, count, typePacked,
                                                              indices, instancecount, basevertex));
@@ -174,7 +174,7 @@ void GL_APIENTRY DrawRangeElementsBaseVertex(GLenum mode,
     {
         PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
         DrawElementsType typePacked                           = FromGL<DrawElementsType>(type);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDrawRangeElementsBaseVertex(
                                                              context, modePacked, start, end, count,
                                                              typePacked, indices, basevertex));
@@ -203,7 +203,7 @@ GLsync GL_APIENTRY FenceSync(GLenum condition, GLbitfield flags)
     GLsync returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateFenceSync(context, condition, flags));
         if (isCallValid)
@@ -236,7 +236,7 @@ void GL_APIENTRY FramebufferTexture(GLenum target, GLenum attachment, GLuint tex
     if (context)
     {
         TextureID texturePacked                               = FromGL<TextureID>(texture);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateFramebufferTexture(context, target, attachment, texturePacked, level));
@@ -265,7 +265,7 @@ void GL_APIENTRY GetBufferParameteri64v(GLenum target, GLenum pname, GLint64 *pa
     if (context)
     {
         BufferBinding targetPacked                            = FromGL<BufferBinding>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetBufferParameteri64v(context, targetPacked, pname, params));
         if (isCallValid)
@@ -289,7 +289,7 @@ void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64 *data)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetInteger64i_v(context, target, index, data));
         if (isCallValid)
@@ -313,7 +313,7 @@ void GL_APIENTRY GetInteger64v(GLenum pname, GLint64 *data)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetInteger64v(context, pname, data));
         if (isCallValid)
@@ -337,7 +337,7 @@ void GL_APIENTRY GetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetMultisamplefv(context, pname, index, val));
         if (isCallValid)
@@ -365,7 +365,7 @@ GetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *va
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetSynciv(context, sync, pname, bufSize, length, values));
         if (isCallValid)
@@ -387,7 +387,7 @@ GLboolean GL_APIENTRY IsSync(GLsync sync)
     GLboolean returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIsSync(context, sync));
         if (isCallValid)
         {
@@ -427,7 +427,7 @@ void GL_APIENTRY MultiDrawElementsBaseVertex(GLenum mode,
     {
         PrimitiveMode modePacked                              = FromGL<PrimitiveMode>(mode);
         DrawElementsType typePacked                           = FromGL<DrawElementsType>(type);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMultiDrawElementsBaseVertex(
                                                              context, modePacked, count, typePacked,
                                                              indices, drawcount, basevertex));
@@ -455,7 +455,7 @@ void GL_APIENTRY ProvokingVertex(GLenum mode)
     if (context)
     {
         ProvokingVertexConvention modePacked = FromGL<ProvokingVertexConvention>(mode);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateProvokingVertex(context, modePacked));
         if (isCallValid)
@@ -479,7 +479,7 @@ void GL_APIENTRY SampleMaski(GLuint maskNumber, GLbitfield mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateSampleMaski(context, maskNumber, mask));
         if (isCallValid)
@@ -511,7 +511,7 @@ void GL_APIENTRY TexImage2DMultisample(GLenum target,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexImage2DMultisample(context, target, samples, internalformat,
                                                           width, height, fixedsamplelocations));
@@ -548,7 +548,7 @@ void GL_APIENTRY TexImage3DMultisample(GLenum target,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateTexImage3DMultisample(context, target, samples, internalformat, width, height,
@@ -579,7 +579,7 @@ void GL_APIENTRY WaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateWaitSync(context, sync, flags, timeout));
         if (isCallValid)
