@@ -63,6 +63,30 @@
       },
       "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d466c345_efaba263",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T02:19:18Z",
+      "side": 1,
+      "message": "Calling `on..Write` on the \"read\" RT is definitely not right. Actually the code shouldn\u0027t even look at this framebuffer\u0027s read RT.\n\nLet\u0027s look at the variables around here:\n\n- Blit src: srcFramebufferVk\n- Blit dst: this\n- Read from srcFramebufferVk.RT[readColorIndexGL]\n- Write to this.RT[drawColorIndexGL] (\u003d\u003d drawRenderTarget)\n\nNow srcFramebufferVk.RT[readColorIndexGL] was being drawn to in the previous render pass. That means srcFramebufferVk.RT[readColorIndexGL] should have already had onImageRenderPassWrite called on it.\n\nWhat about this.RT[drawColorIndexGL]? That needs an onImageRenderPassWrite for the layout to be correct, but that\u0027s not done here. Instead, this.readRT is being transitioned, which is wrong.\n\nProbably the reason why this change works is that in every test this.RT[drawColorIndexGL] \u003d\u003d this.readRT.\n\n---\n\nTim, would you please change this back to onImageRenderPassWrite but call it on drawRenderTarget instead? Then add a test that invokes this optimization but such that `getColorReadRenderTarget()` returns a different RT from drawRenderTarget. Actually, I don\u0027t know if that\u0027s possible given the restrictions for this optimization (that `this` must have only one enabled draw buffer). Only scenario I can think of is something like this:\n\n- Create dst FBO with 2 attachments\n- glReadBuffer(GL_COLOR_ATTACHMENT0)\n- glDrawBuffers([GL_NONE, GL_COLOR_ATTACHMENT1])\n- Blit into dst FBO\n\nSo the dst FBO has read buffer 0 but that buffer is disabled, at the same time it has only one enabled draw buffer. I don\u0027t know what the spec requires regarding the read buffer here, but you can give it a try!",
+      "parentUuid": "227e3669_48066d71",
+      "range": {
+        "startLine": 1312,
+        "startChar": 4,
+        "endLine": 1314,
+        "endChar": 81
+      },
+      "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
