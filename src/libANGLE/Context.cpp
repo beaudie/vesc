@@ -8759,6 +8759,12 @@ std::mutex &Context::getProgramCacheMutex() const
     return mDisplay->getProgramCacheMutex();
 }
 
+void Context::dirtyAllState()
+{
+    mState.setAllDirtyBits();
+    mState.setAllDirtyObjects();
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 
