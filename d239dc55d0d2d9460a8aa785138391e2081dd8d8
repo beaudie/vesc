@@ -36,6 +36,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf603069_f648c959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T18:37:59Z",
+      "side": 1,
+      "message": "LGTM\n\nFor my education, I want to check what I\u0027m understanding.  It seems like this is an intermediate step towards handling content defined for all cases.  In addition to moving the old mContentDefined to ImageHelper and tracking for sub-resources, this CL seems to be trying to make sure that all clears and the start of render passes will set content defined for the appropriate sub-resource (which sets up future optimization you reference).\n\nThis CL is not trying to improve the handling of invalidate-draw cases.  Since we don\u0027t want invalidate of depth/stencil to end a render pass, we still need the existing code to set D/S content defined when depth or stencil is re-enabled, and to look for in-RP drawing that occurs after invalidate.  This CL does not help us distinguish between the two cases:\n\n1) draw-invalidate-endRP\n2) draw-invalidate-draw-endRP\n\nWhile this CL does not handle that, it does make it easier to handle.  It also makes it easier to separate the handling of load/store ops for depth vs. stencil (as in the follow-on CL I did a drive-by of).  Am I following this okay?",
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cddc534b_be958fbb",
@@ -49,6 +66,30 @@
       "writtenOn": "2020-10-08T17:08:25Z",
       "side": 1,
       "message": "this is a bit fishy - array textures can have much more than 8 layers. In fact up to 2048. what\u0027s your game plan for that?\n\nI think you should probably use two data structures - one for non-array textures, which can be quite compact, and then an unordered_map type thing for array textures.",
+      "range": {
+        "startLine": 1819,
+        "startChar": 0,
+        "endLine": 1820,
+        "endChar": 71
+      },
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b20bbdd_474fd090",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T18:37:59Z",
+      "side": 1,
+      "message": "In my initial review (before Jamie\u0027s comment), I wondered about subtle bugs that might creep up in the future if people don\u0027t follow how this is being used, including code that is setting the layer to this value (so that most code does its thing, but content defined isn\u0027t set).",
+      "parentUuid": "cddc534b_be958fbb",
       "range": {
         "startLine": 1819,
         "startChar": 0,
