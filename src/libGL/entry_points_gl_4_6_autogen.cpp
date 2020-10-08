@@ -42,7 +42,7 @@ void GL_APIENTRY MultiDrawArraysIndirectCount(GLenum mode,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMultiDrawArraysIndirectCount(context, mode, indirect, drawcount,
                                                                  maxdrawcount, stride));
@@ -77,7 +77,7 @@ void GL_APIENTRY MultiDrawElementsIndirectCount(GLenum mode,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMultiDrawElementsIndirectCount(
                                 context, mode, type, indirect, drawcount, maxdrawcount, stride));
@@ -104,7 +104,7 @@ void GL_APIENTRY PolygonOffsetClamp(GLfloat factor, GLfloat units, GLfloat clamp
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidatePolygonOffsetClamp(context, factor, units, clamp));
         if (isCallValid)
@@ -135,7 +135,7 @@ void GL_APIENTRY SpecializeShader(GLuint shader,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateSpecializeShader(context, shader, pEntryPoint, numSpecializationConstants,

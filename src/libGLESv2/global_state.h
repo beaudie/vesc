@@ -92,6 +92,8 @@ class Thread;
 extern thread_local Thread *gCurrentThread;
 
 angle::GlobalMutex &GetGlobalMutex();
+gl::Context *GetGlobalLastContext();
+void SetGlobalLastContext(gl::Context *context);
 Thread *GetCurrentThread();
 Debug *GetDebug();
 void SetContextCurrent(Thread *thread, gl::Context *context);
@@ -138,10 +140,26 @@ ANGLE_INLINE Context *GetValidGlobalContext()
 void GenerateContextLostErrorOnContext(Context *context);
 void GenerateContextLostErrorOnCurrentGlobalContext();
 
-ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetShareGroupLock(const Context *context)
+ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(Context *context)
 {
+#if defined(ANGLE_ALWAYS_GLOBAL_LOCK)
+    // get and lock global mutex
+    std::unique_lock<angle::GlobalMutex> globalMutexLock =
+        std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex());
+
+    // if previous context different from current context,
+    // Dirty all state
+    if (context != egl::GetGlobalLastContext())
+    {
+        context->dirtyAllState();
+        SetGlobalLastContext(context);
+    }
+
+    return globalMutexLock;
+#else
     return context->isShared() ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex())
                                : std::unique_lock<angle::GlobalMutex>();
+#endif
 }
 
 }  // namespace gl
