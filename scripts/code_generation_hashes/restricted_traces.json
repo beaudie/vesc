@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "324d4adc8f7e4c2d7ba71f21092010cd",
+    "ad9c982dc9530743f7b24dbd1182709e",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "44fc5437c4a84012e338b3da4b6fc28a",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -11,6 +11,8 @@
     "dffd3bed0d0e53481f43b414309bf152",
   "src/tests/restricted_traces/egypt_1500.tar.gz.sha1":
     "1d80caa37b937f83c95cd053b1bdd4ac",
+  "src/tests/restricted_traces/free_fire.tar.gz.sha1":
+    "a95efee5e5c6d85bac2d8c2ab09dc34c",
   "src/tests/restricted_traces/gen_restricted_traces.py":
     "a520ef50175b1b9a20383a884e293b54",
   "src/tests/restricted_traces/manhattan_10.tar.gz.sha1":
@@ -20,13 +22,13 @@
   "src/tests/restricted_traces/nba2k20_800.tar.gz.sha1":
     "03df0dcf41c18bc59edfc0b088ca4a87",
   "src/tests/restricted_traces/restricted_traces.json":
-    "c45d42f44098f8178172ba2fc3b49828",
+    "c10d9a9e7108492ea03c3898683a174f",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "a6701fee6e64c906ace522173da236ca",
+    "471b5b5807a6bb0fc2a5a222566f0bf3",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "9c0742eca24dd7787197490decee161e",
+    "65310af32ed2674a703e065d537eedef",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "4741a2678361f59303690887ebf72c81",
+    "c50db41d14f0ca945142496f5e563b79",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
     "77475b0186ee0380eeb9db47433d0457",
   "src/tests/restricted_traces/trex_200.tar.gz.sha1":
