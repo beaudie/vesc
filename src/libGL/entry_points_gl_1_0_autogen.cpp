@@ -36,7 +36,7 @@ void GL_APIENTRY Accum(GLenum op, GLfloat value)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateAccum(context, op, value));
         if (isCallValid)
         {
@@ -56,7 +56,7 @@ void GL_APIENTRY AlphaFunc(GLenum func, GLfloat ref)
     if (context)
     {
         AlphaTestFunc funcPacked                              = FromGL<AlphaTestFunc>(func);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateAlphaFunc(context, funcPacked, ref));
         if (isCallValid)
@@ -75,7 +75,7 @@ void GL_APIENTRY Begin(GLenum mode)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateBegin(context, mode));
         if (isCallValid)
         {
@@ -102,7 +102,7 @@ void GL_APIENTRY Bitmap(GLsizei width,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateBitmap(context, width, height, xorig, yorig, xmove, ymove, bitmap));
@@ -125,7 +125,7 @@ void GL_APIENTRY BlendFunc(GLenum sfactor, GLenum dfactor)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateBlendFunc(context, sfactor, dfactor));
         if (isCallValid)
@@ -144,7 +144,7 @@ void GL_APIENTRY CallList(GLuint list)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateCallList(context, list));
         if (isCallValid)
         {
@@ -163,7 +163,7 @@ void GL_APIENTRY CallLists(GLsizei n, GLenum type, const void *lists)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateCallLists(context, n, type, lists));
         if (isCallValid)
@@ -182,7 +182,7 @@ void GL_APIENTRY Clear(GLbitfield mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateClear(context, mask));
         if (isCallValid)
         {
@@ -202,7 +202,7 @@ void GL_APIENTRY ClearAccum(GLfloat red, GLfloat green, GLfloat blue, GLfloat al
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateClearAccum(context, red, green, blue, alpha));
         if (isCallValid)
@@ -223,7 +223,7 @@ void GL_APIENTRY ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat al
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateClearColor(context, red, green, blue, alpha));
         if (isCallValid)
@@ -242,7 +242,7 @@ void GL_APIENTRY ClearDepth(GLdouble depth)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateClearDepth(context, depth));
         if (isCallValid)
         {
@@ -260,7 +260,7 @@ void GL_APIENTRY ClearIndex(GLfloat c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateClearIndex(context, c));
         if (isCallValid)
         {
@@ -278,7 +278,7 @@ void GL_APIENTRY ClearStencil(GLint s)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateClearStencil(context, s));
         if (isCallValid)
         {
@@ -297,7 +297,7 @@ void GL_APIENTRY ClipPlane(GLenum plane, const GLdouble *equation)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateClipPlane(context, plane, equation));
         if (isCallValid)
@@ -317,7 +317,7 @@ void GL_APIENTRY Color3b(GLbyte red, GLbyte green, GLbyte blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3b(context, red, green, blue));
         if (isCallValid)
@@ -336,7 +336,7 @@ void GL_APIENTRY Color3bv(const GLbyte *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3bv(context, v));
         if (isCallValid)
         {
@@ -355,7 +355,7 @@ void GL_APIENTRY Color3d(GLdouble red, GLdouble green, GLdouble blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3d(context, red, green, blue));
         if (isCallValid)
@@ -374,7 +374,7 @@ void GL_APIENTRY Color3dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3dv(context, v));
         if (isCallValid)
         {
@@ -393,7 +393,7 @@ void GL_APIENTRY Color3f(GLfloat red, GLfloat green, GLfloat blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3f(context, red, green, blue));
         if (isCallValid)
@@ -412,7 +412,7 @@ void GL_APIENTRY Color3fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3fv(context, v));
         if (isCallValid)
         {
@@ -431,7 +431,7 @@ void GL_APIENTRY Color3i(GLint red, GLint green, GLint blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3i(context, red, green, blue));
         if (isCallValid)
@@ -450,7 +450,7 @@ void GL_APIENTRY Color3iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3iv(context, v));
         if (isCallValid)
         {
@@ -469,7 +469,7 @@ void GL_APIENTRY Color3s(GLshort red, GLshort green, GLshort blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3s(context, red, green, blue));
         if (isCallValid)
@@ -488,7 +488,7 @@ void GL_APIENTRY Color3sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3sv(context, v));
         if (isCallValid)
         {
@@ -507,7 +507,7 @@ void GL_APIENTRY Color3ub(GLubyte red, GLubyte green, GLubyte blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3ub(context, red, green, blue));
         if (isCallValid)
@@ -526,7 +526,7 @@ void GL_APIENTRY Color3ubv(const GLubyte *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3ubv(context, v));
         if (isCallValid)
         {
@@ -545,7 +545,7 @@ void GL_APIENTRY Color3ui(GLuint red, GLuint green, GLuint blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3ui(context, red, green, blue));
         if (isCallValid)
@@ -564,7 +564,7 @@ void GL_APIENTRY Color3uiv(const GLuint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3uiv(context, v));
         if (isCallValid)
         {
@@ -583,7 +583,7 @@ void GL_APIENTRY Color3us(GLushort red, GLushort green, GLushort blue)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor3us(context, red, green, blue));
         if (isCallValid)
@@ -602,7 +602,7 @@ void GL_APIENTRY Color3usv(const GLushort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor3usv(context, v));
         if (isCallValid)
         {
@@ -621,7 +621,7 @@ void GL_APIENTRY Color4b(GLbyte red, GLbyte green, GLbyte blue, GLbyte alpha)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4b(context, red, green, blue, alpha));
         if (isCallValid)
@@ -640,7 +640,7 @@ void GL_APIENTRY Color4bv(const GLbyte *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4bv(context, v));
         if (isCallValid)
         {
@@ -660,7 +660,7 @@ void GL_APIENTRY Color4d(GLdouble red, GLdouble green, GLdouble blue, GLdouble a
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4d(context, red, green, blue, alpha));
         if (isCallValid)
@@ -679,7 +679,7 @@ void GL_APIENTRY Color4dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4dv(context, v));
         if (isCallValid)
         {
@@ -699,7 +699,7 @@ void GL_APIENTRY Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4f(context, red, green, blue, alpha));
         if (isCallValid)
@@ -718,7 +718,7 @@ void GL_APIENTRY Color4fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4fv(context, v));
         if (isCallValid)
         {
@@ -737,7 +737,7 @@ void GL_APIENTRY Color4i(GLint red, GLint green, GLint blue, GLint alpha)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4i(context, red, green, blue, alpha));
         if (isCallValid)
@@ -756,7 +756,7 @@ void GL_APIENTRY Color4iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4iv(context, v));
         if (isCallValid)
         {
@@ -776,7 +776,7 @@ void GL_APIENTRY Color4s(GLshort red, GLshort green, GLshort blue, GLshort alpha
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4s(context, red, green, blue, alpha));
         if (isCallValid)
@@ -795,7 +795,7 @@ void GL_APIENTRY Color4sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4sv(context, v));
         if (isCallValid)
         {
@@ -815,7 +815,7 @@ void GL_APIENTRY Color4ub(GLubyte red, GLubyte green, GLubyte blue, GLubyte alph
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4ub(context, red, green, blue, alpha));
         if (isCallValid)
@@ -834,7 +834,7 @@ void GL_APIENTRY Color4ubv(const GLubyte *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4ubv(context, v));
         if (isCallValid)
         {
@@ -853,7 +853,7 @@ void GL_APIENTRY Color4ui(GLuint red, GLuint green, GLuint blue, GLuint alpha)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4ui(context, red, green, blue, alpha));
         if (isCallValid)
@@ -872,7 +872,7 @@ void GL_APIENTRY Color4uiv(const GLuint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4uiv(context, v));
         if (isCallValid)
         {
@@ -892,7 +892,7 @@ void GL_APIENTRY Color4us(GLushort red, GLushort green, GLushort blue, GLushort 
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColor4us(context, red, green, blue, alpha));
         if (isCallValid)
@@ -911,7 +911,7 @@ void GL_APIENTRY Color4usv(const GLushort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateColor4usv(context, v));
         if (isCallValid)
         {
@@ -932,7 +932,7 @@ void GL_APIENTRY ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboo
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColorMask(context, red, green, blue, alpha));
         if (isCallValid)
@@ -953,7 +953,7 @@ void GL_APIENTRY ColorMaterial(GLenum face, GLenum mode)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateColorMaterial(context, face, mode));
         if (isCallValid)
@@ -974,7 +974,7 @@ void GL_APIENTRY CopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLe
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateCopyPixels(context, x, y, width, height, type));
         if (isCallValid)
@@ -994,7 +994,7 @@ void GL_APIENTRY CullFace(GLenum mode)
     if (context)
     {
         CullFaceMode modePacked                               = FromGL<CullFaceMode>(mode);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateCullFace(context, modePacked));
         if (isCallValid)
         {
@@ -1012,7 +1012,7 @@ void GL_APIENTRY DeleteLists(GLuint list, GLsizei range)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDeleteLists(context, list, range));
         if (isCallValid)
         {
@@ -1030,7 +1030,7 @@ void GL_APIENTRY DepthFunc(GLenum func)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDepthFunc(context, func));
         if (isCallValid)
         {
@@ -1048,7 +1048,7 @@ void GL_APIENTRY DepthMask(GLboolean flag)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDepthMask(context, flag));
         if (isCallValid)
         {
@@ -1066,7 +1066,7 @@ void GL_APIENTRY DepthRange(GLdouble n, GLdouble f)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDepthRange(context, n, f));
         if (isCallValid)
         {
@@ -1084,7 +1084,7 @@ void GL_APIENTRY Disable(GLenum cap)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDisable(context, cap));
         if (isCallValid)
         {
@@ -1102,7 +1102,7 @@ void GL_APIENTRY DrawBuffer(GLenum buf)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateDrawBuffer(context, buf));
         if (isCallValid)
         {
@@ -1124,7 +1124,7 @@ DrawPixels(GLsizei width, GLsizei height, GLenum format, GLenum type, const void
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateDrawPixels(context, width, height, format, type, pixels));
         if (isCallValid)
@@ -1143,7 +1143,7 @@ void GL_APIENTRY EdgeFlag(GLboolean flag)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEdgeFlag(context, flag));
         if (isCallValid)
         {
@@ -1161,7 +1161,7 @@ void GL_APIENTRY EdgeFlagv(const GLboolean *flag)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEdgeFlagv(context, flag));
         if (isCallValid)
         {
@@ -1179,7 +1179,7 @@ void GL_APIENTRY Enable(GLenum cap)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEnable(context, cap));
         if (isCallValid)
         {
@@ -1196,7 +1196,7 @@ void GL_APIENTRY End()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEnd(context));
         if (isCallValid)
         {
@@ -1213,7 +1213,7 @@ void GL_APIENTRY EndList()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEndList(context));
         if (isCallValid)
         {
@@ -1231,7 +1231,7 @@ void GL_APIENTRY EvalCoord1d(GLdouble u)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord1d(context, u));
         if (isCallValid)
         {
@@ -1249,7 +1249,7 @@ void GL_APIENTRY EvalCoord1dv(const GLdouble *u)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord1dv(context, u));
         if (isCallValid)
         {
@@ -1267,7 +1267,7 @@ void GL_APIENTRY EvalCoord1f(GLfloat u)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord1f(context, u));
         if (isCallValid)
         {
@@ -1285,7 +1285,7 @@ void GL_APIENTRY EvalCoord1fv(const GLfloat *u)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord1fv(context, u));
         if (isCallValid)
         {
@@ -1303,7 +1303,7 @@ void GL_APIENTRY EvalCoord2d(GLdouble u, GLdouble v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord2d(context, u, v));
         if (isCallValid)
         {
@@ -1321,7 +1321,7 @@ void GL_APIENTRY EvalCoord2dv(const GLdouble *u)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord2dv(context, u));
         if (isCallValid)
         {
@@ -1339,7 +1339,7 @@ void GL_APIENTRY EvalCoord2f(GLfloat u, GLfloat v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord2f(context, u, v));
         if (isCallValid)
         {
@@ -1357,7 +1357,7 @@ void GL_APIENTRY EvalCoord2fv(const GLfloat *u)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalCoord2fv(context, u));
         if (isCallValid)
         {
@@ -1376,7 +1376,7 @@ void GL_APIENTRY EvalMesh1(GLenum mode, GLint i1, GLint i2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalMesh1(context, mode, i1, i2));
         if (isCallValid)
         {
@@ -1396,7 +1396,7 @@ void GL_APIENTRY EvalMesh2(GLenum mode, GLint i1, GLint i2, GLint j1, GLint j2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateEvalMesh2(context, mode, i1, i2, j1, j2));
         if (isCallValid)
@@ -1415,7 +1415,7 @@ void GL_APIENTRY EvalPoint1(GLint i)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalPoint1(context, i));
         if (isCallValid)
         {
@@ -1433,7 +1433,7 @@ void GL_APIENTRY EvalPoint2(GLint i, GLint j)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateEvalPoint2(context, i, j));
         if (isCallValid)
         {
@@ -1452,7 +1452,7 @@ void GL_APIENTRY FeedbackBuffer(GLsizei size, GLenum type, GLfloat *buffer)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateFeedbackBuffer(context, size, type, buffer));
         if (isCallValid)
@@ -1470,7 +1470,7 @@ void GL_APIENTRY Finish()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateFinish(context));
         if (isCallValid)
         {
@@ -1487,7 +1487,7 @@ void GL_APIENTRY Flush()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateFlush(context));
         if (isCallValid)
         {
@@ -1506,7 +1506,7 @@ void GL_APIENTRY Fogf(GLenum pname, GLfloat param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateFogf(context, pname, param));
         if (isCallValid)
         {
@@ -1525,7 +1525,7 @@ void GL_APIENTRY Fogfv(GLenum pname, const GLfloat *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateFogfv(context, pname, params));
         if (isCallValid)
         {
@@ -1544,7 +1544,7 @@ void GL_APIENTRY Fogi(GLenum pname, GLint param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateFogi(context, pname, param));
         if (isCallValid)
         {
@@ -1563,7 +1563,7 @@ void GL_APIENTRY Fogiv(GLenum pname, const GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateFogiv(context, pname, params));
         if (isCallValid)
         {
@@ -1581,7 +1581,7 @@ void GL_APIENTRY FrontFace(GLenum mode)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateFrontFace(context, mode));
         if (isCallValid)
         {
@@ -1602,7 +1602,7 @@ Frustum(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble z
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateFrustum(context, left, right, bottom, top, zNear, zFar));
         if (isCallValid)
@@ -1622,7 +1622,7 @@ GLuint GL_APIENTRY GenLists(GLsizei range)
     GLuint returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGenLists(context, range));
         if (isCallValid)
         {
@@ -1650,7 +1650,7 @@ void GL_APIENTRY GetBooleanv(GLenum pname, GLboolean *data)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGetBooleanv(context, pname, data));
         if (isCallValid)
         {
@@ -1669,7 +1669,7 @@ void GL_APIENTRY GetClipPlane(GLenum plane, GLdouble *equation)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetClipPlane(context, plane, equation));
         if (isCallValid)
@@ -1689,7 +1689,7 @@ void GL_APIENTRY GetDoublev(GLenum pname, GLdouble *data)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGetDoublev(context, pname, data));
         if (isCallValid)
         {
@@ -1707,7 +1707,7 @@ GLenum GL_APIENTRY GetError()
     GLenum returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGetError(context));
         if (isCallValid)
         {
@@ -1735,7 +1735,7 @@ void GL_APIENTRY GetFloatv(GLenum pname, GLfloat *data)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGetFloatv(context, pname, data));
         if (isCallValid)
         {
@@ -1754,7 +1754,7 @@ void GL_APIENTRY GetIntegerv(GLenum pname, GLint *data)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGetIntegerv(context, pname, data));
         if (isCallValid)
         {
@@ -1775,7 +1775,7 @@ void GL_APIENTRY GetLightfv(GLenum light, GLenum pname, GLfloat *params)
     if (context)
     {
         LightParameter pnamePacked                            = FromGL<LightParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetLightfv(context, light, pnamePacked, params));
         if (isCallValid)
@@ -1796,7 +1796,7 @@ void GL_APIENTRY GetLightiv(GLenum light, GLenum pname, GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetLightiv(context, light, pname, params));
         if (isCallValid)
@@ -1817,7 +1817,7 @@ void GL_APIENTRY GetMapdv(GLenum target, GLenum query, GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetMapdv(context, target, query, v));
         if (isCallValid)
@@ -1838,7 +1838,7 @@ void GL_APIENTRY GetMapfv(GLenum target, GLenum query, GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetMapfv(context, target, query, v));
         if (isCallValid)
@@ -1859,7 +1859,7 @@ void GL_APIENTRY GetMapiv(GLenum target, GLenum query, GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetMapiv(context, target, query, v));
         if (isCallValid)
@@ -1881,7 +1881,7 @@ void GL_APIENTRY GetMaterialfv(GLenum face, GLenum pname, GLfloat *params)
     if (context)
     {
         MaterialParameter pnamePacked                         = FromGL<MaterialParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetMaterialfv(context, face, pnamePacked, params));
         if (isCallValid)
@@ -1902,7 +1902,7 @@ void GL_APIENTRY GetMaterialiv(GLenum face, GLenum pname, GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetMaterialiv(context, face, pname, params));
         if (isCallValid)
@@ -1922,7 +1922,7 @@ void GL_APIENTRY GetPixelMapfv(GLenum map, GLfloat *values)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetPixelMapfv(context, map, values));
         if (isCallValid)
@@ -1942,7 +1942,7 @@ void GL_APIENTRY GetPixelMapuiv(GLenum map, GLuint *values)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetPixelMapuiv(context, map, values));
         if (isCallValid)
@@ -1962,7 +1962,7 @@ void GL_APIENTRY GetPixelMapusv(GLenum map, GLushort *values)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetPixelMapusv(context, map, values));
         if (isCallValid)
@@ -1981,7 +1981,7 @@ void GL_APIENTRY GetPolygonStipple(GLubyte *mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGetPolygonStipple(context, mask));
         if (isCallValid)
         {
@@ -2000,7 +2000,7 @@ const GLubyte *GL_APIENTRY GetString(GLenum name)
     const GLubyte *returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateGetString(context, name));
         if (isCallValid)
         {
@@ -2032,7 +2032,7 @@ void GL_APIENTRY GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
     {
         TextureEnvTarget targetPacked                         = FromGL<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked                       = FromGL<TextureEnvParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetTexEnvfv(context, targetPacked, pnamePacked, params));
         if (isCallValid)
@@ -2055,7 +2055,7 @@ void GL_APIENTRY GetTexEnviv(GLenum target, GLenum pname, GLint *params)
     {
         TextureEnvTarget targetPacked                         = FromGL<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked                       = FromGL<TextureEnvParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetTexEnviv(context, targetPacked, pnamePacked, params));
         if (isCallValid)
@@ -2077,7 +2077,7 @@ void GL_APIENTRY GetTexGendv(GLenum coord, GLenum pname, GLdouble *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetTexGendv(context, coord, pname, params));
         if (isCallValid)
@@ -2098,7 +2098,7 @@ void GL_APIENTRY GetTexGenfv(GLenum coord, GLenum pname, GLfloat *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetTexGenfv(context, coord, pname, params));
         if (isCallValid)
@@ -2119,7 +2119,7 @@ void GL_APIENTRY GetTexGeniv(GLenum coord, GLenum pname, GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetTexGeniv(context, coord, pname, params));
         if (isCallValid)
@@ -2143,7 +2143,7 @@ void GL_APIENTRY GetTexImage(GLenum target, GLint level, GLenum format, GLenum t
     if (context)
     {
         TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetTexImage(context, targetPacked, level, format, type, pixels));
@@ -2167,7 +2167,7 @@ void GL_APIENTRY GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname
     if (context)
     {
         TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetTexLevelParameterfv(context, targetPacked, level, pname, params));
@@ -2192,7 +2192,7 @@ void GL_APIENTRY GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname
     if (context)
     {
         TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetTexLevelParameteriv(context, targetPacked, level, pname, params));
@@ -2217,7 +2217,7 @@ void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat *params)
     if (context)
     {
         TextureType targetPacked                              = FromGL<TextureType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetTexParameterfv(context, targetPacked, pname, params));
         if (isCallValid)
@@ -2239,7 +2239,7 @@ void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint *params)
     if (context)
     {
         TextureType targetPacked                              = FromGL<TextureType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetTexParameteriv(context, targetPacked, pname, params));
         if (isCallValid)
@@ -2260,7 +2260,7 @@ void GL_APIENTRY Hint(GLenum target, GLenum mode)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateHint(context, target, mode));
         if (isCallValid)
         {
@@ -2278,7 +2278,7 @@ void GL_APIENTRY IndexMask(GLuint mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexMask(context, mask));
         if (isCallValid)
         {
@@ -2296,7 +2296,7 @@ void GL_APIENTRY Indexd(GLdouble c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexd(context, c));
         if (isCallValid)
         {
@@ -2314,7 +2314,7 @@ void GL_APIENTRY Indexdv(const GLdouble *c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexdv(context, c));
         if (isCallValid)
         {
@@ -2332,7 +2332,7 @@ void GL_APIENTRY Indexf(GLfloat c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexf(context, c));
         if (isCallValid)
         {
@@ -2350,7 +2350,7 @@ void GL_APIENTRY Indexfv(const GLfloat *c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexfv(context, c));
         if (isCallValid)
         {
@@ -2368,7 +2368,7 @@ void GL_APIENTRY Indexi(GLint c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexi(context, c));
         if (isCallValid)
         {
@@ -2386,7 +2386,7 @@ void GL_APIENTRY Indexiv(const GLint *c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexiv(context, c));
         if (isCallValid)
         {
@@ -2404,7 +2404,7 @@ void GL_APIENTRY Indexs(GLshort c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexs(context, c));
         if (isCallValid)
         {
@@ -2422,7 +2422,7 @@ void GL_APIENTRY Indexsv(const GLshort *c)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIndexsv(context, c));
         if (isCallValid)
         {
@@ -2439,7 +2439,7 @@ void GL_APIENTRY InitNames()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateInitNames(context));
         if (isCallValid)
         {
@@ -2458,7 +2458,7 @@ GLboolean GL_APIENTRY IsEnabled(GLenum cap)
     GLboolean returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIsEnabled(context, cap));
         if (isCallValid)
         {
@@ -2486,7 +2486,7 @@ GLboolean GL_APIENTRY IsList(GLuint list)
     GLboolean returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateIsList(context, list));
         if (isCallValid)
         {
@@ -2514,7 +2514,7 @@ void GL_APIENTRY LightModelf(GLenum pname, GLfloat param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLightModelf(context, pname, param));
         if (isCallValid)
@@ -2534,7 +2534,7 @@ void GL_APIENTRY LightModelfv(GLenum pname, const GLfloat *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLightModelfv(context, pname, params));
         if (isCallValid)
@@ -2554,7 +2554,7 @@ void GL_APIENTRY LightModeli(GLenum pname, GLint param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLightModeli(context, pname, param));
         if (isCallValid)
@@ -2574,7 +2574,7 @@ void GL_APIENTRY LightModeliv(GLenum pname, const GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLightModeliv(context, pname, params));
         if (isCallValid)
@@ -2596,7 +2596,7 @@ void GL_APIENTRY Lightf(GLenum light, GLenum pname, GLfloat param)
     if (context)
     {
         LightParameter pnamePacked                            = FromGL<LightParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLightf(context, light, pnamePacked, param));
         if (isCallValid)
@@ -2620,7 +2620,7 @@ void GL_APIENTRY Lightfv(GLenum light, GLenum pname, const GLfloat *params)
     if (context)
     {
         LightParameter pnamePacked                            = FromGL<LightParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLightfv(context, light, pnamePacked, params));
         if (isCallValid)
@@ -2641,7 +2641,7 @@ void GL_APIENTRY Lighti(GLenum light, GLenum pname, GLint param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLighti(context, light, pname, param));
         if (isCallValid)
@@ -2663,7 +2663,7 @@ void GL_APIENTRY Lightiv(GLenum light, GLenum pname, const GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLightiv(context, light, pname, params));
         if (isCallValid)
@@ -2682,7 +2682,7 @@ void GL_APIENTRY LineStipple(GLint factor, GLushort pattern)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateLineStipple(context, factor, pattern));
         if (isCallValid)
@@ -2701,7 +2701,7 @@ void GL_APIENTRY LineWidth(GLfloat width)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLineWidth(context, width));
         if (isCallValid)
         {
@@ -2719,7 +2719,7 @@ void GL_APIENTRY ListBase(GLuint base)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateListBase(context, base));
         if (isCallValid)
         {
@@ -2736,7 +2736,7 @@ void GL_APIENTRY LoadIdentity()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLoadIdentity(context));
         if (isCallValid)
         {
@@ -2754,7 +2754,7 @@ void GL_APIENTRY LoadMatrixd(const GLdouble *m)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLoadMatrixd(context, m));
         if (isCallValid)
         {
@@ -2772,7 +2772,7 @@ void GL_APIENTRY LoadMatrixf(const GLfloat *m)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLoadMatrixf(context, m));
         if (isCallValid)
         {
@@ -2790,7 +2790,7 @@ void GL_APIENTRY LoadName(GLuint name)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLoadName(context, name));
         if (isCallValid)
         {
@@ -2809,7 +2809,7 @@ void GL_APIENTRY LogicOp(GLenum opcode)
     if (context)
     {
         LogicalOperation opcodePacked                         = FromGL<LogicalOperation>(opcode);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateLogicOp(context, opcodePacked));
         if (isCallValid)
         {
@@ -2831,7 +2831,7 @@ Map1d(GLenum target, GLdouble u1, GLdouble u2, GLint stride, GLint order, const 
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMap1d(context, target, u1, u2, stride, order, points));
         if (isCallValid)
@@ -2854,7 +2854,7 @@ Map1f(GLenum target, GLfloat u1, GLfloat u2, GLint stride, GLint order, const GL
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMap1f(context, target, u1, u2, stride, order, points));
         if (isCallValid)
@@ -2886,7 +2886,7 @@ void GL_APIENTRY Map2d(GLenum target,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMap2d(context, target, u1, u2, ustride, uorder,
                                                         v1, v2, vstride, vorder, points));
@@ -2920,7 +2920,7 @@ void GL_APIENTRY Map2f(GLenum target,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMap2f(context, target, u1, u2, ustride, uorder,
                                                         v1, v2, vstride, vorder, points));
@@ -2942,7 +2942,7 @@ void GL_APIENTRY MapGrid1d(GLint un, GLdouble u1, GLdouble u2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMapGrid1d(context, un, u1, u2));
         if (isCallValid)
         {
@@ -2961,7 +2961,7 @@ void GL_APIENTRY MapGrid1f(GLint un, GLfloat u1, GLfloat u2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMapGrid1f(context, un, u1, u2));
         if (isCallValid)
         {
@@ -2981,7 +2981,7 @@ void GL_APIENTRY MapGrid2d(GLint un, GLdouble u1, GLdouble u2, GLint vn, GLdoubl
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMapGrid2d(context, un, u1, u2, vn, v1, v2));
         if (isCallValid)
@@ -3002,7 +3002,7 @@ void GL_APIENTRY MapGrid2f(GLint un, GLfloat u1, GLfloat u2, GLint vn, GLfloat v
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMapGrid2f(context, un, u1, u2, vn, v1, v2));
         if (isCallValid)
@@ -3024,7 +3024,7 @@ void GL_APIENTRY Materialf(GLenum face, GLenum pname, GLfloat param)
     if (context)
     {
         MaterialParameter pnamePacked                         = FromGL<MaterialParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMaterialf(context, face, pnamePacked, param));
         if (isCallValid)
@@ -3048,7 +3048,7 @@ void GL_APIENTRY Materialfv(GLenum face, GLenum pname, const GLfloat *params)
     if (context)
     {
         MaterialParameter pnamePacked                         = FromGL<MaterialParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMaterialfv(context, face, pnamePacked, params));
         if (isCallValid)
@@ -3069,7 +3069,7 @@ void GL_APIENTRY Materiali(GLenum face, GLenum pname, GLint param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMateriali(context, face, pname, param));
         if (isCallValid)
@@ -3091,7 +3091,7 @@ void GL_APIENTRY Materialiv(GLenum face, GLenum pname, const GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateMaterialiv(context, face, pname, params));
         if (isCallValid)
@@ -3111,7 +3111,7 @@ void GL_APIENTRY MatrixMode(GLenum mode)
     if (context)
     {
         MatrixType modePacked                                 = FromGL<MatrixType>(mode);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMatrixMode(context, modePacked));
         if (isCallValid)
         {
@@ -3129,7 +3129,7 @@ void GL_APIENTRY MultMatrixd(const GLdouble *m)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMultMatrixd(context, m));
         if (isCallValid)
         {
@@ -3147,7 +3147,7 @@ void GL_APIENTRY MultMatrixf(const GLfloat *m)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateMultMatrixf(context, m));
         if (isCallValid)
         {
@@ -3166,7 +3166,7 @@ void GL_APIENTRY NewList(GLuint list, GLenum mode)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNewList(context, list, mode));
         if (isCallValid)
         {
@@ -3184,7 +3184,7 @@ void GL_APIENTRY Normal3b(GLbyte nx, GLbyte ny, GLbyte nz)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3b(context, nx, ny, nz));
         if (isCallValid)
         {
@@ -3202,7 +3202,7 @@ void GL_APIENTRY Normal3bv(const GLbyte *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3bv(context, v));
         if (isCallValid)
         {
@@ -3221,7 +3221,7 @@ void GL_APIENTRY Normal3d(GLdouble nx, GLdouble ny, GLdouble nz)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3d(context, nx, ny, nz));
         if (isCallValid)
         {
@@ -3239,7 +3239,7 @@ void GL_APIENTRY Normal3dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3dv(context, v));
         if (isCallValid)
         {
@@ -3258,7 +3258,7 @@ void GL_APIENTRY Normal3f(GLfloat nx, GLfloat ny, GLfloat nz)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3f(context, nx, ny, nz));
         if (isCallValid)
         {
@@ -3276,7 +3276,7 @@ void GL_APIENTRY Normal3fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3fv(context, v));
         if (isCallValid)
         {
@@ -3294,7 +3294,7 @@ void GL_APIENTRY Normal3i(GLint nx, GLint ny, GLint nz)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3i(context, nx, ny, nz));
         if (isCallValid)
         {
@@ -3312,7 +3312,7 @@ void GL_APIENTRY Normal3iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3iv(context, v));
         if (isCallValid)
         {
@@ -3331,7 +3331,7 @@ void GL_APIENTRY Normal3s(GLshort nx, GLshort ny, GLshort nz)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3s(context, nx, ny, nz));
         if (isCallValid)
         {
@@ -3349,7 +3349,7 @@ void GL_APIENTRY Normal3sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateNormal3sv(context, v));
         if (isCallValid)
         {
@@ -3370,7 +3370,7 @@ Ortho(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNe
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateOrtho(context, left, right, bottom, top, zNear, zFar));
         if (isCallValid)
@@ -3389,7 +3389,7 @@ void GL_APIENTRY PassThrough(GLfloat token)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePassThrough(context, token));
         if (isCallValid)
         {
@@ -3409,7 +3409,7 @@ void GL_APIENTRY PixelMapfv(GLenum map, GLsizei mapsize, const GLfloat *values)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelMapfv(context, map, mapsize, values));
         if (isCallValid)
@@ -3431,7 +3431,7 @@ void GL_APIENTRY PixelMapuiv(GLenum map, GLsizei mapsize, const GLuint *values)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelMapuiv(context, map, mapsize, values));
         if (isCallValid)
@@ -3452,7 +3452,7 @@ void GL_APIENTRY PixelMapusv(GLenum map, GLsizei mapsize, const GLushort *values
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelMapusv(context, map, mapsize, values));
         if (isCallValid)
@@ -3472,7 +3472,7 @@ void GL_APIENTRY PixelStoref(GLenum pname, GLfloat param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelStoref(context, pname, param));
         if (isCallValid)
@@ -3492,7 +3492,7 @@ void GL_APIENTRY PixelStorei(GLenum pname, GLint param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelStorei(context, pname, param));
         if (isCallValid)
@@ -3512,7 +3512,7 @@ void GL_APIENTRY PixelTransferf(GLenum pname, GLfloat param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelTransferf(context, pname, param));
         if (isCallValid)
@@ -3532,7 +3532,7 @@ void GL_APIENTRY PixelTransferi(GLenum pname, GLint param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelTransferi(context, pname, param));
         if (isCallValid)
@@ -3552,7 +3552,7 @@ void GL_APIENTRY PixelZoom(GLfloat xfactor, GLfloat yfactor)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidatePixelZoom(context, xfactor, yfactor));
         if (isCallValid)
@@ -3571,7 +3571,7 @@ void GL_APIENTRY PointSize(GLfloat size)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePointSize(context, size));
         if (isCallValid)
         {
@@ -3591,7 +3591,7 @@ void GL_APIENTRY PolygonMode(GLenum face, GLenum mode)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePolygonMode(context, face, mode));
         if (isCallValid)
         {
@@ -3609,7 +3609,7 @@ void GL_APIENTRY PolygonStipple(const GLubyte *mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePolygonStipple(context, mask));
         if (isCallValid)
         {
@@ -3626,7 +3626,7 @@ void GL_APIENTRY PopAttrib()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePopAttrib(context));
         if (isCallValid)
         {
@@ -3643,7 +3643,7 @@ void GL_APIENTRY PopMatrix()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePopMatrix(context));
         if (isCallValid)
         {
@@ -3660,7 +3660,7 @@ void GL_APIENTRY PopName()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePopName(context));
         if (isCallValid)
         {
@@ -3678,7 +3678,7 @@ void GL_APIENTRY PushAttrib(GLbitfield mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePushAttrib(context, mask));
         if (isCallValid)
         {
@@ -3695,7 +3695,7 @@ void GL_APIENTRY PushMatrix()
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePushMatrix(context));
         if (isCallValid)
         {
@@ -3713,7 +3713,7 @@ void GL_APIENTRY PushName(GLuint name)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidatePushName(context, name));
         if (isCallValid)
         {
@@ -3731,7 +3731,7 @@ void GL_APIENTRY RasterPos2d(GLdouble x, GLdouble y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2d(context, x, y));
         if (isCallValid)
         {
@@ -3749,7 +3749,7 @@ void GL_APIENTRY RasterPos2dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2dv(context, v));
         if (isCallValid)
         {
@@ -3767,7 +3767,7 @@ void GL_APIENTRY RasterPos2f(GLfloat x, GLfloat y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2f(context, x, y));
         if (isCallValid)
         {
@@ -3785,7 +3785,7 @@ void GL_APIENTRY RasterPos2fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2fv(context, v));
         if (isCallValid)
         {
@@ -3803,7 +3803,7 @@ void GL_APIENTRY RasterPos2i(GLint x, GLint y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2i(context, x, y));
         if (isCallValid)
         {
@@ -3821,7 +3821,7 @@ void GL_APIENTRY RasterPos2iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2iv(context, v));
         if (isCallValid)
         {
@@ -3839,7 +3839,7 @@ void GL_APIENTRY RasterPos2s(GLshort x, GLshort y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2s(context, x, y));
         if (isCallValid)
         {
@@ -3857,7 +3857,7 @@ void GL_APIENTRY RasterPos2sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos2sv(context, v));
         if (isCallValid)
         {
@@ -3875,7 +3875,7 @@ void GL_APIENTRY RasterPos3d(GLdouble x, GLdouble y, GLdouble z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3d(context, x, y, z));
         if (isCallValid)
         {
@@ -3893,7 +3893,7 @@ void GL_APIENTRY RasterPos3dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3dv(context, v));
         if (isCallValid)
         {
@@ -3911,7 +3911,7 @@ void GL_APIENTRY RasterPos3f(GLfloat x, GLfloat y, GLfloat z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3f(context, x, y, z));
         if (isCallValid)
         {
@@ -3929,7 +3929,7 @@ void GL_APIENTRY RasterPos3fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3fv(context, v));
         if (isCallValid)
         {
@@ -3947,7 +3947,7 @@ void GL_APIENTRY RasterPos3i(GLint x, GLint y, GLint z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3i(context, x, y, z));
         if (isCallValid)
         {
@@ -3965,7 +3965,7 @@ void GL_APIENTRY RasterPos3iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3iv(context, v));
         if (isCallValid)
         {
@@ -3983,7 +3983,7 @@ void GL_APIENTRY RasterPos3s(GLshort x, GLshort y, GLshort z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3s(context, x, y, z));
         if (isCallValid)
         {
@@ -4001,7 +4001,7 @@ void GL_APIENTRY RasterPos3sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos3sv(context, v));
         if (isCallValid)
         {
@@ -4020,7 +4020,7 @@ void GL_APIENTRY RasterPos4d(GLdouble x, GLdouble y, GLdouble z, GLdouble w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4d(context, x, y, z, w));
         if (isCallValid)
         {
@@ -4038,7 +4038,7 @@ void GL_APIENTRY RasterPos4dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4dv(context, v));
         if (isCallValid)
         {
@@ -4057,7 +4057,7 @@ void GL_APIENTRY RasterPos4f(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4f(context, x, y, z, w));
         if (isCallValid)
         {
@@ -4075,7 +4075,7 @@ void GL_APIENTRY RasterPos4fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4fv(context, v));
         if (isCallValid)
         {
@@ -4094,7 +4094,7 @@ void GL_APIENTRY RasterPos4i(GLint x, GLint y, GLint z, GLint w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4i(context, x, y, z, w));
         if (isCallValid)
         {
@@ -4112,7 +4112,7 @@ void GL_APIENTRY RasterPos4iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4iv(context, v));
         if (isCallValid)
         {
@@ -4131,7 +4131,7 @@ void GL_APIENTRY RasterPos4s(GLshort x, GLshort y, GLshort z, GLshort w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4s(context, x, y, z, w));
         if (isCallValid)
         {
@@ -4149,7 +4149,7 @@ void GL_APIENTRY RasterPos4sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRasterPos4sv(context, v));
         if (isCallValid)
         {
@@ -4167,7 +4167,7 @@ void GL_APIENTRY ReadBuffer(GLenum src)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateReadBuffer(context, src));
         if (isCallValid)
         {
@@ -4194,7 +4194,7 @@ void GL_APIENTRY ReadPixels(GLint x,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateReadPixels(context, x, y, width, height, format, type, pixels));
         if (isCallValid)
@@ -4214,7 +4214,7 @@ void GL_APIENTRY Rectd(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRectd(context, x1, y1, x2, y2));
         if (isCallValid)
         {
@@ -4234,7 +4234,7 @@ void GL_APIENTRY Rectdv(const GLdouble *v1, const GLdouble *v2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRectdv(context, v1, v2));
         if (isCallValid)
         {
@@ -4253,7 +4253,7 @@ void GL_APIENTRY Rectf(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRectf(context, x1, y1, x2, y2));
         if (isCallValid)
         {
@@ -4273,7 +4273,7 @@ void GL_APIENTRY Rectfv(const GLfloat *v1, const GLfloat *v2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRectfv(context, v1, v2));
         if (isCallValid)
         {
@@ -4292,7 +4292,7 @@ void GL_APIENTRY Recti(GLint x1, GLint y1, GLint x2, GLint y2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRecti(context, x1, y1, x2, y2));
         if (isCallValid)
         {
@@ -4311,7 +4311,7 @@ void GL_APIENTRY Rectiv(const GLint *v1, const GLint *v2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRectiv(context, v1, v2));
         if (isCallValid)
         {
@@ -4330,7 +4330,7 @@ void GL_APIENTRY Rects(GLshort x1, GLshort y1, GLshort x2, GLshort y2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRects(context, x1, y1, x2, y2));
         if (isCallValid)
         {
@@ -4350,7 +4350,7 @@ void GL_APIENTRY Rectsv(const GLshort *v1, const GLshort *v2)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRectsv(context, v1, v2));
         if (isCallValid)
         {
@@ -4369,7 +4369,7 @@ GLint GL_APIENTRY RenderMode(GLenum mode)
     GLint returnValue;
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRenderMode(context, mode));
         if (isCallValid)
         {
@@ -4397,7 +4397,7 @@ void GL_APIENTRY Rotated(GLdouble angle, GLdouble x, GLdouble y, GLdouble z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRotated(context, angle, x, y, z));
         if (isCallValid)
         {
@@ -4416,7 +4416,7 @@ void GL_APIENTRY Rotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateRotatef(context, angle, x, y, z));
         if (isCallValid)
         {
@@ -4434,7 +4434,7 @@ void GL_APIENTRY Scaled(GLdouble x, GLdouble y, GLdouble z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateScaled(context, x, y, z));
         if (isCallValid)
         {
@@ -4452,7 +4452,7 @@ void GL_APIENTRY Scalef(GLfloat x, GLfloat y, GLfloat z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateScalef(context, x, y, z));
         if (isCallValid)
         {
@@ -4471,7 +4471,7 @@ void GL_APIENTRY Scissor(GLint x, GLint y, GLsizei width, GLsizei height)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateScissor(context, x, y, width, height));
         if (isCallValid)
@@ -4491,7 +4491,7 @@ void GL_APIENTRY SelectBuffer(GLsizei size, GLuint *buffer)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateSelectBuffer(context, size, buffer));
         if (isCallValid)
@@ -4511,7 +4511,7 @@ void GL_APIENTRY ShadeModel(GLenum mode)
     if (context)
     {
         ShadingModel modePacked                               = FromGL<ShadingModel>(mode);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateShadeModel(context, modePacked));
         if (isCallValid)
         {
@@ -4530,7 +4530,7 @@ void GL_APIENTRY StencilFunc(GLenum func, GLint ref, GLuint mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateStencilFunc(context, func, ref, mask));
         if (isCallValid)
@@ -4549,7 +4549,7 @@ void GL_APIENTRY StencilMask(GLuint mask)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateStencilMask(context, mask));
         if (isCallValid)
         {
@@ -4570,7 +4570,7 @@ void GL_APIENTRY StencilOp(GLenum fail, GLenum zfail, GLenum zpass)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateStencilOp(context, fail, zfail, zpass));
         if (isCallValid)
@@ -4589,7 +4589,7 @@ void GL_APIENTRY TexCoord1d(GLdouble s)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1d(context, s));
         if (isCallValid)
         {
@@ -4607,7 +4607,7 @@ void GL_APIENTRY TexCoord1dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1dv(context, v));
         if (isCallValid)
         {
@@ -4625,7 +4625,7 @@ void GL_APIENTRY TexCoord1f(GLfloat s)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1f(context, s));
         if (isCallValid)
         {
@@ -4643,7 +4643,7 @@ void GL_APIENTRY TexCoord1fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1fv(context, v));
         if (isCallValid)
         {
@@ -4661,7 +4661,7 @@ void GL_APIENTRY TexCoord1i(GLint s)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1i(context, s));
         if (isCallValid)
         {
@@ -4679,7 +4679,7 @@ void GL_APIENTRY TexCoord1iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1iv(context, v));
         if (isCallValid)
         {
@@ -4697,7 +4697,7 @@ void GL_APIENTRY TexCoord1s(GLshort s)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1s(context, s));
         if (isCallValid)
         {
@@ -4715,7 +4715,7 @@ void GL_APIENTRY TexCoord1sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord1sv(context, v));
         if (isCallValid)
         {
@@ -4733,7 +4733,7 @@ void GL_APIENTRY TexCoord2d(GLdouble s, GLdouble t)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2d(context, s, t));
         if (isCallValid)
         {
@@ -4751,7 +4751,7 @@ void GL_APIENTRY TexCoord2dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2dv(context, v));
         if (isCallValid)
         {
@@ -4769,7 +4769,7 @@ void GL_APIENTRY TexCoord2f(GLfloat s, GLfloat t)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2f(context, s, t));
         if (isCallValid)
         {
@@ -4787,7 +4787,7 @@ void GL_APIENTRY TexCoord2fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2fv(context, v));
         if (isCallValid)
         {
@@ -4805,7 +4805,7 @@ void GL_APIENTRY TexCoord2i(GLint s, GLint t)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2i(context, s, t));
         if (isCallValid)
         {
@@ -4823,7 +4823,7 @@ void GL_APIENTRY TexCoord2iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2iv(context, v));
         if (isCallValid)
         {
@@ -4841,7 +4841,7 @@ void GL_APIENTRY TexCoord2s(GLshort s, GLshort t)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2s(context, s, t));
         if (isCallValid)
         {
@@ -4859,7 +4859,7 @@ void GL_APIENTRY TexCoord2sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord2sv(context, v));
         if (isCallValid)
         {
@@ -4877,7 +4877,7 @@ void GL_APIENTRY TexCoord3d(GLdouble s, GLdouble t, GLdouble r)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3d(context, s, t, r));
         if (isCallValid)
         {
@@ -4895,7 +4895,7 @@ void GL_APIENTRY TexCoord3dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3dv(context, v));
         if (isCallValid)
         {
@@ -4913,7 +4913,7 @@ void GL_APIENTRY TexCoord3f(GLfloat s, GLfloat t, GLfloat r)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3f(context, s, t, r));
         if (isCallValid)
         {
@@ -4931,7 +4931,7 @@ void GL_APIENTRY TexCoord3fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3fv(context, v));
         if (isCallValid)
         {
@@ -4949,7 +4949,7 @@ void GL_APIENTRY TexCoord3i(GLint s, GLint t, GLint r)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3i(context, s, t, r));
         if (isCallValid)
         {
@@ -4967,7 +4967,7 @@ void GL_APIENTRY TexCoord3iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3iv(context, v));
         if (isCallValid)
         {
@@ -4985,7 +4985,7 @@ void GL_APIENTRY TexCoord3s(GLshort s, GLshort t, GLshort r)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3s(context, s, t, r));
         if (isCallValid)
         {
@@ -5003,7 +5003,7 @@ void GL_APIENTRY TexCoord3sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord3sv(context, v));
         if (isCallValid)
         {
@@ -5022,7 +5022,7 @@ void GL_APIENTRY TexCoord4d(GLdouble s, GLdouble t, GLdouble r, GLdouble q)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4d(context, s, t, r, q));
         if (isCallValid)
         {
@@ -5040,7 +5040,7 @@ void GL_APIENTRY TexCoord4dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4dv(context, v));
         if (isCallValid)
         {
@@ -5059,7 +5059,7 @@ void GL_APIENTRY TexCoord4f(GLfloat s, GLfloat t, GLfloat r, GLfloat q)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4f(context, s, t, r, q));
         if (isCallValid)
         {
@@ -5077,7 +5077,7 @@ void GL_APIENTRY TexCoord4fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4fv(context, v));
         if (isCallValid)
         {
@@ -5096,7 +5096,7 @@ void GL_APIENTRY TexCoord4i(GLint s, GLint t, GLint r, GLint q)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4i(context, s, t, r, q));
         if (isCallValid)
         {
@@ -5114,7 +5114,7 @@ void GL_APIENTRY TexCoord4iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4iv(context, v));
         if (isCallValid)
         {
@@ -5133,7 +5133,7 @@ void GL_APIENTRY TexCoord4s(GLshort s, GLshort t, GLshort r, GLshort q)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4s(context, s, t, r, q));
         if (isCallValid)
         {
@@ -5151,7 +5151,7 @@ void GL_APIENTRY TexCoord4sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTexCoord4sv(context, v));
         if (isCallValid)
         {
@@ -5173,7 +5173,7 @@ void GL_APIENTRY TexEnvf(GLenum target, GLenum pname, GLfloat param)
     {
         TextureEnvTarget targetPacked                         = FromGL<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked                       = FromGL<TextureEnvParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexEnvf(context, targetPacked, pnamePacked, param));
         if (isCallValid)
@@ -5197,7 +5197,7 @@ void GL_APIENTRY TexEnvfv(GLenum target, GLenum pname, const GLfloat *params)
     {
         TextureEnvTarget targetPacked                         = FromGL<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked                       = FromGL<TextureEnvParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexEnvfv(context, targetPacked, pnamePacked, params));
         if (isCallValid)
@@ -5220,7 +5220,7 @@ void GL_APIENTRY TexEnvi(GLenum target, GLenum pname, GLint param)
     {
         TextureEnvTarget targetPacked                         = FromGL<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked                       = FromGL<TextureEnvParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexEnvi(context, targetPacked, pnamePacked, param));
         if (isCallValid)
@@ -5245,7 +5245,7 @@ void GL_APIENTRY TexEnviv(GLenum target, GLenum pname, const GLint *params)
     {
         TextureEnvTarget targetPacked                         = FromGL<TextureEnvTarget>(target);
         TextureEnvParameter pnamePacked                       = FromGL<TextureEnvParameter>(pname);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexEnviv(context, targetPacked, pnamePacked, params));
         if (isCallValid)
@@ -5266,7 +5266,7 @@ void GL_APIENTRY TexGend(GLenum coord, GLenum pname, GLdouble param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexGend(context, coord, pname, param));
         if (isCallValid)
@@ -5288,7 +5288,7 @@ void GL_APIENTRY TexGendv(GLenum coord, GLenum pname, const GLdouble *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexGendv(context, coord, pname, params));
         if (isCallValid)
@@ -5309,7 +5309,7 @@ void GL_APIENTRY TexGenf(GLenum coord, GLenum pname, GLfloat param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexGenf(context, coord, pname, param));
         if (isCallValid)
@@ -5332,7 +5332,7 @@ void GL_APIENTRY TexGenfv(GLenum coord, GLenum pname, const GLfloat *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexGenfv(context, coord, pname, params));
         if (isCallValid)
@@ -5353,7 +5353,7 @@ void GL_APIENTRY TexGeni(GLenum coord, GLenum pname, GLint param)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexGeni(context, coord, pname, param));
         if (isCallValid)
@@ -5375,7 +5375,7 @@ void GL_APIENTRY TexGeniv(GLenum coord, GLenum pname, const GLint *params)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexGeniv(context, coord, pname, params));
         if (isCallValid)
@@ -5406,7 +5406,7 @@ void GL_APIENTRY TexImage1D(GLenum target,
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexImage1D(context, target, level, internalformat,
                                                              width, border, format, type, pixels));
@@ -5441,7 +5441,7 @@ void GL_APIENTRY TexImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked                            = FromGL<TextureTarget>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexImage2D(context, targetPacked, level, internalformat, width,
                                                height, border, format, type, pixels));
@@ -5466,7 +5466,7 @@ void GL_APIENTRY TexParameterf(GLenum target, GLenum pname, GLfloat param)
     if (context)
     {
         TextureType targetPacked                              = FromGL<TextureType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexParameterf(context, targetPacked, pname, param));
         if (isCallValid)
@@ -5489,7 +5489,7 @@ void GL_APIENTRY TexParameterfv(GLenum target, GLenum pname, const GLfloat *para
     if (context)
     {
         TextureType targetPacked                              = FromGL<TextureType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexParameterfv(context, targetPacked, pname, params));
         if (isCallValid)
@@ -5511,7 +5511,7 @@ void GL_APIENTRY TexParameteri(GLenum target, GLenum pname, GLint param)
     if (context)
     {
         TextureType targetPacked                              = FromGL<TextureType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexParameteri(context, targetPacked, pname, param));
         if (isCallValid)
@@ -5535,7 +5535,7 @@ void GL_APIENTRY TexParameteriv(GLenum target, GLenum pname, const GLint *params
     if (context)
     {
         TextureType targetPacked                              = FromGL<TextureType>(target);
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexParameteriv(context, targetPacked, pname, params));
         if (isCallValid)
@@ -5554,7 +5554,7 @@ void GL_APIENTRY Translated(GLdouble x, GLdouble y, GLdouble z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTranslated(context, x, y, z));
         if (isCallValid)
         {
@@ -5572,7 +5572,7 @@ void GL_APIENTRY Translatef(GLfloat x, GLfloat y, GLfloat z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateTranslatef(context, x, y, z));
         if (isCallValid)
         {
@@ -5590,7 +5590,7 @@ void GL_APIENTRY Vertex2d(GLdouble x, GLdouble y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2d(context, x, y));
         if (isCallValid)
         {
@@ -5608,7 +5608,7 @@ void GL_APIENTRY Vertex2dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2dv(context, v));
         if (isCallValid)
         {
@@ -5626,7 +5626,7 @@ void GL_APIENTRY Vertex2f(GLfloat x, GLfloat y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2f(context, x, y));
         if (isCallValid)
         {
@@ -5644,7 +5644,7 @@ void GL_APIENTRY Vertex2fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2fv(context, v));
         if (isCallValid)
         {
@@ -5662,7 +5662,7 @@ void GL_APIENTRY Vertex2i(GLint x, GLint y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2i(context, x, y));
         if (isCallValid)
         {
@@ -5680,7 +5680,7 @@ void GL_APIENTRY Vertex2iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2iv(context, v));
         if (isCallValid)
         {
@@ -5698,7 +5698,7 @@ void GL_APIENTRY Vertex2s(GLshort x, GLshort y)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2s(context, x, y));
         if (isCallValid)
         {
@@ -5716,7 +5716,7 @@ void GL_APIENTRY Vertex2sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex2sv(context, v));
         if (isCallValid)
         {
@@ -5734,7 +5734,7 @@ void GL_APIENTRY Vertex3d(GLdouble x, GLdouble y, GLdouble z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3d(context, x, y, z));
         if (isCallValid)
         {
@@ -5752,7 +5752,7 @@ void GL_APIENTRY Vertex3dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3dv(context, v));
         if (isCallValid)
         {
@@ -5770,7 +5770,7 @@ void GL_APIENTRY Vertex3f(GLfloat x, GLfloat y, GLfloat z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3f(context, x, y, z));
         if (isCallValid)
         {
@@ -5788,7 +5788,7 @@ void GL_APIENTRY Vertex3fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3fv(context, v));
         if (isCallValid)
         {
@@ -5806,7 +5806,7 @@ void GL_APIENTRY Vertex3i(GLint x, GLint y, GLint z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3i(context, x, y, z));
         if (isCallValid)
         {
@@ -5824,7 +5824,7 @@ void GL_APIENTRY Vertex3iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3iv(context, v));
         if (isCallValid)
         {
@@ -5842,7 +5842,7 @@ void GL_APIENTRY Vertex3s(GLshort x, GLshort y, GLshort z)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3s(context, x, y, z));
         if (isCallValid)
         {
@@ -5860,7 +5860,7 @@ void GL_APIENTRY Vertex3sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex3sv(context, v));
         if (isCallValid)
         {
@@ -5879,7 +5879,7 @@ void GL_APIENTRY Vertex4d(GLdouble x, GLdouble y, GLdouble z, GLdouble w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4d(context, x, y, z, w));
         if (isCallValid)
         {
@@ -5897,7 +5897,7 @@ void GL_APIENTRY Vertex4dv(const GLdouble *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4dv(context, v));
         if (isCallValid)
         {
@@ -5916,7 +5916,7 @@ void GL_APIENTRY Vertex4f(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4f(context, x, y, z, w));
         if (isCallValid)
         {
@@ -5934,7 +5934,7 @@ void GL_APIENTRY Vertex4fv(const GLfloat *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4fv(context, v));
         if (isCallValid)
         {
@@ -5953,7 +5953,7 @@ void GL_APIENTRY Vertex4i(GLint x, GLint y, GLint z, GLint w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4i(context, x, y, z, w));
         if (isCallValid)
         {
@@ -5971,7 +5971,7 @@ void GL_APIENTRY Vertex4iv(const GLint *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4iv(context, v));
         if (isCallValid)
         {
@@ -5990,7 +5990,7 @@ void GL_APIENTRY Vertex4s(GLshort x, GLshort y, GLshort z, GLshort w)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4s(context, x, y, z, w));
         if (isCallValid)
         {
@@ -6008,7 +6008,7 @@ void GL_APIENTRY Vertex4sv(const GLshort *v)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || ValidateVertex4sv(context, v));
         if (isCallValid)
         {
@@ -6027,7 +6027,7 @@ void GL_APIENTRY Viewport(GLint x, GLint y, GLsizei width, GLsizei height)
 
     if (context)
     {
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateViewport(context, x, y, width, height));
         if (isCallValid)
