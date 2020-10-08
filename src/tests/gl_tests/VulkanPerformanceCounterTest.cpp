@@ -499,8 +499,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDraw)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+0, Stores+0)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 0, 0, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -546,8 +546,8 @@ TEST_P(VulkanPerformanceCounterTest, DisableInvalidateDraw)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+0, Stores+0)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 0, 0, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -593,8 +593,8 @@ TEST_P(VulkanPerformanceCounterTest, DisableDrawInvalidateEnable)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+0, Stores+0)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 0, 0, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -651,8 +651,8 @@ TEST_P(VulkanPerformanceCounterTest, Invalidate)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+0, Stores+0)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 0, 0, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -690,8 +690,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -738,8 +738,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisable)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -788,8 +788,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDrawEnable)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+0, Stores+0)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 0, 0, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -841,8 +841,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDrawEnableDraw)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -896,8 +896,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnable)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -952,8 +952,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableInvalidate)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+1, Stores+0)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+0, Load+0, Stores+0)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 0, 0, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -1010,8 +1010,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnableInvalidateDraw)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -1072,8 +1072,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableEnableDraw)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -1124,8 +1124,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateAndClear)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;
@@ -1175,8 +1175,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDetachModifyTexAttachDrawWithBlen
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 0, 0, 0, &expected);
 
     ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     ANGLE_GL_PROGRAM(greenProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
@@ -1265,8 +1265,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawAndDeleteRenderbuffer)
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+1, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 1, 1, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+1), stencil(Clears+0, Load+0, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 1, 0, 0, 1, &expected);
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     GLFramebuffer framebuffer;

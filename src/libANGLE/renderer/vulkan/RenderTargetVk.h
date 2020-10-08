@@ -108,11 +108,11 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     void retainImageViews(ContextVk *contextVk) const;
 
-    bool hasDefinedContent() const { return mContentDefined; }
+    bool hasDefinedContent() const;
     // Mark content as undefined so that certain optimizations are possible such as using DONT_CARE
     // as loadOp of the render target in the next renderpass.
-    void invalidateEntireContent() { mContentDefined = false; }
-    void restoreEntireContent() { mContentDefined = true; }
+    void invalidateEntireContent();
+    void restoreEntireContent();
 
     // See the description of mTransience for details of how the following two can interact.
     bool hasResolveAttachment() const { return mResolveImage != nullptr && !isEntirelyTransient(); }
@@ -131,6 +131,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     vk::ImageViewSubresourceSerial getSubresourceSerialImpl(vk::ImageViewHelper *imageViews) const;
 
     bool isResolveImageOwnerOfData() const;
+    vk::ImageHelper *getOwnerOfData() const;
 
     // The color or depth/stencil attachment of the framebuffer and its view.
     vk::ImageHelper *mImage;
