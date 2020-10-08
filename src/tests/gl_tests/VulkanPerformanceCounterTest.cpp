@@ -748,10 +748,6 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
     // Draw (since enabled, should result: in storeOp = STORE; mContentDefined = true)
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
-    // TODO: Fix ANGLE to correct set mContentDefined for this scenario.  At this point,
-    // mContentDefined will remain false since we don't do record anything at draw-time, and since
-    // we don't set mContentDefined at endRP().
-    // https://issuetracker.google.com/issues/167275320
 
     // Ensure that the render pass wasn't broken
     EXPECT_EQ(expected.renderPasses, counters.renderPasses);
@@ -765,8 +761,7 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDraw)
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
     swapBuffers();
-    // TODO: After fixing ANGLE per https://issuetracker.google.com/issues/167275320, uncomment:
-    // compareLoadCountersForInvalidateTest(counters, expected);
+    compareLoadCountersForInvalidateTest(counters, expected);
 }
 
 // Tests that another case does not break render pass, and that counts are correct:
@@ -1190,8 +1185,8 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateAndClear)
     swapBuffers();
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 
-    // Expect rpCount+1, depth(Clears+0, Loads+1, Stores+1), stencil(Clears+0, Load+0, Stores+1)
-    setExpectedCountersForInvalidateTest(counters, 0, 0, 1, 1, 0, 0, 1, &expected);
+    // Expect rpCount+1, depth(Clears+0, Loads+1, Stores+1), stencil(Clears+0, Load+1, Stores+1)
+    setExpectedCountersForInvalidateTest(counters, 0, 0, 1, 1, 0, 1, 1, &expected);
 
     // Bind FBO again and try to use the depth buffer without clear. This should result in
     // loadOp=LOAD and StoreOP=STORE
