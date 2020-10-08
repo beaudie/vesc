@@ -200,6 +200,30 @@
       },
       "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da63662_4b694921",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T21:08:39Z",
+      "side": 1,
+      "message": "Ah, you\u0027re right. This is just an optimization thing.\n\nMaybe print out a perf warning or something in these situations?",
+      "parentUuid": "f23eab92_10aa163f",
+      "range": {
+        "startLine": 1819,
+        "startChar": 0,
+        "endLine": 1820,
+        "endChar": 71
+      },
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
