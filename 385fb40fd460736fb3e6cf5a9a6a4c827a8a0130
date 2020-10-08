@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19d5aa76_25bedf53",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 0,
+      "message": "tiny nit: you should be able to revert a few of these whitespace changes.",
+      "revId": "385fb40fd460736fb3e6cf5a9a6a4c827a8a0130",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

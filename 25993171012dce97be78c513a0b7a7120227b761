@@ -178,6 +178,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db899f2_856fa72b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "Hey Courtney. PTAL at comments below. I spent more time on CommandProcessor.h than the other code.",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc7a5786_fbc76f49",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "\"Parallel thread\" and \"parallel thread execution\" is a bit confusing re: the naming. Maybe something like enableCommandProcessor and multiThreadedCommandProcessor/singleThreadedCommandProcessor?",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 36
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78185827_c1ca2ac4",
@@ -262,6 +302,30 @@
       "side": 1,
       "message": "That\u0027s not known until we run RendererVk::initializeDevice. That will happen before we get to where we call this.\nThe general code pattern is to construct with default / invalid values and then fill in with real info in an init function. Since CommandProcessor (and thus CommandWorkQueue is part of RendererVk, need to wait until the RendererVk\u0027s initializeDevice function is called before we know what these details.)",
       "parentUuid": "1f826f8c_f5a07183",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 80
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb01c9a3_1149a239",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "why not pass the family index to init()?",
+      "parentUuid": "5684ba87_75cd6511",
       "range": {
         "startLine": 96,
         "startChar": 0,
@@ -532,6 +596,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6eacb2da_e26464e1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "nit: don\u0027t need const on value data. there\u0027s a link for this in the style guide.",
+      "range": {
+        "startLine": 350,
+        "startChar": 70,
+        "endLine": 350,
+        "endChar": 75
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9530d9da_080a7a15",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 46
@@ -591,6 +678,30 @@
       "side": 1,
       "message": "Oh, you\u0027re right, those are in the CommandProcessor.\n\nYeah, CommandWorkQueue isn\u0027t a great name.   I do like TaskProcessor, since that class is internal to how this command processing is implemented and much more related to what this class is doing.\n\nSince this specific function should be going away relatively soon, I\u0027m fine with skipping trying to assert those conditions are true.",
       "parentUuid": "1bbfac0d_c3e41422",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 354,
+        "endChar": 58
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf9afed6_48321489",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "CommandTaskProcessor SGTM, this relates to my other comment.\n\nCan you pass in the CommandProcessor here?",
+      "parentUuid": "c3a87690_185076a7",
       "range": {
         "startLine": 353,
         "startChar": 0,
@@ -686,6 +797,24 @@
       "side": 1,
       "message": "I wonder if any mention of locks should be removed from these functions to try and remove any confusion/concern.\n\nAll of these functions are called by the CP thread underneath the mWorkerMutex lock, which was acquired by CommandProcessor::processCommandProcessorTasksImpl().   While it\u0027s not entirely obvious that the lock will have been acquired by a separate class, I\u0027m not sure pointing that out here is helping much either.",
       "parentUuid": "bad4562f_7950668a",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62a789d8_573bdcfd",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "Having some ASSERT(isMainThread()) and ASSERT(isSubmitThread()) or ASSERT(isCommandProcessorThread()) would be warmly welcome.",
+      "parentUuid": "7ea63b42_e679ac7e",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1050,6 +1179,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f8ede01_74f36ff0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "See my other comment. We can\u0027t turn this on at least until this is resolved. Please update the TODO to be less ambiguous.",
+      "parentUuid": "f31de7e8_bd6c41f2",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 71
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd1c8380_92d45d40",
@@ -1228,6 +1381,29 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "77bab568_dd2d3ed8",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e44bcde_9714cc2e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "do not ever use mContextVk for an ANGLE_TRY. that\u0027s a race. you\u0027ll need to make one of your classes (e.g. CommandProcessor itself) inherit from vk::Context. I went over this with Tobin in detail a few times, looks like it might have got lost in transition.\n\nI haven\u0027t looked closely at how you would pass message back to a ContextVk when there is an error in the submission. First thing I would think is you should fail unrecoverably on a submit error and report the error to all contexts and stop processing any additional work.",
+      "range": {
+        "startLine": 583,
+        "startChar": 12,
+        "endLine": 583,
+        "endChar": 21
+      },
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1562,6 +1738,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0dff1129_21d9e052",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "these don\u0027t seem to exist in the enum.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 41
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75463875_83caf43a",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -1609,6 +1808,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af9239cd_e5f6e581",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "I\u0027d call this something more like \"here\u0027s a command buffer\".. like just \"ProcessCommands\" or something.",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 18
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c368ee95_5dbcd0b0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "you don\u0027t have a description for this command. I don\u0027t immediately grasp what it\u0027s doing and why it is necessary.",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 26
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a77ddf4_4d95e4f4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "Do you know what calls this? I wonder if we could merge this with another command.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 19
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdc084fa_12247bbe",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -1649,6 +1917,98 @@
         "startChar": 25,
         "endLine": 54,
         "endChar": 38
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "496cbf17_33b4ad62",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "how about just vk::Error or vk::SavedError or vk::StoredError\n\nCan you also use this in DisplayVk instead of storedErrorString just to make it more useful? this could be a small split patch. also this guy can go in vk_utils.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 0
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fcb2d3b_c7dee6a9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "what do we need friend for? I\u0027d like to get rid of it if we can.",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 38
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5df2b802_5146f3d7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "we will need to remove storing mContextVk. see other comments.",
+      "range": {
+        "startLine": 69,
+        "startChar": 10,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5c9cb98_3244ec25",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "nit: most of this belongs in the cpp files. except for one or two-liners.\n\nANGLE generally follows this rule:\n\nhttps://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++-dos-and-donts.md#minimize-code-in-headers",
+      "range": {
+        "startLine": 68,
+        "startChar": 1,
+        "endLine": 73,
+        "endChar": 6
       },
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -1785,6 +2145,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e41087db_5b970f53",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "use \u0026\u0026 to transfer ownership. un-resolving.",
+      "parentUuid": "b994aedf_80244e6e",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 70
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0323b237_702f828e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "nit: early exit instead of indenting.",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 9
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0bcac42_fd165125",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -1825,6 +2232,29 @@
         "startChar": 48,
         "endLine": 131,
         "endChar": 72
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "021c8319_7c2f6138",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "you still need to ensure that this object gets initialized with safe values before you do the std::move.",
+      "range": {
+        "startLine": 150,
+        "startChar": 57,
+        "endLine": 150,
+        "endChar": 82
       },
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -1926,6 +2356,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ba0a16c_4f282f6c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "the naming on this is a bit vague. this is basically vk::CommandQueue but for the command processor right? so how about vk::CommandProcessorQueue ?\n\nAlso why not put this in the vk namespace?",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 22
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0e21c5e_2951cf67",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -1973,6 +2426,93 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "03cf8f6b_9b807b5c",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31fc81d9_0a52b2ca",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "I\u0027m wondering if maybe the command processor itself should be the vk::Context. () fix is welcome in any case, probably as a small split patch. un-resolving.",
+      "parentUuid": "0a47eecd_33b03f82",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65b23d4d_65f0250f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "why mutable here?",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 259,
+        "endChar": 11
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77944854_5896591d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "nit: processTasks()",
+      "range": {
+        "startLine": 271,
+        "startChar": 9,
+        "endLine": 271,
+        "endChar": 37
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a20d904_d8c6848d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "impl should be private. if you point out what needs this to be public maybe we can fix it.",
+      "range": {
+        "startLine": 275,
+        "startChar": 18,
+        "endLine": 275,
+        "endChar": 50
+      },
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -2161,6 +2701,121 @@
         "startChar": 0,
         "endLine": 299,
         "endChar": 27
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8088bfd2_5691528f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "\u0026\u0026",
+      "range": {
+        "startLine": 303,
+        "startChar": 34,
+        "endLine": 303,
+        "endChar": 54
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7c465d9_d43fa979",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "nit: mTasks",
+      "range": {
+        "startLine": 305,
+        "startChar": 41,
+        "endLine": 305,
+        "endChar": 55
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8686c68_3c1798e2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "same q",
+      "range": {
+        "startLine": 306,
+        "startChar": 4,
+        "endLine": 306,
+        "endChar": 11
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "067b6d56_d433370b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "only vk::Context should own a mRenderer pointer.",
+      "range": {
+        "startLine": 316,
+        "startChar": 4,
+        "endLine": 316,
+        "endChar": 26
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "417e0073_5942b826",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "can you make a change to wrap this in a new QueueSerial object at some point? Fine as a follow-up",
+      "range": {
+        "startLine": 321,
+        "startChar": 4,
+        "endLine": 321,
+        "endChar": 10
       },
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -2486,6 +3141,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9ab9f269_a5dc1ad2",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "nit: bug link. tim caught most of the other locations.",
+      "parentUuid": "dca60c5a_e27a20af",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 9
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3e1b135_d0aeca0b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 46
@@ -2573,6 +3252,46 @@
         "startChar": 0,
         "endLine": 2340,
         "endChar": 81
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be41effa_fd8c6716",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "nit: extra space",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1c9f475_29bb641b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "this looks wrong to me. maybe we can chat more about it.",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 24
       },
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -2950,6 +3669,29 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "cca97fd8_3fe77786",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62032aab_ce16d152",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T17:58:26Z",
+      "side": 1,
+      "message": "I wonder if we can map this to anglebug.com/b/####\n\nfiled https://b.corp.google.com/issues/170402379",
+      "range": {
+        "startLine": 2957,
+        "startChar": 20,
+        "endLine": 2957,
+        "endChar": 69
+      },
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
