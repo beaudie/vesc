@@ -278,31 +278,37 @@ void RenderTargetVk::retainImageViews(ContextVk *contextVk) const
 bool RenderTargetVk::hasDefinedContent() const
 {
     vk::ImageHelper *image = getOwnerOfData();
-    // TODO: separate depth and stencil defined content.  https://issuetracker.google.com/167275320
-    return image->hasSubresourceDefinedContent(mLevelIndexGL, mLayerIndex) ||
-           image->hasSubresourceDefinedStencilContent(mLevelIndexGL, mLayerIndex);
+    return image->hasSubresourceDefinedContent(mLevelIndexGL, mLayerIndex);
+}
+
+bool RenderTargetVk::hasDefinedStencilContent() const
+{
+    vk::ImageHelper *image = getOwnerOfData();
+    return image->hasSubresourceDefinedStencilContent(mLevelIndexGL, mLayerIndex);
 }
 
 void RenderTargetVk::invalidateEntireContent()
 {
     vk::ImageHelper *image = getOwnerOfData();
-    // TODO: separate depth and stencil defined content.  https://issuetracker.google.com/167275320
     image->invalidateSubresourceContent(mLevelIndexGL, mLayerIndex);
-    if ((image->getAspectFlags() & VK_IMAGE_ASPECT_STENCIL_BIT) != 0)
-    {
-        image->invalidateSubresourceStencilContent(mLevelIndexGL, mLayerIndex);
-    }
+}
+
+void RenderTargetVk::invalidateEntireStencilContent()
+{
+    vk::ImageHelper *image = getOwnerOfData();
+    image->invalidateSubresourceStencilContent(mLevelIndexGL, mLayerIndex);
 }
 
 void RenderTargetVk::restoreEntireContent()
 {
     vk::ImageHelper *image = getOwnerOfData();
-    // TODO: separate depth and stencil defined content.  https://issuetracker.google.com/167275320
     image->restoreSubresourceContent(mLevelIndexGL, mLayerIndex);
-    if ((image->getAspectFlags() & VK_IMAGE_ASPECT_STENCIL_BIT) != 0)
-    {
-        image->restoreSubresourceStencilContent(mLevelIndexGL, mLayerIndex);
-    }
+}
+
+void RenderTargetVk::restoreEntireStencilContent()
+{
+    vk::ImageHelper *image = getOwnerOfData();
+    image->restoreSubresourceStencilContent(mLevelIndexGL, mLayerIndex);
 }
 
 gl::ImageIndex RenderTargetVk::getImageIndex() const
