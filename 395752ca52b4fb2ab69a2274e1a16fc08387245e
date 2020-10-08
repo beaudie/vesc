@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "006ecbd2_b8b9a3df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-08T00:34:39Z",
+      "side": 1,
+      "message": "I will need to revise this CL. Will update later once I find out the root cause.",
+      "revId": "395752ca52b4fb2ab69a2274e1a16fc08387245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f2da645_2cb4c0ff",
