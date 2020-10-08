@@ -172,7 +172,7 @@ void GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explic
 
     if ({valid_context_check})
     {{{assert_explicit_context}{packed_gl_enum_conversions}
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || Validate{name}({validate_params}));
         if (isCallValid)
         {{
@@ -196,7 +196,7 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
     {return_type} returnValue;
     if ({valid_context_check})
     {{{assert_explicit_context}{packed_gl_enum_conversions}
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid = (context->skipValidation() || Validate{name}({validate_params}));
         if (isCallValid)
         {{
