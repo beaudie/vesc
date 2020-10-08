@@ -22,6 +22,30 @@
       },
       "revId": "907bdaa7a1016633c50feee6d4d10653a5bb9877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feb1ed4a_77748e0a",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T19:59:31Z",
+      "side": 1,
+      "message": "Yeah, I\u0027m waiting to make sure that\u0027s the only suppression needed before I go about creating bugs.\n\n---\n\nEdit: turned out I was hitting some undefined behavior. Making the textures mip complete fixed the GL failures.",
+      "parentUuid": "f5701bfb_2dfffe29",
+      "range": {
+        "startLine": 2374,
+        "startChar": 71,
+        "endLine": 2374,
+        "endChar": 75
+      },
+      "revId": "907bdaa7a1016633c50feee6d4d10653a5bb9877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -53,6 +53,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "958e9159_9ed9466c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T19:59:31Z",
+      "side": 1,
+      "message": "Yes to everything. I already did the change that restores content defined at endRP, and I\u0027ll put it up for review soon.",
+      "parentUuid": "bf603069_f648c959",
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d67a409a_16046097",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T19:59:31Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "409304d6_7a7061d4",
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cddc534b_be958fbb",
@@ -90,6 +126,30 @@
       "side": 1,
       "message": "In my initial review (before Jamie\u0027s comment), I wondered about subtle bugs that might creep up in the future if people don\u0027t follow how this is being used, including code that is setting the layer to this value (so that most code does its thing, but content defined isn\u0027t set).",
       "parentUuid": "cddc534b_be958fbb",
+      "range": {
+        "startLine": 1819,
+        "startChar": 0,
+        "endLine": 1820,
+        "endChar": 71
+      },
+      "revId": "d239dc55d0d2d9460a8aa785138391e2081dd8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9b7eeeb_a41bfdb0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T19:59:31Z",
+      "side": 1,
+      "message": "@Jamie:\n\n\u003e what\u0027s your game plan for that?\n\nIgnore them until there is a user. This CL assumes layer \u003e\u003d 8 has content defined permanently, so unless we need to optimize an application that attaches to layer \u003e\u003d 8 and invalidates it, there\u0027s nothing to do.\n\nThis code does handle the more likely cases of cubemap faces used as attachments, or multi-view rendering (for VR).\n\n\u003e I think you should probably use two data structures\n\nIf you don\u0027t mind, I\u0027d rather keep it simpler and have a single path.\n\nUpdated the comment.\n\n---\n\n@Ian: I repurposed ImageHelper::onWrite() to hopefully avoid such bugs in the future. That function is also handling a clear optimization which if missing could lead to subtle bugs. At this point (and even better, together with the follow up optimization (whenever added)), I\u0027m hoping enough could go wrong if `onWrite` is missing for some test to fail.",
+      "parentUuid": "2b20bbdd_474fd090",
       "range": {
         "startLine": 1819,
         "startChar": 0,

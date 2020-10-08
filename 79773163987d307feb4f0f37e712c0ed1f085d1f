@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbbe0fec_fbf87fbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T19:59:31Z",
+      "side": 1,
+      "message": "Fixed a bug in PS5 where gl::LevelIndex was used to access m*ContentDefined (sigh). Added an accessor (`getLevel*ContentDefined()`) to make sure only vk::LevelIndex is used to access them.",
+      "revId": "79773163987d307feb4f0f37e712c0ed1f085d1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
