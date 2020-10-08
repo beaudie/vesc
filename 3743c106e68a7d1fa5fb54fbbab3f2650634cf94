@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b25270c_2bf46829",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T16:36:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5c5d388_e4902e3f",
+      "range": {
+        "startLine": 735,
+        "startChar": 8,
+        "endLine": 735,
+        "endChar": 25
+      },
+      "revId": "3743c106e68a7d1fa5fb54fbbab3f2650634cf94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab165c98_56b9bcb7",
@@ -88,6 +112,30 @@
       "writtenOn": "2020-10-07T18:49:05Z",
       "side": 1,
       "message": "nit: include \"RP\" in the name here probably.",
+      "range": {
+        "startLine": 737,
+        "startChar": 5,
+        "endLine": 737,
+        "endChar": 28
+      },
+      "revId": "3743c106e68a7d1fa5fb54fbbab3f2650634cf94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f842877_647dc6ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T16:36:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab165c98_56b9bcb7",
       "range": {
         "startLine": 737,
         "startChar": 5,
