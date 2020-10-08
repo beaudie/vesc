@@ -574,8 +574,9 @@ bool ValidateCopyImageSubDataEXT(const Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    return ValidateCopyImageSubDataBase(context, srcName, srcTarget, srcLevel, srcX, srcY, srcZ,
+                                        dstName, dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth,
+                                        srcHeight, srcDepth);
 }
 
 bool ValidateCopyImageSubDataOES(const Context *context,
@@ -601,8 +602,9 @@ bool ValidateCopyImageSubDataOES(const Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    return ValidateCopyImageSubDataBase(context, srcName, srcTarget, srcLevel, srcX, srcY, srcZ,
+                                        dstName, dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth,
+                                        srcHeight, srcDepth);
 }
 
 bool ValidateBufferStorageMemEXT(const Context *context,
