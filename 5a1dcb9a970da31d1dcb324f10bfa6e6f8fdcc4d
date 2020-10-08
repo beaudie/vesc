@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aedf27c_30763ba3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-08T18:27:04Z",
+      "side": 1,
+      "message": "Minor fix. Doesn\u0027t seems make any difference performance wise, but I think this is what spec wants. ",
+      "revId": "5a1dcb9a970da31d1dcb324f10bfa6e6f8fdcc4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
