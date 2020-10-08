@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "957f2406_435baf9c",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T17:51:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b0a0f0e_2d0d82ae",
+      "range": {
+        "startLine": 206,
+        "startChar": 69,
+        "endLine": 206,
+        "endChar": 94
+      },
+      "revId": "5df9bb68b99f75f655e707d980784ba8abc46adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee6c815f_1441782f",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-08T17:03:23Z",
       "side": 1,
       "message": "nit: minor preference to use a relative link.",
+      "range": {
+        "startLine": 209,
+        "startChar": 12,
+        "endLine": 209,
+        "endChar": 90
+      },
+      "revId": "5df9bb68b99f75f655e707d980784ba8abc46adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "328dd7f1_6f4f9284",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T17:51:34Z",
+      "side": 1,
+      "message": "Sorry, I\u0027m not sure what you mean by \"relative link\" here.\n\nLooking at the other links in the document, I added \"refs/heads/\".  Is that what you were looking for?",
+      "parentUuid": "ee6c815f_1441782f",
       "range": {
         "startLine": 209,
         "startChar": 12,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bfea35d_0301bea7",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T17:51:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4105d1b_9d9dad27",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 3
+      },
+      "revId": "5df9bb68b99f75f655e707d980784ba8abc46adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3291be92_3fe62b7b",
@@ -100,6 +172,30 @@
       "writtenOn": "2020-10-08T17:01:18Z",
       "side": 1,
       "message": "looks good. Also include a link to how to view the diff:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2197735/1..3",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 76
+      },
+      "revId": "5df9bb68b99f75f655e707d980784ba8abc46adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "792f3d29_031ccbb6",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-08T17:51:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3291be92_3fe62b7b",
       "range": {
         "startLine": 252,
         "startChar": 0,
