@@ -16,6 +16,23 @@
       "message": "Minor fix. Doesn\u0027t seems make any difference performance wise, but I think this is what spec wants. ",
       "revId": "5a1dcb9a970da31d1dcb324f10bfa6e6f8fdcc4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb1b3fe3_84a8a58e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-08T18:35:09Z",
+      "side": 1,
+      "message": "LGTM, will defer to Shabi\u0027s expertise.",
+      "revId": "5a1dcb9a970da31d1dcb324f10bfa6e6f8fdcc4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
