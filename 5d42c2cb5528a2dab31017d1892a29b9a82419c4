@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fa3579c_4de8773f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-08T15:25:20Z",
+      "side": 1,
+      "message": "No functional change in this CL. Separating depth and stencil will follow + fixing invalidate at the end of RP.\n\nHopefully there are none, but please look out for potential mistakes in specifying the subresource being written.",
+      "revId": "5d42c2cb5528a2dab31017d1892a29b9a82419c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
