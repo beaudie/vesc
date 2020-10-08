@@ -579,6 +579,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3a87690_185076a7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Oh, you\u0027re right, those are in the CommandProcessor.\n\nYeah, CommandWorkQueue isn\u0027t a great name.   I do like TaskProcessor, since that class is internal to how this command processing is implemented and much more related to what this class is doing.\n\nSince this specific function should be going away relatively soon, I\u0027m fine with skipping trying to assert those conditions are true.",
+      "parentUuid": "1bbfac0d_c3e41422",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 354,
+        "endChar": 58
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7bfedac_0b3501bd",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 46
@@ -650,6 +674,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ea63b42_e679ac7e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "I wonder if any mention of locks should be removed from these functions to try and remove any confusion/concern.\n\nAll of these functions are called by the CP thread underneath the mWorkerMutex lock, which was acquired by CommandProcessor::processCommandProcessorTasksImpl().   While it\u0027s not entirely obvious that the lock will have been acquired by a separate class, I\u0027m not sure pointing that out here is helping much either.",
+      "parentUuid": "bad4562f_7950668a",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc8cb12c_3456b06a",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 46
@@ -685,6 +727,30 @@
       "side": 1,
       "message": "Once we switch over the RendererVk function will go away. Can only have one path to vkQueueSubmit.\nRegarding getVkQueue, I\u0027ve been pondering if that info should move into CommandProcessor as well.",
       "parentUuid": "dc8cb12c_3456b06a",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 370,
+        "endChar": 72
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15151b0e_5e8f0b22",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Yeah, since everyone seems to agree that we don\u0027t want to maintain both code paths, I\u0027m fine with skipping this work.\n\nThe getVkQueue() thing can wait until we get a better picture of what that version looks like.",
+      "parentUuid": "dce0cb15_c6436c61",
       "range": {
         "startLine": 369,
         "startChar": 0,
@@ -842,6 +908,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d006478_9caa943f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Ah, yeah, I was missing that \"parallel command processing disabled\" is not the same thing as \"multithreading disabled\".   There will still be multiple threads executing all of this, but only ever a single command being built/processed at a time, so one thread is always stalled while the other works.",
+      "parentUuid": "52e28a75_e1a9e610",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7945f48_3dd9d543",
@@ -873,6 +957,24 @@
       "side": 1,
       "message": "This is the worker processing loop.\nIt\u0027s started in RendererVk::initialize.\nThere are handful of things that are shared between the CommandProcessor (main thread(s)) and CommandWorkQueue (~worker thread). Those all live in the CommandProcessor class with pieces of the worker in that class so that they can access the shared data (e.g. mWorkerMutex, condition variables, command/task queue. Then once the worker has pulled a task of the queue it calls into CommandWorkQueue to do the work and doesn\u0027t need access to any of the sync data in CommandProcessor.\nHaving part of the worker code live in CommandProcessor bugs me but I\u0027m not sure it\u0027s worth it to refactor - to do so would require defining a shared structure that both the worker and CommandProcess can access for the shared bits.",
       "parentUuid": "a7945f48_3dd9d543",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c45aaa_23930558",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Same as above, this is my misunderstanding of what it means to disable the multithreading.",
+      "parentUuid": "f095f6d8_7eb77425",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -979,6 +1081,24 @@
       "side": 1,
       "message": "No, that\u0027s part of the lambda function that the condition variable uses to determine if it should return from the condition or go back to sleep.\nThis says go to sleep waiting for events on mWorkAvailableCondition. When we get an event run the lambda function to determine if we should resume or go back to sleep again.",
       "parentUuid": "cd1c8380_92d45d40",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49443bbb_90fa07a5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Oops.   This was from a gerrit issue I was seeing where it had randomly missing lines of code and big blank spots, so this brace was just out there on its own.   I thought I deleted this comment after refreshing, but apparently not.",
+      "parentUuid": "bd325373_0537553a",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1951,6 +2071,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2759286_9991fa45",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1cc6eafe_677308fe",
+      "range": {
+        "startLine": 297,
+        "startChar": 17,
+        "endLine": 297,
+        "endChar": 34
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77e6e8ef_0a2c8473",
@@ -1988,6 +2132,30 @@
       "side": 1,
       "message": "All these are functions that can be called from the main thread. They in tern interact with the command processing thread in some way.\nPrivate to the CommandProcessor class are two functions which are run in the command processor thread, they are here because they interact with the shared state that is stored in CommandProcessor. All other work is in the CommandWorkQueue class.\nMaybe I should call that the TaskProcessor class instead of CommandWorkQueue?\nOpen to suggestions for how to organize.",
       "parentUuid": "77e6e8ef_0a2c8473",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 27
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8703b31c_cb340c09",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Yeah, after having read the rest of this now, that\u0027s a reasonable answer.   The only ones that stand out are processCommandProcessorTasks[Impl]() as being called by the CP thread.\n\nI hadn\u0027t thought about a higher level rename of the classes themselves.   I think keeping the Command naming is the right thing, since they are doing work on commands which requires communicating with the main thread via tasks.   So the \u0027command\u0027 part is more of what they are doing while \u0027task\u0027 is how they do it, and I think the what is more important here.\n\nInternally within these classes is where it\u0027s useful to separate commands from tasks though, to help reduce confusion on what\u0027s actually being worked on.",
+      "parentUuid": "85799028_7f91d392",
       "range": {
         "startLine": 269,
         "startChar": 0,
@@ -2176,6 +2344,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "77ed9402_e1187196",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 4456,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "I still vote for passing in the context to try and prevent missing error checking if things change in the future.",
+      "parentUuid": "f97077c0_7ca9b81e",
+      "range": {
+        "startLine": 4454,
+        "startChar": 0,
+        "endLine": 4456,
+        "endChar": 37
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70d9c7b2_ae5dfce0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 46
@@ -2258,6 +2450,30 @@
       "side": 1,
       "message": "We are calling waitForCommandProcessorIdle because we\u0027ll be doing a fence.wait below.\nThis will get reworked when fence ownership moves to CommandProcessor so I don\u0027t think it makes sense to call finish. When fence ownership moves this if goes away and the finishToSerial will make sure the necessary work has happened before issuing the vkWaitForFences.",
       "parentUuid": "449dc9c4_5945be4d",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 9
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dca60c5a_e27a20af",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2fca023b_8f7d7355",
       "range": {
         "startLine": 185,
         "startChar": 0,
@@ -2409,6 +2625,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31635768_3b6cbb34",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Ah, right.   Makes sense.",
+      "parentUuid": "ec1a9e5d_2658a1e0",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 5
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb6d5574_1f373760",
@@ -2528,6 +2768,30 @@
       "side": 1,
       "message": "I should be able to get rid of this when I pull in the error checking into waitForCommandProcessorIdle()",
       "parentUuid": "87fedc6f_2822c2f9",
+      "range": {
+        "startLine": 1323,
+        "startChar": 0,
+        "endLine": 1327,
+        "endChar": 9
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7978102d_2855eb5d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "Sounds good.   I\u0027ll leave this open for now then as a reminder to see how that goes.",
+      "parentUuid": "9dd27c59_3e82b05c",
       "range": {
         "startLine": 1323,
         "startChar": 0,
@@ -2774,6 +3038,30 @@
       "side": 1,
       "message": "Will happen in RendererVk::queueSubmitOneOff",
       "parentUuid": "7c3e27a1_993d4941",
+      "range": {
+        "startLine": 3260,
+        "startChar": 14,
+        "endLine": 3260,
+        "endChar": 41
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c42b48cd_6aa87e9c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 3260,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-08T17:21:04Z",
+      "side": 1,
+      "message": "I don\u0027t see that happening now, since there isn\u0027t a processPendingError() following the waitForCommandProcessorIdle():\n\n    if (getFeatures().enableCommandProcessingThread.enabled)\n    {\n        vk::CommandProcessorTask oneOffQueueSubmit;\n        oneOffQueueSubmit.initOneOffQueueSubmit(primary.getHandle(), priority, fence);\n        queueCommand(\u0026oneOffQueueSubmit);\n        waitForCommandProcessorIdle();\n        *serialOut \u003d getLastSubmittedQueueSerial();\n\n        ANGLE_TRY(cleanupGarbage(false));\n    }\n\nHowever, that should be the case if you update waitForCommandProcessorIdle() to check for errors.   I\u0027m going to unresolve this for now, so we revisit this in case the waitForCommandProcessorIdle() can\u0027t be updated.",
+      "parentUuid": "ba14ac64_b574e023",
       "range": {
         "startLine": 3260,
         "startChar": 14,
