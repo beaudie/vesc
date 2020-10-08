@@ -34,6 +34,24 @@
       "parentUuid": "f8e0a2e5_d9f10872",
       "revId": "dbbcdde31b91bee0b8b98f7385b6430eec0ab294",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61b0d728_7f8c080f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-08T20:12:53Z",
+      "side": 1,
+      "message": "Oh, yes, it\u0027s fine. We\u0027ve had to do a bunch of similar loosenings of validating for RGBX on Mac.",
+      "parentUuid": "c02a8713_4e8b5732",
+      "revId": "dbbcdde31b91bee0b8b98f7385b6430eec0ab294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
