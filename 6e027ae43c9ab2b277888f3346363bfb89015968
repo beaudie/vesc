@@ -68,6 +68,24 @@
       "message": "The CQ caught several unrelated flakes. Bots are green after another retry.",
       "revId": "6e027ae43c9ab2b277888f3346363bfb89015968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1338608_1ee1632a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-09T00:26:10Z",
+      "side": 1,
+      "message": "occlusion query tests are flaky on mac/metal/NIVIDIA. FYI.",
+      "parentUuid": "71aee52a_b29f6741",
+      "revId": "6e027ae43c9ab2b277888f3346363bfb89015968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
