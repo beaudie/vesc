@@ -114,6 +114,21 @@ bool DepthStencilState::isStencilMaskedOut() const
     return (stencilMask & stencilWritemask) == 0;
 }
 
+bool DepthStencilState::isStencilNoOp() const
+{
+    return isStencilMaskedOut() || (stencilFunc == GL_NEVER && stencilFail == GL_KEEP) ||
+           (stencilFunc == GL_ALWAYS && stencilPassDepthFail == GL_KEEP &&
+            stencilPassDepthPass == GL_KEEP);
+}
+
+bool DepthStencilState::isStencilBackNoOp() const
+{
+    const bool isStencilBackMaskedOut = (stencilBackMask & stencilBackWritemask) == 0;
+    return isStencilBackMaskedOut || (stencilBackFunc == GL_NEVER && stencilBackFail == GL_KEEP) ||
+           (stencilBackFunc == GL_ALWAYS && stencilBackPassDepthFail == GL_KEEP &&
+            stencilBackPassDepthPass == GL_KEEP);
+}
+
 bool operator==(const DepthStencilState &a, const DepthStencilState &b)
 {
     return memcmp(&a, &b, sizeof(DepthStencilState)) == 0;
