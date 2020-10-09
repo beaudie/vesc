@@ -1482,7 +1482,10 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
                        completeRenderArea.height, &viewport);
     pipelineDesc.setViewport(viewport);
 
-    pipelineDesc.setScissor(gl_vk::GetRect(params.clearArea));
+    // Scissored clears can create a large number of pipelines in some tests.  Use dynamic state for
+    // scissors.
+    pipelineDesc.setDynamicScissor();
+    const VkRect2D scissor = gl_vk::GetRect(params.clearArea);
 
     vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
     vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
@@ -1504,6 +1507,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     // Make sure this draw call doesn't count towards occlusion query results.
     ANGLE_TRY(contextVk->pauseOcclusionQueryIfActive());
+    commandBuffer->setScissor(0, 1, &scissor);
     commandBuffer->draw(3, 0);
     return contextVk->resumeOcclusionQueryIfActive();
 }

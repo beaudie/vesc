@@ -1430,6 +1430,7 @@ void GraphicsPipelineDesc::initDefaults()
     }
 
     mRasterizationAndMultisampleStateInfo.bits.subpass                    = 0;
+    mRasterizationAndMultisampleStateInfo.bits.dynamicScissor             = 0;
     mRasterizationAndMultisampleStateInfo.bits.depthClampEnable           = 0;
     mRasterizationAndMultisampleStateInfo.bits.rasterizationDiscardEnable = 0;
     SetBitField(mRasterizationAndMultisampleStateInfo.bits.polygonMode, VK_POLYGON_MODE_FILL);
@@ -1674,27 +1675,6 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     inputAssemblyState.primitiveRestartEnable =
         static_cast<VkBool32>(mInputAssemblyAndColorBlendStateInfo.primitive.restartEnable);
 
-    // Set initial viewport and scissor state.
-
-    // 0-sized viewports are invalid in Vulkan.  We always use a scissor that at least matches the
-    // requested viewport, so it's safe to adjust the viewport size here.
-    VkViewport viewport = mViewport;
-    if (viewport.width == 0)
-    {
-        viewport.width = 1;
-    }
-    if (viewport.height == 0)
-    {
-        viewport.height = 1;
-    }
-
-    viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    viewportState.flags         = 0;
-    viewportState.viewportCount = 1;
-    viewportState.pViewports    = &viewport;
-    viewportState.scissorCount  = 1;
-    viewportState.pScissors     = &mScissor;
-
     const PackedRasterizationAndMultisampleStateInfo &rasterAndMS =
         mRasterizationAndMultisampleStateInfo;
 
@@ -1742,6 +1722,27 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         rasterStreamState.rasterizationStream = 0;
         rasterState.pNext                     = &rasterLineState;
     }
+
+    // Set initial viewport and scissor state.
+
+    // 0-sized viewports are invalid in Vulkan.  We always use a scissor that at least matches the
+    // requested viewport, so it's safe to adjust the viewport size here.
+    VkViewport viewport = mViewport;
+    if (viewport.width == 0)
+    {
+        viewport.width = 1;
+    }
+    if (viewport.height == 0)
+    {
+        viewport.height = 1;
+    }
+
+    viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    viewportState.flags         = 0;
+    viewportState.viewportCount = 1;
+    viewportState.pViewports    = &viewport;
+    viewportState.scissorCount  = 1;
+    viewportState.pScissors     = rasterAndMS.bits.dynamicScissor ? nullptr : &mScissor;
 
     // Multisample state.
     multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -1829,7 +1830,17 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             Int4Array_Get<VkColorComponentFlags>(inputAndBlend.colorWriteMaskBits, colorIndexGL);
     }
 
-    // We would define dynamic state here if it were to be used.
+    // Dynamic state
+    angle::FixedVector<VkDynamicState, 1> dynamicStateList;
+    if (rasterAndMS.bits.dynamicScissor)
+    {
+        dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
+    }
+
+    VkPipelineDynamicStateCreateInfo dynamicState = {};
+    dynamicState.sType             = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStateList.size());
+    dynamicState.pDynamicStates    = dynamicStateList.data();
 
     createInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     createInfo.flags               = 0;
@@ -1843,7 +1854,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     createInfo.pMultisampleState   = &multisampleState;
     createInfo.pDepthStencilState  = &depthStencilState;
     createInfo.pColorBlendState    = &blendState;
-    createInfo.pDynamicState       = nullptr;
+    createInfo.pDynamicState       = dynamicStateList.empty() ? nullptr : &dynamicState;
     createInfo.layout              = pipelineLayout.getHandle();
     createInfo.renderPass          = compatibleRenderPass.getHandle();
     createInfo.subpass             = mRasterizationAndMultisampleStateInfo.bits.subpass;
@@ -2330,6 +2341,11 @@ void GraphicsPipelineDesc::updateDepthRange(GraphicsPipelineTransitionBits *tran
     mViewport.maxDepth = farPlane;
     transition->set(ANGLE_GET_TRANSITION_BIT(mViewport, minDepth));
     transition->set(ANGLE_GET_TRANSITION_BIT(mViewport, maxDepth));
+}
+
+void GraphicsPipelineDesc::setDynamicScissor()
+{
+    mRasterizationAndMultisampleStateInfo.bits.dynamicScissor = true;
 }
 
 void GraphicsPipelineDesc::setScissor(const VkRect2D &scissor)

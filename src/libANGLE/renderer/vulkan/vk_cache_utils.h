@@ -370,9 +370,12 @@ static_assert(kVertexInputAttributesSize == 96, "Size mismatch");
 
 struct RasterizationStateBits final
 {
-    // Note: Currently only 2 subpasses possible, so there are 5 bits in subpass that can be
+    // Note: Currently only 2 subpasses possible, so there are 4 bits in subpass that can be
     // repurposed.
-    uint32_t subpass : 6;
+    uint32_t subpass : 5;
+    // Dynamic state:
+    uint32_t dynamicScissor : 1;
+    // Other state:
     uint32_t depthClampEnable : 1;
     uint32_t rasterizationDiscardEnable : 1;
     uint32_t polygonMode : 4;
@@ -664,6 +667,7 @@ class GraphicsPipelineDesc final
     void updateDepthRange(GraphicsPipelineTransitionBits *transition,
                           float nearPlane,
                           float farPlane);
+    void setDynamicScissor();
     void setScissor(const VkRect2D &scissor);
     void updateScissor(GraphicsPipelineTransitionBits *transition, const VkRect2D &scissor);
 
