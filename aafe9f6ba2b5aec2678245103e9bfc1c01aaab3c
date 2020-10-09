@@ -34,6 +34,24 @@
       "parentUuid": "794d9cba_19730263",
       "revId": "aafe9f6ba2b5aec2678245103e9bfc1c01aaab3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70a13864_e321f983",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132329
+      },
+      "writtenOn": "2020-10-09T16:37:37Z",
+      "side": 1,
+      "message": "Yeah but I deleted the wrong one. Try again? Thanks.",
+      "parentUuid": "f4baf54a_b59f1e06",
+      "revId": "aafe9f6ba2b5aec2678245103e9bfc1c01aaab3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
