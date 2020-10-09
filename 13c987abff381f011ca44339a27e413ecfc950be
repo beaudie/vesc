@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fd8f64e_559d15d8",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-09T22:31:18Z",
+      "side": 1,
+      "message": "Is \"GL_ANGLE_get_image\" something that ANGLE enables by default so we can assume this test will typically catch errors?\n\nI tried using an FBO, but that prevented VVL errors from being generated.   I don\u0027t know if that\u0027s an FBO thing or how the contexts are created in runMultithreadedGLTest() above.",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 13
+      },
+      "revId": "13c987abff381f011ca44339a27e413ecfc950be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -96,6 +96,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60a8d0ff_c82589c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-09T22:31:18Z",
+      "side": 1,
+      "message": "I added MultithreadingTest::MultiContextDrawSmallDescriptorPools() which is able to generate the following VVL error:\n\n    ERR: RendererVk.cpp:335 (DebugUtilsMessenger): [ UNASSIGNED-CoreValidation-DrawState-InvalidCommandBuffer-VkDescriptorSet ] Validation Error: [ UNASSIGNED-CoreValidation-DrawState-InvalidCommandBuffer-VkDescriptorSet ] Object 0: handle \u003d 0x7f9070036ec0, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; Object 1: handle \u003d 0x28d000000028d, type \u003d VK_OBJECT_TYPE_DESCRIPTOR_SET; | MessageID \u003d 0xe8616bf2 | You are adding vkCmdBindDescriptorSets() to VkCommandBuffer 0x7f9070036ec0[] that is invalid because bound VkDescriptorSet 0x28d000000028d[] was destroyed or updated.\n\nThis is validating that the code fixes the UtilsVk fix.   I haven\u0027t been able to come up with a test that works for the ContextVk or ProgramExecutableVk fixes, but let me know if you have any ideas.",
+      "parentUuid": "af484ac3_16ee371d",
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55432315_f2d618db",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -179,6 +197,24 @@
       "side": 1,
       "message": "And to be clear - if they\u0027re context-specific then such a bool would be fine.",
       "parentUuid": "4f7ab20c_3b2705d0",
+      "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec10fcc0_8a9b1973",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4003,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-09T22:31:18Z",
+      "side": 1,
+      "message": "Since these descriptor pools are ContextVk-specific, they will only ever be used in the current command and/or a submitted command, so we all we really want is the ResourceUse::counter to be either 0 or 1.   That would allow us to retain the pool each time, but once the command is submitted, it\u0027s Serial would be updated and the count decremented.\n\nI added a new Resource::retainOnce() for this.   Let me know what you think.\n\nFor completeness, here are the timings I\u0027m seeing on my linux workstation.   I ran each 4 times with \u0027sudo\u0027 (for StabilizeCPUForBenchmarking) and tossed the first run.\n\n    [[[ master ]]]\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4185529716 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4508987458 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4212046321 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10300 ms)\n\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4442220199 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4311443878 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4302346946 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10474 ms)\n\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4201612841 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4297070710 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4214754432 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10263 ms)\n\n\n    [[[ anglebug.com/5030 ]]]\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4242627345 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4248056306 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4347621818 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10361 ms)\n\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4328091605 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4637140625 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4330442457 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10352 ms)\n\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4286508651 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4420919133 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4413935043 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10306 ms)\n\n    [[[ anglebug.com/5030 + retainOnce() ]]]\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4660550390 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4508747619 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4537726104 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10403 ms)\n\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4454536479 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4463749206 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4460802266 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10280 ms)\n\n        [ RUN      ] TracePerfTest.Run/vulkan_null_manhattan_10\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4375146349 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4317694531 ms\n        *RESULT TracePerf_vulkan_null.wall_time: manhattan_10\u003d 1.4449364156 ms\n        [       OK ] TracePerfTest.Run/vulkan_null_manhattan_10 (10294 ms)\n\nNot really much of a difference.   Maybe a little skew towards retainOnce() being slower, which doesn\u0027t make a ton of sense considering it should be doing less work.",
+      "parentUuid": "6096eeca_db8703ea",
       "revId": "3fb32c6f34611ddf0c82d42e0ff0cb6d8fa9c818",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
