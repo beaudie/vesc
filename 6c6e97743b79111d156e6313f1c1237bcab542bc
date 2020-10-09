@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1aa734_62a02f1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T16:42:21Z",
+      "side": 1,
+      "message": "Tested locally by pretending depthClamp is not available. It seems to be available everywhere but ARM (and imagination?), so this path will go untested on the bots.\n\nCC Sunny who may want to verify this change locally.",
+      "revId": "6c6e97743b79111d156e6313f1c1237bcab542bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
