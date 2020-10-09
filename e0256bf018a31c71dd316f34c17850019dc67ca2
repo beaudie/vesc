@@ -111,6 +111,30 @@
       },
       "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3696594f_398ffbcc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T16:07:44Z",
+      "side": 1,
+      "message": "That\u0027s excellent! The VVL error is the same as https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d5002#c5 and https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1136367\n\nWhile I haven\u0027t yet been able to reproduce those, here\u0027s to hoping this fixes them already!",
+      "parentUuid": "526b171f_a79606d9",
+      "range": {
+        "startLine": 1312,
+        "startChar": 4,
+        "endLine": 1314,
+        "endChar": 81
+      },
+      "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
