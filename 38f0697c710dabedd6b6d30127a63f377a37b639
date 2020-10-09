@@ -16,6 +16,24 @@
       "message": "It seems like this is what we actually want, since it does the onImageRenderPassWrite() work already.   The biggest difference is that onColorDraw() also does a retainImageViews(), which we probably also want but I\u0027m not entirely sure.\n\nThoughts?",
       "revId": "38f0697c710dabedd6b6d30127a63f377a37b639",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f490360_76b213ba",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T20:06:35Z",
+      "side": 1,
+      "message": "Sounds right!",
+      "parentUuid": "d0ede7cb_31d75969",
+      "revId": "38f0697c710dabedd6b6d30127a63f377a37b639",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
