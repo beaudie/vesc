@@ -16,6 +16,24 @@
       "message": "I am once again asking for your support writing a unit test. /bernie",
       "revId": "02c6956ca4752f5fb84c50eb526954e75252077e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afaf8632_ab26161b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T17:07:20Z",
+      "side": 1,
+      "message": "Done in https://chromium-review.googlesource.com/c/angle/angle/+/2462719",
+      "parentUuid": "7389d772_2acef6b4",
+      "revId": "02c6956ca4752f5fb84c50eb526954e75252077e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
