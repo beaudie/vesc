@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d33c4710_ef0271bb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T04:29:03Z",
+      "side": 1,
+      "message": "Turned out this bug is also present with depth/stencil clear. The test added in this change exposed this bug.",
+      "revId": "1467a5d4af1487c2793757af546387ef257bbe7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
