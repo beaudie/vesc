@@ -16,6 +16,23 @@
       "message": "I\u0027m cc\u0027ing some others, as this can affect performance on any Arm devices we have.",
       "revId": "cbcd4f44edb0c7f2ffa47fa37c912fc33711e35c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbeba8dd_f2b156ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-10-09T03:01:43Z",
+      "side": 1,
+      "message": "Android WSI implementation returns VK_SUCCESS on vkQueuePresent when the window is resized.",
+      "revId": "cbcd4f44edb0c7f2ffa47fa37c912fc33711e35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
