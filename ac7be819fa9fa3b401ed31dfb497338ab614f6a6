@@ -16,6 +16,46 @@
       "message": "Verified with AGI on pxiel4 with v0.9 driver that the depth store is gone. Seeing manhattan score improvements between 2% to 3% (depending on on/off screen or fixed clock or not).",
       "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e65b76_a5a8addf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T17:47:48Z",
+      "side": 1,
+      "message": "Drive-by: LGTM.  Also, be aware that Shabi has some CL\u0027s that will interact/conflict.",
+      "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad7a54c3_e416d689",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T17:47:48Z",
+      "side": 1,
+      "message": "FYI ... Shabi has a set of CL\u0027s that will conflict.  See: https://chromium-review.googlesource.com/c/angle/angle/+/2461464",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 0
+      },
+      "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
