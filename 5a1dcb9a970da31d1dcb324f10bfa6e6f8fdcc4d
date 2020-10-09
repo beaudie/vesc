@@ -33,6 +33,46 @@
       "message": "LGTM, will defer to Shabi\u0027s expertise.",
       "revId": "5a1dcb9a970da31d1dcb324f10bfa6e6f8fdcc4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "531b94b5_ae7439f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T01:43:09Z",
+      "side": 1,
+      "message": "Thank you, I\u0027ve been meaning to do this!",
+      "revId": "5a1dcb9a970da31d1dcb324f10bfa6e6f8fdcc4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23cb7682_69a22b08",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T01:43:09Z",
+      "side": 1,
+      "message": "You can use a `kAllDepthStencilStagesFlags` defined next to `kAllShadersPipelineStageFlags`.",
+      "range": {
+        "startLine": 132,
+        "startChar": 44,
+        "endLine": 132,
+        "endChar": 130
+      },
+      "revId": "5a1dcb9a970da31d1dcb324f10bfa6e6f8fdcc4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
