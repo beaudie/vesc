@@ -22,6 +22,47 @@
       },
       "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aec5347_da453ead",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T15:58:51Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "57d4f1da_dc9303a1",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecbd66d9_50753c69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T15:58:51Z",
+      "side": 1,
+      "message": "LGTM, thanks for fixing this!",
+      "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

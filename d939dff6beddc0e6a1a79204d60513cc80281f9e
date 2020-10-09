@@ -39,6 +39,30 @@
       },
       "revId": "d939dff6beddc0e6a1a79204d60513cc80281f9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69b41e73_b1947374",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T15:58:51Z",
+      "side": 1,
+      "message": "Glad you put this comment here (I started to type my own:-).",
+      "parentUuid": "69266bb0_fd069d6d",
+      "range": {
+        "startLine": 1188,
+        "startChar": 84,
+        "endLine": 1188,
+        "endChar": 85
+      },
+      "revId": "d939dff6beddc0e6a1a79204d60513cc80281f9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
