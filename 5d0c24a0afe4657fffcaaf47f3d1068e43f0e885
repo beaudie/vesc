@@ -110,6 +110,30 @@
       },
       "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "803a9304_698fd844",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-09T19:28:41Z",
+      "side": 1,
+      "message": "I guess one possibility is that if app is actually reading undefined data (real app probbaly won\u0027t, but one of the test might). When we enter renderpass, mContentDefined is false, so loadOp is DontCare. Because app did not call invalidate and it is only used for read, we set storeOp to Sore, and with my other CL, we set it to NONE. But content is still undefined, because it starts with undefined and we never write to it. Is this the situation you were seeing? \n\nIf yes, then I think either set the storeOp to DontCare instead of NONE, or do what you said above. The only downside of what you said above is that now we will set mContentDefined to true instead of leave it as undefined. Real app likely shouldn\u0027t get into this, so probably doesn\u0027t matter which one you pick.",
+      "parentUuid": "02ec2f61_1a0b253b",
+      "range": {
+        "startLine": 1070,
+        "startChar": 0,
+        "endLine": 1075,
+        "endChar": 5
+      },
+      "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
