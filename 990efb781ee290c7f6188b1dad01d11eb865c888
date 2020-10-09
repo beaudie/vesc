@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd7b5d8_1b23116c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T15:57:34Z",
+      "side": 1,
+      "message": "Re-LGTM.\n\nAny idea why the tests are failing with transparent black?",
+      "revId": "990efb781ee290c7f6188b1dad01d11eb865c888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
