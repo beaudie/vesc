@@ -1010,11 +1010,24 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     // First, if the attachment is invalidated, skip the store op.
     if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
     {
-        dsOps.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.storeOp = RenderPassStoreOp::DontCare;
     }
     if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled))
     {
-        dsOps.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        dsOps.stencilStoreOp = RenderPassStoreOp::DontCare;
+    }
+    // For read only depth stencil, we can use StoreOpNone if available. DONT_CARE is still
+    // preferred, so do this after finish the DONT_CARE handling.
+    if (mReadOnlyDepthStencilMode)
+    {
+        if (dsOps.storeOp == RenderPassStoreOp::Store)
+        {
+            dsOps.storeOp = RenderPassStoreOp::None_QCOM;
+        }
+        if (dsOps.stencilStoreOp == RenderPassStoreOp::Store)
+        {
+            dsOps.stencilStoreOp = RenderPassStoreOp::None_QCOM;
+        }
     }
 
     // Second, if we are loading or clearing the attachment, but the attachment has not been used,
@@ -1025,7 +1038,7 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     }
 
     if (mStencilAccess == ResourceAccess::Unused &&
-        dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
+        dsOps.stencilStoreOp == RenderPassStoreOp::DontCare)
     {
         dsOps.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     }
@@ -1142,12 +1155,14 @@ char GetLoadOpShorthand(uint32_t loadOp)
     }
 }
 
-char GetStoreOpShorthand(uint32_t storeOp)
+char GetStoreOpShorthand(RenderPassStoreOp storeOp)
 {
     switch (storeOp)
     {
-        case VK_ATTACHMENT_STORE_OP_STORE:
+        case RenderPassStoreOp::Store:
             return 'S';
+        case RenderPassStoreOp::None_QCOM:
+            return 'N';
         default:
             return 'D';
     }
@@ -1184,7 +1199,8 @@ void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
             for (size_t i = 0; i < colorAttachmentCount; ++i)
             {
                 loadOps += GetLoadOpShorthand(mAttachmentOps[attachmentIndexVk].loadOp);
-                storeOps += GetStoreOpShorthand(mAttachmentOps[attachmentIndexVk].storeOp);
+                storeOps += GetStoreOpShorthand(
+                    static_cast<RenderPassStoreOp>(mAttachmentOps[attachmentIndexVk].storeOp));
                 ++attachmentIndexVk;
             }
         }
@@ -1199,8 +1215,10 @@ void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
             loadOps += GetLoadOpShorthand(mAttachmentOps[attachmentIndexVk].loadOp);
             loadOps += GetLoadOpShorthand(mAttachmentOps[attachmentIndexVk].stencilLoadOp);
 
-            storeOps += GetStoreOpShorthand(mAttachmentOps[attachmentIndexVk].storeOp);
-            storeOps += GetStoreOpShorthand(mAttachmentOps[attachmentIndexVk].stencilStoreOp);
+            storeOps += GetStoreOpShorthand(
+                static_cast<RenderPassStoreOp>(mAttachmentOps[attachmentIndexVk].storeOp));
+            storeOps += GetStoreOpShorthand(
+                static_cast<RenderPassStoreOp>(mAttachmentOps[attachmentIndexVk].stencilStoreOp));
         }
 
         if (attachmentCount > 0)
