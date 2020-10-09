@@ -77,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f49eb19c_8283ac8e",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-09T20:07:38Z",
+      "side": 1,
+      "message": "Thanks. Will do in next update.",
+      "parentUuid": "de4b10ce_7683ef38",
+      "range": {
+        "startLine": 359,
+        "startChar": 12,
+        "endLine": 359,
+        "endChar": 41
+      },
+      "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad7a54c3_e416d689",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
