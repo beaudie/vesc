@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "c06a116751ec8a1f129407081b156dcc7b56a673",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc295ef4_3225206b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-09T20:22:06Z",
+      "side": 1,
+      "message": "Could you also check how tools/swarming_client/swarming.py does it?\nWhen I use it directly, tasks are created with the user that I\u0027ve authenticated Swarming with.",
+      "revId": "c06a116751ec8a1f129407081b156dcc7b56a673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
