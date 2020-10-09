@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ebec8bc_ebc11626",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T12:56:07Z",
+      "side": 1,
+      "message": "TBR, these allow me to get passing runs with trigger.py locally.",
+      "revId": "5a34b2affd1ec342ea417d833e16e1e261d198c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
