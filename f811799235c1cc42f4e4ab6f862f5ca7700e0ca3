@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a742a215_2e1ea231",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T20:45:29Z",
+      "side": 0,
+      "message": "I freed these two bits up for use in a CL I have (that\u0027s about to land), sorry taken!\n\nAssuming None is supported, is there any reason why we should use DontCare instead? I\u0027m guessing not. In that case we can keep storeOp as-is, then store DontCare where None would have gone if the extension is supported, and when setting ops just replace all DONT_CAREs with NONE_QCOMs if the extension is supported.",
+      "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
