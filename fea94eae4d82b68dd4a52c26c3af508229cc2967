@@ -16,6 +16,23 @@
       "message": "LGTM, not sure if those Android failures are real.",
       "revId": "fea94eae4d82b68dd4a52c26c3af508229cc2967",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be8065b2_40a3b0e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T15:58:14Z",
+      "side": 1,
+      "message": "LGTM, thanks again!",
+      "revId": "fea94eae4d82b68dd4a52c26c3af508229cc2967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
