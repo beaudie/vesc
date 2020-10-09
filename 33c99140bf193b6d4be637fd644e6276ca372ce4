@@ -22,6 +22,30 @@
       },
       "revId": "33c99140bf193b6d4be637fd644e6276ca372ce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a91d23c8_c83ca00a",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-09T20:01:02Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "63e19ac8_5366c7dd",
+      "range": {
+        "startLine": 148,
+        "startChar": 97,
+        "endLine": 148,
+        "endChar": 98
+      },
+      "revId": "33c99140bf193b6d4be637fd644e6276ca372ce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
