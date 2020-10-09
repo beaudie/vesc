@@ -108,6 +108,53 @@
       },
       "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846adbb3_afe4fcd7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T03:03:22Z",
+      "side": 1,
+      "message": "Good catch Tim! That does seem to be a problem. I just added a comment in the previous change. I think this layout is actually not necessary at all.",
+      "parentUuid": "dee6be54_47ad3719",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 6
+      },
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33e69048_9653b737",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T03:03:22Z",
+      "side": 1,
+      "message": "The same issue is there with this layout too though.\n\nThe TransitionFrom stage should probably unconditionally have EARLY_FRAGMENT_TESTS, and that is unlikely to cause performance problems.\n\nThe TransitionTo stage looks to me like can only omit EARLY_FRAGMENT_TESTS if loadOp\u003dDONT_CARE. I\u0027m not sure if Vulkan actually allows lack of synchronization with EARLY_FRAMGNE_TESTS when loadOp\u003dDONT_CARE though.\n\nCharlie, did we understand the issue correctly? Is Imagination\u0027s observation really due to the use of EARLY_FRAGMENT_TESTS? Perhaps the previous change is sufficient to resolve their issue.",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 10
+      },
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
