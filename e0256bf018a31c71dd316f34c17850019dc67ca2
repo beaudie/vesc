@@ -87,6 +87,30 @@
       },
       "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "526b171f_a79606d9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-09T15:57:34Z",
+      "side": 1,
+      "message": "Good idea on the test.\n\nWhen resolving with a blit we only care that there is a single draw buffer, not which attachment the draw buffer actually is:\n\n    // Vulkan requires a 1:1 relationship for multisample attachments to resolve attachments in the\n    // render pass subpass. Due to this, we currently only support using resolve attachments when\n    // there is a single draw attachment enabled.\n    ASSERT(mState.getEnabledDrawBuffers().count() \u003d\u003d 1);\n    uint32_t drawColorIndexGL \u003d static_cast\u003cuint32_t\u003e(*mState.getEnabledDrawBuffers().begin());\n\nSo, the test is able to exercise the code path and hit the bug:\n\n    [ RUN      ] FramebufferTest_ES31.MultisampleResolveWithBlitDifferentReadDrawBuffers/ES3_1_Vulkan\n    INFO: Debug.cpp:183 (insertMessage): GL performance: HIGH: GPU stall due to ReadPixels\n    ../../src/tests/test_utils/ANGLETest.cpp:63: Failure\n    RendererVk.cpp:335 (DebugUtilsMessenger): [ UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout ] Validation Error: [ UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout ] Object 0: handle \u003d 0x55994165c440, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; | MessageID \u003d 0x4dae5635 | Submitted command buffer expects VkImage 0x610000000061[] (subresource: aspectMask 0x1 array layer 0, mip level 0) to be in layout VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL--instead, current layout is VK_IMAGE_LAYOUT_UNDEFINED.\n\n\nUsing onImageRenderPassWrite() on the draw RT makes it pass.   Good catch.",
+      "parentUuid": "d466c345_efaba263",
+      "range": {
+        "startLine": 1312,
+        "startChar": 4,
+        "endLine": 1314,
+        "endChar": 81
+      },
+      "revId": "e0256bf018a31c71dd316f34c17850019dc67ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
