@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "988a2559_56633a19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "Geoff: sorry for the slow response. Would like to help this get landed ASAP. One main question/suggestion re: dirty handling.",
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84be452b_56f4a010",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "nit: can you also generate a GL error into context? with ANGLE_CHECK or similar?",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 95
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4794ef3a_c79e17ed",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 186,
+        "startChar": 8,
+        "endLine": 186,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2e6ce3d_e3f62d45",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "maybe we should call these mIntendedViewport / mActualViewport\n\nor mUserViewport / mScaledViewport would be a simpler rename?",
+      "range": {
+        "startLine": 1484,
+        "startChar": 4,
+        "endLine": 1484,
+        "endChar": 17
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42e6d42c_19f84523",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3187,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "Agree we don\u0027t want another dirty bit for this. I wasn\u0027t sure if it is the right thing to update mViewport/mScissor in a dirty object handler either. I thought about this some more and have a proposal:\n\n- I\u0027m assuming Framebuffer scale changes on BindFramebuffer or an attachment change.\n- On attachment change: you\u0027ll get a call to gl::Context::onSubjectStateChange under kDrawFramebufferSubjectIndex DirtyBitsFlagged).\n- You can then trigger the necessary viewport/scissor updates in gl::State.\n- Similarly you can update viewport/scissor on a FBO change immediately.\n- You can also update the scaled viewport/scissor immediately when the app binds.\n- Then you can get rid of this lazy update here.\n- You can also cache mIsDownScaled in FramebufferState without needing to query the attachments using notifications\n- This is a small optimization and not necessary for this CL.\n\nWhat do you think?",
+      "range": {
+        "startLine": 3184,
+        "startChar": 0,
+        "endLine": 3187,
+        "endChar": 36
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d85b3dd_8a5a4555",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "same comments as for Renderbuffer.",
+      "range": {
+        "startLine": 1135,
+        "startChar": 8,
+        "endLine": 1135,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "670f2356_a3fd9bb0",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "same comments as for Renderbuffer.",
+      "range": {
+        "startLine": 1167,
+        "startChar": 8,
+        "endLine": 1167,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13da3884_1c66bc9f",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "same comments as for Renderbuffer.",
+      "range": {
+        "startLine": 1458,
+        "startChar": 8,
+        "endLine": 1458,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17c30b82_9686c30d",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "same comments as for Renderbuffer.",
+      "range": {
+        "startLine": 1537,
+        "startChar": 11,
+        "endLine": 1537,
+        "endChar": 12
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

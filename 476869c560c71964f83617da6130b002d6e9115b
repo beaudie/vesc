@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "d94595ee_766a58a0",
         "filename": "include/platform/FrontendFeatures.h",
@@ -20,10 +21,10 @@
         "endChar": 96
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "aff51b88_229e53b8",
         "filename": "include/platform/FrontendFeatures.h",
@@ -44,10 +45,10 @@
         "endChar": 96
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "463a6d83_89f26b2c",
         "filename": "src/libANGLE/Framebuffer.cpp",
@@ -67,10 +68,10 @@
         "endChar": 5
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "160f8536_9b55de8d",
         "filename": "src/libANGLE/Framebuffer.cpp",
@@ -91,10 +92,10 @@
         "endChar": 5
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "fcc390e8_387fef83",
         "filename": "src/libANGLE/Renderbuffer.cpp",
@@ -114,10 +115,10 @@
         "endChar": 5
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "bf47194b_d3a6c282",
         "filename": "src/libANGLE/Renderbuffer.cpp",
@@ -138,10 +139,10 @@
         "endChar": 5
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "0062b38d_2565c987",
         "filename": "src/libANGLE/State.cpp",
@@ -161,10 +162,10 @@
         "endChar": 38
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "13dfac2d_d7015d30",
         "filename": "src/libANGLE/State.cpp",
@@ -185,10 +186,34 @@
         "endChar": 38
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47b116dd_a12bd5c1",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T15:04:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "13dfac2d_d7015d30",
+      "range": {
+        "startLine": 3184,
+        "startChar": 0,
+        "endLine": 3186,
+        "endChar": 38
+      },
+      "revId": "476869c560c71964f83617da6130b002d6e9115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "455acf8c_9b811d01",
         "filename": "src/libANGLE/angletypes.h",
@@ -202,10 +227,10 @@
       "side": 1,
       "message": "Suggest moving to cpp file",
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "53a0fd0f_2597b9ff",
         "filename": "src/libANGLE/angletypes.h",
@@ -220,10 +245,10 @@
       "message": "Done",
       "parentUuid": "455acf8c_9b811d01",
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "3326ed88_8556bcdc",
         "filename": "src/libANGLE/feature_utils.cpp",
@@ -243,8 +268,7 @@
         "endChar": 100
       },
       "revId": "476869c560c71964f83617da6130b002d6e9115b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
