@@ -134,6 +134,30 @@
       },
       "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b31766da_fc1cc6dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T19:38:26Z",
+      "side": 1,
+      "message": "Oops, I didn\u0027t mean to set to defined if it wasn\u0027t previously invalidated and should be restored.  I still like what is in this CL.\n\nMaybe I didn\u0027t understand what you were suggesting originally.",
+      "parentUuid": "803a9304_698fd844",
+      "range": {
+        "startLine": 1070,
+        "startChar": 0,
+        "endLine": 1075,
+        "endChar": 5
+      },
+      "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
