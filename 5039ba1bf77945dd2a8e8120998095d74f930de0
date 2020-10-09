@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7a16c04_e304a1ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T21:28:27Z",
+      "side": 1,
+      "message": "instead of stealing bits from the subpass, can we take over the bits for the scissor? i.e. a scissor of totally 0 bits or total 1 bits is a sentinel value for dynamic scissor.",
+      "range": {
+        "startLine": 377,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 32
+      },
+      "revId": "5039ba1bf77945dd2a8e8120998095d74f930de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9051a1e6_4f99028e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T21:28:27Z",
+      "side": 1,
+      "message": "this guy.",
+      "range": {
+        "startLine": 689,
+        "startChar": 13,
+        "endLine": 689,
+        "endChar": 21
+      },
+      "revId": "5039ba1bf77945dd2a8e8120998095d74f930de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
