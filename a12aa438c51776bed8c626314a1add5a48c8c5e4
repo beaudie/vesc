@@ -16,6 +16,23 @@
       "message": "hi!\n\nthis CL is in response to a linter warning about unused results of unique_ptr::release. this code could be totally valid if something else owns this reference, or it could be potentially leaking memory. might you be familiar with the ownership semantics here (or know someone who is)? :) \n\nthanks!",
       "revId": "a12aa438c51776bed8c626314a1add5a48c8c5e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96890cda_63164400",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-09T13:06:56Z",
+      "side": 1,
+      "message": "Looks correct to me, thanks!",
+      "revId": "a12aa438c51776bed8c626314a1add5a48c8c5e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
