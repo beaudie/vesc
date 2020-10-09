@@ -106,6 +106,19 @@ inline void UpdateAccess(ResourceAccess *oldAccess, ResourceAccess newAccess)
     }
 }
 
+enum RenderPassStoreOp
+{
+    Store,
+    DontCare,
+    None_QCOM,
+};
+
+inline VkAttachmentStoreOp ConvertRenderPassStoreOpToVkStoreOp(RenderPassStoreOp storeOp)
+{
+    return storeOp == RenderPassStoreOp::None_QCOM ? VK_ATTACHMENT_STORE_OP_NONE_QCOM
+                                                   : static_cast<VkAttachmentStoreOp>(storeOp);
+}
+
 // There can be a maximum of IMPLEMENTATION_MAX_DRAW_BUFFERS color and resolve attachments, plus one
 // depth/stencil attachment and one depth/stencil resolve attachment.
 constexpr size_t kMaxFramebufferAttachments = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS * 2 + 2;
@@ -283,11 +296,11 @@ static_assert(kRenderPassDescSize == 12, "Size check failed");
 
 struct PackedAttachmentOpsDesc final
 {
-    // VkAttachmentLoadOp is in range [0, 2], and VkAttachmentStoreOp is in range [0, 1].
+    // VkAttachmentLoadOp is in range [0, 2], and VkAttachmentStoreOp is in range [0, 2].
     uint32_t loadOp : 2;
-    uint32_t storeOp : 1;
+    uint32_t storeOp : 2;
     uint32_t stencilLoadOp : 2;
-    uint32_t stencilStoreOp : 1;
+    uint32_t stencilStoreOp : 2;
 
     // If a corresponding resolve attachment exists, storeOp may already be DONT_CARE, and it's
     // unclear whether the attachment was invalidated or not.  This information is passed along here
@@ -303,7 +316,7 @@ struct PackedAttachmentOpsDesc final
     uint32_t initialLayout : 4;
     uint32_t finalLayout : 4;
 
-    uint32_t padding : 16;
+    uint32_t padding : 14;
 };
 
 static_assert(sizeof(PackedAttachmentOpsDesc) == 4, "Size check failed");
@@ -329,12 +342,10 @@ class AttachmentOpsArray final
     void setLayouts(PackedAttachmentIndex index,
                     ImageLayout initialLayout,
                     ImageLayout finalLayout);
-    void setOps(PackedAttachmentIndex index,
-                VkAttachmentLoadOp loadOp,
-                VkAttachmentStoreOp storeOp);
+    void setOps(PackedAttachmentIndex index, VkAttachmentLoadOp loadOp, RenderPassStoreOp storeOp);
     void setStencilOps(PackedAttachmentIndex index,
                        VkAttachmentLoadOp loadOp,
-                       VkAttachmentStoreOp storeOp);
+                       RenderPassStoreOp storeOp);
 
     void setClearOp(PackedAttachmentIndex index);
     void setClearStencilOp(PackedAttachmentIndex index);
