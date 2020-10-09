@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1d6b22b_192d6801",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T02:15:55Z",
+      "side": 1,
+      "message": "Simple change to separate depth and stencil content tracking from the point of view of RenderTargetVk.",
+      "revId": "6e58fe50b84ac0f3b33f2c150a7b3c483fdb9756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

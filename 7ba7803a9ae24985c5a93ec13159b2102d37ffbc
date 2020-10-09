@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0db2c55a_5ebf36af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T02:15:55Z",
+      "side": 1,
+      "message": "That\u0027s right",
+      "parentUuid": "771377d3_8648afa5",
+      "revId": "7ba7803a9ae24985c5a93ec13159b2102d37ffbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e9b56846_28836b12",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2020-10-08T18:04:16Z",
       "side": 1,
       "message": "Cool!  Because of tracking them separately, there\u0027s no load done for stencil!",
+      "range": {
+        "startLine": 502,
+        "startChar": 79,
+        "endLine": 502,
+        "endChar": 85
+      },
+      "revId": "7ba7803a9ae24985c5a93ec13159b2102d37ffbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8687bc9_3cf0123f",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T02:15:55Z",
+      "side": 1,
+      "message": "Yeap!",
+      "parentUuid": "e9b56846_28836b12",
       "range": {
         "startLine": 502,
         "startChar": 79,
@@ -54,6 +96,30 @@
       "writtenOn": "2020-10-08T18:04:16Z",
       "side": 1,
       "message": "I\u0027m looking forward to this or a follow-on CL taking care of this.",
+      "range": {
+        "startLine": 712,
+        "startChar": 7,
+        "endLine": 730,
+        "endChar": 64
+      },
+      "revId": "7ba7803a9ae24985c5a93ec13159b2102d37ffbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d094cbf_3346e27a",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T02:15:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bf490b39_fda25e86",
       "range": {
         "startLine": 712,
         "startChar": 7,
