@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "138bfe38_e087fbae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-09T02:12:32Z",
+      "side": 1,
+      "message": "sorry the flakes seem to happen on OpenGL backend only. Suppressing Metal as well seems a bit too aggressive imo.",
+      "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
