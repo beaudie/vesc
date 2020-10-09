@@ -16,6 +16,24 @@
       "message": "Yes. Can you try again? Thanks.",
       "revId": "aafe9f6ba2b5aec2678245103e9bfc1c01aaab3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4baf54a_b59f1e06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T15:57:52Z",
+      "side": 1,
+      "message": "Done. There are errors (did you remove is_icd because of msvc\u0027s complaint?)",
+      "parentUuid": "794d9cba_19730263",
+      "revId": "aafe9f6ba2b5aec2678245103e9bfc1c01aaab3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
