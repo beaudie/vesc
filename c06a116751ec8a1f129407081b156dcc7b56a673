@@ -69,6 +69,24 @@
       "parentUuid": "4813442d_93b93f4c",
       "revId": "c06a116751ec8a1f129407081b156dcc7b56a673",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c171d77_a699866f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T20:28:18Z",
+      "side": 1,
+      "message": "The Python one at least uses a lib that we don\u0027t use in ANGLE to access the user and currently authenticated session.\n\nLong-term I\u0027d like to merge this trigger.py into mb.py. For now it\u0027s easier to maintain this script than to merge them.",
+      "parentUuid": "dcdc0450_bb793477",
+      "revId": "c06a116751ec8a1f129407081b156dcc7b56a673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
