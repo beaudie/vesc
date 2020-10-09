@@ -3422,6 +3422,9 @@ void State::setImageUnit(const Context *context,
                          GLenum access,
                          GLenum format)
 {
+    if (mImageUnits.empty())
+        return;
+
     ImageUnit &imageUnit = mImageUnits[unit];
 
     if (texture)
