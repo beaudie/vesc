@@ -88,6 +88,24 @@
       "parentUuid": "82ee552f_a2bd98dd",
       "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad8edb4c_8ac7806c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T21:39:37Z",
+      "side": 0,
+      "message": "+1 to expanding it. Looks like this isn\u0027t used in PipelineCache so it won\u0027t affect GL state change operations.",
+      "parentUuid": "aff8b161_d13256ee",
+      "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
