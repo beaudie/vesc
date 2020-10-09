@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82a719d6_8819e529",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T15:28:27Z",
+      "side": 1,
+      "message": "Hi Craig. Is this a try to see if the changes build correctly? I kicked the build on a few platforms to check that!",
+      "revId": "47c7169fdf70287a8ab290e39ab3b417f5a5291f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
