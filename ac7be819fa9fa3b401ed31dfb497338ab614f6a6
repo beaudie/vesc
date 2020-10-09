@@ -56,6 +56,30 @@
       },
       "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "609c86e5_8cec2446",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-09T18:18:22Z",
+      "side": 1,
+      "message": "Thanks for remind, Ian.",
+      "parentUuid": "ad7a54c3_e416d689",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 0
+      },
+      "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
