@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "5a5e5756_a7d55bb8",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Thanks Jonah.",
       "revId": "d4eddd5f2261eaef70a1aca514df6be44c144f29",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e85416c8_b701df0b",
         "filename": "infra/ANGLEWrangling.md",
@@ -37,8 +38,31 @@
         "endChar": 103
       },
       "revId": "d4eddd5f2261eaef70a1aca514df6be44c144f29",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8920ff_9add769a",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-09T19:53:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e85416c8_b701df0b",
+      "range": {
+        "startLine": 148,
+        "startChar": 32,
+        "endLine": 148,
+        "endChar": 103
+      },
+      "revId": "d4eddd5f2261eaef70a1aca514df6be44c144f29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
