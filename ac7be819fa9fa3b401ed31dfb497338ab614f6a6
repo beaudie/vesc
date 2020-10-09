@@ -35,6 +35,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "188d2b32_0516a470",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T19:59:12Z",
+      "side": 1,
+      "message": "Very nice! LGTM with being mindful of the conflicts.",
+      "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de4b10ce_7683ef38",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T19:59:12Z",
+      "side": 1,
+      "message": "nit: can you include QCOM in here to keep it separate from future KHR/EXT?",
+      "range": {
+        "startLine": 359,
+        "startChar": 12,
+        "endLine": 359,
+        "endChar": 41
+      },
+      "revId": "ac7be819fa9fa3b401ed31dfb497338ab614f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad7a54c3_e416d689",
