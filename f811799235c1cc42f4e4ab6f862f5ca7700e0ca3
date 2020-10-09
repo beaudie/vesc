@@ -52,6 +52,24 @@
       "parentUuid": "135bc7f1_61a2bcb9",
       "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82ee552f_a2bd98dd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T21:21:00Z",
+      "side": 0,
+      "message": "Sorry, \"just one value short of 3 bits \u003d\u003d 8 values\"",
+      "parentUuid": "7340b5f9_bf4d6e25",
+      "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
