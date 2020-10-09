@@ -63,6 +63,29 @@
       "message": "LGTM, thanks for fixing this!",
       "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08db5079_340b22b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-09T18:17:02Z",
+      "side": 1,
+      "message": "I was thinking all you need to do is this (after line 1085):\nif(dsOps.storeOp \u003d\u003d DONT_CARE)\n{\n       setDepthContentDefined(false);\n}\nelse\n{\n      if(dsOps.storeOp \u003d\u003d NONE_QCOM)\n               ASSERT(mContentDefined\u003d\u003dtrue);\n       else\n               setDepthContentDefined(true);\n}\n\nIs there any reason that we want to store but mean time want to mark its content as undefined? I can\u0027t think out any. So set content defined based on store op seems more straight forward. \n\nAnd if you take this approach, you may want to wait until crrev.com/c/2462604 that changes storeOp a bit.",
+      "range": {
+        "startLine": 1070,
+        "startChar": 0,
+        "endLine": 1075,
+        "endChar": 5
+      },
+      "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
