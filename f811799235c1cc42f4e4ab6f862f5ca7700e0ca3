@@ -34,6 +34,24 @@
       "parentUuid": "a742a215_2e1ea231",
       "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7340b5f9_bf4d6e25",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T21:20:26Z",
+      "side": 0,
+      "message": "If you were to merge the 2x 2+1 bit values into 2x 3 bit value:\n\nYou\u0027d have \n\nLOAD_LOAD_STORE_STORE (1 value)\nLOAD_LOAD_STORE_DONTCARE (2 values)\nLOAD_LOAD_STORE_NONE (3)\nLOAD_CLEAR_{STORE/DONTCARE/NONE} (6)\nLOAD_DONTCARE_{STORE/DONTCARE/NONE} (9)\n\ntotal 9 values. Just one value short of 8 bits. Unless there\u0027s an impossible combination somewhere.\n\nYou could merge the 2x 3 bit values into one 6 bit value... you\u0027d just have to use more / and % operations instead of enums.",
+      "parentUuid": "135bc7f1_61a2bcb9",
+      "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
