@@ -31,6 +31,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture_gles_3_0_autogen.h"
+#include "libANGLE/capture_gles_3_1_autogen.h"
 #include "libANGLE/frame_capture_utils.h"
 #include "libANGLE/gl_enum_utils.h"
 #include "libANGLE/queryconversions.h"
@@ -3082,6 +3083,22 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             continue;
         }
         cap(CaptureFenceSync(replayState, true, sync->getCondition(), sync->getFlags(), syncID));
+    }
+
+    const std::vector<gl::ImageUnit> &imageUnits = apiState.getImageUnits();
+    for (GLuint bindingIndex = 0; bindingIndex < static_cast<GLuint>(imageUnits.size());
+         ++bindingIndex)
+    {
+        if (imageUnits[bindingIndex].texture == 0)
+        {
+            continue;
+        }
+
+        cap(CaptureBindImageTexture(
+            replayState, true, bindingIndex, imageUnits[bindingIndex].texture.id(),
+            imageUnits[bindingIndex].level, imageUnits[bindingIndex].layered,
+            imageUnits[bindingIndex].layer, imageUnits[bindingIndex].access,
+            imageUnits[bindingIndex].format));
     }
 
     // Capture GL Context states.
