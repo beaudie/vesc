@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10590a60_f4743e31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T17:09:03Z",
+      "side": 1,
+      "message": "Might want to re-review. I disabled the vkCmdClearAttachments path entirely on QC as the new test added in this change exposes the bug we saw previously with color with depth/stencil too.",
+      "revId": "f64273697da0800eee07c7577aa7d8499d99389f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
