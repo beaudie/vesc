@@ -33,6 +33,24 @@
       "message": "Could you also check how tools/swarming_client/swarming.py does it?\nWhen I use it directly, tasks are created with the user that I\u0027ve authenticated Swarming with.",
       "revId": "c06a116751ec8a1f129407081b156dcc7b56a673",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4813442d_93b93f4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-09T20:23:52Z",
+      "side": 1,
+      "message": "Is that the python swarming client? That guy is supposed to be deprecated now.",
+      "parentUuid": "fc295ef4_3225206b",
+      "revId": "c06a116751ec8a1f129407081b156dcc7b56a673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
