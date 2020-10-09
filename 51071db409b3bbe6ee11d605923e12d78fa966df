@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b5eccd_645625a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-09T04:53:18Z",
+      "side": 1,
+      "message": "Thanks Jamie.  Making good headway on traces with this modest change.  I hope for it to be in the right direction as the rest of the multi-context work.",
+      "parentUuid": "12d76b87_b2965f39",
+      "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bf93a98_f8d63bf9",
@@ -100,6 +118,24 @@
       "side": 1,
       "message": "+1, you shouldn\u0027t need the mutex if things are working correctly.",
       "parentUuid": "6bf93a98_f8d63bf9",
+      "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a7406d2_644e6d4b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4602,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-09T04:53:18Z",
+      "side": 1,
+      "message": "Thanks, removed the mutex.",
+      "parentUuid": "2e9ab5b4_269b11e7",
       "revId": "51071db409b3bbe6ee11d605923e12d78fa966df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
