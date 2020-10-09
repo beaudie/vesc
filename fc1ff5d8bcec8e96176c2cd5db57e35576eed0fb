@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79940ea4_0c067e89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T03:08:46Z",
+      "side": 1,
+      "message": "FYI Trevor, you have +1\u0027ed in Code-Review, not in Commit-Queue.",
+      "revId": "fc1ff5d8bcec8e96176c2cd5db57e35576eed0fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
