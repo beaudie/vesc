@@ -158,6 +158,30 @@
       },
       "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30c8b8e9_39f14448",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T21:02:57Z",
+      "side": 1,
+      "message": "I think I understood what you mean Charlie, though that\u0027s a bigger/riskier refactor than this change.\n\nHow about we leave that to a follow up? I\u0027m thinking we should remove all invalidate / restore calls throughout the code and have them consolidated at endRP. In other words, invalidateImpl() wouldn\u0027t invalidate anymore, neither would onDepthAccess/onStencilAccess restore. Then we fix storeOp here, and invalidate/restore unconditionally based on storeOp.\n\nWhat do you think?",
+      "parentUuid": "b31766da_fc1cc6dc",
+      "range": {
+        "startLine": 1070,
+        "startChar": 0,
+        "endLine": 1075,
+        "endChar": 5
+      },
+      "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
