@@ -86,6 +86,30 @@
       },
       "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02ec2f61_1a0b253b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-09T19:02:12Z",
+      "side": 1,
+      "message": "Thanks to your CL, we can now look at this at endRP time.\n\nI think you are correct about the relationship between DONT_CARE and mContentDefined at endRP time.  I thought about this, and I just looked at the different tests that I (and you) created.\n\nI\u0027m not sure that your code above is correct though.  Why do you think you can ASSERT(mContentDefined\u003d\u003dtrue) for NONE_QCOM?  I found (and Shabi\u0027s has it too) that we need to set/restore it to true for the else case.\n\nIf we can\u0027t ASSERT for NONE_QCOM, we can simply this CL to:\n\n    if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))\n    {\n        setDepthContentDefined(false);\n        dsOps.storeOp \u003d VK_ATTACHMENT_STORE_OP_DONT_CARE;\n    }\n    else\n    {\n        setDepthContentDefined(true);\n    }\n\nand the same for stencil.",
+      "parentUuid": "08db5079_340b22b9",
+      "range": {
+        "startLine": 1070,
+        "startChar": 0,
+        "endLine": 1075,
+        "endChar": 5
+      },
+      "revId": "5d0c24a0afe4657fffcaaf47f3d1068e43f0e885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
