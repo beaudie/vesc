@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "895e2622_d33ce77d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T02:18:43Z",
+      "side": 1,
+      "message": "With the previous changes done, this became quite simple really. Thanks again Charlie for taking care of tracking the depth/stencil attachment in the render pass.",
+      "revId": "d939dff6beddc0e6a1a79204d60513cc80281f9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69266bb0_fd069d6d",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-09T02:18:43Z",
+      "side": 1,
+      "message": "Fixed in the next CL. Basically the clear(DEPTH) that follows the invalidate is throwing the stencil invalidation off (thinking there must have been a stencil write), but stencil is not even doing anything (all ops are GL_KEEP).",
+      "range": {
+        "startLine": 1188,
+        "startChar": 84,
+        "endLine": 1188,
+        "endChar": 85
+      },
+      "revId": "d939dff6beddc0e6a1a79204d60513cc80281f9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
