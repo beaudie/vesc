@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8764712_0ab3e82f",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-09T20:05:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4deefa8_adebcb5f",
+      "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f68e733a_2aff200e",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de5d136e_68d73d1a",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-09T20:05:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c609790_5be05424",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 5
+      },
+      "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "411d8ee3_c8509338",
@@ -71,6 +113,24 @@
       "writtenOn": "2020-10-07T14:49:54Z",
       "side": 1,
       "message": "ref",
+      "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40bbbc7b_3648ab47",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-09T20:05:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "411d8ee3_c8509338",
       "revId": "2141ebec5be8be4956c79940ad4eff78a4aab0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
