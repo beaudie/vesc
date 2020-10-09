@@ -70,6 +70,24 @@
       "parentUuid": "7340b5f9_bf4d6e25",
       "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aff8b161_d13256ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-09T21:36:16Z",
+      "side": 0,
+      "message": "yea, that will make it hard to debug, and / % operations are more expensive as well. Not sure if it will be net win though. I am thinking either expand it to 32 bit field, which will give us a lot more head room for future as well. Or, another option is further squeeze the initialLayout and finalLayout. What I understand is that right now initialLayout and finalLayout is always the same, except one place where I used finalLayout to transit into ImageLayout::Present. If people aren\u0027t going to further use finalLayout to do layout transition,I could poetnytially get rid of finalLayout and just use one bit to indicate finalLayout should be ImageLayout::Present.\n\nI personally like just expand it to 32 bit field, make our current and future life simpler.",
+      "parentUuid": "82ee552f_a2bd98dd",
+      "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
