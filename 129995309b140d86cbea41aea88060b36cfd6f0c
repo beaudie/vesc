@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "301e483f_a8481743",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-10T19:56:31Z",
+      "side": 1,
+      "message": "Sorry Shabi. Need to revert these to unblock the roller. Happy to re-land as a batch if I\u0027m mistaken.",
+      "revId": "129995309b140d86cbea41aea88060b36cfd6f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
