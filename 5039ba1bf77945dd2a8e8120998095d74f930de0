@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "02997f61_17405531",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-10T03:51:57Z",
+      "side": 1,
+      "message": "Done. I used all 1s in offset.x as sentinel.",
+      "parentUuid": "f7a16c04_e304a1ca",
+      "range": {
+        "startLine": 377,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 32
+      },
+      "revId": "5039ba1bf77945dd2a8e8120998095d74f930de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9051a1e6_4f99028e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
