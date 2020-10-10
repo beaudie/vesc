@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "794daa30_f5f02960",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-10T15:11:45Z",
+      "side": 1,
+      "message": "TBR/FYI. Crashes/fails show up on this config only. Does not repro locally so these are probably fixed in a newer OSX update.",
+      "revId": "8b71ad7de96abeb754fe9c893d20c47237e38f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
