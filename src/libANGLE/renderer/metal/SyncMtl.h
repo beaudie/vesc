@@ -45,6 +45,10 @@ class Sync
     angle::Result initialize(ContextMtl *contextMtl);
 
     angle::Result set(ContextMtl *contextMtl, GLenum condition, GLbitfield flags);
+    angle::Result setWithLock(ContextMtl *contextMtl,
+                              GLenum condition,
+                              GLbitfield flags,
+                              bool lock);
     angle::Result clientWait(ContextMtl *contextMtl,
                              bool flushCommands,
                              uint64_t timeout,
@@ -71,6 +75,11 @@ class Sync
         return angle::Result::Stop;
     }
     angle::Result set(ContextMtl *contextMtl, GLenum condition, GLbitfield flags)
+    {
+        UNREACHABLE();
+        return angle::Result::Stop;
+    }
+    angle::Result setWithLock(ContextMtl *contextMtl, GLenum condition, GLbitfield flags, bool lock)
     {
         UNREACHABLE();
         return angle::Result::Stop;

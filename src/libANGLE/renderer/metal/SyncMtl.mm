@@ -49,12 +49,25 @@ angle::Result Sync::initialize(ContextMtl *contextMtl)
 
 angle::Result Sync::set(ContextMtl *contextMtl, GLenum condition, GLbitfield flags)
 {
+    return setWithLock(contextMtl, condition, flags, false);
+}
+angle::Result Sync::setWithLock(ContextMtl *contextMtl,
+                                GLenum condition,
+                                GLbitfield flags,
+                                bool lock)
+{
     if (!mMetalSharedEvent)
     {
         ANGLE_TRY(initialize(contextMtl));
     }
     ASSERT(condition == GL_SYNC_GPU_COMMANDS_COMPLETE);
     ASSERT(flags == 0);
+
+    std::unique_lock<std::mutex> lk(*mLock, std::defer_lock);
+    if (lock)
+    {
+        lk.lock();
+    }
 
     mSetCounter++;
     contextMtl->queueEventSignal(mMetalSharedEvent, mSetCounter);
@@ -236,7 +249,7 @@ egl::Error EGLSyncMtl::initialize(const egl::Display *display,
     ASSERT(context != nullptr);
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
-    if (IsError(mSync.set(contextMtl, GL_SYNC_GPU_COMMANDS_COMPLETE, 0)))
+    if (IsError(mSync.setWithLock(contextMtl, GL_SYNC_GPU_COMMANDS_COMPLETE, 0, true)))
     {
         return egl::Error(EGL_BAD_ALLOC, "eglCreateSyncKHR failed to create sync object");
     }
