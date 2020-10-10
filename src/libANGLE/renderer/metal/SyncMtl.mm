@@ -148,7 +148,7 @@ angle::Result FenceNVMtl::set(const gl::Context *context, GLenum condition)
 {
     ASSERT(condition == GL_ALL_COMPLETED_NV);
     ContextMtl *contextMtl = mtl::GetImpl(context);
-    return mSync.set(contextMtl, GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    return mSync.setWithLock(contextMtl, GL_SYNC_GPU_COMMANDS_COMPLETE, 0, true);
 }
 
 angle::Result FenceNVMtl::test(const gl::Context *context, GLboolean *outFinished)
