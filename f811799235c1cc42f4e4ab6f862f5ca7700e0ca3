@@ -106,6 +106,24 @@
       "parentUuid": "aff8b161_d13256ee",
       "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc119a7_f253d1eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-10T01:18:55Z",
+      "side": 0,
+      "message": "Expanding is fine, but I had also been thinking of turning finalLayout into 1 bit that says \"0 \u003d same as initialLayout, 1 \u003d Present\". Should work even if we add 2 more different-final-layout situations (you need 2 bits, so there\u0027s 1 extra).",
+      "parentUuid": "ad8edb4c_8ac7806c",
+      "revId": "f811799235c1cc42f4e4ab6f862f5ca7700e0ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
