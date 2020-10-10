@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "200a8acd_7bcecac1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-10T20:43:28Z",
+      "side": 1,
+      "message": "Geoff/Yuly, I\u0027m landing this temporary fix to unblock testing of the Chromium-side CL for the standalone angle_end2end_tests. Happy to revert or take up concerns next week.",
+      "revId": "42e4d068648f1d5a09fd27f1a37487399b758dd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
