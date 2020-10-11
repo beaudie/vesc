@@ -3049,8 +3049,8 @@ angle::Result ImageHelper::init(Context *context,
                                 uint32_t layerCount)
 {
     return initExternal(context, textureType, extents, format, samples, usage,
-                        kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
-                        maxLevel, mipLevels, layerCount);
+                        kVkImageCreateFlagsNone, nullptr, baseLevel, maxLevel, mipLevels,
+                        layerCount);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
@@ -3060,7 +3060,6 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         GLint samples,
                                         VkImageUsageFlags usage,
                                         VkImageCreateFlags additionalCreateFlags,
-                                        ImageLayout initialLayout,
                                         const void *externalImageCreateInfo,
                                         gl::LevelIndex baseLevel,
                                         gl::LevelIndex maxLevel,
@@ -3102,9 +3101,9 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.queueFamilyIndexCount = 0;
     imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(initialLayout);
+    imageInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
 
-    mCurrentLayout = initialLayout;
+    mCurrentLayout = ImageLayout::Undefined;
 
     mYuvConversionSampler.reset();
     mExternalFormat = 0;
@@ -3521,11 +3520,10 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
              : VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
     constexpr VkImageCreateFlags kMultisampledCreateFlags = 0;
 
-    ANGLE_TRY(initExternal(context, textureType, resolveImage.getExtents(),
-                           resolveImage.getFormat(), samples, kMultisampledUsageFlags,
-                           kMultisampledCreateFlags, ImageLayout::Undefined, nullptr,
-                           resolveImage.getBaseLevel(), resolveImage.getMaxLevel(),
-                           resolveImage.getLevelCount(), resolveImage.getLayerCount()));
+    ANGLE_TRY(initExternal(
+        context, textureType, resolveImage.getExtents(), resolveImage.getFormat(), samples,
+        kMultisampledUsageFlags, kMultisampledCreateFlags, nullptr, resolveImage.getBaseLevel(),
+        resolveImage.getMaxLevel(), resolveImage.getLevelCount(), resolveImage.getLayerCount()));
 
     const VkMemoryPropertyFlags kMultisampledMemoryFlags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |

@@ -1275,7 +1275,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                GLint samples,
                                VkImageUsageFlags usage,
                                VkImageCreateFlags additionalCreateFlags,
-                               ImageLayout initialLayout,
                                const void *externalImageCreateInfo,
                                gl::LevelIndex baseLevel,
                                gl::LevelIndex maxLevel,
