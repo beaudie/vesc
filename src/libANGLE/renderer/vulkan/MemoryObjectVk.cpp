@@ -205,8 +205,7 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
     // of getting defaulted to zero.  Note that the GL enum values constituting the bits of
     // |createFlags| are identical to their corresponding Vulkan value.
     ANGLE_TRY(image->initExternal(contextVk, type, vkExtents, vkFormat, 1, imageUsageFlags,
-                                  createFlags, vk::ImageLayout::Undefined,
-                                  &externalMemoryImageCreateInfo, gl::LevelIndex(0),
+                                  createFlags, &externalMemoryImageCreateInfo, gl::LevelIndex(0),
                                   gl::LevelIndex(static_cast<uint32_t>(levels) - 1),
                                   static_cast<uint32_t>(levels), layerCount));
 
