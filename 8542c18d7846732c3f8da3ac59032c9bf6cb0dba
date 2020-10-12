@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b38b9a72_73f9bc0f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-12T22:32:31Z",
+      "side": 1,
+      "message": "nit: suggest you split these up into two uint16_ts, to try and have as few bits straddling 8/16-bit boundaries as possible. just in case that\u0027s a performance thing.",
+      "range": {
+        "startLine": 286,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 0
+      },
+      "revId": "8542c18d7846732c3f8da3ac59032c9bf6cb0dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
