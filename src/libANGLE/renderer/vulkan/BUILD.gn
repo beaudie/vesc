@@ -128,6 +128,13 @@ if (angle_use_x11) {
     "xcb/WindowSurfaceVkXcb.cpp",
     "xcb/WindowSurfaceVkXcb.h",
   ]
+} else if (angle_use_display) {
+  _vulkan_backend_sources += [
+    "display/DisplayVkDisplay.cpp",
+    "display/DisplayVkDisplay.h",
+    "display/WindowSurfaceVkDisplay.cpp",
+    "display/WindowSurfaceVkDisplay.h",
+  ]
 }
 
 if (is_fuchsia) {

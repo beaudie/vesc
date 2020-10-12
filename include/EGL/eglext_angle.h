@@ -94,6 +94,8 @@
 #ifndef EGL_ANGLE_platform_angle_vulkan
 #define EGL_ANGLE_platform_angle_vulkan 1
 #define EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE 0x3450
+// TODO: Get a formal value!
+#define EGL_ANGLE_NATIVE_PLATFORM_TYPE_VULKAN_DISPLAY_ANGLE 0x3492
 #endif /* EGL_ANGLE_platform_angle_vulkan */
 
 #ifndef EGL_ANGLE_platform_angle_metal

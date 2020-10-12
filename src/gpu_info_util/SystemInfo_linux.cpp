@@ -7,6 +7,7 @@
 // SystemInfo_linux.cpp: implementation of the Linux-specific parts of SystemInfo.h
 
 #include "gpu_info_util/SystemInfo_internal.h"
+#include "gpu_info_util/SystemInfo_vulkan.h"
 
 #include <cstring>
 #include <fstream>
@@ -73,7 +74,11 @@ bool GetSystemInfo(SystemInfo *info)
 {
     if (!GetPCIDevicesWithLibPCI(&(info->gpus)))
     {
+#if defined(ANGLE_USE_VULKAN_DISPLAY)
+        GetSystemInfoVulkan(info);
+#else
         return false;
+#endif
     }
 
     if (info->gpus.size() == 0)

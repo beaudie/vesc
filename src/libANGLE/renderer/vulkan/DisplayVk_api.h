@@ -39,6 +39,11 @@ bool IsVulkanGGPDisplayAvailable();
 DisplayImpl *CreateVulkanGGPDisplay(const egl::DisplayState &state);
 #endif  // defined(ANGLE_PLATFORM_GGP)
 
+#if defined(ANGLE_USE_VULKAN_DISPLAY)
+bool IsVulkanDisplayDisplayAvailable();
+DisplayImpl *CreateVulkanDisplayDisplay(const egl::DisplayState &state);
+#endif  // defined(ANGLE_USE_VULKAN_DISPLAY)
+
 #if defined(ANGLE_PLATFORM_APPLE)
 bool IsVulkanMacDisplayAvailable();
 DisplayImpl *CreateVulkanMacDisplay(const egl::DisplayState &state);
