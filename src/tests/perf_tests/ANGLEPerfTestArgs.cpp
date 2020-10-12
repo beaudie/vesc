@@ -49,6 +49,8 @@ using namespace angle;
 
 void ANGLEProcessPerfTestArgs(int *argc, char **argv)
 {
+    AddPerfTestEnvironment();
+
     int argcOutCount = 0;
 
     for (int argIndex = 0; argIndex < *argc; argIndex++)
