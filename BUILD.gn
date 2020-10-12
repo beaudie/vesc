@@ -21,7 +21,7 @@ declare_args() {
   # Use the PCI lib to collect GPU information on Linux.
   use_libpci =
       (is_linux || is_chromeos) && (!is_chromecast || is_cast_desktop_build) &&
-      (angle_use_x11 || use_ozone) && angle_has_build
+      (angle_use_x11 || angle_use_display || use_ozone) && angle_has_build
 
   # Link in system libGL, to work with apitrace.  See doc/DebuggingTips.md.
   angle_link_glx = false
@@ -113,6 +113,10 @@ config("internal_config") {
 
   if (is_ggp) {
     defines += [ "__ggp__" ]
+  }
+
+  if (angle_use_display) {
+    defines += [ "ANGLE_USE_VULKAN_DISPLAY" ]
   }
 }
 

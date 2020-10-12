@@ -354,6 +354,12 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                 impl = rx::CreateVulkanXcbDisplay(state);
                 break;
             }
+#        elif defined(ANGLE_PLATFORM_VULKAN_DISPLAY)
+            if (rx::IsVulkanDisplayDisplayAvailable())
+            {
+                impl = rx::CreateVulkanDisplayDisplay(state);
+                break;
+            }
 #        endif
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             if (rx::IsVulkanAndroidDisplayAvailable())
