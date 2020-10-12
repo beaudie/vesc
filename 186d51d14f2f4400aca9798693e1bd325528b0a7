@@ -16,6 +16,23 @@
       "message": "See https://issuetracker.google.com/issues/168327817#comment2 for background.",
       "revId": "186d51d14f2f4400aca9798693e1bd325528b0a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "902f880f_0202dc38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-12T22:27:28Z",
+      "side": 1,
+      "message": "Michael, this change should not affect Fuschia, but a related change may (I\u0027ll cc you on both just in case).",
+      "revId": "186d51d14f2f4400aca9798693e1bd325528b0a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
