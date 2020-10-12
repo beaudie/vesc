@@ -264,6 +264,8 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result createSwapChain(vk::Context *context,
                                   const gl::Extents &extents,
                                   VkSwapchainKHR oldSwapchain);
+    angle::Result queryAndAdjustSurfaceCaps(ContextVk *contextVk,
+                                            VkSurfaceCapabilitiesKHR *surfaceCaps);
     angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk, bool presentOutOfDate);
     angle::Result resizeSwapchainImages(vk::Context *context, uint32_t imageCount);
     void releaseSwapchainImages(ContextVk *contextVk);
@@ -336,6 +338,9 @@ class WindowSurfaceVk : public SurfaceVk
 
     // True when acquiring the next image is deferred.
     bool mNeedToAcquireNextSwapchainImage;
+
+    // True for platforms when window resizing does not trigger VK_ERROR_OUT_OF_DATE.
+    bool mPerFrameWindowSizeQueryEnabled;
 };
 
 }  // namespace rx
