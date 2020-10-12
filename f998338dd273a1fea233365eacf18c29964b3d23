@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f42a278_96a49b62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-12T22:59:34Z",
+      "side": 1,
+      "message": "LGTM, you can keep the old commit message though, as it\u0027s still uint32_t. Might warn you about the length.\n\nThanks!",
+      "revId": "f998338dd273a1fea233365eacf18c29964b3d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
