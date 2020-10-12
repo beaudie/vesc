@@ -50,6 +50,23 @@
       "message": "(So thanks a lot for the test!)",
       "revId": "d069ea39fc800edc8e05f92cb5d9ba0af6eb426b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13d0c3ac_cfb548cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-12T21:57:50Z",
+      "side": 1,
+      "message": "Thanks all. I am moving Shabi to CC here so I can land the CL now and get gfxbench test unblocked. Shabi, if you have comment, feel free to add, we can address in other CLs.",
+      "revId": "d069ea39fc800edc8e05f92cb5d9ba0af6eb426b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
