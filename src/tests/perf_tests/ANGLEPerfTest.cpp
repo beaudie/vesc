@@ -10,6 +10,7 @@
 #include "ANGLEPerfTest.h"
 
 #include "ANGLEPerfTestArgs.h"
+#include "anglebase/no_destructor.h"
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
@@ -27,11 +28,33 @@
 
 #include <json/json.h>
 
+#include <rapidjson/document.h>
+#include <rapidjson/filewritestream.h>
+#include <rapidjson/istreamwrapper.h>
+#include <rapidjson/prettywriter.h>
+
 #if defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
 #    include "util/windows/WGLWindow.h"
 #endif  // defined(ANGLE_USE_UTIL_LOADER) &&defined(ANGLE_PLATFORM_WINDOWS)
 
+#if defined(ANGLE_HAS_HISTOGRAMS)
+ANGLE_DISABLE_EXTRA_SEMI_WARNING
+ANGLE_DISABLE_EXTRA_SEMI_STMT_WARNING
+ANGLE_DISABLE_DESTRUCTOR_OVERRIDE_WARNING
+ANGLE_DISABLE_SUGGEST_OVERRIDE_WARNINGS
+#    include "google/protobuf/util/json_util.h"
+#    include "third_party/catapult/tracing/tracing/value/diagnostics/reserved_infos.h"
+#    include "third_party/catapult/tracing/tracing/value/histogram.h"
+ANGLE_REENABLE_SUGGEST_OVERRIDE_WARNINGS
+ANGLE_REENABLE_DESTRUCTOR_OVERRIDE_WARNING
+ANGLE_REENABLE_EXTRA_SEMI_STMT_WARNING
+ANGLE_REENABLE_EXTRA_SEMI_WARNING
+
+namespace proto = catapult::tracing::tracing::proto;
+#endif  // defined(ANGLE_HAS_HISTOGRAMS)
+
 using namespace angle;
+namespace js = rapidjson;
 
 namespace
 {
@@ -158,6 +181,61 @@ void DumpTraceEventsToJSONFile(const std::vector<TraceEvent> &traceEvents,
 
     outFile.close();
 }
+
+std::string AsJsonString(const std::string string)
+{
+    return "\"" + string + "\"";
+}
+
+using Histograms = std::map<std::string, std::unique_ptr<catapult::HistogramBuilder>>;
+
+class PerfTestEnvironment : public testing::Environment
+{
+  public:
+    void TearDown() override;
+
+    static void AddHistogramSample(const std::string &measurement,
+                                   const std::string &story,
+                                   double value,
+                                   const std::string &units);
+
+  private:
+    static Histograms &GetHistograms()
+    {
+        static angle::base::NoDestructor<std::unique_ptr<Histograms>> sHistograms(new Histograms);
+        return **sHistograms;
+    }
+};
+
+bool WriteJsonFile(const std::string &outputFile, js::Document *doc)
+{
+    FILE *fp = fopen(outputFile.c_str(), "w");
+    if (!fp)
+    {
+        return false;
+    }
+
+    constexpr size_t kBufferSize = 0xFFFF;
+    std::vector<char> writeBuffer(kBufferSize);
+    js::FileWriteStream os(fp, writeBuffer.data(), kBufferSize);
+    js::PrettyWriter<js::FileWriteStream> writer(os);
+    if (!doc->Accept(writer))
+    {
+        fclose(fp);
+        return false;
+    }
+    fclose(fp);
+    return true;
+}
+
+#if defined(ANGLE_HAS_HISTOGRAMS)
+std::string GetUnitAndDirection(proto::UnitAndDirection unit)
+{
+    ASSERT(unit.improvement_direction() == proto::SMALLER_IS_BETTER);
+    ASSERT(unit.unit() == proto::MS_BEST_FIT_FORMAT);
+    return "ms_fit_best_format";
+}
+#endif  // defined(ANGLE_HAS_HISTOGRAMS)
 }  // anonymous namespace
 
 TraceEvent::TraceEvent(char phaseIn,
@@ -348,6 +426,12 @@ double ANGLEPerfTest::printResults()
             static_cast<double>(mNumStepsPerformed * mIterationsPerStep) / elapsedTimeSeconds[0];
         printf("Ran %0.2lf iterations per second\n", fps);
     }
+
+    // Output histogram JSON set format if enabled.
+    double secondsPerStep      = elapsedTimeSeconds[0] / static_cast<double>(mNumStepsPerformed);
+    double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
+    PerfTestEnvironment::AddHistogramSample(mName + mBackend, mStory,
+                                            secondsPerIteration * kMilliSecondsPerSecond, "ms");
 
     return retValue;
 }
@@ -852,6 +936,217 @@ void ANGLERenderTest::onErrorMessage(const char *errorMessage)
     FAIL() << "Failing test because of unexpected internal ANGLE error:\n" << errorMessage << "\n";
 }
 
+// static
+void PerfTestEnvironment::AddHistogramSample(const std::string &measurement,
+                                             const std::string &story,
+                                             double value,
+                                             const std::string &units)
+{
+#if defined(ANGLE_HAS_HISTOGRAMS)
+    std::string measurementAndStory = measurement + story;
+    Histograms &histograms          = GetHistograms();
+    if (histograms.count(measurementAndStory) == 0)
+    {
+        proto::UnitAndDirection unitAndDirection;
+        unitAndDirection.set_improvement_direction(proto::SMALLER_IS_BETTER);
+        unitAndDirection.set_unit(proto::MS_BEST_FIT_FORMAT);
+
+        std::unique_ptr<catapult::HistogramBuilder> builder =
+            std::make_unique<catapult::HistogramBuilder>(measurement, unitAndDirection);
+
+        // Set all summary options as false - we don't want to generate metric_std, metric_count,
+        // and so on for all metrics.
+        builder->SetSummaryOptions(proto::SummaryOptions());
+        histograms[measurementAndStory] = std::move(builder);
+
+        proto::Diagnostic stories;
+        proto::GenericSet *genericSet = stories.mutable_generic_set();
+        genericSet->add_values(AsJsonString(story));
+        histograms[measurementAndStory]->AddDiagnostic(catapult::kStoriesDiagnostic, stories);
+    }
+
+    histograms[measurementAndStory]->AddSample(value);
+#endif  // defined(ANGLE_HAS_HISTOGRAMS)
+}
+
+void PerfTestEnvironment::TearDown()
+{
+#if defined(ANGLE_HAS_HISTOGRAMS)
+    proto::HistogramSet histogramSet;
+
+    for (const auto &histogram : GetHistograms())
+    {
+        std::unique_ptr<proto::Histogram> proto = histogram.second->toProto();
+        histogramSet.mutable_histograms()->AddAllocated(proto.release());
+    }
+
+    // Custom JSON serialization for histogram-json-set.
+    js::Document doc;
+    doc.SetArray();
+
+    js::Document::AllocatorType &allocator = doc.GetAllocator();
+
+    for (int histogramIndex = 0; histogramIndex < histogramSet.histograms_size(); ++histogramIndex)
+    {
+        const proto::Histogram &histogram = histogramSet.histograms(histogramIndex);
+
+        js::Value obj;
+        obj.SetObject();
+
+        js::Value name(histogram.name(), allocator);
+        obj.AddMember("name", name, allocator);
+
+        js::Value description(histogram.description(), allocator);
+        obj.AddMember("description", description, allocator);
+
+        js::Value unitAndDirection(GetUnitAndDirection(histogram.unit()), allocator);
+        obj.AddMember("unit", unitAndDirection, allocator);
+
+        if (histogram.has_diagnostics())
+        {
+            js::Value diags;
+            diags.SetObject();
+
+            for (const auto &mapIter : histogram.diagnostics().diagnostic_map())
+            {
+                const proto::Diagnostic &diagnostic = mapIter.second;
+
+                if (!diagnostic.shared_diagnostic_guid().empty())
+                {
+                    js::Value diagName(mapIter.first, allocator);
+                    js::Value guid(diagnostic.shared_diagnostic_guid(), allocator);
+                    diags.AddMember(diagName, guid, allocator);
+                }
+            }
+
+            obj.AddMember("diagnostics", diags, allocator);
+        }
+
+        js::Value sampleValues;
+        sampleValues.SetArray();
+
+        for (int sampleIndex = 0; sampleIndex < histogram.sample_values_size(); ++sampleIndex)
+        {
+            js::Value sample(histogram.sample_values(sampleIndex));
+            sampleValues.PushBack(sample, allocator);
+        }
+
+        obj.AddMember("sampleValues", sampleValues, allocator);
+
+        js::Value maxNumSamplesValues(histogram.max_num_sample_values());
+        obj.AddMember("maxNumSamplesValues", maxNumSamplesValues, allocator);
+
+        if (histogram.has_bin_boundaries())
+        {
+            js::Value binBoundaries;
+            binBoundaries.SetArray();
+
+            const proto::BinBoundaries &boundaries = histogram.bin_boundaries();
+            for (int binIndex = 0; binIndex < boundaries.bin_specs_size(); ++binIndex)
+            {
+                js::Value binSpec(boundaries.bin_specs(binIndex).bin_boundary());
+                binBoundaries.PushBack(binSpec, allocator);
+            }
+
+            obj.AddMember("binBoundaries", binBoundaries, allocator);
+        }
+
+        if (histogram.has_summary_options())
+        {
+            const proto::SummaryOptions &options = histogram.summary_options();
+
+            js::Value summary;
+            summary.SetObject();
+
+            js::Value avg(options.avg());
+            js::Value count(options.count());
+            js::Value max(options.max());
+            js::Value min(options.min());
+            js::Value std(options.std());
+            js::Value sum(options.sum());
+
+            summary.AddMember("avg", avg, allocator);
+            summary.AddMember("count", count, allocator);
+            summary.AddMember("max", max, allocator);
+            summary.AddMember("min", min, allocator);
+            summary.AddMember("std", std, allocator);
+            summary.AddMember("sum", sum, allocator);
+
+            obj.AddMember("summaryOptions", summary, allocator);
+        }
+
+        if (histogram.has_running())
+        {
+            const proto::RunningStatistics &running = histogram.running();
+
+            js::Value stats;
+            stats.SetArray();
+
+            js::Value count(running.count());
+            js::Value max(running.max());
+            js::Value meanlogs(running.meanlogs());
+            js::Value mean(running.mean());
+            js::Value min(running.min());
+            js::Value sum(running.sum());
+            js::Value variance(running.variance());
+
+            stats.PushBack(count, allocator);
+            stats.PushBack(max, allocator);
+            stats.PushBack(meanlogs, allocator);
+            stats.PushBack(mean, allocator);
+            stats.PushBack(min, allocator);
+            stats.PushBack(sum, allocator);
+            stats.PushBack(variance, allocator);
+
+            obj.AddMember("running", stats, allocator);
+        }
+
+        doc.PushBack(obj, allocator);
+    }
+
+    for (const auto &diagnosticIt : histogramSet.shared_diagnostics())
+    {
+        const proto::Diagnostic &diagnostic = diagnosticIt.second;
+
+        js::Value obj;
+        obj.SetObject();
+
+        js::Value name(diagnosticIt.first, allocator);
+        obj.AddMember("name", name, allocator);
+
+        switch (diagnostic.diagnostic_oneof_case())
+        {
+            case proto::Diagnostic::kGenericSet:
+            {
+                js::Value type("GenericSet", allocator);
+                obj.AddMember("type", type, allocator);
+
+                const proto::GenericSet &genericSet = diagnostic.generic_set();
+
+                js::Value values;
+                values.SetArray();
+
+                for (int valueIndex = 0; valueIndex < genericSet.values_size(); ++valueIndex)
+                {
+                    js::Value value(genericSet.values(valueIndex), allocator);
+                    values.PushBack(value, allocator);
+                }
+
+                obj.AddMember("values", values, allocator);
+                break;
+            }
+
+            default:
+                UNREACHABLE();
+        }
+
+        doc.PushBack(obj, allocator);
+    }
+
+    WriteJsonFile("histo.json", &doc);
+#endif  // defined(ANGLE_HAS_HISTOGRAMS)
+}
+
 namespace angle
 {
 double GetHostTimeSeconds()
@@ -860,5 +1155,10 @@ double GetHostTimeSeconds()
     // large timestamps.
     static double origin = angle::GetCurrentTime();
     return angle::GetCurrentTime() - origin;
+}
+
+void AddPerfTestEnvironment()
+{
+    testing::AddGlobalTestEnvironment(new PerfTestEnvironment());
 }
 }  // namespace angle

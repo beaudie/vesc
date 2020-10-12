@@ -239,6 +239,13 @@ if (is_win || is_linux || is_chromeos || is_mac || is_android) {
   }
 }
 
+config("angle_maybe_has_histograms") {
+  if (angle_has_histograms) {
+    defines = [ "ANGLE_HAS_HISTOGRAMS" ]
+    include_dirs = [ "$root_gen_dir" ]
+  }
+}
+
 template("angle_perftests_common") {
   assert(defined(invoker.test_utils))
 
@@ -258,11 +265,21 @@ template("angle_perftests_common") {
       "perf_tests/third_party/perf/perf_test.h",
     ]
     deps = [ "$angle_jsoncpp_dir:jsoncpp" ]
-    public_deps = [ "${invoker.test_utils}" ]
-    public_configs += [ "${angle_root}:libANGLE_config" ]
+    public_deps = [
+      "$angle_root/third_party/rapidjson:rapidjson",
+      "${invoker.test_utils}",
+    ]
+    public_configs += [
+      "${angle_root}:libANGLE_config",
+      ":angle_maybe_has_histograms",
+    ]
 
     if (angle_has_histograms) {
-      deps += [ "//third_party/catapult/tracing/tracing:histogram" ]
+      deps += [
+        "//third_party/catapult/tracing/tracing:histogram",
+        "//third_party/catapult/tracing/tracing:reserved_infos",
+        "//third_party/protobuf:protobuf_full",
+      ]
     }
   }
 }
