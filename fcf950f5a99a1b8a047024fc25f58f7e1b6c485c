@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52812ba6_19baf313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-12T15:32:00Z",
+      "side": 1,
+      "message": "Thanks for the reviews. Yuly if you have any follow-up comments leave them below and I\u0027ll address after. Landing to progress with dEQP testing with the standalone test runner.",
+      "revId": "fcf950f5a99a1b8a047024fc25f58f7e1b6c485c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57f035fb_2a711941",
