@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4aa18fd_2ee947e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-12T21:46:28Z",
+      "side": 1,
+      "message": "PTAL.\n\nUpdated with Jamie\u0027s suggestions.",
+      "revId": "f6ab72447dcb49e8d17f5e935e952aaecb098cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
