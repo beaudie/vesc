@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4edcc099_7946ede3",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-13T13:30:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b186db3e_38e81edb",
+      "range": {
+        "startLine": 138,
+        "startChar": 9,
+        "endLine": 138,
+        "endChar": 13
+      },
+      "revId": "08213190212a9fc8146546d959af30972c1da98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "528ed8eb_4478efbf",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0ff95ad_664083c5",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-13T13:30:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "528ed8eb_4478efbf",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 19
+      },
+      "revId": "08213190212a9fc8146546d959af30972c1da98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f9294d0_29406c3e",
@@ -94,6 +142,30 @@
       "writtenOn": "2020-10-13T13:14:49Z",
       "side": 1,
       "message": "nit: same",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 19
+      },
+      "revId": "08213190212a9fc8146546d959af30972c1da98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c104bd38_63e50cf1",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-13T13:30:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f9294d0_29406c3e",
       "range": {
         "startLine": 84,
         "startChar": 4,
