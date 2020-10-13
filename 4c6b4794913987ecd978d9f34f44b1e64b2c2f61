@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t these be the other way? As in `*layerCount \u003d hasLayer() ? 1 : layerCount()`\n\nIn other words, `hasLayer()` would imply only one layer, which is `layerIndex()`, and `!hasLayer()` would imply all layers, which is `[0, layerCount()]`. Same for the 3D case. Isn\u0027t that so?",
       "revId": "4c6b4794913987ecd978d9f34f44b1e64b2c2f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faf1f675_196b5ff2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-13T16:59:17Z",
+      "side": 1,
+      "message": "From what I understand, this makes sense. hasLayer means it may have more than one layer, so you should return actual layer count. And you can also find a few other places using it this way as well, (for example,  TextureStorage11_2DArray::getRenderTarget). \n\nI am not the expert of this layer code. I do see some code that I am a bit confused myself as well. For example, if you look at hasLayer() and isLayered() implementation, it looks contradict to each other to me?",
+      "parentUuid": "2d1a8b91_c8ac3eca",
+      "revId": "4c6b4794913987ecd978d9f34f44b1e64b2c2f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
