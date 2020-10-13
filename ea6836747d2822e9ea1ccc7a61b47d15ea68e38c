@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "800a14d3_eec37aa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T18:34:37Z",
+      "side": 1,
+      "message": "fyi. Seems like a deterministic failure but want to land this immediately to unblock CQ.",
+      "revId": "ea6836747d2822e9ea1ccc7a61b47d15ea68e38c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
