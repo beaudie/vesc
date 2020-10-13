@@ -16,6 +16,92 @@
       "message": "The dEQP and some end2end tests for this feature require support for clearing integer attachments, so we can\u0027t run them yet. Also, we need dEQP tests to be relocated from 3.1 to 3.0 suite (CTS internal issue 2328).",
       "revId": "08213190212a9fc8146546d959af30972c1da98f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b4cecf2_c583f949",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:14:49Z",
+      "side": 1,
+      "message": "👍",
+      "revId": "08213190212a9fc8146546d959af30972c1da98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b186db3e_38e81edb",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:14:49Z",
+      "side": 1,
+      "message": "nit: can you replace auto with the full type for clarity?",
+      "range": {
+        "startLine": 138,
+        "startChar": 9,
+        "endLine": 138,
+        "endChar": 13
+      },
+      "revId": "08213190212a9fc8146546d959af30972c1da98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "528ed8eb_4478efbf",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:14:49Z",
+      "side": 1,
+      "message": "nit: style guide recommends methods before data declarations",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 19
+      },
+      "revId": "08213190212a9fc8146546d959af30972c1da98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f9294d0_29406c3e",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:14:49Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 19
+      },
+      "revId": "08213190212a9fc8146546d959af30972c1da98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
