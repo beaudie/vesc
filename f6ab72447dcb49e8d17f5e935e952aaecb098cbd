@@ -16,6 +16,92 @@
       "message": "PTAL.\n\nUpdated with Jamie\u0027s suggestions.",
       "revId": "f6ab72447dcb49e8d17f5e935e952aaecb098cbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e75d8305_267410b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:51:21Z",
+      "side": 1,
+      "message": "OK Tim, the basic approach looks good now. One last issue.",
+      "revId": "f6ab72447dcb49e8d17f5e935e952aaecb098cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69bb27a6_16bd0a68",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:51:21Z",
+      "side": 1,
+      "message": "nit: use explicit type here",
+      "range": {
+        "startLine": 1768,
+        "startChar": 23,
+        "endLine": 1768,
+        "endChar": 27
+      },
+      "revId": "f6ab72447dcb49e8d17f5e935e952aaecb098cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14fa32d1_4b4e336e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:51:21Z",
+      "side": 1,
+      "message": "instead of calling these Context::ObjectPerfCounts etc, you can just call them Context::PerfCounters. Or put them outside the class and name them ContextPerfCounters, etc.",
+      "range": {
+        "startLine": 767,
+        "startChar": 11,
+        "endLine": 767,
+        "endChar": 29
+      },
+      "revId": "f6ab72447dcb49e8d17f5e935e952aaecb098cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15315bdb_cea7a9f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:51:21Z",
+      "side": 1,
+      "message": "Can we use a new define instead of piggy-packing on overlay? It\u0027s only when I\u0027m specifically wanting per-object info dump specifically that I\u0027d want to see this data. Otherwise it might start spamming stdout way too much.",
+      "range": {
+        "startLine": 776,
+        "startChar": 0,
+        "endLine": 780,
+        "endChar": 6
+      },
+      "revId": "f6ab72447dcb49e8d17f5e935e952aaecb098cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
