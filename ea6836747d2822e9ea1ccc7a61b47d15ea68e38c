@@ -16,6 +16,29 @@
       "message": "fyi. Seems like a deterministic failure but want to land this immediately to unblock CQ.",
       "revId": "ea6836747d2822e9ea1ccc7a61b47d15ea68e38c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b881e7e6_183ea60a",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-13T18:37:19Z",
+      "side": 1,
+      "message": "Is this going to be true for all Mac cases, including IsNVIDIA?",
+      "range": {
+        "startLine": 373,
+        "startChar": 34,
+        "endLine": 373,
+        "endChar": 51
+      },
+      "revId": "ea6836747d2822e9ea1ccc7a61b47d15ea68e38c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
