@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5338fa9_0aa0c856",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-13T22:40:17Z",
+      "side": 1,
+      "message": "With this update, WebGL S3TC tests pass on configurations without swizzling support.",
+      "revId": "111d3ebdbe9ea0faf033186d82def870965f9a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
