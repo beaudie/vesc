@@ -93,6 +93,30 @@
       },
       "revId": "336202d7d6014fd61f430d4ac92d756b33d32ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6859f9_1fc46e39",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-13T21:40:26Z",
+      "side": 1,
+      "message": "It\u0027s useful in local testing at least. If anything, it pin-points where in the run the crash happened. I don\u0027t remember if it also says how far it went in the test or not, but I suspect it does.",
+      "parentUuid": "f8bec40d_763f4c41",
+      "range": {
+        "startLine": 538,
+        "startChar": 0,
+        "endLine": 538,
+        "endChar": 51
+      },
+      "revId": "336202d7d6014fd61f430d4ac92d756b33d32ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
