@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e687ae1_1bfa4b62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-13T16:55:32Z",
+      "side": 1,
+      "message": "Accidentally found this bug while writing regression test for the content defined change. The symptoms of the linked bugs are the same, and this should very likely fix those.",
+      "revId": "77fb1eb903eda70b32e7df230f9914dcb4872ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
