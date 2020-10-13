@@ -843,49 +843,39 @@ void Format::init(const DisplayMtl *display, angle::FormatID intendedFormatId_)
             break;
 
         case angle::FormatID::BC1_RGB_UNORM_BLOCK:
+
+            this->metalFormat    = MTLPixelFormatBC1_RGBA;
+            this->actualFormatId = angle::FormatID::BC1_RGBA_UNORM_BLOCK;
+            this->initFunction   = nullptr;
+
 #    if defined(__IPHONE_13_0) || defined(__MAC_10_15)
             if (display->getFeatures().hasTextureSwizzle.enabled)
             {
-
-                this->metalFormat    = MTLPixelFormatBC1_RGBA;
-                this->actualFormatId = angle::FormatID::BC1_RGBA_UNORM_BLOCK;
-                this->initFunction   = nullptr;
-
                 this->swizzled = true;
                 this->swizzle  = {GL_RED, GL_GREEN, GL_BLUE, GL_ONE};
             }
             else
 #    endif  // #if defined(__IPHONE_13_0) || defined(__MAC_10_15)
             {
-
-                this->metalFormat    = MTLPixelFormatInvalid;
-                this->actualFormatId = angle::FormatID::NONE;
-                this->initFunction   = nullptr;
-
                 this->swizzled = false;
             }
             break;
 
         case angle::FormatID::BC1_RGB_UNORM_SRGB_BLOCK:
+
+            this->metalFormat    = MTLPixelFormatBC1_RGBA_sRGB;
+            this->actualFormatId = angle::FormatID::BC1_RGBA_UNORM_SRGB_BLOCK;
+            this->initFunction   = nullptr;
+
 #    if defined(__IPHONE_13_0) || defined(__MAC_10_15)
             if (display->getFeatures().hasTextureSwizzle.enabled)
             {
-
-                this->metalFormat    = MTLPixelFormatBC1_RGBA_sRGB;
-                this->actualFormatId = angle::FormatID::BC1_RGBA_UNORM_SRGB_BLOCK;
-                this->initFunction   = nullptr;
-
                 this->swizzled = true;
                 this->swizzle  = {GL_RED, GL_GREEN, GL_BLUE, GL_ONE};
             }
             else
 #    endif  // #if defined(__IPHONE_13_0) || defined(__MAC_10_15)
             {
-
-                this->metalFormat    = MTLPixelFormatInvalid;
-                this->actualFormatId = angle::FormatID::NONE;
-                this->initFunction   = nullptr;
-
                 this->swizzled = false;
             }
             break;
