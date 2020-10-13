@@ -1769,8 +1769,8 @@ void ContextVk::commandProcessorSyncErrors()
 {
     if (mRenderer->hasPendingError())
     {
-        vk::ErrorDetails error = mRenderer->getAndClearPendingError();
-        handleError(error.errorCode, error.file, error.function, error.line);
+        vk::Error error = mRenderer->getAndClearPendingError();
+        handleError(error.mErrorCode, error.mFile, error.mFunction, error.mLine);
     }
 }
 
@@ -4348,9 +4348,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         // 2. Call submitFrame()
         // 3. Allocate new primary command buffer
         vk::CommandProcessorTask flushAndQueueSubmit;
-        flushAndQueueSubmit.initFlushAndQueueSubmit(mWaitSemaphores, mWaitSemaphoreStageMasks,
-                                                    signalSemaphore, mContextPriority,
-                                                    mCurrentGarbage, mResourceUseList);
+        flushAndQueueSubmit.initFlushAndQueueSubmit(
+            mWaitSemaphores, mWaitSemaphoreStageMasks, signalSemaphore, mContextPriority,
+            std::move(mCurrentGarbage), std::move(mResourceUseList));
 
         commandProcessorSyncErrorsAndQueueCommand(&flushAndQueueSubmit);
 
@@ -4900,18 +4900,25 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     mRenderPassCommands->endRenderPass(this);
 
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (vk::CommandBufferHelper::kEnableCommandStreamDiagnostics)
     {
-        mRenderPassCommands->markClosed();
-        vk::CommandProcessorTask flushToPrimary;
-        flushToPrimary.initFlushToPrimary(this, mRenderPassCommands);
-        ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushInsideRenderPassCommands");
-        commandProcessorSyncErrorsAndQueueCommand(&flushToPrimary);
-        getNextAvailableCommandBuffer(&mRenderPassCommands, true);
-    }
-    else
-    {
-        ANGLE_TRY(mRenderPassCommands->flushToPrimary(this, &mPrimaryCommands));
+        mRenderPassCommands->addCommandDiagnostics(this);
+
+        if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+        {
+            mRenderPassCommands->markClosed();
+            vk::CommandProcessorTask flushToPrimary;
+            flushToPrimary.initProcessCommands(mRenderPassCommands);
+            ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushInsideRenderPassCommands");
+            commandProcessorSyncErrorsAndQueueCommand(&flushToPrimary);
+            getNextAvailableCommandBuffer(&mRenderPassCommands, true);
+        }
+        else
+        {}
+        vk::RenderPass *renderPass = nullptr;
+        ANGLE_TRY(mRenderPassCommands->getRenderPassWithOps(this, &renderPass));
+        ANGLE_TRY(mRenderPassCommands->flushToPrimary(this->getFeatures(), &mPrimaryCommands,
+                                                      renderPass));
     }
 
     mHasPrimaryCommands = true;
@@ -5042,18 +5049,26 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     addOverlayUsedBuffersCount(mOutsideRenderPassCommands);
 
+    if (vk::CommandBufferHelper::kEnableCommandStreamDiagnostics)
+    {
+        mOutsideRenderPassCommands->addCommandDiagnostics(this);
+    }
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
         mOutsideRenderPassCommands->markClosed();
         vk::CommandProcessorTask flushToPrimary;
-        flushToPrimary.initFlushToPrimary(this, mOutsideRenderPassCommands);
+        flushToPrimary.initProcessCommands(mOutsideRenderPassCommands);
         ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushOutsideRenderPassCommands");
         commandProcessorSyncErrorsAndQueueCommand(&flushToPrimary);
         getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
     }
     else
     {
-        ANGLE_TRY(mOutsideRenderPassCommands->flushToPrimary(this, &mPrimaryCommands));
+
+        vk::RenderPass *renderPass = nullptr;
+        ANGLE_TRY(mRenderPassCommands->getRenderPassWithOps(this, &renderPass));
+        ANGLE_TRY(mOutsideRenderPassCommands->flushToPrimary(this->getFeatures(), &mPrimaryCommands,
+                                                             renderPass));
     }
     mHasPrimaryCommands = true;
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;

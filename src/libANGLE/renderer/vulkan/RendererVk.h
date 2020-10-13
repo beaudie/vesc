@@ -298,14 +298,11 @@ class RendererVk : angle::NonCopyable
     {
         if (hasPendingError())
         {
-            vk::ErrorDetails error = getAndClearPendingError();
-            context->handleError(error.errorCode, error.file, error.function, error.line);
+            vk::Error error = getAndClearPendingError();
+            context->handleError(error.mErrorCode, error.mFile, error.mFunction, error.mLine);
         }
     }
-    vk::ErrorDetails getAndClearPendingError()
-    {
-        return mCommandProcessor.getAndClearPendingError();
-    }
+    vk::Error getAndClearPendingError() { return mCommandProcessor.getAndClearPendingError(); }
     void waitForCommandProcessorIdle() { mCommandProcessor.waitForWorkComplete(); }
 
     void finishToSerial(Serial serial) { mCommandProcessor.finishToSerial(serial); }
