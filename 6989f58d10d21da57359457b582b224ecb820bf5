@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8a271a2_85cb679e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-13T22:37:05Z",
+      "side": 1,
+      "message": "At least ARM architecture, early and late fragment test all maps to the same underline stage, so no value for ARM GPUs here. I am moving this to WIP until I can confirm there is any actual improvement here.",
+      "revId": "6989f58d10d21da57359457b582b224ecb820bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c068b491_51573ce2",
