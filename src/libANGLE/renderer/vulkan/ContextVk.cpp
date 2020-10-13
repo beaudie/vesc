@@ -671,7 +671,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mClearColorMasks = gl::BlendStateExt::ColorMaskStorage::GetReplicatedValue(
         kAllColorChannelsMask,
-        gl::BlendStateExt::ColorMaskStorage::GetMask(getCaps().maxDrawBuffers));
+        gl::BlendStateExt::ColorMaskStorage::GetMask(getNativeCaps().maxDrawBuffers));
 
     mNonIndexedDirtyBitsMask.set();
     mNonIndexedDirtyBitsMask.reset(DIRTY_BIT_INDEX_BUFFER);
