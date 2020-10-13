@@ -56,6 +56,30 @@
       },
       "revId": "77fb1eb903eda70b32e7df230f9914dcb4872ca2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a23319_d8365978",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4679,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-13T19:07:31Z",
+      "side": 1,
+      "message": "Probably not. `BufferHelper::releaseToExternal` is not using a global memory barrier, so it should be fine. SemaphoreVk::signal is not on the critical path, so no big deal either way, especially as there\u0027s a flush right after anyway.",
+      "parentUuid": "2059e625_4f7b810a",
+      "range": {
+        "startLine": 4676,
+        "startChar": 4,
+        "endLine": 4679,
+        "endChar": 5
+      },
+      "revId": "77fb1eb903eda70b32e7df230f9914dcb4872ca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
