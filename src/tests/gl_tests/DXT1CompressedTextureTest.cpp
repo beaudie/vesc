@@ -115,8 +115,24 @@ TEST_P(DXT1CompressedTextureTest, DXT1Alpha)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
-    // http://anglebug.com/4917
-    ANGLE_SKIP_TEST_IF(IsD3D());
+    // On platforms without native support for DXT1 RGB or texture swizzling (such as D3D or some
+    // Metal configurations), this test is allowed to succeed with transparent black instead of
+    // opaque black.
+    bool opaque = !IsD3D();
+
+    // TODO: replace skips with a proper Metal swizzling feature detection once it's available.
+
+    // Only newer Intel GPUs support swizzling in Metal.
+    ANGLE_SKIP_TEST_IF(IsMetal() && IsIntel());
+
+    // macOS 10.15+ is required for the swizzling to work on AMD.
+    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
+
+    // No swizzling on NVIDIA.
+    if (IsMetal() && IsNVIDIA())
+    {
+        opaque = false;
+    }
 
     GLTexture texture;
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -125,7 +141,7 @@ TEST_P(DXT1CompressedTextureTest, DXT1Alpha)
 
     // Image using pixels with the code for transparent black:
     //          "BLACK,             if color0 <= color1 and code(x,y) == 3"
-    constexpr uint8_t CompressedImageDXT1[] = {0, 0, 0, 0, 51, 204, 51, 204};
+    constexpr uint8_t CompressedImageDXT1[] = {0, 0, 0, 0, 255, 255, 255, 255};
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_S3TC_DXT1_EXT, 4, 4, 0,
                            sizeof(CompressedImageDXT1), CompressedImageDXT1);
 
@@ -146,7 +162,7 @@ TEST_P(DXT1CompressedTextureTest, DXT1Alpha)
     {
         for (GLint x = 0; x < kDrawSize; x++)
         {
-            EXPECT_PIXEL_EQ(x, y, 0, 0, 0, 255) << "at (" << x << ", " << y << ")";
+            EXPECT_PIXEL_EQ(x, y, 0, 0, 0, opaque ? 255 : 0) << "at (" << x << ", " << y << ")";
         }
     }
 }
