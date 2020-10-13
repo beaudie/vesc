@@ -33,6 +33,24 @@
       "message": "I don\u0027t know why SimpleStateChangeTest.DrawArraysThenDrawElements/ES2_Vulkan is failing, did a bad change sneak in on the main branch?",
       "revId": "36f1e2855028a73cfa550a35919043c226f745e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "129cca9a_1b7715f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T20:04:36Z",
+      "side": 1,
+      "message": "Might be because of a change to the standalone test runner \u0026 the ordering change \u0026 display reuse. Please feel free to file bugs for flakiness in ANGLE tests. Filed http://anglebug.com/5167",
+      "parentUuid": "8d4a812c_959ee5be",
+      "revId": "36f1e2855028a73cfa550a35919043c226f745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
