@@ -70,6 +70,24 @@
       "parentUuid": "8c21c43e_35324db7",
       "revId": "647e81a22f001fd41a8d88284028f9125574e64e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "769cf9e5_11b937df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-13T21:16:57Z",
+      "side": 1,
+      "message": "Ran chrome with and without `--enable-angle-features\u003ddisable_sync_control_support` (on X11). Can confirm disable_sync_control_support is Enabled and Disabled respectively. Chrome seems to me to behave identically.",
+      "parentUuid": "53ebe119_3f9a2a69",
+      "revId": "647e81a22f001fd41a8d88284028f9125574e64e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
