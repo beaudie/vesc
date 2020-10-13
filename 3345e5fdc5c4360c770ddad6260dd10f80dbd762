@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7dfa7a5_4687ce90",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-13T18:00:50Z",
+      "side": 1,
+      "message": "Does this have performance implications?\nIf this is a workaround and is not supposed to be set all the time, a comment here would be nice.\n\nThough, I don\u0027t understand why Context::initialize() is related to texture copies.",
+      "range": {
+        "startLine": 494,
+        "startChar": 0,
+        "endLine": 494,
+        "endChar": 54
+      },
+      "revId": "3345e5fdc5c4360c770ddad6260dd10f80dbd762",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
