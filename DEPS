@@ -28,7 +28,7 @@ vars = {
   'checkout_angle_internal': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'efbcef254191462cc27730a3b9f21beb5030d255',
+  'chromium_revision': '26d96072d548b184722f1c28a7c14296c9795a60',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -108,7 +108,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@8dae5d8e04e901d4e810fc7a7627973c2832bfcd',
+    'url': '{chromium_git}/chromium/src/build.git@28f65f71162ad14e0f9c50a7719e93c0f1deb3a3',
     'condition': 'not build_with_chromium',
   },
 
@@ -118,7 +118,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@b4cc6eb191edf053c625f923c359f77760c63028',
+    'url': '{chromium_git}/chromium/src/testing@225e4dc4d651a363d293ef1d39bda8a36cdd61a2',
     'condition': 'not build_with_chromium',
   },
 
@@ -314,7 +314,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': '{chromium_git}/chromium/src/tools/mb@d3154dd7d9a330d57057f381d3139d76695a35c3',
+    'url': '{chromium_git}/chromium/src/tools/mb@1b83be28f4db7c8c1eb7a1ad3acd31573708c92d',
     'condition': 'not build_with_chromium',
   },
 
