@@ -51,6 +51,41 @@
       "parentUuid": "8d4a812c_959ee5be",
       "revId": "36f1e2855028a73cfa550a35919043c226f745e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "116bd73b_15f065f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T20:05:12Z",
+      "side": 1,
+      "message": "Oh, actually, this ",
+      "revId": "36f1e2855028a73cfa550a35919043c226f745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81b84d9f_879016b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T20:05:12Z",
+      "side": 1,
+      "message": "Argh.. might not be related to the harness. Might be related to the prior CL.",
+      "parentUuid": "129cca9a_1b7715f5",
+      "revId": "36f1e2855028a73cfa550a35919043c226f745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
