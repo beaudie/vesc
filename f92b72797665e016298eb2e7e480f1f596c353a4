@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "f92b72797665e016298eb2e7e480f1f596c353a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa6c2a52_2ccbd100",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:30:37Z",
+      "side": 1,
+      "message": "Cody: review ping. Would like to get this CL out of my inbox.",
+      "revId": "f92b72797665e016298eb2e7e480f1f596c353a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
