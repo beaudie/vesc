@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38e10f61_889be583",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-13T20:18:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29a8a480_31cf7d06",
+      "range": {
+        "startLine": 1042,
+        "startChar": 8,
+        "endLine": 1042,
+        "endChar": 39
+      },
+      "revId": "2e11f37c590cbbe25fa827a3c13c9eadc833473e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fede69c_6436eb25",
