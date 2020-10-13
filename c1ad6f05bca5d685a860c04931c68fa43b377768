@@ -33,6 +33,23 @@
       "message": "Anything else Jamie?",
       "revId": "c1ad6f05bca5d685a860c04931c68fa43b377768",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "171506f6_c9504d29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T20:43:04Z",
+      "side": 1,
+      "message": "LGTM, sorry. Should have approved it earlier.",
+      "revId": "c1ad6f05bca5d685a860c04931c68fa43b377768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
