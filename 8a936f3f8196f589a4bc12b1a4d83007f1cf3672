@@ -33,6 +33,24 @@
       "message": "curious, why unset?",
       "revId": "8a936f3f8196f589a4bc12b1a4d83007f1cf3672",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bb6b5de_a4437da2",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T13:57:45Z",
+      "side": 1,
+      "message": "If we manage the sharding in this file, we don\u0027t want GTEST itself processing the sharding args too. Leads to unintended behaviour.",
+      "parentUuid": "37550038_c3e43a35",
+      "revId": "8a936f3f8196f589a4bc12b1a4d83007f1cf3672",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
