@@ -298,7 +298,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
     void serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value);
 
     const MTLClearColor &getClearColorValue() const;
-    MTLColorWriteMask getColorMask() const;
+    const mtl::WriteMaskArray &getWriteMaskArray() const;
     float getClearDepthValue() const;
     uint32_t getClearStencilValue() const;
     // Return front facing stencil write mask
@@ -528,7 +528,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
     // State
     mtl::RenderPipelineDesc mRenderPipelineDesc;
     mtl::DepthStencilDesc mDepthStencilDesc;
-    mtl::BlendDesc mBlendDesc;
+    mtl::BlendDescArray mBlendDescArray;
+    mtl::WriteMaskArray mWriteMaskArray;
     MTLClearColor mClearColor;
     uint32_t mClearStencil    = 0;
     uint32_t mStencilRefFront = 0;

@@ -31,7 +31,9 @@ namespace mtl
 {
 struct ClearRectParams : public ClearOptions
 {
-    MTLColorWriteMask clearColorMask = MTLColorWriteMaskAll;
+    ClearRectParams() { clearWriteMaskArray.fill(MTLColorWriteMaskAll); }
+
+    WriteMaskArray clearWriteMaskArray;
 
     gl::Extents dstTextureSize;
 
@@ -72,7 +74,9 @@ struct BlitParams
 
 struct ColorBlitParams : public BlitParams
 {
-    MTLColorWriteMask blitColorMask = MTLColorWriteMaskAll;
+    ColorBlitParams() { blitWriteMaskArray.fill(MTLColorWriteMaskAll); }
+
+    WriteMaskArray blitWriteMaskArray;
     gl::DrawBufferMask enabledBuffers;
     GLenum filter               = GL_NEAREST;
     bool unpackPremultiplyAlpha = false;
