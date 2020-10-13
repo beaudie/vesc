@@ -56,6 +56,30 @@
       },
       "revId": "f92b72797665e016298eb2e7e480f1f596c353a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59a428e_ae521cb8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T14:56:26Z",
+      "side": 1,
+      "message": "Because it\u0027s a define, and if we don\u0027t include the label they could conflict.",
+      "parentUuid": "eef45dcc_d0f0ee74",
+      "range": {
+        "startLine": 1208,
+        "startChar": 9,
+        "endLine": 1208,
+        "endChar": 21
+      },
+      "revId": "f92b72797665e016298eb2e7e480f1f596c353a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
