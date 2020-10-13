@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36e2f85d_df64a178",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T16:42:39Z",
+      "side": 1,
+      "message": "Failed http://anglebug.com/5165 for the failure. Will retry.",
+      "revId": "e13c84908b33659adf89c59de022564f3bd3b58d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
