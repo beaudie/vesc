@@ -134,6 +134,23 @@ case_image_format_template2 = """        case angle::FormatID::{angle_format}:
 
 """
 
+case_image_format_template3 = """        case angle::FormatID::{angle_format}:
+            {image_format_assign_swizzled}
+#if defined(__IPHONE_13_0) || defined(__MAC_10_15)
+            if (display->getFeatures().hasTextureSwizzle.enabled)
+            {{
+                this->swizzled = true;
+                this->swizzle  = {mtl_swizzle};
+            }}
+            else
+#endif  // #if defined(__IPHONE_13_0) || defined(__MAC_10_15)
+            {{
+                this->swizzled = false;
+            }}
+            break;
+
+"""
+
 case_vertex_format_template1 = """        case angle::FormatID::{angle_format}:
             this->metalFormat = {mtl_format};
             this->actualFormatId = angle::FormatID::{actual_angle_format};
@@ -221,6 +238,7 @@ def gen_image_map_switch_case(angle_format, actual_angle_format_info, angle_to_m
             swizzle_info = actual_angle_format_info['swizzle']
             swizzle_channels = swizzle_info[0]
             swizzled_actual_angle_format = swizzle_info[1]
+            swizzle_required = swizzle_info[2]
             swizzle_map = {
                 'R': 'GL_RED',
                 'G': 'GL_GREEN',
@@ -235,7 +253,8 @@ def gen_image_map_switch_case(angle_format, actual_angle_format_info, angle_to_m
                 g=swizzle_map[swizzle_channels[1:2]],
                 b=swizzle_map[swizzle_channels[2:3]],
                 a=swizzle_map[swizzle_channels[3:]])
-            return case_image_format_template2.format(
+            image_format_template = case_image_format_template2 if swizzle_required else case_image_format_template3
+            return image_format_template.format(
                 angle_format=angle_format,
                 image_format_assign_default=assign_gen_func(default_actual_angle_format,
                                                             angle_to_mtl_map),
