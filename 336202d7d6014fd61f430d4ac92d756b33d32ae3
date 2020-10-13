@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e63f49bf_2a8b0eaf",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T21:08:48Z",
+      "side": 1,
+      "message": "Probably Vulkan-specific issue. Haven\u0027t seen this file in GLES.",
+      "parentUuid": "4eaf8569_885b1861",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 60
+      },
+      "revId": "336202d7d6014fd61f430d4ac92d756b33d32ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edcf3add_4f60a1bb",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-13T21:07:11Z",
       "side": 1,
       "message": "I wonder what happens if a test crashes.\nWould the .qpa before the crash be any useful?\nSince we\u0027ll lose it without flush.\n\nIf it\u0027s useful, maybe we can set up a signal handler which will do the flush.",
+      "range": {
+        "startLine": 538,
+        "startChar": 0,
+        "endLine": 538,
+        "endChar": 51
+      },
+      "revId": "336202d7d6014fd61f430d4ac92d756b33d32ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8bec40d_763f4c41",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-13T21:08:48Z",
+      "side": 1,
+      "message": "Right, it\u0027s something I was wondering about. Pri-2 for now until we can actually log QPA as test artifacts.",
+      "parentUuid": "edcf3add_4f60a1bb",
       "range": {
         "startLine": 538,
         "startChar": 0,
