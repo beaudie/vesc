@@ -528,44 +528,18 @@ void BlendDesc::reset(MTLColorWriteMask _writeMask)
     sourceAlphaBlendFactor = sourceRGBBlendFactor = MTLBlendFactorOne;
 }
 
-void BlendDesc::updateWriteMask(const gl::BlendState &blendState)
+void BlendDesc::updateWriteMask(const uint8_t mask)
 {
-    writeMask = MTLColorWriteMaskNone;
-    if (blendState.colorMaskRed)
-    {
-        writeMask |= MTLColorWriteMaskRed;
-    }
-    if (blendState.colorMaskGreen)
-    {
-        writeMask |= MTLColorWriteMaskGreen;
-    }
-    if (blendState.colorMaskBlue)
-    {
-        writeMask |= MTLColorWriteMaskBlue;
-    }
-    if (blendState.colorMaskAlpha)
-    {
-        writeMask |= MTLColorWriteMaskAlpha;
-    }
-}
+    ASSERT(mask == (mask & 0xF));
 
-void BlendDesc::updateBlendFactors(const gl::BlendState &blendState)
-{
-    sourceRGBBlendFactor        = GetBlendFactor(blendState.sourceBlendRGB);
-    sourceAlphaBlendFactor      = GetBlendFactor(blendState.sourceBlendAlpha);
-    destinationRGBBlendFactor   = GetBlendFactor(blendState.destBlendRGB);
-    destinationAlphaBlendFactor = GetBlendFactor(blendState.destBlendAlpha);
-}
-
-void BlendDesc::updateBlendOps(const gl::BlendState &blendState)
-{
-    rgbBlendOperation   = GetBlendOp(blendState.blendEquationRGB);
-    alphaBlendOperation = GetBlendOp(blendState.blendEquationAlpha);
-}
-
-void BlendDesc::updateBlendEnabled(const gl::BlendState &blendState)
-{
-    blendingEnabled = blendState.blend;
+// ANGLE's packed color mask is abgr, while Metal expects rgba.
+// ARM64 can reverse bits in a single instruction,
+// use math specialized for 4-bit values on other architectures.
+#if defined(__aarch64__)
+    writeMask = __builtin_bitreverse8(mask) >> 4;
+#else
+    writeMask = ((((mask * 0x82) & 0x294) * 0x111) >> 8) & 0xF;
+#endif
 }
 
 // RenderPipelineColorAttachmentDesc implementation
@@ -596,16 +570,16 @@ void RenderPipelineColorAttachmentDesc::reset(MTLPixelFormat format, MTLColorWri
     BlendDesc::reset(_writeMask);
 }
 
-void RenderPipelineColorAttachmentDesc::reset(MTLPixelFormat format, const BlendDesc &blendState)
+void RenderPipelineColorAttachmentDesc::reset(MTLPixelFormat format, const BlendDesc &blendDesc)
 {
     this->pixelFormat = format;
 
-    BlendDesc::operator=(blendState);
+    BlendDesc::operator=(blendDesc);
 }
 
-void RenderPipelineColorAttachmentDesc::update(const BlendDesc &blendState)
+void RenderPipelineColorAttachmentDesc::update(const BlendDesc &blendDesc)
 {
-    BlendDesc::operator=(blendState);
+    BlendDesc::operator=(blendDesc);
 }
 
 // RenderPipelineOutputDesc implementation
@@ -716,22 +690,29 @@ bool RenderPassAttachmentDesc::operator==(const RenderPassAttachmentDesc &other)
            storeActionOptions == other.storeActionOptions;
 }
 
-void RenderPassDesc::populateRenderPipelineOutputDesc(RenderPipelineOutputDesc *outDesc) const
-{
-    populateRenderPipelineOutputDesc(MTLColorWriteMaskAll, outDesc);
-}
-
-void RenderPassDesc::populateRenderPipelineOutputDesc(MTLColorWriteMask colorWriteMask,
+void RenderPassDesc::populateRenderPipelineOutputDesc(const ContextMtl *contextMtl,
                                                       RenderPipelineOutputDesc *outDesc) const
 {
-    // Default blend state.
-    BlendDesc blendState;
-    blendState.reset(colorWriteMask);
-
-    populateRenderPipelineOutputDesc(blendState, outDesc);
+    WriteMaskArray writeMaskArray;
+    writeMaskArray.fill(MTLColorWriteMaskAll);
+    populateRenderPipelineOutputDesc(contextMtl, writeMaskArray, outDesc);
 }
 
-void RenderPassDesc::populateRenderPipelineOutputDesc(const BlendDesc &blendState,
+void RenderPassDesc::populateRenderPipelineOutputDesc(const ContextMtl *contextMtl,
+                                                      const WriteMaskArray &writeMaskArray,
+                                                      RenderPipelineOutputDesc *outDesc) const
+{
+    // Default blend state with replaced color write masks.
+    BlendDescArray blendDescArray;
+    for (size_t i = 0; i < blendDescArray.size(); i++)
+    {
+        blendDescArray[i].reset(writeMaskArray[i]);
+    }
+    populateRenderPipelineOutputDesc(contextMtl, blendDescArray, outDesc);
+}
+
+void RenderPassDesc::populateRenderPipelineOutputDesc(const ContextMtl *contextMtl,
+                                                      const BlendDescArray &blendDescArray,
                                                       RenderPipelineOutputDesc *outDesc) const
 {
     RenderPipelineOutputDesc &outputDescriptor = *outDesc;
@@ -744,10 +725,18 @@ void RenderPassDesc::populateRenderPipelineOutputDesc(const BlendDesc &blendStat
 
         if (texture)
         {
-            // Copy parameters from blend state
-            outputDescriptor.colorAttachments[i].update(blendState);
-
-            outputDescriptor.colorAttachments[i].pixelFormat = texture->pixelFormat();
+            if (contextMtl->getNativeFormatCaps(texture->pixelFormat()).blendable)
+            {
+                // Copy parameters from blend state
+                outputDescriptor.colorAttachments[i].reset(texture->pixelFormat(),
+                                                           blendDescArray[i]);
+            }
+            else
+            {
+                // Force-disable blending on unsupported pixel formats
+                outputDescriptor.colorAttachments[i].reset(texture->pixelFormat(),
+                                                           blendDescArray[i].writeMask);
+            }
 
             // Combine the masks. This is useful when the texture is not supposed to have alpha
             // channel such as GL_RGB8, however, Metal doesn't natively support 24 bit RGB, so

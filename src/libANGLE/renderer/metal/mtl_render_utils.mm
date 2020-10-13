@@ -789,16 +789,16 @@ id<MTLRenderPipelineState> ClearUtils::getClearRenderPipelineState(const gl::Con
 {
     ContextMtl *contextMtl = GetImpl(context);
     // The color mask to be applied to every color attachment:
-    MTLColorWriteMask globalColorMask = params.clearColorMask;
+    WriteMaskArray clearWriteMaskArray = params.clearWriteMaskArray;
     if (!params.clearColor.valid())
     {
-        globalColorMask = MTLColorWriteMaskNone;
+        clearWriteMaskArray.fill(MTLColorWriteMaskNone);
     }
 
     RenderPipelineDesc pipelineDesc;
     const RenderPassDesc &renderPassDesc = cmdEncoder->renderPassDesc();
 
-    renderPassDesc.populateRenderPipelineOutputDesc(globalColorMask,
+    renderPassDesc.populateRenderPipelineOutputDesc(contextMtl, clearWriteMaskArray,
                                                     &pipelineDesc.outputDescriptor);
 
     // Disable clear for some outputs that are not enabled
@@ -972,7 +972,7 @@ id<MTLRenderPipelineState> ColorBlitUtils::getColorBlitRenderPipelineState(
     RenderPipelineDesc pipelineDesc;
     const RenderPassDesc &renderPassDesc = cmdEncoder->renderPassDesc();
 
-    renderPassDesc.populateRenderPipelineOutputDesc(params.blitColorMask,
+    renderPassDesc.populateRenderPipelineOutputDesc(contextMtl, params.blitWriteMaskArray,
                                                     &pipelineDesc.outputDescriptor);
 
     // Disable blit for some outputs that are not enabled
@@ -1167,7 +1167,7 @@ id<MTLRenderPipelineState> DepthStencilBlitUtils::getDepthStencilBlitRenderPipel
     RenderPipelineDesc pipelineDesc;
     const RenderPassDesc &renderPassDesc = cmdEncoder->renderPassDesc();
 
-    renderPassDesc.populateRenderPipelineOutputDesc(&pipelineDesc.outputDescriptor);
+    renderPassDesc.populateRenderPipelineOutputDesc(contextMtl, &pipelineDesc.outputDescriptor);
 
     // Disable all color outputs
     pipelineDesc.outputDescriptor.updateEnabledDrawBuffers(gl::DrawBufferMask());

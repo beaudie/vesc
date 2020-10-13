@@ -135,7 +135,13 @@ ContextMtl::~ContextMtl() {}
 
 angle::Result ContextMtl::initialize()
 {
-    mBlendDesc.reset();
+    for (auto &blendDesc : mBlendDescArray)
+    {
+        blendDesc.reset();
+    }
+
+    mWriteMaskArray.fill(MTLColorWriteMaskAll);
+
     mDepthStencilDesc.reset();
 
     mTriFanIndexBuffer.initialize(this, 0, mtl::kIndexBufferOffsetAlignment,
@@ -684,21 +690,51 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
                 mDirtyBits.set(DIRTY_BIT_BLEND_COLOR);
                 break;
             case gl::State::DIRTY_BIT_BLEND_ENABLED:
-                mBlendDesc.updateBlendEnabled(glState.getBlendState());
-                invalidateRenderPipeline();
-                break;
             case gl::State::DIRTY_BIT_BLEND_FUNCS:
-                mBlendDesc.updateBlendFactors(glState.getBlendState());
-                invalidateRenderPipeline();
-                break;
             case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
-                mBlendDesc.updateBlendOps(glState.getBlendState());
+            {
+                const gl::BlendStateExt &blendStateExt = glState.getBlendStateExt();
+                for (size_t i = 0; i < mBlendDescArray.size(); i++)
+                {
+                    mtl::BlendDesc &blendDesc = mBlendDescArray[i];
+                    if (blendStateExt.mEnabledMask.test(i))
+                    {
+                        blendDesc.blendingEnabled = true;
+
+                        blendDesc.sourceRGBBlendFactor =
+                            mtl::GetBlendFactor(blendStateExt.getSrcColorIndexed(i));
+                        blendDesc.sourceAlphaBlendFactor =
+                            mtl::GetBlendFactor(blendStateExt.getSrcAlphaIndexed(i));
+                        blendDesc.destinationRGBBlendFactor =
+                            mtl::GetBlendFactor(blendStateExt.getDstColorIndexed(i));
+                        blendDesc.destinationAlphaBlendFactor =
+                            mtl::GetBlendFactor(blendStateExt.getDstAlphaIndexed(i));
+
+                        blendDesc.rgbBlendOperation =
+                            mtl::GetBlendOp(blendStateExt.getEquationColorIndexed(i));
+                        blendDesc.alphaBlendOperation =
+                            mtl::GetBlendOp(blendStateExt.getEquationAlphaIndexed(i));
+                    }
+                    else
+                    {
+                        // Enforce default state when blending is disabled,
+                        blendDesc.reset(blendDesc.writeMask);
+                    }
+                }
                 invalidateRenderPipeline();
                 break;
+            }
             case gl::State::DIRTY_BIT_COLOR_MASK:
-                mBlendDesc.updateWriteMask(glState.getBlendState());
+            {
+                const gl::BlendStateExt &blendStateExt = glState.getBlendStateExt();
+                for (size_t i = 0; i < mBlendDescArray.size(); i++)
+                {
+                    mBlendDescArray[i].updateWriteMask(blendStateExt.getColorMaskIndexed(i));
+                    mWriteMaskArray[i] = mBlendDescArray[i].writeMask;
+                }
                 invalidateRenderPipeline();
                 break;
+            }
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
                 invalidateRenderPipeline();
                 break;
@@ -1128,9 +1164,9 @@ const MTLClearColor &ContextMtl::getClearColorValue() const
 {
     return mClearColor;
 }
-MTLColorWriteMask ContextMtl::getColorMask() const
+const mtl::WriteMaskArray &ContextMtl::getWriteMaskArray() const
 {
-    return mBlendDesc.writeMask;
+    return mWriteMaskArray;
 }
 float ContextMtl::getClearDepthValue() const
 {
@@ -2096,7 +2132,7 @@ angle::Result ContextMtl::checkIfPipelineChanged(const gl::Context *context,
     {
         const mtl::RenderPassDesc &renderPassDesc = mRenderEncoder.renderPassDesc();
         // Obtain RenderPipelineDesc's output descriptor.
-        renderPassDesc.populateRenderPipelineOutputDesc(mBlendDesc,
+        renderPassDesc.populateRenderPipelineOutputDesc(this, mBlendDescArray,
                                                         &mRenderPipelineDesc.outputDescriptor);
 
         if (xfbPass)
