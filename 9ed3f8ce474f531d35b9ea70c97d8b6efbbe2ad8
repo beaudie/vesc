@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ac1feb5_1519dee2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-13T01:31:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f152547e_450108a4",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 13
+      },
+      "revId": "9ed3f8ce474f531d35b9ea70c97d8b6efbbe2ad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e3d3b5b_5ae78a9d",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-13T00:16:09Z",
       "side": 1,
       "message": "This happens to work with how things are lined up, but there isn\u0027t really any guarantee.   Instead, I think you should at least update the enum to:\n\n    enum RenderPassStoreOp\n    {\n        Store    \u003d VK_ATTACHMENT_STORE_OP_STORE,\n        DontCare \u003d VK_ATTACHMENT_STORE_OP_DONT_CARE,\n        None_QCOM\n    };\n\nAlthough, I\u0027d prefer a switch statement that throws an error if a new value is added, rather than silently treating the new value as None_QCOM:\n\n    enum RenderPassStoreOp\n    {\n        Store,\n        DontCare,\n        None_QCOM,\n    };\n\n    VkAttachmentStoreOp storeOp;\n    switch(storeOp)\n    {\n        case Store:\n            storeOp \u003d VK_ATTACHMENT_STORE_OP_STORE;\n            break;\n        case DontCare:\n            storeOp \u003d VK_ATTACHMENT_STORE_OP_DONT_CARE;\n            break;\n        case None_QCOM:\n            storeOp \u003d VK_ATTACHMENT_STORE_OP_NONE_QCOM;\n            break;\n        default:\n            UNREACHABLE();\n    }\n\nThough maybe that\u0027s too paranoid.",
+      "range": {
+        "startLine": 119,
+        "startChar": 53,
+        "endLine": 119,
+        "endChar": 94
+      },
+      "revId": "9ed3f8ce474f531d35b9ea70c97d8b6efbbe2ad8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "504eca29_786bf282",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-13T01:31:57Z",
+      "side": 1,
+      "message": "Done. I can use the enum part and add a static_assert and comment. That way if someone adds a new one it will hit assertion and force him/her to double check.",
+      "parentUuid": "1e3d3b5b_5ae78a9d",
       "range": {
         "startLine": 119,
         "startChar": 53,
