@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9d45f14_0cd0b423",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-13T18:26:42Z",
+      "side": 1,
+      "message": "Why?  With the changes you suggest, we\u0027re calling this multiple times.  Is there any way the value can change that we\u0027d want to keep querying it afresh?",
+      "parentUuid": "154c9629_3897526c",
+      "range": {
+        "startLine": 1042,
+        "startChar": 8,
+        "endLine": 1042,
+        "endChar": 39
+      },
+      "revId": "2e11f37c590cbbe25fa827a3c13c9eadc833473e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7fede69c_6436eb25",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -71,6 +95,24 @@
       "writtenOn": "2020-10-13T17:11:39Z",
       "side": 1,
       "message": "You can remove this comment. If that someday comes, we\u0027ll figure out what needs changing.",
+      "revId": "2e11f37c590cbbe25fa827a3c13c9eadc833473e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cd9d82f_a3a91e09",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-13T18:26:42Z",
+      "side": 1,
+      "message": "Done.  I put it in there to prompt discussing it with somebody.  I agree, we can wait.",
+      "parentUuid": "7fede69c_6436eb25",
       "revId": "2e11f37c590cbbe25fa827a3c13c9eadc833473e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +130,24 @@
       "writtenOn": "2020-10-13T17:11:39Z",
       "side": 1,
       "message": "This function can be further simplified. You shouldn\u0027t need `gotNewSurfaceCaps` for example. `swapIntervalChanged` can also be folded into `presentOutOfDate`.\n\n    angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,\n                                                              bool presentOutOfDate)\n    {\n        bool swapIntervalChanged \u003d mSwapchainPresentMode !\u003d mDesiredSwapchainPresentMode;\n\tpresentOutOfDate \u003d presentOutOfDate || swapIntervalChanged;\n    \n        // If there\u0027s no change, early out.\n        if (!mPerFrameWindowSizeQueryEnabled \u0026\u0026 !presentOutOfDate)\n        {\n            return angle::Result::Continue;\n        }\n    \n        // Get the latest surface capabilities.\n        ANGLE_TRY(queryAndAdjustSurfaceCaps(contextVk, \u0026mSurfaceCaps));\n    \n        if (mPerFrameWindowSizeQueryEnabled \u0026\u0026 !presentOutOfDate)\n        {\n            // This device generates neither VK_ERROR_OUT_OF_DATE_KHR nor VK_SUBOPTIMAL_KHR.  Check for\n            // whether the size and/or rotation have changed since the swapchain was created.\n            presentOutOfDate \u003d mSurfaceCaps.currentTransform !\u003d mPreTransform ||\n                mSurfaceCaps.currentExtent.width !\u003d getWidth() ||\n                mSurfaceCaps.currentExtent.height !\u003d getHeight();\n        }\n    \n        // If anything has changed, recreate the swapchain.\n        if (!presentOutOfDate)\n        {\n            return angle::Result::Continue;\n        }\n    \n        gl::Extents newSwapchainExtents(mSurfaceCaps.currentExtent.width,\n                                        mSurfaceCaps.currentExtent.height, 1);\n    \n        if (contextVk-\u003egetFeatures().enablePreRotateSurfaces.enabled)\n        {\n            // Update the surface\u0027s transform, which can change even if the window size does not.\n            mPreTransform \u003d mSurfaceCaps.currentTransform;\n        }\n    \n        return recreateSwapchain(contextVk, newSwapchainExtents);\n    }\n\n(note: the above is untested code!)",
+      "revId": "2e11f37c590cbbe25fa827a3c13c9eadc833473e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4c4bd8a_2d7f71f4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-13T18:26:42Z",
+      "side": 1,
+      "message": "Thanks!  Done.\n\nBTW, I need the local \u0027uint32_t swapchain*\" variables to make the compiler happy.",
+      "parentUuid": "d3863d79_7f962e5c",
       "revId": "2e11f37c590cbbe25fa827a3c13c9eadc833473e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc90946_e12a65bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-13T18:26:42Z",
+      "side": 1,
+      "message": "Shabi, if you\u0027re okay, can you +2 it?  I didn\u0027t include you as a reviewer initially because Monday was a holiday for you.",
+      "revId": "36f1e2855028a73cfa550a35919043c226f745e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
