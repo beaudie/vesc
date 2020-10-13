@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29a8a480_31cf7d06",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-13T19:57:20Z",
+      "side": 1,
+      "message": "It\u0027s ok to call it multiple times. The whole of `getFeatures().perFrameWindowSizeQuery.enabled` translates to a compile-time offset, so the assembly needs to either load `this[const byte address]` or `renderer[const byte address]`, which shouldn\u0027t really matter.\n\nIt\u0027s more of a code health / style thing. We don\u0027t cache things like this.",
+      "parentUuid": "a9d45f14_0cd0b423",
+      "range": {
+        "startLine": 1042,
+        "startChar": 8,
+        "endLine": 1042,
+        "endChar": 39
+      },
+      "revId": "2e11f37c590cbbe25fa827a3c13c9eadc833473e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7fede69c_6436eb25",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
