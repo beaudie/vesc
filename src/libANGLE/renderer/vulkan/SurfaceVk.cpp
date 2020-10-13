@@ -1324,8 +1324,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         contextVk->getRenderer()->waitForCommandProcessorIdle();
         if (contextVk->getRenderer()->hasPendingError())
         {
-            vk::ErrorDetails error = contextVk->getRenderer()->getAndClearPendingError();
-            result                 = error.errorCode;
+            vk::Error error = contextVk->getRenderer()->getAndClearPendingError();
+            result          = error.mErrorCode;
         }
     }
     else

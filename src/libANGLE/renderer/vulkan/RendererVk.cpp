@@ -910,8 +910,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     if (getFeatures().enableCommandProcessingThread.enabled)
     {
-        mCommandProcessorThread =
-            std::thread(&CommandProcessor::processCommandProcessorTasks, &mCommandProcessor);
+        mCommandProcessorThread = std::thread(&CommandProcessor::processTasks, &mCommandProcessor);
         mCommandProcessor.waitForWorkComplete();
     }
 
