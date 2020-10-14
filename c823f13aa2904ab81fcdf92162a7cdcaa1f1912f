@@ -114,6 +114,30 @@
       },
       "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7703513b_80ec387f",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-10-14T06:36:32Z",
+      "side": 1,
+      "message": "It should be WaveIsHelperLane() according to [1] and [2].\n\n[1] https://docs.microsoft.com/en-us/previous-versions//mt733261(v\u003dvs.85)?redirectedfrom\u003dMSDN\n[2] http://32ipi028l5q82yhj72224m8j.wpengine.netdna-cdn.com/wp-content/uploads/2017/07/GDC2017-Wave-Programming-D3D12-Vulkan.pdf",
+      "parentUuid": "58fd37df_d8a08fcd",
+      "range": {
+        "startLine": 19,
+        "startChar": 86,
+        "endLine": 19,
+        "endChar": 155
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
