@@ -786,6 +786,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5497e885_e6cbd902",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Some renaming, hopefully make things more clear.",
+      "parentUuid": "8872e143_b2616ca8",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 354,
+        "endChar": 58
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7bfedac_0b3501bd",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 46
@@ -1488,6 +1512,30 @@
       "writtenOn": "2020-10-08T17:58:26Z",
       "side": 1,
       "message": "do not ever use mContextVk for an ANGLE_TRY. that\u0027s a race. you\u0027ll need to make one of your classes (e.g. CommandProcessor itself) inherit from vk::Context. I went over this with Tobin in detail a few times, looks like it might have got lost in transition.\n\nI haven\u0027t looked closely at how you would pass message back to a ContextVk when there is an error in the submission. First thing I would think is you should fail unrecoverably on a submit error and report the error to all contexts and stop processing any additional work.",
+      "range": {
+        "startLine": 583,
+        "startChar": 12,
+        "endLine": 583,
+        "endChar": 21
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0e48024_8bd483bc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e44bcde_9714cc2e",
       "range": {
         "startLine": 583,
         "startChar": 12,
@@ -2249,6 +2297,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b5c836_7cd13607",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71e67992_f569ad2b",
+      "range": {
+        "startLine": 69,
+        "startChar": 10,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5c9cb98_3244ec25",
@@ -2826,6 +2898,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60f632fc_9bf1a28d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Switched to using the CommandProcessor as the vk::Context (and thus error handler). Pass around the CommandProcessor as a vk::Context where folks need access to the renderer or features.\nNo longer need this getPointer() thing.",
+      "parentUuid": "31fc81d9_0a52b2ca",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65b23d4d_65f0250f",
@@ -3158,6 +3248,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7f65f88_bd914aee",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Did some renaming that will hopefully help.",
+      "parentUuid": "8703b31c_cb340c09",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 27
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8088bfd2_5691528f",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -3169,6 +3283,30 @@
       "writtenOn": "2020-10-08T17:58:26Z",
       "side": 1,
       "message": "\u0026\u0026",
+      "range": {
+        "startLine": 303,
+        "startChar": 34,
+        "endLine": 303,
+        "endChar": 54
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53c50f36_74e1b87f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Changed to a pointer as I believe that\u0027s according to style guide for non-const reference.",
+      "parentUuid": "8088bfd2_5691528f",
       "range": {
         "startLine": 303,
         "startChar": 34,
@@ -3202,6 +3340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3bae00b_ea2c57e1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7c465d9_d43fa979",
+      "range": {
+        "startLine": 305,
+        "startChar": 41,
+        "endLine": 305,
+        "endChar": 55
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8686c68_3c1798e2",
@@ -3215,6 +3377,30 @@
       "writtenOn": "2020-10-08T17:58:26Z",
       "side": 1,
       "message": "same q",
+      "range": {
+        "startLine": 306,
+        "startChar": 4,
+        "endLine": 306,
+        "endChar": 11
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c25c49db_f675bc24",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Be able to lock in a getter and have getter be const.",
+      "parentUuid": "a8686c68_3c1798e2",
       "range": {
         "startLine": 306,
         "startChar": 4,
@@ -3248,6 +3434,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b9f58de_c39a4838",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "067b6d56_d433370b",
+      "range": {
+        "startLine": 316,
+        "startChar": 4,
+        "endLine": 316,
+        "endChar": 26
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "417e0073_5942b826",
@@ -3261,6 +3471,30 @@
       "writtenOn": "2020-10-08T17:58:26Z",
       "side": 1,
       "message": "can you make a change to wrap this in a new QueueSerial object at some point? Fine as a follow-up",
+      "range": {
+        "startLine": 321,
+        "startChar": 4,
+        "endLine": 321,
+        "endChar": 10
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f53b0635_fe687e0e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "b/170765214",
+      "parentUuid": "417e0073_5942b826",
       "range": {
         "startLine": 321,
         "startChar": 4,
@@ -3471,6 +3705,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c82d2e6_4476959f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 4456,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Based on Jamie\u0027s feedback, the worker thread in general cannot access the calling ContextVk (due to race conditions). So I\u0027m queuing up the errors and will have waitForWorkComplete and finishToSerial suck up any pending errors before returning.",
+      "parentUuid": "77ed9402_e1187196",
+      "range": {
+        "startLine": 4454,
+        "startChar": 0,
+        "endLine": 4456,
+        "endChar": 37
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70d9c7b2_ae5dfce0",
@@ -3613,6 +3871,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f63a600_0c36808e",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab9f269_a5dc1ad2",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 9
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3e1b135_d0aeca0b",
@@ -3650,6 +3932,30 @@
       "side": 1,
       "message": "That seems reasonable. I\u0027ll give it a try.",
       "parentUuid": "b3e1b135_d0aeca0b",
+      "range": {
+        "startLine": 2234,
+        "startChar": 0,
+        "endLine": 2235,
+        "endChar": 37
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6469f21_04619b53",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 2235,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ac12e08_c5763d20",
       "range": {
         "startLine": 2234,
         "startChar": 0,
@@ -3724,6 +4030,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca731f8f_9742fb8b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be41effa_fd8c6716",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1c9f475_29bb641b",
@@ -3737,6 +4061,30 @@
       "writtenOn": "2020-10-08T17:58:26Z",
       "side": 1,
       "message": "this looks wrong to me. maybe we can chat more about it.",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 24
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ec7047d_2a187ab1",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "I think that fixed things before I got the resourceInUse handling in the right spot. Removed.",
+      "parentUuid": "e1c9f475_29bb641b",
       "range": {
         "startLine": 48,
         "startChar": 8,
@@ -3961,6 +4309,30 @@
       "side": 1,
       "message": "Sounds good.   I\u0027ll leave this open for now then as a reminder to see how that goes.",
       "parentUuid": "9dd27c59_3e82b05c",
+      "range": {
+        "startLine": 1323,
+        "startChar": 0,
+        "endLine": 1327,
+        "endChar": 9
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "406ab07a_fac30502",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "This is a special case because we want to catch the VK_ERROR_OUT_OF_DATE_KHR or VK_SUBOPTIMAL_KHR errors.\nThis will be improved in a follow-up focused on present behavior.",
+      "parentUuid": "7978102d_2855eb5d",
       "range": {
         "startLine": 1323,
         "startChar": 0,
@@ -4254,6 +4626,30 @@
       "side": 1,
       "message": "I don\u0027t see that happening now, since there isn\u0027t a processPendingError() following the waitForCommandProcessorIdle():\n\n    if (getFeatures().enableCommandProcessingThread.enabled)\n    {\n        vk::CommandProcessorTask oneOffQueueSubmit;\n        oneOffQueueSubmit.initOneOffQueueSubmit(primary.getHandle(), priority, fence);\n        queueCommand(\u0026oneOffQueueSubmit);\n        waitForCommandProcessorIdle();\n        *serialOut \u003d getLastSubmittedQueueSerial();\n\n        ANGLE_TRY(cleanupGarbage(false));\n    }\n\nHowever, that should be the case if you update waitForCommandProcessorIdle() to check for errors.   I\u0027m going to unresolve this for now, so we revisit this in case the waitForCommandProcessorIdle() can\u0027t be updated.",
       "parentUuid": "ba14ac64_b574e023",
+      "range": {
+        "startLine": 3260,
+        "startChar": 14,
+        "endLine": 3260,
+        "endChar": 41
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55ea434f_d3d0759f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 3260,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-14T21:54:37Z",
+      "side": 1,
+      "message": "waitForCommandProcessorIdle will now suck up errors.",
+      "parentUuid": "c42b48cd_6aa87e9c",
       "range": {
         "startLine": 3260,
         "startChar": 14,
