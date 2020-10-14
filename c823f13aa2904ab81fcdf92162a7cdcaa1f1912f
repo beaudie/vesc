@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc48866e_7175d1e9",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T03:53:47Z",
+      "side": 1,
+      "message": "I\u0027ve been meaning to ask, is ES3.1 on D3D \"in progress\" or \"discontinued\"?",
+      "range": {
+        "startLine": 15,
+        "startChar": 36,
+        "endLine": 15,
+        "endChar": 47
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a36e2a63_0f892199",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T03:53:47Z",
+      "side": 1,
+      "message": "Atomic counters on non-CS are optional in ES IIRC, so this can be called \"Fully implemented\". Please double check with the spec though.",
+      "range": {
+        "startLine": 16,
+        "startChar": 86,
+        "endLine": 16,
+        "endChar": 145
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdb1380e_fa739806",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T03:53:47Z",
+      "side": 1,
+      "message": "Same as atomic counter buffers I believe.",
+      "range": {
+        "startLine": 17,
+        "startChar": 89,
+        "endLine": 17,
+        "endChar": 139
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6120a94e_dcfae736",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T03:53:47Z",
+      "side": 1,
+      "message": "Same as atomic counter buffers too I believe.",
+      "range": {
+        "startLine": 18,
+        "startChar": 89,
+        "endLine": 18,
+        "endChar": 154
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58fd37df_d8a08fcd",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T03:53:47Z",
+      "side": 1,
+      "message": "There\u0027s probably something in SM6 that can be used to emulate this.",
+      "range": {
+        "startLine": 19,
+        "startChar": 86,
+        "endLine": 19,
+        "endChar": 155
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
