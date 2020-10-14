@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "030cbba7_a60d2f57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-14T15:46:21Z",
+      "side": 1,
+      "message": "PTAL\n\nReverting these since the VVL was updating to fix the issues.   Tested locally and it looks good.",
+      "revId": "c29a8f93304ece45f1767553bc48f5b5157a3e91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
