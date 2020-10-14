@@ -507,6 +507,8 @@
 // Low memory warnings when run multi-process.
 5162 OPENGL NVIDIA WIN : dEQP-GLES3.functional.multisample.fbo_max_samples.constancy_alpha_to_coverage = SKIP
 5162 OPENGL NVIDIA WIN : dEQP-GLES3.functional.multisample.fbo_8_samples.constancy_alpha_to_coverage = SKIP
+5162 OPENGL NVIDIA WIN : dEQP.GLES3/functional_multisample_fbo_max_samples_constancy_sample_coverage_inverted = SKIP
+5162 OPENGL NVIDIA WIN : dEQP-GLES3.functional.multisample.fbo_max_samples.constancy_both = SKIP
 
 // General Vulkan failures
 
