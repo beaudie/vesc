@@ -81,6 +81,30 @@
       },
       "revId": "b9f1ca41819dbfd1953b8f85d17c680d5d523d5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc6473ee_289dda66",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-14T19:54:24Z",
+      "side": 1,
+      "message": "Looks like it worked. PTAL.",
+      "parentUuid": "e6f88e4c_db570431",
+      "range": {
+        "startLine": 672,
+        "startChar": 0,
+        "endLine": 674,
+        "endChar": 85
+      },
+      "revId": "b9f1ca41819dbfd1953b8f85d17c680d5d523d5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
