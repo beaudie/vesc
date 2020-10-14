@@ -57,6 +57,30 @@
       },
       "revId": "b9f1ca41819dbfd1953b8f85d17c680d5d523d5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6f88e4c_db570431",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-14T16:16:49Z",
+      "side": 1,
+      "message": "Before indexed masks implementation, the initial value was \"all on\", so I kept the same semantics. Let\u0027s try initializing it with 0.",
+      "parentUuid": "e08a24b3_978c0205",
+      "range": {
+        "startLine": 672,
+        "startChar": 0,
+        "endLine": 674,
+        "endChar": 85
+      },
+      "revId": "b9f1ca41819dbfd1953b8f85d17c680d5d523d5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
