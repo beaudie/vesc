@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d97eca5_86b72e6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-14T23:45:37Z",
+      "side": 1,
+      "message": "We\u0027re trying to keep the cost of AGI work small.  Creating a new DebugImpl class (and having to change/test all back-ends/platforms) would take a bit of time that could be spent on performance.  As you can guess, I\u0027d rather not do that:-).",
+      "parentUuid": "cdc06683_7affa098",
+      "revId": "31399a2a255b084e5b5ab0f3afd297f94d5f419d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91791efe_2cad68f8",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2020-10-14T22:25:51Z",
       "side": 1,
       "message": "nit: name should mirror API, but want Geoff\u0027s feedback.",
+      "range": {
+        "startLine": 5405,
+        "startChar": 21,
+        "endLine": 5405,
+        "endChar": 34
+      },
+      "revId": "31399a2a255b084e5b5ab0f3afd297f94d5f419d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2404772f_a313a74d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5405,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-14T23:45:37Z",
+      "side": 1,
+      "message": "I mirrored the call below, but I\u0027m certainly flexible on this:-).",
+      "parentUuid": "91791efe_2cad68f8",
       "range": {
         "startLine": 5405,
         "startChar": 21,
