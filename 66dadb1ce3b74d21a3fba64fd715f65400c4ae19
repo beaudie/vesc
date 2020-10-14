@@ -33,6 +33,24 @@
       "message": "nit: could be moved up to the constructor initializer list.",
       "revId": "66dadb1ce3b74d21a3fba64fd715f65400c4ae19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f71a92_ec92ecd4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-14T20:15:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1bd5a4c_b9a3129f",
+      "revId": "66dadb1ce3b74d21a3fba64fd715f65400c4ae19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
