@@ -1,31 +1,27 @@
 //
-// Copyright 2019 The ANGLE Project Authors. All rights reserved.
+// Copyright 2020 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
 
-// SyncEGL.h: Defines the rx::SyncEGL class, the EGL implementation of EGL sync objects.
+// EGL_KHR_reusable_sync
 
-#ifndef LIBANGLE_RENDERER_GL_EGL_SYNCEGL_H_
-#define LIBANGLE_RENDERER_GL_EGL_SYNCEGL_H_
+#ifndef LIBANGLE_RENDERER_EGLREUSABLESYNC_H_
+#define LIBANGLE_RENDERER_EGLREUSABLESYNC_H_
 
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/renderer/EGLSyncImpl.h"
 
-namespace egl
-{
-class AttributeMap;
-}
+#include "common/angleutils.h"
 
 namespace rx
 {
 
-class FunctionsEGL;
-
-class SyncEGL final : public EGLSyncImpl
+class ReusableSync final : public EGLSyncImpl
 {
   public:
-    SyncEGL(const egl::AttributeMap &attribs, const FunctionsEGL *egl);
-    ~SyncEGL() override;
+    ReusableSync(const egl::AttributeMap &attribs);
+    ~ReusableSync() override;
 
     void onDestroy(const egl::Display *display) override;
 
@@ -44,16 +40,14 @@ class SyncEGL final : public EGLSyncImpl
                       const gl::Context *context,
                       EGLint mode) override;
     egl::Error getStatus(const egl::Display *display, EGLint *outStatus) override;
-
-    egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *result) const override;
+    egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *fdOut) const override;
 
   private:
-    const FunctionsEGL *mEGL;
-    EGLint mNativeFenceFD;
-
-    EGLSync mSync;
+    EGLint mStatus;
+    std::condition_variable mCondVar;
+    std::unique_lock<std::mutex> mMutex;
 };
 
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_GL_EGL_IMAGEEGL_H_
+#endif  // LIBANGLE_RENDERER_EGLREUSABLESYNC_H_

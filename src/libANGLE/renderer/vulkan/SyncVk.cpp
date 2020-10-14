@@ -519,4 +519,10 @@ egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display, EGLint *fdOu
     }
 }
 
+egl::Error EGLSyncVk::signal(const egl::Display *display, const gl::Context *context, EGLint mode)
+{
+    // Does not support signal
+    return egl::EglBadMatch();
+}
+
 }  // namespace rx

@@ -1116,6 +1116,9 @@ struct DisplayExtensions
 
     // EGL_NOK_texture_from_pixmap
     bool textureFromPixmapNOK = false;
+
+    // EGL_KHR_reusable_sync
+    bool reusableSync = false;
 };
 
 struct DeviceExtensions

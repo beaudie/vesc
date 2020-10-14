@@ -314,3 +314,9 @@ egl::Error EGLSyncMtl::dupNativeFenceFD(const egl::Display *display, EGLint *res
 }
 
 }
+
+egl::Error EGLSyncMtl::signal(const egl::Display *display, const gl::Context *context, EGLint mode)
+{
+    // Does not support signal
+    return egl::EglBadMatch();
+}

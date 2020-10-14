@@ -115,4 +115,10 @@ egl::Error SyncEGL::dupNativeFenceFD(const egl::Display *display, EGLint *result
     return egl::NoError();
 }
 
+egl::Error SyncEGL::signal(const egl::Display *display, const gl::Context *context, EGLint mode)
+{
+    // Does not support signal
+    return egl::EglBadMatch();
+}
+
 }  // namespace rx
