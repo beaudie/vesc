@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4ad7d27_eabba213",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T11:27:10Z",
+      "side": 1,
+      "message": "Thanks very much! Suggestions below.",
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c9077f_2e33d579",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T11:27:10Z",
+      "side": 1,
+      "message": "nit: suggest we rename this to \u0027incomplete\u0027 or since it\u0027s mostly done for the time being.",
+      "range": {
+        "startLine": 15,
+        "startChar": 36,
+        "endLine": 15,
+        "endChar": 47
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17ad07aa_831901e9",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T11:27:10Z",
+      "side": 1,
+      "message": "nit: maybe put \"see notes below\" then include the longer formatted paragraph?",
+      "range": {
+        "startLine": 17,
+        "startChar": 85,
+        "endLine": 17,
+        "endChar": 187
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed16b9ca_9b65d301",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T11:27:10Z",
+      "side": 1,
+      "message": "nit: \u0027aliasing\u0027",
+      "range": {
+        "startLine": 17,
+        "startChar": 304,
+        "endLine": 17,
+        "endChar": 309
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "453cbed1_ad58f09b",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T11:27:10Z",
+      "side": 1,
+      "message": "nit: \u0027is\u0027 not",
+      "range": {
+        "startLine": 18,
+        "startChar": 377,
+        "endLine": 18,
+        "endChar": 378
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d97f6837_c4b922b5",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T11:27:10Z",
+      "side": 1,
+      "message": "nit: similar suggestion about breaking up this block into a \u0027see notes below\u0027",
+      "range": {
+        "startLine": 18,
+        "startChar": 86,
+        "endLine": 18,
+        "endChar": 93
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf152b5a_56aa4abb",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T11:27:10Z",
+      "side": 1,
+      "message": "nit: of",
+      "range": {
+        "startLine": 19,
+        "startChar": 101,
+        "endLine": 19,
+        "endChar": 108
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
