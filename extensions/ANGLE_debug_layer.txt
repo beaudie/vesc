@@ -1,0 +1,131 @@
+Name
+
+    ANGLE_debug_layer
+
+Name Strings
+
+    GL_ANGLE_debug_layer
+
+Contributors
+
+    Ian Elliott, Google
+    Jamie Madill, Google
+    Courtney Goeltzenleuchter, Google
+
+Status
+
+    Complete
+
+Version
+
+    Last Modified Date:  October 15, 2020
+    Version:             1
+
+Number
+
+    OpenGL ES Extension ##########
+
+Dependencies
+
+    This extension is written against the OpenGL ES 3.2 Specification, but can
+    apply to earlier versions used with the GL_KHR_debug extension.
+
+Overview
+
+    ANGLE implements OpenGL ES on top of other APIs, including Vulkan.  The
+    Android Graphics Inspector (AGI) tool provides frame debugging for Vulkan
+    applications.  With ANGLE, AGI can provide frame debugging for OpenGL ES
+    applications.  Android supports OpenGL ES layers, which are similar to
+    Vulkan layers.  An OpenGL ES layer for AGI can annotate the OpenGL ES
+    commands.  This extension allows those commands to be annotated with the
+    Vulkan VK_EXT_debug_utils extension, so that commands from each API can be
+    correlated with each other.
+
+IP Status
+
+    No known IP claims.
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    None
+
+New Constants
+
+    Accepted as a value for the <id> parameter of DebugMessageInsert and
+    PushDebugGroup:
+
+        DEBUG_ID_DEBUG_LAYER_ANGLE                     0x34414749
+
+    This value is the hex value for the 4 ASCII characters in the string
+    "4AGI".  The OpenGL ES layer, that AGI will use, will use this <id> value.
+    It will also use DEBUG_SOURCE_THIRD_PARTY for the <source> parameter and
+    DEBUG_TYPE_MARKER for the <type> parameter of those commands.  Those
+    parameter values indicate to ANGLE that the character string message is an
+    annotation of an OpenGL ES command, that should be inserted into the
+    annotations of Vulkan commands with the VK_EXT_debug_utils extension.
+
+Additions to Chapter 18 of the OpenGL ES 3.2 Specification (Debug Output)
+
+    Add the following to 18.5 (Externally Generated Messages), after the
+    description of DebugMessageInsert:
+
+    ANGLE will specially handle calls when <source> is
+    DEBUG_SOURCE_THIRD_PARTY, <type> is DEBUG_TYPE_MARKER, <id> is
+    DEBUG_ID_DEBUG_LAYER_ANGLE, and <severity> of DEBUG_SEVERITY_NOTIFICATION.
+    The character string <bug> contains the string representation of a
+    non-draw/non-dispatch OpenGL ES command.
+
+    Add the following to 18.6 (Debug Groups), after the description of
+    PushDebugGroup:
+
+    ANGLE will specially handle calls when <source> is DEBUG_SOURCE_THIRD_PARTY
+    and <id> is DEBUG_ID_DEBUG_LAYER_ANGLE.  The character string <message>
+    contains the string representation of a draw or dispatch OpenGL ES command.
+
+Errors
+
+    None
+
+Usage Example
+
+    Consider the following application commands:
+
+    /* Application commands to prepare to draw */
+    /* ... */
+    glViewport(0, 0, 100, 200);
+    glScissor(0, 0, 100, 200);
+    /* ... */
+
+    /* Application draw command */
+    glDrawArrays(GL_TRIANGLES, 0, 10);
+
+    The OpenGL ES layer will add commands to annotate the application commands:
+
+    /* ... */
+    glDebugMessageInsert(DEBUG_SOURCE_THIRD_PARTY, DEBUG_TYPE_MARKER, DEBUG_ID_DEBUG_LAYER_ANGLE,
+                         DEBUG_SEVERITY_NOTIFICATION, -1, "glViewport(0, 0, 100, 200)");
+    glViewport(0, 0, 100, 200);
+    glDebugMessageInsert(DEBUG_SOURCE_THIRD_PARTY, DEBUG_TYPE_MARKER, DEBUG_ID_DEBUG_LAYER_ANGLE,
+                         DEBUG_SEVERITY_NOTIFICATION, -1, "glScissor(0, 0, 100, 200)");
+    glScissor(0, 0, 100, 200);
+    /* ... */
+
+    /* Application draw command */
+    glPushDebugGroup(DEBUG_SOURCE_THIRD_PARTY, DEBUG_ID_DEBUG_LAYER_ANGLE, -1,
+                     "glDrawArrays(GL_TRIANGLES, 0, 10)");
+    glDrawArrays(GL_TRIANGLES, 0, 10);
+    glPopDebugGroup();
+
+Issues
+
+    None
+
+Revision History
+
+    Rev.    Date      Author     Changes
+    ----  ----------- ---------  ----------------------------------------
+      1   15 Oct 2020 ianelliott Initial revision

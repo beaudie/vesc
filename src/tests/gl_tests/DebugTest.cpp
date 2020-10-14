@@ -401,6 +401,46 @@ TEST_P(DebugTest, ObjectPtrLabels)
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
+// AGI will use a GL layer that will use the GL_KHR_debug extension to provide strings for each GLES
+// command.  These strings will be given to vk*DebugUtilsLabelEXT.  The begin-end group for the GLES
+// commands must be layered under the beginnng of the render pass.  A special "id" parameter value
+// is used to identify strings coming from the layer that are for AGI, that is the hex value for the
+// ASCII characters "4AGI".  The "source" parameter used is GL_DEBUG_SOURCE_THIRD_PARTY_KHR.
+static constexpr uint32_t kAngleLayerSpecialMsgId = 0x34414749;
+
+// Test inserting multiple messages
+TEST_P(DebugTest, SimulateGLLayer)
+{
+    ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable);
+
+    std::vector<Message> messages;
+
+    glDebugMessageCallbackKHR(Callback, &messages);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+    const GLenum source   = GL_DEBUG_SOURCE_THIRD_PARTY_KHR;
+    const GLenum type     = GL_DEBUG_TYPE_MARKER;
+    const GLuint id       = kAngleLayerSpecialMsgId;
+    const GLenum severity = GL_DEBUG_SEVERITY_NOTIFICATION;
+
+    // Simulate the GL layer handling some non-draw GLES commands
+    std::string viewportMessage = "glViewport";
+    glDebugMessageInsertKHR(source, type, id, severity, -1, viewportMessage.c_str());
+    std::string scissorMessage = "glScissor";
+    glDebugMessageInsertKHR(source, type, id, severity, -1, scissorMessage.c_str());
+
+    // Simulate the GL layer handling a draw GLES command
+    std::string drawMessage = "glDrawElements";
+    glPushDebugGroupKHR(source, id, -1, drawMessage.c_str());
+
+    EXPECT_EQ(3u, messages.size());
+    EXPECT_STREQ(messages[0].message.c_str(), viewportMessage.c_str());
+    EXPECT_STREQ(messages[1].message.c_str(), scissorMessage.c_str());
+    EXPECT_STREQ(messages[2].message.c_str(), drawMessage.c_str());
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(DebugTest);
