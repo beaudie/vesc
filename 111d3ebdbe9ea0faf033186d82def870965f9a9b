@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c201a62c_514bdd48",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-14T11:04:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4c2fd7e_7fb819c1",
+      "range": {
+        "startLine": 187,
+        "startChar": 28,
+        "endLine": 187,
+        "endChar": 32
+      },
+      "revId": "111d3ebdbe9ea0faf033186d82def870965f9a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "923f9f68_27b498c1",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-14T10:09:08Z",
       "side": 1,
       "message": "IsMetalSwizzleAvailable() function will be added in the CL that implements Metal texture swizzle.\nThat function might not be 100% accurate, but I think it should be fine for testing.",
+      "range": {
+        "startLine": 123,
+        "startChar": 13,
+        "endLine": 123,
+        "endChar": 95
+      },
+      "revId": "111d3ebdbe9ea0faf033186d82def870965f9a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4599ab5_d3ccf37d",
+        "filename": "src/tests/gl_tests/DXT1CompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-14T11:04:35Z",
+      "side": 1,
+      "message": "Ack. I\u0027ll make another CL once Metal texture swizzle support is merged.",
+      "parentUuid": "923f9f68_27b498c1",
       "range": {
         "startLine": 123,
         "startChar": 13,
