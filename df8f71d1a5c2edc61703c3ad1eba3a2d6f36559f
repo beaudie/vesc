@@ -34,6 +34,24 @@
       "parentUuid": "2399ae8b_21680c41",
       "revId": "df8f71d1a5c2edc61703c3ad1eba3a2d6f36559f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aca5208_cb4f651b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T16:20:44Z",
+      "side": 1,
+      "message": "The issue with always-dynamic-scissor was that we were generating a lot of overhead from a bunch of vkCmdBindScissor calls. Now that we are using way fewer command buffers than the original command graph we could probably go back to using always-dynamic-scissor and saving some space in our pipeline desc. OTOH maybe baked scissor is good for some uses cases, so it might be good to keep both around.",
+      "parentUuid": "777d095d_0159d2a9",
+      "revId": "df8f71d1a5c2edc61703c3ad1eba3a2d6f36559f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
