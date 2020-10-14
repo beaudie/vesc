@@ -16,6 +16,24 @@
       "message": "Dynamic scissor---that is great!  \n\nWould it be useful to talk about this in a team meeting sometime?  \n\nAlso, have you tested it with pre-rotation?",
       "revId": "df8f71d1a5c2edc61703c3ad1eba3a2d6f36559f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777d095d_0159d2a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T16:05:11Z",
+      "side": 1,
+      "message": "We used to have dynamic scissor, but there were performance issues on some drivers (QC I guess?). I was thinking it might be a good idea to have a threshold and switch to dynamic scissor if scissor is the only reason for pipeline recreation, but perhaps in practice that\u0027s rare.\n\nFeel free to bring it up anytime.\n\nSorry, I haven\u0027t tested with prerotation. It\u0027s using the same scissor that was otherwise given to the pipeline, so (fingers crossed) it should be fine. Do let me know if you notice issues.",
+      "parentUuid": "2399ae8b_21680c41",
+      "revId": "df8f71d1a5c2edc61703c3ad1eba3a2d6f36559f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
