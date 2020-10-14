@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c6fa8b3_af81cdc9",
+        "filename": "src/libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-14T14:06:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c26f31ba_e875470d",
+      "revId": "5efe6e651d348be780c9a8fb481ae165595e3ee2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee04e157_74e9ae42",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "Oh, you\u0027re refactoring that with the follow-on CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2464921\n\nPlease indicate that in the future.",
       "parentUuid": "ee04e157_74e9ae42",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 100
+      },
+      "revId": "5efe6e651d348be780c9a8fb481ae165595e3ee2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10827e1b_b396275c",
+        "filename": "src/libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-14T14:06:38Z",
+      "side": 1,
+      "message": "Sorry for not being clearer about that.  BTW, getCurrentWindowSize() is a platform-specific method.",
+      "parentUuid": "c13ed2fd_b61731bc",
       "range": {
         "startLine": 40,
         "startChar": 0,
