@@ -16,6 +16,52 @@
       "message": "With this update, WebGL S3TC tests pass on configurations without swizzling support.",
       "revId": "111d3ebdbe9ea0faf033186d82def870965f9a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4c2fd7e_7fb819c1",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-14T10:09:08Z",
+      "side": 1,
+      "message": "I think you can just change this default from NONE to BC1_RGBA_UNORM_BLOCK, no need to add additional require flag to swizzle path.\nDuplicated code in the generated file is fine since that function will only be called once during DisplayMtl creation.",
+      "range": {
+        "startLine": 187,
+        "startChar": 28,
+        "endLine": 187,
+        "endChar": 32
+      },
+      "revId": "111d3ebdbe9ea0faf033186d82def870965f9a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "923f9f68_27b498c1",
+        "filename": "src/tests/gl_tests/DXT1CompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-14T10:09:08Z",
+      "side": 1,
+      "message": "IsMetalSwizzleAvailable() function will be added in the CL that implements Metal texture swizzle.\nThat function might not be 100% accurate, but I think it should be fine for testing.",
+      "range": {
+        "startLine": 123,
+        "startChar": 13,
+        "endLine": 123,
+        "endChar": 95
+      },
+      "revId": "111d3ebdbe9ea0faf033186d82def870965f9a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
