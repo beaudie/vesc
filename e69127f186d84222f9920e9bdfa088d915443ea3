@@ -16,6 +16,23 @@
       "message": "Clear is now render-pass-break free!",
       "revId": "e69127f186d84222f9920e9bdfa088d915443ea3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b499f361_e4dbc03f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T04:19:40Z",
+      "side": 1,
+      "message": "It\u0027s possible that the ImageHelper::mCurrentSingleClearValue optimization is no longer necessary after this change. Repeated clears can get deferred with this change.\n\nCharlie, did you implement that optimization for Manhattan? I\u0027d appreciate it if you could give this change a try (and disable that optimization) to see if this change is sufficient.",
+      "revId": "e69127f186d84222f9920e9bdfa088d915443ea3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
