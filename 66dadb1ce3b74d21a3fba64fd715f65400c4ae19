@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec57000c_30de3415",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T20:01:01Z",
+      "side": 1,
+      "message": "Excellent, thanks for the fix!",
+      "revId": "66dadb1ce3b74d21a3fba64fd715f65400c4ae19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1bd5a4c_b9a3129f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T20:01:01Z",
+      "side": 1,
+      "message": "nit: could be moved up to the constructor initializer list.",
+      "revId": "66dadb1ce3b74d21a3fba64fd715f65400c4ae19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
