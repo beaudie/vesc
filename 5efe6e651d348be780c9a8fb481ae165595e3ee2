@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c26f31ba_e875470d",
+        "filename": "src/libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-14T00:50:31Z",
+      "side": 1,
+      "message": "ref1",
+      "revId": "5efe6e651d348be780c9a8fb481ae165595e3ee2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee04e157_74e9ae42",
+        "filename": "src/libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-14T00:50:31Z",
+      "side": 1,
+      "message": "It looks like this is only called in two place:\n\n1.) WindowSurfaceVkAndroid::createSurfaceVk() [ref1 above]\n2.) WindowSurfaceVk::checkForOutOfDateSwapchain():\n\n    angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,\n                                                              bool presentOutOfDate)\n    {\n    ...\n            gl::Extents currentExtents;\n  [[[ Call this function ]]]\n            ANGLE_TRY(getCurrentWindowSize(contextVk, \u0026currentExtents));\n\n            // If window size has changed, check with surface capabilities.  It has been observed on\n            // Android that `getCurrentWindowSize()` returns 1920x1080 for example, while surface\n            // capabilities returns the size the surface was created with.\n  [[[ Do the exact same work ]]]\n            const VkPhysicalDevice \u0026physicalDevice \u003d contextVk-\u003egetRenderer()-\u003egetPhysicalDevice();\n            ANGLE_VK_TRY(contextVk, vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface,\n                                                                              \u0026mSurfaceCaps));\n\nIt seems we saw that ANativeWindow_get[Width|Height] wasn\u0027t returning what we expected.   How much of this code can be cleaned up now?\n\nIf nothing else, it seems the call getCurrentWindowSize() should be removed and currentExtents replaced with mSurfaceCaps.currentExtent, since it\u0027s just making the same call twice now.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 100
+      },
+      "revId": "5efe6e651d348be780c9a8fb481ae165595e3ee2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
