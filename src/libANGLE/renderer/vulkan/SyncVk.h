@@ -129,6 +129,9 @@ class EGLSyncVk final : public EGLSyncImpl
     egl::Error serverWait(const egl::Display *display,
                           const gl::Context *context,
                           EGLint flags) override;
+    egl::Error signal(const egl::Display *display,
+                      const gl::Context *context,
+                      EGLint mode) override;
     egl::Error getStatus(const egl::Display *display, EGLint *outStatus) override;
 
     egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *fdOut) const override;
