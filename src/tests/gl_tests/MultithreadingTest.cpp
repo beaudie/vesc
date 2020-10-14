@@ -481,7 +481,7 @@ ANGLE_INSTANTIATE_TEST(MultithreadingTest,
                        WithNoVirtualContexts(ES3_OPENGL()),
                        WithNoVirtualContexts(ES2_OPENGLES()),
                        WithNoVirtualContexts(ES3_OPENGLES()),
-                       WithNoVirtualContexts(ES2_VULKAN()),
-                       WithNoVirtualContexts(ES3_VULKAN()));
+                       ES2_VULKAN(),
+                       ES3_VULKAN());
 
 }  // namespace angle
