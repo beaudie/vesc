@@ -1105,6 +1105,7 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
     {
         releaseImage(contextVk);
     }
+
     return angle::Result::Continue;
 }
 
