@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a69522f_9443097d",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-14T07:08:34Z",
+      "side": 1,
+      "message": "Keep it unchanged for now. Not sure if others want to continue this work.",
+      "parentUuid": "cc48866e_7175d1e9",
+      "range": {
+        "startLine": 15,
+        "startChar": 36,
+        "endLine": 15,
+        "endChar": 47
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a36e2a63_0f892199",
         "filename": "doc/ES31StatusOnD3D11.md",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-14T03:53:47Z",
       "side": 1,
       "message": "Atomic counters on non-CS are optional in ES IIRC, so this can be called \"Fully implemented\". Please double check with the spec though.",
+      "range": {
+        "startLine": 16,
+        "startChar": 86,
+        "endLine": 16,
+        "endChar": 145
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2e2178c_57b87f1c",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-14T07:08:34Z",
+      "side": 1,
+      "message": "Yes. In the spec, the minimum value for these resources are 0 for non-CS shaders. However, for d3d backend, it can support them for other shaders. That\u0027s why I said \u0027Implementations in non-compute shaders are not implemented yet\u0027. If you insist that \u0027Fully implemented\u0027 is better. I can change it.",
+      "parentUuid": "a36e2a63_0f892199",
       "range": {
         "startLine": 16,
         "startChar": 86,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "baa3d54c_56d908bf",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-14T07:08:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bdb1380e_fa739806",
+      "range": {
+        "startLine": 17,
+        "startChar": 89,
+        "endLine": 17,
+        "endChar": 139
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6120a94e_dcfae736",
@@ -83,6 +155,30 @@
       "writtenOn": "2020-10-14T03:53:47Z",
       "side": 1,
       "message": "Same as atomic counter buffers too I believe.",
+      "range": {
+        "startLine": 18,
+        "startChar": 89,
+        "endLine": 18,
+        "endChar": 154
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e681c3_f5c95fd6",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-14T07:08:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6120a94e_dcfae736",
       "range": {
         "startLine": 18,
         "startChar": 89,
@@ -130,6 +226,30 @@
       "side": 1,
       "message": "It should be WaveIsHelperLane() according to [1] and [2].\n\n[1] https://docs.microsoft.com/en-us/previous-versions//mt733261(v\u003dvs.85)?redirectedfrom\u003dMSDN\n[2] http://32ipi028l5q82yhj72224m8j.wpengine.netdna-cdn.com/wp-content/uploads/2017/07/GDC2017-Wave-Programming-D3D12-Vulkan.pdf",
       "parentUuid": "58fd37df_d8a08fcd",
+      "range": {
+        "startLine": 19,
+        "startChar": 86,
+        "endLine": 19,
+        "endChar": 155
+      },
+      "revId": "c823f13aa2904ab81fcdf92162a7cdcaa1f1912f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5e8915d_dc24070e",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-14T07:08:34Z",
+      "side": 1,
+      "message": "Thanks Jiawei\u0027s input. Have updated my description.",
+      "parentUuid": "7703513b_80ec387f",
       "range": {
         "startLine": 19,
         "startChar": 86,
