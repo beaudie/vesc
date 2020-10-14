@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2399ae8b_21680c41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-14T15:56:53Z",
+      "side": 1,
+      "message": "Dynamic scissor---that is great!  \n\nWould it be useful to talk about this in a team meeting sometime?  \n\nAlso, have you tested it with pre-rotation?",
+      "revId": "df8f71d1a5c2edc61703c3ad1eba3a2d6f36559f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
