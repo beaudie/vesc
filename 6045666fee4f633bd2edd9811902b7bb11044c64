@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f97c52cc_076720e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T21:36:19Z",
+      "side": 1,
+      "message": "Another skip, this time because the 20 second limit is timing out the test periodically. It\u0027s right on the limit. Ideal fix would be to split up the test or to set a \u0027slow test\u0027 flag somehow. Going to suppress for now since Intel/Windows/Vulkan/GLES1 isn\u0027t a key regression test platform.",
+      "revId": "6045666fee4f633bd2edd9811902b7bb11044c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
