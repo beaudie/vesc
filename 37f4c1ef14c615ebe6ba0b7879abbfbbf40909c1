@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "37f4c1ef14c615ebe6ba0b7879abbfbbf40909c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecd9b13f_537f1dc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-14T00:53:11Z",
+      "side": 1,
+      "message": "We won\u0027t have standalone SwANGLE bots, right?\nSince we need to test with SwiftShader version from Chromium DEPS and not ANGLE DEPS, so that we can safely roll ANGLE.\n\nIf the above is not true, note that SwANGLE bots require Xvfb, so if it\u0027s a script isolate and not windowed_test_launcher, you\u0027ll need to pass it --xvfb somewhere.\n",
+      "revId": "37f4c1ef14c615ebe6ba0b7879abbfbbf40909c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
