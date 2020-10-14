@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00a2d2d8_9339da57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-14T23:39:25Z",
+      "side": 1,
+      "message": "Here\u0027s what I think could be the minimal change necessary to the internal part of ANGLE in order to create a GL layer for AGI.  The idea is to use:\n\n- A special ID value\n- insertMessage() for non-draw/dispatch commands\n- PushDebugGroup-PopDebugGroup for draw/dispatch commands",
+      "revId": "699c9376f89843944d70411a2fd5bff7470db84c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
