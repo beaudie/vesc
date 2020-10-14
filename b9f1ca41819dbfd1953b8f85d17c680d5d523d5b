@@ -16,6 +16,24 @@
       "message": "LGTM. You could also do if \u003d\u003d 0 return 0 in GetMask.\n\nFlake is tracked in http://crbug.com/1004581",
       "revId": "b9f1ca41819dbfd1953b8f85d17c680d5d523d5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47e401b3_e5b69b70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-14T11:46:24Z",
+      "side": 1,
+      "message": "I looked through all usages of GetMask and couldn\u0027t find a single case where zero draw buffers would be a legitimate case, hence the ASSERT.\n\nShould the ubsan hit the assertion, it may indicate a deeper problem.",
+      "parentUuid": "9f8a71ce_e03080e3",
+      "revId": "b9f1ca41819dbfd1953b8f85d17c680d5d523d5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
