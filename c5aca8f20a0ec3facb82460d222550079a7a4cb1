@@ -33,6 +33,63 @@
       "message": "Jonah or Shabi, please take a look so we can land these CLs. This is blocking the Metal stack.",
       "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b1a74c_59687321",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T16:01:40Z",
+      "side": 1,
+      "message": "LGTM. At some point it would be good to enable testing of the ES3 tests in TextureTests.cpp, there are some base-level related regression tests.",
+      "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c1588c_1aae15d4",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T16:01:40Z",
+      "side": 1,
+      "message": "Why is the texture base level not accounted for in these FromBaseZeroGLIndex calls?",
+      "range": {
+        "startLine": 1561,
+        "startChar": 52,
+        "endLine": 1561,
+        "endChar": 71
+      },
+      "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0216a851_72cf20a3",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T16:01:40Z",
+      "side": 1,
+      "message": "The name is a little confusing. Maybe just call it `mNativeIndex`?",
+      "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
