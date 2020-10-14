@@ -16,6 +16,23 @@
       "message": "Please try re-submitting as both failures were timeouts.",
       "revId": "20336e72b2e9322f4a175dfe9e429d2c8c5542ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96f17509_cf0b95c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T22:07:39Z",
+      "side": 1,
+      "message": "Suppressing one timeout here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2472536",
+      "revId": "20336e72b2e9322f4a175dfe9e429d2c8c5542ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
