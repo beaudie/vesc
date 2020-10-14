@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "e90cdbded2e92e2eda2b14465e0ad9540fe2cef9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4757958a_99a0818b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-14T21:02:12Z",
+      "side": 1,
+      "message": "Brian: if you lack CQ + 2 let me know and I\u0027ll grant it.",
+      "revId": "e90cdbded2e92e2eda2b14465e0ad9540fe2cef9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
