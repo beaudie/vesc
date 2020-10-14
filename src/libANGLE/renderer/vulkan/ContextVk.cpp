@@ -2469,6 +2469,20 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+void ContextVk::debugMessageInsert(const gl::Context *context,
+                                   GLenum source,
+                                   GLenum type,
+                                   GLuint id,
+                                   const std::string &message)
+{
+    if (!mRenderer->enableDebugUtils())
+        return;
+
+    VkDebugUtilsLabelEXT label;
+    vk::MakeDebugUtilsLabel(source, message.c_str(), &label);
+    mOutsideRenderPassCommands->getCommandBuffer().insertDebugUtilsLabelEXT(label);
+}
+
 void ContextVk::logEvent(const char *eventString)
 {
     // Save this event (about an OpenGL ES command being called).

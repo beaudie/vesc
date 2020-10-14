@@ -193,6 +193,11 @@ class ContextVk : public ContextImpl, public vk::Context
                                  GLuint id,
                                  const std::string &message) override;
     angle::Result popDebugGroup(const gl::Context *context) override;
+    virtual void debugMessageInsert(const gl::Context *context,
+                                    GLenum source,
+                                    GLenum type,
+                                    GLuint id,
+                                    const std::string &message) override;
 
     // Record GL API calls for debuggers
     void logEvent(const char *eventString);
