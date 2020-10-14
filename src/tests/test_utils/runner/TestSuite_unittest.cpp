@@ -101,6 +101,12 @@ TEST(MockTestSuiteTest, DISABLED_Fail)
     EXPECT_TRUE(false);
 }
 
+// Normal failing test.
+TEST(MockTestSuiteTest, DISABLED_Fail2)
+{
+    EXPECT_TRUE(false);
+}
+
 // Trigger a test timeout.
 TEST(MockTestSuiteTest, DISABLED_Timeout)
 {
