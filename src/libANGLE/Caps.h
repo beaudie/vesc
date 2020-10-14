@@ -653,6 +653,9 @@ struct Extensions
 
     // GL_OES_sample_shading
     bool sampleShadingOES = false;
+
+    // GL_ANGLE_get_tex_level_parameter
+    bool getTexLevelParameter = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct
