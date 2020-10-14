@@ -2640,6 +2640,13 @@ angle::Result ContextVk::popGroupMarker()
     return angle::Result::Continue;
 }
 
+// AGI will use a GL layer that will use the GL_KHR_debug extension to provide strings for each GLES
+// command.  These strings will be given to vk*DebugUtilsLabelEXT.  The begin-end group for the GLES
+// commands must be layered under the beginnng of the render pass.  A special "id" parameter value
+// is used to identify strings coming from the layer that are for AGI, that is the hex value for the
+// ASCII characters "4AGI".  The "source" parameter used is GL_DEBUG_SOURCE_THIRD_PARTY_KHR.
+static constexpr uint32_t kAngleLayerSpecialMsgId = 0x34414749;
+
 angle::Result ContextVk::pushDebugGroup(const gl::Context *context,
                                         GLenum source,
                                         GLuint id,
@@ -2647,6 +2654,20 @@ angle::Result ContextVk::pushDebugGroup(const gl::Context *context,
 {
     if (!mRenderer->enableDebugUtils())
         return angle::Result::Continue;
+
+    if (id == kAngleLayerSpecialMsgId && source == GL_DEBUG_SOURCE_THIRD_PARTY_KHR)
+    {
+        // This message is from the layer that AGI uses to mark GLES commands.  The layer will use
+        // glPushDebugGroup() for draw/dispatch calls.  Save this message to be processed after the
+        // render pass has been started by setupDraw.
+        mEventLog.push_back(message.c_str());
+
+        // Set a dirty bit in order to stay off the "hot path" for when not logging.
+        mGraphicsDirtyBits.set(DIRTY_BIT_EVENT_LOG);
+        mComputeDirtyBits.set(DIRTY_BIT_EVENT_LOG);
+
+        return angle::Result::Continue;
+    }
 
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, message.c_str(), &label);
@@ -2673,6 +2694,18 @@ void ContextVk::insertMessage(const gl::Context *context,
 {
     if (!mRenderer->enableDebugUtils())
         return;
+
+    if (id == kAngleLayerSpecialMsgId && source == GL_DEBUG_SOURCE_THIRD_PARTY_KHR)
+    {
+        // This message is from the layer that AGI uses to mark GLES commands.  The layer will use
+        // glDebugMessageInsert() for non-draw/dispatch calls.  Save this message to be processed
+        // with the draw/dispatch call.
+        mEventLog.push_back(message.c_str());
+
+        // Set a dirty bit in order to stay off the "hot path" for when not logging.
+        mGraphicsDirtyBits.set(DIRTY_BIT_EVENT_LOG);
+        mComputeDirtyBits.set(DIRTY_BIT_EVENT_LOG);
+    }
 
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, message.c_str(), &label);
