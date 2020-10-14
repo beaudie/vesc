@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaeb5800_5a5beef1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-14T01:32:15Z",
+      "side": 1,
+      "message": "Should we be checking if any unexpected platforms are requiring a second call?   Maybe an ASSERT(!IsAndroid()), since presumably we\u0027d just get back the same bad value again?",
+      "range": {
+        "startLine": 1023,
+        "startChar": 0,
+        "endLine": 1025,
+        "endChar": 77
+      },
+      "revId": "de9772351187da6f81d636efb24bc6c9a96382aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
