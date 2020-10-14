@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc0731b_87dd89af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-14T22:18:41Z",
+      "side": 1,
+      "message": "This is part of two efforts:\n\n1) Plumbing all of GL_KHR_debug to the VK_EXT_debug_utils extension.\n\n2) Creating a GL layer for AGI.",
+      "revId": "31399a2a255b084e5b5ab0f3afd297f94d5f419d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
