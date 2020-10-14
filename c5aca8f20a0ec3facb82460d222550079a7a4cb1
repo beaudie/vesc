@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16c66b79_9b11859d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-14T10:19:56Z",
+      "side": 1,
+      "message": "Could Shabby help review this CL? Most are just changing from integers to wrapper class instances, there shouldn\u0027t be many metal specific changes (more like none)",
+      "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
