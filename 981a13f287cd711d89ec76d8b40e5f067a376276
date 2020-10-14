@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e832d57_031603ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-14T19:46:42Z",
+      "side": 1,
+      "message": "It wasn\u0027t a ton of work to get this working, but figured it may be useful to people, especially as we start shifting to looking at ANGLE\u0027s memory consumption.   \n\nI took a shot that RendererVk::queueSubmit() is the most interesting time to output this data, but let me know if there\u0027s somewhere better.\n\nI didn\u0027t go the full \u0027write to a file\u0027 version, since that seems to get complicated quickly on the various platforms like Android.   I\u0027m open to going that route if there\u0027s a good example that works relatively easily if you guys think that would be better.",
+      "revId": "981a13f287cd711d89ec76d8b40e5f067a376276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
