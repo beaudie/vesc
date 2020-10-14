@@ -141,6 +141,30 @@
       },
       "revId": "336202d7d6014fd61f430d4ac92d756b33d32ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "241af68c_7c1663b1",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-14T02:10:29Z",
+      "side": 1,
+      "message": "Yeah I remember this is bot-mode only. It was a reply to Yuly who was asking what happens to the .qpa in case of crash. I agree the qpa generated on the bot is probably not very useful.",
+      "parentUuid": "9bb48078_b706056c",
+      "range": {
+        "startLine": 538,
+        "startChar": 0,
+        "endLine": 538,
+        "endChar": 51
+      },
+      "revId": "336202d7d6014fd61f430d4ac92d756b33d32ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
