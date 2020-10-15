@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "df7b65db17f6db84e1c1c45f1027bdb1",
+    "9a6a9f26f3750cff76eaf33d18b19bb6",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "44fc5437c4a84012e338b3da4b6fc28a",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -17,6 +17,8 @@
     "a95efee5e5c6d85bac2d8c2ab09dc34c",
   "src/tests/restricted_traces/gen_restricted_traces.py":
     "a520ef50175b1b9a20383a884e293b54",
+  "src/tests/restricted_traces/lego_legacy.tar.gz.sha1":
+    "09aa56881403a422bb32cf3185e207bf",
   "src/tests/restricted_traces/manhattan_10.tar.gz.sha1":
     "752781119592a190cc02b773adf38fc3",
   "src/tests/restricted_traces/mobile_legends.tar.gz.sha1":
@@ -24,13 +26,13 @@
   "src/tests/restricted_traces/nba2k20_800.tar.gz.sha1":
     "03df0dcf41c18bc59edfc0b088ca4a87",
   "src/tests/restricted_traces/restricted_traces.json":
-    "03d84b1e4d3e5a3cfadd050750b9b1ce",
+    "e4fa352dd32f652de145dfed92834ba4",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "bf2e36f2de6c095228ad8a9655eae0a9",
+    "476bec9c73190471956d3134cde42d94",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "b6f1670b97ae0ea561f107721de4ca90",
+    "507920f0624312991898f98fb4714be0",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "522c35f107b20fc2031da4b87590fe85",
+    "379a6d4c67e374065a696a925f7ea027",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
     "77475b0186ee0380eeb9db47433d0457",
   "src/tests/restricted_traces/trex_200.tar.gz.sha1":
