@@ -96,6 +96,7 @@ class CommandProcessorTask
 
   private:
     CustomTask mTask;
+    Serial mTaskSerial;
 
     // ProcessCommands
     ContextVk *mContextVk;
@@ -262,9 +263,11 @@ class CommandProcessor : public vk::Context
     TaskProcessor mTaskProcessor;
 
     AtomicSerialFactory mQueueSerialFactory;
+    AtomicSerialFactory mTaskSerialFactory;
     std::mutex mCommandProcessorQueueSerialMutex;
     Serial mCommandProcessorLastSubmittedSerial;
     Serial mCommandProcessorCurrentQueueSerial;
+    Serial mTaskSerial;
 
     mutable std::mutex mErrorMutex;
     std::queue<vk::Error> mErrors;
