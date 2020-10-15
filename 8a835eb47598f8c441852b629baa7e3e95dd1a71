@@ -91,6 +91,30 @@
       },
       "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1b822bf_ac477bba",
+        "filename": "extensions/ANGLE_debug_layer.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-15T18:27:23Z",
+      "side": 1,
+      "message": "That might be a good thing to do if this is to be a broadly-used extension, but it is a bigger, more-costly change.  This is highly-focused for AGI.  We just need a way for the layer to signal to ANGLE\u0027s Vulkan back-end that \u003cthese messages\u003e are GLES commands and should be treated specially.  Are you sure we need this?",
+      "parentUuid": "fb494630_49cd069e",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 55
+      },
+      "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
