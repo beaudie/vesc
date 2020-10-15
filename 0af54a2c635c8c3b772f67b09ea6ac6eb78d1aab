@@ -33,6 +33,24 @@
       "message": "PTAL\n\nI don\u0027t quite understand why that call is there in the first place, but CQ seems happy enough without it.   It just stuck out to me that we are initializing mImage and them immediately releasing it.   Thoughts on how good/bad this is?",
       "revId": "0af54a2c635c8c3b772f67b09ea6ac6eb78d1aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69541ba7_30887954",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-15T03:26:05Z",
+      "side": 1,
+      "message": "Repeating from Chat for posterity. This is not releasing the image after initializing it. This is releasing the image after ensuring that the vk::ImageHelper is at least allocated.\n\nI think the reason for this is repeated glTexStorage2D calls. You should be able to write a test for this:\n\n- glTexStorage2D on texture T\n- Use T, like draw blue into it\n- glTexStorage2D on texture T again, but with wildly different parameters\n- Use T again, making sure a new image is created for it.\n\nNot sure what\u0027s the best way to check the last step. It should be easy to cause validation errors, but something that properly fails... I can imagine binding it as an image and getting the imageSize() in a compute shader would work, but maybe there\u0027s something simpler.",
+      "parentUuid": "06a0e2a0_0a87eb45",
+      "revId": "0af54a2c635c8c3b772f67b09ea6ac6eb78d1aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
