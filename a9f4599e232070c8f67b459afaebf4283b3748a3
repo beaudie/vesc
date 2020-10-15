@@ -206,6 +206,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f21d4a6_59b049ac",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-15T11:46:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3a2aa895_47b3b518",
+      "range": {
+        "startLine": 17,
+        "startChar": 85,
+        "endLine": 17,
+        "endChar": 187
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "453cbed1_ad58f09b",
