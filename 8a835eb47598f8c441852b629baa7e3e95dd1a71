@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c2996c_785bdfd5",
+        "filename": "extensions/ANGLE_debug_layer.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-15T17:30:28Z",
+      "side": 1,
+      "message": "nit: include source, e.g. ANGLE_debug_layer_debug_source or something like that\n\nor ANGLE_debug_source_agi",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6d28fc1_814c2a1b",
+        "filename": "extensions/ANGLE_debug_layer.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-15T17:30:28Z",
+      "side": 1,
+      "message": "can you include a contact email for yourself?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a05721d2_52a2d6ea",
+        "filename": "extensions/ANGLE_debug_layer.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-15T17:30:28Z",
+      "side": 1,
+      "message": "Please use 0x96B0, I allocated this for you from ANGLE\u0027s internal block. Ask the internal team email list and we can point you ad that sheet so you can self-allocate in the future.",
+      "range": {
+        "startLine": 61,
+        "startChar": 55,
+        "endLine": 61,
+        "endChar": 65
+      },
+      "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb494630_49cd069e",
+        "filename": "extensions/ANGLE_debug_layer.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-15T17:30:28Z",
+      "side": 1,
+      "message": "should be a source rather than an ID, DEBUG_SOURCE_DEBUG_LAYER_ANGLE\n\nactually why not DEBUG_SOURCE_AGI_ANGLE",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 55
+      },
+      "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
