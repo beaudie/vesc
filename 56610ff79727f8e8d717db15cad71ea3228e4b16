@@ -1,0 +1,370 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5d09be1_6c4c4712",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Can you std::move() these vectors also, or do they need to be copies?",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 55
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abddb26a_13b8c346",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "nit: move this to the end so the ordering matches the block above (which makes it easier to see all of the members not swap()\u0027ed  are reset here).",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e0b19f8_de93fd56",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Can be: \u003d default",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a415c1_da053f87",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Clang-Tidy: Method \u0027releaseToCommandBatch\u0027 can be made static",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc6ef7b6_0048e901",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Clang-Tidy: Method \u0027present\u0027 can be made static",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68299dda_08d5adbb",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Clang-Tidy: Std::move of the variable \u0027error\u0027 of the trivially-copyable type \u0027vk::Error\u0027 has no effect; remove std::move()",
+      "range": {
+        "startLine": 462,
+        "startChar": 20,
+        "endLine": 462,
+        "endChar": 29
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ee96a5a_9e7b0162",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "This is only called above in the ctor.   This is small enough that it\u0027s probably best to just move the contents into there where we get the lock anyway.",
+      "range": {
+        "startLine": 483,
+        "startChar": 0,
+        "endLine": 489,
+        "endChar": 1
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b81f6917_fb7028aa",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "This should be removed, since there\u0027s no guarantee that it\u0027s true.\n\nThe reason it may be true, is that it\u0027s called with the following:\n\n    bool hasPendingError() const { return mCommandProcessor.hasPendingError(); }\n    vk::Error getAndClearPendingError() { return mCommandProcessor.getAndClearPendingError(); }\n\n\n    void ContextVk::commandProcessorSyncErrors()\n    {\n        while (mRenderer-\u003ehasPendingError())\n        {\n            vk::Error error \u003d mRenderer-\u003egetAndClearPendingError();\n            handleError(error.mErrorCode, error.mFile, error.mFunction, error.mLine);\n        }\n    }\n\nHowever, the mErrorMutex lock is not held across the hasPendingError() and getAndClearPendingError(), so it\u0027s possible for someone else to sneak in and clear the error, leading to an assertion failure.\n\nI\u0027m not sure how std::queue behaves with front() and pop() calls on an empty queue though, so those may need to be inside an empty() check.   That leads to the next question of what to return if it is empty, so maybe this whole area needs to be reworked if returning an empty vk::Error is no good.",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d2b210b_238ef621",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Clang-Tidy: Std::move of the expression of the trivially-copyable type \u0027__gnu_cxx::__alloc_traits\u003cstd::allocator\u003crx::vk::Error\u003e, rx::vk::Error\u003e::value_type\u0027 (aka \u0027rx::vk::Error\u0027) has no effect; remove std::move()",
+      "range": {
+        "startLine": 495,
+        "startChar": 23,
+        "endLine": 495,
+        "endChar": 32
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8b50934_35a9a7cb",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Can all of this work be moved into the CustomTask::Exit handling in processCommandProcessorTasksImpl()?",
+      "range": {
+        "startLine": 725,
+        "startChar": 0,
+        "endLine": 728,
+        "endChar": 44
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4f47850_e4604caa",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Why doesn\u0027t this queueCommand() (and in clearAllGarbage()) pass along the context pointer?",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b953720a_4cc4a27f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Why is this necessary?\n\nWhat happens if this is removed?",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd712efd_e1c17a46",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 44,
+        "startChar": 7,
+        "endLine": 44,
+        "endChar": 22
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ae34289_8bfc9b69",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Should make these vectors references.   Actually, seeing as they are immediately being copied, maybe \"\u0026\u0026\" works with std::move().",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 97
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e35b4c9f_d5311137",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Remove, since this isn\u0027t implemented.",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c05466a_516f8f91",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "nit: processTasksImpl",
+      "range": {
+        "startLine": 247,
+        "startChar": 18,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee8b948_f4d6cd6e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 4906,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "nit: Move these after the addCommandDiagnostics() block, like you have it in flushOutsideRenderPassCommands().",
+      "range": {
+        "startLine": 4905,
+        "startChar": 0,
+        "endLine": 4906,
+        "endChar": 76
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4af357ce_1fce670b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T23:19:33Z",
+      "side": 1,
+      "message": "Same as earlier.   The mErrorMutex is not held across these calls, so there\u0027s no guarantee the error will still be present.",
+      "range": {
+        "startLine": 1352,
+        "startChar": 0,
+        "endLine": 1354,
+        "endChar": 82
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
