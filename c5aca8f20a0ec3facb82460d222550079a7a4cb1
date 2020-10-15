@@ -99,6 +99,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c746c6_0dac12dc",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-15T17:40:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "39c0611f_54cf2b4d",
+      "range": {
+        "startLine": 1561,
+        "startChar": 52,
+        "endLine": 1561,
+        "endChar": 71
+      },
+      "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0216a851_72cf20a3",
