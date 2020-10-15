@@ -115,6 +115,30 @@
       },
       "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c7d63a_8335f338",
+        "filename": "extensions/ANGLE_debug_layer.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-15T18:31:22Z",
+      "side": 1,
+      "message": "to reiterate\n\n\u003e  why not DEBUG_SOURCE_AGI_ANGLE",
+      "parentUuid": "e1b822bf_ac477bba",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 55
+      },
+      "revId": "8a835eb47598f8c441852b629baa7e3e95dd1a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
