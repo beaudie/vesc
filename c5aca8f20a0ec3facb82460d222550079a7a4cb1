@@ -77,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39c0611f_54cf2b4d",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-15T16:45:04Z",
+      "side": 1,
+      "message": "gl::ImageIndex is constructed directly here from mip starting from zero (line 1559) to native texture\u0027s mipmap levels, it doesn\u0027t use any base level from front-end.",
+      "parentUuid": "09c1588c_1aae15d4",
+      "range": {
+        "startLine": 1561,
+        "startChar": 52,
+        "endLine": 1561,
+        "endChar": 71
+      },
+      "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0216a851_72cf20a3",
         "filename": "src/libANGLE/renderer/metal/mtl_common.h",
         "patchSetId": 7
@@ -88,6 +112,24 @@
       "writtenOn": "2020-10-14T16:01:40Z",
       "side": 1,
       "message": "The name is a little confusing. Maybe just call it `mNativeIndex`?",
+      "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "044a1fda_d48cab9c",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-15T16:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0216a851_72cf20a3",
       "revId": "c5aca8f20a0ec3facb82460d222550079a7a4cb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
