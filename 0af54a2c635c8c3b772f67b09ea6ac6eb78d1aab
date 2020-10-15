@@ -51,6 +51,24 @@
       "parentUuid": "06a0e2a0_0a87eb45",
       "revId": "0af54a2c635c8c3b772f67b09ea6ac6eb78d1aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c42b823e_a089c114",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-15T03:29:49Z",
+      "side": 1,
+      "message": "I guess another way to verify could be:\n\n- First glTexStorage2D, create the texture as 128x128\n  * (don\u0027t forget to draw with it so it\u0027s created)\n- Second glTexStorage2D, create the texture as 64x64\n- Attach to framebuffer and clear to red\n- Blit from another image that\u0027s green into area (0, 0, 64, 64)\n- Bind as sampler and render the whole image into the swapchain\n- Make sure it\u0027s all green\n\nIf the 128x128 image is still used after the second glTexStorage2D call, then the clear would clear it entirely to red, but the blit would make only a quarter of it green.",
+      "parentUuid": "69541ba7_30887954",
+      "revId": "0af54a2c635c8c3b772f67b09ea6ac6eb78d1aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
