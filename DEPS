@@ -7,10 +7,14 @@ use_relative_paths = True
 
 gclient_gn_args_file = 'build/config/gclient_args.gni'
 gclient_gn_args = [
+  'angle_minimal_checkout',
   'mac_xcode_version',
 ]
 
 vars = {
+  # Skips checking out very slow targets like VK-GL-CTS and SwiftShader.
+  'angle_minimal_checkout': False,
+
   # This can be overridden, e.g. with custom_vars, to download a nonstandard
   # Xcode version in build/mac_toolchain.py instead of downloading the
   # prebuilt pinned revision.
@@ -245,11 +249,12 @@ deps = {
 
   'third_party/SwiftShader': {
     'url': '{swiftshader_git}/SwiftShader@e72c6099f9465df73f888a92071b70c924d74b0d',
-    'condition': 'not build_with_chromium',
+    'condition': 'not build_with_chromium and not angle_minimal_checkout',
   },
 
   'third_party/VK-GL-CTS/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{vk_gl_cts_revision}',
+    'condition': 'not angle_minimal_checkout',
   },
 
   'third_party/vulkan-headers/src': {
@@ -367,7 +372,7 @@ hooks = [
   {
     'name': 'clang_format_win',
     'pattern': '.',
-    'condition': 'host_os == "win" and not build_with_chromium',
+    'condition': 'host_os == "win" and not build_with_chromium and not angle_minimal_checkout',
     'action': [ 'download_from_google_storage',
                 '--no_resume',
                 '--platform=win32',
@@ -379,7 +384,7 @@ hooks = [
   {
     'name': 'clang_format_mac',
     'pattern': '.',
-    'condition': 'host_os == "mac" and not build_with_chromium',
+    'condition': 'host_os == "mac" and not build_with_chromium and not angle_minimal_checkout',
     'action': [ 'download_from_google_storage',
                 '--no_resume',
                 '--platform=darwin',
@@ -391,7 +396,7 @@ hooks = [
   {
     'name': 'clang_format_linux',
     'pattern': '.',
-    'condition': 'host_os == "linux" and not build_with_chromium',
+    'condition': 'host_os == "linux" and not build_with_chromium and not angle_minimal_checkout',
     'action': [ 'download_from_google_storage',
                 '--no_resume',
                 '--platform=linux*',
@@ -473,7 +478,7 @@ hooks = [
   {
     'name': 'linux_glslang_validator',
     'pattern': '.',
-    'condition': 'checkout_linux and not build_with_chromium',
+    'condition': 'checkout_linux and not build_with_chromium and not angle_minimal_checkout',
     'action': [ 'download_from_google_storage',
                 '--no_resume',
                 '--platform=linux*',
@@ -487,7 +492,7 @@ hooks = [
   {
     'name': 'win_glslang_validator',
     'pattern': '.',
-    'condition': 'checkout_win and not build_with_chromium',
+    'condition': 'checkout_win and not build_with_chromium and not angle_minimal_checkout',
     'action': [ 'download_from_google_storage',
                 '--no_resume',
                 '--platform=win32*',
@@ -501,7 +506,7 @@ hooks = [
   {
     'name': 'linux_flex_bison',
     'pattern': '.',
-    'condition': 'checkout_linux and not build_with_chromium',
+    'condition': 'checkout_linux and not build_with_chromium and not angle_minimal_checkout',
     'action': [ 'download_from_google_storage',
                 '--no_resume',
                 '--platform=linux*',
@@ -515,7 +520,7 @@ hooks = [
   {
     'name': 'win_flex_bison',
     'pattern': '.',
-    'condition': 'checkout_win and not build_with_chromium',
+    'condition': 'checkout_win and not build_with_chromium and not angle_minimal_checkout',
     'action': [ 'download_from_google_storage',
                 '--no_resume',
                 '--platform=win32*',

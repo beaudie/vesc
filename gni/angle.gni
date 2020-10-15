@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import("//build/config/gclient_args.gni")
 import("//build_overrides/angle.gni")
 
 declare_args() {
@@ -117,8 +118,8 @@ declare_args() {
   # Currently SwiftShader's Vulkan front-end doesn't build on Android.
   # SwiftShader is not needed on Fuchsia because Vulkan is supported on all
   # devices that run Fuchsia.
-  angle_enable_swiftshader =
-      angle_enable_vulkan && !is_android && !is_fuchsia && !is_ggp
+  angle_enable_swiftshader = angle_enable_vulkan && !is_android &&
+                             !is_fuchsia && !is_ggp && !angle_minimal_checkout
 
   angle_enable_hlsl = angle_enable_d3d9 || angle_enable_d3d11
   angle_enable_trace = false
