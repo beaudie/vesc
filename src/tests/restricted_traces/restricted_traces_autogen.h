@@ -47,6 +47,7 @@ enum class RestrictedTraceID
     cod_mobile,
     egypt_1500,
     free_fire,
+    lego_legacy,
     manhattan_10,
     mobile_legends,
     nba2k20_800,
