@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f5e7050_bc2450b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-15T04:00:34Z",
+      "side": 1,
+      "message": "While doing the previous change, I suspected this path being dead and an ASSERT(false) in that path didn\u0027t get triggered in local testing. I\u0027m removing it in a separate CL in case I\u0027m wrong and this needs to be reverted.",
+      "revId": "c08e29b9ef93ab6cb1bf1b7143507bc97c00a590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
