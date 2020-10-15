@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4c8e89b_36140e81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-10-15T20:19:29Z",
+      "side": 1,
+      "message": "Thanks for simplifying this. LGTM\n",
+      "revId": "0727f6eeeeb7a0943530b3201fd62155a50c4e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
