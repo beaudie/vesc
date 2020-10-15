@@ -119,6 +119,7 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
     mRenderPass    = rhs.mRenderPass;
     mCommandBuffer = rhs.mCommandBuffer;
     std::swap(mTask, rhs.mTask);
+    std::swap(mTaskSerial, rhs.mTaskSerial);
     std::swap(mWaitSemaphores, rhs.mWaitSemaphores);
     std::swap(mWaitSemaphoreStageMasks, rhs.mWaitSemaphoreStageMasks);
     mSemaphore   = rhs.mSemaphore;
@@ -504,6 +505,8 @@ void CommandProcessor::queueCommand(vk::Context *context, vk::CommandProcessorTa
         // Grab the worker mutex so that we put things on the queue in the same order as we give out
         // serials.
         std::lock_guard<std::mutex> queueLock(mWorkerMutex);
+
+        command->mTaskSerial = mTaskSerialFactory.generate();
 
         if (command->mTask == vk::CustomTask::FlushAndQueueSubmit ||
             command->mTask == vk::CustomTask::OneOffQueueSubmit)
