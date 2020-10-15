@@ -44,6 +44,10 @@ gclient sync
 git checkout master
 ```
 
+**NOTE** If you only want to build ANGLE, and don't want to contribute or
+build the tests, you can run `python scripts/bootstrap.py --minimal`. The
+minimal checkout skips downloading additional tools and test suites.
+
 On Linux only, you need to install all the necessary dependencies before going further by running this command:
 ```
 ./build/install-build-deps.sh
