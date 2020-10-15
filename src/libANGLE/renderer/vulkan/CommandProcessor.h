@@ -87,6 +87,8 @@ class CommandProcessorTask
         *this = std::move(other);
     }
 
+    void setTaskSerial(Serial serial) { mTaskSerial = serial; }
+    Serial getTaskSerial() const { return mTaskSerial; }
     void setQueueSerial(Serial serial) { mSerial = serial; }
     Serial getQueueSerial() const { return mSerial; }
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
@@ -109,6 +111,7 @@ class CommandProcessorTask
 
   private:
     CustomTask mTask;
+    Serial mTaskSerial;
 
     // ProcessCommands
     ContextVk *mContextVk;
@@ -296,9 +299,11 @@ class CommandProcessor : public vk::Context
     TaskProcessor mTaskProcessor;
 
     AtomicSerialFactory mQueueSerialFactory;
+    AtomicSerialFactory mTaskSerialFactory;
     std::mutex mCommandProcessorQueueSerialMutex;
     Serial mCommandProcessorLastSubmittedSerial;
     Serial mCommandProcessorCurrentQueueSerial;
+    Serial mTaskSerial;
 
     mutable std::mutex mErrorMutex;
     std::queue<vk::Error> mErrors;
