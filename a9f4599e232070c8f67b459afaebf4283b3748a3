@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ec857632_54d605f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-15T09:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0910217e_d47549b2",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a4ad7d27_eabba213",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-14T11:27:10Z",
       "side": 1,
       "message": "nit: suggest we rename this to \u0027incomplete\u0027 or since it\u0027s mostly done for the time being.",
+      "range": {
+        "startLine": 15,
+        "startChar": 36,
+        "endLine": 15,
+        "endChar": 47
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f34740e4_dd5c261e",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-15T09:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40c9077f_2e33d579",
       "range": {
         "startLine": 15,
         "startChar": 36,
@@ -112,6 +160,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a2aa895_47b3b518",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-15T09:25:53Z",
+      "side": 1,
+      "message": "Please check if the latest change is what you want.",
+      "parentUuid": "17ad07aa_831901e9",
+      "range": {
+        "startLine": 17,
+        "startChar": 85,
+        "endLine": 17,
+        "endChar": 187
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb42fce_422a3408",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-15T09:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed16b9ca_9b65d301",
+      "range": {
+        "startLine": 17,
+        "startChar": 304,
+        "endLine": 17,
+        "endChar": 309
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "453cbed1_ad58f09b",
         "filename": "doc/ES31StatusOnD3D11.md",
         "patchSetId": 4
@@ -156,6 +252,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdbb3e62_54e3818b",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-15T09:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "453cbed1_ad58f09b",
+      "range": {
+        "startLine": 18,
+        "startChar": 377,
+        "endLine": 18,
+        "endChar": 378
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1368e53e_85e93af7",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-15T09:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d97f6837_c4b922b5",
+      "range": {
+        "startLine": 18,
+        "startChar": 86,
+        "endLine": 18,
+        "endChar": 93
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf152b5a_56aa4abb",
@@ -169,6 +313,30 @@
       "writtenOn": "2020-10-14T11:27:10Z",
       "side": 1,
       "message": "nit: of",
+      "range": {
+        "startLine": 19,
+        "startChar": 101,
+        "endLine": 19,
+        "endChar": 108
+      },
+      "revId": "a9f4599e232070c8f67b459afaebf4283b3748a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8d9979a_9a63d15e",
+        "filename": "doc/ES31StatusOnD3D11.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-15T09:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf152b5a_56aa4abb",
       "range": {
         "startLine": 19,
         "startChar": 101,
