@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3af907_5c27d56b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T15:05:25Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "130843a50b7bc58a317d64dcdd3a05e1c798cab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "092ff083_b86c1ba0",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T15:05:25Z",
+      "side": 1,
+      "message": "Anything else in here that uses this value will need to be cleaned up too, though not as part of this CL.",
+      "revId": "130843a50b7bc58a317d64dcdd3a05e1c798cab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
