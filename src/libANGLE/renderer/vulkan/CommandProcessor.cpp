@@ -520,6 +520,8 @@ void CommandProcessor::queueCommand(vk::Context *context, vk::CommandProcessorTa
             command->mResourceUseList.releaseResourceUsesAndUpdateSerials(command->mSerial);
         }
 
+        WARN() << "Queue task id: " << command->mTaskSerial.getValue()
+               << ", cmd: " << command->mTask << ", serial: " << command->mSerial.getValue();
         mTasks.emplace(std::move(*command));
         mWorkAvailableCondition.notify_one();
     }
@@ -583,6 +585,8 @@ angle::Result CommandProcessor::processCommandProcessorTasksImpl(bool *exitThrea
         vk::CommandProcessorTask task(std::move(mTasks.front()));
         mTasks.pop();
         lock.unlock();
+        WARN() << "process task id: " << task.mTaskSerial.getValue() << ", cmd: " << task.mTask
+               << ", serial: " << task.mSerial.getValue();
         switch (task.mTask)
         {
             case vk::CustomTask::Exit:
