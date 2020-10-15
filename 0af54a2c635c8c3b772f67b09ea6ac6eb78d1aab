@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46d74e0_7b9cf4c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T01:33:36Z",
+      "side": 1,
+      "message": "Needs a bug.\n\nCan/Do we have a \"general fixes\" bug for things like this?",
+      "revId": "0af54a2c635c8c3b772f67b09ea6ac6eb78d1aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06a0e2a0_0a87eb45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-15T01:33:36Z",
+      "side": 1,
+      "message": "PTAL\n\nI don\u0027t quite understand why that call is there in the first place, but CQ seems happy enough without it.   It just stuck out to me that we are initializing mImage and them immediately releasing it.   Thoughts on how good/bad this is?",
+      "revId": "0af54a2c635c8c3b772f67b09ea6ac6eb78d1aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
