@@ -33,7 +33,7 @@ struct TracePerfParams final : public RenderTestParams
     TracePerfParams()
     {
         majorVersion = 3;
-        minorVersion = 0;
+        minorVersion = 1;
 
         // Tracking GPU time adds overhead to native traces. http://anglebug.com/4879
         trackGpuTime = false;
