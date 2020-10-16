@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a512757_aec729fb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-16T16:52:30Z",
+      "side": 1,
+      "message": "If isMidRenderPassClear\u003d\u003dfalse because of currentFramebuffer is not the framebuffer of current open renderpass (line 476), hasStartedRenderPass() should return true and you should hit this assertion, right?",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 539,
+        "endChar": 55
+      },
+      "revId": "ce13d7044be94562a780605345fe9bfe014d6bfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd7b3b10_81ab224f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-16T16:52:30Z",
+      "side": 1,
+      "message": "Not sure if I like this new API name better than current one. I am always have a bit confusion about what exactly is mDeferredClear different from stagedClear, since both are \"deferred clear\" that the clear is not immediately issued. What this redeferClears does is actually stage the clear and remove the mDeferredClears bit. So calling it redeferClears seems a bit odd. Maybe call it stageClears? \n\nIf you could add some comment to mDeferredClears about what it is tracking and why it can\u0027t just use stageClear, that will be useful too.",
+      "range": {
+        "startLine": 2113,
+        "startChar": 20,
+        "endLine": 2113,
+        "endChar": 33
+      },
+      "revId": "ce13d7044be94562a780605345fe9bfe014d6bfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
