@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "b70dd32f_4fa2a185",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "PTAL",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "bfeaedde_5fadeced",
         "filename": "/PATCHSET_LEVEL",
@@ -31,10 +32,10 @@
       "side": 1,
       "message": "Oh man, tested this out on Android... it is trippy seeing that much rendering in on one tiny screen.  There are still some glitches in subway_surfer and temple_run, but the rest looked fine AFAICT.\n\nJust some comments, questions on the code, request for documentation.  Overall, quite a cool feature.",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "d989e032_f7495441",
         "filename": "/PATCHSET_LEVEL",
@@ -48,10 +49,10 @@
       "side": 1,
       "message": "Shifting reviewers b/c Courtney is out.",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "abe3915b_24c019b7",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
@@ -71,10 +72,34 @@
         "endChar": 76
       },
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da795ad0_b530a461",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:35:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "abe3915b_24c019b7",
+      "range": {
+        "startLine": 260,
+        "startChar": 34,
+        "endLine": 260,
+        "endChar": 76
+      },
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "8d1dda9a_62de79cb",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
@@ -88,10 +113,28 @@
       "side": 1,
       "message": "Curious how you chose these values?  Maybe a comment.",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4123222c_d121bbae",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:35:57Z",
+      "side": 1,
+      "message": "Sorry, missed some of these comments. Going to mark them resolved. Some might be!",
+      "parentUuid": "8d1dda9a_62de79cb",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "791e3793_331fac7b",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
@@ -105,10 +148,10 @@
       "side": 1,
       "message": "Is 12 enough? Gfxbench looks like it does about 100 frames per swap and the blt frames are really small",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e570e716_cfc10e08",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
@@ -123,10 +166,28 @@
       "message": "Doubled it to 24. We don\u0027t run super long so it only makes a couple swaps per test.",
       "parentUuid": "791e3793_331fac7b",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b85b7e_3b41c446",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:35:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e570e716_cfc10e08",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "e1247eac_907ad481",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
@@ -140,10 +201,28 @@
       "side": 1,
       "message": "ASSERT offscreen here.",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ea3b4b_3d8de00a",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:35:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e1247eac_907ad481",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "8ce8fc88_92da47cf",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
@@ -157,8 +236,25 @@
       "side": 1,
       "message": "This is complex enough it could use a write up, maybe screenshots.",
       "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26499ac4_93637f70",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:35:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8ce8fc88_92da47cf",
+      "revId": "d7d7c3532455dcbc29ae964ad6f3a024393306e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
