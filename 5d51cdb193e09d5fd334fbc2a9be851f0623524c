@@ -33,6 +33,24 @@
       "message": "Seeing this error:\n\n  384.766s run_tests_on_device(HT7BG1A03481)  [ RUN      ] TextureSamplingMutableFormatBenchmark.Run/vulkan_2samplers\nI  384.766s run_tests_on_device(HT7BG1A03481)  ../../third_party/angle/src/tests/perf_tests/TextureSampling.cpp:279: Skipped\nI  384.767s run_tests_on_device(HT7BG1A03481)  GL_EXT_texture_sRGB_override not supported!",
       "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf81d1f4_f4b7e9a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-16T23:32:03Z",
+      "side": 1,
+      "message": "we went from always enabling override to enabling only if this is true -\n vk::GetTextureSRGBOverrideSupport(this, mNativeExtensions);\n\ni suspect the underlying GPU format support is not according to spec expectations or we are being too conservative in the check. need to debug",
+      "parentUuid": "0ba183bb_cf1aeffb",
+      "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
