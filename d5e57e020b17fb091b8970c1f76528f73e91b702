@@ -16,6 +16,247 @@
       "message": "Please review it again, thank you.",
       "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dfc593e_00d4bf8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "I am ok with the overall structure. But please consider to split this patch into several ones.\n1. Refactor the test cases.\n2. Refactor the the collection of uniform blocks which need to be translated into structured buffers.\n3. Add scalar/vector array support.\n4. More structure format support with padding.",
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee4c0c3c_1c9ee360",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "works around",
+      "range": {
+        "startLine": 318,
+        "startChar": 13,
+        "endLine": 318,
+        "endChar": 30
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84f436e5_01396067",
+        "filename": "src/compiler.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "Rename to \u0027RecordUnifromBlocksTranslatedToStructuredBuffers\u0027 Or \u0027CollectUniformBlocksTranslatedToStructuredBuffers\u0027?",
+      "range": {
+        "startLine": 201,
+        "startChar": 36,
+        "endLine": 201,
+        "endChar": 76
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e59a5383_afbd2254",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "Please add a comment above this to explain why these three types are special which need to do the extra \u0027.XX\u0027 when translated to structured buffer.\nSuggest splitting the support for \u0027vector and scalar\u0027 arrays into a separate patch which can simplify your current implementation.",
+      "range": {
+        "startLine": 1658,
+        "startChar": 0,
+        "endLine": 1659,
+        "endChar": 55
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c218844_8be8b0d4",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a7738ea_67f5c332",
+        "filename": "src/compiler/translator/OutputHLSL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "uniformBlocksTranslatedToStructuredBuffers",
+      "range": {
+        "startLine": 54,
+        "startChar": 54,
+        "endLine": 54,
+        "endChar": 94
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28ab7e51_8adcf950",
+        "filename": "src/compiler/translator/OutputHLSL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "mUniformBlocksTranslatedToStructuredBuffers",
+      "range": {
+        "startLine": 184,
+        "startChar": 43,
+        "endLine": 184,
+        "endChar": 84
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f277880d_a54d091c",
+        "filename": "src/compiler/translator/StructureHLSL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "I suppose this change is used to support more structure types. Please split it into a separate patch.",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 67
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "010baa4f_fea3f65b",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "RecordUniformBlocksTranslatedToStructuredBuffers",
+      "range": {
+        "startLine": 191,
+        "startChar": 17,
+        "endLine": 191,
+        "endChar": 63
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "225b9aaa_c63487a2",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "mUniformBlocksTranslatedToStructuredBuffers",
+      "range": {
+        "startLine": 192,
+        "startChar": 22,
+        "endLine": 192,
+        "endChar": 63
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99515623_0e90f919",
+        "filename": "src/compiler/translator/tree_ops/UniformBlockTranslatedToStructuredBuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-10-16T05:08:58Z",
+      "side": 1,
+      "message": "a?",
+      "range": {
+        "startLine": 22,
+        "startChar": 13,
+        "endLine": 22,
+        "endChar": 15
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
