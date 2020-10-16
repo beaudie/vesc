@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "5b3d89dc_b2907a90",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Hey Jamie, things are looking better. Here are some findings:\n\n* Temple Run offscreen is still pretty jacked up on Linux and Android.  I posted what I\u0027m seeing here:\nhttps://drive.google.com/file/d/10c_s_V_HPxu3boSXobsA33ck0-63aVhF/view?usp\u003dsharing\n\n* Something\u0027s wrong with manhattan offscreen when using ANGLE.  On Linux, I see all the small renderings, but no frame to frame differences (with native I can see motion).  On Android, it renders all black. :\\\n\n* Mobile Legends offscreen has some differences you can eyeball as the frame scroll by.  I think the native offscreen is correct, but ANGLE has some bad frames.  I don\u0027t know if this is a problem with the new technique or something that becomes more obvious when presented with 48 frames at once.  It reminds of the periodic giant bird with Angry Birds.  Probably don\u0027t need to hold up for this.\n\nI haven\u0027t tried anything on Windows, I figure you\u0027ve got that covered.\n",
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "910d6e56_553b4c62",
         "filename": "/PATCHSET_LEVEL",
@@ -32,10 +33,10 @@
       "message": "Hey Cody,\n\nMost of the issues are that the traces need to be recaptured to use the loader. Can you help recapture Temple Run and the other traces that still include gles_loader_autogen ? I\u0027ll work on embedding an ANGLE version in the trace header.",
       "parentUuid": "5b3d89dc_b2907a90",
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "ce856d68_8379ff6e",
         "filename": "/PATCHSET_LEVEL",
@@ -50,10 +51,10 @@
       "message": "Sure, I can do that.  From my quick grepping, that looks to be the following traces:\n\nsubway_surfer_500/subway_surfer_500_capture_context4.h:#include \"util/gles_loader_autogen.h\"\ncandy_crush_500/candy_crush_500_capture_context2.h:#include \"util/gles_loader_autogen.h\"\ntemple_run_300/temple_run_300_capture_context3.h:#include \"util/gles_loader_autogen.h\"",
       "parentUuid": "910d6e56_553b4c62",
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "4e95830d_e1904e04",
         "filename": "/PATCHSET_LEVEL",
@@ -68,10 +69,10 @@
       "message": "Cody: ping. Can we get the trace updates?",
       "parentUuid": "ce856d68_8379ff6e",
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "180a1211_9dbed24a",
         "filename": "/PATCHSET_LEVEL",
@@ -86,10 +87,10 @@
       "message": "Jamie, apologies for the delay here.  I\u0027ve run into problems getting a Temple Run trace that runs on all platforms.  Specifically, some drivers are failing when we loop back to the first frame.  I don\u0027t have the root cause yet, but I would guess some buffers are getting mapped/unmapped incorrectly, and it only affects some platforms.",
       "parentUuid": "4e95830d_e1904e04",
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "9cee916e_85b3b339",
         "filename": "/PATCHSET_LEVEL",
@@ -104,10 +105,10 @@
       "message": "Okay, found a couple more issues today, and Temple Run is running now.\nWhen the following two CLs land, Candy Crush and Temple Run look good:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2447029\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2441851\n\nNote that the Manhattan issue I mentioned previously (no frame-to-frame differences) now happens on Android too (rather than just black).",
       "parentUuid": "180a1211_9dbed24a",
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "59da2fdf_a5b34802",
         "filename": "/PATCHSET_LEVEL",
@@ -122,8 +123,25 @@
       "message": "More info, the lack of frame-to-frame updates only happens with ANGLE (native is okay) and only on ARM.",
       "parentUuid": "9cee916e_85b3b339",
       "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7f21715_d0e24716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-16T14:43:33Z",
+      "side": 1,
+      "message": "Running with \"--steps 9999\" allows running the traces long enough to see frame to frame differences on ARM.",
+      "parentUuid": "59da2fdf_a5b34802",
+      "revId": "22473a9e7bb9f3c72775bce76bc6a050ecd416b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
