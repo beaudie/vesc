@@ -16,6 +16,23 @@
       "message": "PTAL - srgb_decode related change",
       "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ba183bb_cf1aeffb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T22:59:35Z",
+      "side": 1,
+      "message": "Seeing this error:\n\n  384.766s run_tests_on_device(HT7BG1A03481)  [ RUN      ] TextureSamplingMutableFormatBenchmark.Run/vulkan_2samplers\nI  384.766s run_tests_on_device(HT7BG1A03481)  ../../third_party/angle/src/tests/perf_tests/TextureSampling.cpp:279: Skipped\nI  384.767s run_tests_on_device(HT7BG1A03481)  GL_EXT_texture_sRGB_override not supported!",
+      "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
