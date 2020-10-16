@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b325533_b0596a92",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T14:40:01Z",
+      "side": 1,
+      "message": "can you also update registry_xml.py?",
+      "revId": "234fe2fdab5988c0f54c4d493642a07f797f00b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d8b52f3_cc244034",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 4
