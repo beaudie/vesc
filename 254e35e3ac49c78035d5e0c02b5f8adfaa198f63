@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d11fe16f_10facf5f",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-16T08:11:14Z",
+      "side": 1,
+      "message": "As per the GLES 3.0 spec, stencil value is masked, not clamped.",
+      "range": {
+        "startLine": 174,
+        "startChar": 33,
+        "endLine": 174,
+        "endChar": 99
+      },
+      "revId": "254e35e3ac49c78035d5e0c02b5f8adfaa198f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17cec64e_860b96a6",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-16T08:11:14Z",
+      "side": 1,
+      "message": "Same.",
+      "range": {
+        "startLine": 198,
+        "startChar": 29,
+        "endLine": 198,
+        "endChar": 93
+      },
+      "revId": "254e35e3ac49c78035d5e0c02b5f8adfaa198f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
