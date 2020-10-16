@@ -244,6 +244,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1991b8cb_bf4842d7",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "Oh I see. I don\u0027t think we\u0027d want to use two threads in the \"disabled\" situation. We can revisit this later, but I\u0027d like to resolve the naming. asynchronousCommandProcessing is fine with me. Skip the redundant \u0027enable\u0027.",
+      "parentUuid": "88824fca_7b2482ab",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 36
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78185827_c1ca2ac4",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 46
@@ -2153,6 +2177,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e8527e67_ca60dcf9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "Seems like it\u0027d duplicated with a \"FinishEverything\" task. Can you consolidate that? When to clear garbage isn\u0027t part of the job of the calling thread.",
+      "parentUuid": "9de4edbf_395fb1e0",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 19
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdc084fa_12247bbe",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -2282,6 +2330,30 @@
       "side": 1,
       "message": "That\u0027s because a number of CommandProcessor methods (e.g. queueCommand, processCommandProcessorTasksImpl and processTask) need to know details of the task to be able to process it. These classes are so intertwined it seemed natural to use the friend designation.",
       "parentUuid": "1fcb2d3b_c7dee6a9",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 38
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1f080f7_19c2ebb1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "\"need to know the details\" \u003d\u003e getters. Can you update that?",
+      "parentUuid": "d339cecb_71c54930",
       "range": {
         "startLine": 65,
         "startChar": 4,
@@ -2871,6 +2943,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f95b8468_6a9e2417",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "Seems appropriate because some of your other objects are. There\u0027s no firm rule but I\u0027ve been using vk where appropriate.",
+      "parentUuid": "ee583d9b_f86430be",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 22
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0e21c5e_2951cf67",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -2995,6 +3091,30 @@
       "side": 1,
       "message": "For getters that need to grab the lock but otherwise can be defined as const.",
       "parentUuid": "65b23d4d_65f0250f",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 259,
+        "endChar": 11
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94027771_10f0951d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "80995d80_a4f53b0a",
       "range": {
         "startLine": 259,
         "startChar": 4,
@@ -4598,6 +4718,30 @@
       "writtenOn": "2020-10-08T17:58:26Z",
       "side": 1,
       "message": "I wonder if we can map this to anglebug.com/b/####\n\nfiled https://b.corp.google.com/issues/170402379",
+      "range": {
+        "startLine": 2957,
+        "startChar": 20,
+        "endLine": 2957,
+        "endChar": 69
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7a67bb6_73387d8a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "62032aab_ce16d152",
       "range": {
         "startLine": 2957,
         "startChar": 20,

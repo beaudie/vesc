@@ -16,6 +16,115 @@
       "message": "I think the naming is improving in some areas, though we are now at:\n- CommandProcessorTask\n- CommandTaskProcessor\n- CommandProcessor\n\nAt first glance I\u0027m not sure who does what.\n\nI\u0027ll need to look at these again from a higher lever to understand their relationships better, but at first pass we may be having trouble with the naming because the lines for who does what aren\u0027t quite drawn right yet.   The actual units of work seems to be a bit more spread out than I think we\u0027d like, causing the various classes to need to look into each other to get everything they need.\n\nSince the external users of these guys seems to be solidifying now, it may be clearer what the responsibilities should be now if we sit down and describe what each are trying to accomplish.",
       "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a143303_6b2a75eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 52
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "Happy to land this disabled once last nits are resolved.",
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53d17082_3cdd3a1c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "suggest you make this a helper function that you also use in the constructor.",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 41
+      },
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa7d7f2a_b8015712",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "This specialized mutex could be merged with another mutex. anyway fine to defer that for another time.",
+      "range": {
+        "startLine": 493,
+        "startChar": 3,
+        "endLine": 493,
+        "endChar": 55
+      },
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cb17575_21a4bd70",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 5073,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "don\u0027t call this-\u003e unless it\u0027s a compile error not to.",
+      "range": {
+        "startLine": 5073,
+        "startChar": 61,
+        "endLine": 5073,
+        "endChar": 67
+      },
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7893cb88_1f607d7e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T19:23:54Z",
+      "side": 1,
+      "message": "nit: cache this guy",
+      "range": {
+        "startLine": 1329,
+        "startChar": 8,
+        "endLine": 1329,
+        "endChar": 32
+      },
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
