@@ -2064,8 +2064,11 @@ void GraphicsPipelineDesc::updateSampleShading(GraphicsPipelineTransitionBits *t
                                                bool enable,
                                                float value)
 {
-    mRasterizationAndMultisampleStateInfo.bits.sampleShadingEnable = enable;
-    mRasterizationAndMultisampleStateInfo.minSampleShading         = (enable ? value : 1.0f);
+    // If the target is single-sampled target, sample shading is always disabled to enable Bresenham
+    // line rasterization
+    mRasterizationAndMultisampleStateInfo.bits.sampleShadingEnable =
+        (mRasterizationAndMultisampleStateInfo.bits.rasterizationSamples > 1) ? (enable) : (false);
+    mRasterizationAndMultisampleStateInfo.minSampleShading = (enable ? value : 1.0f);
 
     transition->set(ANGLE_GET_TRANSITION_BIT(mRasterizationAndMultisampleStateInfo, bits));
     transition->set(

@@ -3111,6 +3111,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateSampleMask(glState);
                 mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
                                                                   mDrawFramebuffer->getSamples());
+                mGraphicsPipelineDesc->updateSampleShading(&mGraphicsPipelineTransition,
+                                                           glState.isSampleShadingEnabled(),
+                                                           glState.getMinSampleShading());
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
                                                        isViewportFlipEnabledForDrawFBO());
@@ -3503,6 +3506,9 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
     {
         mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
                                                           framebufferVk->getSamples());
+        mGraphicsPipelineDesc->updateSampleShading(&mGraphicsPipelineTransition,
+                                                   mState.isSampleShadingEnabled(),
+                                                   mState.getMinSampleShading());
     }
 
     onDrawFramebufferRenderPassDescChange(framebufferVk);
