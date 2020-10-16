@@ -969,8 +969,6 @@ angle::Result ProgramMtl::updateTextures(const gl::Context *glContext,
         {
             const gl::SamplerBinding &samplerBinding = mState.getSamplerBindings()[textureIndex];
 
-            ASSERT(!samplerBinding.unreferenced);
-
             const mtl::SamplerBinding &mslBinding = shaderInfo.actualSamplerBindings[textureIndex];
             if (mslBinding.textureBinding >= mtl::kMaxShaderSamplers)
             {
