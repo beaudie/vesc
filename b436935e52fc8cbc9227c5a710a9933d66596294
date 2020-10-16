@@ -16,6 +16,126 @@
       "message": "PTAL\nPrevious run passed all tests. Rebased to resolve conflict in this version.",
       "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c6a8bdf_740d0a67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T01:59:48Z",
+      "side": 1,
+      "message": "It looks like reusable syncs have nothing to do with the GPU, did I understand correctly? Why is this even an EGL thing?!",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60f9da35_d0252d96",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T01:59:48Z",
+      "side": 1,
+      "message": "nit: !\u003d 0 for explicit conversion to bool",
+      "range": {
+        "startLine": 47,
+        "startChar": 45,
+        "endLine": 47,
+        "endChar": 46
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f2602e8_78bdbbbf",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T01:59:48Z",
+      "side": 1,
+      "message": "So weird.",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd61f3bf_c2a73f0d",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T01:59:48Z",
+      "side": 1,
+      "message": "The spec is not being very precise, so I don\u0027t know what\u0027s the right thing to do here, but if the spec is written to mirror cond vars, this should loop and check mStatus.\n\nSomething like:\n\n    mMutex.lock();\n    auto timeLimit \u003d std::chrono::system_clock::now() + duration; // Be careful with overflow\n    waitStatus \u003d mCondVar.wait_until(mMutex, timeLimit,\n                                     [this](){return mStatus \u003d\u003d EGL_SIGNALED;});\n    mMutex.unlock();\n\nThe logic is that if the cond var is signaled, by the time this thread wakes up it may have gotten unsignaled again.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 20
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86d75681_57e2c2d7",
+        "filename": "src/libANGLE/renderer/EGLSyncImpl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T01:59:48Z",
+      "side": 1,
+      "message": "You can define this in EGLSyncImpl.cpp to \"return egl::EglBadMatch();\", and avoid having every backend implement the same thing.",
+      "range": {
+        "startLine": 51,
+        "startChar": 42,
+        "endLine": 51,
+        "endChar": 84
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24dbda8c_6801d379",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T01:59:48Z",
+      "side": 1,
+      "message": "The test for display-\u003egetExtensions().fenceSync is removed here with this change. Is that intentional?",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
