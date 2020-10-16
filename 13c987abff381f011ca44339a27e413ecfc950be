@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b298de5_e7f0bd85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T15:06:46Z",
+      "side": 1,
+      "message": "Just change retain to have that check, and make that a prior CL as it\u0027s unrelated. This CL still LGTM once you split that off.",
+      "revId": "13c987abff381f011ca44339a27e413ecfc950be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fd8f64e_559d15d8",
