@@ -60,6 +60,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "fa000b72_f191822d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53d17082_3cdd3a1c",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 41
+      },
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fa7d7f2a_b8015712",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 52
@@ -104,6 +128,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25842cbb_adf3efbd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 5073,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cb17575_21a4bd70",
+      "range": {
+        "startLine": 5073,
+        "startChar": 61,
+        "endLine": 5073,
+        "endChar": 67
+      },
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7893cb88_1f607d7e",
@@ -117,6 +165,30 @@
       "writtenOn": "2020-10-16T19:23:54Z",
       "side": 1,
       "message": "nit: cache this guy",
+      "range": {
+        "startLine": 1329,
+        "startChar": 8,
+        "endLine": 1329,
+        "endChar": 32
+      },
+      "revId": "21c6fe58a793279a41c57cbfaf269b5685559962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ea3312d_094dd742",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 52
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7893cb88_1f607d7e",
       "range": {
         "startLine": 1329,
         "startChar": 8,

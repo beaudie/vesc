@@ -300,6 +300,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d727e3_1e2d6f59",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f4c29a0_cbabc346",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 5
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e7326f7_193ba599",
@@ -479,6 +503,30 @@
       "side": 1,
       "message": "This will be addressed in a follow-up to improve fence behavior.",
       "parentUuid": "c41afd0a_b4fc509f",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 64
+      },
+      "revId": "e51aa748c5e5cd4a1375c98bdaf78966925c89e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "017526cc_39feb7b3",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "791ef007_24ca0c5f",
       "range": {
         "startLine": 58,
         "startChar": 0,

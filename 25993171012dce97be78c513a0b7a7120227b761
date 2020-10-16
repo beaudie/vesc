@@ -266,6 +266,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50a4d7ad_1e9e8a09",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1991b8cb_bf4842d7",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 36
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78185827_c1ca2ac4",
@@ -2201,6 +2225,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78722989_2eed9395",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Removed extra calls. Now only called the same place CommandQueue::clearAllGarbage is called as part of finishImpl. Though if you did finishToSerial to last known serial that should cause the garbage to be cleaned up.",
+      "parentUuid": "e8527e67_ca60dcf9",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 19
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdc084fa_12247bbe",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -2354,6 +2402,30 @@
       "side": 1,
       "message": "\"need to know the details\" \u003d\u003e getters. Can you update that?",
       "parentUuid": "d339cecb_71c54930",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 38
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c445ffe_bb1f5cf0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1f080f7_19c2ebb1",
       "range": {
         "startLine": 65,
         "startChar": 4,
@@ -2955,6 +3027,30 @@
       "side": 1,
       "message": "Seems appropriate because some of your other objects are. There\u0027s no firm rule but I\u0027ve been using vk where appropriate.",
       "parentUuid": "ee583d9b_f86430be",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 22
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9b50b1a_f2c00cf7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:15:29Z",
+      "side": 1,
+      "message": "Looks like Tobin put it in rx name space to match CommandQueue, RendererVk which we are similar to.",
+      "parentUuid": "f95b8468_6a9e2417",
       "range": {
         "startLine": 195,
         "startChar": 6,
