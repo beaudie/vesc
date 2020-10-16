@@ -33,6 +33,24 @@
       "message": "This should fix the lego case. But if we really want to be safe, mImageUnits probbaly should be a fixedVector. Otherwise you may still crash if someone try to unbind a previously unbound unit, right?",
       "revId": "b3f5a314be154b9af2f49f1d66b3be932fca0088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4129a6bc_14559715",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-16T00:37:00Z",
+      "side": 1,
+      "message": "In State.cpp line 443, it did call resize to max capacity, but only doing so for 3.1 and above (because this API is only available on 3.1). I am wondering the real issue here is that the app you traced is using 3.1, but the trace app is creating 3.0 context. So you get into a situation that calling 3.1 API on 3.0 context?",
+      "parentUuid": "781fee5a_112edb4a",
+      "revId": "b3f5a314be154b9af2f49f1d66b3be932fca0088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
