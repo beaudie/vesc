@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6fce73b_c51300a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T22:57:33Z",
+      "side": 1,
+      "message": "OK. How about instead you remove retainonce() and move the check up to the objects that are retaining? It seems hazardous to add this API when it only works for some objects.",
+      "parentUuid": "e53b444d_c610caf7",
+      "revId": "13c987abff381f011ca44339a27e413ecfc950be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fd8f64e_559d15d8",
