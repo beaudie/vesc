@@ -33,6 +33,46 @@
       "message": "Thanks Mohan, will follow up.",
       "revId": "b1b4275be448f0eb6bd65c851c4af519d2a91502",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "414eb49e_63601ccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T18:38:11Z",
+      "side": 1,
+      "message": "One last comment. Why don\u0027t we land this and I\u0027ll address the follow-ups. Just to confirm the three points are:\n\n - the isSRGB function\n - the syncState call in the back-end\n - there\u0027s some texture checking logic that could be front-end",
+      "revId": "b1b4275be448f0eb6bd65c851c4af519d2a91502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a6f3bc_262a5bb8",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T18:38:11Z",
+      "side": 1,
+      "message": "nit: can you clean up this TODO into the standard form with a bug link?",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 43
+      },
+      "revId": "b1b4275be448f0eb6bd65c851c4af519d2a91502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
