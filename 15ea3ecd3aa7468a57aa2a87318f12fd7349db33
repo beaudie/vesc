@@ -16,6 +16,57 @@
       "message": "PTAL\nFixes and responses.",
       "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea64885e_24964630",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:13:26Z",
+      "side": 1,
+      "message": "Potential edits",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fb431fb_eaa5aee0",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:13:26Z",
+      "side": 1,
+      "message": "These first 3 \"if\" statements could be factored out to EGLSync::clientWait(). Although it splits the spec logic for each extension.",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "750e8e6a_6b1b4b86",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:13:26Z",
+      "side": 1,
+      "message": "Could remove this in favor of a default virtual serverWait() in EGLSyncImpl.",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
