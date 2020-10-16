@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "804fb298_8fc83272",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T00:16:37Z",
+      "side": 1,
+      "message": "nit: suggest you make this a temporary for cleaner code.",
+      "range": {
+        "startLine": 3113,
+        "startChar": 12,
+        "endLine": 3113,
+        "endChar": 36
+      },
+      "revId": "f3fae4420b87b156fb253dc472a32c12939eb849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
