@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fde8b4c6_8b179bf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-16T16:21:07Z",
+      "side": 1,
+      "message": "The vsync portion is working.  The GPU time doesn\u0027t look right.\n\nI ran with:\nout/Performance/angle_perftests --gtest_filter\u003d\"*vsync*\" --verbose --enable-all-trace-tests\n\nHere\u0027s an example of output on Android:\n\n[ RUN      ] TracePerfTest.Run/vulkan_vsync_angry_birds_2_1500\n*RESULT TracePerf_vulkan.wall_time: vsync_angry_birds_2_1500\u003d 16.6571322726 ms\n*RESULT TracePerf_vulkan.gpu_time: vsync_angry_birds_2_1500\u003d 4.1272466818 ms\n*RESULT TracePerf_vulkan.wall_time: vsync_angry_birds_2_1500\u003d 16.6645192120 ms\n*RESULT TracePerf_vulkan.gpu_time: vsync_angry_birds_2_1500\u003d 4.1424099242 ms\n*RESULT TracePerf_vulkan.wall_time: vsync_angry_birds_2_1500\u003d 16.4802453338 ms\n*RESULT TracePerf_vulkan.gpu_time: vsync_angry_birds_2_1500\u003d 4.2241943333 ms\n[       OK ] TracePerfTest.Run/vulkan_vsync_angry_birds_2_1500 (9634 ms)\n[ RUN      ] TracePerfTest.Run/native_vsync_angry_birds_2_1500\n*RESULT TracePerf_native.wall_time: vsync_angry_birds_2_1500\u003d 16.6554743482 ms\n*RESULT TracePerf_native.gpu_time: vsync_angry_birds_2_1500\u003d 152474417.6271359921 ms\n*RESULT TracePerf_native.wall_time: vsync_angry_birds_2_1500\u003d 16.6628403178 ms\n*RESULT TracePerf_native.gpu_time: vsync_angry_birds_2_1500\u003d 152475514.7553823292 ms\n*RESULT TracePerf_native.wall_time: vsync_angry_birds_2_1500\u003d 16.6587861207 ms\n*RESULT TracePerf_native.gpu_time: vsync_angry_birds_2_1500\u003d 152476615.4424319863 ms\n[       OK ] TracePerfTest.Run/native_vsync_angry_birds_2_1500 (9042 ms)\n\n",
+      "revId": "139b62388309d1cf5bfeb441b56a6655757a9b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
