@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2f32b25_db92e45d",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "274799ed_3c4ab96d",
+      "range": {
+        "startLine": 940,
+        "startChar": 0,
+        "endLine": 940,
+        "endChar": 28
+      },
+      "revId": "92229a1d69f0b22f760318c7f5afbbe802bc7e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bdd4e04_25a4c0f7",
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-15T17:26:24Z",
       "side": 1,
       "message": "Nit:\nI don\u0027t think GTest executes the tests in the same order that they appear in the filter.\nPreviously, to achieve determinism, I have used --gtest_random_seed arg.\nIt worked this way: run the whole suite with a specific --gtest_random_seed.\nThen, when you specify a filter and use the same --gtest_random_seed, filtered tests will run in the same order as the whole suite.\n\nMaybe it\u0027s not that important here, since we consider 2 GTest runs with the same filter.\nWhat I needed to do at the time is to bisect the filter.\nI was really surprised when the order changed when I\u0027ve modified the filter.",
+      "range": {
+        "startLine": 1183,
+        "startChar": 0,
+        "endLine": 1185,
+        "endChar": 0
+      },
+      "revId": "92229a1d69f0b22f760318c7f5afbbe802bc7e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2643a227_3233d938",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:49:28Z",
+      "side": 1,
+      "message": "The filter here gave the real order in my testing. So bisecting the filter is pretty straight-forward with this approach.",
+      "parentUuid": "9bdd4e04_25a4c0f7",
       "range": {
         "startLine": 1183,
         "startChar": 0,
