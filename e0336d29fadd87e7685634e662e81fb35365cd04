@@ -64,6 +64,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd1815ae_d4cd4a32",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-16T19:37:28Z",
+      "side": 1,
+      "message": "I believe a const reference should be fine for these uses.  Will re-record something locally before merging.",
+      "parentUuid": "d8e51803_bb41faf0",
+      "range": {
+        "startLine": 385,
+        "startChar": 4,
+        "endLine": 385,
+        "endChar": 10
+      },
+      "revId": "e0336d29fadd87e7685634e662e81fb35365cd04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9227c70f_59764ead",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-16T19:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bce0d6f8_9420c6c1",
+      "range": {
+        "startLine": 385,
+        "startChar": 22,
+        "endLine": 385,
+        "endChar": 37
+      },
+      "revId": "e0336d29fadd87e7685634e662e81fb35365cd04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db7e31c2_9cca004f",
@@ -77,6 +125,30 @@
       "writtenOn": "2020-10-16T00:15:35Z",
       "side": 1,
       "message": "this should probably be a reference, also this method should be const.",
+      "range": {
+        "startLine": 388,
+        "startChar": 5,
+        "endLine": 388,
+        "endChar": 25
+      },
+      "revId": "e0336d29fadd87e7685634e662e81fb35365cd04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7690555_b49d2fa1",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-16T19:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db7e31c2_9cca004f",
       "range": {
         "startLine": 388,
         "startChar": 5,
