@@ -22,6 +22,30 @@
       },
       "revId": "df7810cd2ccf6a12afb39daab62a610e6c020079",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0410ffdb_876da39c",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-16T15:09:58Z",
+      "side": 1,
+      "message": "No I don\u0027t use float to represent integers. I use exact bit representation, this is not value casting.\nIn FrameBufferMtl, the correct value type is assigned, let\u0027s say 0x7fffffff is assigned to redI. Since red and redI are alias in the union, the value of red will be NaN (or whatever). Here, uniformParams.clearColor[0] will be assigned a value \u003d NaN (but its binary form is still 0x7fffffff).\nIn shader, the correct value will be bit casted, see https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/metal/shaders/clear.metal#31\n\nNote mtl::ClearColorValue is an union of floats, ints and uints, it is not MTLClearColor (which has double values)",
+      "parentUuid": "d63043b6_dc465abb",
+      "range": {
+        "startLine": 889,
+        "startChar": 6,
+        "endLine": 889,
+        "endChar": 83
+      },
+      "revId": "df7810cd2ccf6a12afb39daab62a610e6c020079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
