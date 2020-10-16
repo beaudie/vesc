@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da120420_3285aeec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:34:04Z",
+      "side": 1,
+      "message": "Ignore. missed it.",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fb431fb_eaa5aee0",
@@ -82,6 +99,24 @@
       "writtenOn": "2020-10-16T22:32:54Z",
       "side": 1,
       "message": "context can be nullptr - needs checked first.",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d39764_a5cfc584",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48765a9b_7f56d11a",
       "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
