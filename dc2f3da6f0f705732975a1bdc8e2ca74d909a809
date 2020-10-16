@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3af9eb71_52a42d89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 53
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T22:16:41Z",
+      "side": 1,
+      "message": "BTW, I\u0027ve disabled using the threaded worker in this version (53).\nDue to perf regression want to submit with code off and will enable later once follow-up work has addressed the regression.",
+      "revId": "dc2f3da6f0f705732975a1bdc8e2ca74d909a809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
