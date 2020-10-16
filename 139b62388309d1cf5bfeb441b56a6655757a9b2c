@@ -34,6 +34,24 @@
       "parentUuid": "fde8b4c6_8b179bf3",
       "revId": "139b62388309d1cf5bfeb441b56a6655757a9b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0133e4a3_936e05a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-16T16:39:18Z",
+      "side": 1,
+      "message": "This is on S20.  Pixel 4 looks okay locally.  Let\u0027s land.",
+      "parentUuid": "dad7d0dc_bfb65f23",
+      "revId": "139b62388309d1cf5bfeb441b56a6655757a9b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
