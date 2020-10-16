@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f8fd0f3_9306e1e8",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:30:48Z",
+      "side": 1,
+      "message": "Yeah, this is kind of verboten. Can you explain what goes wrong when you take this out?",
+      "parentUuid": "4f2602e8_78bdbbbf",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd61f3bf_c2a73f0d",
         "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
         "patchSetId": 4
@@ -123,6 +141,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f207360_5ab8935e",
+        "filename": "src/libANGLE/renderer/EGLSyncImpl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:30:48Z",
+      "side": 1,
+      "message": "+1, also call UNREACHABLE()",
+      "parentUuid": "86d75681_57e2c2d7",
+      "range": {
+        "startLine": 51,
+        "startChar": 42,
+        "endLine": 51,
+        "endChar": 84
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24dbda8c_6801d379",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 4
@@ -134,6 +176,29 @@
       "writtenOn": "2020-10-16T01:59:48Z",
       "side": 1,
       "message": "The test for display-\u003egetExtensions().fenceSync is removed here with this change. Is that intentional?",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfc803b4_c5b26cd5",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:30:48Z",
+      "side": 1,
+      "message": "you need to validate that the sync object must be reusable. This API doesn\u0027t apply to normal syncs.",
+      "range": {
+        "startLine": 4657,
+        "startChar": 0,
+        "endLine": 4657,
+        "endChar": 43
+      },
       "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

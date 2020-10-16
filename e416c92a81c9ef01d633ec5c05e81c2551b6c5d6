@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60921cb8_9b65b181",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:30:48Z",
+      "side": 0,
+      "message": "Is there a test that requires moving this? seems like it\u0027s an unintentional behaviour change. Regression test welcome.",
+      "range": {
+        "startLine": 2857,
+        "startChar": 0,
+        "endLine": 2861,
+        "endChar": 0
+      },
+      "revId": "e416c92a81c9ef01d633ec5c05e81c2551b6c5d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d3e9c9b_b8e16b2e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2862,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:30:48Z",
+      "side": 0,
+      "message": "also removing this seems odd. why are reusable sync different here?",
+      "range": {
+        "startLine": 2862,
+        "startChar": 3,
+        "endLine": 2862,
+        "endChar": 63
+      },
+      "revId": "e416c92a81c9ef01d633ec5c05e81c2551b6c5d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

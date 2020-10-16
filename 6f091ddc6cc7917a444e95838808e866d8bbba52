@@ -16,6 +16,29 @@
       "message": "+Implementation of EGL_KHR_reusable_sync using std::conditional_var",
       "revId": "6f091ddc6cc7917a444e95838808e866d8bbba52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "348800bd_b80155c0",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:30:48Z",
+      "side": 1,
+      "message": "nit: when you add new extensions, can you suffix them with the KHR/etc vendor tag?\n\ne.g. \u0027reusableSyncKHR\u0027\n\nWe should at some point go and rename all the old ones. This allows us to more consistently support multiple vendor tags.",
+      "range": {
+        "startLine": 1121,
+        "startChar": 9,
+        "endLine": 1121,
+        "endChar": 21
+      },
+      "revId": "6f091ddc6cc7917a444e95838808e866d8bbba52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
