@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14bb1c34_80f2f068",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-16T17:58:37Z",
+      "side": 1,
+      "message": "jamie, all small nits have been addressed. the larger refactor work has todo labels tagged at appropriate places. Moving ownership of this over to you",
+      "revId": "b1b4275be448f0eb6bd65c851c4af519d2a91502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
