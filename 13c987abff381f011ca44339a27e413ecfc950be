@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e53b444d_c610caf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-16T21:53:21Z",
+      "side": 1,
+      "message": "The change you\u0027re suggesting doesn\u0027t work:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2480607\n\nretainOnce() can only be called on an object that\u0027s specific to a particular context.   Otherwise, retain() will see that someone has a reference to it, but that doesn\u0027t guarantee it\u0027s the context making the retain() call, which is why we need separate functions.",
+      "parentUuid": "2b298de5_e7f0bd85",
+      "revId": "13c987abff381f011ca44339a27e413ecfc950be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fd8f64e_559d15d8",
