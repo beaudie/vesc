@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b88362_5cb17aca",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5d09be1_6c4c4712",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 55
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abddb26a_13b8c346",
@@ -37,6 +61,24 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "nit: move this to the end so the ordering matches the block above (which makes it easier to see all of the members not swap()\u0027ed  are reset here).",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7385c6a_0109fc5f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abddb26a_13b8c346",
       "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5520deb3_0db86b33",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e0b19f8_de93fd56",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6a415c1_da053f87",
@@ -71,6 +131,24 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "Clang-Tidy: Method \u0027releaseToCommandBatch\u0027 can be made static",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e89f7f40_db9bf683",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Hmm. We don\u0027t call it static in CommandQueue which we are mirroring. I\u0027ll leave as is for now.",
+      "parentUuid": "b6a415c1_da053f87",
       "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +170,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dbc6ed5_00db561a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "I\u0027m going to keep it like CommandQueue. Though it doesn\u0027t refer to any class members marking it static doesn\u0027t feel right.",
+      "parentUuid": "cc6ef7b6_0048e901",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68299dda_08d5adbb",
@@ -105,6 +201,30 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "Clang-Tidy: Std::move of the variable \u0027error\u0027 of the trivially-copyable type \u0027vk::Error\u0027 has no effect; remove std::move()",
+      "range": {
+        "startLine": 462,
+        "startChar": 20,
+        "endLine": 462,
+        "endChar": 29
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dae7af95_4475806c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68299dda_08d5adbb",
       "range": {
         "startLine": 462,
         "startChar": 20,
@@ -138,6 +258,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "724dc3d4_f11d57f0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Yeah, I thought I was going to need this elsewhere but looks like not.",
+      "parentUuid": "6ee96a5a_9e7b0162",
+      "range": {
+        "startLine": 483,
+        "startChar": 0,
+        "endLine": 489,
+        "endChar": 1
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b81f6917_fb7028aa",
@@ -155,6 +299,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d64e36db_aa5d46e5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Great catch. Yeah, I have a follow-up bug to clean up error handling.\nI\u0027m thinking it would be better to put the locking inside the ContextVk handleError function so that the worker thread can safely call that. For now I\u0027ll add handling for when the queue is empty.",
+      "parentUuid": "b81f6917_fb7028aa",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d2b210b_238ef621",
@@ -168,6 +330,30 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "Clang-Tidy: Std::move of the expression of the trivially-copyable type \u0027__gnu_cxx::__alloc_traits\u003cstd::allocator\u003crx::vk::Error\u003e, rx::vk::Error\u003e::value_type\u0027 (aka \u0027rx::vk::Error\u0027) has no effect; remove std::move()",
+      "range": {
+        "startLine": 495,
+        "startChar": 23,
+        "endLine": 495,
+        "endChar": 32
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9ab2bb2_6104ae45",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d2b210b_238ef621",
       "range": {
         "startLine": 495,
         "startChar": 23,
@@ -201,6 +387,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "595ae406_ffabc106",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b50934_35a9a7cb",
+      "range": {
+        "startLine": 725,
+        "startChar": 0,
+        "endLine": 728,
+        "endChar": 44
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4f47850_e4604caa",
@@ -214,6 +424,24 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "Why doesn\u0027t this queueCommand() (and in clearAllGarbage()) pass along the context pointer?",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3964c001_685ec585",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4f47850_e4604caa",
       "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -235,6 +463,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f1aa4ac_b9f77a6b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "The caller expects that any pending garbage has been cleared. We need to wait for pending jobs to complete to be sure that\u0027s true.",
+      "parentUuid": "b953720a_4cc4a27f",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd712efd_e1c17a46",
@@ -248,6 +494,30 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "nit: remove",
+      "range": {
+        "startLine": 44,
+        "startChar": 7,
+        "endLine": 44,
+        "endChar": 22
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "332e24df_50778b21",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd712efd_e1c17a46",
       "range": {
         "startLine": 44,
         "startChar": 7,
@@ -281,6 +551,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d42cf4ed_94e14498",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ae34289_8bfc9b69",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 97
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e35b4c9f_d5311137",
@@ -298,6 +592,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd2355f1_abbdcd4c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e35b4c9f_d5311137",
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c05466a_516f8f91",
@@ -311,6 +623,30 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "nit: processTasksImpl",
+      "range": {
+        "startLine": 247,
+        "startChar": 18,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1956ba45_fe2ba0c4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c05466a_516f8f91",
       "range": {
         "startLine": 247,
         "startChar": 18,
@@ -344,6 +680,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5b813aa_b0a68508",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 4906,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ee8b948_f4d6cd6e",
+      "range": {
+        "startLine": 4905,
+        "startChar": 0,
+        "endLine": 4906,
+        "endChar": 76
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4af357ce_1fce670b",
@@ -357,6 +717,30 @@
       "writtenOn": "2020-10-15T23:19:33Z",
       "side": 1,
       "message": "Same as earlier.   The mErrorMutex is not held across these calls, so there\u0027s no guarantee the error will still be present.",
+      "range": {
+        "startLine": 1352,
+        "startChar": 0,
+        "endLine": 1354,
+        "endChar": 82
+      },
+      "revId": "56610ff79727f8e8d717db15cad71ea3228e4b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eebaa6b9_6088ca17",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Fixed getAndClearPendingError so that it\u0027s well behaved, but still possible to miss the error.\nWill fix that properly in follow-up present work. Calling this done for now.",
+      "parentUuid": "4af357ce_1fce670b",
       "range": {
         "startLine": 1352,
         "startChar": 0,

@@ -808,6 +808,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c5d65f7_d2058e37",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5497e885_e6cbd902",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 354,
+        "endChar": 58
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7bfedac_0b3501bd",
@@ -929,6 +953,24 @@
       "side": 1,
       "message": "Added some ASSERTs for task processor functions (queueSubmit and submitFrame).",
       "parentUuid": "62a789d8_573bdcfd",
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "451c78c5_e8b94039",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e697ac73_d9403279",
       "revId": "25993171012dce97be78c513a0b7a7120227b761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -3270,6 +3312,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04401f3_860598ee",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7f65f88_bd914aee",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 27
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8088bfd2_5691528f",
@@ -3307,6 +3373,30 @@
       "side": 1,
       "message": "Changed to a pointer as I believe that\u0027s according to style guide for non-const reference.",
       "parentUuid": "8088bfd2_5691528f",
+      "range": {
+        "startLine": 303,
+        "startChar": 34,
+        "endLine": 303,
+        "endChar": 54
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdbb4636_bbc92925",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-16T17:09:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53c50f36_74e1b87f",
       "range": {
         "startLine": 303,
         "startChar": 34,
