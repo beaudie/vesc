@@ -41,7 +41,7 @@ enum CustomTask
     FlushAndQueueSubmit,
     // Submit custom command buffer, excludes some state management
     OneOffQueueSubmit,
-    // FinishToSerial:Finish queue commands up to given serial value
+    // Finish queue commands up to given serial value
     FinishToSerial,
     // Execute QueuePresent
     Present,
@@ -76,8 +76,8 @@ class CommandProcessorTask
 
     void initFinishToSerial(Serial serial);
 
-    void initFlushAndQueueSubmit(const std::vector<VkSemaphore> waitSemaphores,
-                                 const std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks,
+    void initFlushAndQueueSubmit(std::vector<VkSemaphore> &&waitSemaphores,
+                                 std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                  const vk::Semaphore *semaphore,
                                  egl::ContextPriority priority,
                                  vk::GarbageList &&currentGarbage,
@@ -140,11 +140,11 @@ struct CommandBatch final : angle::NonCopyable
 };
 }  // namespace vk
 
-class CommandTaskProcessor : angle::NonCopyable
+class TaskProcessor : angle::NonCopyable
 {
   public:
-    CommandTaskProcessor();
-    ~CommandTaskProcessor();
+    TaskProcessor();
+    ~TaskProcessor();
 
     angle::Result init(vk::Context *context, std::thread::id threadId);
     void destroy(VkDevice device);
@@ -181,7 +181,6 @@ class CommandTaskProcessor : angle::NonCopyable
     angle::Result checkCompletedCommands(vk::Context *context);
 
     void handleDeviceLost(vk::Context *context);
-    vk::Error getAndClearError();
 
   private:
     angle::Result releaseToCommandBatch(vk::Context *context,
@@ -210,7 +209,7 @@ class CommandProcessor : public vk::Context
 
     bool isRobustResourceInitEnabled() const override;
 
-    // Entry point for command processor thread, calls processCommandProcessorTasksImpl to do the
+    // Entry point for command processor thread, calls processTasksImpl to do the
     // work. called by RendererVk::initialization on main thread
     void processTasks();
 
@@ -244,12 +243,10 @@ class CommandProcessor : public vk::Context
   private:
     // Command processor thread, called by processTasks. The loop waits for work to
     // be submitted from a separate thread.
-    angle::Result processCommandProcessorTasksImpl(bool *exitThread);
+    angle::Result processTasksImpl(bool *exitThread);
 
     // Command processor thread, process a task
     angle::Result processTask(vk::CommandProcessorTask *task);
-
-    void resetErrorsWithLock();
 
     std::queue<vk::CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
@@ -262,7 +259,7 @@ class CommandProcessor : public vk::Context
     // Command pool to allocate processor thread primary command buffers from
     vk::CommandPool mCommandPool;
     vk::PrimaryCommandBuffer mPrimaryCommandBuffer;
-    CommandTaskProcessor mTaskProcessor;
+    TaskProcessor mTaskProcessor;
 
     AtomicSerialFactory mQueueSerialFactory;
     std::mutex mCommandProcessorQueueSerialMutex;

@@ -1347,7 +1347,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         result = VK_SUCCESS;
 
         // wait for the queuePresent to be submitted and intentionally set the context to nullptr so
-        // that we can catch any error
+        // that we can catch any error. Note this doesn't prevent another context from grabbing the
+        // error. Will be fixed properly in a follow-up as part of present work.
         contextVk->getRenderer()->waitForCommandProcessorIdle(nullptr);
         if (contextVk->getRenderer()->hasPendingError())
         {

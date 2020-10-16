@@ -1762,7 +1762,10 @@ void ContextVk::commandProcessorSyncErrors()
     while (mRenderer->hasPendingError())
     {
         vk::Error error = mRenderer->getAndClearPendingError();
-        handleError(error.mErrorCode, error.mFile, error.mFunction, error.mLine);
+        if (error.mErrorCode != VK_SUCCESS)
+        {
+            handleError(error.mErrorCode, error.mFile, error.mFunction, error.mLine);
+        }
     }
 }
 
@@ -4341,8 +4344,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         // 3. Allocate new primary command buffer
         vk::CommandProcessorTask flushAndQueueSubmit;
         flushAndQueueSubmit.initFlushAndQueueSubmit(
-            mWaitSemaphores, mWaitSemaphoreStageMasks, signalSemaphore, mContextPriority,
-            std::move(mCurrentGarbage), std::move(mResourceUseList));
+            std::move(mWaitSemaphores), std::move(mWaitSemaphoreStageMasks), signalSemaphore,
+            mContextPriority, std::move(mCurrentGarbage), std::move(mResourceUseList));
 
         commandProcessorSyncErrorsAndQueueCommand(&flushAndQueueSubmit);
 
@@ -4366,6 +4369,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         ANGLE_TRY(submitFrame(submitInfo, &mResourceUseList, std::move(mPrimaryCommands)));
 
         ANGLE_TRY(startPrimaryCommandBuffer());
+        mWaitSemaphores.clear();
+        mWaitSemaphoreStageMasks.clear();
     }
 
     mPerfCounters.renderPasses                           = 0;
@@ -4373,8 +4378,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     mPerfCounters.flushedOutsideRenderPassCommandBuffers = 0;
     mPerfCounters.resolveImageCommands                   = 0;
 
-    mWaitSemaphores.clear();
-    mWaitSemaphoreStageMasks.clear();
+    ASSERT(mWaitSemaphores.empty());
+    ASSERT(mWaitSemaphoreStageMasks.empty());
 
     mPerfCounters.primaryBuffers++;
 
@@ -4902,13 +4907,13 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     mRenderPassCommands->endRenderPass(this);
 
-    vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(mRenderPassCommands->getRenderPassWithOps(this, &renderPass));
     if (vk::CommandBufferHelper::kEnableCommandStreamDiagnostics)
     {
         mRenderPassCommands->addCommandDiagnostics(this);
     }
 
+    vk::RenderPass *renderPass = nullptr;
+    ANGLE_TRY(mRenderPassCommands->getRenderPassWithOps(this, &renderPass));
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
         mRenderPassCommands->markClosed();
