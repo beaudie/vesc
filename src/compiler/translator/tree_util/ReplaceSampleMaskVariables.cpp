@@ -23,6 +23,9 @@ namespace sh
 {
 namespace
 {
+
+static constexpr int kFullSampleMask = 0xFFFFFFFF;
+
 // Traverse the tree and collect the redeclaration and all constant index references of
 // gl_SampleMask or gl_SampleMaskIn
 class GLSampleMaskRelatedReferenceTraverser : public TIntermTraverser
@@ -122,11 +125,65 @@ class ReplaceVariableExceptOneTraverser : public TIntermTraverser
     const TIntermTyped *const mReplacement;
 };
 
+// Replace all gl_SampleMask except redeclaration with if-else block contains the original
+// gl_SampleMask sentence
+class WrapUpSampleMaskWithIfElseTraverser : public TIntermTraverser
+{
+  public:
+    WrapUpSampleMaskWithIfElseTraverser(const TIntermBinary *condition,
+                                        const TVariable *sampleMask,
+                                        const TIntermSymbol *redeclaration)
+        : TIntermTraverser(true, false, false),
+          mToBeReplaced(sampleMask),
+          mException(redeclaration),
+          mCondition(condition)
+    {}
+
+    void visitSymbol(TIntermSymbol *node) override
+    {
+        // Only if the node which we want to replace is on left, we wrap up it with if-else block
+        if (&node->variable() == mToBeReplaced && node != mException &&
+            getParentNode()->getChildNode(0) == node)
+        {
+            // Example : gl_SampleMask[0] = int(0xAAAAAAAA);
+            // node : gl_SampleMask
+            // leftOfSentence : gl_SampleMask[0]
+            // fullSentence : gl_SampleMask[0] = int(0xAAAAAAAA)
+            TIntermNode *leftOfSentence       = getParentNode();
+            TIntermNode *fullSentence         = getAncestorNode(1);
+            TIntermNode *parentOfFullSentence = getAncestorNode(2);
+            ASSERT(fullSentence && parentOfFullSentence);
+
+            TIntermBlock *trueBlock = new TIntermBlock();
+            trueBlock->appendStatement(fullSentence->deepCopy());
+
+            TIntermBlock *falseBlock = new TIntermBlock();
+            TIntermBinary *left      = leftOfSentence->deepCopy()->getAsBinaryNode();
+            ASSERT(left);
+            TIntermConstantUnion *fullSampleMask = CreateIndexNode(kFullSampleMask);
+            TIntermBinary *assignment = new TIntermBinary(EOpAssign, left, fullSampleMask);
+            falseBlock->appendStatement(assignment);
+
+            TIntermIfElse *multiSampleOfNot =
+                new TIntermIfElse(mCondition->deepCopy(), trueBlock, falseBlock);
+
+            queueReplacementWithParent(parentOfFullSentence, fullSentence, multiSampleOfNot,
+                                       OriginalNode::IS_DROPPED);
+        }
+    }
+
+  private:
+    const TVariable *const mToBeReplaced;
+    const TIntermSymbol *const mException;
+    const TIntermTyped *mCondition;
+};
+
 }  // anonymous namespace
 
 ANGLE_NO_DISCARD bool ReplaceSampleMaskAssignments(TCompiler *compiler,
                                                    TIntermBlock *root,
-                                                   TSymbolTable *symbolTable)
+                                                   TSymbolTable *symbolTable,
+                                                   const TIntermTyped *numSamplesFlags)
 {
     // Collect all constant index references of gl_SampleMask
     bool useNonConstIndex                       = false;
@@ -134,12 +191,6 @@ ANGLE_NO_DISCARD bool ReplaceSampleMaskAssignments(TCompiler *compiler,
     GLSampleMaskRelatedReferenceTraverser indexTraverser(&redeclaredGLSampleMask, &useNonConstIndex,
                                                          ImmutableString("gl_SampleMask"));
     root->traverse(&indexTraverser);
-
-    if (!useNonConstIndex)
-    {
-        // No references of the target variable
-        return true;
-    }
 
     // Retrieve gl_SampleMask variable reference
     // Search user redeclared it first
@@ -157,6 +208,25 @@ ANGLE_NO_DISCARD bool ReplaceSampleMaskAssignments(TCompiler *compiler,
     if (!glSampleMaskVar)
     {
         return false;
+    }
+
+    // Even if no need to replace gl_SampleMask with ANGLESampleMask, there is need to add
+    // code block if the target is singlesample target to ignore multisample operation.
+    TIntermConstantUnion *singleSampleCount = CreateUIntNode(1);
+    TIntermBinary *greaterThan =
+        new TIntermBinary(EOpGreaterThan, numSamplesFlags->deepCopy(), singleSampleCount);
+
+    if (!useNonConstIndex)
+    {
+        WrapUpSampleMaskWithIfElseTraverser wrapUpTraverser(
+            greaterThan, glSampleMaskVar, /** exception */ redeclaredGLSampleMask);
+        root->traverse(&wrapUpTraverser);
+        if (!wrapUpTraverser.updateTree(compiler, root))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     // Declare a global variable substituting gl_SampleMask
@@ -184,25 +254,43 @@ ANGLE_NO_DISCARD bool ReplaceSampleMaskAssignments(TCompiler *compiler,
         return false;
     }
 
-    TIntermBlock *reassignBlock       = new TIntermBlock;
     TIntermSymbol *glSampleMaskSymbol = new TIntermSymbol(glSampleMaskVar);
     TIntermSymbol *sampleMaskSymbol   = new TIntermSymbol(sampleMaskVar);
 
+    // if (ANGLEUniforms.numSamples > 1)
     // {
     //     gl_SampleMask[0] = ANGLESampleMask[0];
     //     gl_SampleMask[1] = ANGLESampleMask[1];
     // }
+    // else
+    // {
+    //     gl_SampleMask[0] = int(0xFFFFFFFF);
+    //     gl_SampleMask[1] = int(0xFFFFFFFF);
+    // }
+    TIntermBlock *trueBlock  = new TIntermBlock();
+    TIntermBlock *falseBlock = new TIntermBlock();
+
     for (unsigned int i = 0; i < sampleMaskType->getOutermostArraySize(); ++i)
     {
         TIntermBinary *left =
             new TIntermBinary(EOpIndexDirect, glSampleMaskSymbol->deepCopy(), CreateIndexNode(i));
+
+        // For true block of if statement
         TIntermBinary *right =
             new TIntermBinary(EOpIndexDirect, sampleMaskSymbol->deepCopy(), CreateIndexNode(i));
-        TIntermBinary *assignment = new TIntermBinary(EOpAssign, left, right);
-        reassignBlock->appendStatement(assignment);
+        TIntermBinary *assignmentTrue = new TIntermBinary(EOpAssign, left->deepCopy(), right);
+        trueBlock->appendStatement(assignmentTrue);
+
+        // For false block of if statement
+        TIntermConstantUnion *fullSampleMask = CreateIndexNode(kFullSampleMask);
+        TIntermBinary *assignmentFalse =
+            new TIntermBinary(EOpAssign, left->deepCopy(), fullSampleMask);
+        falseBlock->appendStatement(assignmentFalse);
     }
 
-    return RunAtTheEndOfShader(compiler, root, reassignBlock, symbolTable);
+    TIntermIfElse *multiSampleOrNot = new TIntermIfElse(greaterThan, trueBlock, falseBlock);
+
+    return RunAtTheEndOfShader(compiler, root, multiSampleOrNot, symbolTable);
 }
 
 ANGLE_NO_DISCARD bool ReplaceSampleMaskInAssignments(TCompiler *compiler,

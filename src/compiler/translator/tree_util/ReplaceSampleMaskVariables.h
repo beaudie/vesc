@@ -26,7 +26,8 @@ class TIntermTyped;
 // used for the unsized array problem.
 ANGLE_NO_DISCARD bool ReplaceSampleMaskAssignments(TCompiler *compiler,
                                                    TIntermBlock *root,
-                                                   TSymbolTable *symbolTable);
+                                                   TSymbolTable *symbolTable,
+                                                   const TIntermTyped *numSamplesFlags);
 
 ANGLE_NO_DISCARD bool ReplaceSampleMaskInAssignments(TCompiler *compiler,
                                                      TIntermBlock *root,
