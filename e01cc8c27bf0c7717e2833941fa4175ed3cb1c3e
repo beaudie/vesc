@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66bcd001_aa20631f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T17:05:35Z",
+      "side": 1,
+      "message": "This program doesn\u0027t sample from or render to the texture, so the texture\u0027s image is never allocated. Did you forget to create an FBO and bind the texture to it?",
+      "revId": "e01cc8c27bf0c7717e2833941fa4175ed3cb1c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
