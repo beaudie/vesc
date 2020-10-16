@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0ffcf40_483c6f0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-16T16:29:13Z",
+      "side": 1,
+      "message": "Jonah, PTAL. After this batch of CLs hopefully I could take a break fron ANGLE.",
+      "revId": "5e036fb6a8aeaf42bae04ef66ac358bd4834c2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
