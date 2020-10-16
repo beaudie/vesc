@@ -183,32 +183,6 @@
 // Cannot create 2D (array) view of 3D texture.
 3886 VULKAN : dEQP-GLES31.functional.image_load_store.3d.*layer = FAIL
 
-// Cannot support a non-const indexing for gl_SampleMask or gl_SampleMaskIn variables:
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_texture_1 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_texture_2 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_texture_4 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_texture_8 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_rbo_1 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_rbo_2 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_rbo_4 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.multisample_rbo_8 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_texture_1 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_texture_2 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_texture_4 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_texture_8 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_rbo_1 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_rbo_2 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_rbo_4 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_sample.multisample_rbo_8 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_texture_1 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_texture_2 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_texture_4 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_texture_8 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_rbo_1 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_rbo_2 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_rbo_4 = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_two_samples.multisample_rbo_8 = FAIL
-
 // Cannot ignore multisampling-related operations when the target is a single-sampled target:
 3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.default_framebuffer = FAIL
 3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_pixel.singlesample_texture = FAIL
