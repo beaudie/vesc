@@ -95,6 +95,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1401b64a_ba59ef1f",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T04:06:46Z",
+      "side": 1,
+      "message": "The spec doesn\u0027t say flush shouldn\u0027t happen with reusable sync, so this is per spec IMO. It\u0027s just weird that the spec doesn\u0027t say something like EGL_SYNC_FLUSH_COMMANDS_BIT is invalid for reusable sync.",
+      "parentUuid": "0f8fd0f3_9306e1e8",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd61f3bf_c2a73f0d",
         "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
         "patchSetId": 4
