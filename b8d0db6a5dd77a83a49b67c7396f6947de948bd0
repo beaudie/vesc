@@ -33,6 +33,24 @@
       "message": "Have you tried this locally? I don\u0027t remember if stopping and restarting the GPU timer resets it to 0 or accumulates.",
       "revId": "b8d0db6a5dd77a83a49b67c7396f6947de948bd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8868656a_e62abeee",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T16:14:54Z",
+      "side": 1,
+      "message": "Yeah, the GPU timer stuff I redid a while back. Should accumulate and average now. Updated commit message with my testing info.",
+      "parentUuid": "d4506aa0_03c0bd56",
+      "revId": "b8d0db6a5dd77a83a49b67c7396f6947de948bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
