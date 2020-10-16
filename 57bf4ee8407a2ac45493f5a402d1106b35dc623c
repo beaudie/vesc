@@ -16,6 +16,24 @@
       "message": "From the spec it says \"...is allowed only if just one of the aliased attributes is active in the executable program\". My understanding is that use of aliased attributes at same time is undefined? \nhttps://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glBindAttribLocation.xml",
       "revId": "57bf4ee8407a2ac45493f5a402d1106b35dc623c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "459aa023_2b162dd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T17:58:47Z",
+      "side": 1,
+      "message": "TL;DR: Yes\n\nFirst, please avoid reading the desktop GL spec. There are differences with ES. In particular, GLSL ES only supports aliasing in ES 100, while desktop GLSL supports aliasing in latest versions. The ES version being limited to 100 **greatly** simplifies emulation due to the limited types allowed in ES 100.\n\nSecond, did you notice this bit?\n\n\u003e or if no path through the shader consumes more than one attribute of a set of attributes aliased to the same location\n\nSo yes, the driver can assume simultaneous use is not done (1). That\u0027s why the tests control access to the aliasing locations through a uniform.\n\n(1) this is actually irrelevant to ANGLE. The emulation can be done in such a way that even if aliasing locations were simultaneously used, it would be ok. This is more of a problem for desktop GL as the aliasing attributes could have different base types (e.g. float vs int).",
+      "parentUuid": "2725e1ca_af0d3243",
+      "revId": "57bf4ee8407a2ac45493f5a402d1106b35dc623c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
