@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33464405_5f8a25a6",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-16T15:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b325533_b0596a92",
+      "revId": "234fe2fdab5988c0f54c4d493642a07f797f00b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d8b52f3_cc244034",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-10-16T14:35:40Z",
       "side": 1,
       "message": "nit: ANGLE suffix",
+      "range": {
+        "startLine": 661,
+        "startChar": 29,
+        "endLine": 661,
+        "endChar": 30
+      },
+      "revId": "234fe2fdab5988c0f54c4d493642a07f797f00b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "221cfa9c_ea075f72",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-16T15:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d8b52f3_cc244034",
       "range": {
         "startLine": 661,
         "startChar": 29,
