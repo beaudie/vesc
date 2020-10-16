@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "b8d0db6a5dd77a83a49b67c7396f6947de948bd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4506aa0_03c0bd56",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-16T16:10:27Z",
+      "side": 1,
+      "message": "Have you tried this locally? I don\u0027t remember if stopping and restarting the GPU timer resets it to 0 or accumulates.",
+      "revId": "b8d0db6a5dd77a83a49b67c7396f6947de948bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
