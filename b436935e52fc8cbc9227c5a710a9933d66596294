@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c18aa80_337edaab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 1,
+      "message": "Correct. According to Alon this was a Nokia thing and he seemed to wish that it was never created. I think it was Jon Leech that described it as a wrapper to  conditional_variable. Its also implementable using posix semaphore, should this CV not be available in all platforms.\n\nIt it is part of your \"planned\" set of extensions. I had prior code to work from, so saw doing this as a quick do.",
+      "parentUuid": "9c6a8bdf_740d0a67",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60f9da35_d0252d96",
@@ -48,6 +66,30 @@
       "writtenOn": "2020-10-16T01:59:48Z",
       "side": 1,
       "message": "nit: !\u003d 0 for explicit conversion to bool",
+      "range": {
+        "startLine": 47,
+        "startChar": 45,
+        "endLine": 47,
+        "endChar": 46
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96f8f20d_583c38de",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "60f9da35_d0252d96",
       "range": {
         "startLine": 47,
         "startChar": 45,
@@ -113,6 +155,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2360607_6e036433",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 1,
+      "message": "It does seem to be targeted to fence based syncs. But, as said, the spec doesn\u0027t make that distinction. I could ask Jon for history, but at this point it becomes a matter of developer expectation from interpreting the spec.\n\nPossibly, with effort, the flush could be factored out to EGLSync::clientWait(). Along with timeout\u003d\u003d0, and already signaled.",
+      "parentUuid": "1401b64a_ba59ef1f",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd61f3bf_c2a73f0d",
         "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
         "patchSetId": 4
@@ -124,6 +184,30 @@
       "writtenOn": "2020-10-16T01:59:48Z",
       "side": 1,
       "message": "The spec is not being very precise, so I don\u0027t know what\u0027s the right thing to do here, but if the spec is written to mirror cond vars, this should loop and check mStatus.\n\nSomething like:\n\n    mMutex.lock();\n    auto timeLimit \u003d std::chrono::system_clock::now() + duration; // Be careful with overflow\n    waitStatus \u003d mCondVar.wait_until(mMutex, timeLimit,\n                                     [this](){return mStatus \u003d\u003d EGL_SIGNALED;});\n    mMutex.unlock();\n\nThe logic is that if the cond var is signaled, by the time this thread wakes up it may have gotten unsignaled again.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 20
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0d88907_e07f01f9",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 1,
+      "message": "My interpretation is any thread in the wait_for() waiting state will be signaled/released at notify_all(). Spec just says the transition from UNSIGNALED to SIGNALED will unblock. I\u0027m leaving all the change of state in signal() and the status/result in clientWait().",
+      "parentUuid": "fd61f3bf_c2a73f0d",
       "range": {
         "startLine": 65,
         "startChar": 0,
@@ -181,6 +265,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d77ac708_66f87fb6",
+        "filename": "src/libANGLE/renderer/EGLSyncImpl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 1,
+      "message": "Yes, I would have done it that way, but assumed that was not the intended pattern here.\n\nNothing prevents call to signal() or dupNativeFenceFD() using incompatible sync, and some dEQP-EGL tests do this to check for return error on a negative test. So, I will add UNREACHABLE() and return an BadMatch() to cover those cases.",
+      "parentUuid": "4f207360_5ab8935e",
+      "range": {
+        "startLine": 51,
+        "startChar": 42,
+        "endLine": 51,
+        "endChar": 84
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24dbda8c_6801d379",
@@ -198,6 +306,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b73fe186_e1c64187",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 1,
+      "message": "I assumed that if nativeFenceSyncANDROID was set then fence could be implied. - Can be added.",
+      "parentUuid": "24dbda8c_6801d379",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfc803b4_c5b26cd5",
@@ -211,6 +337,30 @@
       "writtenOn": "2020-10-16T02:30:48Z",
       "side": 1,
       "message": "you need to validate that the sync object must be reusable. This API doesn\u0027t apply to normal syncs.",
+      "range": {
+        "startLine": 4657,
+        "startChar": 0,
+        "endLine": 4657,
+        "endChar": 43
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "938f7778_68c56e9e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 1,
+      "message": "Ack. thx",
+      "parentUuid": "bfc803b4_c5b26cd5",
       "range": {
         "startLine": 4657,
         "startChar": 0,

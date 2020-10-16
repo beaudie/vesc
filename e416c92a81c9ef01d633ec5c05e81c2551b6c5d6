@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c57487b_e4a906ca",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 0,
+      "message": "current display was null for the dEQP-EGL reusable_sync tests. Doesn\u0027t seem a current context is required for reusable_sync.",
+      "parentUuid": "60921cb8_9b65b181",
+      "range": {
+        "startLine": 2857,
+        "startChar": 0,
+        "endLine": 2861,
+        "endChar": 0
+      },
+      "revId": "e416c92a81c9ef01d633ec5c05e81c2551b6c5d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d3e9c9b_b8e16b2e",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-16T02:30:48Z",
       "side": 0,
       "message": "also removing this seems odd. why are reusable sync different here?",
+      "range": {
+        "startLine": 2862,
+        "startChar": 3,
+        "endLine": 2862,
+        "endChar": 63
+      },
+      "revId": "e416c92a81c9ef01d633ec5c05e81c2551b6c5d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b676baa_c06be711",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2862,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:02:24Z",
+      "side": 0,
+      "message": "See above, no current context was being used with dEQP-EGL.functional.reusable_sync tests.",
+      "parentUuid": "3d3e9c9b_b8e16b2e",
       "range": {
         "startLine": 2862,
         "startChar": 3,
