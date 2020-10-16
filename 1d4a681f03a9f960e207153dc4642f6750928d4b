@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "2f376302_e8799f5a",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
@@ -20,10 +21,34 @@
         "endChar": 46
       },
       "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b596f102_ad32eae2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-16T21:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f376302_e8799f5a",
+      "range": {
+        "startLine": 634,
+        "startChar": 17,
+        "endLine": 634,
+        "endChar": 46
+      },
+      "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "36ddcf6d_fc3d44b0",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
@@ -43,10 +68,34 @@
         "endChar": 66
       },
       "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "710470ed_4767475a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-16T21:58:34Z",
+      "side": 1,
+      "message": "They are optional because it\u0027s valid for us not to support any of these formats at all. These are the possibilities -\n1. Valid: format is not supported at all\n2. Valid: format is supported, and we support overriding\n3. Invalid: format is supported, but we do not support overriding",
+      "parentUuid": "36ddcf6d_fc3d44b0",
+      "range": {
+        "startLine": 666,
+        "startChar": 45,
+        "endLine": 666,
+        "endChar": 66
+      },
+      "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "15951305_14667f9a",
         "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
@@ -66,10 +115,34 @@
         "endChar": 51
       },
       "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00e405a8_e006a99b",
+        "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-16T21:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15951305_14667f9a",
+      "range": {
+        "startLine": 311,
+        "startChar": 4,
+        "endLine": 311,
+        "endChar": 51
+      },
+      "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "dd098da8_98e892c5",
         "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
@@ -83,8 +156,25 @@
       "side": 1,
       "message": "The test name says \"required\" formats, but this is pretty lax about any format not being supported. Is there any format that actually *must* support sRGB override? If so, this should fail on them. If not, you can change the test name to SRGBOverrideFormats",
       "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e245ef87_e05d6fdc",
+        "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-16T21:58:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd098da8_98e892c5",
+      "revId": "1d4a681f03a9f960e207153dc4642f6750928d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
