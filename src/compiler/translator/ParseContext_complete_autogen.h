@@ -63,6 +63,11 @@ bool isTextureGather(const TFunction *func)
     int id = func->uniqueId().get();
     return id >= 1327 && id <= 1414;
 }
+bool isInterpolationFS(const TFunction *func)
+{
+    int id = func->uniqueId().get();
+    return id >= 1451 && id <= 1462;
+}
 bool isAtomicMemory(const TFunction *func)
 {
     int id = func->uniqueId().get();

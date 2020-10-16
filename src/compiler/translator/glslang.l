@@ -267,13 +267,12 @@ O           [0-7]
 "restrict" { return ES3_reserved_ES3_1_keyword(context, RESTRICT); }
 "volatile" { return ES2_reserved_ES3_1_keyword(context, VOLATILE); }
 "atomic_uint" { return ES3_reserved_ES3_1_keyword(context, ATOMICUINT); }
-
+"sample" { return ES2_reserved_ES3_keyword(context, SAMPLE); }
 "precise" { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::EXT_gpu_shader5, PRECISE); }
 
     /* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 "resource"          |
 "patch"             |
-"sample"            |
 "subroutine"        |
 "common"            |
 "partition"         |

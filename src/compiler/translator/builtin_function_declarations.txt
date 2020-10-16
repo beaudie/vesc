@@ -961,8 +961,8 @@ GROUP BEGIN DerivativesFS {"shader_type": "FRAGMENT"}
     genType fwidthCoarse(genType);
 GROUP END DerivativesFS
 
-GROUP BEGIN InterpolationFS {"shader_type": "FRAGMENT"}
-  DEFAULT METADATA {"glsl_level": "GLSL4_BUILTINS", "op": "CallBuiltInFunction"}
+GROUP BEGIN InterpolationFS {"queryFunction": true, "shader_type": "FRAGMENT"}
+  DEFAULT METADATA {"essl_level": "ESSL3_BUILTINS", "op": "CallBuiltInFunction"}
     float interpolateAtCentroid(float);
     vec2 interpolateAtCentroid(vec2);
     vec3 interpolateAtCentroid(vec3);
