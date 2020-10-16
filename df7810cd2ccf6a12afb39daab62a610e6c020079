@@ -46,6 +46,30 @@
       },
       "revId": "df7810cd2ccf6a12afb39daab62a610e6c020079",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b833a9fb_19dc766f",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-16T15:13:22Z",
+      "side": 1,
+      "message": "Sorry, I missed Metal shaders update from the parent CL.",
+      "parentUuid": "0410ffdb_876da39c",
+      "range": {
+        "startLine": 889,
+        "startChar": 6,
+        "endLine": 889,
+        "endChar": 83
+      },
+      "revId": "df7810cd2ccf6a12afb39daab62a610e6c020079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
