@@ -185,12 +185,13 @@ constexpr const char kAcbBufferOffsets[]     = "acbBufferOffsets";
 constexpr const char kDepthRange[]           = "depthRange";
 constexpr const char kPreRotation[]          = "preRotation";
 constexpr const char kFragRotation[]         = "fragRotation";
+constexpr const char kNumSamples[]           = "numSamples";
 
-constexpr size_t kNumGraphicsDriverUniforms                                                = 12;
+constexpr size_t kNumGraphicsDriverUniforms                                                = 13;
 constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames = {
     {kViewport, kHalfRenderArea, kFlipXY, kNegFlipXY, kClipDistancesEnabled, kXfbActiveUnpaused,
      kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange, kPreRotation,
-     kFragRotation}};
+     kFragRotation, kNumSamples}};
 
 constexpr size_t kNumComputeDriverUniforms                                               = 1;
 constexpr std::array<const char *, kNumComputeDriverUniforms> kComputeDriverUniformNames = {
@@ -432,6 +433,7 @@ const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root,
         emulatedDepthRangeType,
         new TType(EbtFloat, 2, 2),
         new TType(EbtFloat, 2, 2),
+        new TType(EbtInt),
     }};
 
     for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniforms; ++uniformIndex)
@@ -1011,6 +1013,16 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                 usePreRotation ? CreateDriverUniformRef(driverUniforms, kFragRotation) : nullptr;
             if (!RewriteDfdy(this, root, getSymbolTable(), getShaderVersion(), flipXY,
                              fragRotation))
+            {
+                return false;
+            }
+        }
+
+        {
+            const TVariable *numSamplesVar = static_cast<const TVariable *>(
+                getSymbolTable().findBuiltIn(ImmutableString("gl_NumSamples"), getShaderVersion()));
+            TIntermBinary *numSamples = CreateDriverUniformRef(driverUniforms, kNumSamples);
+            if (!ReplaceVariableWithTyped(this, root, numSamplesVar, numSamples))
             {
                 return false;
             }

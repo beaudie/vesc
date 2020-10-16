@@ -90,6 +90,9 @@ struct GraphicsDriverUniforms
     // Used to pre-rotate gl_FragCoord for swapchain images on Android (a mat2, which is padded to
     // the size of two vec4's).
     std::array<float, 8> fragRotation;
+
+    // Used to replace gl_NumSamples. Because gl_NumSamples cannot be recognized in SPIR-V.
+    int32_t numSamples;
 };
 
 struct ComputeDriverUniforms
@@ -3849,6 +3852,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
     float depthRangeFar  = mState.getFarPlane();
     float depthRangeDiff = depthRangeFar - depthRangeNear;
 
+    int32_t numSamples = mDrawFramebuffer->getSamples();
+
     // Copy and flush to the device.
     GraphicsDriverUniforms *driverUniforms = reinterpret_cast<GraphicsDriverUniforms *>(ptr);
     *driverUniforms                        = {
@@ -3865,7 +3870,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
         {},
         {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f},
         {},
-        {}};
+        {},
+        numSamples};
     memcpy(&driverUniforms->preRotation, &kPreRotationMatrices[mCurrentRotationDrawFramebuffer],
            sizeof(PreRotationMatrixValues));
     memcpy(&driverUniforms->fragRotation, &kFragRotationMatrices[mCurrentRotationDrawFramebuffer],

@@ -129,6 +129,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::EXT_shadow_samplers] = EBhUndefined;
     }
+    if (resources.OES_sample_variables)
+    {
+        extBehavior[TExtension::OES_sample_variables] = EBhUndefined;
+    }
 }
 
 void ResetExtensionBehavior(const ShBuiltInResources &resources,

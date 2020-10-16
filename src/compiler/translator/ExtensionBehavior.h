@@ -48,6 +48,7 @@ enum class TExtension : uint8_t
     OES_texture_cube_map_array,
     EXT_texture_cube_map_array,
     EXT_shadow_samplers,
+    OES_sample_variables,
 };
 
 enum TBehavior : uint8_t

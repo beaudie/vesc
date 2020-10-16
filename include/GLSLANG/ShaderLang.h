@@ -406,6 +406,7 @@ struct ShBuiltInResources
     int OES_texture_cube_map_array;
     int EXT_texture_cube_map_array;
     int EXT_shadow_samplers;
+    int OES_sample_variables;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate
@@ -462,6 +463,10 @@ struct ShBuiltInResources
 
     // maximum number of available image units
     int MaxImageUnits;
+
+    // OES_sample_variables constant
+    // maximum number of available samples
+    int MaxSamples;
 
     // maximum number of image uniforms in a vertex shader
     int MaxVertexImageUniforms;

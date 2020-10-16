@@ -179,6 +179,7 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->OES_texture_cube_map_array                  = 0;
     resources->EXT_texture_cube_map_array                  = 0;
     resources->EXT_shadow_samplers                         = 0;
+    resources->OES_sample_variables                        = 0;
 
     resources->NV_draw_buffers = 0;
 
@@ -265,6 +266,8 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->MaxGeometryImageUniforms         = 0;
 
     resources->SubPixelBits = 8;
+
+    resources->MaxSamples = 4;
 }
 
 //
