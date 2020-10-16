@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d6d41a7_88481513",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee4c0c3c_1c9ee360",
+      "range": {
+        "startLine": 318,
+        "startChar": 13,
+        "endLine": 318,
+        "endChar": 30
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84f436e5_01396067",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-10-16T05:08:58Z",
       "side": 1,
       "message": "Rename to \u0027RecordUnifromBlocksTranslatedToStructuredBuffers\u0027 Or \u0027CollectUniformBlocksTranslatedToStructuredBuffers\u0027?",
+      "range": {
+        "startLine": 201,
+        "startChar": 36,
+        "endLine": 201,
+        "endChar": 76
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aef2646_95b75f7e",
+        "filename": "src/compiler.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84f436e5_01396067",
       "range": {
         "startLine": 201,
         "startChar": 36,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "627060b4_68e3cbf5",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e59a5383_afbd2254",
+      "range": {
+        "startLine": 1658,
+        "startChar": 0,
+        "endLine": 1659,
+        "endChar": 55
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c218844_8be8b0d4",
@@ -117,6 +189,24 @@
       "writtenOn": "2020-10-16T05:08:58Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6711c1c0_3221ccc6",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c218844_8be8b0d4",
       "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -144,6 +234,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38b3b683_31abed08",
+        "filename": "src/compiler/translator/OutputHLSL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a7738ea_67f5c332",
+      "range": {
+        "startLine": 54,
+        "startChar": 54,
+        "endLine": 54,
+        "endChar": 94
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28ab7e51_8adcf950",
@@ -157,6 +271,30 @@
       "writtenOn": "2020-10-16T05:08:58Z",
       "side": 1,
       "message": "mUniformBlocksTranslatedToStructuredBuffers",
+      "range": {
+        "startLine": 184,
+        "startChar": 43,
+        "endLine": 184,
+        "endChar": 84
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7feedb83_ec965780",
+        "filename": "src/compiler/translator/OutputHLSL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28ab7e51_8adcf950",
       "range": {
         "startLine": 184,
         "startChar": 43,
@@ -192,6 +330,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "964e0d95_f48b25cc",
+        "filename": "src/compiler/translator/StructureHLSL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "If want to support more types, I will changed these functions. But this change is also used by current supported types, so cannot split it into a separate patch.",
+      "parentUuid": "f277880d_a54d091c",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 67
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "010baa4f_fea3f65b",
         "filename": "src/compiler/translator/TranslatorHLSL.cpp",
         "patchSetId": 6
@@ -203,6 +365,30 @@
       "writtenOn": "2020-10-16T05:08:58Z",
       "side": 1,
       "message": "RecordUniformBlocksTranslatedToStructuredBuffers",
+      "range": {
+        "startLine": 191,
+        "startChar": 17,
+        "endLine": 191,
+        "endChar": 63
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91c9bc3_c0c067f6",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "010baa4f_fea3f65b",
       "range": {
         "startLine": 191,
         "startChar": 17,
@@ -236,6 +422,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aed5401a_4d1b41ea",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "225b9aaa_c63487a2",
+      "range": {
+        "startLine": 192,
+        "startChar": 22,
+        "endLine": 192,
+        "endChar": 63
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99515623_0e90f919",
@@ -249,6 +459,30 @@
       "writtenOn": "2020-10-16T05:08:58Z",
       "side": 1,
       "message": "a?",
+      "range": {
+        "startLine": 22,
+        "startChar": 13,
+        "endLine": 22,
+        "endChar": 15
+      },
+      "revId": "d5e57e020b17fb091b8970c1f76528f73e91b702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1c35884_f3b37591",
+        "filename": "src/compiler/translator/tree_ops/UniformBlockTranslatedToStructuredBuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-16T08:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99515623_0e90f919",
       "range": {
         "startLine": 22,
         "startChar": 13,
