@@ -51,6 +51,7 @@ struct Format final : private angle::NonCopyable
 
     constexpr bool hasDepthOrStencilBits() const;
     constexpr bool isLUMA() const;
+    constexpr bool isSRGB() const;
 
     constexpr bool isSint() const;
     constexpr bool isUint() const;
@@ -183,6 +184,43 @@ constexpr bool Format::isLUMA() const
     // There's no format with G or B without R
     ASSERT(redBits > 0 || (greenBits == 0 && blueBits == 0));
     return redBits == 0 && (luminanceBits > 0 || alphaBits > 0);
+}
+
+constexpr bool Format::isSRGB() const
+{
+    // TODO RESOLVE THIS BEFORE FINAL COMMIT
+    // Does gles support SRGB BGRA formats?
+    // clang-format off
+    return
+        glInternalFormat == GL_SR8_EXT ||
+        glInternalFormat == GL_SRG8_EXT ||
+        glInternalFormat == GL_SRGB8 ||
+        //glInternalFormat == GL_SBGR8 ||
+        glInternalFormat == GL_SRGB8_ALPHA8 ||
+        //glInternalFormat == GL_SBGR8_ALPHA8 ||
+        glInternalFormat == GL_COMPRESSED_SRGB_S3TC_DXT1_EXT ||
+        glInternalFormat == GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT ||
+        glInternalFormat == GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT ||
+        glInternalFormat == GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT ||
+        glInternalFormat == GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ETC2 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10 ||
+        glInternalFormat == GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12;
+    // clang-format on
 }
 
 constexpr bool Format::isSint() const
