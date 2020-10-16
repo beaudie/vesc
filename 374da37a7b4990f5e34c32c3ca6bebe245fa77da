@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8920e47b_e98d58c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:43:21Z",
+      "side": 1,
+      "message": "Going to shelve this and see if gclient can support recursedeps with gclient args≥",
+      "revId": "374da37a7b4990f5e34c32c3ca6bebe245fa77da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

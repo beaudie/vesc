@@ -56,6 +56,30 @@
       },
       "revId": "d42aa59085eb2cfcbd98fb26bd83c9852046c421",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dfd26bd_b8d3c1dc",
+        "filename": "scripts/bootstrap.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-16T02:43:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a3051e0_29edef6e",
+      "range": {
+        "startLine": 23,
+        "startChar": 33,
+        "endLine": 23,
+        "endChar": 45
+      },
+      "revId": "d42aa59085eb2cfcbd98fb26bd83c9852046c421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
