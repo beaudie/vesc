@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "455831eb_3bdf0cf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:32:54Z",
+      "side": 1,
+      "message": "Caught a bug",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fb431fb_eaa5aee0",
@@ -48,6 +65,23 @@
       "writtenOn": "2020-10-16T22:13:26Z",
       "side": 1,
       "message": "These first 3 \"if\" statements could be factored out to EGLSync::clientWait(). Although it splits the spec logic for each extension.",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48765a9b_7f56d11a",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-16T22:32:54Z",
+      "side": 1,
+      "message": "context can be nullptr - needs checked first.",
       "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
