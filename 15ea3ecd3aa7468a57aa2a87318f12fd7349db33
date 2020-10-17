@@ -69,6 +69,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3665ef9c_78fa91e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T12:12:58Z",
+      "side": 1,
+      "message": "LGTM. The only thing that would be nice is a negative test to validate some of the stuff that was moved around in the validation. Non-blocking, so LGTM.",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79d2d9ea_cbd33ee1",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T12:12:58Z",
+      "side": 1,
+      "message": "tiny nit: missing blank line.",
+      "range": {
+        "startLine": 1125,
+        "startChar": 4,
+        "endLine": 1125,
+        "endChar": 5
+      },
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fb431fb_eaa5aee0",
@@ -100,6 +140,24 @@
       "side": 1,
       "message": "LGTM the way it is. It\u0027s easier to follow the logic of the extension.",
       "parentUuid": "4fb431fb_eaa5aee0",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f752877_998d1c91",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T12:12:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4cb5d1fd_25b80895",
       "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -152,6 +210,24 @@
       "writtenOn": "2020-10-16T22:13:26Z",
       "side": 1,
       "message": "Could remove this in favor of a default virtual serverWait() in EGLSyncImpl.",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e8fdf7d_85514bef",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T12:12:58Z",
+      "side": 1,
+      "message": "This is fine.",
+      "parentUuid": "750e8e6a_6b1b4b86",
       "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
