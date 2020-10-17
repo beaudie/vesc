@@ -76,6 +76,10 @@ bool IsDebuggerAttached();
 
 // Calls system APIs to break into the debugger.
 void BreakDebugger();
+
+// Memory profiling info.
+int GetNativeHeapSize();
+int GetNativeHeapAllocatedSize();
 }  // namespace angle
 
 #endif  // COMMON_SYSTEM_UTILS_H_

@@ -105,4 +105,14 @@ std::string GetHelperExecutableDir()
 {
     return "";
 }
+
+int GetNativeHeapSize()
+{
+    return 0;
+}
+
+int GetNativeHeapAllocatedSize()
+{
+    return 0;
+}
 }  // namespace angle

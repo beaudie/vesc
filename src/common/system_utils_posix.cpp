@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include <dlfcn.h>
+#include <malloc.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -144,5 +145,17 @@ const char *GetExecutableExtension()
 char GetPathSeparator()
 {
     return '/';
+}
+
+int GetNativeHeapSize()
+{
+    struct mallinfo info = mallinfo();
+    return static_cast<int>(info.usmblks);
+}
+
+int GetNativeHeapAllocatedSize()
+{
+    struct mallinfo info = mallinfo();
+    return static_cast<int>(info.uordblks);
 }
 }  // namespace angle

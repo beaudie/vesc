@@ -404,6 +404,8 @@ class dEQPTest : public testing::TestWithParam<size_t>
             std::cout << "Test expected to fail but passed!" << std::endl;
             sUnexpectedPasses.push_back(caseInfo.mDEQPName);
         }
+
+        printf("Memory usage after test: %d k\n", angle::GetNativeHeapAllocatedSize() >> 10);
     }
 
     bool countTestResultAndReturnSuccess(TestResult result) const
