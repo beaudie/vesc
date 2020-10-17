@@ -16,6 +16,23 @@
       "message": "lgtm\n",
       "revId": "15524e6b1f74b11a7adba9108a6d74092cba3380",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fac7f49_09bdb666",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-17T01:32:50Z",
+      "side": 1,
+      "message": "Is this the same fix?\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2392897",
+      "revId": "15524e6b1f74b11a7adba9108a6d74092cba3380",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
