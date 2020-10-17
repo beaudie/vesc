@@ -16,6 +16,23 @@
       "message": "TBR",
       "revId": "39942d14d904498d87e5c73945a855f1e8bd87a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777f6d65_b86fe634",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T02:41:31Z",
+      "side": 1,
+      "message": "Says expectation unused - you probably have to merge this with the roll CL to land them.",
+      "revId": "39942d14d904498d87e5c73945a855f1e8bd87a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
