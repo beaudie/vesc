@@ -138,6 +138,24 @@
       "message": "Can you split off the additional tests you added in this CL? I\u0027d like to land them and use them in the refactor.",
       "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a8fecb2_e8db033c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T23:00:57Z",
+      "side": 1,
+      "message": "OK, on closer look it\u0027s really the ext that\u0027s the issue. It\u0027s pretty clear it only wants this to apply to texture filtering (which is kind of what you have, modulo creating the texture with the mutable bit). But it words it in a way that we\u0027re actually changing the storage of the texture.\n\nAnyway I have a few cleanup CLs. It would be good to work through those before this one. I definitely have a better idea of what\u0027s going on with these extensions now.",
+      "parentUuid": "538ca067_84682155",
+      "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
