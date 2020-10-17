@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9d26953_a2c78366",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-17T04:54:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7c18aa80_337edaab",
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60f9da35_d0252d96",
@@ -208,6 +226,30 @@
       "side": 1,
       "message": "My interpretation is any thread in the wait_for() waiting state will be signaled/released at notify_all(). Spec just says the transition from UNSIGNALED to SIGNALED will unblock. I\u0027m leaving all the change of state in signal() and the status/result in clientWait().",
       "parentUuid": "fd61f3bf_c2a73f0d",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 20
+      },
+      "revId": "b436935e52fc8cbc9227c5a710a9933d66596294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace7b01b_d6247c9f",
+        "filename": "src/libANGLE/renderer/EGLReusableSync.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-17T04:54:11Z",
+      "side": 1,
+      "message": "Ok, that\u0027s fine with me",
+      "parentUuid": "a0d88907_e07f01f9",
       "range": {
         "startLine": 65,
         "startChar": 0,
