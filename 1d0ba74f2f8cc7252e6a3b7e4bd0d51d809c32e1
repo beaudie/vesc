@@ -16,6 +16,24 @@
       "message": "The debug autogen files contain local paths to the source files to support shader debugging, hence they are machine specific.\nThe normal autogen files I\u0027m not sure. Metal shader binary format is not public.\n\nSorry If I\u0027m not fully understanding the purpose of this decoupling. But even if you can generate the format table separately from the metal shaders, the metal shaders still need to be re-generated in case the format values are changed.\nIf there is a CL that changes the order of the formatIDs in the enum class, then the metal shaders must be re-compiled otherwise the runtime shaders will pick a wrong pre-compiled value. So it is not safe to generate only format table and leave metal shaders as it is.\nI\u0027m not sure what is the best way to deal with this, but probably a re-ordering of formatIDs is rare, we just need to extra careful when it happens.\nThe alternative way is probably letting gn generate the Metal shaders instead of pre-compiling them locally.",
       "revId": "1d0ba74f2f8cc7252e6a3b7e4bd0d51d809c32e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45d4b0c3_3501ae6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T19:47:12Z",
+      "side": 1,
+      "message": "Yeah, I see your point. Unfortunately this is a risk we\u0027re going to have to live with for now as it\u0027s a hard requirement that we be able to generate cross-platform scripts in a cross-platform way. This is a must-land to ensure the most important path for maintaining ANGLE is accessible.",
+      "parentUuid": "a60abdd9_8b7b72de",
+      "revId": "1d0ba74f2f8cc7252e6a3b7e4bd0d51d809c32e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
