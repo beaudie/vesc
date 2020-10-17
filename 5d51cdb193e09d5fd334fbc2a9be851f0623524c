@@ -103,6 +103,24 @@
       "parentUuid": "7edb9231_7c81ad7c",
       "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "538ca067_84682155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T21:43:23Z",
+      "side": 1,
+      "message": "We\u0027re not. The effective internal format is a front-end concept and is treated specifically in cases like CopyTexImage and Blit. I believe your solution has hard-to-address errors with these edge cases.\n\nAlso it will likely be a simpler implementation in the front-end.",
+      "parentUuid": "7da721f0_07306659",
+      "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
