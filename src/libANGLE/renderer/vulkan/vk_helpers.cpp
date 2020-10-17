@@ -5978,7 +5978,7 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
     ASSERT(mImageViewSerial.valid());
 
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(format.intendedFormat());
-    mLinearColorspace                    = IsLinearFormat(format.vkImageFormat);
+    mLinearColorspace                    = !format.actualImageFormat().isSRGB;
 
     if (HasBothDepthAndStencilAspects(aspectFlags))
     {
