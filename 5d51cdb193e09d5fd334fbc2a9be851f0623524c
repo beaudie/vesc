@@ -85,6 +85,24 @@
       "message": "I just took a look at the spec... the wording here:\n\n \"If the currently bound texture\u0027s internal format is one of the non-sRGB formats\n    listed below, and if the texture has TEXTURE_FORMAT_SRGB_OVERRIDE_EXT\n    set to the value SRGB, then the effective internal format is overridden\n    to be the sRGB Override Format as listed below\"\n\nANGLE doesn\u0027t have a representation of the effective internal format separate from the internal format. I think we\u0027re doing some serious gymnastics in the back-end to accommodate this limitation.\n\nI\u0027ll see if I have time to fix this. I don\u0027t think we should land further sRGB changes until we fix that.",
       "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7da721f0_07306659",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-17T21:27:11Z",
+      "side": 1,
+      "message": "not sure i understand jamie. even if we did have a representation, say a mapping between format/type/internal format/effective internal format, we would still need to ensure that for a given internal format, the sRGB effective internal format is supported by the backend. I agree that we dont use the correct GLES spec terminology in ANGLE right now but we are doing the same, functionally speaking, right?",
+      "parentUuid": "7edb9231_7c81ad7c",
+      "revId": "5d51cdb193e09d5fd334fbc2a9be851f0623524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
