@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57f65b57_98003f00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T17:02:31Z",
+      "side": 1,
+      "message": "PTAL. It seems like my version of the OSX toolchain is different from yours. As a separate follow-up it would be good to embed the generated version in the .inc files so we can make this consistent between machines.",
+      "revId": "c212f42986e81909498f17ae704e9203c83f7b14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
