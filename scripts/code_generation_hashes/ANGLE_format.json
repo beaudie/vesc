@@ -10,5 +10,7 @@
   "src/libANGLE/renderer/angle_format_map.json":
     "aa4a0d3463b76858a75787b9cdec8e98",
   "src/libANGLE/renderer/gen_angle_format_table.py":
-    "34ab57bb88958e320f509bd5fbd04495"
+    "0d16a12e082246586b6310012e6b934f",
+  "src/libANGLE/renderer/metal/shaders/format_autogen.h":
+    "1cfdafd41c4ffef8c061db691be8360e"
 }
