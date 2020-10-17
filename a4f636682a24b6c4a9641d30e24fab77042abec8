@@ -16,6 +16,161 @@
       "message": "this might be early but need some eyes",
       "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08ba5510_923f8b32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T13:12:03Z",
+      "side": 1,
+      "message": "This looks all great to me except the driver uniforms. LGTM with suppressions. Also please follow up in the bug or email with details about what is not easily supported on Vulkan.",
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38b20582_eb8c6153",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T13:12:03Z",
+      "side": 1,
+      "message": "usual nit.",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c61533d_1b4f2815",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T13:12:03Z",
+      "side": 1,
+      "message": "I suggest you remove one from the padding and put your new value in here. Otherwise you might be weird problems.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 35
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35c75694_1b1b8488",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T13:12:03Z",
+      "side": 1,
+      "message": "We need more details on this. Can you share your findings here? If we need to support this via a Vulkan/SPIR-V extension we should log that.",
+      "range": {
+        "startLine": 186,
+        "startChar": 3,
+        "endLine": 186,
+        "endChar": 86
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03fbff9b_a0cce014",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T13:12:03Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 212,
+        "startChar": 3,
+        "endLine": 212,
+        "endChar": 93
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0044d2e5_82041e3a",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T13:12:03Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 220,
+        "startChar": 3,
+        "endLine": 220,
+        "endChar": 80
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "900f080e_cb0a6f16",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-17T13:12:03Z",
+      "side": 1,
+      "message": "etc",
+      "range": {
+        "startLine": 235,
+        "startChar": 3,
+        "endLine": 235,
+        "endChar": 72
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
