@@ -44,7 +44,7 @@ bool FormatReinterpretationSupported(const std::vector<GLenum> &optionalSizedFor
 
             VkFormat reinterpretedFormat = checkLinearColorspace
                                                ? vk::ConvertToLinear(vkFormat.vkImageFormat)
-                                               : vk::ConvertToNonLinear(vkFormat.vkImageFormat);
+                                               : vk::ConvertToSRGB(vkFormat.vkImageFormat);
             ASSERT(reinterpretedFormat != VK_FORMAT_UNDEFINED);
 
             constexpr uint32_t kBitsSampleFilter =
