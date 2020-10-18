@@ -1267,7 +1267,11 @@ int TestSuite::run()
     // Run tests serially.
     if (!mBotMode)
     {
-        startWatchdog();
+        if (!angle::IsDebuggerAttached())
+        {
+            startWatchdog();
+        }
+
         int retVal = RUN_ALL_TESTS();
 
         {
