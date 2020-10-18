@@ -52,6 +52,24 @@
       "parentUuid": "96c7e6aa_68f23450",
       "revId": "3a310461310f456db0d885c89cb46820da626c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af5c727e_3f751e74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T16:26:42Z",
+      "side": 1,
+      "message": "anw, it looks like they are not treated as errors but the \"standalone_angle_end2end_tests on Intel GPU on Mac\" runner was red color-ed.",
+      "parentUuid": "d7ae06ce_e38def46",
+      "revId": "3a310461310f456db0d885c89cb46820da626c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
