@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1cded24_dd793693",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T22:52:11Z",
+      "side": 1,
+      "message": "LGTM. I\u0027m wary of adding \"uber-tests\" because they\u0027re hard to debug. It would be better to split this into a parameterized test that can execute and name each format individually. Going to land this though to unblock further work.",
+      "revId": "36f8a6d232ac19a19b2c613f54dfafc01e16bbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
