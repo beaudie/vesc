@@ -70,6 +70,24 @@
       "parentUuid": "d7ae06ce_e38def46",
       "revId": "3a310461310f456db0d885c89cb46820da626c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef7b584_7107f610",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T20:05:48Z",
+      "side": 1,
+      "message": "OK thank you for pointing that out. It\u0027s definitely a bug somewhere. Might be in the test harness. I\u0027ll look - should fix before landing.",
+      "parentUuid": "af5c727e_3f751e74",
+      "revId": "3a310461310f456db0d885c89cb46820da626c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
