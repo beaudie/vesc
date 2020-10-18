@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "197f4000_51ae4aec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 54
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T22:55:31Z",
+      "side": 1,
+      "message": "also it\u0027s time to update the title of this CL. \"phase2\" is not a descriptive name.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "eeccf72a8ea1bf0a80d0cd1ef4b1eaeda96e40db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
