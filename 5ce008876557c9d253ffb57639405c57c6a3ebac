@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "725c6ebe_237deb70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T13:02:49Z",
+      "side": 1,
+      "message": "LGTM - if it\u0027s possible to compile these shaders lazily that would be best. That way you\u0027d only get a bit of jank during program execution instead of a very long load time.",
+      "revId": "5ce008876557c9d253ffb57639405c57c6a3ebac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
