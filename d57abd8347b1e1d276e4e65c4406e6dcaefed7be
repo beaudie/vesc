@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96988a11_88ecbffb",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T10:35:16Z",
+      "side": 1,
+      "message": "I think this piece of code does a bit too much here. Maybe move it to a ContextMtl\u0027s function or mtl::BlendDesc::updateBlend*(const gl::BlendStateExt \u0026blendStateExt)?\nI think it\u0027s better to keep this switch cases\u0027 code small.\n\nAlso, this seems to be duplicated execution. If DIRTY_BIT_BLEND_ENABLED, DIRTY_BIT_BLEND_FUNCS \u0026 DIRTY_BIT_BLEND_EQUATIONS are both set, this code snippet will be executed three times.",
+      "range": {
+        "startLine": 696,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 17
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "364fbcda_6d858b7b",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T10:35:16Z",
+      "side": 1,
+      "message": "If you don\u0027t mind. I would like to wait for integer textures CL https://chromium-review.googlesource.com/c/angle/angle/+/2433329 to be merged first before this CL.\nThat CL added a work-around for clearing mixed type Framebuffer (i.e. containing both float and integer attachments). The work-around has to clear attachments one by one. And this `clearWriteMaskArray` needs to consider that case also.\nSee `FramebufferMtl::clearWithDraw()` in https://chromium-review.googlesource.com/c/angle/angle/+/2433329",
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00a46569_b65ea868",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T10:35:16Z",
+      "side": 1,
+      "message": "nit: glMask? to make it clearer",
+      "range": {
+        "startLine": 163,
+        "startChar": 39,
+        "endLine": 163,
+        "endChar": 43
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be0f6b4_b7a03f98",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T10:35:16Z",
+      "side": 1,
+      "message": "this is cool",
+      "range": {
+        "startLine": 541,
+        "startChar": 16,
+        "endLine": 541,
+        "endChar": 62
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88fb0cec_284d6c19",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T10:35:16Z",
+      "side": 1,
+      "message": "I cached a blendable property inside mtl::RenderPassAttachmentDesc struct in this CL: https://chromium-review.googlesource.com/c/angle/angle/+/2433329/11/src/libANGLE/renderer/metal/mtl_state_cache.mm#750\n\nThis can avoid passing ContextMtl and doing the caps table lookup here.",
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
