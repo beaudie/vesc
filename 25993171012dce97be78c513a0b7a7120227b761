@@ -2273,6 +2273,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "530cf770_28012890",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T22:54:57Z",
+      "side": 1,
+      "message": "Or, if you can\u0027t know the last serial, just add a command that is essentially \"finish everything\".",
+      "parentUuid": "0307f632_ffb1a8fc",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 19
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdc084fa_12247bbe",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
