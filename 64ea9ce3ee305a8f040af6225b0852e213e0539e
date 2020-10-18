@@ -16,6 +16,92 @@
       "message": "PTAL... this is a much simpler change now.",
       "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e06b5ce_8fefdd3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T18:59:24Z",
+      "side": 1,
+      "message": "Thanks, it is better than previous version. There is one issue with missing clang\u0027s \u0027-xc++\u0027 option.",
+      "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4f9d6ee_a6c51543",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T18:59:24Z",
+      "side": 1,
+      "message": "I think you forgot to use this module.",
+      "range": {
+        "startLine": 14,
+        "startChar": 7,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "316561a7_d76ce723",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T18:59:24Z",
+      "side": 1,
+      "message": "this variable is not used anywhere",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 14
+      },
+      "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a3fa145_f4a8cba2",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T18:59:24Z",
+      "side": 1,
+      "message": "I tried to run this script on macOS, it didn\u0027t work unless \u0027-xc++\u0027 option is added together with \u0027-E\u0027.",
+      "range": {
+        "startLine": 121,
+        "startChar": 53,
+        "endLine": 121,
+        "endChar": 58
+      },
+      "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
