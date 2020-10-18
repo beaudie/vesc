@@ -10,6 +10,7 @@
 
 #ifndef SKIP_STD_HEADERS
 #    include <simd/simd.h>
+#    include <metal_pack>
 #    include <metal_stdlib>
 #endif
 
