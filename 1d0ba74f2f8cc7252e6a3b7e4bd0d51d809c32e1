@@ -34,6 +34,24 @@
       "parentUuid": "a60abdd9_8b7b72de",
       "revId": "1d0ba74f2f8cc7252e6a3b7e4bd0d51d809c32e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ef9910e_7171defb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T08:14:07Z",
+      "side": 1,
+      "message": "Yes, I understand that ANGLE format table\u0027s cross-platform access is more important. However, I feel this CL does nothing useful to the `metal/shaders/format_autogen.h` file. Even if later the `gen_mtl_internal_shaders.py ` script is run locally on macOS, it won\u0027t re-generate the shaders because `format_autogen.h` is not a dependency anymore. Apparently, `format_autogen.h` would become an useless file, it would be better to be manually modified than being auto-generated and unnoticed by its intended users (metal default shaders + script).\n\nI have another CL that makes `metal/shaders/format_autogen.h` cross-platform\u0027s accessible here: https://chromium-review.googlesource.com/c/angle/angle/+/2482405\nPTAL, you could keep this CL, I can modify my CL accordingly (but I don\u0027t think this CL is useful for metal), or just discard this CL and use my CL instead.\n\nThanks,",
+      "parentUuid": "45d4b0c3_3501ae6c",
+      "revId": "1d0ba74f2f8cc7252e6a3b7e4bd0d51d809c32e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
