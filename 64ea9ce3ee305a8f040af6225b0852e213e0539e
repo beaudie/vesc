@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3b42f77_cbb50b03",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T20:01:37Z",
+      "side": 1,
+      "message": "Was an intermediate artifact. Removed.",
+      "parentUuid": "f4f9d6ee_a6c51543",
+      "range": {
+        "startLine": 14,
+        "startChar": 7,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "316561a7_d76ce723",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ca254e_0e57a567",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T20:01:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "316561a7_d76ce723",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 14
+      },
+      "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a3fa145_f4a8cba2",
@@ -94,6 +142,30 @@
       "writtenOn": "2020-10-18T18:59:24Z",
       "side": 1,
       "message": "I tried to run this script on macOS, it didn\u0027t work unless \u0027-xc++\u0027 option is added together with \u0027-E\u0027.",
+      "range": {
+        "startLine": 121,
+        "startChar": 53,
+        "endLine": 121,
+        "endChar": 58
+      },
+      "revId": "64ea9ce3ee305a8f040af6225b0852e213e0539e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "904208d3_beed367d",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T20:01:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a3fa145_f4a8cba2",
       "range": {
         "startLine": 121,
         "startChar": 53,
