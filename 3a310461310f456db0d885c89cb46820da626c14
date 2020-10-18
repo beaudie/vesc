@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34a18d1c_5ec29968",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T15:19:57Z",
+      "side": 1,
+      "message": "Why are skipped SwizzleTest become failures now?\nWas something changed in the way angle_end2end_tests work?\n```\nUnexpected Skips:\n* SwizzleIntegerTest.RGB8UI_2D/ES3_Metal\n* SwizzleTest.A32F_2D/ES3_Metal\n* SwizzleTest.A8_2D/ES3_Metal\n* SwizzleTest.CompressedDXT1_RGB_2D/ES3_Metal\n* SwizzleTest.CompressedDXT_2D/ES3_Metal\n* SwizzleTest.D16_2D/ES3_Metal\n* SwizzleTest.D24_2D/ES3_Metal\n* SwizzleTest.D32F_2D/ES3_Metal\n* SwizzleTest.L32F_2D/ES3_Metal\n* SwizzleTest.L8_2D/ES3_Metal\n* SwizzleTest.LA32F_2D/ES3_Metal\n* SwizzleTest.LA8_2D/ES3_Metal\n* SwizzleTest.R32F_2D/ES3_Metal\n* SwizzleTest.R8_2D/ES3_Metal\n* SwizzleTest.RG32F_2D/ES3_Metal\n* SwizzleTest.RG8_2D/ES3_Metal\n* SwizzleTest.RGB10_A2_2D/ES3_Metal\n* SwizzleTest.RGB32F_2D/ES3_Metal\n* SwizzleTest.RGB8_2D/ES3_Metal\n* SwizzleTest.RGBA32F_2D/ES3_Metal\n* SwizzleTest.RGBA8_2D/ES3_Metal\n* SwizzleTest.SubUpdate/ES3_Metal\n```",
+      "revId": "3a310461310f456db0d885c89cb46820da626c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
