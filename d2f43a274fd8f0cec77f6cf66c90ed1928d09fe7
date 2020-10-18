@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c51585ba_5fc6622d",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T15:02:33Z",
+      "side": 1,
+      "message": "nit: can you expose this to the front end in gl::Limitations? Then we could design a check in the front-end to prevent this unexpected error.",
+      "range": {
+        "startLine": 1000,
+        "startChar": 21,
+        "endLine": 1011,
+        "endChar": 21
+      },
+      "revId": "d2f43a274fd8f0cec77f6cf66c90ed1928d09fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44d921b_4de0fe07",
+        "filename": "src/libANGLE/renderer/metal/SamplerMtl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T15:02:33Z",
+      "side": 1,
+      "message": "no need to cache these if they\u0027re the same as the front-end.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "d2f43a274fd8f0cec77f6cf66c90ed1928d09fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
