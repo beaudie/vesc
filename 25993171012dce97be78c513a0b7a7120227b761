@@ -2249,6 +2249,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0307f632_ffb1a8fc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T22:54:22Z",
+      "side": 1,
+      "message": "Can you make that change so we can remove clearAllGarbage as a command?",
+      "parentUuid": "78722989_2eed9395",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 19
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdc084fa_12247bbe",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -3051,6 +3075,30 @@
       "side": 1,
       "message": "Looks like Tobin put it in rx name space to match CommandQueue, RendererVk which we are similar to.",
       "parentUuid": "f95b8468_6a9e2417",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 22
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c51c6042_3f2a9d39",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-18T22:54:22Z",
+      "side": 1,
+      "message": "OK, understood about Tobin\u0027s pattern. It would be a better fit to use vk::. Can you move them?",
+      "parentUuid": "c9b50b1a_f2c00cf7",
       "range": {
         "startLine": 195,
         "startChar": 6,
