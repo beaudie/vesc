@@ -34,6 +34,24 @@
       "parentUuid": "34a18d1c_5ec29968",
       "revId": "3a310461310f456db0d885c89cb46820da626c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7ae06ce_e38def46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-18T16:01:28Z",
+      "side": 1,
+      "message": "It happened in next CL: https://ci.chromium.org/p/chromium/builders/try/mac-angle-rel/11263?\n\nThis CL is just rebased so CQ dry-run won\u0027t run.",
+      "parentUuid": "96c7e6aa_68f23450",
+      "revId": "3a310461310f456db0d885c89cb46820da626c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
