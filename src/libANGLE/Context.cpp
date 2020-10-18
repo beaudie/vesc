@@ -3152,6 +3152,7 @@ Extensions Context::generateSupportedExtensions() const
         supportedExtensions.drawBuffersIndexedEXT    = false;
         supportedExtensions.drawBuffersIndexedOES    = false;
         supportedExtensions.eglImageArray            = false;
+        supportedExtensions.textureSRGBOverride      = false;
 
         // Requires glCompressedTexImage3D
         supportedExtensions.textureCompressionASTCOES = false;
