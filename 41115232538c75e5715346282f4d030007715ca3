@@ -157,6 +157,30 @@
       },
       "revId": "41115232538c75e5715346282f4d030007715ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f3aacf6_071ce4f9",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-10-19T08:02:19Z",
+      "side": 1,
+      "message": "Ack. Could you leave a comment here to explain why you make such decision?",
+      "parentUuid": "76ebbd5a_fea68f9d",
+      "range": {
+        "startLine": 188,
+        "startChar": 27,
+        "endLine": 188,
+        "endChar": 29
+      },
+      "revId": "41115232538c75e5715346282f4d030007715ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

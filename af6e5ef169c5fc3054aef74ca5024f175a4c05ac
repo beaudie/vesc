@@ -16,6 +16,24 @@
       "message": "Thank you for your review. If there is no other comments, I will add more test cases and split it into some CLs.",
       "revId": "af6e5ef169c5fc3054aef74ca5024f175a4c05ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c00a506_c4bfbcdc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-10-19T08:02:19Z",
+      "side": 1,
+      "message": "It\u0027s fine. Thanks!",
+      "parentUuid": "7abf8799_5229b1b9",
+      "revId": "af6e5ef169c5fc3054aef74ca5024f175a4c05ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
