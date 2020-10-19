@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "878a56d1_2155240e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-19T21:53:06Z",
+      "side": 1,
+      "message": "Does that means line 475 can change to \n    const bool isMidRenderPassClear \u003d contextVk-\u003ehasStartedRenderPassWithCommands();\nI am wondering if there is other recent changes ensured that or there is another simplification opportunity here. Or that could only possible if mDeferredClears.any() returns true? Since the bots are all green, not hitting assertion, I am wondering line 475 can just simplified.",
+      "parentUuid": "5bb2a943_a78f67ee",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 539,
+        "endChar": 55
+      },
+      "revId": "ce13d7044be94562a780605345fe9bfe014d6bfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd7b3b10_81ab224f",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Hopefully this helps: Here\u0027s the lifetime of a clear:\n\n    glClear()\n    \u003d\u003e Clear is about to happen\n    \u003d\u003e Under some circumstances (like here), the clear is deferred\n       Deferring the clear is done by staging it in the ImageHelper\n    \u003d\u003e Next syncState, the clear is taken out of ImageHelper\u0027s staged updates,\n       and set in mDeferredClears.  Basically mDeferredClears are clears that were\n       **previously deferred** (i.e. staged in the ImageHelper) but now must be\n       applied.\n    \u003d\u003e Here, the code decides that the clear could be even further deferred, i.e.\n       it can be re-deferred.\n\nIn other words, clears are \"staged\" in the ImageHelper, then syncState takes them out into mDeferredClears. This function takes them back from mDeferredClears and stages them in ImageHelper again.\n\nThe name says exactly what this does, I\u0027m open to suggestions, but this is accurate IMO. I avoided `deferClears()` on purpose, as there are many flag variables with that name around.",
       "parentUuid": "dd7b3b10_81ab224f",
+      "range": {
+        "startLine": 2113,
+        "startChar": 20,
+        "endLine": 2113,
+        "endChar": 33
+      },
+      "revId": "ce13d7044be94562a780605345fe9bfe014d6bfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65531f16_fa2c08c3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-19T21:53:06Z",
+      "side": 1,
+      "message": "Thanks, that sounds good. But again, it will be nice to capture what you described above in the  comment. (Or maybe already had it somewhere that I am not aware of?)",
+      "parentUuid": "4fc59dfa_2a182513",
       "range": {
         "startLine": 2113,
         "startChar": 20,
