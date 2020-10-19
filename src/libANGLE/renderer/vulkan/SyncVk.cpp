@@ -34,7 +34,7 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer)
     renderer->collectGarbageAndReinit(&mUse, &mEvent);
     // TODO: https://issuetracker.google.com/170312581 - Currently just stalling on worker thread
     // here to try and avoid race condition. If this works, need some alternate solution
-    if (renderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
     {
         renderer->waitForCommandProcessorIdle(nullptr);
     }
@@ -56,9 +56,12 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
     ANGLE_VK_TRY(contextVk, event.get().init(device, eventCreateInfo));
     // TODO: https://issuetracker.google.com/170312581 - For now wait for worker thread to finish
     // then get next fence from renderer
-    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    if (contextVk->getRenderer()->getFeatures().commandProcessor.enabled)
     {
-        contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
+        if (contextVk->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
+        {
+            contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
+        }
         ANGLE_TRY(contextVk->getRenderer()->getNextSubmitFence(&mFence, false));
     }
     else
@@ -108,7 +111,7 @@ angle::Result SyncHelper::clientWait(Context *context,
 
     // If we are using worker need to wait for the commands to be issued before waiting on the
     // fence.
-    if (renderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
     {
         renderer->waitForCommandProcessorIdle(contextVk);
     }
@@ -213,14 +216,17 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
 
         retain(&contextVk->getResourceUseList());
 
-        if (renderer->getFeatures().enableCommandProcessingThread.enabled)
+        if (renderer->getFeatures().commandProcessor.enabled)
         {
             CommandProcessorTask oneOffQueueSubmit;
             oneOffQueueSubmit.initOneOffQueueSubmit(VK_NULL_HANDLE, contextVk->getPriority(),
                                                     &fence.get());
             renderer->queueCommand(contextVk, &oneOffQueueSubmit);
             // TODO: https://issuetracker.google.com/170312581 - wait for now
-            renderer->waitForCommandProcessorIdle(contextVk);
+            if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
+            {
+                renderer->waitForCommandProcessorIdle(contextVk);
+            }
         }
         else
         {
