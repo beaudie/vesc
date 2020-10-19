@@ -183,10 +183,10 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
     // TODO: https://issuetracker.google.com/169788986 - can't guarantee hasPendingWork() works when
     // using threaded worker
     if (mQueryHelper.hasPendingWork(contextVk) ||
-        contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+        contextVk->getRenderer()->getFeatures().commandProcessor.enabled)
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
-        if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+        if (contextVk->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
         {
             // TODO: https://issuetracker.google.com/170312581 - For now just stalling here
             contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
@@ -196,7 +196,7 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
         ASSERT(!mQueryHelper.hasPendingWork(contextVk));
     }
 
-    if (!contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    if (!contextVk->getRenderer()->getFeatures().commandProcessor.enabled)
     {
         // If the command buffer this query is being written to is still in flight, its reset
         // command may not have been performed by the GPU yet.  To avoid a race condition in this
