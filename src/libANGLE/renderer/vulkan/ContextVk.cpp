@@ -384,7 +384,8 @@ angle::Result CommandQueue::init(vk::Context *context)
 
 angle::Result CommandQueue::checkCompletedCommands(vk::Context *context)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::checkCompletedCommands");
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::checkCompletedCommandsWithLock");
+    ASSERT(!context->getRenderer()->getFeatures().commandProcessor.enabled);
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
@@ -488,6 +489,7 @@ angle::Result CommandQueue::allocatePrimaryCommandBuffer(vk::Context *context,
 angle::Result CommandQueue::releasePrimaryCommandBuffer(vk::Context *context,
                                                         vk::PrimaryCommandBuffer &&commandBuffer)
 {
+    ASSERT(!context->getRenderer()->getFeatures().commandProcessor.enabled);
     ASSERT(mPrimaryCommandPool.valid());
     ANGLE_TRY(mPrimaryCommandPool.collect(context, std::move(commandBuffer)));
 
@@ -522,7 +524,7 @@ bool CommandQueue::hasInFlightCommands() const
 
 angle::Result CommandQueue::finishToSerial(vk::Context *context, Serial serial, uint64_t timeout)
 {
-    ASSERT(!context->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled);
+    ASSERT(!context->getRenderer()->getFeatures().commandProcessor.enabled);
 
     if (mInFlightCommands.empty())
     {
@@ -571,6 +573,7 @@ angle::Result CommandQueue::submitFrame(vk::Context *context,
                                         vk::PrimaryCommandBuffer &&commandBuffer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::submitFrame");
+    ASSERT(!context->getRenderer()->getFeatures().commandProcessor.enabled);
 
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
@@ -608,7 +611,7 @@ angle::Result CommandQueue::submitFrame(vk::Context *context,
 
 vk::Shared<vk::Fence> CommandQueue::getLastSubmittedFence(const vk::Context *context) const
 {
-    ASSERT(!context->getRenderer()->getFeatures().enableCommandProcessingThread.enabled);
+    ASSERT(!context->getRenderer()->getFeatures().commandProcessor.enabled);
 
     vk::Shared<vk::Fence> fence;
     if (!mInFlightCommands.empty())
@@ -1779,7 +1782,7 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
                                      vk::ResourceUseList *resourceList,
                                      vk::PrimaryCommandBuffer &&commandBuffer)
 {
-    ASSERT(!getRenderer()->getFeatures().enableCommandProcessingThread.enabled);
+    ASSERT(!getRenderer()->getFeatures().commandProcessor.enabled);
 
     if (vk::CommandBufferHelper::kEnableCommandStreamDiagnostics)
     {
@@ -2121,7 +2124,7 @@ void ContextVk::clearAllGarbage()
         garbage.destroy(mRenderer);
     }
     mCurrentGarbage.clear();
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
         // Issue command to CommandProcessor to ensure all work is complete, which will return any
         // garbage items as well.
@@ -2138,7 +2141,7 @@ void ContextVk::handleDeviceLost()
     mOutsideRenderPassCommands->reset();
     mRenderPassCommands->reset();
 
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
         mRenderer->handleDeviceLost();
     }
@@ -3328,7 +3331,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
     ANGLE_TRY(flushImpl(nullptr));
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().asynchronousCommandProcessing.enabled)
     {
         mRenderer->waitForCommandProcessorIdle(this);
     }
@@ -4340,7 +4343,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     // want confirmation.
     waitForSwapchainImageIfNecessary();
 
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
         // Some tasks from ContextVk::submitFrame() that run before CommandQueue::submitFrame()
         gl::RunningGraphWidget *renderPassCount =
@@ -4414,7 +4417,7 @@ angle::Result ContextVk::finishImpl()
 
     ANGLE_TRY(flushImpl(nullptr));
 
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
         ANGLE_TRY(finishToSerial(getLastSubmittedQueueSerial()));
     }
@@ -4463,14 +4466,21 @@ bool ContextVk::isSerialInUse(Serial serial) const
 
 angle::Result ContextVk::checkCompletedCommands()
 {
-    ASSERT(!mRenderer->getFeatures().enableCommandProcessingThread.enabled);
+    if (mRenderer->getFeatures().commandProcessor.enabled)
+    {
+        // finishToSerial will do checkCompletedCommands
+        // TODO: https://issuetracker.google.com/169788986 - overkill to use finishToSerial, just
+        // want to kick off checkCompletedCommands
+        mRenderer->finishToSerial(this, Serial::Infinite());
+        return angle::Result::Continue;
+    }
 
     return mCommandQueue.checkCompletedCommands(this);
 }
 
 angle::Result ContextVk::finishToSerial(Serial serial)
 {
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
         mRenderer->finishToSerial(this, serial);
         return angle::Result::Continue;
@@ -4504,7 +4514,7 @@ angle::Result ContextVk::ensureSubmitFenceInitialized()
 
 angle::Result ContextVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut)
 {
-    ASSERT(!getRenderer()->getFeatures().enableCommandProcessingThread.enabled);
+    ASSERT(!getRenderer()->getFeatures().commandProcessor.enabled);
 
     ANGLE_TRY(ensureSubmitFenceInitialized());
 
@@ -4515,9 +4525,9 @@ angle::Result ContextVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOu
 
 vk::Shared<vk::Fence> ContextVk::getLastSubmittedFence() const
 {
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
-        return mRenderer->getLastSubmittedFence();
+        return mRenderer->getLastSubmittedFence(this);
     }
     return mCommandQueue.getLastSubmittedFence(this);
 }
@@ -4928,7 +4938,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     vk::RenderPass *renderPass = nullptr;
     ANGLE_TRY(mRenderPassCommands->getRenderPassWithOps(this, &renderPass));
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
         mRenderPassCommands->markClosed();
         vk::CommandProcessorTask flushToPrimary;
@@ -5078,7 +5088,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     vk::RenderPass *renderPass = nullptr;
     ANGLE_TRY(mOutsideRenderPassCommands->getRenderPassWithOps(this, &renderPass));
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (mRenderer->getFeatures().commandProcessor.enabled)
     {
         mOutsideRenderPassCommands->markClosed();
         vk::CommandProcessorTask flushToPrimary;
