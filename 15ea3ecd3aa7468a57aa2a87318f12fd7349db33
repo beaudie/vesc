@@ -86,6 +86,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e056b193_df33e305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-19T17:05:25Z",
+      "side": 1,
+      "message": "Ran dEQP-EGL.functional.fence_sync.* passed all 27 on Windows with Vulkan.",
+      "parentUuid": "3665ef9c_78fa91e2",
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79d2d9ea_cbd33ee1",
@@ -99,6 +117,30 @@
       "writtenOn": "2020-10-17T12:12:58Z",
       "side": 1,
       "message": "tiny nit: missing blank line.",
+      "range": {
+        "startLine": 1125,
+        "startChar": 4,
+        "endLine": 1125,
+        "endChar": 5
+      },
+      "revId": "15ea3ecd3aa7468a57aa2a87318f12fd7349db33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75709514_23cd30aa",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-10-19T17:05:25Z",
+      "side": 1,
+      "message": "Ack. Conflict resolved, removed the line and didn\u0027t notice.",
+      "parentUuid": "79d2d9ea_cbd33ee1",
       "range": {
         "startLine": 1125,
         "startChar": 4,
