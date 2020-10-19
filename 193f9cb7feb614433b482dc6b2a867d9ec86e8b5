@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f000859b_22002f34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-10-19T22:21:33Z",
+      "side": 1,
+      "message": "Taking over https://chromium-review.googlesource.com/c/angle/angle/+/2392897 from Geoff for landing.",
+      "revId": "193f9cb7feb614433b482dc6b2a867d9ec86e8b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
