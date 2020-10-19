@@ -317,6 +317,11 @@ struct FeaturesVk : FeatureSetBase
                                        "Enable Android pre-rotation for landscape applications",
                                        &members, "http://anglebug.com/3502"};
 
+    // Emulate Android's pre-rotation support on desktop devices. http://anglebug.com/3502
+    Feature desktopEmulatePreRotateSurfaces = {
+        "desktop_emulated_pre_rotation_surfaces", FeatureCategory::VulkanFeatures,
+        "Emulate Android pre-rotation on desktop", &members, "http://anglebug.com/4901"};
+
     // Cache FramebufferVk objects. Currently hitting a bug on Apple: http://anglebug.com/4442
     Feature enableFramebufferVkCache = {
         "enable_framebuffer_vk_cache", FeatureCategory::VulkanFeatures,

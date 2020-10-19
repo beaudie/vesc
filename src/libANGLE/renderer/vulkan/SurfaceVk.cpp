@@ -475,6 +475,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mDesiredSwapchainPresentMode(VK_PRESENT_MODE_FIFO_KHR),
       mMinImageCount(0),
       mPreTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
+      mDesktopEmulatedTransform(VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR),
+      //      mDesktopEmulatedTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
       mCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR),
       mCurrentSwapHistoryIndex(0),
       mCurrentSwapchainImageIndex(0),
@@ -881,7 +883,18 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
     VkFormat nativeFormat    = format.vkImageFormat;
 
-    gl::Extents rotatedExtents = extents;
+    // The "extents" parameter is the original extents of the surface.  For pre-rotation, we split
+    // this into two different views of the extents:
+    //
+    // - frontEndExtents is what the application and most of ANGLE think the surface extents are
+    //
+    // - swapchainExtents is what the swapchain and other lower-level parts of ANGLE think the
+    //   surface extents are.
+    //
+    // For Android, we potentially swap the width and height of swapchainExtents.  For desktop,
+    // we potentially swap the width and height of frontEndExtents.
+    gl::Extents frontEndExtents  = extents;
+    gl::Extents swapchainExtents = extents;
     if (Is90DegreeRotation(mPreTransform))
     {
         // The Surface is oriented such that its aspect ratio no longer matches that of the
@@ -891,7 +904,12 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         // scissor, and render-pass render area must also be swapped.  Then, when ANGLE rotates
         // gl_Position in the vertex shader, the rendering will look the same as if no
         // pre-rotation had been done.
-        std::swap(rotatedExtents.width, rotatedExtents.height);
+        std::swap(swapchainExtents.width, swapchainExtents.height);
+    }
+    else if (renderer->getFeatures().desktopEmulatePreRotateSurfaces.enabled &&
+             Is90DegreeRotation(mDesktopEmulatedTransform))
+    {
+        std::swap(frontEndExtents.width, frontEndExtents.height);
     }
 
     // We need transfer src for reading back from the backbuffer.
@@ -916,8 +934,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.imageColorSpace          = MapEglColorSpaceToVkColorSpace(
         static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
     // Note: Vulkan doesn't allow 0-width/height swapchains.
-    swapchainInfo.imageExtent.width     = std::max(rotatedExtents.width, 1);
-    swapchainInfo.imageExtent.height    = std::max(rotatedExtents.height, 1);
+    swapchainInfo.imageExtent.width     = std::max(swapchainExtents.width, 1);
+    swapchainInfo.imageExtent.height    = std::max(swapchainExtents.height, 1);
     swapchainInfo.imageArrayLayers      = 1;
     swapchainInfo.imageUsage            = imageUsageFlags;
     swapchainInfo.imageSharingMode      = VK_SHARING_MODE_EXCLUSIVE;
@@ -957,7 +975,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     ANGLE_VK_CHECK(context, samples > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     VkExtent3D vkExtents;
-    gl_vk::GetExtent(rotatedExtents, &vkExtents);
+    gl_vk::GetExtent(swapchainExtents, &vkExtents);
 
     if (samples > 1)
     {
@@ -979,7 +997,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     for (uint32_t imageIndex = 0; imageIndex < imageCount; ++imageIndex)
     {
         SwapchainImage &member = mSwapchainImages[imageIndex];
-        member.image.init2DWeakReference(context, swapchainImages[imageIndex], extents, format, 1);
+        member.image.init2DWeakReference(context, swapchainImages[imageIndex], frontEndExtents,
+                                         format, 1);
         member.imageViews.init(renderer);
     }
 
