@@ -16,6 +16,46 @@
       "message": "PTAL\n\nThe query API isn\u0027t strictly necessary for what I\u0027m trying to achieve here but the init state setting is.  If we feel like the query API is too much of a risk, I can remove it.",
       "revId": "3000f799e06f20c2fc61bd9285fb63aab1c19ebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbb9dbf8_bac995f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-19T16:01:25Z",
+      "side": 1,
+      "message": "Nice stuff.",
+      "revId": "3000f799e06f20c2fc61bd9285fb63aab1c19ebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59e3f650_704e6d0d",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-19T16:01:25Z",
+      "side": 1,
+      "message": "nit: I\u0027d invert this and say allImagesInitialized \u003d true .. then false in the loop",
+      "range": {
+        "startLine": 609,
+        "startChar": 13,
+        "endLine": 609,
+        "endChar": 36
+      },
+      "revId": "3000f799e06f20c2fc61bd9285fb63aab1c19ebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
