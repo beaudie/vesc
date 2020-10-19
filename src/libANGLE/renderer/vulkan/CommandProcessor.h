@@ -27,10 +27,11 @@ class CommandProcessor;
 
 namespace vk
 {
-// CommandProcessorTask is used to queue a task to the worker thread when
-// enableCommandProcessingThread feature is true.
-// Issuing the CustomTask::Exit command will cause the worker thread to clean up it's resources and
-// shut down. This command is sent when the renderer instance shuts down. Custom tasks are:
+// CommandProcessor is used to dispatch work to the GPU when commandProcessor feature is true.
+// If asynchronousCommandProcessing is enabled the work will be queued and handled by an worker
+// thread asynchronous to the context. Issuing the CustomTask::Exit command will cause the worker
+// thread to clean up it's resources and shut down. This command is sent when the renderer instance
+// shuts down. Custom tasks are:
 
 enum CustomTask
 {
@@ -183,12 +184,12 @@ class TaskProcessor : angle::NonCopyable
 
     vk::Shared<vk::Fence> getLastSubmittedFenceWithLock(VkDevice device) const;
 
-    // Check to see which batches have finished completion (forward progress for
-    // mLastCompletedQueueSerial, for example for when the application busy waits on a query
-    // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
+    void handleDeviceLost(vk::Context *context);
+
+    // Called by CommandProcessor to process any completed work
     angle::Result checkCompletedCommands(vk::Context *context);
 
-    void handleDeviceLost(vk::Context *context);
+    VkResult getLastPresentResult(VkSwapchainKHR swapchain);
 
   private:
     angle::Result releaseToCommandBatch(vk::Context *context,
@@ -196,12 +197,24 @@ class TaskProcessor : angle::NonCopyable
                                         vk::CommandPool *commandPool,
                                         vk::CommandBatch *batch);
 
+    // Check to see which batches have finished completion (forward progress for
+    // mLastCompletedQueueSerial, for example for when the application busy waits on a query
+    // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
+    angle::Result checkCompletedCommandsWithLock(vk::Context *context);
+
     vk::GarbageQueue mGarbageQueue;
+
+    mutable std::mutex mInFlightCommandsMutex;
     std::vector<vk::CommandBatch> mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
     vk::PersistentCommandPool mPrimaryCommandPool;
     std::thread::id mThreadId;
+
+    // Track present info
+    std::mutex mSwapchainStatusMutex;
+    std::condition_variable mSwapchainStatusCondition;
+    std::map<VkSwapchainKHR, VkResult> mSwapchainStatus;
 };
 
 class CommandProcessor : public vk::Context
@@ -209,6 +222,8 @@ class CommandProcessor : public vk::Context
   public:
     CommandProcessor(RendererVk *renderer);
     ~CommandProcessor() override;
+
+    angle::Result initTaskProcessor(vk::Context *context);
 
     void handleError(VkResult result,
                      const char *file,
@@ -225,6 +240,11 @@ class CommandProcessor : public vk::Context
     // thread
     void queueCommand(vk::Context *context, vk::CommandProcessorTask *task);
 
+    angle::Result checkCompletedCommands(vk::Context *context)
+    {
+        return mTaskProcessor.checkCompletedCommands(context);
+    }
+
     // Used by main thread to wait for worker thread to complete all outstanding work.
     void waitForWorkComplete(vk::Context *context);
     Serial getCurrentQueueSerial();
@@ -233,7 +253,7 @@ class CommandProcessor : public vk::Context
     // Wait until desired serial has been processed.
     void finishToSerial(vk::Context *context, Serial serial);
 
-    vk::Shared<vk::Fence> getLastSubmittedFence() const;
+    vk::Shared<vk::Fence> getLastSubmittedFence(const vk::Context *context) const;
     void handleDeviceLost();
 
     bool hasPendingError() const
@@ -248,13 +268,18 @@ class CommandProcessor : public vk::Context
 
     void finishAllWork(vk::Context *context);
 
+    VkResult getLastPresentResult(VkSwapchainKHR swapchain)
+    {
+        return mTaskProcessor.getLastPresentResult(swapchain);
+    }
+
   private:
     // Command processor thread, called by processTasks. The loop waits for work to
     // be submitted from a separate thread.
     angle::Result processTasksImpl(bool *exitThread);
 
     // Command processor thread, process a task
-    angle::Result processTask(vk::CommandProcessorTask *task);
+    angle::Result processTask(vk::Context *context, vk::CommandProcessorTask *task);
 
     std::queue<vk::CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
