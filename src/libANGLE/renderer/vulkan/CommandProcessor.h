@@ -27,10 +27,11 @@ class CommandProcessor;
 
 namespace vk
 {
-// CommandProcessorTask is used to queue a task to the worker thread when
-// enableCommandProcessingThread feature is true.
-// Issuing the CustomTask::Exit command will cause the worker thread to clean up it's resources and
-// shut down. This command is sent when the renderer instance shuts down. Custom tasks are:
+// CommandProcessor is used to dispatch work to the GPU when commandProcessor feature is true.
+// If asynchronousCommandProcessing is enabled the work will be queued and handled by an worker
+// thread asynchronous to the context. Issuing the CustomTask::Exit command will cause the worker
+// thread to clean up it's resources and shut down. This command is sent when the renderer instance
+// shuts down. Custom tasks are:
 
 enum CustomTask
 {
@@ -213,6 +214,8 @@ class CommandProcessor : public vk::Context
     CommandProcessor(RendererVk *renderer);
     ~CommandProcessor() override;
 
+    angle::Result initTaskProcessor(vk::Context *context);
+
     void handleError(VkResult result,
                      const char *file,
                      const char *function,
@@ -236,7 +239,7 @@ class CommandProcessor : public vk::Context
     // Wait until desired serial has been processed.
     void finishToSerial(vk::Context *context, Serial serial);
 
-    vk::Shared<vk::Fence> getLastSubmittedFence() const;
+    vk::Shared<vk::Fence> getLastSubmittedFence(const vk::Context *context) const;
     void handleDeviceLost();
 
     bool hasPendingError() const
@@ -257,7 +260,7 @@ class CommandProcessor : public vk::Context
     angle::Result processTasksImpl(bool *exitThread);
 
     // Command processor thread, process a task
-    angle::Result processTask(vk::CommandProcessorTask *task);
+    angle::Result processTask(vk::Context *context, vk::CommandProcessorTask *task);
 
     std::queue<vk::CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
