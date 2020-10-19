@@ -33,6 +33,24 @@
       "message": "Failure was unrelated. The order isn\u0027t deterministic because the time to complete a test is non-deterministic and some batches may finish before others.\n\nWe could make the tests a bit more deterministic by forcing the batches to complete in order. If you can show evidence this would help it\u0027s a fairly easy change to make (basically only spawn a new worker process when the front of the worker process queue is done).",
       "revId": "e3a573811a6a21f95bdc2b312b6cc55a47b17ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6191ef2_b78188e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-19T18:13:06Z",
+      "side": 1,
+      "message": "What I\u0027d like to know is what was test #5091 that failed.\nI\u0027m not sure what\u0027s the best solution.\nPrinting the test list before each shard might slow things down.\nWould making tests deterministic slow things down, too?\n\nCan the watchdog thread or a signal handler detect what tests crashed/hanged and print the names only in case of failure? That would probably be the best.",
+      "parentUuid": "5dee4dc6_f6e46785",
+      "revId": "e3a573811a6a21f95bdc2b312b6cc55a47b17ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
