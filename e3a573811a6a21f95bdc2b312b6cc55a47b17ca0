@@ -51,6 +51,24 @@
       "parentUuid": "5dee4dc6_f6e46785",
       "revId": "e3a573811a6a21f95bdc2b312b6cc55a47b17ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c28174ba_ca96a7e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-19T18:51:48Z",
+      "side": 1,
+      "message": "Just FYI we can\u0027t make the tests actually deterministic because of factors beyond our control (the speed of execution of each test, time of day, weather, etc). We can reduce the variability by forcing an ordering to shard completion. I don\u0027t know how much in practice it would slow things down. I\u0027ll file a bug and try it out.",
+      "parentUuid": "c6191ef2_b78188e8",
+      "revId": "e3a573811a6a21f95bdc2b312b6cc55a47b17ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
