@@ -213,7 +213,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
     }
 
     angle::Result result = contextVk->flushImpl(&mSemaphore);
-    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    if (contextVk->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
     {
         contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
     }
