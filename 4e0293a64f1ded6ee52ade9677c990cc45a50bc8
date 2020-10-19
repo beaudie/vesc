@@ -16,6 +16,23 @@
       "message": "Hey,\n\nI was wondering if you could take a look at this patch to skip a test on Apple DTK?\n\nRegards,\nJonathan",
       "revId": "4e0293a64f1ded6ee52ade9677c990cc45a50bc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bf6ab3d_05e121ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-19T19:14:06Z",
+      "side": 1,
+      "message": "LGTM, make sure angle_end2end_tests run successfully on gpu-fyi-try-mac-arm64-apple-dtk-rel",
+      "revId": "4e0293a64f1ded6ee52ade9677c990cc45a50bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
