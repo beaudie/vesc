@@ -458,6 +458,7 @@ void SwapHistory::destroy(RendererVk *renderer)
 angle::Result SwapHistory::waitFence(ContextVk *contextVk)
 {
     ASSERT(sharedFence.isReferenced());
+    // TODO: This wait needs to be synchronized with worker thread
     ANGLE_VK_TRY(contextVk, sharedFence.get().wait(contextVk->getDevice(),
                                                    std::numeric_limits<uint64_t>::max()));
     return angle::Result::Continue;
@@ -1194,6 +1195,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
         if (swap.sharedFence.isReferenced())
         {
+            // TODO: This wait needs to be sure to happen after work has submitted
             ANGLE_TRY(swap.waitFence(contextVk));
             swap.destroy(renderer);
         }
@@ -1327,13 +1329,10 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
     VkResult result;
-    if (renderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (renderer->getFeatures().commandProcessor.enabled)
     {
         vk::CommandProcessorTask present;
         present.initPresent(contextVk->getPriority(), presentInfo);
-
-        // Make sure everything has been submitted (and errors handled)
-        renderer->waitForCommandProcessorIdle(contextVk);
 
         // Submit queuePresent all by itself (ignoring interference from other threads for now)
         renderer->queueCommand(contextVk, &present);
@@ -1347,15 +1346,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // to have current content.
         result = VK_SUCCESS;
 
-        // wait for the queuePresent to be submitted and intentionally set the context to nullptr so
-        // that we can catch any error. Note this doesn't prevent another context from grabbing the
-        // error. Will be fixed properly in a follow-up as part of present work.
-        renderer->waitForCommandProcessorIdle(nullptr);
-        if (renderer->hasPendingError())
-        {
-            vk::Error error = renderer->getAndClearPendingError();
-            result          = error.mErrorCode;
-        }
+        // TODO: get value back from CommandProcessor somehow?
     }
     else
     {
@@ -1442,6 +1433,35 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 {
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+
+    if (contextVk->getFeatures().commandProcessor.enabled)
+    {
+        VkResult result = contextVk->getRenderer()->getLastPresentResult(mSwapchain);
+
+        // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
+        // continuing.
+        // If VK_SUBOPTIMAL_KHR is returned it's because the device orientation changed and we
+        // should recreate the swapchain with a new window orientation.
+        if (contextVk->getFeatures().enablePreRotateSurfaces.enabled)
+        {
+            // Also check for VK_SUBOPTIMAL_KHR.
+            presentOutOfDate =
+                ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR));
+            if (!presentOutOfDate)
+            {
+                ANGLE_VK_TRY(contextVk, result);
+            }
+        }
+        else
+        {
+            // We aren't quite ready for that so just ignore for now.
+            presentOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
+            if (!presentOutOfDate && result != VK_SUBOPTIMAL_KHR)
+            {
+                ANGLE_VK_TRY(contextVk, result);
+            }
+        }
+    }
 
     ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, presentOutOfDate));
 
