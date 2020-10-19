@@ -16,6 +16,23 @@
       "message": "lgtm\n",
       "revId": "efeb54f36f8e84475920a1fc3ebf3126eee040e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "908e2eda_ccabe691",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-19T16:01:59Z",
+      "side": 1,
+      "message": "LGTM, needs a fix for the commit messages",
+      "revId": "efeb54f36f8e84475920a1fc3ebf3126eee040e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
