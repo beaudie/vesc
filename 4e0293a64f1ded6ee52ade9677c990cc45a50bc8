@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "045749d6_060b100b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1109584
+      },
+      "writtenOn": "2020-10-19T19:04:29Z",
+      "side": 1,
+      "message": "Hey,\n\nI was wondering if you could take a look at this patch to skip a test on Apple DTK?\n\nRegards,\nJonathan",
+      "revId": "4e0293a64f1ded6ee52ade9677c990cc45a50bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
