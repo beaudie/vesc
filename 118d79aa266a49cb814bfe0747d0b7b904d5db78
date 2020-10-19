@@ -16,6 +16,46 @@
       "message": "this might be early but need some eyes",
       "revId": "118d79aa266a49cb814bfe0747d0b7b904d5db78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74810b57_0410b799",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T21:01:27Z",
+      "side": 1,
+      "message": "This can easily break. For example:\n\n    if ((gl_SampleMask[0] |\u003d 0x1234) \u003e 0x5678)\n\nPlease add a unit test based on that. Also, this assumes parent is \u003d, but that\u0027s not necessarily true (could be |\u003d, \u0026\u003d etc). Unit test for this too.\n\nBased on my comment on the first CL in this chain, if ANGLESampleMask is unconditionally used, then this transformation is unnecessary, as the if/else is contained to the last bit that assigns to gl_SampleMask.",
+      "revId": "118d79aa266a49cb814bfe0747d0b7b904d5db78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f2433b4_62e2c58d",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T21:01:27Z",
+      "side": 1,
+      "message": "nit: Not a flag, suggest `numSamplesUniform`.",
+      "range": {
+        "startLine": 30,
+        "startChar": 71,
+        "endLine": 30,
+        "endChar": 86
+      },
+      "revId": "118d79aa266a49cb814bfe0747d0b7b904d5db78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
