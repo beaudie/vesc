@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "374a7e20_04898b1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 57
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-19T23:30:37Z",
+      "side": 1,
+      "message": "Looks like a good big first step.",
+      "revId": "d0664dda0a6cd3b2ff750e94614bc7eab7ab2ef3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa18b24_ef2f51f3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 57
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-19T23:30:37Z",
+      "side": 1,
+      "message": "Since you\u0027re in here and have \u0027renderer\u0027 setup, this can be updated too.",
+      "range": {
+        "startLine": 1369,
+        "startChar": 8,
+        "endLine": 1369,
+        "endChar": 17
+      },
+      "revId": "d0664dda0a6cd3b2ff750e94614bc7eab7ab2ef3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
