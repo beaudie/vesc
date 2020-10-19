@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28fb4248_07370662",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T17:51:47Z",
+      "side": 1,
+      "message": "Only supports float and vecN for now. Will follow up with matN support",
+      "revId": "b22168b8564deafa3b3cda9d82e7e1be786d3810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
