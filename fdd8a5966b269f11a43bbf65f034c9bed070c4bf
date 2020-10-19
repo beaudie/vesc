@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "909a9401_bf717a5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 55
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-19T16:34:06Z",
+      "side": 1,
+      "message": "LGTM - one thing I noticed in Semaphore, otherwise happy to land as-is.",
+      "revId": "fdd8a5966b269f11a43bbf65f034c9bed070c4bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab05193_ac9ad548",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-19T16:34:06Z",
+      "side": 1,
+      "message": "can you add a comment here why you are still waiting on failure? Seems like a failure is a failure and you should exit immediately.",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 18
+      },
+      "revId": "fdd8a5966b269f11a43bbf65f034c9bed070c4bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77164165_5975ee0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-19T16:34:06Z",
+      "side": 1,
+      "message": "non-blocking nit: could be a split CL.",
+      "range": {
+        "startLine": 952,
+        "startChar": 10,
+        "endLine": 952,
+        "endChar": 26
+      },
+      "revId": "fdd8a5966b269f11a43bbf65f034c9bed070c4bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
