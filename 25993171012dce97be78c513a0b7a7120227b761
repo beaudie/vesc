@@ -2295,6 +2295,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77e16e70_e9124aea",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-19T15:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "530cf770_28012890",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 19
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdc084fa_12247bbe",
@@ -3123,6 +3147,30 @@
       "side": 1,
       "message": "OK, understood about Tobin\u0027s pattern. It would be a better fit to use vk::. Can you move them?",
       "parentUuid": "c9b50b1a_f2c00cf7",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 22
+      },
+      "revId": "25993171012dce97be78c513a0b7a7120227b761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f7a24bb_ca5ae2ce",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-19T15:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c51c6042_3f2a9d39",
       "range": {
         "startLine": 195,
         "startChar": 6,
