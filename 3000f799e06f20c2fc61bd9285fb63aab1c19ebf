@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "775fd141_b9ea5623",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-19T15:54:03Z",
+      "side": 1,
+      "message": "PTAL\n\nThe query API isn\u0027t strictly necessary for what I\u0027m trying to achieve here but the init state setting is.  If we feel like the query API is too much of a risk, I can remove it.",
+      "revId": "3000f799e06f20c2fc61bd9285fb63aab1c19ebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
