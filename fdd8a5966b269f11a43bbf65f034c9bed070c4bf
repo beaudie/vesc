@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c87c68d1_788a3250",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-19T19:58:47Z",
+      "side": 1,
+      "message": "I\u0027ll put it back and run a round of tests to see if we hit anything.",
+      "parentUuid": "7c79690f_957da202",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 18
+      },
+      "revId": "fdd8a5966b269f11a43bbf65f034c9bed070c4bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "77164165_5975ee0b",
