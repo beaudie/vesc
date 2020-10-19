@@ -528,6 +528,9 @@ void CommandProcessor::queueCommand(vk::Context *context, vk::CommandProcessorTa
 
         if (context->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
         {
+            WARN() << "Queue: task id: " << task->getTaskSerial().getValue()
+                   << ", cmd: " << task->getTaskCommand()
+                   << ", queue serial: " << task->getQueueSerial().getValue();
             mTasks.emplace(std::move(*task));
             mWorkAvailableCondition.notify_one();
         }
@@ -620,6 +623,9 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
 
 angle::Result CommandProcessor::processTask(vk::Context *context, vk::CommandProcessorTask *task)
 {
+    WARN() << "Process: task id: " << task->getTaskSerial().getValue()
+           << ", cmd: " << task->getTaskCommand()
+           << ", serial: " << task->getQueueSerial().getValue();
     switch (task->getTaskCommand())
     {
         case vk::CustomTask::Exit:
