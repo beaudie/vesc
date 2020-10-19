@@ -502,7 +502,7 @@ void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
 
 void RendererVk::onDestroy()
 {
-    if (getFeatures().enableCommandProcessingThread.enabled)
+    if (getFeatures().commandProcessor.enabled)
     {
         // Shutdown worker thread
         mCommandProcessor.shutdown(&mCommandProcessorThread);
@@ -911,11 +911,19 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     setGlobalDebugAnnotator();
 
-    if (getFeatures().enableCommandProcessingThread.enabled)
+    if (getFeatures().commandProcessor.enabled)
     {
-        mCommandProcessorThread =
-            std::thread(&vk::CommandProcessor::processTasks, &mCommandProcessor);
-        mCommandProcessor.waitForWorkComplete(nullptr);
+        if (getFeatures().asynchronousCommandProcessing.enabled)
+        {
+            ASSERT(getFeatures().commandProcessor.enabled);
+            mCommandProcessorThread =
+                std::thread(&vk::CommandProcessor::processTasks, &mCommandProcessor);
+            mCommandProcessor.waitForWorkComplete(displayVk);
+        }
+        else
+        {
+            ANGLE_TRY(mCommandProcessor.initTaskProcessor(displayVk));
+        }
     }
 
     return angle::Result::Continue;
@@ -1911,7 +1919,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, isNvidia || isAMD || isIntel);
 
     // Currently disabled by default: http://anglebug.com/4324
-    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, commandProcessor, true);
 
     // Currently disabled by default: http://anglebug.com/4324
     ANGLE_FEATURE_CONDITION(&mFeatures, asynchronousCommandProcessing, false);
@@ -2217,7 +2225,7 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
         outputVmaStatString();
     }
 
-    ASSERT(!getFeatures().enableCommandProcessingThread.enabled);
+    ASSERT(!getFeatures().commandProcessor.enabled);
 
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
@@ -2245,14 +2253,18 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             const vk::Fence *fence,
                                             Serial *serialOut)
 {
-    if (getFeatures().enableCommandProcessingThread.enabled)
+    if (getFeatures().commandProcessor.enabled)
     {
         vk::CommandProcessorTask oneOffQueueSubmit;
         oneOffQueueSubmit.initOneOffQueueSubmit(primary.getHandle(), priority, fence);
         queueCommand(context, &oneOffQueueSubmit);
-        waitForCommandProcessorIdle(context);
+        if (getFeatures().asynchronousCommandProcessing.enabled)
+        {
+            waitForCommandProcessorIdle(context);
+        }
         *serialOut = getLastSubmittedQueueSerial();
 
+        // Why do we have cleanupGarbage here but not in else? Shouldn't need it.
         ANGLE_TRY(cleanupGarbage(false));
     }
     else
@@ -2273,7 +2285,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
 {
-    if (getFeatures().enableCommandProcessingThread.enabled)
+    if (getFeatures().asynchronousCommandProcessing.enabled)
     {
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
         waitForCommandProcessorIdle(context);
@@ -2290,7 +2302,7 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 
 angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
-    if (getFeatures().enableCommandProcessingThread.enabled)
+    if (getFeatures().asynchronousCommandProcessing.enabled)
     {
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
         waitForCommandProcessorIdle(context);
@@ -2310,7 +2322,7 @@ VkResult RendererVk::queuePresent(egl::ContextPriority priority,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
 
-    ASSERT(!getFeatures().enableCommandProcessingThread.enabled);
+    ASSERT(!getFeatures().commandProcessor.enabled);
 
     std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
 

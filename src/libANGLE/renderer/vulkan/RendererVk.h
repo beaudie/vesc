@@ -227,9 +227,9 @@ class RendererVk : angle::NonCopyable
         }
     }
 
-    vk::Shared<vk::Fence> getLastSubmittedFence() const
+    vk::Shared<vk::Fence> getLastSubmittedFence(const vk::Context *context) const
     {
-        return mCommandProcessor.getLastSubmittedFence();
+        return mCommandProcessor.getLastSubmittedFence(context);
     }
     void handleDeviceLost() { mCommandProcessor.handleDeviceLost(); }
 
@@ -250,7 +250,7 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE Serial getCurrentQueueSerial()
     {
-        if (getFeatures().enableCommandProcessingThread.enabled)
+        if (getFeatures().commandProcessor.enabled)
         {
             return mCommandProcessor.getCurrentQueueSerial();
         }
@@ -259,7 +259,7 @@ class RendererVk : angle::NonCopyable
     }
     ANGLE_INLINE Serial getLastSubmittedQueueSerial()
     {
-        if (getFeatures().enableCommandProcessingThread.enabled)
+        if (getFeatures().commandProcessor.enabled)
         {
             return mCommandProcessor.getLastSubmittedSerial();
         }
@@ -273,6 +273,11 @@ class RendererVk : angle::NonCopyable
     }
 
     void onCompletedSerial(Serial serial);
+
+    VkResult getLastPresentResult(VkSwapchainKHR swapchain)
+    {
+        return mCommandProcessor.getLastPresentResult(swapchain);
+    }
 
     bool enableDebugUtils() const { return mEnableDebugUtils; }
 
@@ -289,6 +294,7 @@ class RendererVk : angle::NonCopyable
     vk::Error getAndClearPendingError() { return mCommandProcessor.getAndClearPendingError(); }
     void waitForCommandProcessorIdle(vk::Context *context)
     {
+        ASSERT(getFeatures().asynchronousCommandProcessing.enabled);
         mCommandProcessor.waitForWorkComplete(context);
     }
 
