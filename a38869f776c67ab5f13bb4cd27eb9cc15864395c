@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25d33101_245f02db",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-19T19:44:09Z",
+      "side": 1,
+      "message": "Can you add the bug tracking this TODO?",
+      "range": {
+        "startLine": 711,
+        "startChar": 7,
+        "endLine": 711,
+        "endChar": 12
+      },
+      "revId": "a38869f776c67ab5f13bb4cd27eb9cc15864395c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
