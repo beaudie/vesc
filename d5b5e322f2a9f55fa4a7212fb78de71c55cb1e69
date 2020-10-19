@@ -33,6 +33,52 @@
       "message": "Mohan: can you investigate the red bots?",
       "revId": "d5b5e322f2a9f55fa4a7212fb78de71c55cb1e69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b86019bd_92de5be6",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T19:08:36Z",
+      "side": 1,
+      "message": "This is removing the functions from GLSL4. See the very next section (AtomicCounters) about how you can declare the functions to be both part of ESSL and GLSL.",
+      "range": {
+        "startLine": 965,
+        "startChar": 35,
+        "endLine": 965,
+        "endChar": 49
+      },
+      "revId": "d5b5e322f2a9f55fa4a7212fb78de71c55cb1e69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3af2d876_9ed1b067",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T19:08:36Z",
+      "side": 1,
+      "message": "sample is not reserved in GLSL ES 1.0, which is why the WebGL tests fail. Not sure what the deal with dEQP is.",
+      "range": {
+        "startLine": 270,
+        "startChar": 18,
+        "endLine": 270,
+        "endChar": 30
+      },
+      "revId": "d5b5e322f2a9f55fa4a7212fb78de71c55cb1e69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
