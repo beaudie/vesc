@@ -16,6 +16,23 @@
       "message": "Fix looks correct, but I wonder why https://ci.chromium.org/p/chromium/builders/try/win-angle-rel-64/10988 failed.\nI\u0027ve tried to find what test #5091 is comparing with passing https://ci.chromium.org/p/chromium/builders/try/win-angle-rel-64/10990, but the order of tests looked completely different.\n\nIt\u0027s possible that the new test needs to be suppressed on Win Intel.\nAlso possible that the failure is unrelated.\nI wonder why test order seems not to be deterministic.\nThe only change that landed between the 2 builds is https://chromium-review.googlesource.com/c/angle/angle/+/2483464, which I don\u0027t thin should have affected the order.\nAlso consider printing the test filter before running the tests, so that we can have some indication what failed.",
       "revId": "e3a573811a6a21f95bdc2b312b6cc55a47b17ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dee4dc6_f6e46785",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-19T14:59:53Z",
+      "side": 1,
+      "message": "Failure was unrelated. The order isn\u0027t deterministic because the time to complete a test is non-deterministic and some batches may finish before others.\n\nWe could make the tests a bit more deterministic by forcing the batches to complete in order. If you can show evidence this would help it\u0027s a fairly easy change to make (basically only spawn a new worker process when the front of the worker process queue is done).",
+      "revId": "e3a573811a6a21f95bdc2b312b6cc55a47b17ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
