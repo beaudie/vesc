@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f641ed2_2e73cacf",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-19T19:05:48Z",
+      "side": 1,
+      "message": "What are your reasons for using union here? I suggest making this a class with optional private members and getters/setters based on PixelType unless you really need a union.",
+      "range": {
+        "startLine": 407,
+        "startChar": 0,
+        "endLine": 426,
+        "endChar": 2
+      },
+      "revId": "80f868e2717af5a53c1f4cd5026c2086e4915c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
