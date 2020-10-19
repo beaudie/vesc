@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4ab7e3b_f3160aa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-19T11:06:17Z",
+      "side": 1,
+      "message": "Stencil ref values are clamped in Context::stencilFuncSeparate.",
+      "revId": "6b791828db11dce2c1763e2730ccc569e6ac00eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
