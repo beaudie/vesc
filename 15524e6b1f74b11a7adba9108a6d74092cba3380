@@ -33,6 +33,24 @@
       "message": "Is this the same fix?\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2392897",
       "revId": "15524e6b1f74b11a7adba9108a6d74092cba3380",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec2ca540_a37d048c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-10-19T22:38:48Z",
+      "side": 1,
+      "message": "Yes, it\u0027s the same. It looks like the earlier attempt was accidentally dropped. Need to fix the test breakage with this version of the CL.",
+      "parentUuid": "7fac7f49_09bdb666",
+      "revId": "15524e6b1f74b11a7adba9108a6d74092cba3380",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
