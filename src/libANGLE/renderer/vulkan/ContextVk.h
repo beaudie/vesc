@@ -656,7 +656,7 @@ class ContextVk : public ContextImpl, public vk::Context
     // Sync any errors from the command processor
     void commandProcessorSyncErrors();
     // Sync any error from worker thread and queue up next command for processing
-    void commandProcessorSyncErrorsAndQueueCommand(vk::CommandProcessorTask *command);
+    angle::Result commandProcessorSyncErrorsAndQueueCommand(vk::CommandProcessorTask *command);
     // When worker thread completes, it releases command buffers back to context queue
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
 
