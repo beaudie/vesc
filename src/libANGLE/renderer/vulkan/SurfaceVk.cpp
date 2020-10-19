@@ -1327,13 +1327,16 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
     VkResult result;
-    if (renderer->getFeatures().enableCommandProcessingThread.enabled)
+    if (renderer->getFeatures().commandProcessor.enabled)
     {
         vk::CommandProcessorTask present;
         present.initPresent(contextVk->getPriority(), presentInfo);
 
         // Make sure everything has been submitted (and errors handled)
-        renderer->waitForCommandProcessorIdle(contextVk);
+        if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
+        {
+            renderer->waitForCommandProcessorIdle(contextVk);
+        }
 
         // Submit queuePresent all by itself (ignoring interference from other threads for now)
         renderer->queueCommand(contextVk, &present);
@@ -1347,15 +1350,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // to have current content.
         result = VK_SUCCESS;
 
-        // wait for the queuePresent to be submitted and intentionally set the context to nullptr so
-        // that we can catch any error. Note this doesn't prevent another context from grabbing the
-        // error. Will be fixed properly in a follow-up as part of present work.
-        renderer->waitForCommandProcessorIdle(nullptr);
-        if (renderer->hasPendingError())
-        {
-            vk::Error error = renderer->getAndClearPendingError();
-            result          = error.mErrorCode;
-        }
+        // TODO: get value back from CommandProcessor somehow?
     }
     else
     {
