@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7abf8799_5229b1b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-19T07:50:45Z",
+      "side": 1,
+      "message": "Thank you for your review. If there is no other comments, I will add more test cases and split it into some CLs.",
+      "revId": "af6e5ef169c5fc3054aef74ca5024f175a4c05ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

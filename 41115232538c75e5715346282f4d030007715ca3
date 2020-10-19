@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26679117_0b95c145",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-19T07:50:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "502dd671_47add4f7",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "41115232538c75e5715346282f4d030007715ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "364f0a0f_059e1aa4",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a40fb3_07338a03",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-19T07:50:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "364f0a0f_059e1aa4",
+      "range": {
+        "startLine": 210,
+        "startChar": 7,
+        "endLine": 210,
+        "endChar": 25
+      },
+      "revId": "41115232538c75e5715346282f4d030007715ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d53456c5_7775eaa9",
@@ -77,6 +125,30 @@
       "writtenOn": "2020-10-19T01:32:00Z",
       "side": 1,
       "message": "\u003e\u003d",
+      "range": {
+        "startLine": 188,
+        "startChar": 27,
+        "endLine": 188,
+        "endChar": 29
+      },
+      "revId": "41115232538c75e5715346282f4d030007715ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76ebbd5a_fea68f9d",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-19T07:50:45Z",
+      "side": 1,
+      "message": "I only translate uniform block to StructuredBuffer on ES3.0. Because only sampler uses HLSL \"t\" type register, so it is safe that I defined \"kMaxAllowToUseRegisterCount \u003d 60u\" in RecordUniformBlockTranslatedToStructuredBuffer.cpp. In ES3.1, some many object types use \"t\" register, it is difficult for me to define an enough value for kMaxAllowToUseRegisterCount.",
+      "parentUuid": "d53456c5_7775eaa9",
       "range": {
         "startLine": 188,
         "startChar": 27,
