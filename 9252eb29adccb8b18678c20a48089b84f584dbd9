@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28228f80_1ba32ea6",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3636,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-19T19:37:15Z",
+      "side": 1,
+      "message": "nit: comment doesn\u0027t apply anymore",
+      "range": {
+        "startLine": 3635,
+        "startChar": 0,
+        "endLine": 3636,
+        "endChar": 44
+      },
+      "revId": "9252eb29adccb8b18678c20a48089b84f584dbd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
