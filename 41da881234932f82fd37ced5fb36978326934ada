@@ -33,6 +33,46 @@
       "message": "Looks like ImageTest failures I didn\u0027t notice. Will fix.",
       "revId": "41da881234932f82fd37ced5fb36978326934ada",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a9266ad_17e00161",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4116,
+      "author": {
+        "id": 1462757
+      },
+      "writtenOn": "2020-10-19T15:39:52Z",
+      "side": 1,
+      "message": "To clarify: the semantics of activeTexture.srgbDecode here are being changed from:\ntrue -\u003e use linear imageview\nfalse -\u003e use SRGB imageview\n\nto:\ntrue -\u003e use SRGB imageview if format requires it, or use the linear imageview otherwise\nfalse -\u003e use a linear imageview regardless of format\n\nIs this the case?\nIf so, does this have any interactions with sRGB_override?",
+      "revId": "41da881234932f82fd37ced5fb36978326934ada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "925f1162_31de0cf2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2256,
+      "author": {
+        "id": 1462757
+      },
+      "writtenOn": "2020-10-19T15:39:52Z",
+      "side": 1,
+      "message": "nit: clang-format messed up some spaces here\n\"DECODE_EXT.  Table X.1\"\n\"abindless\"",
+      "range": {
+        "startLine": 2252,
+        "startChar": 7,
+        "endLine": 2256,
+        "endChar": 88
+      },
+      "revId": "41da881234932f82fd37ced5fb36978326934ada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
