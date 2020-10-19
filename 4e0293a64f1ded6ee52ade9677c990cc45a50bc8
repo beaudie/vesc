@@ -50,6 +50,23 @@
       "message": "It looks like the trybot has permission errors currently:\n\nError 403: user \"chromium-try-gpu-builder@chops-service-accounts.iam.gserviceaccount.com\" does not have permission \"swarming.pools.createTask\"\n\nAny thoughts?",
       "revId": "4e0293a64f1ded6ee52ade9677c990cc45a50bc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b918fd_fd3f33ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-19T20:34:25Z",
+      "side": 1,
+      "message": "Landing as-is, I filed a bug for the trybot: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1140194",
+      "revId": "4e0293a64f1ded6ee52ade9677c990cc45a50bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
