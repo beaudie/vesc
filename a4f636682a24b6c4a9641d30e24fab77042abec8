@@ -83,6 +83,76 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f6f905c_88687321",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T20:35:58Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "9c61533d_1b4f2815",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 35
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed4c0b77_69c7ac10",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T20:35:58Z",
+      "side": 1,
+      "message": "typo: spec",
+      "range": {
+        "startLine": 224,
+        "startChar": 23,
+        "endLine": 224,
+        "endChar": 28
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e828b05e_75636e1b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T20:35:58Z",
+      "side": 1,
+      "message": "typo: remove to",
+      "range": {
+        "startLine": 224,
+        "startChar": 80,
+        "endLine": 224,
+        "endChar": 83
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35c75694_1b1b8488",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 1
@@ -99,6 +169,29 @@
         "startChar": 3,
         "endLine": 186,
         "endChar": 86
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c846e699_524e00df",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T20:35:58Z",
+      "side": 1,
+      "message": "Please use wildcards to reduce the clutter (comment applies to all the added sections in this file)",
+      "range": {
+        "startLine": 187,
+        "startChar": 109,
+        "endLine": 187,
+        "endChar": 118
       },
       "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -169,6 +262,23 @@
         "endLine": 235,
         "endChar": 72
       },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "908b61b4_da4c3653",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-19T20:35:58Z",
+      "side": 1,
+      "message": "Why is this AMD-only?",
       "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
