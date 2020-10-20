@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f52394c_c72deef0",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T23:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa3b0878_599423f8",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "3f0bdc8e81535ebe3b1c6e7c39f6d778bc2767f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac371db3_f8525738",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2a636b9_42047fd4",
+        "filename": "src/compiler/translator/ExtensionBehavior.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T23:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac371db3_f8525738",
+      "range": {
+        "startLine": 45,
+        "startChar": 7,
+        "endLine": 45,
+        "endChar": 43
+      },
+      "revId": "3f0bdc8e81535ebe3b1c6e7c39f6d778bc2767f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f9e9015_d1ee6488",
@@ -77,6 +125,30 @@
       "writtenOn": "2020-10-20T23:00:48Z",
       "side": 1,
       "message": "nit: can we re-sort these fields alphabetically?",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 40
+      },
+      "revId": "3f0bdc8e81535ebe3b1c6e7c39f6d778bc2767f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04446fb6_82f77108",
+        "filename": "src/compiler/translator/ExtensionBehavior.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T23:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f9e9015_d1ee6488",
       "range": {
         "startLine": 51,
         "startChar": 4,
