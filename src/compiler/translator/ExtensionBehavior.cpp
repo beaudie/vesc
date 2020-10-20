@@ -41,7 +41,8 @@
     OP(APPLE_clip_distance)                         \
     OP(OES_texture_cube_map_array)                  \
     OP(EXT_texture_cube_map_array)                  \
-    OP(EXT_shadow_samplers)
+    OP(EXT_shadow_samplers)                         \
+    OP(OES_shader_multisample_interpolation)
 
 namespace sh
 {
