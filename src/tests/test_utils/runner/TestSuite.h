@@ -6,6 +6,9 @@
 // TestSuite:
 //   Basic implementation of a test harness in ANGLE.
 
+#ifndef ANGLE_TESTS_TEST_UTILS_TEST_SUITE_H_
+#define ANGLE_TESTS_TEST_UTILS_TEST_SUITE_H_
+
 #include <map>
 #include <memory>
 #include <mutex>
@@ -13,6 +16,7 @@
 #include <string>
 #include <thread>
 
+#include "HistogramWriter.h"
 #include "util/test_utils.h"
 
 namespace angle
@@ -121,6 +125,12 @@ class TestSuite
 
     int run();
     void onCrashOrTimeout(TestResultType crashOrTimeout);
+    void addHistogramSample(const std::string &measurement,
+                            const std::string &story,
+                            double value,
+                            const std::string &units);
+
+    static TestSuite *GetInstance() { return mInstance; }
 
   private:
     bool parseSingleArg(const char *argument);
@@ -128,6 +138,8 @@ class TestSuite
     bool finishProcess(ProcessInfo *processInfo);
     int printFailuresAndReturnCount() const;
     void startWatchdog();
+
+    static TestSuite *mInstance;
 
     std::string mTestExecutableName;
     std::string mTestSuiteName;
@@ -157,7 +169,10 @@ class TestSuite
     std::map<TestIdentifier, FileLine> mTestFileLines;
     std::vector<ProcessInfo> mCurrentProcesses;
     std::thread mWatchdogThread;
+    HistogramWriter mHistogramWriter;
 };
 
 bool GetTestResultsFromFile(const char *fileName, TestResults *resultsOut);
 }  // namespace angle
+
+#endif  // ANGLE_TESTS_TEST_UTILS_TEST_SUITE_H_

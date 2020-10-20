@@ -10,10 +10,12 @@
 #include "ANGLEPerfTest.h"
 
 #include "ANGLEPerfTestArgs.h"
+#include "anglebase/no_destructor.h"
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
 #include "common/utilities.h"
+#include "test_utils/runner/TestSuite.h"
 #include "third_party/perf/perf_test.h"
 #include "third_party/trace_event/trace_event.h"
 #include "util/shader_utils.h"
@@ -359,6 +361,11 @@ double ANGLEPerfTest::printResults()
         printf("Ran %0.2lf iterations per second\n", fps);
     }
 
+    // Output histogram JSON set format if enabled.
+    double secondsPerStep      = elapsedTimeSeconds[0] / static_cast<double>(mNumStepsPerformed);
+    double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
+    TestSuite::GetInstance()->addHistogramSample(
+        mName + mBackend, mStory, secondsPerIteration * kMilliSecondsPerSecond, "ms");
     return retValue;
 }
 

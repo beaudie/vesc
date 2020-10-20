@@ -31,6 +31,8 @@ inline bool OneFrame()
 {
     return gStepsToRunOverride == 1;
 }
+
+void AddPerfTestEnvironment();
 }  // namespace angle
 
 #endif  // TESTS_PERF_TESTS_ANGLE_PERF_TEST_ARGS_H_
