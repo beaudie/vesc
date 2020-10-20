@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7de1ba39_56fde166",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-20T17:33:47Z",
+      "side": 1,
+      "message": "Thanks for sharing this Jamie.  I tried it out locally and it didn\u0027t impact overall compile time.  I think goma is doing all linking locally, so whether it is all at once, or one at a time, linking the traces is expensive.  This was a Debug build.\n\nThat being said, even when split out, the shared objects are large (see below), so this is a good direction.  It also is a step towards piecing this out to the device rather than dropping them all at once, so that\u0027s good.\n\n1020K libangle_restricted_trace_angry_birds_2_1500.so\n 1.3M libangle_restricted_trace_arena_of_valor.so\n 3.1M libangle_restricted_trace_asphalt_8.so\n 976K libangle_restricted_trace_avakin_life.so\n 1.4M libangle_restricted_trace_brawl_stars.so\n 1.1M libangle_restricted_trace_candy_crush_500.so\n 322K libangle_restricted_trace_clash_of_clans.so\n 324K libangle_restricted_trace_clash_royale.so\n 2.4M libangle_restricted_trace_cod_mobile.so\n 671K libangle_restricted_trace_dragon_ball_legends.so\n 2.8M libangle_restricted_trace_efootball_pes_2021.so\n 5.2M libangle_restricted_trace_egypt_1500.so\n 696K libangle_restricted_trace_extreme_car_driving_simulator.so\n 616K libangle_restricted_trace_fate_grand_order.so\n 5.4M libangle_restricted_trace_fifa_mobile.so\n 3.4M libangle_restricted_trace_free_fire.so\n 2.8M libangle_restricted_trace_gta_san_andreas.so\n 534K libangle_restricted_trace_idle_heroes.so\n 512K libangle_restricted_trace_junes_journey.so\n 1.7M libangle_restricted_trace_kartrider_rush.so\n  11M libangle_restricted_trace_lego_legacy.so\n 421K libangle_restricted_trace_loader.so\n 5.2M libangle_restricted_trace_manhattan_10.so\n 1.4M libangle_restricted_trace_marvel_contest_of_champions.so\n 1.2M libangle_restricted_trace_mobile_legends.so\n 8.4M libangle_restricted_trace_nba2k20_800.so\n 1.6M libangle_restricted_trace_ragnarok_m_external_love.so\n 3.0M libangle_restricted_trace_saint_seiya_awakening.so\n 228K libangle_restricted_traces.so\n 394K libangle_restricted_trace_temple_run_300.so\n 3.0M libangle_restricted_trace_trex_200.so\n 674K libangle_restricted_trace_world_cricket_championship_2.so\n 1.8M libangle_restricted_trace_world_of_tanks_blitz.so\n 1.6M libangle_restricted_trace_world_war_doh.so\n\n",
+      "revId": "9cb1f628033d517feea050fbb02c681495a4fe68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b8bd2fe_f0d6522f",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-20T17:33:47Z",
+      "side": 1,
+      "message": "This is a bit of a problem.  Most of the traces now don\u0027t include start frame in their label.  I patched this to the following to get it to work.  We should either automate it, move to include the start frame (whatever it ends up being) in the label (which might be trivial), or move to replay all traces as frame 1 instead of the real frame.\n\nif trace \u003d\u003d \"angry_birds_2_1500\":\n    return 1500\nelif trace \u003d\u003d \"arena_of_valor\":\n    return 8472\nelif trace \u003d\u003d \"asphalt_8\":\n    return 983\nelif trace \u003d\u003d \"brawl_stars\":\n    return 1527\nelif trace \u003d\u003d \"candy_crush_500\":\n    return 500\nelif trace \u003d\u003d \"cod_mobile\":\n    return 1843\nelif trace \u003d\u003d \"clash_of_clans\":\n    return 11827\nelif trace \u003d\u003d \"egypt_1500\":\n    return 1500\nelif trace \u003d\u003d \"free_fire\":\n    return 1487\nelif trace \u003d\u003d \"lego_legacy\":\n    return 882\nelif trace \u003d\u003d \"manhattan_10\":\n    return 10\nelif trace \u003d\u003d \"mobile_legends\":\n    return 5292\nelif trace \u003d\u003d \"nba2k20_800\":\n    return 800\nelif trace \u003d\u003d \"temple_run_300\":\n    return 300\nelif trace \u003d\u003d \"trex_200\":\n    return 200\nelif trace \u003d\u003d \"idle_heroes\":\n    return 11293\nelif trace \u003d\u003d \"fifa_mobile\":\n    return 1146\nelif trace \u003d\u003d \"world_war_doh\":\n    return 1493\nelif trace \u003d\u003d \"saint_seiya_awakening\":\n    return 1404\nelif trace \u003d\u003d \"efootball_pes_2021\":\n    return 9066\nelif trace \u003d\u003d \"kartrider_rush\":\n    return 14518\nelif trace \u003d\u003d \"world_of_tanks_blitz\":\n    return 1580\nelif trace \u003d\u003d \"marvel_contest_of_champions\":\n    return 6399\nelif trace \u003d\u003d \"extreme_car_driving_simulator\":\n    return 2134\nelif trace \u003d\u003d \"clash_royale\":\n    return 3293\nelif trace \u003d\u003d \"avakin_life\":\n    return 3986\nelif trace \u003d\u003d \"fate_grand_order\":\n    return 6378\nelif trace \u003d\u003d \"ragnarok_m_external_love\":\n    return 7933\nelif trace \u003d\u003d \"junes_journey\":\n    return 4401\nelif trace \u003d\u003d \"dragon_ball_legends\":\n    return 9773\nelif trace \u003d\u003d \"world_cricket_championship_2\":\n    return 3088\nelif trace \u003d\u003d \"gta_san_andreas\":\n    return 1642\nelse:\n    raise Exception(\u0027Unknown trace: \u0027 + trace)",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 297,
+        "endChar": 54
+      },
+      "revId": "9cb1f628033d517feea050fbb02c681495a4fe68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
