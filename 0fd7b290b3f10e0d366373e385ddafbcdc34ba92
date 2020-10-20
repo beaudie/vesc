@@ -16,6 +16,24 @@
       "message": "Good fix. Can we make replays cross-compatible? Can we ensure a GLsync in a replay stream is consistent no matter what arch recorded / played back?",
       "revId": "0fd7b290b3f10e0d366373e385ddafbcdc34ba92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6e69226_2da39d55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-20T02:59:19Z",
+      "side": 1,
+      "message": "I think this solution will work for 32 and 64 unless we end up with more than MAX_UINT glSyncs.",
+      "parentUuid": "a9938591_2a26051a",
+      "revId": "0fd7b290b3f10e0d366373e385ddafbcdc34ba92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
