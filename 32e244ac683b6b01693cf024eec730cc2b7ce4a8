@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21a858c9_3fc23b24",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6005,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T18:57:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6e61bc4_6c51b2da",
+      "revId": "32e244ac683b6b01693cf024eec730cc2b7ce4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11b22717_38073d6c",
@@ -48,6 +66,30 @@
       "writtenOn": "2020-10-19T20:11:24Z",
       "side": 1,
       "message": "Please use an anonymous function at the top of the file instead.",
+      "range": {
+        "startLine": 6025,
+        "startChar": 0,
+        "endLine": 6037,
+        "endChar": 14
+      },
+      "revId": "32e244ac683b6b01693cf024eec730cc2b7ce4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bef2fb51_c05cd3a6",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6037,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T18:57:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11b22717_38073d6c",
       "range": {
         "startLine": 6025,
         "startChar": 0,
@@ -98,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbb8bd00_da686eda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T18:57:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12ec8d63_76578b55",
+      "revId": "32e244ac683b6b01693cf024eec730cc2b7ce4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a8e8a17_f42fb8d7",
@@ -121,6 +181,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dce211af_98b8c48f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T18:57:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a8e8a17_f42fb8d7",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 77
+      },
+      "revId": "32e244ac683b6b01693cf024eec730cc2b7ce4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b27a3ddf_8a04420d",
@@ -134,6 +218,30 @@
       "writtenOn": "2020-10-19T20:11:24Z",
       "side": 1,
       "message": "No need for removing 1/ULP: `mNativeCaps.maxInterpolationOffset \u003e\u003d 0.5` is sufficient. The Vulkan spec\u0027s minimum limit being 0.5-1/ULP is not an indication that maxInterpolationOffset has an extra 1/ULP in it.",
+      "range": {
+        "startLine": 240,
+        "startChar": 8,
+        "endLine": 242,
+        "endChar": 12
+      },
+      "revId": "32e244ac683b6b01693cf024eec730cc2b7ce4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7861c052_50f9f83b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T18:57:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b27a3ddf_8a04420d",
       "range": {
         "startLine": 240,
         "startChar": 8,
