@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64088bc0_a57b0a8a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-20T03:21:42Z",
+      "side": 1,
+      "message": "Yes. \"friendly\" names make it harder to read the SPIR-V and I\u0027ve been meaning to make this change for a long while now.",
+      "parentUuid": "29d5d475_403453c1",
+      "range": {
+        "startLine": 970,
+        "startChar": 58,
+        "endLine": 970,
+        "endChar": 60
+      },
+      "revId": "2bdcb74225f1a0f6ba39f6bc8267d41c385eef21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e38139a_bbe777e7",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-10-20T03:01:12Z",
       "side": 1,
       "message": "These initializations are redundant, getCurrentInstruction() always sets it.",
+      "range": {
+        "startLine": 1278,
+        "startChar": 4,
+        "endLine": 1279,
+        "endChar": 36
+      },
+      "revId": "2bdcb74225f1a0f6ba39f6bc8267d41c385eef21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "def44911_94de4cbc",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-20T03:21:42Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "4e38139a_bbe777e7",
       "range": {
         "startLine": 1278,
         "startChar": 4,
