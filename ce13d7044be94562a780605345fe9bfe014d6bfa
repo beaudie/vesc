@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f073c01e_f289fa36",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-20T03:19:40Z",
+      "side": 1,
+      "message": "That sounds reasonable. I can turn that into an ASSERT. There\u0027s nothing special about `mDeferredClears.any()` w.r.t the render pass.",
+      "parentUuid": "878a56d1_2155240e",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 539,
+        "endChar": 55
+      },
+      "revId": "ce13d7044be94562a780605345fe9bfe014d6bfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd7b3b10_81ab224f",
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Thanks, that sounds good. But again, it will be nice to capture what you described above in the  comment. (Or maybe already had it somewhere that I am not aware of?)",
       "parentUuid": "4fc59dfa_2a182513",
+      "range": {
+        "startLine": 2113,
+        "startChar": 20,
+        "endLine": 2113,
+        "endChar": 33
+      },
+      "revId": "ce13d7044be94562a780605345fe9bfe014d6bfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12c92d74_6a5d10fe",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-20T03:19:40Z",
+      "side": 1,
+      "message": "This should really be a doc file as the feature is a little intrusive. I wrote one up.",
+      "parentUuid": "65531f16_fa2c08c3",
       "range": {
         "startLine": 2113,
         "startChar": 20,
