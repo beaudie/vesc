@@ -2258,6 +2258,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
         queueCommand(context, &oneOffQueueSubmit);
         if (getFeatures().asynchronousCommandProcessing.enabled)
         {
+            ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueSubmitOneOff");
             waitForCommandProcessorIdle(context);
         }
         *serialOut = getLastSubmittedQueueSerial();
@@ -2285,6 +2286,7 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 {
     if (getFeatures().asynchronousCommandProcessing.enabled)
     {
+        ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueWaitIdle");
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
         waitForCommandProcessorIdle(context);
     }
@@ -2302,6 +2304,7 @@ angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
     if (getFeatures().asynchronousCommandProcessing.enabled)
     {
+        ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::deviceWaitIdle");
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
         waitForCommandProcessorIdle(context);
     }
@@ -2467,6 +2470,7 @@ void RendererVk::onCompletedSerial(Serial serial)
     if (serial > mLastCompletedQueueSerial)
     {
         mLastCompletedQueueSerial = serial;
+        WARN() << "mLastCompletedQueueSerial: " << mLastCompletedQueueSerial.getValue();
     }
 }
 

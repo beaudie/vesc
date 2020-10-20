@@ -558,6 +558,8 @@ void CommandProcessor::queueCommand(vk::Context *context, vk::CommandProcessorTa
         task->setQueueSerial(queueSerial);
         mCommandProcessorLastSubmittedSerial = mCommandProcessorCurrentQueueSerial;
         mCommandProcessorCurrentQueueSerial  = mQueueSerialFactory.generate();
+        WARN() << "mCommandProcessorCurrentQueueSerial: "
+               << mCommandProcessorCurrentQueueSerial.getValue();
 
         task->getResourceUseList().releaseResourceUsesAndUpdateSerials(queueSerial);
     }

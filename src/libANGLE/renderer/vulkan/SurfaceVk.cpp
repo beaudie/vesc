@@ -1334,6 +1334,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         vk::CommandProcessorTask present;
         present.initPresent(contextVk->getPriority(), presentInfo);
 
+        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::presentA");
         // Submit queuePresent all by itself (ignoring interference from other threads for now)
         renderer->queueCommand(contextVk, &present);
         // TODO: https://issuetracker.google.com/issues/170329600 - Just stalling here for now, but
@@ -1345,8 +1346,6 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // That will likely require serializing access to the WindowSurfaceVk object in order
         // to have current content.
         result = VK_SUCCESS;
-
-        // TODO: get value back from CommandProcessor somehow?
     }
     else
     {
