@@ -16,6 +16,69 @@
       "message": "Mechanical change to make the next change simpler",
       "revId": "2bdcb74225f1a0f6ba39f6bc8267d41c385eef21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2a0b6e9_93c45968",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-20T03:01:12Z",
+      "side": 1,
+      "message": "LGTM with minor comment",
+      "revId": "2bdcb74225f1a0f6ba39f6bc8267d41c385eef21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29d5d475_403453c1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-20T03:01:12Z",
+      "side": 1,
+      "message": "Is this change intended?",
+      "range": {
+        "startLine": 970,
+        "startChar": 58,
+        "endLine": 970,
+        "endChar": 60
+      },
+      "revId": "2bdcb74225f1a0f6ba39f6bc8267d41c385eef21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e38139a_bbe777e7",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-20T03:01:12Z",
+      "side": 1,
+      "message": "These initializations are redundant, getCurrentInstruction() always sets it.",
+      "range": {
+        "startLine": 1278,
+        "startChar": 4,
+        "endLine": 1279,
+        "endChar": 36
+      },
+      "revId": "2bdcb74225f1a0f6ba39f6bc8267d41c385eef21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
