@@ -187,6 +187,7 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
         ANGLE_TRY(contextVk->flushImpl(nullptr));
         if (contextVk->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
         {
+            ANGLE_TRACE_EVENT0("gpu.angle", "QueryVk::getResult");
             // TODO: https://issuetracker.google.com/170312581 - For now just stalling here
             contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
         }

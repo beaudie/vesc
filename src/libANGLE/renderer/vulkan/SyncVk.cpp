@@ -36,6 +36,7 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer)
     // here to try and avoid race condition. If this works, need some alternate solution
     if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
     {
+        ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelper::releaseToRenderer");
         renderer->waitForCommandProcessorIdle(nullptr);
     }
     mFence.reset(renderer->getDevice());
@@ -100,6 +101,7 @@ angle::Result SyncHelper::clientWait(Context *context,
     // fence.
     if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
     {
+        ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelper::clientWait");
         renderer->waitForCommandProcessorIdle(contextVk);
     }
 
@@ -212,6 +214,7 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
             // TODO: https://issuetracker.google.com/170312581 - wait for now
             if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
             {
+                ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::initializeWithFd");
                 renderer->waitForCommandProcessorIdle(contextVk);
             }
         }
@@ -288,6 +291,7 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     // fence.
     if (contextVk->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
     {
+        ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::clientWait");
         contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
     }
 
