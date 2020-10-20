@@ -139,6 +139,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b9d0eeee_3b8125d0",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-20T13:22:31Z",
+      "side": 1,
+      "message": "Makes sense.\nTests appear okay as well.",
+      "parentUuid": "bfe01f48_49b640a5",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 18
+      },
+      "revId": "fdd8a5966b269f11a43bbf65f034c9bed070c4bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "77164165_5975ee0b",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 55
