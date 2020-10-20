@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db9b9a2c_c4b0f0f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-20T20:37:54Z",
+      "side": 1,
+      "message": "There seem to be a couple of potentially unrelated changes.\nMinor changes, but curious how they relate.",
+      "revId": "a9f7f194e518a306a94cd82258195835c9d6692d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "160cef4f_100ba411",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-20T20:37:54Z",
+      "side": 1,
+      "message": "Unrelated change?",
+      "revId": "a9f7f194e518a306a94cd82258195835c9d6692d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1dfb69d_5c41c252",
