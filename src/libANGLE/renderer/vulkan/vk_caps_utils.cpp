@@ -274,6 +274,26 @@ void RendererVk::ensureCapsInitialized() const
     // the SampleRateShading capability
     mNativeExtensions.sampleShadingOES = (mPhysicalDeviceFeatures.sampleRateShading == VK_TRUE);
 
+    mNativeCaps.minInterpolationOffset          = limitsVk.minInterpolationOffset;
+    mNativeCaps.maxInterpolationOffset          = limitsVk.maxInterpolationOffset;
+    mNativeCaps.subPixelInterpolationOffsetBits = limitsVk.subPixelInterpolationOffsetBits;
+
+    // From the Vulkan spec:
+    //
+    // > The values minInterpolationOffset and maxInterpolationOffset describe the closed interval
+    // > of supported interpolation offsets : [ minInterpolationOffset, maxInterpolationOffset ].
+    // > The ULP is determined by subPixelInterpolationOffsetBits. If
+    // > subPixelInterpolationOffsetBits is 4, this provides increments of(1 / 2^4) = 0.0625, and
+    // > thus the range of supported interpolation offsets would be[-0.5, 0.4375]
+    //
+    // OES_shader_multisample_interpolation requires a maximum value of -0.5 for
+    // MIN_FRAGMENT_INTERPOLATION_OFFSET_OES and minimum 0.5 for
+    // MAX_FRAGMENT_INTERPOLATION_OFFSET_OES.  Vulkan has an identical limit for
+    // minInterpolationOffset, but it's limit for maxInterpolationOffset is 0.5-(1/ULP).
+    // OES_shader_multisample_interpolation is therefore only supported if
+    // maxInterpolationOffset is at least 0.5.
+    mNativeExtensions.multisampleInterpolationOES = (mNativeCaps.maxInterpolationOffset >= 0.5);
+
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize = LimitToInt(limitsVk.maxImageDimension3D);
