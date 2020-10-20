@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3b0ab12_ce1e1f3c",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-20T02:14:05Z",
+      "side": 1,
+      "message": "Does this remove the robust init of renderbuffers?!",
+      "range": {
+        "startLine": 37,
+        "startChar": 28,
+        "endLine": 37,
+        "endChar": 39
+      },
+      "revId": "3000f799e06f20c2fc61bd9285fb63aab1c19ebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59e3f650_704e6d0d",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 5
@@ -53,6 +76,29 @@
         "startChar": 13,
         "endLine": 609,
         "endChar": 36
+      },
+      "revId": "3000f799e06f20c2fc61bd9285fb63aab1c19ebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b577dc96_84e8297e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-20T02:14:05Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be done only for images in [base, max]? Then changing base/max would also update this.",
+      "range": {
+        "startLine": 610,
+        "startChar": 37,
+        "endLine": 610,
+        "endChar": 48
       },
       "revId": "3000f799e06f20c2fc61bd9285fb63aab1c19ebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
