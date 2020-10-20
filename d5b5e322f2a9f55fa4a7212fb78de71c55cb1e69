@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e59941f1_41c2bc82",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T18:56:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b86019bd_92de5be6",
+      "range": {
+        "startLine": 965,
+        "startChar": 35,
+        "endLine": 965,
+        "endChar": 49
+      },
+      "revId": "d5b5e322f2a9f55fa4a7212fb78de71c55cb1e69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3af2d876_9ed1b067",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-10-19T19:08:36Z",
       "side": 1,
       "message": "sample is not reserved in GLSL ES 1.0, which is why the WebGL tests fail. Not sure what the deal with dEQP is.",
+      "range": {
+        "startLine": 270,
+        "startChar": 18,
+        "endLine": 270,
+        "endChar": 30
+      },
+      "revId": "d5b5e322f2a9f55fa4a7212fb78de71c55cb1e69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "385ade3d_23630f8b",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-20T18:56:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3af2d876_9ed1b067",
       "range": {
         "startLine": 270,
         "startChar": 18,
