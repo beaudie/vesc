@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75bda83d_015cbdac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-20T21:43:30Z",
+      "side": 1,
+      "message": "This is my next step for advancing the code to support threading.\nIf I could get your review / input while I work on the last issue or two that would be great!",
+      "revId": "5463f8fb8f432fab975d4f618fe1cdfeebcf5645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
