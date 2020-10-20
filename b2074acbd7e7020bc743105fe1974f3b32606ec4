@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ec320ba_1fbd1db2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-20T19:19:47Z",
+      "side": 1,
+      "message": "Still clearing the bots, but I\u0027ve done local analysis in go/angle-frame-analysis and updated the Skia Gold results.  So far so good.",
+      "revId": "b2074acbd7e7020bc743105fe1974f3b32606ec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
