@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9938591_2a26051a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-20T02:01:53Z",
+      "side": 1,
+      "message": "Good fix. Can we make replays cross-compatible? Can we ensure a GLsync in a replay stream is consistent no matter what arch recorded / played back?",
+      "revId": "0fd7b290b3f10e0d366373e385ddafbcdc34ba92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
