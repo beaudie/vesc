@@ -3330,6 +3330,7 @@ angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
     ANGLE_TRY(flushImpl(nullptr));
     if (mRenderer->getFeatures().asynchronousCommandProcessing.enabled)
     {
+        ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::onUnMakeCurrent");
         mRenderer->waitForCommandProcessorIdle(this);
     }
     mCurrentWindowSurface = nullptr;

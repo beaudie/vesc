@@ -1335,6 +1335,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // Make sure everything has been submitted (and errors handled)
         if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
         {
+            ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::presentA");
             renderer->waitForCommandProcessorIdle(contextVk);
         }
 
@@ -1355,6 +1356,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // error. Will be fixed properly in a follow-up as part of present work.
         if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
         {
+            ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::presentB");
             renderer->waitForCommandProcessorIdle(nullptr);
         }
         if (renderer->hasPendingError())
