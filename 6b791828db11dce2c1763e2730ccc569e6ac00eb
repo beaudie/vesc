@@ -16,6 +16,23 @@
       "message": "Stencil ref values are clamped in Context::stencilFuncSeparate.",
       "revId": "6b791828db11dce2c1763e2730ccc569e6ac00eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "904446aa_1a540f67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-20T12:49:48Z",
+      "side": 1,
+      "message": "hi Alexey, I think you can CQ+2 this CL by yourself if you want.",
+      "revId": "6b791828db11dce2c1763e2730ccc569e6ac00eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
