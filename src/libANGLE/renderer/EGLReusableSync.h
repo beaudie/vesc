@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_RENDERER_EGLREUSABLESYNC_H_
 #define LIBANGLE_RENDERER_EGLREUSABLESYNC_H_
 
+#include <condition_variable>
+
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/renderer/EGLSyncImpl.h"
 
