@@ -16,6 +16,23 @@
       "message": "Chromium crashes on win-angle-rel-32 are unrelated.",
       "revId": "0a1f9b7e4abe36ab849d264a7fa909ad71911fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79056319_7d1460cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T12:27:10Z",
+      "side": 1,
+      "message": "LGTM. Filed https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1140954 for the flakiness.",
+      "revId": "0a1f9b7e4abe36ab849d264a7fa909ad71911fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
