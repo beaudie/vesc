@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "475efbd3_b758a2e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T14:21:52Z",
+      "side": 1,
+      "message": "Cody, this was a failed experiment. We can\u0027t support these configs on desktop platforms. Let\u0027s chat offline about ways to preserve info in the traces when we re-trace.",
+      "revId": "8e2ea41e22e82a7c9149ba42f3d79da418185e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
