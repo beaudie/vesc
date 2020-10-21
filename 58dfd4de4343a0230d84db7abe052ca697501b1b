@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4c6a981_2f4845ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T15:18:16Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "58dfd4de4343a0230d84db7abe052ca697501b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db0895c5_c95d3419",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T15:18:16Z",
+      "side": 1,
+      "message": "just being pedantic - \n\nmove this into a helper function that returns bool, and ASSERT that return. so we can guarantee the ASSERT doesn\u0027t leak instructions on any compiler.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 5
+      },
+      "revId": "58dfd4de4343a0230d84db7abe052ca697501b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
