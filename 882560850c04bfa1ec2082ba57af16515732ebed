@@ -208,6 +208,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62f9e3cc_09d77042",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3187,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T16:13:47Z",
+      "side": 1,
+      "message": "OK, ping me if you need anything related to dirty bits changes. Thanks for working on it.",
+      "parentUuid": "bc5e760a_556866c0",
+      "range": {
+        "startLine": 3184,
+        "startChar": 0,
+        "endLine": 3187,
+        "endChar": 36
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d85b3dd_8a5a4555",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 8
