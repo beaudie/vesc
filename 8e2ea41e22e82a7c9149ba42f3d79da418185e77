@@ -16,6 +16,24 @@
       "message": "Cody, this was a failed experiment. We can\u0027t support these configs on desktop platforms. Let\u0027s chat offline about ways to preserve info in the traces when we re-trace.",
       "revId": "8e2ea41e22e82a7c9149ba42f3d79da418185e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c708d24_8c453ed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-21T14:57:10Z",
+      "side": 1,
+      "message": "This should work if we re-record on Android.  I think respecting the config (if we can) is important for more reasons than trace conversion.",
+      "parentUuid": "475efbd3_b758a2e7",
+      "revId": "8e2ea41e22e82a7c9149ba42f3d79da418185e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
