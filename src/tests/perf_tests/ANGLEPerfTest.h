@@ -134,6 +134,12 @@ struct RenderTestParams : public angle::PlatformParameters
 
     EGLint windowWidth             = 64;
     EGLint windowHeight            = 64;
+    EGLint redBits                 = 8;
+    EGLint greenBits               = 8;
+    EGLint blueBits                = 8;
+    EGLint alphaBits               = 8;
+    EGLint depthBits               = 24;
+    EGLint stencilBits             = 8;
     unsigned int iterationsPerStep = 0;
     bool trackGpuTime              = false;
     SurfaceType surfaceType        = SurfaceType::Window;

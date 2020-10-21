@@ -86,6 +86,12 @@ struct TraceInfo
     uint32_t endFrame;
     uint32_t drawSurfaceWidth;
     uint32_t drawSurfaceHeight;
+    uint32_t drawSurfaceRedBits;
+    uint32_t drawSurfaceGreenBits;
+    uint32_t drawSurfaceBlueBits;
+    uint32_t drawSurfaceAlphaBits;
+    uint32_t drawSurfaceDepthBits;
+    uint32_t drawSurfaceStencilBits;
     char name[kTraceInfoMaxNameLen];
 }};
 
@@ -216,7 +222,10 @@ def gen_gni(traces, gni_file, format_args):
 def get_trace_info(trace):
     info = [
         "%s::kReplayFrameStart", "%s::kReplayFrameEnd", "%s::kReplayDrawSurfaceWidth",
-        "%s::kReplayDrawSurfaceHeight", "\"%s\""
+        "%s::kReplayDrawSurfaceHeight", "%s::kDefaultFramebufferRedBits",
+        "%s::kDefaultFramebufferGreenBits", "%s::kDefaultFramebufferBlueBits",
+        "%s::kDefaultFramebufferAlphaBits", "%s::kDefaultFramebufferDepthBits",
+        "%s::kDefaultFramebufferStencilBits", "\"%s\""
     ]
     return ", ".join([element % trace for element in info])
 
