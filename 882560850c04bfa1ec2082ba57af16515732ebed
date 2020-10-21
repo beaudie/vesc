@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f30c4d4_b67f3985",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "I changed these to INFO, they don\u0027t really need to be errors.",
+      "parentUuid": "84be452b_56f4a010",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 95
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4794ef3a_c79e17ed",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fadfe66f_29c30059",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4794ef3a_c79e17ed",
+      "range": {
+        "startLine": 186,
+        "startChar": 8,
+        "endLine": 186,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2e6ce3d_e3f62d45",
@@ -77,6 +125,30 @@
       "writtenOn": "2020-10-09T15:04:30Z",
       "side": 1,
       "message": "maybe we should call these mIntendedViewport / mActualViewport\n\nor mUserViewport / mScaledViewport would be a simpler rename?",
+      "range": {
+        "startLine": 1484,
+        "startChar": 4,
+        "endLine": 1484,
+        "endChar": 17
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26bf814b_e885780c",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "Went with mIntendedViewport but kept the old mViewport name to minimize the diff in other parts of this file.",
+      "parentUuid": "f2e6ce3d_e3f62d45",
       "range": {
         "startLine": 1484,
         "startChar": 4,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc5e760a_556866c0",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3187,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "Still working on this.",
+      "parentUuid": "42e6d42c_19f84523",
+      "range": {
+        "startLine": 3184,
+        "startChar": 0,
+        "endLine": 3187,
+        "endChar": 36
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d85b3dd_8a5a4555",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 8
@@ -123,6 +219,30 @@
       "writtenOn": "2020-10-09T15:04:30Z",
       "side": 1,
       "message": "same comments as for Renderbuffer.",
+      "range": {
+        "startLine": 1135,
+        "startChar": 8,
+        "endLine": 1135,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "465b48cf_7c52346d",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d85b3dd_8a5a4555",
       "range": {
         "startLine": 1135,
         "startChar": 8,
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3ecf8e5_d1ce82b7",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "670f2356_a3fd9bb0",
+      "range": {
+        "startLine": 1167,
+        "startChar": 8,
+        "endLine": 1167,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13da3884_1c66bc9f",
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c02bf3e2_4b724167",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13da3884_1c66bc9f",
+      "range": {
+        "startLine": 1458,
+        "startChar": 8,
+        "endLine": 1458,
+        "endChar": 11
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17c30b82_9686c30d",
@@ -192,6 +360,30 @@
       "writtenOn": "2020-10-09T15:04:30Z",
       "side": 1,
       "message": "same comments as for Renderbuffer.",
+      "range": {
+        "startLine": 1537,
+        "startChar": 11,
+        "endLine": 1537,
+        "endChar": 12
+      },
+      "revId": "882560850c04bfa1ec2082ba57af16515732ebed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9707dd84_e896149a",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-21T16:04:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17c30b82_9686c30d",
       "range": {
         "startLine": 1537,
         "startChar": 11,
