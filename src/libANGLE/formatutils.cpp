@@ -143,7 +143,8 @@ static bool UnsizedHalfFloatOESRGBATextureAttachmentSupport(const Version &clien
 {
     // dEQP requires ES3 + EXT_color_buffer_half_float for rendering to RGB[A] + HALF_FLOAT_OES
     // textures but WebGL allows it with just ES 2.0
-    return (clientVersion.major >= 3 || extensions.webglCompatibility) &&
+    return (clientVersion.major >= 3 || extensions.webglCompatibility ||
+            extensions.textureHalfFloat) &&
            extensions.colorBufferHalfFloat;
 }
 
