@@ -33,6 +33,24 @@
       "message": "LGTM. Filed https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1140954 for the flakiness.",
       "revId": "0a1f9b7e4abe36ab849d264a7fa909ad71911fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90ff5a14_4d9e6e0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-21T22:53:59Z",
+      "side": 1,
+      "message": "Should I land this CL myself or wait for the second review?",
+      "parentUuid": "79056319_7d1460cd",
+      "revId": "0a1f9b7e4abe36ab849d264a7fa909ad71911fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
