@@ -33,6 +33,23 @@
       "message": "On 2nd thought ... Perhaps you may want to land this (after some cleanup).\n\nAfter responding to Shabi on the bug, I\u0027m reminded that it\u0027s not perfect, but can still be useful for some of our ANGLE work.  I\u0027ll try a test run while the bots are still quiet.\n\nFor example, running the EGLPreRotation* tests on my Windows-Intel laptop, yields 78 of 102 tests passing, and only 15 failing:\n\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 102 tests from 3 test suites ran. (90361 ms total)\n[  PASSED  ] 87 tests.\n[  FAILED  ] 15 tests, listed below:\n[  FAILED  ] EGLPreRotationSurfaceTest.OrientedWindowWithDraw/ES2_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES2_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationSurfaceTest.OrientedWindowWithDraw/ES3_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationSurfaceTest.OrientedWindowWithDraw/ES3_Vulkan_SwiftShader_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_SwiftShader_NoFixture, false)\n[  FAILED  ] EGLPreRotationSurfaceTest.OrientedWindowWithDerivativeDraw/ES2_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES2_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationSurfaceTest.OrientedWindowWithDerivativeDraw/ES3_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationSurfaceTest.OrientedWindowWithDerivativeDraw/ES3_Vulkan_SwiftShader_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_SwiftShader_NoFixture, false)\n[  FAILED  ] EGLPreRotationLargeSurfaceTest.OrientedWindowWithFragCoordDraw/ES2_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES2_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationLargeSurfaceTest.OrientedWindowWithFragCoordDraw/ES3_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationLargeSurfaceTest.OrientedWindowWithFragCoordDraw/ES3_Vulkan_SwiftShader_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_SwiftShader_NoFixture, false)\n[  FAILED  ] EGLPreRotationBlitFramebufferTest.BlitColorWithFlip/ES2_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES2_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationBlitFramebufferTest.BlitColorWithFlip/ES2_Vulkan_NoFixture__PreRotationEnabled, where GetParam() \u003d (ES2_Vulkan_NoFixture, true)\n[  FAILED  ] EGLPreRotationBlitFramebufferTest.BlitColorWithFlip/ES3_Vulkan_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_NoFixture, false)\n[  FAILED  ] EGLPreRotationBlitFramebufferTest.BlitColorWithFlip/ES3_Vulkan_NoFixture__PreRotationEnabled, where GetParam() \u003d (ES3_Vulkan_NoFixture, true)\n[  FAILED  ] EGLPreRotationBlitFramebufferTest.BlitColorWithFlip/ES3_Vulkan_SwiftShader_NoFixture__PreRotationDisabled, where GetParam() \u003d (ES3_Vulkan_SwiftShader_NoFixture, false)\n[  FAILED  ] EGLPreRotationBlitFramebufferTest.BlitColorWithFlip/ES3_Vulkan_SwiftShader_NoFixture__PreRotationEnabled, where GetParam() \u003d (ES3_Vulkan_SwiftShader_NoFixture, true)",
       "revId": "8ecdefc5ec1fb0ea051324b24f1533403e7eb394",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d955720d_2c3a3cfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-21T16:01:22Z",
+      "side": 1,
+      "message": "From yesterday\u0027s discussion, it sounds like this feature can be useful.  I\u0027d like Shabi and Tim to try it and provide feedback.  I can then clean it up and land it with the feature disabled.",
+      "revId": "8ecdefc5ec1fb0ea051324b24f1533403e7eb394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
