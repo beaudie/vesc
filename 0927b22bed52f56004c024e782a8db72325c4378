@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee2f2b8a_0647fbcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-10-21T00:32:00Z",
+      "side": 1,
+      "message": "Thanks James for upstreaming this.\n\nGeoff and I discussed this in today\u0027s ANGLE meeting and though it might be possible to make this work a different way by instrumenting every EGL API, Kimmo and I discussed this design at great length on Slack and it conclusively solves the limited multithreading problem with ANGLE in Apple\u0027s UIWebView. I personally like the solution of explicitly releasing ANGLE from the thread when we\u0027re returning control to the application - this is now what UIWebView does. I\u0027d prefer to see this land in roughly its current form to simplify future rolls of ANGLE into WebKit. Going forward it would be great to have better collaboration on upstream ANGLE.\n\nLooks like a bug fix is needed on the D3D backend along with this. James, do you have the ability to debug that?\n\nNote to Geoff and Jonah that this also changes the implementation of ANGLE\u0027s limited multithreading support on macOS (and iOS) a little bit. These changes seemed fine to me.\n",
+      "revId": "0927b22bed52f56004c024e782a8db72325c4378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fd99d8b_bde5272e",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_context_volatile_cgl.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-10-21T00:32:00Z",
+      "side": 1,
+      "message": "I didn\u0027t notice this in the downstream review but this should be \"device context\", not \"device context contexts\".",
+      "range": {
+        "startLine": 41,
+        "startChar": 41,
+        "endLine": 41,
+        "endChar": 48
+      },
+      "revId": "0927b22bed52f56004c024e782a8db72325c4378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85eb2ba0_caac72b9",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_context_volatile_eagl.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-10-21T00:32:00Z",
+      "side": 1,
+      "message": "Same comment here.",
+      "range": {
+        "startLine": 41,
+        "startChar": 49,
+        "endLine": 41,
+        "endChar": 57
+      },
+      "revId": "0927b22bed52f56004c024e782a8db72325c4378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
