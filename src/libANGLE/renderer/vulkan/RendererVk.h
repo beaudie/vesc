@@ -405,7 +405,7 @@ class RendererVk : angle::NonCopyable
     bool mPipelineCacheInitialized;
 
     // A cache of VkFormatProperties as queried from the device over time.
-    mutable std::array<VkFormatProperties, vk::kNumVkFormats> mFormatProperties;
+    mutable std::unordered_map<VkFormat, VkFormatProperties> mFormatProperties;
 
     // Latest validation data for debug overlay.
     std::string mLastValidationMessage;

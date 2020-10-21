@@ -29,6 +29,8 @@ template_table_autogen_cpp = """// GENERATED FILE - DO NOT EDIT.
 
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
+#include <unordered_map>
+
 using namespace angle;
 
 namespace rx
@@ -37,18 +39,15 @@ namespace rx
 namespace vk
 {{
 
-namespace
-{{
-static_assert({num_formats} == kNumVkFormats, "Update kNumVkFormats");
-constexpr std::array<VkFormatProperties, kNumVkFormats> kFormatProperties = {{{{
-    {format_case_data}
-}}}};
-}}  // anonymous namespace
-
 const VkFormatProperties& GetMandatoryFormatSupport(VkFormat vkFormat)
 {{
-    ASSERT(static_cast<uint64_t>(vkFormat) < sizeof(kFormatProperties));
-    return kFormatProperties[vkFormat];
+    static const auto* const kFormatPropertiesMap = new std::unordered_map<uint64_t, VkFormatProperties>{{
+        {format_case_data}
+    }};
+
+    auto it = kFormatPropertiesMap->find(vkFormat);
+    ASSERT(it != kFormatPropertiesMap->end());
+    return it->second;
 }}
 
 }}  // namespace vk
@@ -59,15 +58,19 @@ const VkFormatProperties& GetMandatoryFormatSupport(VkFormat vkFormat)
 
 template_format_property = """
 /* {vk_format} */
-{{0, {optimal_features}, {buffer_features}}}"""
+{{{vk_format}, {{0, {optimal_features}, {buffer_features}}}}}"""
+
+# Constants taken from Vulkan-Headers/registry/generator.py.
+EXTENSION_ENUM_VALUE_BASE = 1000000000
+EXTENSION_ENUM_VALUE_BLOCK_SIZE = 1000
 
 
 def script_relative(path):
     return os.path.join(os.path.dirname(sys.argv[0]), path)
 
 
-def gen_format_case(index, vk_to_index_to_format_map, vk_map):
-    vk_format = vk_to_index_to_format_map[index]
+def gen_format_case(value, vk_format_value_to_name_map, vk_map):
+    vk_format = vk_format_value_to_name_map[value]
 
     if vk_format in vk_map and len(vk_map[vk_format]) > 0:
         # Check which feature is a buffer feature or not.
@@ -111,23 +114,40 @@ def main():
 
     tree = etree.parse(script_relative(vk_xml_file))
     root = tree.getroot()
+
+    vk_format_value_to_name_map = {}
+
     vk_format_enums = root.findall(".//enums[@name='VkFormat']/enum")
-    vk_format_name_to_index_map = {}
-    num_formats = len(vk_format_enums)
     for format_enum in vk_format_enums:
-        index = int(format_enum.attrib['value'])
-        vk_format = format_enum.attrib['name']
-        vk_format_name_to_index_map[index] = vk_format
+        vk_format_name = format_enum.attrib['name']
+        vk_format_value = int(format_enum.attrib['value'])
+        vk_format_value_to_name_map[vk_format_value] = vk_format_name
+
+    vk_format_ext_enums = root.findall(".//feature//enum[@extends='VkFormat']")
+    for vk_format_ext_enum in vk_format_ext_enums:
+        vk_format_name = vk_format_ext_enum.attrib['name']
+
+        if 'offset' not in vk_format_ext_enum.attrib:
+            continue
+        vk_format_ext_offset = int(vk_format_ext_enum.attrib['offset'])
+
+        if 'extnumber' not in vk_format_ext_enum.attrib:
+            continue
+        vk_format_ext_extnumber = int(vk_format_ext_enum.attrib['extnumber'])
+
+        vk_format_value = EXTENSION_ENUM_VALUE_BASE + (
+            vk_format_ext_extnumber - 1) * EXTENSION_ENUM_VALUE_BLOCK_SIZE + vk_format_ext_offset
+        vk_format_value = '%d' % vk_format_value
+        vk_format_value_to_name_map[vk_format_value] = vk_format_name
 
     vk_map = angle_format.load_json(input_file_name)
     vk_cases = [
-        gen_format_case(index, vk_format_name_to_index_map, vk_map)
-        for index in vk_format_name_to_index_map
+        gen_format_case(value, vk_format_value_to_name_map, vk_map)
+        for value in vk_format_value_to_name_map
     ]
 
     output_cpp = template_table_autogen_cpp.format(
         copyright_year=date.today().year,
-        num_formats=num_formats,
         format_case_data="\n,".join(vk_cases),
         script_name=__file__,
         out_file_name=out_file_name,
