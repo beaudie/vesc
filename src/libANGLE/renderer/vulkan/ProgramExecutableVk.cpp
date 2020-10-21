@@ -57,12 +57,23 @@ ShaderInfo::~ShaderInfo() = default;
 
 angle::Result ShaderInfo::initShaders(ContextVk *contextVk,
                                       const gl::ShaderBitSet &linkedShaderStages,
-                                      const gl::ShaderMap<std::string> &shaderSources)
+                                      const gl::ShaderMap<std::string> &shaderSources,
+                                      ProgramExecutableVk *executableVk)
 {
     ASSERT(!valid());
 
     ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, linkedShaderStages, contextVk->getCaps(),
                                               shaderSources, &mSpirvBlobs));
+
+    // Assert that SPIR-V transformation is correct, even if the test never issues a draw call.
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        SpirvBlob transformed;
+        ASSERT(GlslangWrapperVk::TransformSpirV(
+                   contextVk, shaderType, false,
+                   executableVk->getShaderInterfaceVariableInfoMap()[shaderType],
+                   mSpirvBlobs[shaderType], &transformed) == angle::Result::Continue);
+    }
 
     mIsInitialized = true;
     return angle::Result::Continue;
