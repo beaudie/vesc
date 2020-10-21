@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7e579a1_866a951f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T20:12:46Z",
+      "side": 1,
+      "message": "PTAL Shabi. Courtney this affects your threaded path so would be good to adopt there too.",
+      "revId": "84e8e28231523d05f52ef612fd55e4660ed4ac81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
