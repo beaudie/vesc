@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "057254bf_44725f35",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-21T20:09:16Z",
+      "side": 1,
+      "message": "This is putting garbage destruction under the lock too. Is that necessary?",
+      "range": {
+        "startLine": 199,
+        "startChar": 32,
+        "endLine": 199,
+        "endChar": 44
+      },
+      "revId": "2c77f80665a5c111e63a3afd82a93093012a55cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
