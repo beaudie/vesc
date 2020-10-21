@@ -16,6 +16,29 @@
       "message": "Some prep work I split from the next change",
       "revId": "52f06533364125add55ee75910a188110d9bde2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c14c4b49_7c107537",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-21T14:01:50Z",
+      "side": 1,
+      "message": "components",
+      "range": {
+        "startLine": 2188,
+        "startChar": 21,
+        "endLine": 2188,
+        "endChar": 30
+      },
+      "revId": "52f06533364125add55ee75910a188110d9bde2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
