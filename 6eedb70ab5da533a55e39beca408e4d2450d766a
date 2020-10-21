@@ -34,6 +34,24 @@
       "parentUuid": "9db44031_61ab5bf7",
       "revId": "6eedb70ab5da533a55e39beca408e4d2450d766a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "589c943f_67242f3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-21T19:41:11Z",
+      "side": 1,
+      "message": "Added an extension requirement.  On Pixel 2 the native driver supports GL_EXT_color_buffer_half_float, but not the Vulkan driver.",
+      "parentUuid": "d546772e_1658855c",
+      "revId": "6eedb70ab5da533a55e39beca408e4d2450d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
