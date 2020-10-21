@@ -16,6 +16,23 @@
       "message": "Small final touch",
       "revId": "23f8faf772f5f9a92075f263d78caaf857fa286c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7f411a2_9465e194",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-10-21T21:29:16Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "23f8faf772f5f9a92075f263d78caaf857fa286c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
