@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4773006_5a256a69",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-21T21:20:51Z",
+      "side": 1,
+      "message": "Done in next CL to avoid having to re-run the bots.",
+      "parentUuid": "c14c4b49_7c107537",
+      "range": {
+        "startLine": 2188,
+        "startChar": 21,
+        "endLine": 2188,
+        "endChar": 30
+      },
+      "revId": "52f06533364125add55ee75910a188110d9bde2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1dfb02a_fb08e052",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-10-21T17:23:41Z",
       "side": 1,
       "message": "Should this be assert? I notice variableInfoMap is per shader stage.",
+      "range": {
+        "startLine": 2644,
+        "startChar": 50,
+        "endLine": 2644,
+        "endChar": 91
+      },
+      "revId": "52f06533364125add55ee75910a188110d9bde2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e52cde13_46dc3897",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-21T21:20:51Z",
+      "side": 1,
+      "message": "I don\u0027t think so, otherwise `info.activeStages` would have been redundant?\n\nThere seems to be some redundant info. I think `variableInfoMap` was made per stage for the sake of PPOs, and if a program in the PPO has multiple stages, the variable info is duplicated in each of its stages, but activeStages is still the source of truth.\n\nI may be wrong, Tim should know better. If you don\u0027t mind, I\u0027ll defer trying this out to a separate change.",
+      "parentUuid": "a1dfb02a_fb08e052",
       "range": {
         "startLine": 2644,
         "startChar": 50,
