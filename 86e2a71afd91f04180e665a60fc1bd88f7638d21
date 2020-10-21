@@ -22,6 +22,30 @@
       },
       "revId": "86e2a71afd91f04180e665a60fc1bd88f7638d21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90e84ff5_d78ef71c",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-10-21T16:04:40Z",
+      "side": 1,
+      "message": "Removed that function entirely",
+      "parentUuid": "8f1dcb2e_ea7ce31b",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 52
+      },
+      "revId": "86e2a71afd91f04180e665a60fc1bd88f7638d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
