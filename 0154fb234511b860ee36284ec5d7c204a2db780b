@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bae5f2e3_12c5066a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-21T03:32:56Z",
+      "side": 1,
+      "message": "I\u0027m glad to announce no hurdles were encountered in emulating this feature :)",
+      "revId": "0154fb234511b860ee36284ec5d7c204a2db780b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
