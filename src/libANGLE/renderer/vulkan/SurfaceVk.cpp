@@ -1332,12 +1332,6 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         vk::CommandProcessorTask present;
         present.initPresent(contextVk->getPriority(), presentInfo);
 
-        // Make sure everything has been submitted (and errors handled)
-        if (renderer->getFeatures().asynchronousCommandProcessing.enabled)
-        {
-            renderer->waitForCommandProcessorIdle(contextVk);
-        }
-
         // Submit queuePresent all by itself (ignoring interference from other threads for now)
         renderer->queueCommand(contextVk, &present);
         // TODO: https://issuetracker.google.com/issues/170329600 - Just stalling here for now, but

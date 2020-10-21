@@ -701,6 +701,7 @@ angle::Result CommandProcessor::processTask(vk::Context *context, vk::CommandPro
             if (ANGLE_UNLIKELY(result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR))
             {
                 // TODO: somehow signal context that we need to recreate swapchain
+                // cache swapchain that got an error, can query in WindowSurfaceVk::present?
             }
             else if (ANGLE_UNLIKELY(result != VK_SUCCESS))
             {
