@@ -85,6 +85,30 @@
       },
       "revId": "0927b22bed52f56004c024e782a8db72325c4378",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b107f8be_bcfff0d9",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2020-10-21T19:22:44Z",
+      "side": 1,
+      "message": "If you mean of form:\n\n  egl::Error Display::MakeCurrent(..) {\n    ANGLE_TRY(PrepareCall());\n    ...\n  }\n\nNot all of those calls operate on Display.",
+      "parentUuid": "f6889c65_13183d51",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 64
+      },
+      "revId": "0927b22bed52f56004c024e782a8db72325c4378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
