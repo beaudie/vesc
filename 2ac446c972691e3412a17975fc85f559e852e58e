@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da386d0f_ac03c1fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T02:08:19Z",
+      "side": 1,
+      "message": "Confused here Mohan - why can\u0027t we index gl_SampleMask (or the corresponding ANGLE driver uniform) with a constant index?",
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c806779a_02bd8f8b",
