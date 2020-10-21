@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b06e448_8050e3c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-21T21:02:58Z",
+      "side": 1,
+      "message": "We don\u0027t wait one each fence, but we do call getFenceStatus on each fence, this allows us to skip some of those.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 21
+      },
+      "revId": "84e8e28231523d05f52ef612fd55e4660ed4ac81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faf02e1b_dcaff49b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-21T21:02:58Z",
+      "side": 1,
+      "message": "of",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 11
+      },
+      "revId": "84e8e28231523d05f52ef612fd55e4660ed4ac81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b7e579a1_866a951f",
