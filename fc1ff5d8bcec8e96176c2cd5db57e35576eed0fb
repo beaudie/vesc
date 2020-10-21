@@ -33,6 +33,24 @@
       "message": "I wasn\u0027t getting the egl failures on an Intel GPU.\nI need to figure out if I was correcting testing on that machine, and then determine if the problem is specific to Nvidia GPUs",
       "revId": "fc1ff5d8bcec8e96176c2cd5db57e35576eed0fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c743f13_b66932a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2020-10-21T19:50:28Z",
+      "side": 1,
+      "message": "Oh, _oh no_.\n\nThey\u0027re also crashing on Intel. I need to fix this.",
+      "parentUuid": "3be8639d_b698c654",
+      "revId": "fc1ff5d8bcec8e96176c2cd5db57e35576eed0fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
