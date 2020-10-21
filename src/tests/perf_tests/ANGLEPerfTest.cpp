@@ -570,13 +570,13 @@ void ANGLERenderTest::SetUp()
     EGLPlatformParameters withMethods = mTestParams.eglParameters;
     withMethods.platformMethods       = &mPlatformMethods;
 
-    // Request a common framebuffer config
-    mConfigParams.redBits     = 8;
-    mConfigParams.greenBits   = 8;
-    mConfigParams.blueBits    = 8;
-    mConfigParams.alphaBits   = 8;
-    mConfigParams.depthBits   = 24;
-    mConfigParams.stencilBits = 8;
+    // Request a framebuffer config
+    mConfigParams.redBits     = mTestParams.redBits;
+    mConfigParams.greenBits   = mTestParams.greenBits;
+    mConfigParams.blueBits    = mTestParams.blueBits;
+    mConfigParams.alphaBits   = mTestParams.alphaBits;
+    mConfigParams.depthBits   = mTestParams.depthBits;
+    mConfigParams.stencilBits = mTestParams.stencilBits;
 
     if (!mGLWindow->initializeGL(mOSWindow, mEntryPointsLib.get(), mTestParams.driver, withMethods,
                                  mConfigParams))

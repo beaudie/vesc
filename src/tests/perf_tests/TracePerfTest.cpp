@@ -784,6 +784,12 @@ TracePerfParams CombineTestID(const TracePerfParams &in, RestrictedTraceID id)
     out.testID          = id;
     out.windowWidth     = traceInfo.drawSurfaceWidth;
     out.windowHeight    = traceInfo.drawSurfaceHeight;
+    out.redBits         = traceInfo.drawSurfaceRedBits;
+    out.greenBits       = traceInfo.drawSurfaceGreenBits;
+    out.blueBits        = traceInfo.drawSurfaceBlueBits;
+    out.alphaBits       = traceInfo.drawSurfaceAlphaBits;
+    out.depthBits       = traceInfo.drawSurfaceDepthBits;
+    out.stencilBits     = traceInfo.drawSurfaceStencilBits;
     return out;
 }
 

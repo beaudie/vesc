@@ -69,6 +69,12 @@ struct TraceInfo
     uint32_t endFrame;
     uint32_t drawSurfaceWidth;
     uint32_t drawSurfaceHeight;
+    khronos_int32_t drawSurfaceRedBits;
+    khronos_int32_t drawSurfaceGreenBits;
+    khronos_int32_t drawSurfaceBlueBits;
+    khronos_int32_t drawSurfaceAlphaBits;
+    khronos_int32_t drawSurfaceDepthBits;
+    khronos_int32_t drawSurfaceStencilBits;
     char name[kTraceInfoMaxNameLen];
 };
 
