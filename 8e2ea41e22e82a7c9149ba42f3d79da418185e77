@@ -34,6 +34,24 @@
       "parentUuid": "475efbd3_b758a2e7",
       "revId": "8e2ea41e22e82a7c9149ba42f3d79da418185e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1d4747a_fe4afdcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T15:16:02Z",
+      "side": 1,
+      "message": "Well, we can make a \"best effort\" but we\u0027ll need to swap the replay config on some platforms. So I think some flexibility here is inevitable if we care about portability (we do).",
+      "parentUuid": "8c708d24_8c453ed9",
+      "revId": "8e2ea41e22e82a7c9149ba42f3d79da418185e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
