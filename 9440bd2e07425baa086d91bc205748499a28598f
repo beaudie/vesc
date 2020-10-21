@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca0f082_1cf782a5",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T02:01:34Z",
+      "side": 1,
+      "message": "nit: Caps",
+      "range": {
+        "startLine": 131,
+        "startChar": 14,
+        "endLine": 131,
+        "endChar": 28
+      },
+      "revId": "9440bd2e07425baa086d91bc205748499a28598f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24536450_68d3983a",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T02:01:34Z",
+      "side": 1,
+      "message": "nit: binary",
+      "range": {
+        "startLine": 147,
+        "startChar": 14,
+        "endLine": 147,
+        "endChar": 38
+      },
+      "revId": "9440bd2e07425baa086d91bc205748499a28598f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fc670a2_235653f0",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6021,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-21T02:01:34Z",
+      "side": 1,
+      "message": "Looks pretty much the same as IsVaryingIn in util.h. Can you de-dupe?",
+      "range": {
+        "startLine": 6007,
+        "startChar": 0,
+        "endLine": 6021,
+        "endChar": 0
+      },
+      "revId": "9440bd2e07425baa086d91bc205748499a28598f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
