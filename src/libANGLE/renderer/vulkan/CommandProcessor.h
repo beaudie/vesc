@@ -71,7 +71,9 @@ class CommandProcessorTask
 
     void initFinishToSerial(Serial serial);
 
-    void initFlushAndQueueSubmit(std::vector<VkSemaphore> &&waitSemaphores,
+    void initFlushAndQueueSubmit(vk::Context *contextVk,
+                                 const vk::Shared<vk::Fence> &sharedFence,
+                                 std::vector<VkSemaphore> &&waitSemaphores,
                                  std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                  const vk::Semaphore *semaphore,
                                  egl::ContextPriority priority,
@@ -107,6 +109,7 @@ class CommandProcessorTask
     vk::RenderPass *getRenderPass() const { return mRenderPass; }
     CommandBufferHelper *getCommandBuffer() const { return mCommandBuffer; }
     ContextVk *getContextVk() const { return mContextVk; }
+    vk::Shared<vk::Fence> &getSharedFence() { return mSharedFence; }
 
   private:
     void copyPresentInfo(const VkPresentInfoKHR &other);
@@ -143,6 +146,7 @@ class CommandProcessorTask
     const vk::Fence *mOneOffFence;
 
     // Flush, Present & QueueWaitIdle data
+    vk::Shared<vk::Fence> mSharedFence;
     egl::ContextPriority mPriority;
 };
 
@@ -192,8 +196,6 @@ class TaskProcessor : angle::NonCopyable
                               VkQueue queue,
                               const VkSubmitInfo &submitInfo,
                               const vk::Fence *fence);
-
-    vk::Shared<vk::Fence> getLastSubmittedFenceWithLock(VkDevice device) const;
 
     void handleDeviceLost(vk::Context *context);
 
@@ -261,7 +263,6 @@ class CommandProcessor : public vk::Context
     // Wait until desired serial has been processed.
     void finishToSerial(vk::Context *context, Serial serial);
 
-    vk::Shared<vk::Fence> getLastSubmittedFence(const vk::Context *context) const;
     void handleDeviceLost();
 
     bool hasPendingError() const

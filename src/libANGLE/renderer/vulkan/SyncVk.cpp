@@ -55,21 +55,8 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
 
     DeviceScoped<Event> event(device);
     ANGLE_VK_TRY(contextVk, event.get().init(device, eventCreateInfo));
-    // TODO: https://issuetracker.google.com/170312581 - For now wait for worker thread to finish
-    // then get next fence from renderer
-    if (contextVk->getRenderer()->getFeatures().commandProcessor.enabled)
-    {
-        if (contextVk->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
-        {
-            contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk);
-        }
-        ANGLE_TRY(contextVk->getRenderer()->getNextSubmitFence(&mFence, false));
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
-    }
 
+    ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
     mEvent = event.release();
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
