@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aeb1c0d_7323dfd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T00:44:17Z",
+      "side": 1,
+      "message": "There appears to be a performance penalty on Android for a constructor having varargs.  I tried various changes.  I tested with perftest and its NBA 2K20 trace.  I run-time disable the debug-util markers by having the Vulkan back-end set the global g_debugAnnotator pointer to nullptr (causes DebugAnnotationsActive() to return false, just below EVENT()).\n\nFor perftest, this CL gives the same performance as when ANGLE is compiled without markers.  Same performance whether enabled or disabled.  However, running real NBA 2K20 with AGI seemmed sluggish.  I did system traces with AGI and see that there\u0027s still a 2X+ performance penalty with markers enabled, but this CL is still better than without this CL.\n\nperftest performance is as follows:\n\n- Native: ~9 msec\n- ANGLE compiled without markers: ~12 msec\n- ANGLE compiled with markers: ~25 msec\n- ANGLE compiled with markers, disabled: ~25 msec\n- ANGLE compiled with markers, with this CL, disabled: ~12 msec\n- ANGLE compiled with markers, with this CL, enabled: ~12 msec\n",
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
