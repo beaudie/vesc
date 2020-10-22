@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f40a0d54_48ccc9c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-22T21:46:00Z",
+      "side": 1,
+      "message": "PTAL. This actually breaks the //base dependency finally. Still more work to do after it lands to clean things up and remove the old paths.\n\nWill need to land after the SwANGLE dEQP bots are shifted over (hence the test failures) but if you give me the go ahead I can try to land this tonight.",
+      "revId": "5f06cbc96b8482c9b3e86bc0cd7571eeb39dbab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
