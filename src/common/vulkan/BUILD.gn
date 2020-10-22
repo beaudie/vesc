@@ -46,6 +46,10 @@ group("angle_vulkan_entry_points") {
   } else if (!is_android && !is_ggp) {
     if (angle_shared_libvulkan) {
       data_deps = [ "$angle_root/third_party/vulkan-loader/src:libvulkan" ]
+      if (is_linux) {
+        data_deps +=
+            [ "$angle_root/third_party/vulkan-loader/src:libvulkan-abi1" ]
+      }
     } else {
       deps = [ "$angle_root/third_party/vulkan-loader/src:libvulkan" ]
     }
@@ -76,6 +80,10 @@ angle_source_set("vulkan") {
   if (!is_android && !is_fuchsia && !is_ggp) {
     if (angle_shared_libvulkan) {
       data_deps += [ "$angle_root/third_party/vulkan-loader/src:libvulkan" ]
+      if (is_linux) {
+        data_deps +=
+            [ "$angle_root/third_party/vulkan-loader/src:libvulkan-abi1" ]
+      }
     } else {
       deps += [ "$angle_root/third_party/vulkan-loader/src:libvulkan" ]
     }
