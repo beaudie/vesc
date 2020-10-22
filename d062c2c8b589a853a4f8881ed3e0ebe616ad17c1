@@ -68,6 +68,23 @@
       "message": "Thanks Tim. Trace scalability is a Pri-1 right now.",
       "revId": "d062c2c8b589a853a4f8881ed3e0ebe616ad17c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eaaf3f6_c9e81428",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-22T17:10:55Z",
+      "side": 1,
+      "message": "OK, the presubmit really didn\u0027t like using download_from_google_storage as a command. Will update.",
+      "revId": "d062c2c8b589a853a4f8881ed3e0ebe616ad17c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
