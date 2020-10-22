@@ -16,6 +16,24 @@
       "message": "Thank you! Xiaoxuan, can you add your name to CONTRIBUTORS under Arm Ltd.?",
       "revId": "8bb943bd4c39fd4ca82628feb64bdd0e2bc1d723",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a10f718_be5bf536",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-10-22T14:02:19Z",
+      "side": 1,
+      "message": "Hi Jamie,\n\nI\u0027m already in CONTRIBUTORS under Arm Ltd.\n\nMaybe it\u0027s been a while that I haven\u0027t commit ANGLE code 😂",
+      "parentUuid": "65b66193_40b288f8",
+      "revId": "8bb943bd4c39fd4ca82628feb64bdd0e2bc1d723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
