@@ -342,6 +342,30 @@
       },
       "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8479850a_7c3cc7c8",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T19:41:01Z",
+      "side": 1,
+      "message": "Compiles for Android.  Not sure what I did differently before.",
+      "parentUuid": "30ef7a4e_73b1a9a8",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 99
+      },
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
