@@ -161,6 +161,8 @@ void CommandProcessorTask::initFinishToSerial(Serial serial)
 }
 
 void CommandProcessorTask::initFlushAndQueueSubmit(
+    vk::Context *contextVk,
+    const vk::Shared<vk::Fence> &sharedFence,
     std::vector<VkSemaphore> &&waitSemaphores,
     std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
     const vk::Semaphore *semaphore,
@@ -168,7 +170,8 @@ void CommandProcessorTask::initFlushAndQueueSubmit(
     vk::GarbageList &&currentGarbage,
     vk::ResourceUseList &&currentResources)
 {
-    mTask                    = vk::CustomTask::FlushAndQueueSubmit;
+    mTask = vk::CustomTask::FlushAndQueueSubmit;
+    mSharedFence.copy(contextVk->getDevice(), sharedFence);
     mWaitSemaphores          = std::move(waitSemaphores);
     mWaitSemaphoreStageMasks = std::move(waitSemaphoreStageMasks);
     mSemaphore               = semaphore;
@@ -207,6 +210,7 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
     std::swap(mPriority, rhs.mPriority);
     std::swap(mResourceUseList, rhs.mResourceUseList);
     mOneOffCommandBufferVk = rhs.mOneOffCommandBufferVk;
+    std::swap(mSharedFence, rhs.mSharedFence);
 
     copyPresentInfo(rhs.mPresentInfo);
 
@@ -522,19 +526,6 @@ angle::Result TaskProcessor::submitFrame(vk::Context *context,
     return angle::Result::Continue;
 }
 
-vk::Shared<vk::Fence> TaskProcessor::getLastSubmittedFenceWithLock(VkDevice device) const
-{
-    vk::Shared<vk::Fence> fence;
-    std::lock_guard<std::mutex> inFlightLock(mInFlightCommandsMutex);
-
-    if (!mInFlightCommands.empty())
-    {
-        fence.copy(device, mInFlightCommands.back().fence);
-    }
-
-    return fence;
-}
-
 angle::Result TaskProcessor::queueSubmit(vk::Context *context,
                                          VkQueue queue,
                                          const VkSubmitInfo &submitInfo,
@@ -752,18 +743,12 @@ angle::Result CommandProcessor::processTask(vk::Context *context, vk::CommandPro
             InitializeSubmitInfo(&submitInfo, mPrimaryCommandBuffer, task->getWaitSemaphores(),
                                  &task->getWaitSemaphoreStageMasks(), task->getSemaphore());
 
-            // 2. Get shared submit fence. It's possible there are other users of this fence that
-            // must wait for the work to be submitted before waiting on the fence. Reset the fence
-            // immediately so we are sure to get a fresh one next time.
-            vk::Shared<vk::Fence> fence;
-            ANGLE_TRY(mRenderer->getNextSubmitFence(&fence, true));
-
-            // 3. Call submitFrame()
+            // 2. Call submitFrame()
             ANGLE_TRY(mTaskProcessor.submitFrame(
-                context, getRenderer()->getVkQueue(task->getPriority()), submitInfo, fence,
-                &task->getGarbage(), &mCommandPool, std::move(mPrimaryCommandBuffer),
-                task->getQueueSerial()));
-            // 4. Allocate & begin new primary command buffer
+                context, getRenderer()->getVkQueue(task->getPriority()), submitInfo,
+                task->getSharedFence(), &task->getGarbage(), &mCommandPool,
+                std::move(mPrimaryCommandBuffer), task->getQueueSerial()));
+            // 3. Allocate & begin new primary command buffer
             ANGLE_TRY(mTaskProcessor.allocatePrimaryCommandBuffer(context, &mPrimaryCommandBuffer));
 
             VkCommandBufferBeginInfo beginInfo = {};
@@ -772,8 +757,8 @@ angle::Result CommandProcessor::processTask(vk::Context *context, vk::CommandPro
             beginInfo.pInheritanceInfo         = nullptr;
             ANGLE_VK_TRY(context, mPrimaryCommandBuffer.begin(beginInfo));
 
-            // Free this local reference
-            getRenderer()->resetSharedFence(&fence);
+            // Free task's reference to the sharedFence
+            getRenderer()->resetSharedFence(&task->getSharedFence());
 
             ASSERT(task->getGarbage().empty());
             break;
@@ -889,21 +874,6 @@ void CommandProcessor::shutdown(std::thread *commandProcessorThread)
             commandProcessorThread->join();
         }
     }
-}
-
-// Return the fence for the last submit. This may mean waiting on the worker to process tasks to
-// actually get to the last submit
-vk::Shared<vk::Fence> CommandProcessor::getLastSubmittedFence(const vk::Context *context) const
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::getLastSubmittedFence");
-    std::unique_lock<std::mutex> lock(mWorkerMutex);
-    if (context->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
-    {
-        mWorkerIdleCondition.wait(lock, [this] { return (mTasks.empty() && mWorkerThreadIdle); });
-    }
-    // Worker thread is idle and command queue is empty so good to continue
-
-    return mTaskProcessor.getLastSubmittedFenceWithLock(getDevice());
 }
 
 Serial CommandProcessor::getLastSubmittedSerial()
