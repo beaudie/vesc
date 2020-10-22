@@ -227,10 +227,6 @@ class RendererVk : angle::NonCopyable
         }
     }
 
-    vk::Shared<vk::Fence> getLastSubmittedFence(const vk::Context *context) const
-    {
-        return mCommandProcessor.getLastSubmittedFence(context);
-    }
     void handleDeviceLost() { mCommandProcessor.handleDeviceLost(); }
 
     static constexpr size_t kMaxExtensionNames = 200;
