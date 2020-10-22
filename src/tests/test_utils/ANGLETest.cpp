@@ -555,7 +555,7 @@ void ANGLETestBase::ANGLETestSetUp()
     {
         Library *driverLib = ANGLETestEnvironment::GetDriverLibrary(mCurrentParams->driver);
 
-        if (mForceNewDisplay || !mFixture->eglWindow->isDisplayInitialized())
+        if ((mForceNewDisplay && !gReuseDisplays) || !mFixture->eglWindow->isDisplayInitialized())
         {
             mFixture->eglWindow->destroyGL();
             if (!mFixture->eglWindow->initializeDisplay(mFixture->osWindow, driverLib,
@@ -620,7 +620,7 @@ void ANGLETestBase::ANGLETestTearDown()
         checkD3D11SDKLayersMessages();
     }
 
-    if (mFixture->reuseCounter++ >= kWindowReuseLimit || mForceNewDisplay)
+    if (!gReuseDisplays && (mFixture->reuseCounter++ >= kWindowReuseLimit || mForceNewDisplay))
     {
         mFixture->reuseCounter = 0;
         getGLWindow()->destroyGL();
