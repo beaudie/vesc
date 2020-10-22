@@ -252,6 +252,30 @@
       },
       "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d97236e7_2eb55e77",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-22T18:14:22Z",
+      "side": 1,
+      "message": "FWIW you can\u0027t put the do {} around the scoped helper, but you can put it around the if.",
+      "parentUuid": "f98a6b06_c2c37a1a",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 99
+      },
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
