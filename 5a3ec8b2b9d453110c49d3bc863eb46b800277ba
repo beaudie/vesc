@@ -53,6 +53,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9558673_1c6c4b6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T18:09:09Z",
+      "side": 1,
+      "message": "Quick question about Jamie\u0027s nit + other responses",
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a3f812d_891a7c3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T18:09:09Z",
+      "side": 1,
+      "message": "Not sure what you\u0027re asking.  perftest results were about 12 msec/frame with this CL, whether markers were enabled or disabled.  Same when compiled so that markers will not enabled.  Perftest results were about 25 msec/frame without this CL, whether or not markers were enabled.\n\nI tried several times (e.g. git revert) to make sure I was seeing accurate results.\n\nAGI analysis of the real game showed that frame times were normal with this CL and markers disabled, and slower with this CL and markers enabled.  That suggests that there are cases where perftest varies from real application performance.",
+      "parentUuid": "8d935e5f_d5555f86",
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90f73690_5beffdf8",
@@ -66,6 +101,30 @@
       "writtenOn": "2020-10-22T17:50:59Z",
       "side": 1,
       "message": "nit: begin",
+      "range": {
+        "startLine": 41,
+        "startChar": 9,
+        "endLine": 41,
+        "endChar": 22
+      },
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f49a5a_f927a61a",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T18:09:09Z",
+      "side": 1,
+      "message": "To clarify, did you mean: s/logEntryPoint/beginEntryPoint/ ?",
+      "parentUuid": "90f73690_5beffdf8",
       "range": {
         "startLine": 41,
         "startChar": 9,
@@ -113,6 +172,30 @@
       "side": 1,
       "message": "+1, also recommend {} around the if, and ensuring the indentation looks good.",
       "parentUuid": "338723b5_acc728d8",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 99
+      },
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7229d599_b380399b",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T18:09:09Z",
+      "side": 1,
+      "message": "I couldn\u0027t compile for Android with {} around the if.  I don\u0027t remember the exact error, but the variable arguments got messed up, especially with FUNC_EVENT calling EVENT.\n\nI\u0027ll fix the indentation.",
+      "parentUuid": "bd23935c_aacc2cdf",
       "range": {
         "startLine": 259,
         "startChar": 0,
