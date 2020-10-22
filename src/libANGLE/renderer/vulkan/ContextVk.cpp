@@ -4470,11 +4470,21 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         // 2. Call submitFrame()
         // 3. Allocate new primary command buffer
         vk::CommandProcessorTask flushAndQueueSubmit;
+
+        // Create the shared fence here and pass it in to the command.
+        // Can then keep a copy in the ContextVk to use at AcquireNextImage via
+        // ContextVk::getLastSubmittedFence
+        ANGLE_TRY(ensureSubmitFenceInitialized());
+
         flushAndQueueSubmit.initFlushAndQueueSubmit(
-            std::move(mWaitSemaphores), std::move(mWaitSemaphoreStageMasks), signalSemaphore,
-            mContextPriority, std::move(mCurrentGarbage), std::move(mResourceUseList));
+            this, mSubmitFence, std::move(mWaitSemaphores), std::move(mWaitSemaphoreStageMasks),
+            signalSemaphore, mContextPriority, std::move(mCurrentGarbage),
+            std::move(mResourceUseList));
 
         commandProcessorSyncErrorsAndQueueCommand(&flushAndQueueSubmit);
+
+        // Make sure a new fence is created for the next submission.
+        mRenderer->resetSharedFence(&mSubmitFence);
 
         // Some tasks from ContextVk::submitFrame() that run after CommandQueue::submitFrame()
         onRenderPassFinished();
@@ -4623,8 +4633,6 @@ angle::Result ContextVk::ensureSubmitFenceInitialized()
 
 angle::Result ContextVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut)
 {
-    ASSERT(!getRenderer()->getFeatures().commandProcessor.enabled);
-
     ANGLE_TRY(ensureSubmitFenceInitialized());
 
     ASSERT(!sharedFenceOut->isReferenced());
@@ -4636,7 +4644,12 @@ vk::Shared<vk::Fence> ContextVk::getLastSubmittedFence() const
 {
     if (mRenderer->getFeatures().commandProcessor.enabled)
     {
-        return mRenderer->getLastSubmittedFence(this);
+        vk::Shared<vk::Fence> fence;
+        if (mSubmitFence.isReferenced())
+        {
+            fence.copy(getDevice(), mSubmitFence);
+        }
+        return fence;
     }
     return mCommandQueue.getLastSubmittedFence(this);
 }
