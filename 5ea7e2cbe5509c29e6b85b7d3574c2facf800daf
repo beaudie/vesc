@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54644779_55ea21c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-22T17:09:51Z",
+      "side": 1,
+      "message": "Thanks Cody for reverting. Sorry for having to revert this temporarily. ",
+      "revId": "5ea7e2cbe5509c29e6b85b7d3574c2facf800daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
