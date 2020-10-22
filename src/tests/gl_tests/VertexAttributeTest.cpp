@@ -182,11 +182,11 @@ class VertexAttributeTest : public ANGLETest
         const GLfloat *expectedData;
     };
 
-    void setupTest(const TestData &test, GLint typeSize)
+    void setupTest(const TestData &test, GLint typeSize, bool highp)
     {
         if (mProgram == 0)
         {
-            initBasicProgram();
+            initBasicProgram(false);
         }
 
         if (test.source == Source::BUFFER)
@@ -258,9 +258,11 @@ class VertexAttributeTest : public ANGLETest
         EXPECT_PIXEL_NE(midPixelX, (midPixelY + viewportSize[3]) / 2, 255, 255, 255, 255);
     }
 
-    void runTest(const TestData &test) { runTest(test, true); }
+    void runTest(const TestData &test) { runTest(test, true, false); }
 
-    void runTest(const TestData &test, bool checkPixelEqual)
+    void runTest(const TestData &test, bool highp) { runTest(test, true, highp); }
+
+    void runTest(const TestData &test, bool checkPixelEqual, bool highp)
     {
         // TODO(geofflang): Figure out why this is broken on AMD OpenGL
         ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
@@ -268,7 +270,7 @@ class VertexAttributeTest : public ANGLETest
         for (GLint i = 0; i < 4; i++)
         {
             GLint typeSize = i + 1;
-            setupTest(test, typeSize);
+            setupTest(test, typeSize, false);
 
             drawQuad(mProgram, "position", 0.5f);
 
@@ -362,28 +364,54 @@ class VertexAttributeTest : public ANGLETest
         }
     }
 
-    void initBasicProgram()
+    void initBasicProgram(bool highp)
     {
-        constexpr char kVS[] =
-            "attribute mediump vec4 position;\n"
-            "attribute mediump vec4 test;\n"
-            "attribute mediump vec4 expected;\n"
-            "varying mediump vec4 color;\n"
-            "void main(void)\n"
-            "{\n"
-            "    gl_Position = position;\n"
-            "    vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);\n"
-            "    color = vec4(lessThanEqual(abs(test - expected), threshold));\n"
-            "}\n";
+        if (highp)
+        {
+            constexpr char kVS[] =
+                "attribute highp vec4 position;\n"
+                "attribute highp vec4 test;\n"
+                "attribute highp vec4 expected;\n"
+                "varying highp vec4 color;\n"
+                "void main(void)\n"
+                "{\n"
+                "    gl_Position = position;\n"
+                "    vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);\n"
+                "    color = vec4(lessThanEqual(abs(test - expected), threshold));\n"
+                "}\n";
 
-        constexpr char kFS[] =
-            "varying mediump vec4 color;\n"
-            "void main(void)\n"
-            "{\n"
-            "    gl_FragColor = color;\n"
-            "}\n";
+            constexpr char kFS[] =
+                "varying highp vec4 color;\n"
+                "void main(void)\n"
+                "{\n"
+                "    gl_FragColor = color;\n"
+                "}\n";
 
-        mProgram = CompileProgram(kVS, kFS);
+            mProgram = CompileProgram(kVS, kFS);
+        }
+        else
+        {
+            constexpr char kVS[] =
+                "attribute mediump vec4 position;\n"
+                "attribute mediump vec4 test;\n"
+                "attribute mediump vec4 expected;\n"
+                "varying mediump vec4 color;\n"
+                "void main(void)\n"
+                "{\n"
+                "    gl_Position = position;\n"
+                "    vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);\n"
+                "    color = vec4(lessThanEqual(abs(test - expected), threshold));\n"
+                "}\n";
+
+            constexpr char kFS[] =
+                "varying mediump vec4 color;\n"
+                "void main(void)\n"
+                "{\n"
+                "    gl_FragColor = color;\n"
+                "}\n";
+
+            mProgram = CompileProgram(kVS, kFS);
+        }
         ASSERT_NE(0u, mProgram);
 
         mTestAttrib = glGetAttribLocation(mProgram, "test");
@@ -483,7 +511,8 @@ TEST_P(VertexAttributeTest, UnsignedShortUnnormalized)
 
     TestData data(GL_UNSIGNED_SHORT, GL_FALSE, Source::IMMEDIATE, inputData.data(),
                   expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 TEST_P(VertexAttributeTest, UnsignedShortNormalized)
@@ -498,7 +527,8 @@ TEST_P(VertexAttributeTest, UnsignedShortNormalized)
 
     TestData data(GL_UNSIGNED_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(),
                   expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 TEST_P(VertexAttributeTest, ShortUnnormalized)
@@ -512,7 +542,8 @@ TEST_P(VertexAttributeTest, ShortUnnormalized)
     }
 
     TestData data(GL_SHORT, GL_FALSE, Source::IMMEDIATE, inputData.data(), expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 TEST_P(VertexAttributeTest, ShortNormalized)
@@ -526,7 +557,8 @@ TEST_P(VertexAttributeTest, ShortNormalized)
     }
 
     TestData data(GL_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(), expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 // Verify that vertex data is updated correctly when using a float/half-float client memory pointer.
@@ -599,7 +631,8 @@ TEST_P(VertexAttributeTest, UsingDifferentFormatAndSameClientMemoryPointer)
 
     TestData unnormalizedData(GL_SHORT, GL_FALSE, Source::IMMEDIATE, inputData.data(),
                               unnormalizedExpectedData.data());
-    runTest(unnormalizedData);
+    // Requires highp precision (int values > 1024)
+    runTest(unnormalizedData, true);
 
     std::array<GLfloat, kVertexCount> normalizedExpectedData;
     for (size_t i = 0; i < kVertexCount; i++)
@@ -628,13 +661,14 @@ TEST_P(VertexAttributeTest, NegativeUsingDifferentFormatAndSameClientMemoryPoint
     // Use unnormalized short as the format of the data in client memory pointer in the first draw.
     TestData unnormalizedData(GL_SHORT, GL_FALSE, Source::IMMEDIATE, inputData.data(),
                               unnormalizedExpectedData.data());
-    runTest(unnormalizedData);
+    // Requires highp precision (int values > 1024)
+    runTest(unnormalizedData, true);
 
     // Use normalized short as the format of the data in client memory pointer in the second draw,
     // but mExpectedAttrib is the same as the first draw.
     TestData normalizedData(GL_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(),
                             unnormalizedExpectedData.data());
-    runTest(normalizedData, false);
+    runTest(normalizedData, false, false);
 }
 
 // Verify that using different vertex format and same buffer won't mess up the draw.
@@ -654,7 +688,8 @@ TEST_P(VertexAttributeTest, UsingDifferentFormatAndSameBuffer)
     // Use unnormalized short as the format of the data in mBuffer in the first draw.
     TestData unnormalizedData(GL_SHORT, GL_FALSE, Source::BUFFER, inputData.data(),
                               unnormalizedExpectedData.data());
-    runTest(unnormalizedData);
+    // Requires highp precision (int values > 1024)
+    runTest(unnormalizedData, true);
 
     // Use normalized short as the format of the data in mBuffer in the second draw.
     TestData normalizedData(GL_SHORT, GL_TRUE, Source::BUFFER, inputData.data(),
@@ -677,7 +712,8 @@ TEST_P(VertexAttributeTest, NegativeUsingDifferentFormatAndSameBuffer)
     // Use unnormalized short as the format of the data in mBuffer in the first draw.
     TestData unnormalizedData(GL_SHORT, GL_FALSE, Source::BUFFER, inputData.data(),
                               unnormalizedExpectedData.data());
-    runTest(unnormalizedData);
+    // Requires highp precision (int values > 1024)
+    runTest(unnormalizedData, true);
 
     // Use normalized short as the format of the data in mBuffer in the second draw, but
     // mExpectedAttrib is the same as the first draw.
@@ -685,7 +721,7 @@ TEST_P(VertexAttributeTest, NegativeUsingDifferentFormatAndSameBuffer)
                             unnormalizedExpectedData.data());
 
     // The check should fail because the test data is changed while the expected data is the same.
-    runTest(normalizedData, false);
+    runTest(normalizedData, false, false);
 }
 
 // Verify that mixed using buffer and client memory pointer won't mess up the draw.
@@ -704,11 +740,13 @@ TEST_P(VertexAttributeTest, MixedUsingBufferAndClientMemoryPointer)
 
     TestData unnormalizedData(GL_SHORT, GL_FALSE, Source::IMMEDIATE, inputData.data(),
                               unnormalizedExpectedData.data());
-    runTest(unnormalizedData);
+    // Requires highp precision (int values > 1024)
+    runTest(unnormalizedData, true);
 
     TestData unnormalizedBufferData(GL_SHORT, GL_FALSE, Source::BUFFER, inputData.data(),
                                     unnormalizedExpectedData.data());
-    runTest(unnormalizedBufferData);
+    // Requires highp precision (int values > 1024)
+    runTest(unnormalizedData, true);
 
     TestData normalizedData(GL_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(),
                             normalizedExpectedData.data());
@@ -759,7 +797,7 @@ TEST_P(VertexAttributeTest, SignedPacked1010102ExtensionUnnormalized)
 
     for (auto data : dataSet)
     {
-        setupTest(data.first, data.second);
+        setupTest(data.first, data.second, false);
         drawQuad(mProgram, "position", 0.5f);
         glDisableVertexAttribArray(mTestAttrib);
         glDisableVertexAttribArray(mExpectedAttrib);
@@ -813,7 +851,7 @@ TEST_P(VertexAttributeTest, SignedPacked1010102ExtensionNormalized)
 
     for (auto data : dataSet)
     {
-        setupTest(data.first, data.second);
+        setupTest(data.first, data.second, false);
         drawQuad(mProgram, "position", 0.5f);
         glDisableVertexAttribArray(mTestAttrib);
         glDisableVertexAttribArray(mExpectedAttrib);
@@ -865,7 +903,7 @@ TEST_P(VertexAttributeTest, UnsignedPacked1010102ExtensionUnnormalized)
 
     for (auto data : dataSet)
     {
-        setupTest(data.first, data.second);
+        setupTest(data.first, data.second, false);
         drawQuad(mProgram, "position", 0.5f);
         glDisableVertexAttribArray(mTestAttrib);
         glDisableVertexAttribArray(mExpectedAttrib);
@@ -920,7 +958,7 @@ TEST_P(VertexAttributeTest, UnsignedPacked1010102ExtensionNormalized)
 
     for (auto data : dataSet)
     {
-        setupTest(data.first, data.second);
+        setupTest(data.first, data.second, false);
         drawQuad(mProgram, "position", 0.5f);
         glDisableVertexAttribArray(mTestAttrib);
         glDisableVertexAttribArray(mExpectedAttrib);
@@ -947,7 +985,8 @@ TEST_P(VertexAttributeTestES3, IntUnnormalized)
     }
 
     TestData data(GL_INT, GL_FALSE, Source::BUFFER, inputData.data(), expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 TEST_P(VertexAttributeTestES3, IntNormalized)
@@ -963,7 +1002,8 @@ TEST_P(VertexAttributeTestES3, IntNormalized)
     }
 
     TestData data(GL_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 TEST_P(VertexAttributeTestES3, UnsignedIntUnnormalized)
@@ -979,7 +1019,8 @@ TEST_P(VertexAttributeTestES3, UnsignedIntUnnormalized)
     }
 
     TestData data(GL_UNSIGNED_INT, GL_FALSE, Source::BUFFER, inputData.data(), expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 TEST_P(VertexAttributeTestES3, UnsignedIntNormalized)
@@ -995,7 +1036,8 @@ TEST_P(VertexAttributeTestES3, UnsignedIntNormalized)
     }
 
     TestData data(GL_UNSIGNED_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data());
-    runTest(data);
+    // Requires highp precision (int values > 1024)
+    runTest(data, true);
 }
 
 void SetupColorsForUnitQuad(GLint location, const GLColor32F &color, GLenum usage, GLBuffer *vbo)
@@ -1155,7 +1197,7 @@ TEST_P(VertexAttributeOORTest, ANGLEDrawArraysBufferTooSmall)
     TestData data(GL_FLOAT, GL_FALSE, Source::BUFFER, inputData.data(), expectedData.data());
     data.bufferOffset = kVertexCount * TypeStride(GL_FLOAT);
 
-    setupTest(data, 1);
+    setupTest(data, 1, false);
     drawQuad(mProgram, "position", 0.5f);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
@@ -1174,7 +1216,7 @@ TEST_P(VertexAttributeOORTest, ANGLEDrawElementsBufferTooSmall)
     TestData data(GL_FLOAT, GL_FALSE, Source::BUFFER, inputData.data(), expectedData.data());
     data.bufferOffset = (kVertexCount - 3) * TypeStride(GL_FLOAT);
 
-    setupTest(data, 1);
+    setupTest(data, 1, false);
     drawIndexedQuad(mProgram, "position", 0.5f);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
@@ -1186,7 +1228,7 @@ TEST_P(VertexAttributeOORTest, ANGLEDrawArraysOutOfBoundsCases)
     // Test skipped due to supporting GL_KHR_robust_buffer_access_behavior
     ANGLE_SKIP_TEST_IF(IsGLExtensionEnabled("GL_KHR_robust_buffer_access_behavior"));
 
-    initBasicProgram();
+    initBasicProgram(false);
 
     GLfloat singleFloat = 1.0f;
     GLsizei dataSize    = TypeStride(GL_FLOAT);
@@ -1204,7 +1246,7 @@ TEST_P(VertexAttributeOORTest, ANGLEDrawArraysOutOfBoundsCases)
 // Verify that using a different start vertex doesn't mess up the draw.
 TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
 {
-    initBasicProgram();
+    initBasicProgram(false);
     glUseProgram(mProgram);
 
     std::array<GLfloat, kVertexCount> inputData;
@@ -1275,7 +1317,7 @@ TEST_P(VertexAttributeTest, DrawArraysWithUnalignedBufferOffset)
     // TODO(https://anglebug.com/4269): Test is flaky on OpenGL and Metal on Mac NVIDIA.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
 
-    initBasicProgram();
+    initBasicProgram(false);
     glUseProgram(mProgram);
 
     std::array<GLfloat, kVertexCount> inputData;
@@ -1340,7 +1382,7 @@ TEST_P(VertexAttributeTest, DrawArraysWithUnalignedShortBufferOffset)
     // TODO(https://anglebug.com/4269): Test is flaky on OpenGL and Metal on Mac NVIDIA.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
 
-    initBasicProgram();
+    initBasicProgram(false);
     glUseProgram(mProgram);
 
     // input data is GL_SHORTx3 (6 bytes) but stride=8
@@ -1416,7 +1458,7 @@ TEST_P(VertexAttributeTest, DrawArraysWithShortBufferOffsetNotMultipleOf4)
     // TODO(https://anglebug.com/4269): Test is flaky on OpenGL and Metal on Mac NVIDIA.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
 
-    initBasicProgram();
+    initBasicProgram(false);
     glUseProgram(mProgram);
 
     // input data is GL_SHORTx3 (6 bytes) but stride=8
@@ -1491,7 +1533,7 @@ TEST_P(VertexAttributeTest, DrawArraysWithAlignedAndUnalignedBufferOffset)
     // TODO(https://anglebug.com/4269): Test is flaky on OpenGL and Metal on Mac NVIDIA.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
 
-    initBasicProgram();
+    initBasicProgram(false);
     glUseProgram(mProgram);
 
     std::array<GLfloat, kVertexCount> inputData;
@@ -1561,7 +1603,7 @@ TEST_P(VertexAttributeTest, DrawArraysWithAlignedAndUnalignedBufferOffset)
 // correct.
 TEST_P(VertexAttributeTest, DrawArraysWithDisabledAttribute)
 {
-    initBasicProgram();
+    initBasicProgram(false);
 
     std::array<GLfloat, kVertexCount> inputData;
     std::array<GLfloat, kVertexCount> expectedData;
@@ -1702,7 +1744,7 @@ TEST_P(VertexAttributeTest, DrawWithLargeBufferOffset)
         }
     }
 
-    initBasicProgram();
+    initBasicProgram(false);
 
     glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
     glBufferData(GL_ARRAY_BUFFER, inputData.size(), inputData.data(), GL_STATIC_DRAW);
@@ -1777,7 +1819,7 @@ class VertexAttributeTestES31 : public VertexAttributeTestES3
 
     void initTest()
     {
-        initBasicProgram();
+        initBasicProgram(false);
         glUseProgram(mProgram);
 
         glGenVertexArrays(1, &mVAO);
@@ -2454,12 +2496,12 @@ class VertexAttributeCachingTest : public VertexAttributeTest
     void initDoubleAttribProgram()
     {
         constexpr char kVS[] =
-            "attribute mediump vec4 position;\n"
-            "attribute mediump vec4 test;\n"
-            "attribute mediump vec4 expected;\n"
-            "attribute mediump vec4 test2;\n"
-            "attribute mediump vec4 expected2;\n"
-            "varying mediump vec4 color;\n"
+            "attribute highp vec4 position;\n"
+            "attribute highp vec4 test;\n"
+            "attribute highp vec4 expected;\n"
+            "attribute highp vec4 test2;\n"
+            "attribute highp vec4 expected2;\n"
+            "varying highp vec4 color;\n"
             "void main(void)\n"
             "{\n"
             "    gl_Position = position;\n"
@@ -2470,7 +2512,7 @@ class VertexAttributeCachingTest : public VertexAttributeTest
             "}\n";
 
         constexpr char kFS[] =
-            "varying mediump vec4 color;\n"
+            "varying highp vec4 color;\n"
             "void main(void)\n"
             "{\n"
             "    gl_FragColor = color;\n"
@@ -2615,7 +2657,7 @@ TEST_P(VertexAttributeCachingTest, BufferMulticaching)
 {
     ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL());
 
-    initBasicProgram();
+    initBasicProgram(false);
 
     glEnableVertexAttribArray(mTestAttrib);
     glEnableVertexAttribArray(mExpectedAttrib);
@@ -2912,7 +2954,7 @@ void main()
     // Setup the test data
     TestData data(GL_UNSIGNED_BYTE, GL_FALSE, Source::IMMEDIATE, inputData.data(),
                   expectedData.data());
-    setupTest(data, 1);
+    setupTest(data, 1, false);
 
     // Test enabling an unused attribute after glUseProgram
     glVertexAttribPointer(unused1Attrib, 1, data.type, data.normalized, 0, inputData2.data());
