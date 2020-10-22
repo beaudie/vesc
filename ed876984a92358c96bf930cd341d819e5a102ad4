@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "147e2db2_687858b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 59
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-10-22T06:08:06Z",
+      "side": 1,
+      "message": "Hi ANGLEers,\n\nWe found CTS crash with this commit:\n\n./glcts --deqp-case\u003ddEQP-EGL.functional.fence_sync.valid.wait_no_context\nSegmentation fault\n\nIt crashed due to NULL contextVk in SyncHelper::clientWait. With change below, test could pass:\n\n```\ndiff --git a/src/libANGLE/renderer/vulkan/SyncVk.cpp b/src/libANGLE/renderer/vulkan/SyncVk.cpp\nindex e11c69339..381502bf7 100644\n--- a/src/libANGLE/renderer/vulkan/SyncVk.cpp\n+++ b/src/libANGLE/renderer/vulkan/SyncVk.cpp\n@@ -108,7 +108,7 @@ angle::Result SyncHelper::clientWait(Context *context,\n \n     // If we are using worker need to wait for the commands to be issued before waiting on the\n     // fence.\n-    if (contextVk-\u003egetRenderer()-\u003egetFeatures().enableCommandProcessingThread.enabled)\n+    if (contextVk \u0026\u0026 contextVk-\u003egetRenderer()-\u003egetFeatures().enableCommandProcessingThread.enabled)\n     {\n         contextVk-\u003egetRenderer()-\u003ewaitForCommandProcessorIdle(contextVk);\n     }\n```\n\n\nbacktrace:\n(gdb) bt\nwarning: Could not find DWO CU obj/src/libANGLE/renderer/vulkan/angle_vulkan_backend/SyncVk.dwo(0x8fdd00868e3c768b) referenced by CU at offset 0x1c00 [in module /root/angle/out/debug_arm64/libmali.so.0]\n#0  rx::vk::Context::getRenderer() const () at ../../src/libANGLE/renderer/vulkan/vk_utils.h:174\n#1  0x0000007fbea02e98 in rx::vk::SyncHelper::clientWait(rx::vk::Context*, rx::ContextVk*, bool, unsigned long, VkResult*) () at ../../src/libANGLE/renderer/vulkan/SyncVk.cpp:111\n#2  0x0000007fbea053a4 in rx::EGLSyncVk::clientWait(egl::Display const*, gl::Context const*, int, unsigned long, int*) () at ../../src/libANGLE/renderer/vulkan/SyncVk.cpp:501\nwarning: Could not find DWO CU obj/libANGLE_base/EGLSync.dwo(0xbc856fd8594e67f1) referenced by CU at offset 0x4a0 [in module /root/angle/out/debug_arm64/libmali.so.0]\n#3  0x0000007fbe661800 in egl::Sync::clientWait(egl::Display const*, gl::Context const*, int, unsigned long, int*) () at ../../src/libANGLE/EGLSync.cpp:85\nwarning: Could not find DWO CU obj/libGLESv2/entry_points_egl_ext.dwo(0xa3bb2da90a650537) referenced by CU at offset 0x34 [in module /root/angle/out/debug_arm64/libmali.so.0]\n#4  0x0000007fbe487760 in EGL_ClientWaitSyncKHR () at ../../src/libGLESv2/entry_points_egl_ext.cpp:966\n#5  0x000000000105dc74 in deqp::egl::(anonymous namespace)::ClientWaitNoContextTest::iterate() ()\n#6  0x0000000001f042a4 in tcu::TestSessionExecutor::iterate() ()\n#7  0x0000000001edc508 in tcu::App::iterate() ()\n#8  0x000000000046a3cc in main ()\n\n",
+      "revId": "ed876984a92358c96bf930cd341d819e5a102ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
