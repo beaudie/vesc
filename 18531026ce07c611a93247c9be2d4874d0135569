@@ -16,6 +16,24 @@
       "message": "Please ping once this is passing tryjobs. Thanks.\n",
       "revId": "18531026ce07c611a93247c9be2d4874d0135569",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5efbc89_d6af1fc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-22T21:33:07Z",
+      "side": 1,
+      "message": "It wasn\u0027t necessary for me to run the dry run. Merge branches from ANGLE like this will almost always fail since it\u0027s running some old ANGLE rev against ToT chromium. I tested locally and it compiles and launches without errors",
+      "parentUuid": "f8125d64_ea56332f",
+      "revId": "18531026ce07c611a93247c9be2d4874d0135569",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
