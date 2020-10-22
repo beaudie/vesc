@@ -16,6 +16,24 @@
       "message": "Mohan/Chabi/Colid, PTAL. Would like to move this forward - I think there is a Vulkan back-end bug with the EGL color space EXT so I suppressed those failures.",
       "revId": "804610def8049188f95f091ebd811bbd9d72f843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be4c0b69_f7ebc485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1462757
+      },
+      "writtenOn": "2020-10-22T21:10:17Z",
+      "side": 1,
+      "message": "EGL colorspace EXT creates some situations where a texture can have a different VK backend format from its ANGLE frontend format- the existing colorspace logic generally expects these to refer to the same format.\n\nCould be something to look into for a follow-up fix.",
+      "parentUuid": "6a194179_093fa55e",
+      "revId": "804610def8049188f95f091ebd811bbd9d72f843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
