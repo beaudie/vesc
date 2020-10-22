@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "905d0a3a_2eeb0a1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-22T15:42:20Z",
+      "side": 1,
+      "message": "PTAL\n\nI took the commit from the latest (failed) Chromium roll here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2491888",
+      "revId": "aaabc426cfe63604b8ec940a36cc5ad8e1585b97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
