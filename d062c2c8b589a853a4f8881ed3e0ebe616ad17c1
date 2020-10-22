@@ -51,6 +51,23 @@
       "parentUuid": "38f08922_6d4de887",
       "revId": "d062c2c8b589a853a4f8881ed3e0ebe616ad17c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "612b042b_cb85d92a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-22T16:39:34Z",
+      "side": 1,
+      "message": "Thanks Tim. Trace scalability is a Pri-1 right now.",
+      "revId": "d062c2c8b589a853a4f8881ed3e0ebe616ad17c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
