@@ -93,6 +93,8 @@ void CommandProcessorTask::initFinishToSerial(Serial serial)
 }
 
 void CommandProcessorTask::initFlushAndQueueSubmit(
+    vk::Context *contextVk,
+    const vk::Shared<vk::Fence> &sharedFence,
     std::vector<VkSemaphore> &&waitSemaphores,
     std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
     const vk::Semaphore *semaphore,
@@ -100,7 +102,8 @@ void CommandProcessorTask::initFlushAndQueueSubmit(
     vk::GarbageList &&currentGarbage,
     vk::ResourceUseList &&currentResources)
 {
-    mTask                    = vk::CustomTask::FlushAndQueueSubmit;
+    mTask = vk::CustomTask::FlushAndQueueSubmit;
+    mSharedFence.copy(contextVk->getDevice(), sharedFence);
     mWaitSemaphores          = std::move(waitSemaphores);
     mWaitSemaphoreStageMasks = std::move(waitSemaphoreStageMasks);
     mSemaphore               = semaphore;
@@ -141,6 +144,7 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
     std::swap(mPriority, rhs.mPriority);
     std::swap(mResourceUseList, rhs.mResourceUseList);
     mOneOffCommandBufferVk = rhs.mOneOffCommandBufferVk;
+    std::swap(mSharedFence, rhs.mSharedFence);
 
     // clear rhs now that everything has moved.
     rhs.initTask();
@@ -675,14 +679,14 @@ angle::Result CommandProcessor::processTask(vk::Context *context, vk::CommandPro
             // 2. Get shared submit fence. It's possible there are other users of this fence that
             // must wait for the work to be submitted before waiting on the fence. Reset the fence
             // immediately so we are sure to get a fresh one next time.
-            vk::Shared<vk::Fence> fence;
-            ANGLE_TRY(mRenderer->getNextSubmitFence(&fence, true));
+            // vk::Shared<vk::Fence> fence;
+            // ANGLE_TRY(mRenderer->getNextSubmitFence(&fence, true));
 
             // 3. Call submitFrame()
             ANGLE_TRY(mTaskProcessor.submitFrame(
-                context, getRenderer()->getVkQueue(task->getPriority()), submitInfo, fence,
-                &task->getGarbage(), &mCommandPool, std::move(mPrimaryCommandBuffer),
-                task->getQueueSerial()));
+                context, getRenderer()->getVkQueue(task->getPriority()), submitInfo,
+                task->getSharedFence(), &task->getGarbage(), &mCommandPool,
+                std::move(mPrimaryCommandBuffer), task->getQueueSerial()));
             // 4. Allocate & begin new primary command buffer
             ANGLE_TRY(mTaskProcessor.allocatePrimaryCommandBuffer(context, &mPrimaryCommandBuffer));
 
@@ -693,7 +697,8 @@ angle::Result CommandProcessor::processTask(vk::Context *context, vk::CommandPro
             ANGLE_VK_TRY(context, mPrimaryCommandBuffer.begin(beginInfo));
 
             // Free this local reference
-            getRenderer()->resetSharedFence(&fence);
+            // getRenderer()->resetSharedFence(&fence);
+            getRenderer()->resetSharedFence(&task->getSharedFence());
 
             ASSERT(task->getGarbage().empty());
             break;

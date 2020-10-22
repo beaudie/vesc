@@ -4358,11 +4358,24 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         // 2. Call submitFrame()
         // 3. Allocate new primary command buffer
         vk::CommandProcessorTask flushAndQueueSubmit;
+
+        // Create the shared fence here and pass it in to the command.
+        // Can then keep a copy in the ContextVk to use at AcquireNextImage time?
+        // Properties of ContextVk::getLastSubmittedFence:
+        // - get's last submit fence for THIS context
+        // - only returns fence from mIsInFlight list, if work is done, empty fence is returned
+        // Caching the fence would keep it around too long, though that shouldn't hurt anything
+        ANGLE_TRY(ensureSubmitFenceInitialized());
+
         flushAndQueueSubmit.initFlushAndQueueSubmit(
-            std::move(mWaitSemaphores), std::move(mWaitSemaphoreStageMasks), signalSemaphore,
-            mContextPriority, std::move(mCurrentGarbage), std::move(mResourceUseList));
+            this, mSubmitFence, std::move(mWaitSemaphores), std::move(mWaitSemaphoreStageMasks),
+            signalSemaphore, mContextPriority, std::move(mCurrentGarbage),
+            std::move(mResourceUseList));
 
         commandProcessorSyncErrorsAndQueueCommand(&flushAndQueueSubmit);
+
+        // Make sure a new fence is created for the next submission.
+        mRenderer->resetSharedFence(&mSubmitFence);
 
         // Some tasks from ContextVk::submitFrame() that run after CommandQueue::submitFrame()
         onRenderPassFinished();

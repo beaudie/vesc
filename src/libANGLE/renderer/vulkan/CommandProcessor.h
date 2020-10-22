@@ -67,7 +67,9 @@ class CommandProcessorTask
 
     void initFinishToSerial(Serial serial);
 
-    void initFlushAndQueueSubmit(std::vector<VkSemaphore> &&waitSemaphores,
+    void initFlushAndQueueSubmit(vk::Context *contextVk,
+                                 const vk::Shared<vk::Fence> &sharedFence,
+                                 std::vector<VkSemaphore> &&waitSemaphores,
                                  std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                  const vk::Semaphore *semaphore,
                                  egl::ContextPriority priority,
@@ -105,6 +107,7 @@ class CommandProcessorTask
     vk::RenderPass *getRenderPass() const { return mRenderPass; }
     CommandBufferHelper *getCommandBuffer() const { return mCommandBuffer; }
     ContextVk *getContextVk() const { return mContextVk; }
+    vk::Shared<vk::Fence> &getSharedFence() { return mSharedFence; }
 
   private:
     CustomTask mTask;
@@ -133,6 +136,7 @@ class CommandProcessorTask
     const vk::Fence *mOneOffFence;
 
     // Flush, Present & QueueWaitIdle data
+    vk::Shared<vk::Fence> mSharedFence;
     egl::ContextPriority mPriority;
 };
 
