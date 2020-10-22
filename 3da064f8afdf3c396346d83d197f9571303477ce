@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb36b333_94fdb56d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T02:17:54Z",
+      "side": 1,
+      "message": "I regret not having crafted a test for this, but I think this change has a bug with shared resources (between contexts)",
+      "revId": "3da064f8afdf3c396346d83d197f9571303477ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e1d8e58_3f7e3619",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T02:17:54Z",
+      "side": 1,
+      "message": "nit: make it an anonymous function and pass in mInFlightCommands.",
+      "range": {
+        "startLine": 542,
+        "startChar": 19,
+        "endLine": 542,
+        "endChar": 52
+      },
+      "revId": "3da064f8afdf3c396346d83d197f9571303477ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa53b02_7aba7d28",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T02:17:54Z",
+      "side": 1,
+      "message": "See the deleted comment. In the example I had provided, if Context 2 asks to finishToSerial(3), this code will only finish until serial 2, which is incorrect.\n\nNot sure if you added the ASSERT above for this, but serials not being in order was never a concern.",
+      "revId": "3da064f8afdf3c396346d83d197f9571303477ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
