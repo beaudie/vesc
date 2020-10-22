@@ -16,6 +16,23 @@
       "message": "Cody PTAL. Tim as well because I think you ran into the issue of a super long download step that wasn\u0027t printing anything.",
       "revId": "d062c2c8b589a853a4f8881ed3e0ebe616ad17c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38f08922_6d4de887",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-22T16:24:38Z",
+      "side": 1,
+      "message": "Cool.\n\nI wasn\u0027t so worried about the lack of output during the downloads, though this extra output should be nice, but instead the overall size of an ANGLE checkout and the long build and startup times for perftests while all of the data is pushed to the device.   I don\u0027t have an answer for it, and Cody said you guys are aware and keeping it in mind, which is good enough for me.\n\nI do wonder if we\u0027ll want to eventually do something like break up the perftests traces into separate APKs for each trace, so only that APK has to be built and pushed to the device.   Running multiple/all of the traces would require building/running them all separately, so the test runner would also have to get more complex too.   I don\u0027t know how much work an approach like that would be, just throwing out ideas that move us away from the monolithic perftests approach we have right now, since this approach may not scale well with our current goal of 100 apps.   You guys are much more familiar with this than I am though, so you likely have other/better ideas on an good answer here.",
+      "revId": "d062c2c8b589a853a4f8881ed3e0ebe616ad17c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
