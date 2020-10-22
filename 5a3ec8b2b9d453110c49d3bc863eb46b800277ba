@@ -177,6 +177,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4b04b21_d86e44d3",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T19:20:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90859ab6_f1cc9ab3",
+      "range": {
+        "startLine": 41,
+        "startChar": 9,
+        "endLine": 41,
+        "endChar": 22
+      },
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "338723b5_acc728d8",
@@ -286,6 +310,30 @@
       "side": 1,
       "message": "FWIW you can\u0027t put the do {} around the scoped helper, but you can put it around the if.",
       "parentUuid": "f98a6b06_c2c37a1a",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 99
+      },
+      "revId": "5a3ec8b2b9d453110c49d3bc863eb46b800277ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30ef7a4e_73b1a9a8",
+        "filename": "src/common/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-22T19:20:42Z",
+      "side": 1,
+      "message": "\u003e you can\u0027t put the do {} around the scoped helper, but you can put it around the if.\n\nTrue (RAII).  It\u0027s compiling with curly braces on Windows (same as I did before).  I\u0027ll push and try an Android build.",
+      "parentUuid": "d97236e7_2eb55e77",
       "range": {
         "startLine": 259,
         "startChar": 0,
