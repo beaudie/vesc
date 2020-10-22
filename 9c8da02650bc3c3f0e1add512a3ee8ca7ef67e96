@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f65909_961d6ef7",
+        "filename": "gni/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-10-22T21:58:49Z",
+      "side": 0,
+      "message": "nit: would be less confusing to me if you\u0027ve just kept this part as is.",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 23
+      },
+      "revId": "9c8da02650bc3c3f0e1add512a3ee8ca7ef67e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
