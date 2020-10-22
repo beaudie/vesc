@@ -67,7 +67,8 @@ class CommandProcessorTask
 
     void initFinishToSerial(Serial serial);
 
-    void initFlushAndQueueSubmit(std::vector<VkSemaphore> &&waitSemaphores,
+    void initFlushAndQueueSubmit(const vk::Shared<vk::Fence> &sharedFence,
+                                 std::vector<VkSemaphore> &&waitSemaphores,
                                  std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                  const vk::Semaphore *semaphore,
                                  egl::ContextPriority priority,
@@ -133,6 +134,7 @@ class CommandProcessorTask
     const vk::Fence *mOneOffFence;
 
     // Flush, Present & QueueWaitIdle data
+    vk::Shared<vk::Fence> mSharedFence;
     egl::ContextPriority mPriority;
 };
 
