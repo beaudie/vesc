@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1339362a_98d721ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T19:59:04Z",
+      "side": 1,
+      "message": "This is failing presubmit with:\n\n  File \"\u003credacted\u003e/scripts/export_targets.py\", line 152, in pre\n    assert not deps, (target_name, dep[\u0027deps\u0027])\n\nscripts/export_targets.py has this:\n\n        if dep_type \u003d\u003d \u0027copy\u0027:\n            assert not deps, (target_name, dep[\u0027deps\u0027])\n\nNot sure what to do about that at the moment.",
+      "revId": "a2f9d619cc5511bf0fb9b82b8e15cb72d4657578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
