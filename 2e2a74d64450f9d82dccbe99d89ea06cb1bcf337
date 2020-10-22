@@ -16,6 +16,24 @@
       "message": "What\u0027s the diff with the change that was reverted?",
       "revId": "2e2a74d64450f9d82dccbe99d89ea06cb1bcf337",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f50f24f9_089d0ae2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-10-22T18:49:22Z",
+      "side": 1,
+      "message": "The extra expectations file change.",
+      "parentUuid": "5305a75c_6d8a3992",
+      "revId": "2e2a74d64450f9d82dccbe99d89ea06cb1bcf337",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
