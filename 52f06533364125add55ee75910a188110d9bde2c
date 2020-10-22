@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d020bde_490975d8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-22T00:36:09Z",
+      "side": 1,
+      "message": "nit: \"is which\"",
+      "range": {
+        "startLine": 2155,
+        "startChar": 54,
+        "endLine": 2155,
+        "endChar": 59
+      },
+      "revId": "52f06533364125add55ee75910a188110d9bde2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c14c4b49_7c107537",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 1
@@ -143,6 +166,30 @@
       "side": 1,
       "message": "\u003e I think `variableInfoMap` was made per stage for the sake of PPOs, and if a program in the PPO has multiple stages, the variable info is duplicated in each of its stages, but activeStages is still the source of truth.\n\nCorrect.   PPOs need to be able to get a specific shader stage\u0027s ShaderInterfaceVariableInfoMap, so we just duplicate the data for now to make that easier to handle both:\n1. a PPO containing separate VS and FS programs\n2. a PPO containing a single program with both VS and FS\n\nNow that the PPO work is much farther along, we could try and look at cleaning that up, since we have a better idea of what\u0027s involved.   We also aren\u0027t particularly concerned with the performance of PPOs, so we can likely get away with adding some extra processing into that path, especially if it helps monolithic programs.",
       "parentUuid": "e52cde13_46dc3897",
+      "range": {
+        "startLine": 2644,
+        "startChar": 50,
+        "endLine": 2644,
+        "endChar": 91
+      },
+      "revId": "52f06533364125add55ee75910a188110d9bde2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1134031e_7d5ab490",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-22T00:36:09Z",
+      "side": 1,
+      "message": "Thinking about it some more though, I think the variables should only be duplicated if they actually exist in both shaders.   Meaning, we don\u0027t add all of the FS\u0027s variable to the VS\u0027s map, just because they are in the FS, so the only duplication is shared variables.   Since you\u0027re checking that you\u0027re processing the VS\u0027s data before getting here, an ASSERT may actually work.\n\nThe only other thing that may prevent it is if the attribute is declared but not actually used anywhere.   I think we (should) discard those before getting here though.",
+      "parentUuid": "2667b006_a7a39037",
       "range": {
         "startLine": 2644,
         "startChar": 50,

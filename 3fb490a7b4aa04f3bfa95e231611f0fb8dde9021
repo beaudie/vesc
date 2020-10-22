@@ -16,6 +16,23 @@
       "message": "Forgot to CC Tim, any comments on https://chromium-review.googlesource.com/c/angle/angle/+/2488127/1/src/libANGLE/renderer/glslang_wrapper_utils.cpp#2644 ?",
       "revId": "3fb490a7b4aa04f3bfa95e231611f0fb8dde9021",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75d810b5_5d2ed750",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-22T00:36:09Z",
+      "side": 1,
+      "message": "Few comments, since I didn\u0027t look at the rest of the CL when answer the question earlier.",
+      "revId": "3fb490a7b4aa04f3bfa95e231611f0fb8dde9021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
