@@ -10,6 +10,7 @@
 import fnmatch
 import json
 import os
+import subprocess
 import sys
 
 
@@ -26,6 +27,19 @@ def reject_duplicate_keys(pairs):
 def read_json(json_file):
     with open(json_file) as map_file:
         return json.loads(map_file.read(), object_pairs_hook=reject_duplicate_keys)
+
+
+def run_command(command):
+    env = os.environ.copy()
+    env['PYTHONUNBUFFERED'] = '1'
+    with subprocess.Popen(
+            command, stdout=subprocess.PIPE, universal_newlines=True, env=env) as proc:
+        while proc.poll() is None:
+            out = proc.stdout.read(1)
+            sys.stdout.write(out)
+            sys.stdout.flush()
+        if proc.returncode:
+            raise subprocess.CalledProcessError(proc.returncode, cmd)
 
 
 def main():
@@ -46,7 +60,7 @@ def main():
         trace_dir,
     ]
 
-    os.system(" ".join(cmd))
+    run_command(cmd)
 
     json_file = os.path.join(trace_dir, 'restricted_traces.json')
 
