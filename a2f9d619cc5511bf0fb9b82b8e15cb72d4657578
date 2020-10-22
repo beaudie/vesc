@@ -33,6 +33,24 @@
       "message": "Can we fix the loader upstream to output libvulkan.so.1 instead of using a copy rule?\n\ntry \"gn help output_extension\"",
       "revId": "a2f9d619cc5511bf0fb9b82b8e15cb72d4657578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d174791_17f8514d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T20:07:28Z",
+      "side": 1,
+      "message": "Nice, missed your email",
+      "parentUuid": "b485828e_9071c88f",
+      "revId": "a2f9d619cc5511bf0fb9b82b8e15cb72d4657578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
