@@ -33,6 +33,41 @@
       "message": "Xiaoxuan,\n\nGerrit is having trouble replying to your message directly for some reason.\n\nThe fix looks good for me locally too.\n\nThis failure got through our testing, since we are currently skipping the test:\n\n[[[ deqp_egl_test_expectations.txt ]]]\n\n    // Tests were being hidden by flakiness (anglebug.com/3271)\n    3325 : dEQP-EGL.functional.fence_sync.* \u003d SKIP\n\nWe should try re-enabling those tests again with a separate CL, since there has been (and still is) a lot of work in this area since anglebug.com/3271 was opened and these tests were suppressed.",
       "revId": "ed876984a92358c96bf930cd341d819e5a102ad4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aacc1fe_b4729268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 59
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T15:50:00Z",
+      "side": 1,
+      "message": "Both vk::Context and ContextVk are passed to this function. Since we only need the renderer, the former can be used. In fact, renderer is already initialized at the top, so the code should become:\n\n    -    if (contextVk-\u003egetRenderer()-\u003egetFeatures().enableCommandProcessingThread.enabled)\n    +    if (renderer-\u003egetFeatures().enableCommandProcessingThread.enabled)\n\n         {\n    -         contextVk-\u003egetRenderer()-\u003ewaitForCommandProcessorIdle(contextVk);\n    +         renderer-\u003ewaitForCommandProcessorIdle(contextVk);\n         }",
+      "revId": "ed876984a92358c96bf930cd341d819e5a102ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1bbca79_67098701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 59
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T15:50:00Z",
+      "side": 1,
+      "message": "Both vk::Context and ContextVk are passed to this function. Since we only need the renderer, the former can be used. In fact, renderer is already initialized at the top, so the code should become:\n\n-    if (contextVk-\u003egetRenderer()-\u003egetFeatures().enableCommandProcessingThread.enabled)\n+    if (renderer-\u003egetFeatures().enableCommandProcessingThread.enabled)\n     {\n-         contextVk-\u003egetRenderer()-\u003ewaitForCommandProcessorIdle(contextVk);\n+         renderer-\u003ewaitForCommandProcessorIdle(contextVk);\n     }",
+      "parentUuid": "c9227eb8_8cf43c32",
+      "revId": "ed876984a92358c96bf930cd341d819e5a102ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
