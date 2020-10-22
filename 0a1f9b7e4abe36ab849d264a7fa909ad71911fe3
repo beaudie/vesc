@@ -68,6 +68,23 @@
       "message": "Wait for second.. you can bypass the normal process for urgent CLs. For this one if needed just poke the reviewers politely if you need a second LGTM.",
       "revId": "0a1f9b7e4abe36ab849d264a7fa909ad71911fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0bab84c_8535602a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T02:21:41Z",
+      "side": 1,
+      "message": "Thanks for the fix!",
+      "revId": "0a1f9b7e4abe36ab849d264a7fa909ad71911fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
