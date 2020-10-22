@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5adf923c_e089f060",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T16:04:10Z",
+      "side": 1,
+      "message": "I used alias as a verb here, so the sentence (with implicit stuff re-added) is:\n\n\u003e find out which [attributes] alias which [attributes]\n\nIn my head, the first which refers to attributes so it\u0027s plural. Should have I said \"which aliases which\"?",
+      "parentUuid": "5d020bde_490975d8",
+      "range": {
+        "startLine": 2155,
+        "startChar": 54,
+        "endLine": 2155,
+        "endChar": 59
+      },
+      "revId": "52f06533364125add55ee75910a188110d9bde2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c14c4b49_7c107537",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 1
@@ -190,6 +214,30 @@
       "side": 1,
       "message": "Thinking about it some more though, I think the variables should only be duplicated if they actually exist in both shaders.   Meaning, we don\u0027t add all of the FS\u0027s variable to the VS\u0027s map, just because they are in the FS, so the only duplication is shared variables.   Since you\u0027re checking that you\u0027re processing the VS\u0027s data before getting here, an ASSERT may actually work.\n\nThe only other thing that may prevent it is if the attribute is declared but not actually used anywhere.   I think we (should) discard those before getting here though.",
       "parentUuid": "2667b006_a7a39037",
+      "range": {
+        "startLine": 2644,
+        "startChar": 50,
+        "endLine": 2644,
+        "endChar": 91
+      },
+      "revId": "52f06533364125add55ee75910a188110d9bde2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f6864a8_372b54fd",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-22T16:04:10Z",
+      "side": 1,
+      "message": "Ok that seems mostly true. `AssignImageBindings` for example seems to not care about the image being active (same for `AssignAtomicCounterBufferBindings`), but the rest do check it.\n\nI\u0027ll follow up with a change to turn these into ASSERT.",
+      "parentUuid": "1134031e_7d5ab490",
       "range": {
         "startLine": 2644,
         "startChar": 50,
