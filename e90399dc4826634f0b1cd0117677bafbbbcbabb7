@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88d63113_506078df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-22T13:41:09Z",
+      "side": 1,
+      "message": "Shabi: the gold failures indicate this precision change could be affecting non-aliased attribs as well.",
+      "revId": "e90399dc4826634f0b1cd0117677bafbbbcbabb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
