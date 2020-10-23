@@ -87,6 +87,41 @@
       "parentUuid": "f82b3664_90df4733",
       "revId": "193f9cb7feb614433b482dc6b2a867d9ec86e8b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9c35371_657f4419",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-10-23T23:20:59Z",
+      "side": 1,
+      "message": "OK I just looked through all the comments in detail and I believe they are all addressed.",
+      "parentUuid": "92ae70e4_aa0de881",
+      "revId": "193f9cb7feb614433b482dc6b2a867d9ec86e8b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "febfce71_7dd2959e",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-10-23T23:20:59Z",
+      "side": 1,
+      "message": "There was a comment here on the old CL implying that there would be a problem if this loop first encountered a large arrayIndex and then a small one. I think that the code would work in this case, but also Geoff mentioned that arrayIndex is guaranteed to increase with increasing uniform location, so it shouldn\u0027t happen. I think the code is OK as is.",
+      "revId": "193f9cb7feb614433b482dc6b2a867d9ec86e8b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
