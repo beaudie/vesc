@@ -22,6 +22,30 @@
       },
       "revId": "80f868e2717af5a53c1f4cd5026c2086e4915c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd5f163_0c209eda",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-23T22:16:02Z",
+      "side": 1,
+      "message": "I used union in order to avoid creating multiple functions \u0026 shader uniform definitions for int, uint and float clearing variants.\nIt\u0027s better to use the same functions with an union parameter instead of creating duplicated versions.\nFor clearing shader\u0027s uniform handling, you can see https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/metal/shaders/clear.metal#31 for example of bit casting from union values to integer values.\n\nAlso, this is inspired by Vulkan\u0027s VkClearColorValue which is also an union: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkClearColorValue.html\n\nAre you concerning that the code could mistakenly assign a wrong value to the union? If so, I have changed the union\u0027s members to be private and they are only modifiable (as a whole) via setter/constructor.",
+      "parentUuid": "9f641ed2_2e73cacf",
+      "range": {
+        "startLine": 407,
+        "startChar": 0,
+        "endLine": 426,
+        "endChar": 2
+      },
+      "revId": "80f868e2717af5a53c1f4cd5026c2086e4915c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
