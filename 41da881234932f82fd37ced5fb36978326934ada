@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77f5fbba_edb6c7c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4116,
+      "author": {
+        "id": 1462757
+      },
+      "writtenOn": "2020-10-23T14:19:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "96e53955_0b937a3b",
+      "revId": "41da881234932f82fd37ced5fb36978326934ada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "925f1162_31de0cf2",
