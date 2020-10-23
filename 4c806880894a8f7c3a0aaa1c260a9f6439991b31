@@ -1,0 +1,267 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84e5197e_d29e0300",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Is it guaranteed somehow that the passed in VkSwapchainKHR is \"valid\" (in whatever context \u0027valid\u0027 makes sense)?   Meaning, are we always guaranteed that we don\u0027t have a status because the present just hasn\u0027t occurred yet, vs it was never submitted or it was submitted so long ago we don\u0027t have its status anymore?\n\nIs there a good way to make sure the thread doesn\u0027t get stuck in here waiting for a result that will never come?",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 5
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88b57634_05be965e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Is it safe to ASSERT(!mSwapchainStatus.contains(presentInfo.pSwapchains[0])), so we don\u0027t overwrite a previous status?",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d727031_18f06c6c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Now that this loop is getting larger with taking and releasing locks, it\u0027s probably time to find the serial that would bring us within the limit and only calling finishToSerial() once.   Something like:\n\n        if (mInFlightCommands.size() \u003e\u003d kInFlightCommandsLimit)\n        {\n            int numCommandsToFinish \u003d kInFlightCommandsLimit - mInFlightCommands.size()\n            Serial finishSerial \u003d mInFlightCommands[numCommandsToFinish].serial;\n            inFlightLock.unlock();\n            return finishToSerial(context, finishSerial);\n        }\n\nThe other nice thing is that it gets rid of needing to re-lock() at the end.",
+      "range": {
+        "startLine": 438,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 9
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a767b5c_98364966",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Add a tracking bug.",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1534d4b3_4997991f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Since CommandProcessor::shutdown() was updated to pass a vk::Context*, I think this can be changed to an ASSERT(context).",
+      "range": {
+        "startLine": 766,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 5
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e71f3ad_a23e4077",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Add a tracking bug.",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce2a7ac2_9f078f67",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "nit: a",
+      "range": {
+        "startLine": 31,
+        "startChar": 86,
+        "endLine": 31,
+        "endChar": 88
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "011e3153_755b690d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2266,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "RendererVk::queueSubmit() does it for us already:\n\n    angle::Result RendererVk::queueSubmit(vk::Context *context,\n                                          egl::ContextPriority priority,\n                                          const VkSubmitInfo \u0026submitInfo,\n                                          vk::ResourceUseList *resourceList,\n                                          const vk::Fence *fence,\n                                          Serial *serialOut)\n    {\n    ...\n        ANGLE_TRY(cleanupGarbage(false));\n\n        return angle::Result::Continue;\n    }\n\nHowever, looking at TaskProcessor::checkCompletedCommands(), it does (mostly) the same garbage processing as RendererVk::cleanupGarbage().\n\n    angle::Result RendererVk::cleanupGarbage(bool block)\n    {\n        Serial lastCompletedQueueSerial \u003d getLastCompletedQueueSerial();\n        std::lock_guard\u003cstd::mutex\u003e lock(mGarbageMutex);\n\n        for (auto garbageIter \u003d mSharedGarbage.begin(); garbageIter !\u003d mSharedGarbage.end();)\n        {\n            // Possibly \u0027counter\u0027 should be always zero when we add the object to garbage.\n            vk::SharedGarbage \u0026garbage \u003d *garbageIter;\n            if (garbage.destroyIfComplete(this, lastCompletedQueueSerial))\n            {\n                garbageIter \u003d mSharedGarbage.erase(garbageIter);\n            }\n            else\n            {\n                garbageIter++;\n            }\n        }\n\n        return angle::Result::Continue;\n    }\n\n\n    angle::Result TaskProcessor::checkCompletedCommands(vk::Context *context)\n    {\n    ...\n        Serial lastCompleted \u003d rendererVk-\u003egetLastCompletedQueueSerial();\n\n        size_t freeIndex \u003d 0;\n        for (; freeIndex \u003c mGarbageQueue.size(); ++freeIndex)\n        {\n            vk::GarbageAndSerial \u0026garbageList \u003d mGarbageQueue[freeIndex];\n            if (garbageList.getSerial() \u003c\u003d lastCompleted)\n            {\n                for (vk::GarbageObject \u0026garbage : garbageList.get())\n                {\n                    garbage.destroy(rendererVk);\n                }\n            }\n            else\n            {\n                break;\n            }\n        }\n\n        // Remove the entries from the garbage list - they should be ready to go.\n        if (freeIndex \u003e 0)\n        {\n            mGarbageQueue.erase(mGarbageQueue.begin(), mGarbageQueue.begin() + freeIndex);\n        }\n\n        return angle::Result::Continue;\n    }\n\nOne of the differences is in SharedGarbage::destroyIfComplete() which uses isCurrentlyInUse() to check if the object is referenced or the Serial is complete, vs checkCompletedCommands() which just checks the Serial.\n\n    bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSerial)\n    {\n        if (mLifetime.isCurrentlyInUse(completedSerial))\n            return false;\n\n        for (GarbageObject \u0026object : mGarbage)\n        {\n            object.destroy(renderer);\n        }\n\n        mLifetime.release();\n\n        return true;\n    }\n\nI haven\u0027t dug any deeper than that, and I\u0027m not sure about all of the details to know enough if isCurrentlyInUse() is entirely necessary, since most of this code was copied over from RendererVk in the first place (and seems to be passing the bots so far).\n\nAll that to say, this cleanupGarbage() call can probably be removed, unless there\u0027s a separate list of garbage that needs cleaning up I\u0027m missing.   Probably worth at least giving it a shot on CQ to flush out any obvious issues with removing it (which could answer the original question).",
+      "range": {
+        "startLine": 2265,
+        "startChar": 0,
+        "endLine": 2266,
+        "endChar": 41
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3b2c515_d82a2951",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Add a tracking bug.\n\nAlso, can you expand on why we need to wait until after the work was submitted?",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75fa71fd_99f9f179",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "Add a tracking bug.",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e503f8f_aef2f1bd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "These lines are unconditionally overwriting the value of presentOutOfDate.   Does this imply we don\u0027t need to pass it in to begin with, or are callers to doDeferredAcquireNextImage() trying to force recreating the swapchain and this loses that information?",
+      "range": {
+        "startLine": 1448,
+        "startChar": 0,
+        "endLine": 1449,
+        "endChar": 88
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e6d7346_fe3a76fc",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "What\u0027s \u0027that\u0027 in this context?   Recreating the swapchain?",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab492560_db6aba3c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T16:41:52Z",
+      "side": 1,
+      "message": "I think this should live in checkForOutOfDateSwapchain().",
+      "range": {
+        "startLine": 1437,
+        "startChar": 0,
+        "endLine": 1464,
+        "endChar": 5
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
