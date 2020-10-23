@@ -1112,6 +1112,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     if (!isMultisampleTarget())
     {
         disableSampleShadingForSingleSampledTarget(context->getState());
+        disableSampleMaskForSingleSampledTarget(context->getState());
     }
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
@@ -2809,21 +2810,29 @@ void ContextVk::updateColorMasks(const gl::BlendStateExt &blendStateExt)
                                                  framebufferVk->getState().getEnabledDrawBuffers());
 }
 
-void ContextVk::updateSampleMask(const gl::State &glState)
+void ContextVk::updateSampleMaskImpl(const gl::State &glState,
+                                     const uint32_t &maskNumber,
+                                     uint32_t *mask)
 {
     // If sample coverage is enabled, emulate it by generating and applying a mask on top of the
     // sample mask.
     uint32_t coverageSampleCount = GetCoverageSampleCount(glState, mDrawFramebuffer);
 
     static_assert(sizeof(uint32_t) == sizeof(GLbitfield), "Vulkan assumes 32-bit sample masks");
+
+    ApplySampleCoverage(glState, coverageSampleCount, maskNumber, mask);
+
+    mGraphicsPipelineDesc->updateSampleMask(&mGraphicsPipelineTransition, maskNumber, *mask);
+}
+
+void ContextVk::updateSampleMask(const gl::State &glState)
+{
     for (uint32_t maskNumber = 0; maskNumber < glState.getMaxSampleMaskWords(); ++maskNumber)
     {
         uint32_t mask = glState.isSampleMaskEnabled() ? glState.getSampleMaskWord(maskNumber)
                                                       : std::numeric_limits<uint32_t>::max();
 
-        ApplySampleCoverage(glState, coverageSampleCount, maskNumber, &mask);
-
-        mGraphicsPipelineDesc->updateSampleMask(&mGraphicsPipelineTransition, maskNumber, mask);
+        updateSampleMaskImpl(glState, maskNumber, &mask);
     }
 }
 
@@ -2942,6 +2951,18 @@ void ContextVk::disableSampleShadingForSingleSampledTarget(const gl::State &glSt
 {
     mGraphicsPipelineDesc->updateSampleShading(&mGraphicsPipelineTransition, false,
                                                glState.getMinSampleShading());
+    invalidateCurrentGraphicsPipeline();
+}
+
+void ContextVk::disableSampleMaskForSingleSampledTarget(const gl::State &glState)
+{
+    for (uint32_t maskNumber = 0; maskNumber < glState.getMaxSampleMaskWords(); ++maskNumber)
+    {
+        uint32_t mask = std::numeric_limits<uint32_t>::max();
+
+        updateSampleMaskImpl(glState, maskNumber, &mask);
+    }
+
     invalidateCurrentGraphicsPipeline();
 }
 
