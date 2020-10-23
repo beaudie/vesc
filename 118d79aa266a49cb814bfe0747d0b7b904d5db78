@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa736fb_738981db",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74810b57_0410b799",
+      "revId": "118d79aa266a49cb814bfe0747d0b7b904d5db78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f2433b4_62e2c58d",
@@ -48,6 +66,30 @@
       "writtenOn": "2020-10-19T21:01:27Z",
       "side": 1,
       "message": "nit: Not a flag, suggest `numSamplesUniform`.",
+      "range": {
+        "startLine": 30,
+        "startChar": 71,
+        "endLine": 30,
+        "endChar": 86
+      },
+      "revId": "118d79aa266a49cb814bfe0747d0b7b904d5db78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c30bc25b_cc375e69",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f2433b4_62e2c58d",
       "range": {
         "startLine": 30,
         "startChar": 71,
