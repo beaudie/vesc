@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "17fada10_dd9f171a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T20:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "942b0e2c_719e6b84",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "9440bd2e07425baa086d91bc205748499a28598f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bd799368_fb82d811",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35dde267_9244b76c",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T20:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ca0f082_1cf782a5",
+      "range": {
+        "startLine": 131,
+        "startChar": 14,
+        "endLine": 131,
+        "endChar": 28
+      },
+      "revId": "9440bd2e07425baa086d91bc205748499a28598f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24536450_68d3983a",
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c0d73ab_3cde1ebd",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T20:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24536450_68d3983a",
+      "range": {
+        "startLine": 147,
+        "startChar": 14,
+        "endLine": 147,
+        "endChar": 38
+      },
+      "revId": "9440bd2e07425baa086d91bc205748499a28598f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fc670a2_235653f0",
@@ -100,6 +172,30 @@
       "writtenOn": "2020-10-21T02:01:34Z",
       "side": 1,
       "message": "Looks pretty much the same as IsVaryingIn in util.h. Can you de-dupe?",
+      "range": {
+        "startLine": 6007,
+        "startChar": 0,
+        "endLine": 6021,
+        "endChar": 0
+      },
+      "revId": "9440bd2e07425baa086d91bc205748499a28598f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2609969c_e960ef25",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6021,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T20:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fc670a2_235653f0",
       "range": {
         "startLine": 6007,
         "startChar": 0,
