@@ -68,6 +68,24 @@
       "message": "LGTM. Given this is a more complex merge, did you verify locally that it builds works?",
       "revId": "18531026ce07c611a93247c9be2d4874d0135569",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32cef59b_352d9191",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-10-23T18:02:22Z",
+      "side": 1,
+      "message": "Yep, verified locally this works with refs/branch-heads/4280",
+      "parentUuid": "0113341e_287970b7",
+      "revId": "18531026ce07c611a93247c9be2d4874d0135569",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
