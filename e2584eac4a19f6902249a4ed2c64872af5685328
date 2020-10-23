@@ -33,6 +33,29 @@
       "message": "Tests where the target is render buffer or texture passes without issues. Only those tests that uses the default frame buffer fail.\n\nroot-cause is a conflict between \"interpolateAtOffset\" and \"flip-y\" transformation.\nwill have a follow up change when we have finalized on an approach",
       "revId": "e2584eac4a19f6902249a4ed2c64872af5685328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdb897c8_78f06103",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T20:05:26Z",
+      "side": 1,
+      "message": "oops, typo - 3589",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "e2584eac4a19f6902249a4ed2c64872af5685328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
