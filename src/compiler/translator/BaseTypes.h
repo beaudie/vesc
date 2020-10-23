@@ -986,6 +986,13 @@ enum TQualifier
     EvqNoPerspectiveIn,
     EvqCentroidIn,  // Implies smooth
 
+    // GLSL ES 3.0 extension OES_sample_variables
+    EvqSampleID,
+    EvqSamplePosition,
+    EvqSampleMaskIn,
+    EvqSampleMask,
+    EvqNumSamples,
+
     // GLSL ES 3.1 compute shader special variables
     EvqShared,
     EvqComputeIn,
@@ -1333,6 +1340,11 @@ inline const char *getQualifierString(TQualifier q)
     case EvqPerVertexIn:            return "gl_in";
     case EvqPrecise:                return "precise";
     case EvqClipDistance:           return "ClipDistance";
+    case EvqSampleID:               return "SampleID";
+    case EvqSamplePosition:         return "SamplePosition";
+    case EvqSampleMaskIn:           return "SampleMaskIn";
+    case EvqSampleMask:             return "SampleMask";
+    case EvqNumSamples:             return "NumSamples";
     default: UNREACHABLE();         return "unknown qualifier";
     }
     // clang-format on

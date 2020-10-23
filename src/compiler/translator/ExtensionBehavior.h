@@ -41,6 +41,7 @@ enum class TExtension : uint8_t
     NV_shader_noperspective_interpolation,
     OES_EGL_image_external,
     OES_EGL_image_external_essl3,
+    OES_sample_variables,
     OES_shader_multisample_interpolation,
     OES_standard_derivatives,
     OES_texture_3D,
