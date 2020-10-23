@@ -23,6 +23,8 @@ namespace sh
 {
 namespace
 {
+static constexpr int kFullSampleMask = 0xFFFFFFFF;
+
 // Traverse the tree and collect the redeclaration and all constant index references of
 // gl_SampleMask or gl_SampleMaskIn
 class GLSampleMaskRelatedReferenceTraverser : public TIntermTraverser
@@ -126,7 +128,8 @@ class ReplaceVariableExceptOneTraverser : public TIntermTraverser
 
 ANGLE_NO_DISCARD bool ReplaceSampleMaskToANGLESampleMask(TCompiler *compiler,
                                                          TIntermBlock *root,
-                                                         TSymbolTable *symbolTable)
+                                                         TSymbolTable *symbolTable,
+                                                         const TIntermTyped *numSamplesUniform)
 {
     // Collect all constant index references of gl_SampleMask
     bool useNonConstIndex                       = false;
@@ -178,25 +181,47 @@ ANGLE_NO_DISCARD bool ReplaceSampleMaskToANGLESampleMask(TCompiler *compiler,
         return false;
     }
 
-    TIntermBlock *reassignBlock       = new TIntermBlock;
     TIntermSymbol *glSampleMaskSymbol = new TIntermSymbol(glSampleMaskVar);
     TIntermSymbol *sampleMaskSymbol   = new TIntermSymbol(sampleMaskVar);
 
+    // if (ANGLEUniforms.numSamples > 1)
     // {
     //     gl_SampleMask[0] = ANGLESampleMask[0];
     //     gl_SampleMask[1] = ANGLESampleMask[1];
     // }
+    // else
+    // {
+    //     gl_SampleMask[0] = int(0xFFFFFFFF);
+    //     gl_SampleMask[1] = int(0xFFFFFFFF);
+    // }
+    TIntermConstantUnion *singleSampleCount = CreateUIntNode(1);
+    TIntermBinary *greaterThan =
+        new TIntermBinary(EOpGreaterThan, numSamplesUniform->deepCopy(), singleSampleCount);
+
+    TIntermBlock *trueBlock  = new TIntermBlock();
+    TIntermBlock *falseBlock = new TIntermBlock();
+
     for (unsigned int i = 0; i < sampleMaskType->getOutermostArraySize(); ++i)
     {
         TIntermBinary *left =
             new TIntermBinary(EOpIndexDirect, glSampleMaskSymbol->deepCopy(), CreateIndexNode(i));
+
+        // For true block of if statement
         TIntermBinary *right =
             new TIntermBinary(EOpIndexDirect, sampleMaskSymbol->deepCopy(), CreateIndexNode(i));
-        TIntermBinary *assignment = new TIntermBinary(EOpAssign, left, right);
-        reassignBlock->appendStatement(assignment);
+        TIntermBinary *assignmentTrue = new TIntermBinary(EOpAssign, left->deepCopy(), right);
+        trueBlock->appendStatement(assignmentTrue);
+
+        // For false block of if statement
+        TIntermConstantUnion *fullSampleMask = CreateIndexNode(kFullSampleMask);
+        TIntermBinary *assignmentFalse =
+            new TIntermBinary(EOpAssign, left->deepCopy(), fullSampleMask);
+        falseBlock->appendStatement(assignmentFalse);
     }
 
-    return RunAtTheEndOfShader(compiler, root, reassignBlock, symbolTable);
+    TIntermIfElse *multiSampleOrNot = new TIntermIfElse(greaterThan, trueBlock, falseBlock);
+
+    return RunAtTheEndOfShader(compiler, root, multiSampleOrNot, symbolTable);
 }
 
 ANGLE_NO_DISCARD bool ReplaceSampleMaskInToANGLESampleMaskIn(TCompiler *compiler,
