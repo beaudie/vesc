@@ -78,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60157ea4_ae0f91ed",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:50:02Z",
+      "side": 1,
+      "message": "gl_SampleMaskIn cannot be assigned, will rename appropriately?",
+      "parentUuid": "c806779a_02bd8f8b",
+      "range": {
+        "startLine": 1025,
+        "startChar": 52,
+        "endLine": 1025,
+        "endChar": 63
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f3d78d48_9cd0ce13",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 1
@@ -89,6 +113,30 @@
       "writtenOn": "2020-10-19T20:50:30Z",
       "side": 1,
       "message": "Can these be assigned and read back? If so, it\u0027s not just assignments that need to be replaced.",
+      "range": {
+        "startLine": 1030,
+        "startChar": 49,
+        "endLine": 1030,
+        "endChar": 60
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a49b2b4d_564fe20c",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:50:02Z",
+      "side": 1,
+      "message": "yes, gl_SampleMask can be read back -\n    4.3.6 Output Variables\n    Shader output variables are declared with a storage qualifier using the storage qualifier     out. They form\n    the output interface between the declaring shader and the subsequent stages of the OpenGL     pipeline.\n    Output variables must be declared at global scope. During shader execution they will behave as normal\n    unqualified global variables. Their values are copied out to the subsequent pipeline stage on shader exit.\n    Only output variables that are read by the subsequent pipeline stage need to be written; it is allowed to\n    have superfluous declarations of output variables.\n\n\nThe function \"ReplaceSampleMaskAssignments\" replaces all gl_SampleMask with ANGLESampleMask not just assignments, except the redeclaration of gl_SampleMask. An alternative would be \"ReplaceSampleMaskWithANGLESampleMask\" but this function also modifies -\n gl_SampleMask[0] \u003d ANGLESampleMask[0]\n\nwith an if-check like so -\n\n if(ANGLEUniforms.numSamples \u003e 1)\n\nAny naming suggestions?",
+      "parentUuid": "f3d78d48_9cd0ce13",
       "range": {
         "startLine": 1030,
         "startChar": 49,
@@ -130,6 +178,24 @@
       "side": 1,
       "message": "Yes please. The transformation here is doing all sorts of tricks, like not doing anything if non-const indices are not used etc. I\u0027d say skip all that, always declare ANGLESampleMask/In, unconditionally replace gl_SampleMask/In, and assign to them at the end of the shader.\n\nUnless the optimized assembly of the shader is affected, there\u0027s no point in optimizing this. If it is, let me know and to review the code.",
       "parentUuid": "61737bc3_16ef72c2",
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08e1e343_850f0008",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:50:02Z",
+      "side": 1,
+      "message": "The reason for a dedicated replacement method for gl_SampleMask is that it is not a simple replacement. It is tracking a flow which assigns gl_SampleMask to ANGLESampleMask and at the end of main function, re-assign ANGLESampleMask to gl_SampleMask.\n\nThere was a way to implement this in TranslateVulkan.cpp using ReplaceVariable feature, but it seemed like a less clean approach. This was mirroring the pattern of ReplaceClipDistanceVariable.\n\nShabi, the reason that the transformation is only done if non-const indices are used, is to minimize additional instructions in the shader. This routine adds some lines which is for replacing gl_SampleMask to ANGLESampleMask, checking that the sample count is greater than one and assigning ANGLESampleMask to gl_SampleMask. The additional routines are there just to check whether the transformation is \"really\" needed.\n\nafter taking another look, the performance gain is so little that it might be better to choose simpler code, will modify accordingly.",
+      "parentUuid": "747f8fea_cc133f58",
       "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -193,6 +259,30 @@
       "writtenOn": "2020-10-19T20:50:30Z",
       "side": 1,
       "message": "int(0xAAAAAAAA) looks pretty constant to me. Is the int() making it non-const for some reason?",
+      "range": {
+        "startLine": 16,
+        "startChar": 35,
+        "endLine": 16,
+        "endChar": 53
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb9c4440_8c47e513",
+        "filename": "src/tests/compiler_tests/OES_sample_variables_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:50:02Z",
+      "side": 1,
+      "message": "The meaning of \"non-constant index\" is that the index to gl_SampleMask is not a literal, an access like this -\u003e gl_SampleMask[i]\n\nin(0xAAAAAAAA) is a value that will be assigned to gl_SampleMask[i].",
+      "parentUuid": "604fba1b_428c5088",
       "range": {
         "startLine": 16,
         "startChar": 35,
