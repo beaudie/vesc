@@ -1109,6 +1109,11 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         invalidateGraphicsDriverUniforms();
     }
 
+    if (!isMultisampleTarget())
+    {
+        disableSampleShadingForSingleSampledTarget(context->getState());
+    }
+
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
     if (dirtyBits.none())
@@ -2926,6 +2931,18 @@ angle::Result ContextVk::updateScissorImpl(const gl::State &glState, bool should
     }
 
     return angle::Result::Continue;
+}
+
+bool ContextVk::isMultisampleTarget() const
+{
+    return (mGraphicsPipelineDesc->getRasterizationSamples() > 1);
+}
+
+void ContextVk::disableSampleShadingForSingleSampledTarget(const gl::State &glState)
+{
+    mGraphicsPipelineDesc->updateSampleShading(&mGraphicsPipelineTransition, false,
+                                               glState.getMinSampleShading());
+    invalidateCurrentGraphicsPipeline();
 }
 
 void ContextVk::invalidateProgramBindingHelper(const gl::State &glState)
