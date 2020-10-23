@@ -39,6 +39,30 @@
       },
       "revId": "187f9d489aa30dbba2d9d11de97eaa051f19c35b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8feffd8f_157b7352",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-23T16:56:42Z",
+      "side": 1,
+      "message": "Hey Tim,\n\nI only implemented it on Windows. Would you like to contribute a solution that works for CLion here? It\u0027s not necessary to fully duplicate the Chromium logic.\n\nIn any case, if you can file a bug, then we can track it.",
+      "parentUuid": "75691f11_8feabf57",
+      "range": {
+        "startLine": 1288,
+        "startChar": 13,
+        "endLine": 1288,
+        "endChar": 38
+      },
+      "revId": "187f9d489aa30dbba2d9d11de97eaa051f19c35b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
