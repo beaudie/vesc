@@ -16,6 +16,29 @@
       "message": "PTAL Shabi.",
       "revId": "3dd7838f24e1448bad5f1ac2c3f3b441b49b604a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81f69a37_75897dcf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-23T02:08:03Z",
+      "side": 1,
+      "message": "Meh, I\u0027d remove this. Chances of any app relying on it is abysmal to begin with. The problem is going to fix itself soon with the move of fences, so no point in this.",
+      "range": {
+        "startLine": 580,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 5
+      },
+      "revId": "3dd7838f24e1448bad5f1ac2c3f3b441b49b604a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
