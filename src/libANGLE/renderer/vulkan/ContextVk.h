@@ -985,6 +985,11 @@ class ContextVk : public ContextImpl, public vk::Context
     bool shouldSwitchToReadOnlyDepthFeedbackLoopMode(const gl::Context *context,
                                                      gl::Texture *texture) const;
 
+    // If the target is single-sampled target, sample shading is always disabled to enable Bresenham
+    // line rasterization
+    bool isMultisampleTarget() const;
+    void disableSampleShadingForSingleSampledTarget(const gl::State &glState);
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
