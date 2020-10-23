@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb7c1019_dda4d53e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-23T15:23:20Z",
+      "side": 1,
+      "message": "PTAL.. this can fix some disruptive timeouts in trace tests.",
+      "revId": "187f9d489aa30dbba2d9d11de97eaa051f19c35b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
