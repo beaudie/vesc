@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ced91873_c065d25d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:49:55Z",
+      "side": 1,
+      "message": "Also the root-cause for failures in \"deqp-khr-gles31 tests\" -\n An incomplete multisample texture is not supported in ANGLE -\n \n    1) When the format is RGBA8i or RGBA8ui\n        These cases uses isampler2D or usampler2D sampler in the fragment shader but is not used,\n        so an incomplete texture is attached to this sampler variable. However, ANGLE creates an\n        incomplete texture of type RGBA8_UNORM thus causing a mismatching.\n    2) Tests that use sample_0\n        These cases declare sampler2DMS in the fragment shader code but is not used,\n        so an incomplete multisample texture needs to be attached to this sampler variable and\n        ANGLE doesn\u0027t support that currently thus causing an error.\n",
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38b20582_eb8c6153",
@@ -176,6 +193,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "175bca96_5cc22b90",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:49:55Z",
+      "side": 1,
+      "message": "Error log -\n\n    GlslangGetShaderSpirvCode(1983): Internal error parsing Vulkan shader corresponding to GL_FRAGMENT_SHADER:\n    ERROR: 0:44: \u0027[\u0027 :  array must be redeclared with a size before being indexed with a variable\n    ERROR: 0:44: \u0027\u0027 : compilation terminated \n    ERROR: 2 compilation errors.  No code generated.\n\nExcerpt from shader code in which the error occurs -\n\n    void main(){\n        for (int _ui \u003d 0; (_ui \u003c 1); (++_ui))\n        {\n            (gl_SampleMask[_ui] \u003d -1431655766);\n        }\n        float _ublue \u003d float(gl_SampleID);\n        (_ufragColor \u003d vec4(0.0, 1.0, _ublue, 1.0));\n    }\n\nCurrent root-cause for this (GLSL 4.5) -\n\n    Except for the last declared member of a shader storage block (section 4.3.9 “Interface Blocks”),\n    the size of an array must be declared (explicitly sized) before it is indexed with anything other than an integral constant expression.\n    The size of any array must be declared before passing it as an argument to a function.\n    Violation of any of these rules result in compile-time errors.\n    It is legal to declare an array without a size (unsized) and then later redeclare the same name as an array of the same type and specify a size,\n    or index it only with integral constant expressions (implicitly sized).",
+      "parentUuid": "35c75694_1b1b8488",
+      "range": {
+        "startLine": 186,
+        "startChar": 3,
+        "endLine": 186,
+        "endChar": 86
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c846e699_524e00df",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 1
@@ -222,6 +263,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "db26ecd2_09199ef5",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:49:55Z",
+      "side": 1,
+      "message": "Error log -\n        No error log (tests just failed) \n\nCurrent root-cause for this -\n\n    13.4 Multisampling\n    ...\n    If the value of SAMPLE_BUFFERS (see section 9.2.3.1) is one, the rasterization of\n    all primitives is changed, and is referred to as multisample rasterization.\n    Otherwise, primitive rasterization is referred to as single-sample rasterization.\n    ...\n    Multisample rasterization is only in effect when the value of SAMPLE_BUFFERS is one.\n    ...",
+      "parentUuid": "03fbff9b_a0cce014",
+      "range": {
+        "startLine": 212,
+        "startChar": 3,
+        "endLine": 212,
+        "endChar": 93
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0044d2e5_82041e3a",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 1
@@ -233,6 +298,30 @@
       "writtenOn": "2020-10-17T13:12:03Z",
       "side": 1,
       "message": "same here.",
+      "range": {
+        "startLine": 220,
+        "startChar": 3,
+        "endLine": 220,
+        "endChar": 80
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac920c36_e2189836",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:49:55Z",
+      "side": 1,
+      "message": "Error log -\n        No error log (tests just failed) \n\nCurrent root-cause for this -\n\n    9.2. Graphics Pipelines\n    ...\n    If the lineRasterizationMode member of a VkPipelineRasterizationLineStateCreateInfoEXT \n    structure included in the pNext chain of pRasterizationState \n    VK_LINE_RASTERIZATION_MODE_BRESENHAM_EXT is or \n    VK_LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT and if rasterization is enabled,\n    then the alphaToCoverageEnable, alphaToOneEnable, and sampleShadingEnable members of\n    pMultisampleState must all be VK_FALSE.",
+      "parentUuid": "0044d2e5_82041e3a",
       "range": {
         "startLine": 220,
         "startChar": 3,
@@ -268,6 +357,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "254c5bd4_b70a15ab",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:49:55Z",
+      "side": 1,
+      "message": "This looks like AMD specific failures due to AMD driver bug, passes on other vendors. Will move this to the AMD Vulkan expectation category. \n\nReason -\n        \"Cannot support a seperate set of fragment shader input when per-sample shading\" \n\nError log -\n        No error log (tests just failed) \n\nCurrent suspected root-cause -\n    Overview\n    ...\n    This extension adds new global state that controls the minimum\n    number of samples for which attribute data is independently\n    interpolated. When enabled, all fragment-shading operations\n    are executed independently on each sample.\n    ...\n    Additions to Chapter 3 of the OpenGL ES 3.0 Specification (Rasterization)\n    ...\n    When the sample shading fraction is 1.0, a separate set of fragment shader\n    input values are evaluated for each sample, and each set of values\n    is evaluated at the sample location.",
+      "parentUuid": "900f080e_cb0a6f16",
+      "range": {
+        "startLine": 235,
+        "startChar": 3,
+        "endLine": 235,
+        "endChar": 72
+      },
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "908b61b4_da4c3653",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 1
@@ -279,6 +392,24 @@
       "writtenOn": "2020-10-19T20:35:58Z",
       "side": 1,
       "message": "Why is this AMD-only?",
+      "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "709a4275_ed90da16",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T19:49:55Z",
+      "side": 1,
+      "message": "Ran the tests on a Geforce GT 730 and AMD Radeon RX 5700 XT card.\nThe run on Nvidia card had no issues with these tests but on the AMD card they failed.\n\nSuspecting a AMD driver bug.",
+      "parentUuid": "908b61b4_da4c3653",
       "revId": "a4f636682a24b6c4a9641d30e24fab77042abec8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
