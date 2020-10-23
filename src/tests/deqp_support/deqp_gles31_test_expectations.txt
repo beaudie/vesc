@@ -206,15 +206,6 @@
 3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.multisample_*_8 = FAIL
 
 ////
-//// Nvidia Vulkan expectations
-////
-
-// Unknown reason
-3588 VULKAN NVIDIA : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.default_framebuffer = FAIL
-3588 VULKAN NVIDIA : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.singlesample_texture = FAIL
-3588 VULKAN NVIDIA : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.singlesample_rbo = FAIL
-
-////
 //// Android (i.e. Pixel*) Vulkan expectations
 ////
 
