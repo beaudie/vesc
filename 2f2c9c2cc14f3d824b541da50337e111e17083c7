@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "310f3a96_25442532",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-23T17:07:28Z",
+      "side": 1,
+      "message": "Ack\n\nThinking about it some more I\u0027m not sure there was a bug here. I missed that the image flags are cached between recreations.",
+      "parentUuid": "766170eb_b9c819c1",
+      "range": {
+        "startLine": 10,
+        "startChar": 42,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "2f2c9c2cc14f3d824b541da50337e111e17083c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f3d46710_e3fa66f4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
