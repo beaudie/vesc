@@ -39,6 +39,30 @@
       },
       "revId": "3dd7838f24e1448bad5f1ac2c3f3b441b49b604a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9994490_ff97d9c3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-23T14:41:19Z",
+      "side": 1,
+      "message": "I\u0027ll leave it for now since you had asked for it earlier.",
+      "parentUuid": "81f69a37_75897dcf",
+      "range": {
+        "startLine": 580,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 5
+      },
+      "revId": "3dd7838f24e1448bad5f1ac2c3f3b441b49b604a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
