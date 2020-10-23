@@ -46,6 +46,7 @@ enum class RestrictedTraceID
     candy_crush_500,
     cod_mobile,
     egypt_1500,
+    fate_grand_order,
     free_fire,
     kartrider_rush,
     manhattan_10,
