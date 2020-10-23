@@ -15,7 +15,7 @@ class BlitFramebufferANGLETest : public ANGLETest
     BlitFramebufferANGLETest()
     {
         setWindowWidth(32);
-        setWindowHeight(32);
+        setWindowHeight(64);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
@@ -420,6 +420,9 @@ TEST_P(BlitFramebufferANGLETest, ReverseColorBlit)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
 
+    // TODO
+    ANGLE_SKIP_TEST_IF(isEmulatedPrerotation());
+
     // TODO(jmadill): Fix this. http://anglebug.com/2743
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
 
@@ -488,6 +491,9 @@ TEST_P(BlitFramebufferANGLETest, ScissoredBlit)
 TEST_P(BlitFramebufferANGLETest, ReverseScissoredBlit)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
+
+    // TODO
+    ANGLE_SKIP_TEST_IF(isEmulatedPrerotation());
 
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
@@ -558,6 +564,9 @@ TEST_P(BlitFramebufferANGLETest, OversizedBlit)
 TEST_P(BlitFramebufferANGLETest, ReverseOversizedBlit)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
+
+    // TODO
+    ANGLE_SKIP_TEST_IF(isEmulatedPrerotation());
 
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
@@ -2370,6 +2379,9 @@ ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES3_OPENGL(),
                        ES2_VULKAN(),
                        ES3_VULKAN(),
+                       WithEmulatedPrerotation(ES3_VULKAN(), 90),
+                       WithEmulatedPrerotation(ES3_VULKAN(), 180),
+                       WithEmulatedPrerotation(ES3_VULKAN(), 270),
                        ES2_METAL(),
                        WithNoShaderStencilOutput(ES2_METAL()));
 

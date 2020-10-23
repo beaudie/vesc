@@ -2551,10 +2551,12 @@ gl::Rectangle FramebufferVk::getNonRotatedCompleteRenderArea() const
 gl::Rectangle FramebufferVk::getRotatedCompleteRenderArea(ContextVk *contextVk) const
 {
     gl::Rectangle renderArea = getNonRotatedCompleteRenderArea();
+    fprintf(stderr, "Non rotated: %u %u\n", renderArea.width, renderArea.height);
     if (contextVk->isRotatedAspectRatioForDrawFBO())
     {
         // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
         std::swap(renderArea.width, renderArea.height);
+        fprintf(stderr, "Rotated: %u %u\n", renderArea.width, renderArea.height);
     }
     return renderArea;
 }
