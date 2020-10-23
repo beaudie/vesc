@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "df59137c2af385802302003d9fe79a8432eee027",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d33d1da_a521cdd4",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:08:49Z",
+      "side": 1,
+      "message": "typo - With",
+      "range": {
+        "startLine": 27,
+        "startChar": 39,
+        "endLine": 27,
+        "endChar": 41
+      },
+      "revId": "df59137c2af385802302003d9fe79a8432eee027",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e40df45_345ba9f1",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:08:49Z",
+      "side": 1,
+      "message": "typo - With",
+      "range": {
+        "startLine": 31,
+        "startChar": 41,
+        "endLine": 31,
+        "endChar": 43
+      },
+      "revId": "df59137c2af385802302003d9fe79a8432eee027",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
