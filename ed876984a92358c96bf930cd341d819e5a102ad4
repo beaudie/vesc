@@ -85,6 +85,24 @@
       "message": "Sorry for the spam, looks like gerrit is working, despite it looking like it\u0027s dropping messages and failing replies.",
       "revId": "ed876984a92358c96bf930cd341d819e5a102ad4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba81e6ee_4e0b838d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 59
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-10-23T02:13:38Z",
+      "side": 1,
+      "message": "Thank you guys for quick response! I see the fix CL merged https://chromium-review.googlesource.com/c/angle/angle/+/2493181.\n\nI\u0027ll update our local test results 😊",
+      "parentUuid": "7aacc1fe_b4729268",
+      "revId": "ed876984a92358c96bf930cd341d819e5a102ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
