@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a079577_c34df972",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-23T01:25:04Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this (and if you do, it\u0027s a bug)",
+      "range": {
+        "startLine": 150,
+        "startChar": 6,
+        "endLine": 150,
+        "endChar": 28
+      },
+      "revId": "71664efe5fe4e7aa1c2e4edbfd9de270eeee85ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
