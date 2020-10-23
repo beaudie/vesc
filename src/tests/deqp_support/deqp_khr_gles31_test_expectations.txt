@@ -60,6 +60,13 @@
 4723 VULKAN NVIDIA : KHR-GLES31.core.shader_image_size.advanced-nonMS-vs-uint = SKIP
 4723 VULKAN NVIDIA : KHR-GLES31.core.program_interface_query.transform-feedback-types = SKIP
 
+// Cannot support incomplete multisample texture:
+3588 VULKAN : KHR-GLES31.core.sample_variables*samples_0* = SKIP
+
+// These test are failed, but the fault about incomplete multisample texture, these tests need to be SKIP.
+// Incompatible between incomplete texture and sampler format (isampler2D or usampler2D):
+3588 VULKAN : KHR-GLES31.core.sample_variables.mask.rgba8*i.* = SKIP
+
 ////
 //// Desktop Vulkan expectations
 ////

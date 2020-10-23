@@ -274,6 +274,10 @@ void RendererVk::ensureCapsInitialized() const
     // the SampleRateShading capability
     mNativeExtensions.sampleShadingOES = (mPhysicalDeviceFeatures.sampleRateShading == VK_TRUE);
 
+    // From the SPIR-V spec at 3.21. BuiltIn, SampleId and SamplePosition needs
+    // SampleRateShading. https://www.khronos.org/registry/spir-v/specs/unified1/SPIRV.html
+    mNativeExtensions.sampleVariablesOES = mNativeExtensions.sampleShadingOES;
+
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize = LimitToInt(limitsVk.maxImageDimension3D);
