@@ -100,6 +100,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3c16f60_56fe971a",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:07:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60157ea4_ae0f91ed",
+      "range": {
+        "startLine": 1025,
+        "startChar": 52,
+        "endLine": 1025,
+        "endChar": 63
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3d78d48_9cd0ce13",
@@ -200,6 +224,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e960f470_55e207a2",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:07:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08e1e343_850f0008",
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1c815a4_d49557e2",
@@ -236,6 +278,30 @@
       "writtenOn": "2020-10-19T20:50:30Z",
       "side": 1,
       "message": "\"beginning\": in comments, file name, guard macro below etc.",
+      "range": {
+        "startLine": 6,
+        "startChar": 54,
+        "endLine": 6,
+        "endChar": 59
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cf05432_63f5572b",
+        "filename": "src/compiler/translator/tree_util/RunAtTheBeginOfShader.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:07:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3e59f441_9c0611d0",
       "range": {
         "startLine": 6,
         "startChar": 54,
@@ -316,6 +382,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11cb330a_a5b09124",
+        "filename": "src/tests/compiler_tests/OES_sample_variables_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:07:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3664b63_e2b69c96",
+      "range": {
+        "startLine": 43,
+        "startChar": 9,
+        "endLine": 43,
+        "endChar": 12
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6591d4bd_c69ffbbe",
@@ -329,6 +419,30 @@
       "writtenOn": "2020-10-17T13:15:50Z",
       "side": 1,
       "message": "nit: whitespace",
+      "range": {
+        "startLine": 51,
+        "startChar": 9,
+        "endLine": 51,
+        "endChar": 12
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cecbf1c_cb819437",
+        "filename": "src/tests/compiler_tests/OES_sample_variables_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-23T22:07:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6591d4bd_c69ffbbe",
       "range": {
         "startLine": 51,
         "startChar": 9,
