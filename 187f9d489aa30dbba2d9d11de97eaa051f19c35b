@@ -121,6 +121,30 @@
       },
       "revId": "187f9d489aa30dbba2d9d11de97eaa051f19c35b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36a63e26_252fa6cb",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-23T19:06:07Z",
+      "side": 1,
+      "message": "I noticed this last week and took a look at chromium based on the comment in that function. I don\u0027t remember exactly what there was, but I do recall it was kind of clear what\u0027s the core part of it ANGLE could take. I\u0027d be glad to help you out with this Tim.",
+      "parentUuid": "dddad5f5_0538c68b",
+      "range": {
+        "startLine": 1288,
+        "startChar": 13,
+        "endLine": 1288,
+        "endChar": 38
+      },
+      "revId": "187f9d489aa30dbba2d9d11de97eaa051f19c35b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
