@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "d020cfc7_5be720ab",
         "filename": "src/libANGLE/Texture.cpp",
@@ -14,8 +15,25 @@
       "side": 1,
       "message": "Missing signalDirtyStorage call;\n\nThe effect is that in this scenario:\n\n- Attach framebuffer to X\n- Invalidate X\n- Copy into X\n- Draw into framebuffer (blending into X)\n\nloadOp\u003dDONT_CARE will be used by the draw because it\u0027s not aware of the content update. Please add an end2end test based on the above. You should be able to verify that loadOp\u003dDONT_CARE is indeed used without the fix.",
       "revId": "c0200a70233fea88e37a4065f5974aaa4da7344c",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a791ec12_8453138e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-23T20:21:12Z",
+      "side": 1,
+      "message": "I\u0027ve added an end2end test for this (CopyImageFBInvalidateThenBlend). I couldn\u0027t reproduce this problem of the loadOp being DONT_CARE. It was always OP_LOAD for the test with and without having the signalDirtyStorage call.",
+      "parentUuid": "d020cfc7_5be720ab",
+      "revId": "c0200a70233fea88e37a4065f5974aaa4da7344c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
