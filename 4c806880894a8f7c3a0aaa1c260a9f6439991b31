@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80312e41_b57e6d30",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "This is only called from WindowSurfaceVk::doDeferredAcquireNextImage where we know that we have issued a present recently. So if timing is good we shouldn\u0027t have to wait, if it isn\u0027t ready it will be soon.",
+      "parentUuid": "84e5197e_d29e0300",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 5
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88b57634_05be965e",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 11
@@ -37,6 +61,24 @@
       "writtenOn": "2020-10-23T16:41:52Z",
       "side": 1,
       "message": "Is it safe to ASSERT(!mSwapchainStatus.contains(presentInfo.pSwapchains[0])), so we don\u0027t overwrite a previous status?",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d333073_1992e280",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "We don\u0027t care about anything but the last result. Though the way things are right now we won\u0027t ever have a second present finish without reading the prior result.",
+      "parentUuid": "88b57634_05be965e",
       "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f54404dd_2b701585",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d727031_18f06c6c",
+      "range": {
+        "startLine": 438,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 9
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a767b5c_98364966",
@@ -77,6 +143,24 @@
       "writtenOn": "2020-10-23T16:41:52Z",
       "side": 1,
       "message": "Add a tracking bug.",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d45aa058_9b729f5e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a767b5c_98364966",
       "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -104,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f1fe9e1_96ece056",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "No there is still one place where we can pass in nullptr.",
+      "parentUuid": "1534d4b3_4997991f",
+      "range": {
+        "startLine": 766,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 5
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e71f3ad_a23e4077",
@@ -121,6 +229,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0bfdfdc_264890b0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e71f3ad_a23e4077",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce2a7ac2_9f078f67",
@@ -134,6 +260,30 @@
       "writtenOn": "2020-10-23T16:41:52Z",
       "side": 1,
       "message": "nit: a",
+      "range": {
+        "startLine": 31,
+        "startChar": 86,
+        "endLine": 31,
+        "endChar": 88
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7e8a3cf_3a7cfca0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce2a7ac2_9f078f67",
       "range": {
         "startLine": 31,
         "startChar": 86,
@@ -169,6 +319,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f6dbfd1_e1112431",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2266,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "The garbage stuff is complicated.\nThe ANGLE_TRY(cleanupGarbage(false)); here is to clean up RendererVk::mSharedGarbage garbage. We don\u0027t have that call in the else because the queueSubmit does it for us.\nThe RendererVk::cleanupGarbage method we are calling is cleaning up different stuff than what we do in TaskProcessor::checkCompletedCommands.\nBasically there are two types of garbage, shared garbage which the RendererVk keeps track of and ContextVk garbage which we give to the CommandProcessor to take care of.",
+      "parentUuid": "011e3153_755b690d",
+      "range": {
+        "startLine": 2265,
+        "startChar": 0,
+        "endLine": 2266,
+        "endChar": 41
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3b2c515_d82a2951",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -180,6 +354,24 @@
       "writtenOn": "2020-10-23T16:41:52Z",
       "side": 1,
       "message": "Add a tracking bug.\n\nAlso, can you expand on why we need to wait until after the work was submitted?",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3368c2e_f963bbef",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "This is going to issue a vkWaitForFences. If we don\u0027t flush the work out it would be possible for us to issue this wait before the work was sent and we\u0027d be in a deadlock.\nhttps://issuetracker.google.com/170312581 is follow-up task to move fence management into CommandProcessor so that it can make sure to flush what\u0027s needed when needed.",
+      "parentUuid": "d3b2c515_d82a2951",
       "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -201,6 +393,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e7f2252_79a3e09e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75fa71fd_99f9f179",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e503f8f_aef2f1bd",
@@ -214,6 +424,30 @@
       "writtenOn": "2020-10-23T16:41:52Z",
       "side": 1,
       "message": "These lines are unconditionally overwriting the value of presentOutOfDate.   Does this imply we don\u0027t need to pass it in to begin with, or are callers to doDeferredAcquireNextImage() trying to force recreating the swapchain and this loses that information?",
+      "range": {
+        "startLine": 1448,
+        "startChar": 0,
+        "endLine": 1449,
+        "endChar": 88
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f442b5b_1446654c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "This is doing what used to happen in WindowSurfaceVk::present, but since we skip over that now need to do it here once we have the return value for that prior present.\nWhen we get rid of the legacy path, we shouldn\u0027t need to pass the value in.",
+      "parentUuid": "9e503f8f_aef2f1bd",
       "range": {
         "startLine": 1448,
         "startChar": 0,
@@ -243,6 +477,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "41d0b251_43d88391",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "On devices that do not support renderer-\u003egetFeatures().enablePreRotateSurfaces.enabled we only handle OUT_OF_DATE and ignore SUBOPTIMAL.",
+      "parentUuid": "1e6d7346_fe3a76fc",
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab492560_db6aba3c",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -254,6 +506,30 @@
       "writtenOn": "2020-10-23T16:41:52Z",
       "side": 1,
       "message": "I think this should live in checkForOutOfDateSwapchain().",
+      "range": {
+        "startLine": 1437,
+        "startChar": 0,
+        "endLine": 1464,
+        "endChar": 5
+      },
+      "revId": "4c806880894a8f7c3a0aaa1c260a9f6439991b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf70909_a2d9716e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-23T23:01:58Z",
+      "side": 1,
+      "message": "Doesn\u0027t quite fit there, but I can get rid of the duplicate code. Put this into a helper function.",
+      "parentUuid": "ab492560_db6aba3c",
       "range": {
         "startLine": 1437,
         "startChar": 0,
