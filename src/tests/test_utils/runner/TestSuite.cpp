@@ -42,6 +42,7 @@ constexpr char kResultFileArg[]        = "--results-file=";
 constexpr char kHistogramJsonFileArg[] = "--histogram-json-file=";
 constexpr char kListTests[]            = "--gtest_list_tests";
 constexpr char kPrintTestStdout[]      = "--print-test-stdout";
+constexpr char kBatchId[]              = "--batch-id=";
 #if defined(NDEBUG)
 constexpr int kDefaultTestTimeout = 20;
 #else
@@ -806,7 +807,8 @@ TestSuite::TestSuite(int *argc, char **argv)
       mTotalResultCount(0),
       mMaxProcesses(std::min(NumberOfProcessors(), kDefaultMaxProcesses)),
       mTestTimeout(kDefaultTestTimeout),
-      mBatchTimeout(kDefaultBatchTimeout)
+      mBatchTimeout(kDefaultBatchTimeout),
+      mBatchId(-1),
 {
     Optional<int> filterArgIndex;
     bool alsoRunDisabledTests = false;
@@ -832,7 +834,7 @@ TestSuite::TestSuite(int *argc, char **argv)
     {
         if (parseSingleArg(argv[argIndex]))
         {
-            DeleteArg(argc, argv, argIndex);
+            ++argIndex;
             continue;
         }
 
@@ -1034,6 +1036,7 @@ bool TestSuite::parseSingleArg(const char *argument)
             ParseIntArg("--max-processes=", argument, &mMaxProcesses) ||
             ParseIntArg(kTestTimeoutArg, argument, &mTestTimeout) ||
             ParseIntArg("--batch-timeout=", argument, &mBatchTimeout) ||
+            ParseIntArg(kBatchId, argument, &mBatchId) ||
             ParseStringArg("--results-directory=", argument, &mResultsDirectory) ||
             ParseStringArg(kResultFileArg, argument, &mResultsFile) ||
             ParseStringArg("--isolated-script-test-output=", argument, &mResultsFile) ||
@@ -1274,7 +1277,8 @@ int TestSuite::run()
     // Run tests serially.
     if (!mBotMode)
     {
-        if (!angle::IsDebuggerAttached())
+        // Only start the watchdog if the debugger is not attached and we're a child process.
+        if (!angle::IsDebuggerAttached() && mBatchId != -1)
         {
             startWatchdog();
         }
