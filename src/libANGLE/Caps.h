@@ -654,6 +654,9 @@ struct Extensions
     // GL_OES_sample_shading
     bool sampleShadingOES = false;
 
+    // GL_OES_sample_variables
+    bool sampleVariablesOES = false;
+
     // GL_NV_robustness_video_memory_purge
     bool robustnessVideoMemoryPurgeNV = false;
 

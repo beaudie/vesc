@@ -186,12 +186,13 @@ constexpr const char kAcbBufferOffsets[]     = "acbBufferOffsets";
 constexpr const char kDepthRange[]           = "depthRange";
 constexpr const char kPreRotation[]          = "preRotation";
 constexpr const char kFragRotation[]         = "fragRotation";
+constexpr const char kNumSamples[]           = "numSamples";
 
-constexpr size_t kNumGraphicsDriverUniforms                                                = 12;
+constexpr size_t kNumGraphicsDriverUniforms                                                = 13;
 constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames = {
     {kViewport, kHalfRenderArea, kFlipXY, kNegFlipXY, kClipDistancesEnabled, kXfbActiveUnpaused,
-     kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange, kPreRotation,
-     kFragRotation}};
+     kXfbVerticesPerDraw, kNumSamples, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange,
+     kPreRotation, kFragRotation}};
 
 constexpr size_t kNumComputeDriverUniforms                                               = 1;
 constexpr std::array<const char *, kNumComputeDriverUniforms> kComputeDriverUniformNames = {
@@ -427,7 +428,8 @@ const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root,
         new TType(EbtUInt),  // uint clipDistancesEnabled;  // 32 bits for 32 clip distances max
         new TType(EbtUInt),
         new TType(EbtUInt),
-        // NOTE: There's a vec3 gap here that can be used in the future
+        new TType(EbtInt),
+        // NOTE: There's a vec2 gap here that can be used in the future
         new TType(EbtInt, 4),
         new TType(EbtUInt, 4),
         emulatedDepthRangeType,
@@ -1017,6 +1019,16 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                 usePreRotation ? CreateDriverUniformRef(driverUniforms, kFragRotation) : nullptr;
             if (!RewriteDfdy(this, root, getSymbolTable(), getShaderVersion(), flipXY,
                              fragRotation))
+            {
+                return false;
+            }
+        }
+
+        {
+            const TVariable *numSamplesVar = static_cast<const TVariable *>(
+                getSymbolTable().findBuiltIn(ImmutableString("gl_NumSamples"), getShaderVersion()));
+            TIntermBinary *numSamples = CreateDriverUniformRef(driverUniforms, kNumSamples);
+            if (!ReplaceVariableWithTyped(this, root, numSamplesVar, numSamples))
             {
                 return false;
             }
