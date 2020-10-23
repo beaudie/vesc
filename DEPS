@@ -86,7 +86,7 @@ vars = {
   'vulkan_headers_revision': '320af06cbdd29848e1d7100d9b8e4e517db1dfd5',
 
   # Current revision of Khronos Vulkan-Loader.
-  'vulkan_loader_revision': '91ce213a1d882ca9587cbfe3e4fa429382d60b9d',
+  'vulkan_loader_revision': '097cf80e0c78e0406c5ba33bad69d28abe49a1d0',
 
   # Current revision of Khronos Vulkan-Tools.
   'vulkan_tools_revision': 'ee0de094ddff8573a06b36b7fa7922de21ea372c',
@@ -262,7 +262,7 @@ deps = {
   },
 
   'third_party/vulkan-loader/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@{vulkan_loader_revision}',
+    'url': 'https://github.com/ShabbyX/Vulkan-Loader@{vulkan_loader_revision}',
   },
 
   'third_party/vulkan_memory_allocator': {
