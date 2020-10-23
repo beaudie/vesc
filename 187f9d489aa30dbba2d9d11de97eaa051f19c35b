@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5dd20e2b_c83f2fe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T17:25:25Z",
+      "side": 1,
+      "message": "Looks reasonable, though I\u0027m not very familiar with all of this stuff.",
+      "revId": "187f9d489aa30dbba2d9d11de97eaa051f19c35b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "75691f11_8feabf57",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 4
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "Hey Tim,\n\nI only implemented it on Windows. Would you like to contribute a solution that works for CLion here? It\u0027s not necessary to fully duplicate the Chromium logic.\n\nIn any case, if you can file a bug, then we can track it.",
       "parentUuid": "75691f11_8feabf57",
+      "range": {
+        "startLine": 1288,
+        "startChar": 13,
+        "endLine": 1288,
+        "endChar": 38
+      },
+      "revId": "187f9d489aa30dbba2d9d11de97eaa051f19c35b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dddad5f5_0538c68b",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T17:25:25Z",
+      "side": 1,
+      "message": "I opened anglebug.com/5219 to track it.   Can you add some high-level notes about which parts from Chromium\u0027s implementation can be omitted (admittedly, it may turn out to be obvious, I haven\u0027t look too closely beyond seeing it\u0027s more than few lines).\n\nI\u0027ll try and get to it next week, since it can be a bit of an irritation to those of us on linux.",
+      "parentUuid": "8feffd8f_157b7352",
       "range": {
         "startLine": 1288,
         "startChar": 13,
