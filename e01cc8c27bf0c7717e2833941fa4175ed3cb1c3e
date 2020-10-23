@@ -39,6 +39,24 @@
       "message": "This program doesn\u0027t sample from or render to the texture, so the texture\u0027s image is never allocated. Did you forget to create an FBO and bind the texture to it?",
       "revId": "e01cc8c27bf0c7717e2833941fa4175ed3cb1c3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41edcdd2_fe559c42",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-23T18:52:05Z",
+      "side": 1,
+      "message": "Rearranged things a bit so the texture is bound to an FBO during the draw.   Doing a swap buffers and grabbing what\u0027s rendered I see this:\n\nWith releaseImage():\nhttps://screenshot.googleplex.com/7eNMVxKEHXRJyAr\n\nWithout releaseImage():\nhttps://screenshot.googleplex.com/EEg3VX33i4HMD2s\n\nAdmittedly, I\u0027m not sure what the expected outcome here is.   Since we are intentionally shrinking the texture and drawing green to it, I would have assumed we\u0027d want only the lower corner to be green since the window itself is still the original (large) size.   Why would we expect the small texture to draw green to the full large surface?",
+      "parentUuid": "66bcd001_aa20631f",
+      "revId": "e01cc8c27bf0c7717e2833941fa4175ed3cb1c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
