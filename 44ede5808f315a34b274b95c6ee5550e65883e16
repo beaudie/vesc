@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f674901d_46a4223f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-23T20:56:07Z",
+      "side": 1,
+      "message": "nit: call this invalidateSomething... like invalidatePipelineDescriptors or something.\n\nthe wording here is a bit confusing and at odds with the other invalidate methods in ContextVk.h.",
+      "range": {
+        "startLine": 1523,
+        "startChar": 15,
+        "endLine": 1523,
+        "endChar": 40
+      },
+      "revId": "44ede5808f315a34b274b95c6ee5550e65883e16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
