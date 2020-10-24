@@ -93,6 +93,30 @@
       },
       "revId": "d2f43a274fd8f0cec77f6cf66c90ed1928d09fe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36152720_93569069",
+        "filename": "src/libANGLE/renderer/metal/SamplerMtl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-24T17:01:26Z",
+      "side": 1,
+      "message": "Got it. Please tag with the TODO with the bug you filed, since the Limitations will fix the need to throw the error.",
+      "parentUuid": "f6b68f24_27ef0aaa",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "d2f43a274fd8f0cec77f6cf66c90ed1928d09fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
