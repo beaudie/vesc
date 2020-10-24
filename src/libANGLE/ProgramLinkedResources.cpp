@@ -57,7 +57,8 @@ LinkMismatchError LinkValidateUniforms(const sh::ShaderVariable &uniform1,
 #endif
 
     LinkMismatchError linkError = Program::LinkValidateVariablesBase(
-        uniform1, uniform2, validatePrecision, true, mismatchedStructFieldName);
+        uniform1, uniform2, validatePrecision && uniform1.staticUse && uniform2.staticUse, true,
+        mismatchedStructFieldName);
     if (linkError != LinkMismatchError::NO_MISMATCH)
     {
         return linkError;
