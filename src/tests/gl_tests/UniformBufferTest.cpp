@@ -3251,7 +3251,7 @@ TEST_P(UniformBufferTest, ManyBlocks)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST_ES3_AND(UniformBufferTest, ES3_METAL());
+ANGLE_INSTANTIATE_TEST_ES3(UniformBufferTest);
 ANGLE_INSTANTIATE_TEST_ES31(UniformBufferTest31);
 
 }  // namespace
