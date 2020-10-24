@@ -19,6 +19,8 @@
 #include "compiler/translator/OutputVulkanGLSLForMetal.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/tree_ops/InitializeVariables.h"
+#include "compiler/translator/tree_ops/RewriteUnaryMinusOperatorFloat.h"
+#include "compiler/translator/tree_ops/RewriteUnaryMinusOperatorInt.h"
 #include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/FindSymbolNode.h"
@@ -149,9 +151,25 @@ bool TranslatorMetal::translate(TIntermBlock *root,
         return false;
     }
 
+    // http://anglebug.com/5242
+    if ((compileOptions & SH_REWRITE_INTEGER_UNARY_MINUS_OPERATOR) != 0)
+    {
+        if (!RewriteUnaryMinusOperatorInt(this, root))
+        {
+            return false;
+        }
+    }
+    if ((compileOptions & SH_REWRITE_FLOAT_UNARY_MINUS_OPERATOR) != 0)
+    {
+        if (!RewriteUnaryMinusOperatorFloat(this, root))
+        {
+            return false;
+        }
+    }
+
     if (getShaderType() == GL_VERTEX_SHADER)
     {
-        auto negFlipY = getDriverUniformNegFlipYRef(driverUniforms);
+        TIntermSwizzle *negFlipY = getDriverUniformNegFlipYRef(driverUniforms);
 
         // Append gl_Position.y correction to main
         if (!AppendVertexShaderPositionYCorrectionToMain(this, root, &getSymbolTable(), negFlipY))
