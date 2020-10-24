@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d3c11a0_2827ac56",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:10:35Z",
+      "side": 1,
+      "message": "Should be moved to dirty bit handling for framebuffer bind. It\u0027s only necessary to update this when FBO changes.",
+      "revId": "0d410051b1c5f22847b832be660311281fb95970",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
