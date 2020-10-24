@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df014a66_b34c9ba4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:38:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b45a2be_6c3a98de",
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96988a11_88ecbffb",
@@ -31,6 +49,30 @@
       "writtenOn": "2020-10-18T10:35:16Z",
       "side": 1,
       "message": "I think this piece of code does a bit too much here. Maybe move it to a ContextMtl\u0027s function or mtl::BlendDesc::updateBlend*(const gl::BlendStateExt \u0026blendStateExt)?\nI think it\u0027s better to keep this switch cases\u0027 code small.\n\nAlso, this seems to be duplicated execution. If DIRTY_BIT_BLEND_ENABLED, DIRTY_BIT_BLEND_FUNCS \u0026 DIRTY_BIT_BLEND_EQUATIONS are both set, this code snippet will be executed three times.",
+      "range": {
+        "startLine": 696,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 17
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a9a7ff3_30901e75",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:38:53Z",
+      "side": 1,
+      "message": "Moved to a separate function and merged 3 dirty bits to 1.\n\nSince Metal accepts a complete blend state and factors/ops have no effect when blending is disabled, I think it\u0027s better to keep the blend state \"normalized\" (i.e. avoid different configurations that lead to the same result).\n\nAnother way of achieving that would be to move the \"normalization\" to RenderPassDesc::populateRenderPipelineOutputDesc.",
+      "parentUuid": "96988a11_88ecbffb",
       "range": {
         "startLine": 696,
         "startChar": 16,
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f1a2b97_e1a257d3",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:38:53Z",
+      "side": 1,
+      "message": "Done in FramebufferMtl::clearWithDraw.",
+      "parentUuid": "364fbcda_6d858b7b",
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00a46569_b65ea868",
@@ -71,6 +131,30 @@
       "writtenOn": "2020-10-18T10:35:16Z",
       "side": 1,
       "message": "nit: glMask? to make it clearer",
+      "range": {
+        "startLine": 163,
+        "startChar": 39,
+        "endLine": 163,
+        "endChar": 43
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b2610a7_2faf35d4",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:38:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00a46569_b65ea868",
       "range": {
         "startLine": 163,
         "startChar": 39,
@@ -104,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "503a0e69_c9dbbd71",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:38:53Z",
+      "side": 1,
+      "message": "Added a rationale and an explanation how this works. Further optimized the expression.",
+      "parentUuid": "6be0f6b4_b7a03f98",
+      "range": {
+        "startLine": 541,
+        "startChar": 16,
+        "endLine": 541,
+        "endChar": 62
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88fb0cec_284d6c19",
@@ -117,6 +225,24 @@
       "writtenOn": "2020-10-18T10:35:16Z",
       "side": 1,
       "message": "I cached a blendable property inside mtl::RenderPassAttachmentDesc struct in this CL: https://chromium-review.googlesource.com/c/angle/angle/+/2433329/11/src/libANGLE/renderer/metal/mtl_state_cache.mm#750\n\nThis can avoid passing ContextMtl and doing the caps table lookup here.",
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92fdf66d_b27d5daf",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:38:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88fb0cec_284d6c19",
       "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

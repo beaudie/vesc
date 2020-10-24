@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b86dfec1_32bdaab8",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:38:53Z",
+      "side": 1,
+      "message": "Given that drawbuffer value increases with each iteration, could this be replaced with `break`?",
+      "range": {
+        "startLine": 1028,
+        "startChar": 12,
+        "endLine": 1028,
+        "endChar": 20
+      },
+      "revId": "c9fc211c13663e1e8b65c672f39b82a46b1a256c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
