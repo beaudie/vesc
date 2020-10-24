@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ae8b36_086da9b6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:09:10Z",
+      "side": 1,
+      "message": "Wait, PS#1 was on the right track. setupDraw() is the hottest path, and this definitely doesn\u0027t belong here. I think you can fix up PS#1 such that a helper is used to call the two relevant functions (updateRasterizationSamples and updateSampleShading) in the right order and with consistent parameters, then use that instead of where those functions are called (which is always through some dirty bit handling)",
+      "revId": "97eec8278011f77abb24caf78319243f74e84d6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
