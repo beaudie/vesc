@@ -56,6 +56,24 @@
       "message": "looks like bots with nvidia cards have issues with this test, going to add a skip for nvidia",
       "revId": "a6bfc19e1175c8aa7a11b17e5328c8723851ded6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4c8cfaa_9102280e",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8736,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-24T22:52:22Z",
+      "side": 1,
+      "message": "Thanks. It\u0027s Win/NVIDIA/OpenGL. Please file a bug for it and add a skip with all three conditions and a bug link.",
+      "parentUuid": "d733ad8e_33ffdf2b",
+      "revId": "a6bfc19e1175c8aa7a11b17e5328c8723851ded6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
