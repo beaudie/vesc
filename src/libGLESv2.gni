@@ -143,7 +143,13 @@ libangle_gpu_info_util_libpci_sources =
 
 libangle_gpu_info_util_x11_sources = [ "src/gpu_info_util/SystemInfo_x11.cpp" ]
 
-libangle_gpu_info_util_mac_sources = [ "src/gpu_info_util/SystemInfo_macos.mm" ]
+libangle_gpu_info_util_mac_sources = [
+  "src/gpu_info_util/SystemInfo_apple.mm",
+  "src/gpu_info_util/SystemInfo_macos.mm",
+  "src/libANGLE/renderer/gl/SoftLinking_apple.h",
+  "src/libANGLE/renderer/gl/cgl/CGLFunctions.cpp",
+  "src/libANGLE/renderer/gl/cgl/CGLFunctions.h",
+]
 
 libangle_includes = [
   "include/angle_gl.h",
