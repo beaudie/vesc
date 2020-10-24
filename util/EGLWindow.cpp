@@ -206,6 +206,16 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         disabledFeatureOverrides.push_back("gen_multiple_mips_per_pass");
     }
 
+    if (params.hasExplicitMemBarrierFeature == EGL_FALSE)
+    {
+        disabledFeatureOverrides.push_back("has_explicit_mem_barrier");
+    }
+
+    if (params.breakRenderPassIsCheapFeature == EGL_FALSE)
+    {
+        disabledFeatureOverrides.push_back("break_render_pass_is_cheap");
+    }
+
     if (!disabledFeatureOverrides.empty())
     {
         if (strstr(extensionString, "EGL_ANGLE_feature_control") == nullptr)
