@@ -165,12 +165,21 @@ class VertexAttributeTest : public ANGLETest
                  Source sourceIn,
                  const void *inputDataIn,
                  const GLfloat *expectedDataIn)
+            : TestData(typeIn, normalizedIn, sourceIn, inputDataIn, expectedDataIn, false)
+        {}
+        TestData(GLenum typeIn,
+                 GLboolean normalizedIn,
+                 Source sourceIn,
+                 const void *inputDataIn,
+                 const GLfloat *expectedDataIn,
+                 bool clearBeforeDrawIn)
             : type(typeIn),
               normalized(normalizedIn),
               bufferOffset(0),
               source(sourceIn),
               inputData(inputDataIn),
-              expectedData(expectedDataIn)
+              expectedData(expectedDataIn),
+              clearBeforeDraw(clearBeforeDrawIn)
         {}
 
         GLenum type;
@@ -180,6 +189,8 @@ class VertexAttributeTest : public ANGLETest
 
         const void *inputData;
         const GLfloat *expectedData;
+
+        const bool clearBeforeDraw;
     };
 
     void setupTest(const TestData &test, GLint typeSize)
@@ -269,6 +280,11 @@ class VertexAttributeTest : public ANGLETest
         {
             GLint typeSize = i + 1;
             setupTest(test, typeSize);
+
+            if (test.clearBeforeDraw)
+            {
+                glClear(GL_COLOR_BUFFER_BIT);
+            }
 
             drawQuad(mProgram, "position", 0.5f);
 
@@ -966,6 +982,48 @@ TEST_P(VertexAttributeTestES3, IntNormalized)
     runTest(data);
 }
 
+// Same as IntUnnormalized but with glClear() before running the test to force
+// starting a render pass. This to verify that buffer format conversion within
+// an active render pass works as expected in Metal back-end.
+TEST_P(VertexAttributeTestES3, IntUnnormalizedWithClear)
+{
+    GLint lo                                  = std::numeric_limits<GLint>::min();
+    GLint hi                                  = std::numeric_limits<GLint>::max();
+    std::array<GLint, kVertexCount> inputData = {
+        {0, 1, 2, 3, -1, -2, -3, -4, -1, hi, hi - 1, lo, lo + 1}};
+    std::array<GLfloat, kVertexCount> expectedData;
+    for (size_t i = 0; i < kVertexCount; i++)
+    {
+        expectedData[i] = static_cast<GLfloat>(inputData[i]);
+    }
+
+    TestData data(GL_INT, GL_FALSE, Source::BUFFER, inputData.data(), expectedData.data(),
+                  /** clearBeforeDraw */ true);
+
+    runTest(data);
+}
+
+// Same as IntNormalized but with glClear() before running the test to force
+// starting a render pass. This to verify that buffer format conversion within
+// an active render pass works as expected in Metal back-end.
+TEST_P(VertexAttributeTestES3, IntNormalizedWithClear)
+{
+    GLint lo                                  = std::numeric_limits<GLint>::min();
+    GLint hi                                  = std::numeric_limits<GLint>::max();
+    std::array<GLint, kVertexCount> inputData = {
+        {0, 1, 2, 3, -1, -2, -3, -4, -1, hi, hi - 1, lo, lo + 1}};
+    std::array<GLfloat, kVertexCount> expectedData;
+    for (size_t i = 0; i < kVertexCount; i++)
+    {
+        expectedData[i] = Normalize(inputData[i]);
+    }
+
+    TestData data(GL_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data(),
+                  /** clearBeforeDraw */ true);
+
+    runTest(data);
+}
+
 TEST_P(VertexAttributeTestES3, UnsignedIntUnnormalized)
 {
     GLuint mid                                 = std::numeric_limits<GLuint>::max() >> 1;
@@ -995,6 +1053,26 @@ TEST_P(VertexAttributeTestES3, UnsignedIntNormalized)
     }
 
     TestData data(GL_UNSIGNED_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data());
+    runTest(data);
+}
+
+// Same as UnsignedIntNormalized but with glClear() before running the test to force
+// starting a render pass. This to verify that buffer format conversion within
+// an active render pass works as expected in Metal back-end.
+TEST_P(VertexAttributeTestES3, UnsignedIntNormalizedWithClear)
+{
+    GLuint mid                                 = std::numeric_limits<GLuint>::max() >> 1;
+    GLuint hi                                  = std::numeric_limits<GLuint>::max();
+    std::array<GLuint, kVertexCount> inputData = {
+        {0, 1, 2, 3, 254, 255, 256, mid - 1, mid, mid + 1, hi - 2, hi - 1, hi}};
+    std::array<GLfloat, kVertexCount> expectedData;
+    for (size_t i = 0; i < kVertexCount; i++)
+    {
+        expectedData[i] = Normalize(inputData[i]);
+    }
+
+    TestData data(GL_UNSIGNED_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data(),
+                  /** clearBeforeDraw */ true);
     runTest(data);
 }
 
@@ -3640,14 +3718,45 @@ void main()
 // tests should be run against.
 // D3D11 Feature Level 9_3 uses different D3D formats for vertex attribs compared to Feature Levels
 // 10_0+, so we should test them separately.
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VertexAttributeTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
+    VertexAttributeTest,
+    ES3_METAL(),
+    WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                        /* hasBarrier */ false,
+                                        /* cheapRenderPass */ true),
+    WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                        /* hasBarrier */ false,
+                                        /* cheapRenderPass */ false));
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VertexAttributeOORTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
+    VertexAttributeOORTest,
+    ES3_METAL(),
+    WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                        /* hasBarrier */ false,
+                                        /* cheapRenderPass */ true),
+    WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                        /* hasBarrier */ false,
+                                        /* cheapRenderPass */ false));
 
-ANGLE_INSTANTIATE_TEST_ES3_AND(VertexAttributeTestES3, ES3_METAL());
+ANGLE_INSTANTIATE_TEST_ES3_AND(VertexAttributeTestES3,
+                               ES3_METAL(),
+                               WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                                                   /* hasBarrier */ false,
+                                                                   /* cheapRenderPass */ true),
+                               WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                                                   /* hasBarrier */ false,
+                                                                   /* cheapRenderPass */ false));
 
 ANGLE_INSTANTIATE_TEST_ES31(VertexAttributeTestES31);
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VertexAttributeCachingTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
+    VertexAttributeCachingTest,
+    ES3_METAL(),
+    WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                        /* hasBarrier */ false,
+                                        /* cheapRenderPass */ true),
+    WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
+                                        /* hasBarrier */ false,
+                                        /* cheapRenderPass */ false));
 
 }  // anonymous namespace
