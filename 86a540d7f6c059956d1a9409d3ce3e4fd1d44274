@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "97c4aa02_d2fe3a06",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Will this actually result in a compile error if this condition is false? If not, please use a FeaturesMtl.h feature and avoid `#if`.",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "68cfe27a_3cca1f1c",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
@@ -32,10 +33,10 @@
       "message": "It is compiler error without the define since the function `newTextureViewWithPixelFormat` with swizzle is only declared in macOS10.15 SDK.",
       "parentUuid": "97c4aa02_d2fe3a06",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "b6927801_7f9823a6",
         "filename": "src/tests/gl_tests/SwizzleTest.cpp",
@@ -49,10 +50,10 @@
       "side": 1,
       "message": "These kinds of exceptions are hard to maintain. If the platform doesn\u0027t support Swizzle, the metal backend should simply not expose ES3 in the first place.\n\nWe do have a bug in the way the tests are instantiated in that if ES3_METAL is specified, but the platform doesn\u0027t support it, end2end tests crash instead of skipping the tests. There was a discussion about this, but I can\u0027t seem to find it now. The idea is to silently skip unsupported configurations, but have an end2end test that makes sure platforms that should be supported do actually work.",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "7690f74b_5a86ba72",
         "filename": "src/tests/gl_tests/SwizzleTest.cpp",
@@ -67,10 +68,10 @@
       "message": "This is a complicated situation. If I completely disabled ES3 when swizzle is not available then ES3_METAL()\u0027s other features wouldn\u0027t be tested on any bot since there is no bot that supports Metal swizzle feature atm. Intel bot\u0027s GPU doesn\u0027t support Metal swizzle and AMD bot\u0027s macOS version is below 10.15.\n\nIf I simply skipped ES3_METAL() from SwizzleTest.cpp then the swizzle testing on Metal would be missed when the bots are updated (i.e. to 10.15) in future.\n\nThe other solution is implementing swizzle in software (inserting to shader via compiler. But that would be in another CL and this solution makes non-swizzled textures\u0027 sampling become slower.\n\nMaybe we could create a task tracker for this line.",
       "parentUuid": "b6927801_7f9823a6",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "cb83abd7_cfcd961c",
         "filename": "src/tests/gl_tests/SwizzleTest.cpp",
@@ -85,10 +86,10 @@
       "message": "Yes, keeping a task tracked for enforcing this feature limit is fine. We do that for the Vulkan back-end. No sense in disabling ES3 everywhere or implementing a fallback that isn\u0027t that impactful. However if Swizzle isn\u0027t available I just recommend skipping this test suite always if it\u0027s Apple instead of doing a more complex suppression with #ifdefs and conditional includes.",
       "parentUuid": "7690f74b_5a86ba72",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c4b7873a_4386f7ad",
         "filename": "src/tests/gl_tests/SwizzleTest.cpp",
@@ -103,8 +104,25 @@
       "message": "Actually, one thing you could do is implement IsMetalTextureSwizzleAvailable on non-Apple platforms (return false). Then you could get rid of the ifdefs.\n\nAlso try to use ANGLE_SKIP_TEST_IF instead of if (...) GTEST_SKIP",
       "parentUuid": "cb83abd7_cfcd961c",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd17c255_834c43b2",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-24T15:19:06Z",
+      "side": 1,
+      "message": "- DONE. IsMetalTextureSwizzleAvailable() is made available on all platforms now.\n\n- ANGLE_SKIP_TEST_IF() is just an early return, it doesn\u0027t skip the test properly if called inside testSetUp(). Looks like GTEST_SKIP caused unexpected skipped tests on bots",
+      "parentUuid": "c4b7873a_4386f7ad",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
