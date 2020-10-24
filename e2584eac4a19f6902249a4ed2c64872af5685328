@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d712eab_2cb11fb2",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-24T17:55:35Z",
+      "side": 1,
+      "message": "jamie/shabi - can that be done as a follow up change or would you want that to be part of this itself?",
+      "parentUuid": "8458931b_055808e2",
+      "revId": "e2584eac4a19f6902249a4ed2c64872af5685328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fdb897c8_78f06103",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 7
