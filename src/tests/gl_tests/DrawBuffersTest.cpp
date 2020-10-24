@@ -997,6 +997,17 @@ TEST_P(ColorMaskForDrawBuffersTest, Blit)
     ANGLE_SKIP_TEST_IF(!setupTest());
     setupColorMaskForDrawBuffersTest();
 
+    // Need to flush, since on Metal back-end, the writing to buffer2 might not be finished by the
+    // time it becomes source of the blit.
+    // This is the draw calls order:
+    // 1. draw red color to buffer0
+    // 2. draw green color to buffer1
+    // 3. draw yellow color to buffer2
+    // 4. blit buffer2 to buffer0.
+    // However, if there is no flush between 3 & 4, then there is no guarantee that 3 will finish
+    // before 4 happens. At least on Metal back-end, this would result in corrupted buffer0.
+    glFlush();
+
     glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[2],
                            0);
 
