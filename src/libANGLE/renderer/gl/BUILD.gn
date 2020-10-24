@@ -180,6 +180,8 @@ if (is_android) {
 
 if (is_mac) {
   _gl_backend_sources += [
+    "cgl/CGLFunctions.cpp",
+    "cgl/CGLFunctions.h",
     "cgl/ContextCGL.cpp",
     "cgl/ContextCGL.h",
     "cgl/DeviceCGL.cpp",

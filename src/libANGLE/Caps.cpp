@@ -627,7 +627,13 @@ static bool DetermineDepthTextureANGLESupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFormats[] = {
         GL_DEPTH_COMPONENT16,
+#if !defined(ANGLE_PLATFORM_IOS) && \
+    (!defined(ANGLE_PLATFORM_MACCATALYST) || !defined(ANGLE_CPU_ARM64))
+        // TODO(dino): Temporarily Removing the need for GL_DEPTH_COMPONENT32_OES
+        // because it is not supported on iOS.
+        // TODO(dino): I think this needs to be a runtime check when running an iOS app on Mac.
         GL_DEPTH_COMPONENT32_OES,
+#endif
         GL_DEPTH24_STENCIL8_OES,
     };
 
@@ -639,7 +645,13 @@ static bool DetermineDepthTextureOESSupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFormats[] = {
         GL_DEPTH_COMPONENT16,
+#if !defined(ANGLE_PLATFORM_IOS) && \
+    (!defined(ANGLE_PLATFORM_MACCATALYST) || !defined(ANGLE_CPU_ARM64))
+        // TODO(dino): Temporarily Removing the need for GL_DEPTH_COMPONENT32_OES
+        // because it is not supported on iOS.
+        // TODO(dino): I think this needs to be a runtime check when running an iOS app on Mac.
         GL_DEPTH_COMPONENT32_OES,
+#endif
     };
 
     return GetFormatSupport(textureCaps, requiredFormats, true, true, true, true, false);
