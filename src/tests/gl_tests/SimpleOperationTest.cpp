@@ -1364,7 +1364,6 @@ TEST_P(SimpleOperationTest, PrimitiveModeNegativeTest)
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     SimpleOperationTest,
-    ES3_METAL(),
     WithGPUBuffersOnly(ES3_METAL()),
     WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                         /* hasBarrier */ false,
