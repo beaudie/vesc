@@ -173,6 +173,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe7e8832_fd0a18cf",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:39:14Z",
+      "side": 1,
+      "message": "You could call it `RewriteSampleMask`. Same with the other one (RewriteSampleMaskIn)",
+      "parentUuid": "a49b2b4d_564fe20c",
+      "range": {
+        "startLine": 1030,
+        "startChar": 49,
+        "endLine": 1030,
+        "endChar": 60
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "61737bc3_16ef72c2",
         "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.h",
         "patchSetId": 1
@@ -349,6 +373,30 @@
       "side": 1,
       "message": "The meaning of \"non-constant index\" is that the index to gl_SampleMask is not a literal, an access like this -\u003e gl_SampleMask[i]\n\nin(0xAAAAAAAA) is a value that will be assigned to gl_SampleMask[i].",
       "parentUuid": "604fba1b_428c5088",
+      "range": {
+        "startLine": 16,
+        "startChar": 35,
+        "endLine": 16,
+        "endChar": 53
+      },
+      "revId": "2ac446c972691e3412a17975fc85f559e852e58e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8644e18_c235ef0e",
+        "filename": "src/tests/compiler_tests/OES_sample_variables_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:39:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb9c4440_8c47e513",
       "range": {
         "startLine": 16,
         "startChar": 35,

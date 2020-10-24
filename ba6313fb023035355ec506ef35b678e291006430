@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45507b8a_6cce2983",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:39:14Z",
+      "side": 1,
+      "message": "Looks reasonable.\n\nLooking at the chain of changes, I have one last simplification in mind. gl_SampleMask and gl_SampleMaskIn support 32 samples per array entry. We currently support up to 16 samples. Honestly, I don\u0027t ever see us needing to support 64xMSAA anywhere!\n\nHow about assuming the size of both these arrays is 1, add the appropriate ASSERTs in place, and simplify all these changes? For example, you wouldn\u0027t need to care about dynamic indexing, because you can always assume the index is 0 (and force replace the index with 0 even if it\u0027s dynamically indexed (watch out for side effects of the index, see usage of insertStatementsInParentBlock).",
+      "revId": "ba6313fb023035355ec506ef35b678e291006430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3115e09c_97c3288e",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:39:14Z",
+      "side": 1,
+      "message": "nit:\n\n    TIntermSymbol *symbol \u003d variable-\u003egetAsSymbolNode();\n    if (symbol \u003d\u003d nullptr || symbol-\u003egetName() !\u003d mTargetStr)\n    {\n        return true;\n    }\n\n    *mRedeclaredSym \u003d symbol;\n\nNote that getAsX() is a virtual call.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 54
+      },
+      "revId": "ba6313fb023035355ec506ef35b678e291006430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
