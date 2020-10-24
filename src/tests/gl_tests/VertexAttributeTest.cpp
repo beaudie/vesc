@@ -3720,7 +3720,6 @@ void main()
 // 10_0+, so we should test them separately.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeTest,
-    ES3_METAL(),
     WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                         /* hasBarrier */ false,
                                         /* cheapRenderPass */ true),
@@ -3730,7 +3729,6 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeOORTest,
-    ES3_METAL(),
     WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                         /* hasBarrier */ false,
                                         /* cheapRenderPass */ true),
@@ -3739,7 +3737,6 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
                                         /* cheapRenderPass */ false));
 
 ANGLE_INSTANTIATE_TEST_ES3_AND(VertexAttributeTestES3,
-                               ES3_METAL(),
                                WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                                                    /* hasBarrier */ false,
                                                                    /* cheapRenderPass */ true),
@@ -3751,7 +3748,6 @@ ANGLE_INSTANTIATE_TEST_ES31(VertexAttributeTestES31);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeCachingTest,
-    ES3_METAL(),
     WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                         /* hasBarrier */ false,
                                         /* cheapRenderPass */ true),

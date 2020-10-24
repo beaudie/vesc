@@ -479,7 +479,6 @@ TEST_P(LineLoopIndirectTest, UShortIndexIndirectBuffer)
 ANGLE_INSTANTIATE_TEST_ES2(LineLoopTest);
 
 ANGLE_INSTANTIATE_TEST_ES3_AND(LineLoopPrimitiveRestartTest,
-                               ES3_METAL(),
                                WithGPUBuffersOnly(ES3_METAL()),
                                WithMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                                                    /* hasBarrier */ false,
