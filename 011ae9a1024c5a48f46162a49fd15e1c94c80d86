@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eeac069_8d6744e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-24T01:11:48Z",
+      "side": 1,
+      "message": "Presubmit run with these changes looks good:\nhttps://android-review.googlesource.com/c/platform/external/angle/+/1472290",
+      "revId": "011ae9a1024c5a48f46162a49fd15e1c94c80d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
