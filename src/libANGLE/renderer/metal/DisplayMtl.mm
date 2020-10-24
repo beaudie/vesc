@@ -487,8 +487,9 @@ void DisplayMtl::ensureCapsInitialized() const
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize = 2048;
 #if TARGET_OS_OSX || TARGET_OS_MACCATALYST
-    mNativeCaps.max2DTextureSize          = 16384;
-    mNativeCaps.maxVaryingVectors         = 31;
+    mNativeCaps.max2DTextureSize = 16384;
+    // On macOS exclude [[position]] from maxVaryingVectors.
+    mNativeCaps.maxVaryingVectors         = 31 - 1;
     mNativeCaps.maxVertexOutputComponents = 124;
 #else
     if (supportsIOSGPUFamily(3))
@@ -764,6 +765,10 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), breakRenderPassIsCheap,
                             (TARGET_OS_OSX || TARGET_OS_MACCATALYST) && !ANGLE_MTL_ARM);
+
+    // http://anglebug.com/5235
+    // D24S8 is unreliable on AMD.
+    ANGLE_FEATURE_CONDITION((&mFeatures), forceD24S8AsUnsupported, isAMD());
 
 #if !TARGET_OS_MACCATALYST && (TARGET_OS_IOS || TARGET_OS_TV)
     // Base Vertex drawing is only supported since GPU family 3.
