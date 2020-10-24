@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26a67228_55a1c4aa",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-24T16:56:33Z",
+      "side": 1,
+      "message": "It would also be great to avoid unnecessary pipeline invalidation by comparing last-synced blend state with the normalized new blend state.\n\nBlendStateExt struct has special functions for loop-less comparison but we\u0027d need to maintain a copy of it in ContextMtl (like it\u0027s done in D3D11 renderer).",
+      "parentUuid": "2a9a7ff3_30901e75",
+      "range": {
+        "startLine": 696,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 17
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "364fbcda_6d858b7b",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 2
