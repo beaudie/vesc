@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eb6d06f_5e238c9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-24T20:46:48Z",
+      "side": 1,
+      "message": "Added another suppression for the Mac flake here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2495698",
+      "revId": "f92f062522883e34584144480038f9c783d41851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
