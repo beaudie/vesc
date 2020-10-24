@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4affc792_f83a591b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:43:05Z",
+      "side": 1,
+      "message": "See my suggestion here: https://chromium-review.googlesource.com/c/angle/angle/+/2477908\n\nIf we accept that we won\u0027t support more than 32xMSAA, we can assume gl_SampleMask and gl_SampleMaskIn to be a fixed array of size 1, and that should simplify a number of things. Some of the test suppressions here could be removed probably.",
+      "revId": "5d2b08a64b22aad895e7e22c12706c597c4af8e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
