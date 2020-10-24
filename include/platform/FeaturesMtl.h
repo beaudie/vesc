@@ -79,6 +79,9 @@ struct FeaturesMtl : FeatureSetBase
         "On systems that support both buffer' memory allocation on GPU and shared memory (such as "
         "macOS), force using GPU memory allocation for buffers everytime or not.",
         &members};
+
+    Feature forceD24S8AsUnsupported = {"force_d24s8_as_unsupported", FeatureCategory::MetalFeatures,
+                                       "Force Depth24Stencil8 format as unsupported.", &members};
 };
 
 }  // namespace angle
