@@ -219,6 +219,16 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_NoGenMultipleMipsPerPass";
     }
 
+    if (pp.eglParameters.hasExplicitMemBarrierFeature == EGL_FALSE)
+    {
+        stream << "_NoExplicitMemoryBarrier";
+    }
+
+    if (pp.eglParameters.breakRenderPassIsCheapFeature == EGL_FALSE)
+    {
+        stream << "_NoCheapRenderPass";
+    }
+
     return stream;
 }
 
