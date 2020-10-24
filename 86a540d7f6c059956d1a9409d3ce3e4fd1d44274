@@ -123,6 +123,24 @@
       "parentUuid": "c4b7873a_4386f7ad",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35effdcc_a7aa6ef5",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-24T16:27:11Z",
+      "side": 1,
+      "message": "Got it. Please don\u0027t use GTEST_SKIP. Use ANGLE_SKIP_TEST_IF in the main test body, instead of a helper function.",
+      "parentUuid": "bd17c255_834c43b2",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
