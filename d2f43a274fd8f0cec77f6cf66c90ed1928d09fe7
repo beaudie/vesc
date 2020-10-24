@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc6d3ff2_614e787e",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-24T12:57:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c51585ba_5fc6622d",
+      "range": {
+        "startLine": 1000,
+        "startChar": 21,
+        "endLine": 1011,
+        "endChar": 21
+      },
+      "revId": "d2f43a274fd8f0cec77f6cf66c90ed1928d09fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b44d921b_4de0fe07",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-10-18T15:02:33Z",
       "side": 1,
       "message": "no need to cache these if they\u0027re the same as the front-end.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "d2f43a274fd8f0cec77f6cf66c90ed1928d09fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6b68f24_27ef0aaa",
+        "filename": "src/libANGLE/renderer/metal/SamplerMtl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-24T12:57:48Z",
+      "side": 1,
+      "message": "I need to cache this value to detect compare mode change, then invalidate current bound textures so that metal back-end has a chance to detect compareMode\u003dnone on a shadow sampler and throw an error.\nIn future, if the check could be done on front-end side then this caching would be removed.",
+      "parentUuid": "b44d921b_4de0fe07",
       "range": {
         "startLine": 34,
         "startChar": 0,
