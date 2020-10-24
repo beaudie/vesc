@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
+#include "libANGLE/renderer/metal/DisplayMtl.h"
 
 namespace rx
 {
@@ -24,12 +25,20 @@ std::shared_ptr<WaitableCompileEvent> ShaderMtl::compile(const gl::Context *cont
                                                          gl::ShCompilerInstance *compilerInstance,
                                                          ShCompileOptions options)
 {
+    ContextMtl *contextMtl = mtl::GetImpl(context);
+
     ShCompileOptions compileOptions = SH_INITIALIZE_UNINITIALIZED_LOCALS;
 
     bool isWebGL = context->getExtensions().webglCompatibility;
     if (isWebGL && mState.getShaderType() != gl::ShaderType::Compute)
     {
         compileOptions |= SH_INIT_OUTPUT_VARIABLES;
+    }
+
+    if (contextMtl->getDisplay()->getFeatures().workaroundUnaryMinusBug.enabled)
+    {
+        compileOptions |=
+            SH_REWRITE_INTEGER_UNARY_MINUS_OPERATOR | SH_REWRITE_FLOAT_UNARY_MINUS_OPERATOR;
     }
 
     compileOptions |= SH_CLAMP_POINT_SIZE;
