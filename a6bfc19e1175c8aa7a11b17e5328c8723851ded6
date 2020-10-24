@@ -16,6 +16,29 @@
       "message": "thanks guys, landing this",
       "revId": "a6bfc19e1175c8aa7a11b17e5328c8723851ded6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3c2c7d5_89ae658f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8694,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-24T21:40:17Z",
+      "side": 1,
+      "message": "kVSUnused",
+      "range": {
+        "startLine": 8694,
+        "startChar": 19,
+        "endLine": 8694,
+        "endChar": 28
+      },
+      "revId": "a6bfc19e1175c8aa7a11b17e5328c8723851ded6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
