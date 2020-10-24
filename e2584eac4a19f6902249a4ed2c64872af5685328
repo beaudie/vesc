@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8458931b_055808e2",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T02:04:27Z",
+      "side": 1,
+      "message": "Right, you need a transformation that changes offset.y to -offset.y based on a uniform. Actually prerotation also comes into play here, so it\u0027s more complicated than that.\n\nSee tree_ops/RewriteDfdy.cpp for an example of a very similar transformation. Ian should be able to help you understand how you can test things under prerotation.",
+      "parentUuid": "ee6a581f_503c8cdc",
+      "revId": "e2584eac4a19f6902249a4ed2c64872af5685328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fdb897c8_78f06103",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 7
