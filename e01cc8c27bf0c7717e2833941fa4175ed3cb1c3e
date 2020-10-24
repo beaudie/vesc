@@ -57,6 +57,24 @@
       "parentUuid": "66bcd001_aa20631f",
       "revId": "e01cc8c27bf0c7717e2833941fa4175ed3cb1c3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71ad8ba7_dda9bc37",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T01:56:30Z",
+      "side": 1,
+      "message": "The step that says:\n\n    // Render to the default framebuffer sampling from the blited texture and verify it\u0027s green\n\nrenders the whole texture to the window. It\u0027s using uv coordinates, so the size of the texture doesn\u0027t matter. In this case, the small texture is stretched to fit the window. By the way, the window (default framebuffer) was never cleared to blue! So even if the draw filled the window partially, the rest of it should have been black / garbage.\n\nI think you agree with me at this point that releaseImage needs to remain where it was.\n\n\u003e Admittedly, I\u0027m not sure what the expected outcome here is.\n\nTo re-iterate:\n\n- Without releaseImage, `glTexStorage2D` is a noop, and the image is still large (and blue). The blit to the texture only fills a quarter of it. Drawing the texture over the window shows blue with a quarter green.\n- With releaseImage, `glTexStorage2D` is actually effective, and the image becomes small. The blit to the texture fills all of it. Drawing the texture over the window shows all green.",
+      "parentUuid": "41edcdd2_fe559c42",
+      "revId": "e01cc8c27bf0c7717e2833941fa4175ed3cb1c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
