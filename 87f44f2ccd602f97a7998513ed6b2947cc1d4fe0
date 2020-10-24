@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a453d24_29905fca",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-24T07:37:11Z",
+      "side": 1,
+      "message": "This may work with tests as they use OSWindow to create the window. What about real applications? What\u0027s the handle then?",
+      "range": {
+        "startLine": 71,
+        "startChar": 33,
+        "endLine": 71,
+        "endChar": 67
+      },
+      "revId": "87f44f2ccd602f97a7998513ed6b2947cc1d4fe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
