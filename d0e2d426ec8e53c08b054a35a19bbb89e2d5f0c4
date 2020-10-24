@@ -16,6 +16,46 @@
       "message": "PTAL - precision qualifier check for uniforms workaround. lets badland work",
       "revId": "d0e2d426ec8e53c08b054a35a19bbb89e2d5f0c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13c48dd2_43729f52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-24T01:10:54Z",
+      "side": 1,
+      "message": "Nice Mohan. Can you please add a regression test to GLSLTest before landing?",
+      "revId": "d0e2d426ec8e53c08b054a35a19bbb89e2d5f0c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db01326c_dbd1820b",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-24T01:10:54Z",
+      "side": 1,
+      "message": "nit: please make this a temporary for readability.",
+      "range": {
+        "startLine": 60,
+        "startChar": 27,
+        "endLine": 60,
+        "endChar": 89
+      },
+      "revId": "d0e2d426ec8e53c08b054a35a19bbb89e2d5f0c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
