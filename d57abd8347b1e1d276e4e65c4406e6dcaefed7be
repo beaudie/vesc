@@ -133,6 +133,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e30152a_e329bd86",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-10-25T09:54:38Z",
+      "side": 1,
+      "message": "\u003e if user only calls glEnable(GL_BLEND) then the whole mBlendDescArray has to be updated\n\nOn the other hand, funcs/ops updates could be skipped altogether until blending is enabled. Without an intermediate caching layer, the alternative would be to always update mBlendDescArray here and to normalize the state later.\n\nHere\u0027s a function that compares packed blend ops across all buffers and returns a DrawBufferMask:\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/angletypes.cpp#435",
+      "parentUuid": "4b0c29dd_d7648a43",
+      "range": {
+        "startLine": 696,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 17
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "364fbcda_6d858b7b",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 2
