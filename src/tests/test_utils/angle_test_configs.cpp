@@ -234,6 +234,11 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_ForceGPUOnlyBuffers";
     }
 
+    if (pp.eglParameters.randomizeShaderSignature == EGL_FALSE)
+    {
+        stream << "_NoShaderSigRandomize";
+    }
+
     return stream;
 }
 

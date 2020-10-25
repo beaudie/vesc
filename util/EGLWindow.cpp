@@ -221,6 +221,17 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         enabledFeatureOverrides.push_back("force_buffer_gpu_storage");
     }
 
+    if (params.randomizeShaderSignature == EGL_FALSE)
+    {
+        disabledFeatureOverrides.push_back("randomize_shader_sig");
+    }
+    else
+    {
+        // Always enable shader signature randomization during testing to prevent Metal from caching
+        // them. Metal shader cache is very slow.
+        enabledFeatureOverrides.push_back("randomize_shader_sig");
+    }
+
     if (!disabledFeatureOverrides.empty())
     {
         if (strstr(extensionString, "EGL_ANGLE_feature_control") == nullptr)
