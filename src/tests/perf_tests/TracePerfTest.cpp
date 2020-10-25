@@ -250,6 +250,11 @@ TracePerfTest::TracePerfTest()
         addExtensionPrerequisite("GL_EXT_color_buffer_half_float");
     }
 
+    if (param.testID == RestrictedTraceID::dragon_ball_legends)
+    {
+        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
