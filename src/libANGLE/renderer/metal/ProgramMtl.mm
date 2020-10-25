@@ -574,7 +574,8 @@ angle::Result ProgramMtl::createMslShaderLib(mtl::Context *context,
         // Convert to actual binary shader
         mtl::AutoObjCPtr<NSError *> err = nil;
         translatedMslInfo->metalLibrary =
-            mtl::CreateShaderLibrary(mtlDevice, translatedMslInfo->metalShaderSource, &err);
+            mtl::CreateShaderLibrary(mtlDevice, translatedMslInfo->metalShaderSource,
+                                     display->getFeatures().randomizeShaderSig.enabled, &err);
         if (err && !translatedMslInfo->metalLibrary)
         {
             std::ostringstream ss;
