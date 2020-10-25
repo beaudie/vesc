@@ -24,6 +24,7 @@
 #include <EGL/eglext.h>
 
 #include "egluGLContextFactory.hpp"
+#include "platform/FeaturesMtl.h"
 #include "tcuANGLENativeDisplayFactory.h"
 #include "tcuNullContextFactory.hpp"
 #include "util/test_utils.h"
@@ -110,6 +111,27 @@ ANGLEPlatform::ANGLEPlatform(angle::LogErrorFunc logErrorFunc)
     {
         std::vector<eglw::EGLAttrib> mtlAttribs = initAttribs(EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE);
 
+        // Always enable shader signature randomization to avoid Metal runtime shader caching.
+        static angle::PlatformMethods mtlPlatformMethods;
+        mtlPlatformMethods                     = mPlatformMethods;
+        mtlPlatformMethods.overrideFeaturesMtl = [](angle::PlatformMethods *platform,
+                                                    angle::FeaturesMtl *featuresMtl) {
+            featuresMtl->overrideFeatures({"randomize_shader_sig"}, true);
+        };
+        bool platformAttribExist = false;
+        for (size_t i = 0; i < mtlAttribs.size(); ++i)
+        {
+            if (mtlAttribs[i] == EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX)
+            {
+                mtlAttribs[i + 1]   = reinterpret_cast<EGLAttrib>(&mtlPlatformMethods);
+                platformAttribExist = true;
+            }
+        }
+        if (!platformAttribExist)
+        {
+            mtlAttribs.push_back(EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX);
+            mtlAttribs.push_back(reinterpret_cast<EGLAttrib>(&mtlPlatformMethods));
+        }
         auto *mtlFactory = new ANGLENativeDisplayFactory("angle-metal", "ANGLE Metal Display",
                                                          mtlAttribs, &mEvents);
         m_nativeDisplayFactoryRegistry.registerFactory(mtlFactory);
