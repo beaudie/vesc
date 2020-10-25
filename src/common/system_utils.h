@@ -25,6 +25,7 @@ const char *GetExecutableExtension();
 char GetPathSeparator();
 Optional<std::string> GetCWD();
 bool SetCWD(const char *dirName);
+void RestoreStartingCWD();
 bool SetEnvironmentVar(const char *variableName, const char *value);
 bool UnsetEnvironmentVar(const char *variableName);
 std::string GetEnvironmentVar(const char *variableName);
