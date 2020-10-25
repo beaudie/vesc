@@ -95,6 +95,24 @@ GLint GetSliceOrDepth(const ImageNativeIndex &index)
     return std::max(layer, startDepth);
 }
 
+NSString *CreateNSShaderSrc(const char *source, size_t sourceLen, bool randSignature)
+{
+    // NOTE: this function must be called inside ANGLE_MTL_OBJC_SCOPE
+    auto nsSource = [[NSString alloc] initWithBytesNoCopy:const_cast<char *>(source)
+                                                   length:sourceLen
+                                                 encoding:NSUTF8StringEncoding
+                                             freeWhenDone:NO];
+    [nsSource ANGLE_MTL_AUTORELEASE];
+    if (!randSignature)
+    {
+        return nsSource;
+    }
+    // Prepend current time as randomized signature to avoid Metal caching the source.
+    auto curTime = [[[NSDate alloc] init] ANGLE_MTL_AUTORELEASE];
+    return
+        [[[NSString alloc] initWithFormat:@"// %@\n%@", curTime, nsSource] ANGLE_MTL_AUTORELEASE];
+}
+
 }
 
 angle::Result InitializeTextureContents(const gl::Context *context,
@@ -451,31 +469,46 @@ uint32_t GetDeviceVendorId(id<MTLDevice> metalDevice)
 
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(id<MTLDevice> metalDevice,
                                                 const std::string &source,
+                                                bool randomizeSignature,
                                                 AutoObjCPtr<NSError *> *error)
 {
-    return CreateShaderLibrary(metalDevice, source.c_str(), source.size(), error);
+    return CreateShaderLibrary(metalDevice, source.c_str(), source.size(), randomizeSignature,
+                               error);
 }
 
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(id<MTLDevice> metalDevice,
                                                 const char *source,
                                                 size_t sourceLen,
+                                                bool randomizeSignature,
                                                 AutoObjCPtr<NSError *> *errorOut)
 {
     ANGLE_MTL_OBJC_SCOPE
     {
-        NSError *nsError = nil;
-        auto nsSource    = [[NSString alloc] initWithBytesNoCopy:const_cast<char *>(source)
-                                                       length:sourceLen
-                                                     encoding:NSUTF8StringEncoding
-                                                 freeWhenDone:NO];
-        auto options     = [[[MTLCompileOptions alloc] init] ANGLE_MTL_AUTORELEASE];
+        NSError *nsError   = nil;
+        NSString *nsSource = CreateNSShaderSrc(source, sourceLen, randomizeSignature);
+        auto options       = [[[MTLCompileOptions alloc] init] ANGLE_MTL_AUTORELEASE];
         auto library = [metalDevice newLibraryWithSource:nsSource options:options error:&nsError];
-
-        [nsSource ANGLE_MTL_AUTORELEASE];
 
         *errorOut = std::move(nsError);
 
         return [library ANGLE_MTL_AUTORELEASE];
+    }
+}
+
+void CreateShaderLibraryAsync(id<MTLDevice> metalDevice,
+                              const char *source,
+                              size_t sourceLen,
+                              bool randomizeSignature,
+                              MTLNewLibraryCompletionHandler completionHandler)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+
+        NSString *nsSource = CreateNSShaderSrc(source, sourceLen, randomizeSignature);
+        auto options       = [[[MTLCompileOptions alloc] init] ANGLE_MTL_AUTORELEASE];
+        [metalDevice newLibraryWithSource:nsSource
+                                  options:options
+                        completionHandler:completionHandler];
     }
 }
 

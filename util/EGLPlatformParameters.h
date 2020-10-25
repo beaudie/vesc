@@ -58,12 +58,13 @@ struct EGLPlatformParameters
 
     auto tie() const
     {
-        return std::tie(
-            renderer, majorVersion, minorVersion, deviceType, presentPath, debugLayersEnabled,
-            contextVirtualization, transformFeedbackFeature, allocateNonZeroMemoryFeature,
-            emulateCopyTexImage2DFromRenderbuffers, shaderStencilOutputFeature,
-            genMultipleMipsPerPassFeature, emulatedPrerotation, hasExplicitMemBarrierFeature,
-            breakRenderPassIsCheapFeature, forceGPUBufferFeature, platformMethods, robustness);
+        return std::tie(renderer, majorVersion, minorVersion, deviceType, presentPath,
+                        debugLayersEnabled, contextVirtualization, transformFeedbackFeature,
+                        allocateNonZeroMemoryFeature, emulateCopyTexImage2DFromRenderbuffers,
+                        shaderStencilOutputFeature, genMultipleMipsPerPassFeature,
+                        emulatedPrerotation, hasExplicitMemBarrierFeature,
+                        breakRenderPassIsCheapFeature, forceGPUBufferFeature,
+                        randomizeShaderSignature, platformMethods, robustness);
     }
 
     EGLint renderer                               = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
@@ -83,6 +84,7 @@ struct EGLPlatformParameters
     EGLint hasExplicitMemBarrierFeature           = EGL_DONT_CARE;
     EGLint breakRenderPassIsCheapFeature          = EGL_DONT_CARE;
     EGLint forceGPUBufferFeature                  = EGL_DONT_CARE;
+    EGLint randomizeShaderSignature               = EGL_DONT_CARE;
     angle::PlatformMethods *platformMethods       = nullptr;
 };
 
