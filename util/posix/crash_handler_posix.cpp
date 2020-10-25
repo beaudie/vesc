@@ -11,9 +11,11 @@
 #include "util/test_utils.h"
 
 #include "common/angleutils.h"
+#include "common/system_utils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 #if !defined(ANGLE_PLATFORM_ANDROID) && !defined(ANGLE_PLATFORM_FUCHSIA)
 #    if defined(ANGLE_PLATFORM_APPLE)
@@ -28,6 +30,7 @@
 #        include <cxxabi.h>
 #        include <dlfcn.h>
 #        include <execinfo.h>
+#        include <libgen.h>
 #        include <signal.h>
 #        include <string.h>
 #    endif  // defined(ANGLE_PLATFORM_APPLE)
@@ -102,6 +105,9 @@ static void Handler(int sig)
 
 #    elif defined(ANGLE_PLATFORM_POSIX)
 
+// Can control this at a higher level if required.
+#        define ANGLE_HAS_ADDR2LINE
+
 void PrintStackBacktrace()
 {
     printf("Backtrace:\n");
@@ -112,6 +118,34 @@ void PrintStackBacktrace()
 
     for (int i = 0; i < count; i++)
     {
+#        if defined(ANGLE_HAS_ADDR2LINE)
+        std::string module(symbols[i], strchr(symbols[i], '('));
+
+        // We need an absolute path to get to the executable and all of the various shared objects,
+        // but the caller may have used a relative path to launch the executable, so build one up if
+        // we don't see a leading '/'.
+        if (module.at(0) != GetPathSeparator())
+        {
+            // https://stackoverflow.com/a/23943306
+            char result[PATH_MAX];
+            ssize_t pathLength = readlink("/proc/self/exe", result, PATH_MAX);
+            const char *path;
+            if (pathLength != -1)
+            {
+                path                  = dirname(result);
+                size_t lastPathSepLoc = module.find_last_of(GetPathSeparator());
+                module                = path + module.substr(lastPathSepLoc, module.length());
+            }
+            else
+            {
+                std::cout << "Failed to get executable's path.";
+            }
+        }
+
+        std::string substring(strchr(symbols[i], '+') + 1, strchr(symbols[i], ')'));
+        std::string command = "addr2line -s -p -f -C -e " + module + " " + substring;
+        (void)system(command.c_str());
+#        else
         Dl_info info;
         if (dladdr(stack[i], &info) && info.dli_sname)
         {
@@ -130,6 +164,7 @@ void PrintStackBacktrace()
             }
         }
         printf("    %s\n", symbols[i]);
+#        endif  // defined(ANGLE_HAS_ADDR2LINE)
     }
 }
 
