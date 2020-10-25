@@ -86,12 +86,20 @@ uint32_t GetDeviceVendorId(id<MTLDevice> metalDevice);
 
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(id<MTLDevice> metalDevice,
                                                 const std::string &source,
+                                                bool randomizeSignature,
                                                 AutoObjCPtr<NSError *> *error);
 
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(id<MTLDevice> metalDevice,
                                                 const char *source,
                                                 size_t sourceLen,
+                                                bool randomizeSignature,
                                                 AutoObjCPtr<NSError *> *error);
+
+void CreateShaderLibraryAsync(id<MTLDevice> metalDevice,
+                              const char *source,
+                              size_t sourceLen,
+                              bool randomizeSignature,
+                              MTLNewLibraryCompletionHandler completionHandler);
 
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibraryFromBinary(id<MTLDevice> metalDevice,
                                                           const uint8_t *binarySource,
