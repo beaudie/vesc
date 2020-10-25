@@ -22,6 +22,30 @@
       },
       "revId": "c9fc211c13663e1e8b65c672f39b82a46b1a256c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a8a45c_76d97abd",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-25T19:43:54Z",
+      "side": 1,
+      "message": "I was not sure about the iteration order of the BitSet.\nIt\u0027s possible that in future, the iteration\u0027s implementation could use a new instruction that iterates from msb to lsb. I think it\u0027s better to not assume the order here.",
+      "parentUuid": "b86dfec1_32bdaab8",
+      "range": {
+        "startLine": 1028,
+        "startChar": 12,
+        "endLine": 1028,
+        "endChar": 20
+      },
+      "revId": "c9fc211c13663e1e8b65c672f39b82a46b1a256c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
