@@ -745,6 +745,7 @@ void DisplayMtl::initializeFeatures()
     mFeatures.allowGenMultipleMipsPerPass.enabled       = true;
     mFeatures.breakRenderPassIsCheap.enabled            = false;
     mFeatures.forceBufferGPUStorage.enabled             = false;
+    mFeatures.randomizeShaderSig.enabled                = false;
 
     ANGLE_FEATURE_CONDITION((&mFeatures), hasDepthTextureFiltering,
                             TARGET_OS_OSX || TARGET_OS_MACCATALYST);
@@ -801,27 +802,17 @@ angle::Result DisplayMtl::initializeShaderLibrary()
     std::shared_ptr<DefaultShaderAsyncInfoMtl> asyncRef = mDefaultShadersAsyncInfo;
 
     // Compile the default shaders asynchronously
-    ANGLE_MTL_OBJC_SCOPE
-    {
-        auto nsSource = [[NSString alloc] initWithBytesNoCopy:gDefaultMetallibSrc
-                                                       length:sizeof(gDefaultMetallibSrc)
-                                                     encoding:NSUTF8StringEncoding
-                                                 freeWhenDone:NO];
-        auto options  = [[[MTLCompileOptions alloc] init] ANGLE_MTL_AUTORELEASE];
-        [getMetalDevice() newLibraryWithSource:nsSource
-                                       options:options
-                             completionHandler:^(id<MTLLibrary> library, NSError *error) {
-                               std::unique_lock<std::mutex> lg(asyncRef->lock);
+    mtl::CreateShaderLibraryAsync(
+        getMetalDevice(), gDefaultMetallibSrc, sizeof(gDefaultMetallibSrc),
+        getFeatures().randomizeShaderSig.enabled, ^(id<MTLLibrary> library, NSError *error) {
+          std::unique_lock<std::mutex> lg(asyncRef->lock);
 
-                               asyncRef->defaultShaders             = std::move(library);
-                               asyncRef->defaultShadersCompileError = std::move(error);
+          asyncRef->defaultShaders             = std::move(library);
+          asyncRef->defaultShadersCompileError = std::move(error);
 
-                               asyncRef->compiled = true;
-                               asyncRef->cv.notify_one();
-                             }];
-
-        [nsSource ANGLE_MTL_AUTORELEASE];
-    }
+          asyncRef->compiled = true;
+          asyncRef->cv.notify_one();
+        });
 
     return angle::Result::Continue;
 }
