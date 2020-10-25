@@ -19,6 +19,9 @@
 
 namespace angle
 {
+
+static char gStartingCWD[PATH_MAX] = {'\0'};
+
 Optional<std::string> GetCWD()
 {
     std::array<char, 4096> pathBuf;
@@ -32,7 +35,26 @@ Optional<std::string> GetCWD()
 
 bool SetCWD(const char *dirName)
 {
+    // Only record the starting CWD
+    if (gStartingCWD[0] == '\0')
+    {
+        Optional<std::string> currCWD = GetCWD();
+        if (currCWD.valid())
+        {
+            strncpy(gStartingCWD, currCWD.value().c_str(), PATH_MAX - 1);
+            gStartingCWD[PATH_MAX - 1] = '\0';
+        }
+    }
+
     return (chdir(dirName) == 0);
+}
+
+void RestoreStartingCWD()
+{
+    if (gStartingCWD[0] != '\0')
+    {
+        SetCWD(gStartingCWD);
+    }
 }
 
 bool UnsetEnvironmentVar(const char *variableName)
