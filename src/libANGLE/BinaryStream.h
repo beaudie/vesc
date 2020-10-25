@@ -35,8 +35,13 @@ class BinaryInputStream : angle::NonCopyable
     template <class IntT>
     IntT readInt()
     {
-        int value = 0;
+        static_assert(!std::is_same<bool, IntT>(), "Use readBool");
+
+        using PromotedIntT =
+            typename std::conditional<std::is_signed<IntT>::value, int64_t, uint64_t>::type;
+        PromotedIntT value = 0;
         read(&value);
+        ASSERT(angle::IsValueInRangeForNumericType<IntT>(value));
         return static_cast<IntT>(value);
     }
 
@@ -186,8 +191,10 @@ class BinaryOutputStream : angle::NonCopyable
     template <class IntT>
     void writeInt(IntT param)
     {
+        static_assert(!std::is_same<bool, IntT>(), "Use writeBool");
+
         using PromotedIntT =
-            typename std::conditional<std::is_signed<IntT>::value, int, unsigned>::type;
+            typename std::conditional<std::is_signed<IntT>::value, int64_t, uint64_t>::type;
         ASSERT(angle::IsValueInRangeForNumericType<PromotedIntT>(param));
         PromotedIntT intValue = static_cast<PromotedIntT>(param);
         write(&intValue, 1);
@@ -232,6 +239,12 @@ class BinaryOutputStream : angle::NonCopyable
 
     void writeBytes(const unsigned char *bytes, size_t count) { write(bytes, count); }
 
+    void writeBool(bool value)
+    {
+        int intValue = value ? 1 : 0;
+        write(&intValue, 1);
+    }
+
     size_t length() const { return mData.size(); }
 
     const void *data() const { return mData.size() ? &mData[0] : nullptr; }
@@ -239,8 +252,6 @@ class BinaryOutputStream : angle::NonCopyable
     const std::vector<uint8_t> &getData() const { return mData; }
 
   private:
-    std::vector<uint8_t> mData;
-
     template <typename T>
     void write(const T *v, size_t num)
     {
@@ -248,6 +259,8 @@ class BinaryOutputStream : angle::NonCopyable
         const char *asBytes = reinterpret_cast<const char *>(v);
         mData.insert(mData.end(), asBytes, asBytes + num * sizeof(T));
     }
+
+    std::vector<uint8_t> mData;
 };
 
 inline BinaryOutputStream::BinaryOutputStream() {}

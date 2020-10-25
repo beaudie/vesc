@@ -273,8 +273,8 @@ void ProgramExecutableVk::save(gl::BinaryOutputStream *stream)
             stream->writeInt<uint32_t>(it.second.xfbBuffer);
             stream->writeInt<uint32_t>(it.second.xfbOffset);
             stream->writeInt<uint32_t>(it.second.xfbStride);
-            stream->writeInt<uint8_t>(it.second.useRelaxedPrecision);
-            stream->writeInt<uint8_t>(it.second.varyingIsOutput);
+            stream->writeBool(it.second.useRelaxedPrecision);
+            stream->writeBool(it.second.varyingIsOutput);
             stream->writeInt<uint8_t>(it.second.attributeComponentCount);
             stream->writeInt<uint8_t>(it.second.attributeLocationCount);
         }

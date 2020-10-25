@@ -658,7 +658,7 @@ void WriteShaderVariableBuffer(BinaryOutputStream *stream, const ShaderVariableB
 
     for (ShaderType shaderType : AllShaderTypes())
     {
-        stream->writeInt(var.isActive(shaderType));
+        stream->writeBool(var.isActive(shaderType));
     }
 
     stream->writeInt(var.memberIndexes.size());
@@ -695,7 +695,7 @@ void WriteBufferVariable(BinaryOutputStream *stream, const BufferVariable &var)
 
     for (ShaderType shaderType : AllShaderTypes())
     {
-        stream->writeInt(var.isActive(shaderType));
+        stream->writeBool(var.isActive(shaderType));
     }
 }
 
@@ -717,7 +717,7 @@ void WriteInterfaceBlock(BinaryOutputStream *stream, const InterfaceBlock &block
 {
     stream->writeString(block.name);
     stream->writeString(block.mappedName);
-    stream->writeInt(block.isArray);
+    stream->writeBool(block.isArray);
     stream->writeInt(block.arrayElement);
 
     WriteShaderVariableBuffer(stream, block);
@@ -857,7 +857,7 @@ bool IsActiveInterfaceBlock(const sh::InterfaceBlock &interfaceBlock)
 void WriteBlockMemberInfo(BinaryOutputStream *stream, const sh::BlockMemberInfo &var)
 {
     stream->writeInt(var.arrayStride);
-    stream->writeInt(var.isRowMajorMatrix);
+    stream->writeBool(var.isRowMajorMatrix);
     stream->writeInt(var.matrixStride);
     stream->writeInt(var.offset);
     stream->writeInt(var.topLevelArrayStride);
@@ -879,17 +879,17 @@ void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
     stream->writeString(var.name);
     stream->writeString(var.mappedName);
     stream->writeIntVector(var.arraySizes);
-    stream->writeInt(var.staticUse);
-    stream->writeInt(var.active);
+    stream->writeBool(var.staticUse);
+    stream->writeBool(var.active);
     stream->writeInt(var.binding);
     stream->writeString(var.structName);
     stream->writeInt(var.hasParentArrayIndex() ? var.parentArrayIndex() : -1);
 
     stream->writeInt(var.imageUnitFormat);
     stream->writeInt(var.offset);
-    stream->writeInt(var.readonly);
-    stream->writeInt(var.writeonly);
-    stream->writeInt(var.texelFetchStaticUse);
+    stream->writeBool(var.readonly);
+    stream->writeBool(var.writeonly);
+    stream->writeBool(var.texelFetchStaticUse);
 
     ASSERT(var.fields.empty());
 }
@@ -5147,7 +5147,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     stream.writeInt(mState.mGeometryShaderMaxVertices);
 
     stream.writeInt(mState.mNumViews);
-    stream.writeInt(mState.mEarlyFramentTestsOptimization);
+    stream.writeBool(mState.mEarlyFramentTestsOptimization);
 
     stream.writeInt(mState.getProgramInputs().size());
     for (const sh::ShaderVariable &attrib : mState.getProgramInputs())
@@ -5171,7 +5171,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
         // Active shader info
         for (ShaderType shaderType : gl::AllShaderTypes())
         {
-            stream.writeInt(uniform.isActive(shaderType));
+            stream.writeBool(uniform.isActive(shaderType));
         }
     }
 
@@ -5180,7 +5180,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     {
         stream.writeInt(variable.arrayIndex);
         stream.writeIntOrNegOne(variable.index);
-        stream.writeInt(variable.ignored);
+        stream.writeBool(variable.ignored);
     }
 
     stream.writeInt(mState.getUniformBlocks().size());
@@ -5240,7 +5240,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     {
         stream.writeInt(outputVar.arrayIndex);
         stream.writeIntOrNegOne(outputVar.index);
-        stream.writeInt(outputVar.ignored);
+        stream.writeBool(outputVar.ignored);
     }
 
     stream.writeInt(mState.getSecondaryOutputLocations().size());
@@ -5248,7 +5248,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     {
         stream.writeInt(outputVar.arrayIndex);
         stream.writeIntOrNegOne(outputVar.index);
-        stream.writeInt(outputVar.ignored);
+        stream.writeBool(outputVar.ignored);
     }
 
     stream.writeInt(mState.mOutputVariableTypes.size());
@@ -5275,7 +5275,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
         stream.writeEnum(samplerBinding.textureType);
         stream.writeEnum(samplerBinding.format);
         stream.writeInt(samplerBinding.boundTextureUnits.size());
-        stream.writeInt(samplerBinding.unreferenced);
+        stream.writeBool(samplerBinding.unreferenced);
     }
 
     stream.writeInt(mState.getImageUniformRange().low());
@@ -5341,7 +5341,7 @@ angle::Result Program::deserialize(const Context *context,
     mState.mGeometryShaderMaxVertices         = stream.readInt<int>();
 
     mState.mNumViews                      = stream.readInt<int>();
-    mState.mEarlyFramentTestsOptimization = stream.readInt<bool>();
+    mState.mEarlyFramentTestsOptimization = stream.readBool();
 
     unsigned int attribCount = stream.readInt<unsigned int>();
     ASSERT(mState.mExecutable->getProgramInputs().empty());
