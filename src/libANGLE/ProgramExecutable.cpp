@@ -139,8 +139,8 @@ void ProgramExecutable::load(gl::BinaryInputStream *stream)
                   "Too many vertex attribs for mask: All bits of mAttributesTypeMask types and "
                   "mask fit into 32 bits each");
     mAttributesTypeMask        = gl::ComponentTypeMask(stream->readInt<uint32_t>());
-    mAttributesMask            = stream->readInt<gl::AttributesMask>();
-    mActiveAttribLocationsMask = stream->readInt<gl::AttributesMask>();
+    mAttributesMask            = gl::AttributesMask(stream->readInt<uint32_t>());
+    mActiveAttribLocationsMask = gl::AttributesMask(stream->readInt<uint32_t>());
     mMaxActiveAttribLocation   = stream->readInt<unsigned int>();
 
     mLinkedGraphicsShaderStages = ShaderBitSet(stream->readInt<uint8_t>());
@@ -163,9 +163,9 @@ void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
 {
     static_assert(MAX_VERTEX_ATTRIBS * 2 <= sizeof(uint32_t) * 8,
                   "All bits of mAttributesTypeMask types and mask fit into 32 bits each");
-    stream->writeInt(static_cast<int>(mAttributesTypeMask.to_ulong()));
-    stream->writeInt(static_cast<int>(mAttributesMask.to_ulong()));
-    stream->writeInt(mActiveAttribLocationsMask.to_ulong());
+    stream->writeInt(static_cast<uint32_t>(mAttributesTypeMask.to_ulong()));
+    stream->writeInt(static_cast<uint32_t>(mAttributesMask.to_ulong()));
+    stream->writeInt(static_cast<uint32_t>(mActiveAttribLocationsMask.to_ulong()));
     stream->writeInt(mMaxActiveAttribLocation);
 
     stream->writeInt(mLinkedGraphicsShaderStages.bits());
