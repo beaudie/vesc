@@ -103,4 +103,8 @@
     "script": "//scripts/run_gtest_angle_test.py",
     "type": "script",
   },
+  "test_utils_unittest_helper": {
+    "label": "//src/tests:test_utils_unittest_helper",
+    "type": "console_test_launcher",
+  },
 }

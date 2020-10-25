@@ -11,9 +11,11 @@
 #include "util/test_utils.h"
 
 #include "common/angleutils.h"
+#include "common/system_utils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 #if !defined(ANGLE_PLATFORM_ANDROID) && !defined(ANGLE_PLATFORM_FUCHSIA)
 #    if defined(ANGLE_PLATFORM_APPLE)
@@ -102,6 +104,9 @@ static void Handler(int sig)
 
 #    elif defined(ANGLE_PLATFORM_POSIX)
 
+// Can control this at a higher level if required.
+#        define ANGLE_HAS_ADDR2LINE
+
 void PrintStackBacktrace()
 {
     printf("Backtrace:\n");
@@ -112,6 +117,12 @@ void PrintStackBacktrace()
 
     for (int i = 0; i < count; i++)
     {
+#        if defined(ANGLE_HAS_ADDR2LINE)
+        std::string substring(strchr(symbols[i], '+') + 1, strchr(symbols[i], ')'));
+        std::string command =
+            "addr2line -s -p -f -C -e " + angle::GetExecutablePath() + " " + substring;
+        (void)system(command.c_str());
+#        else
         Dl_info info;
         if (dladdr(stack[i], &info) && info.dli_sname)
         {
@@ -130,6 +141,7 @@ void PrintStackBacktrace()
             }
         }
         printf("    %s\n", symbols[i]);
+#        endif  // defined(ANGLE_HAS_ADDR2LINE)
     }
 }
 
