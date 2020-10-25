@@ -109,6 +109,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b0c29dd_d7648a43",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-25T08:35:31Z",
+      "side": 1,
+      "message": "Hi Alexey,\nSorry if I\u0027m misunderstanding something, but why mBlendDescArray has to be updated as a whole if any of DIRTY_BIT_BLEND_ENABLED, DIRTY_BIT_BLEND_FUNCS \u0026 DIRTY_BIT_BLEND_EQUATIONS is set?\nThe overhead might not be much, but mtl::GetBlendFactor/mtl::GetBlendOp() is not free, inside they have a pretty big switch.\n\nIs it better to update only blendingEnabled properties of the mBlendDescArray when DIRTY_BIT_BLEND_ENABLED is set, update only blendFactors when DIRTY_BIT_BLEND_FUNCS is set, and so on?\n\nThe way your code works now, if user only calls glEnable(GL_BLEND) then the whole mBlendDescArray has to be updated (including calling mtl::GetBlendFactor/mtl::GetBlendOp() lookup functions again).\n\nRegarding mtl::BlendDescArray caching comparison, I think simple memcmp is OK for now. I took a look on generated assembly code on iOS and macOS, both of them use SIMD instructions (SSE \u0026 NEON) for memcmp, so memcmp might be even faster than bitwise ops on integers. Could you point me to the loop-less comparison code of the BlendStateExt?",
+      "parentUuid": "26a67228_55a1c4aa",
+      "range": {
+        "startLine": 696,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 17
+      },
+      "revId": "d57abd8347b1e1d276e4e65c4406e6dcaefed7be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "364fbcda_6d858b7b",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 2
