@@ -82,6 +82,11 @@ struct FeaturesMtl : FeatureSetBase
 
     Feature forceD24S8AsUnsupported = {"force_d24s8_as_unsupported", FeatureCategory::MetalFeatures,
                                        "Force Depth24Stencil8 format as unsupported.", &members};
+
+    Feature randomizeShaderSig = {"randomize_shader_sig", FeatureCategory::MetalFeatures,
+                                  "Randomize shader signature to avoid Metal shader caching. Metal "
+                                  "shader caching is very slow some times.",
+                                  &members};
 };
 
 }  // namespace angle
