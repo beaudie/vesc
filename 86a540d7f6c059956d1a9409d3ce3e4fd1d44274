@@ -141,6 +141,24 @@
       "parentUuid": "bd17c255_834c43b2",
       "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22e95c22_4811742e",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-10-25T08:38:44Z",
+      "side": 1,
+      "message": "Done. Although it is a bit inconvenient.",
+      "parentUuid": "35effdcc_a7aa6ef5",
+      "revId": "86a540d7f6c059956d1a9409d3ce3e4fd1d44274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
