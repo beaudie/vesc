@@ -1087,7 +1087,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
         D3DUniform *d3dUniform =
             new D3DUniform(linkedUniform.type, HLSLRegisterType::None, linkedUniform.name,
                            linkedUniform.arraySizes, linkedUniform.isInDefaultBlock());
-        stream->readInt<HLSLRegisterType>(&d3dUniform->regType);
+        stream->readEnum(&d3dUniform->regType);
         for (gl::ShaderType shaderType : gl::AllShaderTypes())
         {
             stream->readInt(&d3dUniform->mShaderRegisterIndexes[shaderType]);
@@ -1180,7 +1180,7 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
 
         for (size_t inputIndex = 0; inputIndex < inputLayoutSize; inputIndex++)
         {
-            inputLayout[inputIndex] = stream->readInt<angle::FormatID>();
+            inputLayout[inputIndex] = stream->readEnum<angle::FormatID>();
         }
 
         unsigned int vertexShaderSize             = stream->readInt<unsigned int>();
@@ -1277,7 +1277,7 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
             unsigned int imageUint;
             gl::TextureType textureType;
             stream->readInt<unsigned int>(&imageUint);
-            stream->readInt<gl::TextureType>(&textureType);
+            stream->readEnum<gl::TextureType>(&textureType);
             signatures.insert(std::pair<unsigned int, gl::TextureType>(imageUint, textureType));
         }
 
@@ -1337,7 +1337,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeInt(mShaderSamplers[shaderType].size());
         for (unsigned int i = 0; i < mShaderSamplers[shaderType].size(); ++i)
         {
-            stream->writeInt(mShaderSamplers[shaderType][i].active);
+            stream->writeBool(mShaderSamplers[shaderType][i].active);
             stream->writeInt(mShaderSamplers[shaderType][i].logicalTextureUnit);
             stream->writeEnum(mShaderSamplers[shaderType][i].textureType);
         }
@@ -1349,14 +1349,14 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     stream->writeInt(mImagesCS.size());
     for (unsigned int i = 0; i < mImagesCS.size(); ++i)
     {
-        stream->writeInt(mImagesCS[i].active);
+        stream->writeBool(mImagesCS[i].active);
         stream->writeInt(mImagesCS[i].logicalImageUnit);
     }
 
     stream->writeInt(mReadonlyImagesCS.size());
     for (unsigned int i = 0; i < mReadonlyImagesCS.size(); ++i)
     {
-        stream->writeInt(mReadonlyImagesCS[i].active);
+        stream->writeBool(mReadonlyImagesCS[i].active);
         stream->writeInt(mReadonlyImagesCS[i].logicalImageUnit);
     }
 
@@ -1391,7 +1391,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     for (const D3DUniform *uniform : mD3DUniforms)
     {
         // Type, name and arraySize are redundant, so aren't stored in the binary.
-        stream->writeInt(static_cast<unsigned int>(uniform->regType));
+        stream->writeEnum(uniform->regType);
         for (gl::ShaderType shaderType : gl::AllShaderTypes())
         {
             stream->writeIntOrNegOne(uniform->mShaderRegisterIndexes[shaderType]);
@@ -1406,7 +1406,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         for (gl::ShaderType shaderType : gl::AllShaderTypes())
         {
             stream->writeIntOrNegOne(uniformBlock.mShaderRegisterIndexes[shaderType]);
-            stream->writeInt(uniformBlock.mUseStructuredBuffers[shaderType]);
+            stream->writeBool(uniformBlock.mUseStructuredBuffers[shaderType]);
             stream->writeInt(uniformBlock.mByteWidths[shaderType]);
             stream->writeInt(uniformBlock.mStructureByteStrides[shaderType]);
         }
@@ -1428,12 +1428,12 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
                            sizeof(angle::CompilerWorkaroundsD3D));
     }
 
-    stream->writeInt(mUsesFragDepth);
-    stream->writeInt(mHasANGLEMultiviewEnabled);
-    stream->writeInt(mUsesVertexID);
-    stream->writeInt(mUsesViewID);
-    stream->writeInt(mUsesPointSize);
-    stream->writeInt(mUsesFlatInterpolation);
+    stream->writeBool(mUsesFragDepth);
+    stream->writeBool(mHasANGLEMultiviewEnabled);
+    stream->writeBool(mUsesVertexID);
+    stream->writeBool(mUsesViewID);
+    stream->writeBool(mUsesPointSize);
+    stream->writeBool(mUsesFlatInterpolation);
 
     const std::vector<PixelShaderOutputVariable> &pixelShaderKey = mPixelShaderKey;
     stream->writeInt(pixelShaderKey.size());
@@ -1461,7 +1461,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
 
         for (size_t inputIndex = 0; inputIndex < inputLayout.size(); inputIndex++)
         {
-            stream->writeInt(static_cast<unsigned int>(inputLayout[inputIndex]));
+            stream->writeEnum(inputLayout[inputIndex]);
         }
 
         size_t vertexShaderSize = vertexExecutable->shaderExecutable()->getLength();
@@ -1515,7 +1515,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         for (const auto &signature : signatures)
         {
             stream->writeInt(signature.first);
-            stream->writeInt(static_cast<unsigned int>(signature.second));
+            stream->writeEnum(signature.second);
         }
 
         size_t computeShaderSize = computeExecutable->shaderExecutable()->getLength();
