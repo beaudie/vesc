@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "439b0fc3_55eddd92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-26T23:59:07Z",
+      "side": 1,
+      "message": "Yes, will do in a separate CL.",
+      "parentUuid": "bef44e28_0c5a60e8",
+      "revId": "afa9a20f50219c757c87f6236a92bd13b5008782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3384ff5_25158dcc",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da48e303_420a73e7",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-26T23:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3384ff5_25158dcc",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 0
+      },
+      "revId": "afa9a20f50219c757c87f6236a92bd13b5008782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c79716a_cbc4b797",
@@ -71,6 +113,30 @@
       "writtenOn": "2020-10-26T23:29:07Z",
       "side": 1,
       "message": "nit: GetEnvironmentVarFromAndroidProperty to clarify this is an Android property.",
+      "range": {
+        "startLine": 31,
+        "startChar": 12,
+        "endLine": 31,
+        "endChar": 41
+      },
+      "revId": "afa9a20f50219c757c87f6236a92bd13b5008782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76cc49b3_962902a2",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-26T23:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c79716a_cbc4b797",
       "range": {
         "startLine": 31,
         "startChar": 12,
