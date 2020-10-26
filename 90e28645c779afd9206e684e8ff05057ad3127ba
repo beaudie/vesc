@@ -83,6 +83,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "766fb1d2_3f05a1a1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T18:02:45Z",
+      "side": 1,
+      "message": "agree, just minus the Image, so copyTextureSubData, copyRenderbufferSubData.",
+      "parentUuid": "70988437_1e0a9f3a",
+      "range": {
+        "startLine": 4108,
+        "startChar": 43,
+        "endLine": 4108,
+        "endChar": 59
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efc2bb05_3fb4550a",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 12
