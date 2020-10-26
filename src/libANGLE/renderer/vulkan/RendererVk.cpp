@@ -2334,6 +2334,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
 {
+    // TODO: This should probably move to the worker thread.
     if (getFeatures().asynchronousCommandProcessing.enabled)
     {
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
@@ -2351,6 +2352,7 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 
 angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
+    // TODO: this should probably move to worker thread.
     if (getFeatures().asynchronousCommandProcessing.enabled)
     {
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
