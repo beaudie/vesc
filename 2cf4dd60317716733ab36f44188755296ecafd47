@@ -16,6 +16,52 @@
       "message": "Ok, there was nothing wrong with the y flip. It was just ShaderVk that had to emit prerotation code in emulation as well.",
       "revId": "2cf4dd60317716733ab36f44188755296ecafd47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "101f4d6f_8a5daca5",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-26T16:56:04Z",
+      "side": 1,
+      "message": "What is the difference between mWidth and mFixture-\u003eosWindow-\u003egetWidth()?",
+      "range": {
+        "startLine": 554,
+        "startChar": 30,
+        "endLine": 554,
+        "endChar": 36
+      },
+      "revId": "2cf4dd60317716733ab36f44188755296ecafd47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83c35f49_8a223d86",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-26T16:56:04Z",
+      "side": 1,
+      "message": "Not sure how this will do on Android.  If this is built on Cody\u0027s mechanism, it will really (sometime later) resize the window, but won\u0027t change the rotation.",
+      "range": {
+        "startLine": 561,
+        "startChar": 0,
+        "endLine": 561,
+        "endChar": 73
+      },
+      "revId": "2cf4dd60317716733ab36f44188755296ecafd47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
