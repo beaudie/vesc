@@ -268,9 +268,14 @@ angle::Result TaskProcessor::init(vk::Context *context, std::thread::id threadId
 angle::Result TaskProcessor::lockAndCheckCompletedCommands(vk::Context *context)
 {
     ASSERT(isValidWorkerThread(context));
-    std::lock_guard<std::mutex> inFlightLock(mInFlightCommandsMutex);
+    std::unique_lock<std::mutex> inFlightLock(mInFlightCommandsMutex);
 
-    return checkCompletedCommandsNoLock(context);
+    ANGLE_TRY(checkCompletedCommandsNoLock(context));
+
+    // Don't need lock for garbage cleanup
+    inFlightLock.unlock();
+
+    return cleanUpGarbage(context);
 }
 
 VkResult TaskProcessor::getLastAndClearPresentResult(VkSwapchainKHR swapchain)
@@ -291,8 +296,7 @@ VkResult TaskProcessor::getLastAndClearPresentResult(VkSwapchainKHR swapchain)
 angle::Result TaskProcessor::checkCompletedCommandsNoLock(vk::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "TaskProcessor::checkCompletedCommandsNoLock");
-    VkDevice device        = context->getDevice();
-    RendererVk *rendererVk = context->getRenderer();
+    VkDevice device = context->getDevice();
 
     int finishedCount = 0;
 
@@ -304,6 +308,30 @@ angle::Result TaskProcessor::checkCompletedCommandsNoLock(vk::Context *context)
             break;
         }
         ANGLE_VK_TRY(context, result);
+        ++finishedCount;
+    }
+
+    if (finishedCount == 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    ANGLE_TRY(retireFinishedCommandsWithLock(context, finishedCount));
+
+    return cleanUpGarbage(context);
+}
+
+angle::Result TaskProcessor::retireFinishedCommandsWithLock(rx::vk::Context *context,
+                                                            size_t finishedCount)
+{
+    ASSERT(finishedCount > 0);
+
+    VkDevice device        = context->getDevice();
+    RendererVk *rendererVk = context->getRenderer();
+
+    for (size_t commandIndex = 0; commandIndex < finishedCount; ++commandIndex)
+    {
+        vk::CommandBatch &batch = mInFlightCommands[commandIndex];
 
         rendererVk->onCompletedSerial(batch.serial);
 
@@ -312,7 +340,6 @@ angle::Result TaskProcessor::checkCompletedCommandsNoLock(vk::Context *context)
         ANGLE_TRACE_EVENT0("gpu.angle", "command buffer recycling");
         batch.commandPool.destroy(device);
         ANGLE_TRY(releasePrimaryCommandBuffer(context, std::move(batch.primaryCommands)));
-        ++finishedCount;
     }
 
     if (finishedCount > 0)
@@ -321,7 +348,14 @@ angle::Result TaskProcessor::checkCompletedCommandsNoLock(vk::Context *context)
         mInFlightCommands.erase(beginIter, beginIter + finishedCount);
     }
 
-    Serial lastCompleted = rendererVk->getLastCompletedQueueSerial();
+    return angle::Result::Continue;
+}
+
+angle::Result TaskProcessor::cleanUpGarbage(vk::Context *context)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "TaskProcessor::cleanUpGarbage");
+    RendererVk *rendererVk = context->getRenderer();
+    Serial lastCompleted   = rendererVk->getLastCompletedQueueSerial();
 
     size_t freeIndex = 0;
     for (; freeIndex < mGarbageQueue.size(); ++freeIndex)
@@ -422,10 +456,10 @@ void TaskProcessor::handleDeviceLost(vk::Context *context)
 // TODO: https://issuetracker.google.com/issues/170312581 - A more optimal solution might be to do
 // the wait in CommandProcessor rather than the worker thread. That would require protecting access
 // to mInFlightCommands
-angle::Result TaskProcessor::finishToSerial(vk::Context *context, Serial serial)
+angle::Result TaskProcessor::finishToSerial(vk::Context *context, Serial finishSerial)
 {
     ASSERT(isValidWorkerThread(context));
-    ANGLE_TRACE_EVENT0("gpu.angle", "TaskProcessor::finishToSerial");
+
     RendererVk *rendererVk = context->getRenderer();
     uint64_t timeout       = rendererVk->getMaxFenceWaitTimeNs();
     std::unique_lock<std::mutex> inFlightLock(mInFlightCommandsMutex);
@@ -436,18 +470,21 @@ angle::Result TaskProcessor::finishToSerial(vk::Context *context, Serial serial)
         return angle::Result::Continue;
     }
 
-    // Find the first batch with serial equal to or bigger than given serial (note that
-    // the batch serials are unique, otherwise upper-bound would have been necessary).
-    size_t batchIndex = mInFlightCommands.size() - 1;
-    for (size_t i = 0; i < mInFlightCommands.size(); ++i)
+    ANGLE_TRACE_EVENT0("gpu.angle", "TaskProcessor::finishToSerial");
+
+    size_t finishedCount = 0;
+    while (finishedCount < mInFlightCommands.size() &&
+           mInFlightCommands[finishedCount].serial <= finishSerial)
     {
-        if (mInFlightCommands[i].serial >= serial)
-        {
-            batchIndex = i;
-            break;
-        }
+        finishedCount++;
     }
-    const vk::CommandBatch &batch = mInFlightCommands[batchIndex];
+
+    if (finishedCount == 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    const vk::CommandBatch &batch = mInFlightCommands[finishedCount - 1];
 
     // Don't need to hold the lock while waiting for the fence
     inFlightLock.unlock();
@@ -457,7 +494,11 @@ angle::Result TaskProcessor::finishToSerial(vk::Context *context, Serial serial)
     ANGLE_VK_TRY(context, batch.fence.get().wait(device, timeout));
 
     // Clean up finished batches.
-    return lockAndCheckCompletedCommands(context);
+    inFlightLock.lock();
+    ANGLE_TRY(retireFinishedCommandsWithLock(context, finishedCount));
+    inFlightLock.unlock();
+
+    return cleanUpGarbage(context);
 }
 
 VkResult TaskProcessor::present(VkQueue queue, const VkPresentInfoKHR &presentInfo)
@@ -521,7 +562,10 @@ angle::Result TaskProcessor::submitFrame(vk::Context *context,
         return finishToSerial(context, finishSerial);
     }
 
-    return angle::Result::Continue;
+    // Don't need lock for garbage cleanup
+    inFlightLock.unlock();
+
+    return cleanUpGarbage(context);
 }
 
 vk::Shared<vk::Fence> TaskProcessor::getLastSubmittedFenceWithLock(VkDevice device) const
