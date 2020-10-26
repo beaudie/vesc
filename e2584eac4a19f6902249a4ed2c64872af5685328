@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "703de3e7_fa81bcd4",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:19:06Z",
+      "side": 1,
+      "message": "Yep, follow-up is good.",
+      "parentUuid": "310272b8_1cd98b21",
+      "revId": "e2584eac4a19f6902249a4ed2c64872af5685328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fdb897c8_78f06103",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 7
