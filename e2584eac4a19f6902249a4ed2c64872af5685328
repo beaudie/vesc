@@ -143,6 +143,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e76d4b_0b6ecdd9",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-26T16:33:22Z",
+      "side": 1,
+      "message": "Ack. thanks guys, will land this and wait for input from Ian on how to handle pre-rotation interaction",
+      "parentUuid": "e1eb5f55_592e688f",
+      "revId": "e2584eac4a19f6902249a4ed2c64872af5685328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdb897c8_78f06103",
