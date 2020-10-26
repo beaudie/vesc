@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c8a6217a_f41cfee1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1390803
+      },
+      "writtenOn": "2020-10-26T22:38:20Z",
+      "side": 1,
+      "message": "Thanks for upstreaming this James! I approve taking the patch from WebKit.",
+      "revId": "3bb119e546faa824d85f6f7346c51f05d713ded9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20529902_874aeb9a",
         "filename": "src/gpu_info_util/SystemInfo_apple.mm",
         "patchSetId": 2
