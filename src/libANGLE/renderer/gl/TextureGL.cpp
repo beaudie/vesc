@@ -265,8 +265,18 @@ angle::Result TextureGL::setImageHelper(const gl::Context *context,
                                            texImageFormat.type, pixels));
     }
 
-    setLevelInfo(context, target, level, 1,
-                 GetLevelInfo(features, internalFormat, texImageFormat.internalFormat));
+    LevelInfoGL levelInfo = GetLevelInfo(features, internalFormat, texImageFormat.internalFormat);
+    setLevelInfo(context, target, level, 1, levelInfo);
+
+    if (features.setZeroLevelBeforeGenerateMipmap.enabled && getType() == gl::TextureType::_2D &&
+        level != 0 && mLevelInfo[0].nativeInternalFormat == GL_NONE)
+    {
+        ANGLE_GL_TRY_ALWAYS_CHECK(
+            context, functions->texImage2D(nativegl::GetTextureBindingTarget(target), 0,
+                                           texImageFormat.internalFormat, 1, 1, 0,
+                                           texImageFormat.format, texImageFormat.type, nullptr));
+        setLevelInfo(context, target, 0, 1, levelInfo);
+    }
 
     return angle::Result::Continue;
 }
