@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e66009_8bb34a43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-10-26T18:46:54Z",
+      "side": 1,
+      "message": "I think this patch is ok as is and we can land it in the interest of minimizing merge conflicts later.\n\nIf I was to implement this over again I would do it a bit differently I think:\n\nSince the real issue (I believe) is that ANGLE does some internal emulation that makes GL calls, we need to ensure a context is current on the the current thread just for those calls. eglMakeCurrent may also need to make sure the context it thinks is current really is too.\n\nI recently hit this issue in WindowSurfaceCGL and solved it by adding a little RAII wrapper to make a context current for that function: https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/gl/cgl/WindowSurfaceCGL.mm;l\u003d167\n\nWe could probably do the same in the relevant CGL and EAGL code that makes GL function calls and not need any new extensions. The cost of EGL calls is already expected to be high so it\u0027s not an issue adding more cost like this, IMO.\n",
+      "revId": "0927b22bed52f56004c024e782a8db72325c4378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fd99d8b_bde5272e",
