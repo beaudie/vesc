@@ -183,7 +183,7 @@ class TaskProcessor : angle::NonCopyable
     angle::Result releasePrimaryCommandBuffer(vk::Context *context,
                                               vk::PrimaryCommandBuffer &&commandBuffer);
 
-    angle::Result finishToSerial(vk::Context *context, Serial serial);
+    angle::Result finishToSerial(vk::Context *context, Serial finishSerial);
 
     VkResult present(VkQueue queue, const VkPresentInfoKHR &presentInfo);
 
@@ -214,6 +214,8 @@ class TaskProcessor : angle::NonCopyable
                                         vk::PrimaryCommandBuffer &&commandBuffer,
                                         vk::CommandPool *commandPool,
                                         vk::CommandBatch *batch);
+    angle::Result retireFinishedCommandsWithLock(rx::vk::Context *context, size_t finishedCount);
+    angle::Result cleanUpGarbage(vk::Context *context);
 
     // Check to see which batches have finished completion (forward progress for
     // mLastCompletedQueueSerial, for example for when the application busy waits on a query
