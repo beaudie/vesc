@@ -33,6 +33,23 @@
       "message": "LGTM if all bots pass.\n\n+Jamie/Shahbaz take a look. Thanks.",
       "revId": "db43d86c3584fad290554d5ed076c026802eb056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da17f035_01569068",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T12:46:33Z",
+      "side": 1,
+      "message": "Xinghua: I think there\u0027s some sort of deterministic crash that is happening on Android. It might be related to changing the test ordering. Let us know if you need help finding which test to skip. LGTM otherwise.",
+      "revId": "db43d86c3584fad290554d5ed076c026802eb056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
