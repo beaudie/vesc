@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "391a2d14_3959accb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T18:34:37Z",
+      "side": 1,
+      "message": "Updating Vulkan-Loader and ANGLE independently seems impossible. This change is proof that updating both simultaneously works.\n\n@Corentin, a similar change may be necessary for Dawn. When you give me the green light, I\u0027ll push the change to Vulkan-Loader, then do a manual roll to ANGLE with this change.",
+      "revId": "651c7305165f3f9e755a926c8a86cc0c5c5970f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
