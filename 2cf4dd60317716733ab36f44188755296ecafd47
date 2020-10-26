@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0d169a3_357dcb28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T15:23:47Z",
+      "side": 1,
+      "message": "Ok, there was nothing wrong with the y flip. It was just ShaderVk that had to emit prerotation code in emulation as well.",
+      "revId": "2cf4dd60317716733ab36f44188755296ecafd47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

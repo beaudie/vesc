@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e0f4c1_d307aaec",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T15:23:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a80281e_abfe1c68",
+      "range": {
+        "startLine": 2554,
+        "startChar": 4,
+        "endLine": 2554,
+        "endChar": 81
+      },
+      "revId": "75f56157f3b9fe8d97413a8c27ad0c268190fe5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fcc2b85_a1d08faa",
@@ -71,6 +95,30 @@
       "writtenOn": "2020-10-26T12:59:38Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 2559,
+        "startChar": 8,
+        "endLine": 2559,
+        "endChar": 15
+      },
+      "revId": "75f56157f3b9fe8d97413a8c27ad0c268190fe5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc7aee0d_074daca3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2559,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T15:23:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fcc2b85_a1d08faa",
       "range": {
         "startLine": 2559,
         "startChar": 8,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "253d13c0_1c41ca1b",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T15:23:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa16dfcd_0fa2d572",
+      "range": {
+        "startLine": 224,
+        "startChar": 19,
+        "endLine": 224,
+        "endChar": 41
+      },
+      "revId": "75f56157f3b9fe8d97413a8c27ad0c268190fe5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bbfb59f_415264f1",
@@ -117,6 +189,30 @@
       "writtenOn": "2020-10-26T12:59:38Z",
       "side": 1,
       "message": "nit: just int/ uint32_t. You aren\u0027t passing this to an EGL api.",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 10
+      },
+      "revId": "75f56157f3b9fe8d97413a8c27ad0c268190fe5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11c3b753_1f9be9aa",
+        "filename": "util/EGLPlatformParameters.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T15:23:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bbfb59f_415264f1",
       "range": {
         "startLine": 81,
         "startChar": 4,
