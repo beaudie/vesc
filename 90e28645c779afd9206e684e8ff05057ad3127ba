@@ -292,6 +292,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97fc1661_2a4e6a8e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "We don\u0027t hit case. I\u0027m just putting it here at it is possible, but like you said unlikely.",
+      "parentUuid": "a1f7f8d8_2a0ae31c",
+      "range": {
+        "startLine": 4252,
+        "startChar": 0,
+        "endLine": 4257,
+        "endChar": 35
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3da5d595_2085f6d2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
@@ -431,6 +455,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5144dd73_57a79bd9",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "I took this from ValidateBindRenderbuffer in order to determine if the renderbuffer passed in is a valid handle. I don\u0027t quite follow the test you are suggesting?",
+      "parentUuid": "b6567814_0abfa114",
+      "range": {
+        "startLine": 2615,
+        "startChar": 14,
+        "endLine": 2615,
+        "endChar": 69
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19e2e361_56b50b0c",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 12
@@ -442,6 +490,30 @@
       "writtenOn": "2020-10-26T13:47:21Z",
       "side": 1,
       "message": "I don\u0027t see where you\u0027re validating that this is a valid texture object. What is specified in that case?",
+      "range": {
+        "startLine": 2629,
+        "startChar": 16,
+        "endLine": 2629,
+        "endChar": 30
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed77295_f5f8306c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "Good catch! Looks like we need this check:\n\nif (!context-\u003egetStateCache().isValidBindTextureType(target))",
+      "parentUuid": "19e2e361_56b50b0c",
       "range": {
         "startLine": 2629,
         "startChar": 16,
@@ -488,6 +560,30 @@
       "writtenOn": "2020-10-26T13:47:21Z",
       "side": 1,
       "message": "what\u0027s specced here if the cube map texture is cube-incomplete?",
+      "range": {
+        "startLine": 2694,
+        "startChar": 0,
+        "endLine": 2700,
+        "endChar": 9
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71714a50_e0658d88",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2700,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "The textures to be used must be Texture Complete. Being cube-complete is a prerequisite for that.\n\n\"INVALID_OPERATION is generated if either object is a texture and the texture is not complete (as defined in section 3.8.13)\"\n\nThis texture completeness check is done on line 2718.",
+      "parentUuid": "776b91f7_021e4bf2",
       "range": {
         "startLine": 2694,
         "startChar": 0,
@@ -707,6 +803,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "618e5305_c2f2eb7a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "GL_RGBA32 is not a valid internal format, so I would expect there to be an error during texture creation (glTexImage2D). With that said, you are correct, there isn\u0027t any checks to ensure we follow the tables in the spec. For example, copy from COMPRESSED_RGBA_ASTC_4x4_KHR to GL_COMPRESSED_RGBA_ASTC_5x5_KHR has the same pixelBytes, but is \"not compatible\" according to the table. I\u0027ll need to add something to make sure the table is followed.",
+      "parentUuid": "3069fe58_16931559",
+      "range": {
+        "startLine": 2857,
+        "startChar": 0,
+        "endLine": 2861,
+        "endChar": 31
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9296343_1a09642a",
         "filename": "src/libANGLE/validationES32.cpp",
         "patchSetId": 12
@@ -753,6 +873,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c2d8385_33665f07",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "I think I mistakenly kept this skip in here. Essentially the tests will give a \"Not Supported\" for us already if GL_KHR_texture_compression_astc_hdr is not supported. This HDR support is not a dependency for the copy image extension.",
+      "parentUuid": "d6e64b34_ba68b8ca",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 122
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7e72f1f_51ada8db",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 12
@@ -764,6 +908,30 @@
       "writtenOn": "2020-10-26T13:47:21Z",
       "side": 1,
       "message": "any idea on the root cause here? We\u0027ll follow up?",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 98
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46b2923a_09a3d314",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "The general flow for these copy image deqp tests goes something like this:\n\n1. Build up source image\n2. Build up destination image\n3. Verify source image looks correct\n4. Verify destination image looks correct\n5. Do the copy image\n6. Verify source image looks correct\n7. Verify destination image looks correct\n\nThe test fails on step 3 and/or 4, before the copy. The interesting bit is that these tests were passing locally a couple of weeks ago. That is why I\u0027d like to move forward with this change in it\u0027s current state to gate new regressions that copy image can catch.",
+      "parentUuid": "b7e72f1f_51ada8db",
       "range": {
         "startLine": 276,
         "startChar": 0,
@@ -799,6 +967,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43942a2b_2243b689",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "Similar to my comment on renderbuffers except I don\u0027t think these have regressed. The source/destination srgb image verification (before the copy) fails.",
+      "parentUuid": "0b9e69ae_63b08fb5",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 119
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17f2136d_68014119",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 12
@@ -810,6 +1002,30 @@
       "writtenOn": "2020-10-26T13:47:21Z",
       "side": 1,
       "message": "This is an ANGLE bug? Need a bit more info to know if we should file a new bug/defer or fix this now.",
+      "range": {
+        "startLine": 292,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 72
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a7bf1dd_746186a5",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-10-26T22:36:10Z",
+      "side": 1,
+      "message": "Similar to my comment on renderbuffers except I don\u0027t think these have regressed. The source/destination etc2 image verification (before the copy) fails.",
+      "parentUuid": "17f2136d_68014119",
       "range": {
         "startLine": 292,
         "startChar": 0,
