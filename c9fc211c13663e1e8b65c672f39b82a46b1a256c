@@ -46,6 +46,30 @@
       },
       "revId": "c9fc211c13663e1e8b65c672f39b82a46b1a256c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c8e9d20_680f2663",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T01:41:21Z",
+      "side": 1,
+      "message": "We do kind of expect the bitset iteration to go from LSB to MSB (though I don\u0027t recall offhand if any kind relies on that). I don\u0027t personally see a problem making that a requirement for the class.",
+      "parentUuid": "a2a8a45c_76d97abd",
+      "range": {
+        "startLine": 1028,
+        "startChar": 12,
+        "endLine": 1028,
+        "endChar": 20
+      },
+      "revId": "c9fc211c13663e1e8b65c672f39b82a46b1a256c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
