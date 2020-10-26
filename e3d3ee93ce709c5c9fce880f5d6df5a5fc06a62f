@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f1677d6_a15f45cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T17:31:25Z",
+      "side": 1,
+      "message": "Thanks for reviews.",
+      "revId": "e3d3ee93ce709c5c9fce880f5d6df5a5fc06a62f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e956055_993d5290",
@@ -31,6 +48,24 @@
       "writtenOn": "2020-10-26T14:43:15Z",
       "side": 1,
       "message": "nit: why not just output command?\nI like it when script\u0027s debug output allows me to copy \u0026 paste the commands if I need to try and repro something.",
+      "revId": "e3d3ee93ce709c5c9fce880f5d6df5a5fc06a62f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c2a91ac_a1b16054",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T17:31:25Z",
+      "side": 1,
+      "message": "It does actually log the whole output call during the subprocess call. So it\u0027s outputting twice. I put this in to debug this function specifically. Could remove it, but it\u0027s off by default, so figured it was okay to leave.",
+      "parentUuid": "8e956055_993d5290",
       "revId": "e3d3ee93ce709c5c9fce880f5d6df5a5fc06a62f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
