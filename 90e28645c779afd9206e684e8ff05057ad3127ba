@@ -60,6 +60,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70988437_1e0a9f3a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "I\u0027d just create two functions:\n\n    copyTextureImageSubData\n    copyRenderbufferImageSubData\n\nand avoid the overload / templates.",
+      "range": {
+        "startLine": 4108,
+        "startChar": 43,
+        "endLine": 4108,
+        "endChar": 59
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efc2bb05_3fb4550a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4114,
+        "startChar": 15,
+        "endLine": 4114,
+        "endChar": 27
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13c30978_24f8d9be",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4148,
+        "startChar": 15,
+        "endLine": 4148,
+        "endChar": 27
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "376f888b_251cec52",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4903,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "Can this be nullptr? Maybe you can ASSERT instead.",
+      "range": {
+        "startLine": 4903,
+        "startChar": 8,
+        "endLine": 4903,
+        "endChar": 15
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f1035ef_9388f635",
         "filename": "src/libANGLE/Texture.h",
         "patchSetId": 12
@@ -76,6 +168,52 @@
         "startChar": 0,
         "endLine": 406,
         "endChar": 53
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2478259b_3a68a452",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "Every usage of `is*Layered` is paired with `!is*3D`. You can remove `srcImage-\u003egetType() \u003d\u003d VK_IMAGE_TYPE_3D` and simplify that.",
+      "range": {
+        "startLine": 4206,
+        "startChar": 13,
+        "endLine": 4206,
+        "endChar": 25
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0a302a3_405e83e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "Based on how region.extent.depth is set, this can probably be `isSrc3D ? srcZ : 0`.",
+      "range": {
+        "startLine": 4230,
+        "startChar": 31,
+        "endLine": 4230,
+        "endChar": 68
       },
       "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -106,6 +244,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1f7f8d8_2a0ae31c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "Do we actually hit this? It seems unlikely that an implementation would support RGB8I but not RGB8UI.\n\nRGB8 vs RGB8UI might be a more likely scenario. I suspect this is only a problem for 24-bit (or 48-bit) formats:\n\n    VIEW_CLASS_48_BITS | RGB16F, RGB16UI, RGB16I    \n    VIEW_CLASS_24_BITS | RGB8, RGB8_SNORM, SRGB8, RGB8UI, RGB8I \n\nWe should probably not bother unless there\u0027s an implementation that supports either of these sets partially.\n\nUtilsVk::copyImage already does most of the job so if needs be, can be adapted. The difference is that UtilsVk::copyImage converts between types (because of CHROMIUM_copy_texture), but shouldn\u0027t for EXT_copy_image.",
+      "parentUuid": "ffe46f8d_21b82b98",
+      "range": {
+        "startLine": 4252,
+        "startChar": 0,
+        "endLine": 4257,
+        "endChar": 35
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3da5d595_2085f6d2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
@@ -117,6 +279,30 @@
       "writtenOn": "2020-10-26T13:47:21Z",
       "side": 1,
       "message": "nit: Can you take these all out of the class and make them static helper functions? Trying to reduce the amount of public static in-class functions we define, as it doesn\u0027t really help anything.",
+      "range": {
+        "startLine": 1408,
+        "startChar": 0,
+        "endLine": 1436,
+        "endChar": 0
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b95a4976_63aa7d0c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "Only FormatHasNecessaryFeature and CanCopyWithTransferCommon (which can be named CanCopyWithTransfer) need to become utility functions. The rest can remain anonymous functions in the file that uses them.",
+      "parentUuid": "3da5d595_2085f6d2",
       "range": {
         "startLine": 1408,
         "startChar": 0,
@@ -467,6 +653,29 @@
         "startChar": 90,
         "endLine": 2842,
         "endChar": 95
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3069fe58_16931559",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T17:36:50Z",
+      "side": 1,
+      "message": "Does this simple check really cover everything in tables 4.X.1 and 4.X.2?\n\nLike, what\u0027s preventing a copy from RGBA32 to COMPRESSED_RGBA_ASTC_4x4_KHR?",
+      "range": {
+        "startLine": 2857,
+        "startChar": 0,
+        "endLine": 2861,
+        "endChar": 31
       },
       "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
