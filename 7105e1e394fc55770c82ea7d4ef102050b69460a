@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c70d7d17_cf9c1b70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T17:59:27Z",
+      "side": 1,
+      "message": "Ah, looks like there are still some failures. Putting back as WIP.",
+      "revId": "7105e1e394fc55770c82ea7d4ef102050b69460a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
