@@ -946,8 +946,13 @@ void CommandProcessor::finishToSerial(vk::Context *context, Serial serial)
     finishToSerial.initFinishToSerial(serial);
     queueCommand(context, &finishToSerial);
 
-    // Wait until the worker is idle. At that point we know that the finishToSerial command has
-    // completed executing, including any associated state cleanup.
+    // TODO: Should remove the checkCompletedCommands from finishToSerial and queue that as a
+    // follow-up command. And, if we can wait for a specific taskId to complete we could queue up
+    // both the finishToSerial and checkCompletedCommands and then just wait for the finishToSerial
+    // task to complete. That would allow us to continue as soon as the GPU work has completed and
+    // leave necessary cleanup work to the worker thread. Wait until the worker is idle. At that
+    // point we know that the finishToSerial command has completed executing, including any
+    // associated state cleanup.
     if (context->getRenderer()->getFeatures().asynchronousCommandProcessing.enabled)
     {
         waitForWorkComplete(context);
