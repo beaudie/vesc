@@ -2300,6 +2300,8 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueWaitIdle");
+
+    // TODO: This should probably move to the worker thread.
     if (getFeatures().asynchronousCommandProcessing.enabled)
     {
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
@@ -2319,6 +2321,7 @@ angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::deviceWaitIdle");
 
+    // TODO: this should probably move to worker thread.
     if (getFeatures().asynchronousCommandProcessing.enabled)
     {
         // Wait for all pending commands to get sent before issuing vkQueueWaitIdle
