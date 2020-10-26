@@ -33,6 +33,24 @@
       "message": "Jamie, can you provide a little more info on how this fixes pointer handling?  Is it because we don\u0027t handle all those types when writing the capture, and we were defaulting to binary param out?",
       "revId": "2eca19c6580e870d7422d0e522854d0c1a61f308",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ff46974_44368d3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:48:38Z",
+      "side": 1,
+      "message": "yes, out \u003c\u003c pointer produces \"(nil)\" for nullptr. We have a custom handler for the const void * case that outputs \"nullptr\".",
+      "parentUuid": "373afc3d_036f68ec",
+      "revId": "2eca19c6580e870d7422d0e522854d0c1a61f308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
