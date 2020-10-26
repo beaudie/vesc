@@ -16,6 +16,23 @@
       "message": "LGTM with some questions.",
       "revId": "9b5d6094bb709ff1adf850aad3a220b2cff72cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "258959c8_70b6a18d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-26T18:40:16Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "9b5d6094bb709ff1adf850aad3a220b2cff72cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
