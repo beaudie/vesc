@@ -22,6 +22,30 @@
       },
       "revId": "23c12db266e55f6690e90a748b0e12ea18015860",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aba8c1c6_39adb066",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T17:16:35Z",
+      "side": 1,
+      "message": "Ack .. didn\u0027t handle that specially. Given this esoteric config I\u0027m inclined to leave it for now.",
+      "parentUuid": "bd1f5c7e_b9ab7948",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 46
+      },
+      "revId": "23c12db266e55f6690e90a748b0e12ea18015860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
