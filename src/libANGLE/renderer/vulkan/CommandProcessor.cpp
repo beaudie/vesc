@@ -294,8 +294,7 @@ VkResult TaskProcessor::getLastPresentResult(VkSwapchainKHR swapchain)
 angle::Result TaskProcessor::checkCompletedCommandsWithLock(vk::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "TaskProcessor::checkCompletedCommandsWithLock");
-    VkDevice device        = context->getDevice();
-    RendererVk *rendererVk = context->getRenderer();
+    VkDevice device = context->getDevice();
 
     int finishedCount = 0;
 
@@ -307,6 +306,27 @@ angle::Result TaskProcessor::checkCompletedCommandsWithLock(vk::Context *context
             break;
         }
         ANGLE_VK_TRY(context, result);
+        ++finishedCount;
+    }
+
+    if (finishedCount == 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    return retireFinishedCommands(context, finishedCount);
+}
+
+angle::Result TaskProcessor::retireFinishedCommands(rx::vk::Context *context, size_t finishedCount)
+{
+    ASSERT(finishedCount > 0);
+
+    VkDevice device        = context->getDevice();
+    RendererVk *rendererVk = context->getRenderer();
+
+    for (size_t commandIndex = 0; commandIndex < finishedCount; ++commandIndex)
+    {
+        vk::CommandBatch &batch = mInFlightCommands[commandIndex];
 
         rendererVk->onCompletedSerial(batch.serial);
 
@@ -315,7 +335,6 @@ angle::Result TaskProcessor::checkCompletedCommandsWithLock(vk::Context *context
         ANGLE_TRACE_EVENT0("gpu.angle", "command buffer recycling");
         batch.commandPool.destroy(device);
         ANGLE_TRY(releasePrimaryCommandBuffer(context, std::move(batch.primaryCommands)));
-        ++finishedCount;
     }
 
     if (finishedCount > 0)

@@ -210,6 +210,7 @@ class TaskProcessor : angle::NonCopyable
                                         vk::PrimaryCommandBuffer &&commandBuffer,
                                         vk::CommandPool *commandPool,
                                         vk::CommandBatch *batch);
+    angle::Result retireFinishedCommands(vk::Context *context, size_t finishedCount);
 
     // Check to see which batches have finished completion (forward progress for
     // mLastCompletedQueueSerial, for example for when the application busy waits on a query
