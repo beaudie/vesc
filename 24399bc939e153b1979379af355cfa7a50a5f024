@@ -18,6 +18,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de7241b5_86d2e9a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-26T18:25:58Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "24399bc939e153b1979379af355cfa7a50a5f024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceebe36c_0e43f29d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-26T18:25:58Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "2e53818d_135ba40d",
+      "revId": "24399bc939e153b1979379af355cfa7a50a5f024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0dda1eb7_356acf72",
@@ -31,6 +66,30 @@
       "writtenOn": "2020-10-26T17:24:40Z",
       "side": 1,
       "message": "nit: GTEST_SKIP messes up the test runner, try to find another way to skip. i.e. by adding ANGLE_SKIP_TEST_IF to each TEST_P.",
+      "range": {
+        "startLine": 279,
+        "startChar": 8,
+        "endLine": 279,
+        "endChar": 18
+      },
+      "revId": "24399bc939e153b1979379af355cfa7a50a5f024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd6fb11_575925e4",
+        "filename": "src/tests/perf_tests/TextureSampling.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-10-26T18:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dda1eb7_356acf72",
       "range": {
         "startLine": 279,
         "startChar": 8,
