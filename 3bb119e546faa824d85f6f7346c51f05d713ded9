@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "861e0632_e2557391",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-10-26T22:46:11Z",
+      "side": 1,
+      "message": "Thank you Dean! I updated the copyright notices to reflect that copyright is assigned to The ANGLE Project Authors.",
+      "parentUuid": "c8a6217a_f41cfee1",
+      "revId": "3bb119e546faa824d85f6f7346c51f05d713ded9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20529902_874aeb9a",
@@ -31,6 +49,24 @@
       "writtenOn": "2020-10-26T22:35:43Z",
       "side": 1,
       "message": "Here and below: Dean\u0027s permission to upstream this implies that copyright would be assigned to The ANGLE Project Authors, so that this file doesn\u0027t have to be put into a third_party directory per Google\u0027s open-source rules. That\u0027s the way other upstreamings have been done - for example, src/libANGLE/renderer/gl/eagl/ , and portions of src/libANGLE/renderer/gl/cgl/DisplayCGL.mm .",
+      "revId": "3bb119e546faa824d85f6f7346c51f05d713ded9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5a9aece_4091cd64",
+        "filename": "src/gpu_info_util/SystemInfo_apple.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-10-26T22:46:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20529902_874aeb9a",
       "revId": "3bb119e546faa824d85f6f7346c51f05d713ded9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
