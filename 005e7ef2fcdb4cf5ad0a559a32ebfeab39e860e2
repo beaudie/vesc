@@ -22,6 +22,30 @@
       },
       "revId": "005e7ef2fcdb4cf5ad0a559a32ebfeab39e860e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa11095a_05d134eb",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T18:31:19Z",
+      "side": 0,
+      "message": "It\u0027s unused",
+      "parentUuid": "5ca2bd60_01810f14",
+      "range": {
+        "startLine": 465,
+        "startChar": 4,
+        "endLine": 465,
+        "endChar": 37
+      },
+      "revId": "005e7ef2fcdb4cf5ad0a559a32ebfeab39e860e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

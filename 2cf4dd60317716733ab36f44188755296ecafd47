@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0bb8cfdf_51462267",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T18:31:19Z",
+      "side": 1,
+      "message": "mWidth is the width the test wants. mFixture-\u003eosWindow-\u003egetWidth() is the width of the actual window. With emulated prerotation at 90 and 270 degrees, these two differ.",
+      "parentUuid": "101f4d6f_8a5daca5",
+      "range": {
+        "startLine": 554,
+        "startChar": 30,
+        "endLine": 554,
+        "endChar": 36
+      },
+      "revId": "2cf4dd60317716733ab36f44188755296ecafd47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83c35f49_8a223d86",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-26T16:56:04Z",
       "side": 1,
       "message": "Not sure how this will do on Android.  If this is built on Cody\u0027s mechanism, it will really (sometime later) resize the window, but won\u0027t change the rotation.",
+      "range": {
+        "startLine": 561,
+        "startChar": 0,
+        "endLine": 561,
+        "endChar": 73
+      },
+      "revId": "2cf4dd60317716733ab36f44188755296ecafd47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a88d46c9_1750be0c",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T18:31:19Z",
+      "side": 1,
+      "message": "If you mean the real rotation, I don\u0027t think emulated and real prerotation would work well together. I\u0027m assuming here the phone is not rotated. Arguably this feature is not very useful on Android, so we could skip emulated prerotation tests on Android. A follow up if it ever becomes a problem?",
+      "parentUuid": "83c35f49_8a223d86",
       "range": {
         "startLine": 561,
         "startChar": 0,
