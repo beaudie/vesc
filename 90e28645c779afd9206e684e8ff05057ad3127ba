@@ -16,6 +16,575 @@
       "message": "PTAL. There seems to be a possibly flakey test that is having trouble passing. Test looks unrelated to change.",
       "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d61fcc16_dc8c7de6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "Thanks for taking this on Brandon. No major issues that I saw but a bunch of small comments to resolve before landing.",
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33e25e5f_b6c97c05",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: please add suffix",
+      "range": {
+        "startLine": 664,
+        "startChar": 9,
+        "endLine": 664,
+        "endChar": 19
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f1035ef_9388f635",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: The templating is a bit inconsistent with how we define all the other impl methods. Can you either explicitly make two overloads or make two non-overloaded\n\ncopyRenderbufferSubData/copyTextureSubData\n\nThat would be the most consistent with the other impl methods.",
+      "range": {
+        "startLine": 393,
+        "startChar": 0,
+        "endLine": 406,
+        "endChar": 53
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffe46f8d_21b82b98",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "what is our plan here? do we need to use the blit shaders in UtilsVk?",
+      "range": {
+        "startLine": 4252,
+        "startChar": 0,
+        "endLine": 4257,
+        "endChar": 35
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da5d595_2085f6d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: Can you take these all out of the class and make them static helper functions? Trying to reduce the amount of public static in-class functions we define, as it doesn\u0027t really help anything.",
+      "range": {
+        "startLine": 1408,
+        "startChar": 0,
+        "endLine": 1436,
+        "endChar": 0
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ee7127c_7cb2693d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "this one makes sense to leave as it\u0027s an action command and we already have static Copy, etc.",
+      "range": {
+        "startLine": 1454,
+        "startChar": 0,
+        "endLine": 1467,
+        "endChar": 60
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3b7cdbc_35aec129",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: CheckValid is not how we name things here, we just use the phrase \"Validate...\"",
+      "range": {
+        "startLine": 2598,
+        "startChar": 5,
+        "endLine": 2598,
+        "endChar": 37
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dd1a34e_6dbb7408",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "same not as below about comment formatting.",
+      "range": {
+        "startLine": 2600,
+        "startChar": 0,
+        "endLine": 2609,
+        "endChar": 23
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6567814_0abfa114",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "this seems wrong - only bind should generate a resource, right?\n\nCan you make a regression test for this?",
+      "range": {
+        "startLine": 2615,
+        "startChar": 14,
+        "endLine": 2615,
+        "endChar": 69
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e2e361_56b50b0c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "I don\u0027t see where you\u0027re validating that this is a valid texture object. What is specified in that case?",
+      "range": {
+        "startLine": 2629,
+        "startChar": 16,
+        "endLine": 2629,
+        "endChar": 30
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a76fcc80_05430924",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2657,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: can you fix the comment formatting on all of these?",
+      "range": {
+        "startLine": 2655,
+        "startChar": 0,
+        "endLine": 2657,
+        "endChar": 40
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776b91f7_021e4bf2",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2700,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "what\u0027s specced here if the cube map texture is cube-incomplete?",
+      "range": {
+        "startLine": 2694,
+        "startChar": 0,
+        "endLine": 2700,
+        "endChar": 9
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a73ed056_8849f441",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: this name is a bit too broad, how about GetTargetFormatInfo or GetFormatInfoForTarget",
+      "range": {
+        "startLine": 2752,
+        "startChar": 22,
+        "endLine": 2752,
+        "endChar": 35
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ecd14fb_567a3f43",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2771,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "to be safe, I\u0027d just the switch here like you did above. That way you can handle the unexpected error case.",
+      "range": {
+        "startLine": 2754,
+        "startChar": 3,
+        "endLine": 2771,
+        "endChar": 1
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f659c33_617f9525",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2799,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: never check \u003d\u003d false or \u003d\u003d true, use ! or nothing",
+      "range": {
+        "startLine": 2799,
+        "startChar": 69,
+        "endLine": 2799,
+        "endChar": 78
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfeb88e7_0ef6fc92",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2803,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 2803,
+        "startChar": 69,
+        "endLine": 2803,
+        "endChar": 78
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcf59b97_6c5cda4a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2808,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "nit: you can use a const \u0026 to prevent a copy.",
+      "range": {
+        "startLine": 2808,
+        "startChar": 10,
+        "endLine": 2808,
+        "endChar": 25
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05e33825_77946e61",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 2809,
+        "startChar": 10,
+        "endLine": 2809,
+        "endChar": 25
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7ac24d7_7dbcf6ce",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2816,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 2816,
+        "startChar": 85,
+        "endLine": 2816,
+        "endChar": 95
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ba57b9_98970ced",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2842,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "all these too",
+      "range": {
+        "startLine": 2842,
+        "startChar": 90,
+        "endLine": 2842,
+        "endChar": 95
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9296343_1a09642a",
+        "filename": "src/libANGLE/validationES32.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "also validate 3.2",
+      "range": {
+        "startLine": 142,
+        "startChar": 11,
+        "endLine": 142,
+        "endChar": 39
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e64b34_ba68b8ca",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "can you update the caps to not expose this ext if we\u0027re missing support here? what kind of queries do we need to run?",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 122
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7e72f1f_51ada8db",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "any idea on the root cause here? We\u0027ll follow up?",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 98
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b9e69ae_63b08fb5",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "is this a SwS bug? Can you provide more info so we can file a bug?",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 119
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f2136d_68014119",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T13:47:21Z",
+      "side": 1,
+      "message": "This is an ANGLE bug? Need a bit more info to know if we should file a new bug/defer or fix this now.",
+      "range": {
+        "startLine": 292,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 72
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
