@@ -818,6 +818,40 @@
       },
       "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34376393_a3af9edf",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3541,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T18:26:50Z",
+      "side": 1,
+      "message": "Can you please add a test with non-zero-base textures as src and destination? Non-zero-base textures are rarely tested by dEQP.",
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1b00d69_9dc8fe10",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3666,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T18:26:50Z",
+      "side": 1,
+      "message": "I ran your test, and yes it works without the signalDirtyStorage call. But that\u0027s because of the way the Vulkan backend works.\n\nFirst, please add the following here:\n\n    // Draw something in the texture to make sure it\u0027s image is defined.\n    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());\n    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f);\n\nThe above makes sure copyImageSubData doesn\u0027t call syncState on the texture as the texture has nothing to sync. That removes one call that sets the content of the texture defined.\n\nThere\u0027s another one however, and that\u0027s the onImageTransferWrite call in ImageHelper::CopySubImageData.\n\nAgain, this works in the Vulkan backend, but that\u0027s just due to the peculiarities of the current implementation. signalDirtyStorage is still necessary, but I don\u0027t know how we can write a regression test for it. Can you please add the call anyway and avoid future regressions?",
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
