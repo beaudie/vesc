@@ -52,7 +52,7 @@ for abi in ${abis[@]}; do
         "is_component_build = false"
         "is_debug = false"
 
-        # Build for 64-bit CPUs
+        # Specify the ABI
         "target_cpu = \"$abi\""
 
         # Target ndk API 26 to make sure ANGLE can use the Vulkan backend on Android
@@ -75,7 +75,11 @@ for abi in ${abis[@]}; do
         "angle_enable_glsl = true" # TODO(geofflang): Disable ESSL once Andrid no longer requires it. anglebug.com/4444
         "angle_enable_hlsl = false"
 
+        # Git is not available everywhere ANGLE is built
         "angle_enable_commit_id = false"
+
+        # Disable various features that are unneeded/unsupported in Android builds
+        "angle_has_histograms = false"
     )
 
     gn gen ${GN_OUTPUT_DIRECTORY} --args="${gn_args[*]}"
