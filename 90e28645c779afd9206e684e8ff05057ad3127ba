@@ -316,6 +316,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2474cd63_992c8e31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-26T22:51:17Z",
+      "side": 1,
+      "message": "Can you swap this over to ANGLE_VK_CHECK? Mostly a consistency thing, bit if we ever hit that case it\u0027ll show as an error.",
+      "parentUuid": "97fc1661_2a4e6a8e",
+      "range": {
+        "startLine": 4252,
+        "startChar": 0,
+        "endLine": 4257,
+        "endChar": 35
+      },
+      "revId": "90e28645c779afd9206e684e8ff05057ad3127ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3da5d595_2085f6d2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
