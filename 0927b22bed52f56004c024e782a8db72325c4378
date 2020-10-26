@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0128ee0a_8a7349e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2020-10-26T19:23:48Z",
+      "side": 1,
+      "message": "\u003e We could probably do the same in the relevant CGL and EAGL code that makes GL function calls and not need any new extensions.\n\nFWIW: approach here does not *need* any new extensions either. They were added to pre-empt \"cost too high for non-needing case\".\n\nNot saying existing RAII would be any worse. Maybe be hard to spot which functions to markup and which not, but nicer in many other ways.\nMany EGL entry points call multiple implementation entry points, so if all implementation entry points are marked up, then the RAII will be run multiple times per EGL call.",
+      "parentUuid": "27e66009_8bb34a43",
+      "revId": "0927b22bed52f56004c024e782a8db72325c4378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fd99d8b_bde5272e",
