@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1eb5f55_592e688f",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-26T15:59:21Z",
+      "side": 1,
+      "message": "Regardless of interpolant, the second parameter (offset) should be adjusted for y-flip / prerotation. I don\u0027t think the interpolant being position or not would require any additional work.",
+      "parentUuid": "1ad2b462_b84218c3",
+      "revId": "e2584eac4a19f6902249a4ed2c64872af5685328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fdb897c8_78f06103",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 7
