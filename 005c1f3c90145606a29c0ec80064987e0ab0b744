@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a035b37f_206bb436",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T08:27:18Z",
+      "side": 1,
+      "message": "Please add the following first:\n\n    std::string sanitizedPropertyName \u003d propertyName;\n    str.erase(std::remove(sanitizedPropertyName.begin(), sanitizedPropertyName.end(), \u0027\\\u0027\u0027), sanitizedPropertyName.end());\n\nAnd then use:\n\n    std::string command(\"getprop \u0027\");\n    command +\u003d sanitizedPropertyName;\n    command +\u003d \"\u0027\";\n\nJust to avoid this from becoming a security bug in the future.",
+      "range": {
+        "startLine": 35,
+        "startChar": 15,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2215bfb_a00a00a8",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T08:27:18Z",
+      "side": 1,
+      "message": "What\u0027s the point of this Set/Get combination? Why not something like this:\n\n    std::string GetEnvironmentVarFromAndroidProperty(const char *variableName, const char *propertyName)\n    {\n    #if defined(ANGLE_PLATFORM_ANDROID) \u0026\u0026 __ANDROID_API__ \u003e\u003d 21\n        ...\n\n        return value;\n    #else\n        return GetEnvironmentVar(variableName);\n    #endif  // ANGLE_PLATFORM_ANDROID\n    }\n\nAlso, is there no better way to get a property other than running a shell command?!",
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ad66ba_2923811b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T08:27:18Z",
+      "side": 1,
+      "message": "Should this be angle.debug?",
+      "range": {
+        "startLine": 449,
+        "startChar": 52,
+        "endLine": 449,
+        "endChar": 63
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
