@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac2ab828_8f50b195",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-27T14:35:29Z",
+      "side": 1,
+      "message": "Thanks!  It was on my TODO list today to narrow down this extension requirement, not realizing there was a typo (copy/pasted from the top of the extension).  I had inadvertently disabled it everywhere, apparently.",
+      "revId": "85782968b3e20dfc4c8da241df6625ed2724764a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
