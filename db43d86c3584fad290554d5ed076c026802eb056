@@ -50,6 +50,24 @@
       "message": "Xinghua: I think there\u0027s some sort of deterministic crash that is happening on Android. It might be related to changing the test ordering. Let us know if you need help finding which test to skip. LGTM otherwise.",
       "revId": "db43d86c3584fad290554d5ed076c026802eb056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a8b0aa1_98e04cc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-10-27T08:13:20Z",
+      "side": 1,
+      "message": "Hi,Jamie, it was my case UniformBlockWithOneLargeArrayMemberTest.MemberArrayOperations that triggered crash. If skip it on OpenGL and OpenGL ES backends, bots could pass.\n\n@Jie, please help me check whether there is a bug about parallel compiling on OpenGL backend. The crash stack is as below,\nlibGLESv2.dll!std::__1::__function::__policy_func\u003cangle::Result (bool, const std::__1::basic_string\u003cchar,std::__1::char_traits\u003cchar\u003e,std::__1::allocator\u003cchar\u003e\u003e \u0026)\u003e::operator()(bool \u0026\u0026 __args, const std::__1::basic_string\u003cchar,std::__1::char_traits\u003cchar\u003e,std::__1::allocator\u003cchar\u003e\u003e \u0026 __args) Line 2203\tC++\n \tlibGLESv2.dll!std::__1::function\u003cangle::Result (bool, const std::__1::basic_string\u003cchar,std::__1::char_traits\u003cchar\u003e,std::__1::allocator\u003cchar\u003e\u003e \u0026)\u003e::operator()(bool __arg, const std::__1::basic_string\u003cchar,std::__1::char_traits\u003cchar\u003e,std::__1::allocator\u003cchar\u003e\u003e \u0026 __arg) Line 2473\tC++\n \tlibGLESv2.dll!rx::ProgramGL::LinkEventGL::wait(const gl::Context * context) Line 212\tC++\n \tlibGLESv2.dll!gl::Program::resolveLinkImpl(const gl::Context * context) Line 1634\tC++\n \tlibGLESv2.dll!gl::Program::resolveLink(const gl::Context * context) Line 823\tC++\n \tlibGLESv2.dll!gl::GetValidProgram(const gl::Context * context, gl::ShaderProgramID id) Line 1233\tC++\n \tlibGLESv2.dll!gl::ValidateGetProgramivBase(const gl::Context * context, gl::ShaderProgramID program, unsigned int pname, int * numParams) Line 4511\tC++\n \tlibGLESv2.dll!gl::ValidateGetProgramiv(const gl::Context * context, gl::ShaderProgramID program, unsigned int pname, const int * params) Line 5280\tC++\n \tlibGLESv2.dll!gl::GetProgramiv(unsigned int program, unsigned int pname, int * params) Line 1776\tC++\n \tangle_util.dll!CheckLinkStatusAndReturnProgram(unsigned int program, bool outputErrorMessages) Line 152\tC++\n \tangle_util.dll!`anonymous namespace\u0027::CompileProgramInternal(const char * vsSource, const char * gsSource, const char * fsSource, const std::__1::function\u003cvoid (unsigned int)\u003e \u0026 preLinkCallback) Line 77\tC++\n \tangle_util.dll!CompileProgram(const char * vsSource, const char * fsSource) Line 228\tC++\n \tangle_end2end_tests.exe!angle::GLProgram::makeRaster(const char * vertexShader, const char * fragmentShader) Line 173\tC++\n \tangle_end2end_tests.exe!`anonymous namespace\u0027::UniformBlockWithOneLargeArrayMemberTest_MemberArrayOperations_Test::TestBody() Line 3478\tC++\n \tangle_end2end_tests.exe!testing::internal::HandleExceptionsInMethodIfSupported\u003ctesting::Test,void\u003e(testing::Test * object, void(testing::Test::*)() method, const char * location) Line 2674\tC++",
+      "parentUuid": "da17f035_01569068",
+      "revId": "db43d86c3584fad290554d5ed076c026802eb056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
