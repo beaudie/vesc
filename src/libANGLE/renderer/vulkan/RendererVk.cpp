@@ -36,6 +36,8 @@
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
 
+#include <vk_mem_alloc.h>
+
 // Consts
 namespace
 {
@@ -444,6 +446,44 @@ ANGLE_MAYBE_UNUSED bool SemaphorePropertiesCompatibleWithAndroid(
     return true;
 }
 
+std::string PrintStatInfo(const VmaStatInfo &info)
+{
+    std::stringstream output;
+    output << "            blockCount: " << info.blockCount << "\n";
+    output << "            allocationCount: " << info.allocationCount << "\n";
+    output << "            unusedRangeCount: " << info.unusedRangeCount << "\n";
+    output << "            usedBytes: " << info.usedBytes << "\n";
+    output << "            unusedBytes: " << info.unusedBytes << "\n";
+    output << "            allocationSizeMin: " << info.allocationSizeMin << "\n";
+    output << "            allocationSizeAvg: " << info.allocationSizeAvg << "\n";
+    output << "            allocationSizeMax: " << info.allocationSizeMax << "\n";
+    output << "            unusedRangeSizeMin: " << info.unusedRangeSizeMin << "\n";
+    output << "            unusedRangeSizeAvg: " << info.unusedRangeSizeAvg << "\n";
+    output << "            unusedRangeSizeMax: " << info.unusedRangeSizeMax << "\n";
+
+    return output.str();
+}
+
+std::string PrintStats(const VmaStats &stats, const char *suffix)
+{
+    std::stringstream output;
+    output << "    VmaStats " << suffix << ":\n";
+    output << "        total:\n";
+    output << PrintStatInfo(stats.total).c_str();
+
+    for (uint32_t i = 0; i < stats.memoryHeap->allocationCount; ++i)
+    {
+        output << "        memoryHeap[" << i << "]:\n";
+        output << PrintStatInfo(stats.memoryHeap[i]).c_str();
+    }
+    for (uint32_t i = 0; i < stats.memoryType->allocationCount; ++i)
+    {
+        output << "        memoryType[" << i << "]:\n";
+        output << PrintStatInfo(stats.memoryType[i]).c_str();
+    }
+    return output.str();
+}
+
 }  // namespace
 
 // RendererVk implementation.
@@ -548,6 +588,9 @@ void RendererVk::onDestroy()
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
 
+    VmaStats stats;
+    vma::CalculateStats(mAllocator.getHandle(), &stats);
+    WARN() << PrintStats(stats, "RendererVk::onDestroy").c_str();
     mAllocator.destroy();
 
     if (mGlslangInitialized)
