@@ -199,7 +199,7 @@ std::string GetCaptureTrigger()
 #if defined(ANGLE_PLATFORM_ANDROID)
     return AndroidGetEnvFromProp(kAndroidCaptureTrigger);
 #else
-    return std::string();
+    return GetEnvironmentVar(kCaptureTriggerVarName);
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
 }
 
