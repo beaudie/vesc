@@ -2472,7 +2472,7 @@ void RendererVk::setGlobalDebugAnnotator()
     bool enableDebugAnnotatorVk = false;
     if (vkCmdBeginDebugUtilsLabelEXT)
     {
-        std::string enabled = angle::GetEnvironmentVarFromAndroidProperty(
+        std::string enabled = angle::GetEnvironmentVarOrAndroidProperty(
             kEnableDebugMarkersVarName, kEnableDebugMarkersPropertyName);
         if (!enabled.empty() && enabled.compare("0") != 0)
         {
