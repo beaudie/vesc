@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a01bd3f_b7515a5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-27T14:58:57Z",
+      "side": 1,
+      "message": "I have tested it out yes. With the tests and my retrace script. Not opposed if you wanted to add the trigger frame to metadata.",
+      "parentUuid": "6e743a5d_d3bdb20b",
+      "revId": "090a157b51e413bdf0591b078f89bb2cf86f8eb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dae546f0_d864f5e0",
@@ -78,6 +96,30 @@
       "writtenOn": "2020-10-27T14:44:04Z",
       "side": 1,
       "message": "Can this move to a helper like getFrameCount?  The intent isn\u0027t clear.",
+      "range": {
+        "startLine": 4377,
+        "startChar": 23,
+        "endLine": 4377,
+        "endChar": 59
+      },
+      "revId": "090a157b51e413bdf0591b078f89bb2cf86f8eb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b456867_71bd10ea",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4377,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-27T14:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b336ac9_64865e84",
       "range": {
         "startLine": 4377,
         "startChar": 23,
