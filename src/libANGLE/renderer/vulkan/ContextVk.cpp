@@ -42,6 +42,8 @@
 
 #include "libANGLE/trace.h"
 
+#include <vk_mem_alloc.h>
+
 #include <iostream>
 
 namespace rx
@@ -324,6 +326,45 @@ bool CommandsHaveValidOrdering(const std::vector<vk::CommandBatch> &commands)
 
     return true;
 }
+
+std::string PrintStatInfo(const VmaStatInfo &info)
+{
+    std::stringstream output;
+    output << "            blockCount: " << info.blockCount << "\n";
+    output << "            allocationCount: " << info.allocationCount << "\n";
+    output << "            unusedRangeCount: " << info.unusedRangeCount << "\n";
+    output << "            usedBytes: " << info.usedBytes << "\n";
+    output << "            unusedBytes: " << info.unusedBytes << "\n";
+    output << "            allocationSizeMin: " << info.allocationSizeMin << "\n";
+    output << "            allocationSizeAvg: " << info.allocationSizeAvg << "\n";
+    output << "            allocationSizeMax: " << info.allocationSizeMax << "\n";
+    output << "            unusedRangeSizeMin: " << info.unusedRangeSizeMin << "\n";
+    output << "            unusedRangeSizeAvg: " << info.unusedRangeSizeAvg << "\n";
+    output << "            unusedRangeSizeMax: " << info.unusedRangeSizeMax << "\n";
+
+    return output.str();
+}
+
+std::string PrintStats(const VmaStats &stats, const char *suffix)
+{
+    std::stringstream output;
+    output << "    VmaStats " << suffix << ":\n";
+    output << "        total:\n";
+    output << PrintStatInfo(stats.total).c_str();
+
+    for (uint32_t i = 0; i < stats.memoryHeap->allocationCount; ++i)
+    {
+        output << "        memoryHeap[" << i << "]:\n";
+        output << PrintStatInfo(stats.memoryHeap[i]).c_str();
+    }
+    for (uint32_t i = 0; i < stats.memoryType->allocationCount; ++i)
+    {
+        output << "        memoryType[" << i << "]:\n";
+        output << PrintStatInfo(stats.memoryType[i]).c_str();
+    }
+    return output.str();
+}
+
 }  // anonymous namespace
 
 ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
@@ -789,7 +830,15 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mWriteDescriptorSets.reserve(kDescriptorWriteInfosInitialSize);
 }
 
-ContextVk::~ContextVk() = default;
+ContextVk::~ContextVk()
+{
+    VmaStats stats;
+    vma::CalculateStats(getRenderer()->getAllocator().getHandle(), &stats);
+    if (stats.total.allocationCount > 0)
+    {
+        WARN() << "\n" << PrintStats(stats, "ContextVk::~ContextVk").c_str();
+    }
+}
 
 void ContextVk::onDestroy(const gl::Context *context)
 {

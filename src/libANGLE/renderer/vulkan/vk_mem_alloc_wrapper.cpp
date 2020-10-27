@@ -158,4 +158,10 @@ void FreeStatsString(VmaAllocator allocator, char *statsString)
 {
     vmaFreeStatsString(allocator, statsString);
 }
+
+void CalculateStats(VmaAllocator allocator, VmaStats *pStats)
+{
+    vmaCalculateStats(allocator, pStats);
+}
+
 }  // namespace vma
