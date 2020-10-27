@@ -68,6 +68,23 @@
       "message": "FWIW Volk has already made a similar change upstream:\n\nhttps://github.com/zeux/volk/blob/master/volk.c",
       "revId": "651c7305165f3f9e755a926c8a86cc0c5c5970f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f130930_2c439372",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2020-10-27T14:46:46Z",
+      "side": 1,
+      "message": "Ah, thanks for the explanation. The change sounds good from the Dawn side since it has its own loader and doesn\u0027t use volk.",
+      "revId": "651c7305165f3f9e755a926c8a86cc0c5c5970f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
