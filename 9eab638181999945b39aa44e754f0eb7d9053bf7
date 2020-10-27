@@ -50,6 +50,41 @@
       "message": "since*",
       "revId": "9eab638181999945b39aa44e754f0eb7d9053bf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c2f0d27_a3acbfe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T07:56:04Z",
+      "side": 1,
+      "message": "Ack. Keeping it as-is though, I don\u0027t know if there\u0027s a name for the new pattern",
+      "parentUuid": "997f1e06_f2b0729e",
+      "revId": "9eab638181999945b39aa44e754f0eb7d9053bf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "174e66db_46151b86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T07:56:04Z",
+      "side": 1,
+      "message": "TBR Tim so I can land the next change. Shouldn\u0027t be controversial (other than the shader name? Can change it in another CL)",
+      "revId": "9eab638181999945b39aa44e754f0eb7d9053bf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
