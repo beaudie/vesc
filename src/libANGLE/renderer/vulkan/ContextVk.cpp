@@ -842,6 +842,9 @@ void ContextVk::onDestroy(const gl::Context *context)
     mGpuEventQueryPool.destroy(device);
     mCommandPool.destroy(device);
     mPrimaryCommands.destroy(device);
+
+    // This will clean up any outstanding buffer allocations
+    (void)mRenderer->cleanupGarbage(false);
 }
 
 angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,
