@@ -78,6 +78,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a291fda1_01900805",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T15:11:44Z",
+      "side": 1,
+      "message": "Ok. It looks like this particular case doesn\u0027t need to do the SetEnv/GetEnv dance. I would agree that calling this once so that it would SetEnv, and then use GetEnvironmentVar() everywhere is acceptable (and even better than this).",
+      "parentUuid": "ddffa301_9f4109c7",
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2ad66ba_2923811b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
