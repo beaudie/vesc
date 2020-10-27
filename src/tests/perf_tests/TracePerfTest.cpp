@@ -338,6 +338,13 @@ void TracePerfTest::initializeBenchmark()
     SetupReplay(params.testID);
     glFinish();
 
+    // If we're re-tracing, trigger capture start after setup.
+    if (angle::gStartTraceAfterSetup)
+    {
+        angle::SetEnvironmentVar("ANGLE_CAPTURE_TRIGGER", "0");
+        getGLWindow()->swap();
+    }
+
     ASSERT_TRUE(mEndFrame > mStartFrame);
 
     getWindow()->ignoreSizeEvents();
