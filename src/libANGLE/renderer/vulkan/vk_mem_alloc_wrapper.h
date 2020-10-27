@@ -14,6 +14,7 @@
 
 VK_DEFINE_HANDLE(VmaAllocator)
 VK_DEFINE_HANDLE(VmaAllocation)
+struct VmaStats;
 
 namespace vma
 {
@@ -64,6 +65,7 @@ void InvalidateAllocation(VmaAllocator allocator,
 
 void BuildStatsString(VmaAllocator allocator, char **statsString, VkBool32 detailedMap);
 void FreeStatsString(VmaAllocator allocator, char *statsString);
+void CalculateStats(VmaAllocator allocator, VmaStats *pStats);
 
 }  // namespace vma
 
