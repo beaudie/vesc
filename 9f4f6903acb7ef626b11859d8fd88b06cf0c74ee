@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31afb8d8_6c588356",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-27T16:31:08Z",
+      "side": 1,
+      "message": "FWIW I was still seeing garbage stack traces on Linux in some cases.",
+      "revId": "9f4f6903acb7ef626b11859d8fd88b06cf0c74ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a645d37b_b0514428",
