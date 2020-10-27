@@ -343,12 +343,20 @@ void TracePerfTest::initializeBenchmark()
 
     // Potentially slow. Can load a lot of resources.
     SetupReplay(params.testID);
+
     glFinish();
 
     ASSERT_TRUE(mEndFrame > mStartFrame);
 
     getWindow()->ignoreSizeEvents();
     getWindow()->setVisible(true);
+
+    // If we're re-tracing, trigger capture start after setup.
+    if (angle::gStartTraceAfterSetup)
+    {
+        angle::SetEnvironmentVar("ANGLE_CAPTURE_TRIGGER", "0");
+        getGLWindow()->swap();
+    }
 }
 
 #undef TRACE_TEST_CASE
