@@ -33,6 +33,24 @@
       "message": "LGTM, but don\u0027t we need to do the change upstream?",
       "revId": "651c7305165f3f9e755a926c8a86cc0c5c5970f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3158ad25_aa9898d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T14:37:38Z",
+      "side": 1,
+      "message": "Yes. Like I said, I need to send a PR upstream, and then do a manual roll in ANGLE. I wanted to be sure the change upstream doesn\u0027t break Dawn.",
+      "parentUuid": "59f278ac_db6a94b1",
+      "revId": "651c7305165f3f9e755a926c8a86cc0c5c5970f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
