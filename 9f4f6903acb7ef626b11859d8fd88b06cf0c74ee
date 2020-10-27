@@ -16,6 +16,23 @@
       "message": "Shabi/Tim, this had issues on Linux. Not sure if you guys want to push it over the finish line.",
       "revId": "9f4f6903acb7ef626b11859d8fd88b06cf0c74ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a645d37b_b0514428",
+        "filename": "util/posix/crash_handler_posix.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-27T16:27:35Z",
+      "side": 1,
+      "message": "Can this check the return code and fallback to doing the work in #else case if the addr2line call fails, so we can try to at least output something to the user?",
+      "revId": "9f4f6903acb7ef626b11859d8fd88b06cf0c74ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
