@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56c5cb6d_b2ed4bc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-27T16:35:41Z",
+      "side": 1,
+      "message": "Good idea.   Should be much easier to tell what\u0027s going on now.",
+      "revId": "9a47fe71eae36ca5cec7241e824816abe92c21fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa27d87_810ca4e0",
+        "filename": "util/shader_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-27T16:35:41Z",
+      "side": 1,
+      "message": "nit: R, G, B, and Y\n\nThough, it may be easier to just state something like \"different colors\", since the table that describes how the colors are generated specifies the actual colors used.",
+      "range": {
+        "startLine": 82,
+        "startChar": 53,
+        "endLine": 82,
+        "endChar": 72
+      },
+      "revId": "9a47fe71eae36ca5cec7241e824816abe92c21fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
