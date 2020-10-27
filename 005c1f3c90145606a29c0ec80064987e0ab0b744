@@ -62,6 +62,76 @@
       },
       "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6364f1b_c1c3461d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-27T14:11:18Z",
+      "side": 1,
+      "message": "Properties have naming rules, debug is required to be the first component. I believe that allows anyone to read it and it will be reset when the device reboots.",
+      "parentUuid": "c2ad66ba_2923811b",
+      "range": {
+        "startLine": 449,
+        "startChar": 52,
+        "endLine": 449,
+        "endChar": 63
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b3976cc_845fddb7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2468,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-27T14:11:18Z",
+      "side": 1,
+      "message": "FYI this is called by DisplayVk::makeCurrent\nI don\u0027t have a good feel for how often / when an app calls makeCurrent. Will this allow us to do what AGI wants? Could this be called too often, impacting app perf?",
+      "range": {
+        "startLine": 2468,
+        "startChar": 5,
+        "endLine": 2468,
+        "endChar": 40
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e39c47_80a651c5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2470,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-10-27T14:11:18Z",
+      "side": 1,
+      "message": "are",
+      "range": {
+        "startLine": 2470,
+        "startChar": 89,
+        "endLine": 2470,
+        "endChar": 91
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
