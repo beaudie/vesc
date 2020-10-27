@@ -1,0 +1,245 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ff91d67_1a1308d1",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "Should this be EGL_PLATFORM_VULKAN_DISPLAY_ANGLE?",
+      "range": {
+        "startLine": 91,
+        "startChar": 8,
+        "endLine": 91,
+        "endChar": 59
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3d6e2eb_550c0957",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "nit: space before (",
+      "range": {
+        "startLine": 155,
+        "startChar": 55,
+        "endLine": 155,
+        "endChar": 56
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6a7739_3666f2fc",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "Please add a comment.",
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a6dec5c_68e7bb1d",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "@Jamie, could you please point me to the where we track ANGLE\u0027s allocated enums?",
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b707dff_4aeef638",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "Can remove indentation by changing this to #elif.",
+      "range": {
+        "startLine": 231,
+        "startChar": 3,
+        "endLine": 232,
+        "endChar": 5
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8aabf54_1962cdde",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "You can use ANGLE_VK_TRY on this function.",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 8
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "038070bd_136ca649",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "Follow that with another ANGLE_VK_TRY for this check.",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 18
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75ac9b4_fc903ee5",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY instead",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 34
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69637bda_5b8fa6a7",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY instead",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 14
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6a40b98_7d6b9702",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY instead",
+      "range": {
+        "startLine": 52,
+        "startChar": 12,
+        "endLine": 52,
+        "endChar": 18
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b29b9e9_b33c864d",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-10-27T21:00:38Z",
+      "side": 1,
+      "message": "Where is display_window coming from?",
+      "range": {
+        "startLine": 71,
+        "startChar": 50,
+        "endLine": 71,
+        "endChar": 64
+      },
+      "revId": "4256b18fb8f8cf8b686e9f6a7da7d4d0c4eb2325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
