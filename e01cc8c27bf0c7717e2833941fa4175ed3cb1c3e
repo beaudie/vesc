@@ -75,6 +75,24 @@
       "parentUuid": "41edcdd2_fe559c42",
       "revId": "e01cc8c27bf0c7717e2833941fa4175ed3cb1c3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a4b250e_dec5df64",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-27T23:15:26Z",
+      "side": 1,
+      "message": "Sounds good.   Thanks for the explanation.",
+      "parentUuid": "71ad8ba7_dda9bc37",
+      "revId": "e01cc8c27bf0c7717e2833941fa4175ed3cb1c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
