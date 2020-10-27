@@ -22,6 +22,30 @@
       },
       "revId": "87f44f2ccd602f97a7998513ed6b2947cc1d4fe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10a463af_dac9d664",
+        "filename": "src/libANGLE/renderer/vulkan/display/WindowSurfaceVkDisplay.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-10-27T06:37:35Z",
+      "side": 1,
+      "message": "Here shared the same \u0027display_window\u0027 struct info in util/display/DisplayWindow.h, so it could work. I think we still need to make it clear how we define this window type...",
+      "parentUuid": "4a453d24_29905fca",
+      "range": {
+        "startLine": 71,
+        "startChar": 33,
+        "endLine": 71,
+        "endChar": 67
+      },
+      "revId": "87f44f2ccd602f97a7998513ed6b2947cc1d4fe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
