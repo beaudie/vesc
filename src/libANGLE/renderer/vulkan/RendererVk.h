@@ -315,6 +315,8 @@ class RendererVk : angle::NonCopyable
 
     void outputVmaStatString();
 
+    angle::Result cleanupGarbage(bool block);
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -333,8 +335,6 @@ class RendererVk : angle::NonCopyable
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     bool hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits) const;
-
-    angle::Result cleanupGarbage(bool block);
 
     egl::Display *mDisplay;
 
