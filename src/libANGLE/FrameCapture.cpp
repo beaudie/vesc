@@ -1187,8 +1187,7 @@ void WriteCppReplayIndexFiles(bool compression,
                               const std::string &captureLabel,
                               uint32_t frameStart,
                               uint32_t frameEnd,
-                              EGLint drawSurfaceWidth,
-                              EGLint drawSurfaceHeight,
+                              const SurfaceDimensions &drawSurfaceDimensions,
                               size_t readBufferSize,
                               const gl::AttribArray<size_t> &clientArraySizes,
                               const HasResourceTypeMap &hasResourceType,
@@ -1232,8 +1231,10 @@ void WriteCppReplayIndexFiles(bool compression,
     header << " " << ANGLE_REVISION << "\n";
     header << "constexpr uint32_t kReplayFrameStart = " << frameStart << ";\n";
     header << "constexpr uint32_t kReplayFrameEnd = " << frameEnd << ";\n";
-    header << "constexpr EGLint kReplayDrawSurfaceWidth = " << drawSurfaceWidth << ";\n";
-    header << "constexpr EGLint kReplayDrawSurfaceHeight = " << drawSurfaceHeight << ";\n";
+    header << "constexpr EGLint kReplayDrawSurfaceWidth = "
+           << drawSurfaceDimensions.at(contextId).width << ";\n";
+    header << "constexpr EGLint kReplayDrawSurfaceHeight = "
+           << drawSurfaceDimensions.at(contextId).height << ";\n";
     header << "constexpr EGLint kDefaultFramebufferRedBits = "
            << (config ? std::to_string(config->redSize) : "EGL_DONT_CARE") << ";\n";
     header << "constexpr EGLint kDefaultFramebufferGreenBits = "
@@ -4385,8 +4386,8 @@ void FrameCapture::onEndFrame(const gl::Context *context)
             // Save the index files after the last frame.
             WriteCppReplayIndexFiles(
                 mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameStart, mFrameEnd,
-                mDrawSurfaceWidth, mDrawSurfaceHeight, mReadBufferSize, mClientArraySizes,
-                mHasResourceType, mSerializeStateEnabled, false, context->getConfig(), mBinaryData);
+                mDrawSurfaceDimensions, mReadBufferSize, mClientArraySizes, mHasResourceType,
+                mSerializeStateEnabled, false, context->getConfig(), mBinaryData);
             if (!mBinaryData.empty())
             {
                 SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel,
@@ -4435,9 +4436,9 @@ void FrameCapture::onDestroyContext(const gl::Context *context)
         mFrameIndex -= 1;
         mFrameEnd = mFrameIndex;
         WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel,
-                                 mFrameStart, mFrameEnd, mDrawSurfaceWidth, mDrawSurfaceHeight,
-                                 mReadBufferSize, mClientArraySizes, mHasResourceType,
-                                 mSerializeStateEnabled, true, context->getConfig(), mBinaryData);
+                                 mFrameStart, mFrameEnd, mDrawSurfaceDimensions, mReadBufferSize,
+                                 mClientArraySizes, mHasResourceType, mSerializeStateEnabled, true,
+                                 context->getConfig(), mBinaryData);
         if (!mBinaryData.empty())
         {
             SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel, mBinaryData);
@@ -4447,15 +4448,14 @@ void FrameCapture::onDestroyContext(const gl::Context *context)
     }
 }
 
-void FrameCapture::onMakeCurrent(const egl::Surface *drawSurface)
+void FrameCapture::onMakeCurrent(const gl::Context *context, const egl::Surface *drawSurface)
 {
     if (!drawSurface)
         return;
 
     // Track the width and height of the draw surface as provided to makeCurrent
-    // TODO (b/159238311): Track this per context. Right now last one wins.
-    mDrawSurfaceWidth  = drawSurface->getWidth();
-    mDrawSurfaceHeight = drawSurface->getHeight();
+    mDrawSurfaceDimensions[context->id()] =
+        gl::Extents(drawSurface->getWidth(), drawSurface->getHeight(), 1);
 }
 
 DataCounters::DataCounters() = default;
