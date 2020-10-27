@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e743a5d_d3bdb20b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-27T14:44:04Z",
+      "side": 1,
+      "message": "Let me try this out on Android before we land, unless you already tested it Jamie.\n\nAlso, there would be value in tracking the actual start frame in metadata.  It gives an indication of how far into the content you were when triggering.  Doing that with a follow up would be fine.",
+      "revId": "090a157b51e413bdf0591b078f89bb2cf86f8eb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dae546f0_d864f5e0",
@@ -43,6 +60,29 @@
         "startChar": 22,
         "endLine": 1089,
         "endChar": 23
+      },
+      "revId": "090a157b51e413bdf0591b078f89bb2cf86f8eb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b336ac9_64865e84",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4377,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-27T14:44:04Z",
+      "side": 1,
+      "message": "Can this move to a helper like getFrameCount?  The intent isn\u0027t clear.",
+      "range": {
+        "startLine": 4377,
+        "startChar": 23,
+        "endLine": 4377,
+        "endChar": 59
       },
       "revId": "090a157b51e413bdf0591b078f89bb2cf86f8eb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
