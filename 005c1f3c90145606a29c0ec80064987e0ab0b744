@@ -60,6 +60,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ddffa301_9f4109c7",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-10-27T15:06:22Z",
+      "side": 1,
+      "message": "In FrameCapture we do this to allow Android to use any code that relies on environment variables.  PrimeAndroidEnvironmentVariables sets them up, and all the downstream code just works.  If we want to use this generally for ANGLE, this should probably be reworked such that any platform can just call getenv for this feature, and only Android primes the value.\n\nNon-system code can\u0027t use the NDK\u0027s getenv (but it can use setenv), that\u0027s why the shell call is required.",
+      "parentUuid": "f2215bfb_a00a00a8",
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2ad66ba_2923811b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
