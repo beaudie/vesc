@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7293ff9_55febe0a",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-27T15:36:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a035b37f_206bb436",
+      "range": {
+        "startLine": 35,
+        "startChar": 15,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2215bfb_a00a00a8",
@@ -94,6 +118,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a44df06_6146568e",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-27T15:36:27Z",
+      "side": 1,
+      "message": "Done\n\n\u003e Also, is there no better way to get a property other than running a shell command?!\n\nLooks like Cody answered this.",
+      "parentUuid": "f2215bfb_a00a00a8",
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2ad66ba_2923811b",
@@ -141,6 +183,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b2dcf66_a73ee802",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-27T15:36:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6364f1b_c1c3461d",
+      "range": {
+        "startLine": 449,
+        "startChar": 52,
+        "endLine": 449,
+        "endChar": 63
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b3976cc_845fddb7",
@@ -164,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c117202a_765ffa2f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2468,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-27T15:36:27Z",
+      "side": 1,
+      "message": "I added that to work-around the fact that there\u0027s one global pointer used to point to the back-end\u0027s DebugAnnotator class AND the end2end tests keep switching which back-end/context is used.  Other than that, I don\u0027t think it\u0027s called much.",
+      "parentUuid": "4b3976cc_845fddb7",
+      "range": {
+        "startLine": 2468,
+        "startChar": 5,
+        "endLine": 2468,
+        "endChar": 40
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95e39c47_80a651c5",
@@ -177,6 +267,30 @@
       "writtenOn": "2020-10-27T14:11:18Z",
       "side": 1,
       "message": "are",
+      "range": {
+        "startLine": 2470,
+        "startChar": 89,
+        "endLine": 2470,
+        "endChar": 91
+      },
+      "revId": "005c1f3c90145606a29c0ec80064987e0ab0b744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f14099d7_2ee87cbd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2470,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-10-27T15:36:27Z",
+      "side": 1,
+      "message": "Done.  Actually, I reworked it a little.",
+      "parentUuid": "95e39c47_80a651c5",
       "range": {
         "startLine": 2470,
         "startChar": 89,
