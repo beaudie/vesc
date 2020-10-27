@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b5c8608_69c6d339",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-10-27T16:47:26Z",
+      "side": 1,
+      "message": "So the bad stacks problem was indeed with the module. And we can get a lot better accuracy parsing out the module.\n\nThe issue now is that angle_perftests (and possibly other apps) change the CWD so the back trace has trouble finding the right path to the modules in question. Not sure how to fix that one.",
+      "revId": "28a45718f8f345a52e94252918a62f89e80ede4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
