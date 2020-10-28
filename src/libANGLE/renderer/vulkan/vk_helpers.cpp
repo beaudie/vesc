@@ -2399,6 +2399,7 @@ angle::Result QueryHelper::endQuery(ContextVk *contextVk)
     CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
     commandBuffer.endQuery(getQueryPool().getHandle(), mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
+    WARN() << "mMostRecentSerial: " << mMostRecentSerial.getValue();
     return angle::Result::Continue;
 }
 
@@ -2414,6 +2415,7 @@ void QueryHelper::endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderP
 {
     renderPassCommandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
+    WARN() << "mMostRecentSerial: " << mMostRecentSerial.getValue();
 }
 
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
@@ -2436,6 +2438,7 @@ void QueryHelper::writeTimestampToPrimary(ContextVk *contextVk, PrimaryCommandBu
     primary->resetQueryPool(queryPool, mQuery, 1);
     primary->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
+    WARN() << "mMostRecentSerial: " << mMostRecentSerial.getValue();
 }
 
 void QueryHelper::writeTimestamp(ContextVk *contextVk, CommandBuffer *commandBuffer)
@@ -2445,6 +2448,7 @@ void QueryHelper::writeTimestamp(ContextVk *contextVk, CommandBuffer *commandBuf
     commandBuffer->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool.getHandle(),
                                   mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
+    WARN() << "mMostRecentSerial: " << mMostRecentSerial.getValue();
 }
 
 bool QueryHelper::hasPendingWork(ContextVk *contextVk)
@@ -2452,6 +2456,12 @@ bool QueryHelper::hasPendingWork(ContextVk *contextVk)
     // TODO: https://issuetracker.google.com/169788986 - this is not a valid statement with
     // CommandProcessor: If the renderer has a queue serial higher than the stored one, the command
     // buffers that recorded this query have already been submitted, so there is no pending work.
+    WARN() << "mMostRecentSerial.valid() = " << mMostRecentSerial.valid();
+    WARN() << "getCurrentQueueSerial: " << contextVk->getCurrentQueueSerial().getValue();
+    if (mMostRecentSerial.valid())
+    {
+        WARN() << "mMostRecentSerial: " << mMostRecentSerial.getValue();
+    }
     return mMostRecentSerial.valid() && (mMostRecentSerial == contextVk->getCurrentQueueSerial());
 }
 

@@ -2479,6 +2479,7 @@ void RendererVk::onCompletedSerial(Serial serial)
     if (serial > mLastCompletedQueueSerial)
     {
         mLastCompletedQueueSerial = serial;
+        WARN() << "mLastCompletedQueueSerial: " << mLastCompletedQueueSerial.getValue();
     }
 }
 

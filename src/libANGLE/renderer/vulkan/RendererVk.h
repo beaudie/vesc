@@ -265,6 +265,7 @@ class RendererVk : angle::NonCopyable
     ANGLE_INLINE Serial getLastCompletedQueueSerial()
     {
         std::lock_guard<std::mutex> lock(mQueueSerialMutex);
+        WARN() << "mLastCompletedQueueSerial: " << mLastCompletedQueueSerial.getValue();
         return mLastCompletedQueueSerial;
     }
 
