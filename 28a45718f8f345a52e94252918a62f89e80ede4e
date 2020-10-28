@@ -16,6 +16,24 @@
       "message": "So the bad stacks problem was indeed with the module. And we can get a lot better accuracy parsing out the module.\n\nThe issue now is that angle_perftests (and possibly other apps) change the CWD so the back trace has trouble finding the right path to the modules in question. Not sure how to fix that one.",
       "revId": "28a45718f8f345a52e94252918a62f89e80ede4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "270ba232_e3ddce72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-28T00:23:31Z",
+      "side": 1,
+      "message": "I added a crash to ContextVk::setupDraw() and ran it from outside my angle checkout to try and get further away, which gave me:\n\n   timvp@timvp-glaptop:~$ ./code/angle/out/LinuxDebug/angle_perftests --gtest_filter\u003dDrawCallPerfBenchmark.Run/vulkan --verbose\n    1 GPUs:\n      0 - NVIDIA device id: 0x1CB1\n           Driver Vendor: Nvidia\n           Driver Version: 440.100\n\n    Active GPU: 0\n\n    Optimus: false\n    AMD Switchable: false\n\n\n    Skipping tests using configuration ES2_WGL because it is not available.\n    Skipping tests using configuration ES2_OpenGLES because it is not available.\n    Skipping tests using configuration ES2_OpenGLES because it is not available.\n    Note: Google Test filter \u003d DrawCallPerfBenchmark.Run/vulkan\n    [\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 1 test from 1 test suite.\n    [----------] Global test environment set-up.\n    [----------] 1 test from DrawCallPerfBenchmark\n    [ RUN      ] DrawCallPerfBenchmark.Run/vulkan\n    Warning: setpriority failed in StabilizeCPUForBenchmarking. Process will retain default priority: Permission denied\n    WARN: ContextVk.cpp:1048 (setupDraw): TIMTIM \u003e\u003e \n    No results file specified.\n\n    Signal 11 [Segmentation fault]:\n    Backtrace:\n    angle::PrintStackBacktrace() at crash_handler_posix.cpp:115\n    angle::Handler(int) at crash_handler_posix.cpp:159\n    __restore_rt at sigaction.c:?\n    rx::ContextVk::setupDraw(gl::Context const*, gl::PrimitiveMode, int, int, int, gl::DrawElementsType, void const*, angle::BitSetT\u003c13ul, unsigned long, unsigned long\u003e, rx::vk::priv::SecondaryCommandBuffer**) at ContextVk.cpp:1050\n    rx::ContextVk::drawArrays(gl::Context const*, gl::PrimitiveMode, int, int) at ContextVk.cpp:2215\n    gl::Context::drawArrays(gl::PrimitiveMode, int, int) at Context.inl.h:131\n    ?? ??:0  \u003c\u003c--- It can\u0027t figure out the glDrawArrays()-\u003egl::DrawArrays() jump\n    (anonymous namespace)::ClearThenDraw(unsigned int, int) at DrawCallPerf.cpp:279\n    (anonymous namespace)::DrawCallPerfBenchmark::drawBenchmark() at DrawCallPerf.cpp:415\n    ANGLERenderTest::step() at ANGLEPerfTest.cpp:742\n    ANGLEPerfTest::doRunLoop(double, int, ANGLEPerfTest::RunLoopPolicy) at ANGLEPerfTest.cpp:273\n    ANGLERenderTest::SetUp() at ANGLEPerfTest.cpp:642\n    void testing::internal::HandleSehExceptionsInMethodIfSupported\u003ctesting::Test, void\u003e(testing::Test*, void (testing::Test::*)(), char const*) at gtest.cc:2614\n    void testing::internal::HandleExceptionsInMethodIfSupported\u003ctesting::Test, void\u003e(testing::Test*, void (testing::Test::*)(), char const*) at gtest.cc:2669\n    testing::Test::Run() at gtest.cc:2687\n    testing::TestInfo::Run() at gtest.cc:2869\n    testing::TestSuite::Run() at gtest.cc:3021\n    testing::internal::UnitTestImpl::RunAllTests() at gtest.cc:5731\n    bool testing::internal::HandleSehExceptionsInMethodIfSupported\u003ctesting::internal::UnitTestImpl, bool\u003e(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) at gtest.cc:2614\n    bool testing::internal::HandleExceptionsInMethodIfSupported\u003ctesting::internal::UnitTestImpl, bool\u003e(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) at gtest.cc:2669\n    testing::UnitTest::Run() at gtest.cc:5313\n    RUN_ALL_TESTS() at gtest.h:2485\n    angle::TestSuite::run() at TestSuite.cpp:1314\n    main at angle_perftests_main.cpp:20\n    ?? ??:0\n    ?? ??:0\n\nThat looks good to me.   What are you seeing?",
+      "parentUuid": "7b5c8608_69c6d339",
+      "revId": "28a45718f8f345a52e94252918a62f89e80ede4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
