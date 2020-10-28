@@ -239,7 +239,8 @@ std::ostream &FmtHex(std::ostream &os, T value)
 
 }  // namespace gl
 
-#if defined(ANGLE_ENABLE_DEBUG_TRACE) || defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS)
+#if defined(ANGLE_ENABLE_DEBUG_TRACE) || defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS) || \
+    defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
 #    define ANGLE_TRACE_ENABLED
 #endif
 

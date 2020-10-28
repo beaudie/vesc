@@ -37,6 +37,42 @@ namespace gl
 namespace
 {
 
+#if defined(ANGLE_PLATFORM_ANDROID) && defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+static size_t kChunkSize = 256;
+static void outputMsg(int android_priority, std::string &msg)
+{
+    size_t index        = 0;
+    const char *message = msg.c_str();
+
+    while (msg.size() > index)
+    {
+        if ((index + kChunkSize) >= msg.size())
+        {
+            // Print left over bits of string
+            __android_log_print(android_priority, "ANGLE", "%s", &message[index]);
+            return;
+        }
+        else
+        {
+            size_t nl = msg.find("\n", index + 1);
+            // Find the next closest new line
+            if ((nl - index) < kChunkSize)
+            {
+                __android_log_print(android_priority, "ANGLE", "%.*s", static_cast<int>(nl - index),
+                                    &message[index]);
+                index += nl - index + 1;
+            }
+            else
+            {
+                __android_log_print(android_priority, "ANGLE", "%.*s", static_cast<int>(kChunkSize),
+                                    &message[index]);
+                index += kChunkSize + 1;
+            }
+        }
+    }
+}
+#endif
+
 DebugAnnotator *g_debugAnnotator = nullptr;
 
 std::mutex *g_debugMutex = nullptr;
@@ -44,7 +80,7 @@ std::mutex *g_debugMutex = nullptr;
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
     {"EVENT", "INFO", "WARN", "ERR", "FATAL"}};
 
-constexpr const char *LogSeverityName(int severity)
+ANGLE_MAYBE_UNUSED constexpr const char *LogSeverityName(int severity)
 {
     return (severity >= 0 && severity < LOG_NUM_SEVERITIES) ? g_logSeverityNames[severity]
                                                             : "UNKNOWN";
@@ -68,7 +104,7 @@ namespace priv
 
 bool ShouldCreatePlatformLogMessage(LogSeverity severity)
 {
-#if defined(ANGLE_TRACE_ENABLED)
+#if defined(ANGLE_TRACE_ENABLED) || defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
     return true;
 #else
     return severity != LOG_EVENT;
@@ -82,7 +118,9 @@ std::ostream *gSwallowStream;
 
 bool DebugAnnotationsActive()
 {
-#if defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS) || defined(ANGLE_ENABLE_DEBUG_TRACE)
+#if defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+    return true;
+#elif defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS) || defined(ANGLE_ENABLE_DEBUG_TRACE)
     return g_debugAnnotator != nullptr && g_debugAnnotator->getStatus();
 #else
     return false;
@@ -127,7 +165,11 @@ ScopedPerfEventHelper::ScopedPerfEventHelper(gl::Context *context, gl::EntryPoin
 ScopedPerfEventHelper::~ScopedPerfEventHelper()
 {
     // EGL_Terminate() can set g_debugAnnotator to nullptr; must call DebugAnnotationsActive() here
+#if defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+    if (mFunctionName && g_debugAnnotator != nullptr && g_debugAnnotator->getStatus())
+#else
     if (mFunctionName && DebugAnnotationsActive())
+#endif
     {
         g_debugAnnotator->endEvent(mContext, mFunctionName, mEntryPoint);
     }
@@ -146,7 +188,14 @@ void ScopedPerfEventHelper::begin(const char *format, ...)
 
     ANGLE_LOG(EVENT) << std::string(&buffer[0], len);
     // Do not need to call DebugAnnotationsActive() here, because it was called in EVENT()
+#if defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+    if (g_debugAnnotator)
+    {
+        g_debugAnnotator->beginEvent(mContext, mEntryPoint, mFunctionName, buffer.data());
+    }
+#else
     g_debugAnnotator->beginEvent(mContext, mEntryPoint, mFunctionName, buffer.data());
+#endif
 }
 
 LogMessage::LogMessage(const char *file, const char *function, int line, LogSeverity severity)
@@ -214,13 +263,20 @@ void Trace(LogSeverity severity, const char *message)
     }
 
     if (severity == LOG_FATAL || severity == LOG_ERR || severity == LOG_WARN ||
+#if defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+        severity == LOG_INFO || severity == LOG_EVENT)
+#else
         severity == LOG_INFO)
+#endif
     {
 #if defined(ANGLE_PLATFORM_ANDROID)
         android_LogPriority android_priority = ANDROID_LOG_ERROR;
         switch (severity)
         {
             case LOG_INFO:
+#    if defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+            case LOG_EVENT:
+#    endif
                 android_priority = ANDROID_LOG_INFO;
                 break;
             case LOG_WARN:
@@ -235,8 +291,12 @@ void Trace(LogSeverity severity, const char *message)
             default:
                 UNREACHABLE();
         }
+#    if defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+        outputMsg(android_priority, str);
+#    else
         __android_log_print(android_priority, "ANGLE", "%s: %s\n", LogSeverityName(severity),
                             str.c_str());
+#    endif
 #elif defined(ANGLE_PLATFORM_APPLE)
         if (__builtin_available(macOS 10.12, iOS 10.0, *))
         {
@@ -280,12 +340,14 @@ void Trace(LogSeverity severity, const char *message)
 #endif
 
 #if defined(ANGLE_ENABLE_DEBUG_TRACE)
-#    if defined(NDEBUG)
+#    if !defined(ANGLE_ENABLE_API_COMMAND_LOGGING)
+#        if defined(NDEBUG)
     if (severity == LOG_EVENT || severity == LOG_WARN || severity == LOG_INFO)
     {
         return;
     }
-#    endif  // defined(NDEBUG)
+#        endif  // defined(NDEBUG)
+#    endif
     static angle::base::NoDestructor<std::ofstream> file(TRACE_OUTPUT_FILE, std::ofstream::app);
     if (file->good())
     {
