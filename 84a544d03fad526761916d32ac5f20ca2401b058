@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf49c386_e4664395",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-10-28T01:24:37Z",
+      "side": 1,
+      "message": "This is a reland of:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2437609\n\nThat was reverted due to failing builds:\nhttps://ci.chromium.org/p/chromium/builders/try/linux-chromeos-rel/708103?\n\nCompare PS1 and PS2 for the differences:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2504457/1..2\n\nI know we generally try to avoid #ifdef\u0027ing if we can, but this approach seems better than duplicating the multithreading code into a separate Vulkan .cpp file.",
+      "revId": "84a544d03fad526761916d32ac5f20ca2401b058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
