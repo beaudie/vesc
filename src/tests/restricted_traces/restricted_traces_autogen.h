@@ -58,6 +58,7 @@ enum class RestrictedTraceID
     temple_run_300,
     trex_200,
     world_of_tanks_blitz,
+    lego_legacy,
     InvalidEnum,
     EnumCount = InvalidEnum
 };

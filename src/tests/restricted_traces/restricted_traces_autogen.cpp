@@ -21,6 +21,7 @@
 #include "fate_grand_order/fate_grand_order_capture_context2.h"
 #include "free_fire/free_fire_capture_context3.h"
 #include "kartrider_rush/kartrider_rush_capture_context3.h"
+#include "lego_legacy/lego_legacy_capture_context2.h"
 #include "manhattan_10/manhattan_10_capture_context6.h"
 #include "marvel_contest_of_champions/marvel_contest_of_champions_capture_context2.h"
 #include "mobile_legends/mobile_legends_capture_context3.h"
@@ -100,7 +101,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
     {RestrictedTraceID::world_of_tanks_blitz,
      {world_of_tanks_blitz::kReplayFrameStart, world_of_tanks_blitz::kReplayFrameEnd,
       world_of_tanks_blitz::kReplayDrawSurfaceWidth, world_of_tanks_blitz::kReplayDrawSurfaceHeight,
-      "world_of_tanks_blitz"}}};
+      "world_of_tanks_blitz"}},
+    {RestrictedTraceID::lego_legacy,
+     {lego_legacy::kReplayFrameStart, lego_legacy::kReplayFrameEnd,
+      lego_legacy::kReplayDrawSurfaceWidth, lego_legacy::kReplayDrawSurfaceHeight, "lego_legacy"}}};
 }
 
 const TraceInfo &GetTraceInfo(RestrictedTraceID traceID)
@@ -165,6 +169,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ReplayContext3Frame(frameIndex);
+            break;
+        case RestrictedTraceID::lego_legacy:
+            lego_legacy::ReplayContext2Frame(frameIndex);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -231,6 +238,9 @@ void ResetReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ResetContext3Replay();
             break;
+        case RestrictedTraceID::lego_legacy:
+            lego_legacy::ResetContext2Replay();
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -295,6 +305,9 @@ void SetupReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetupContext3Replay();
+            break;
+        case RestrictedTraceID::lego_legacy:
+            lego_legacy::SetupContext2Replay();
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -361,6 +374,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::lego_legacy:
+            lego_legacy::SetBinaryDataDir(dataDir);
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -425,6 +441,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::lego_legacy:
+            lego_legacy::SetBinaryDataDecompressCallback(callback);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
