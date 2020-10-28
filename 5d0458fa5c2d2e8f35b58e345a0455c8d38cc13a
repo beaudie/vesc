@@ -16,6 +16,24 @@
       "message": "some tests, like\nKHR-GLES31.core.shader_multisample_interpolation.render.interpolate_at_sample.rgba8.samples_1\nfailed with:\nWARNING: 0:3: \u0026apos;GL_OES_sample_variables\u0026apos; : extension is not supported\nERROR: 0:9: \u0026apos;gl_SampleID\u0026apos; : undeclared identifier\n\nso they require\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2477907",
       "revId": "5d0458fa5c2d2e8f35b58e345a0455c8d38cc13a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37139c9b_762449be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-10-28T01:55:45Z",
+      "side": 1,
+      "message": "From https://www.khronos.org/registry/OpenGL/extensions/OES/OES_shader_multisample_interpolation.txt\n\"This extension requires OES_sample_variables.\"\n\nSo it seems to me we have to support GL_OES_sample_variables before GL_OES_shader_multisample_interpolation",
+      "parentUuid": "4eb3693c_4affa281",
+      "revId": "5d0458fa5c2d2e8f35b58e345a0455c8d38cc13a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
