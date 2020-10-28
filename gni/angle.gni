@@ -122,6 +122,7 @@ declare_args() {
 
   angle_enable_hlsl = angle_enable_d3d9 || angle_enable_d3d11
   angle_enable_trace = false
+  angle_enable_api_command_logging = false
 
   # Disable the layers in ubsan builds because of really slow builds.
   # TODO(anglebug.com/4082) enable validation layers on mac for swiftshader

@@ -103,8 +103,14 @@ config("internal_config") {
     defines += [ "ANGLE_IS_LINUX" ]
   }
 
+  # Enables a number of debug/trace-related functionality, including debug markers for AGI
   if (angle_enable_trace) {
     defines += [ "ANGLE_ENABLE_DEBUG_TRACE=1" ]
+  }
+
+  # Enables logging every GLES/EGL API command, including in Android logcat
+  if (angle_enable_api_command_logging) {
+    defines += [ "ANGLE_ENABLE_API_COMMAND_LOGGING=1" ]
   }
 
   if (is_chromeos) {
