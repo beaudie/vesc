@@ -20,7 +20,7 @@
   "src/tests/restricted_traces/free_fire.tar.gz.sha1":
     "a95efee5e5c6d85bac2d8c2ab09dc34c",
   "src/tests/restricted_traces/gen_restricted_traces.py":
-    "5c95022fc335f608f8bc9daf305c8bf3",
+    "eccb9514e9606eb56b24cf57598e596c",
   "src/tests/restricted_traces/kartrider_rush.tar.gz.sha1":
     "64079b7406be62a9b04062b8790f3313",
   "src/tests/restricted_traces/manhattan_10.tar.gz.sha1":
@@ -38,7 +38,7 @@
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
     "5215fd1e7503fe2b4d0cc8e46cb71cde",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "4d56428aea3627c37380ab3bc17a4316",
+    "fd47383404d65e5b518ffb3609577aec",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
     "77475b0186ee0380eeb9db47433d0457",
   "src/tests/restricted_traces/trex_200.tar.gz.sha1":
