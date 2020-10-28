@@ -294,6 +294,9 @@ class GarbageObject
 
     bool valid() const { return mHandle != VK_NULL_HANDLE; }
     void destroy(RendererVk *renderer);
+    const char *getObjectTypeName() const;
+    void *getHandle() const { return (void *)mHandle; }
+    uint32_t getHandleType() const { return (uint32_t)mHandleType; }
 
     template <typename DerivedT, typename HandleT>
     static GarbageObject Get(WrappedObject<DerivedT, HandleT> *object)

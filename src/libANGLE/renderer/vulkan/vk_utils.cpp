@@ -700,6 +700,78 @@ void GarbageObject::destroy(RendererVk *renderer)
     renderer->getActiveHandleCounts().onDeallocate(mHandleType);
 }
 
+const char *GarbageObject::getObjectTypeName() const
+{
+    switch (mHandleType)
+    {
+        case HandleType::Semaphore:
+            return "Semaphore";
+            break;
+        case HandleType::CommandBuffer:
+            // Command buffers are pool allocated.
+            return "CommandBuffer";
+            break;
+        case HandleType::Event:
+            return "Event";
+            break;
+        case HandleType::Fence:
+            return "Fence";
+            break;
+        case HandleType::DeviceMemory:
+            return "DeviceMemory";
+            break;
+        case HandleType::Buffer:
+            return "Buffer";
+            break;
+        case HandleType::BufferView:
+            return "BufferView";
+            break;
+        case HandleType::Image:
+            return "Image";
+            break;
+        case HandleType::ImageView:
+            return "ImageView";
+            break;
+        case HandleType::ShaderModule:
+            return "ShaderModule";
+            break;
+        case HandleType::PipelineLayout:
+            return "PipelineLayout";
+            break;
+        case HandleType::RenderPass:
+            return "RenderPass";
+            break;
+        case HandleType::Pipeline:
+            return "Pipeline";
+            break;
+        case HandleType::DescriptorSetLayout:
+            return "DescriptorSetLayout";
+            break;
+        case HandleType::Sampler:
+            return "Sampler";
+            break;
+        case HandleType::DescriptorPool:
+            return "DescriptorPool";
+            break;
+        case HandleType::Framebuffer:
+            return "Framebuffer";
+            break;
+        case HandleType::CommandPool:
+            return "CommandPool";
+            break;
+        case HandleType::QueryPool:
+            return "QueryPool";
+            break;
+        case HandleType::Allocation:
+            return "Allocation";
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+    return "unknown";
+}
+
 void MakeDebugUtilsLabel(GLenum source, const char *marker, VkDebugUtilsLabelEXT *label)
 {
     static constexpr angle::ColorF kLabelColors[6] = {

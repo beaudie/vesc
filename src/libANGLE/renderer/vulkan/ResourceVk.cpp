@@ -87,6 +87,8 @@ bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSeri
 
     for (GarbageObject &object : mGarbage)
     {
+        WARN() << "object.destroy: type: " << object.getObjectTypeName() << ", id: " << std::hex
+               << object.getHandle() << ", serial: " << completedSerial.getValue();
         object.destroy(renderer);
     }
 
