@@ -137,6 +137,7 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                        const gl::ShaderType shaderType,
                                        const ShaderInfo &shaderInfo,
                                        ProgramTransformOptionBits optionBits,
+                                       SurfaceRotation surfaceRotation,
                                        ProgramExecutableVk *executableVk)
 {
     const ShaderMapInterfaceVariableInfoMap &variableInfoMap =
@@ -158,11 +159,11 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
 
     mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
 
-    if (optionBits[ProgramTransformOption::EnableLineRasterEmulation])
-    {
-        mProgramHelper.enableSpecializationConstant(
-            sh::vk::SpecializationConstantId::LineRasterEmulation);
-    }
+    mProgramHelper.setSpecializationConstant(
+        sh::vk::SpecializationConstantId::LineRasterEmulation,
+        optionBits[ProgramTransformOption::EnableLineRasterEmulation] ? true : false);
+    mProgramHelper.setSpecializationConstant(sh::vk::SpecializationConstantId::SurfaceRotation,
+                                             static_cast<uint32_t>(surfaceRotation));
 
     return angle::Result::Continue;
 }
@@ -660,6 +661,7 @@ void ProgramExecutableVk::updateEarlyFragmentTestsOptimization(ContextVk *contex
 angle::Result ProgramExecutableVk::getGraphicsPipeline(
     ContextVk *contextVk,
     gl::PrimitiveMode mode,
+    SurfaceRotation surfaceRotation,
     const vk::GraphicsPipelineDesc &desc,
     const gl::AttributesMask &activeAttribLocations,
     const vk::GraphicsPipelineDesc **descPtrOut,
@@ -681,7 +683,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
         if (programVk)
         {
             ANGLE_TRY(programVk->initGraphicsShaderProgram(
-                contextVk, shaderType, mTransformOptionBits, &programInfo, this));
+                contextVk, shaderType, mTransformOptionBits, surfaceRotation, &programInfo, this));
         }
     }
 
