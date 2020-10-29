@@ -2845,7 +2845,8 @@ void ContextVk::updateColorMasks(const gl::BlendStateExt &blendStateExt)
                                                  framebufferVk->getState().getEnabledDrawBuffers());
 }
 
-void ContextVk::updateSampleMask(const gl::State &glState)
+void ContextVk::updateSampleMaskWithRasterizationSamples(const gl::State &glState,
+                                                         const uint32_t rasterizationSamples)
 {
     // If sample coverage is enabled, emulate it by generating and applying a mask on top of the
     // sample mask.
@@ -2854,8 +2855,9 @@ void ContextVk::updateSampleMask(const gl::State &glState)
     static_assert(sizeof(uint32_t) == sizeof(GLbitfield), "Vulkan assumes 32-bit sample masks");
     for (uint32_t maskNumber = 0; maskNumber < glState.getMaxSampleMaskWords(); ++maskNumber)
     {
-        uint32_t mask = glState.isSampleMaskEnabled() ? glState.getSampleMaskWord(maskNumber)
-                                                      : std::numeric_limits<uint32_t>::max();
+        uint32_t mask = glState.isSampleMaskEnabled() && rasterizationSamples > 1
+                            ? glState.getSampleMaskWord(maskNumber)
+                            : std::numeric_limits<uint32_t>::max();
 
         ApplySampleCoverage(glState, coverageSampleCount, maskNumber, &mask);
 
@@ -2996,6 +2998,7 @@ void ContextVk::updateRasterizationSamples(const gl::State &glState,
     if (needToUpdateDependency)
     {
         updateSampleShadingWithRasterizationSamples(glState, rasterizationSamples);
+        updateSampleMaskWithRasterizationSamples(glState, rasterizationSamples);
     }
 }
 
@@ -3120,16 +3123,16 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 iter.setLaterBit(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED:
-                updateSampleMask(glState);
+                updateSampleMaskWithRasterizationSamples(glState, mDrawFramebuffer->getSamples());
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE:
-                updateSampleMask(glState);
+                updateSampleMaskWithRasterizationSamples(glState, mDrawFramebuffer->getSamples());
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_MASK_ENABLED:
-                updateSampleMask(glState);
+                updateSampleMaskWithRasterizationSamples(glState, mDrawFramebuffer->getSamples());
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_MASK:
-                updateSampleMask(glState);
+                updateSampleMaskWithRasterizationSamples(glState, mDrawFramebuffer->getSamples());
                 break;
             case gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED:
             {
@@ -3266,7 +3269,6 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 updateColorMasks(glState.getBlendStateExt());
-                updateSampleMask(glState);
                 updateRasterizationSamples(glState, mDrawFramebuffer->getSamples());
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
