@@ -463,7 +463,22 @@ struct PackedDepthStencilStateInfo final
     DepthStencilEnableFlags enable;
     uint8_t frontStencilReference;
     uint8_t backStencilReference;
-    uint8_t depthCompareOp;  // only needs 4 bits. extra used as padding.
+
+    // We are borrowing three bits here for surface rotation, even though it has nothing to do with
+    // depth stencil. Because ANGLE_GET_TRANSITION_BIT uses offsetof macro which can't handle
+    // bitfield, a union is used here for ANGLE_GET_TRANSITION_BIT can calculate the correct dirty
+    // bit for them.
+    union
+    {
+        uint8_t depthCompareOpSurfaceRotation;
+        struct
+        {
+            uint8_t depthCompareOp : 4;
+            uint8_t surfaceRotation : 3;
+            uint8_t padding : 1;
+        };
+    };
+
     float minDepthBounds;
     float maxDepthBounds;
     PackedStencilOpState front;
@@ -472,6 +487,7 @@ struct PackedDepthStencilStateInfo final
 
 constexpr size_t kPackedDepthStencilStateSize = sizeof(PackedDepthStencilStateInfo);
 static_assert(kPackedDepthStencilStateSize == 20, "Size check failed");
+static_assert(static_cast<int>(SurfaceRotation::EnumCount) <= 8, "Size check failed");
 
 struct LogicOpState final
 {
@@ -569,7 +585,7 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
-                                     vk::SpecializationConstantBitSet specConsts,
+                                     const vk::SpecializationConstant specConsts,
                                      Pipeline *pipelineOut) const;
 
     // Vertex input state. For ES 3.1 this should be separated into binding and attribute.
@@ -694,6 +710,13 @@ class GraphicsPipelineDesc final
     void nextSubpass(GraphicsPipelineTransitionBits *transition);
     void setSubpass(uint32_t subpass);
     uint32_t getSubpass() const;
+
+    void updateSurfaceRotation(GraphicsPipelineTransitionBits *transition,
+                               const SurfaceRotation surfaceRotation);
+    SurfaceRotation getSurfaceRotation() const
+    {
+        return static_cast<SurfaceRotation>(mDepthStencilStateInfo.surfaceRotation);
+    }
 
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
@@ -1332,7 +1355,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
-                                           vk::SpecializationConstantBitSet specConsts,
+                                           const vk::SpecializationConstant specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
                                            vk::PipelineHelper **pipelineOut)
@@ -1361,7 +1384,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
-                                 vk::SpecializationConstantBitSet specConsts,
+                                 const vk::SpecializationConstant specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
