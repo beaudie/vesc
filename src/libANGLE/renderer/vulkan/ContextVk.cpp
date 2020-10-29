@@ -2969,6 +2969,36 @@ angle::Result ContextVk::updateScissorImpl(const gl::State &glState, bool should
     return angle::Result::Continue;
 }
 
+// If the target is a single-sampled target, sampleShading should be disabled, to use Bresenham line
+// raterization feature.
+void ContextVk::updateSampleShadingWithRasterizationSamples(const gl::State &glState,
+                                                            const uint32_t rasterizationSamples)
+{
+    bool sampleShadingEnable =
+        (rasterizationSamples <= 1 ? false : glState.isSampleShadingEnabled());
+
+    mGraphicsPipelineDesc->updateSampleShading(&mGraphicsPipelineTransition, sampleShadingEnable,
+                                               glState.getMinSampleShading());
+}
+
+// If the target is switched between a single-sampled and multisample, the dependency related to the
+// rasterization sample should be updated.
+void ContextVk::updateRasterizationSamples(const gl::State &glState,
+                                           const uint32_t rasterizationSamples)
+{
+    bool isPrevTargetMultisample = (mGraphicsPipelineDesc->getRasterizationSamples() > 1);
+    bool isCurrTargetMultisample = (rasterizationSamples > 1);
+    bool needToUpdateDependency  = (isPrevTargetMultisample != isCurrTargetMultisample);
+
+    mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
+                                                      rasterizationSamples);
+
+    if (needToUpdateDependency)
+    {
+        updateSampleShadingWithRasterizationSamples(glState, rasterizationSamples);
+    }
+}
+
 void ContextVk::invalidateProgramBindingHelper(const gl::State &glState)
 {
     mProgram         = nullptr;
@@ -3237,8 +3267,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 updateColorMasks(glState.getBlendStateExt());
                 updateSampleMask(glState);
-                mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
-                                                                  mDrawFramebuffer->getSamples());
+                updateRasterizationSamples(glState, mDrawFramebuffer->getSamples());
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
                                                        isViewportFlipEnabledForDrawFBO());
@@ -3324,9 +3353,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                               glState.isSampleAlphaToOneEnabled());
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_SHADING:
-                mGraphicsPipelineDesc->updateSampleShading(&mGraphicsPipelineTransition,
-                                                           glState.isSampleShadingEnabled(),
-                                                           glState.getMinSampleShading());
+                updateSampleShadingWithRasterizationSamples(glState,
+                                                            mDrawFramebuffer->getSamples());
                 break;
             case gl::State::DIRTY_BIT_COVERAGE_MODULATION:
                 break;
@@ -3633,8 +3661,7 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
     if (mGraphicsPipelineDesc->getRasterizationSamples() !=
         static_cast<uint32_t>(framebufferVk->getSamples()))
     {
-        mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
-                                                          framebufferVk->getSamples());
+        updateRasterizationSamples(mState, framebufferVk->getSamples());
     }
 
     onDrawFramebufferRenderPassDescChange(framebufferVk);
