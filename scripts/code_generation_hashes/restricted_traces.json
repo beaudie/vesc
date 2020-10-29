@@ -2,35 +2,35 @@
   "src/tests/restricted_traces/.gitignore":
     "ddaa06125884442e2ed1d0885d9bdc02",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
-    "44fc5437c4a84012e338b3da4b6fc28a",
+    "b386813bf458db325dc9cb0e03ba54d5",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
-    "d271919091590d490ea68b9223b7eb06",
+    "f3ce31f4471417eef4f99d5c30a7898d",
   "src/tests/restricted_traces/brawl_stars.tar.gz.sha1":
-    "a6b023409f36ca174b890dbeb842da7e",
+    "c43dc650893992cddb935cc26b2fba9a",
   "src/tests/restricted_traces/candy_crush_500.tar.gz.sha1":
-    "55de8a400b02e570ff2380436bda269d",
+    "1e869325fb79b3c24b4fd490024b65b4",
   "src/tests/restricted_traces/cod_mobile.tar.gz.sha1":
-    "dffd3bed0d0e53481f43b414309bf152",
+    "a7334995de9c7a5bd42ddcbfb2cb7a31",
   "src/tests/restricted_traces/dragon_ball_legends.tar.gz.sha1":
-    "dc20d295d45ab85cd15bed6065d7a13a",
+    "4d97d7700e7458e8f4832281453459e2",
   "src/tests/restricted_traces/egypt_1500.tar.gz.sha1":
-    "1d80caa37b937f83c95cd053b1bdd4ac",
+    "2a4b5a46cd47a72f462cca97b48e4849",
   "src/tests/restricted_traces/fate_grand_order.tar.gz.sha1":
-    "df7f111c1f4e30767a4c33eb190600b8",
+    "66f8f13e0f456a0f5adffdf3c2f29050",
   "src/tests/restricted_traces/free_fire.tar.gz.sha1":
-    "a95efee5e5c6d85bac2d8c2ab09dc34c",
+    "f81fdad091f061c65e05abe240f67cec",
   "src/tests/restricted_traces/gen_restricted_traces.py":
-    "5c95022fc335f608f8bc9daf305c8bf3",
+    "eccb9514e9606eb56b24cf57598e596c",
   "src/tests/restricted_traces/kartrider_rush.tar.gz.sha1":
-    "64079b7406be62a9b04062b8790f3313",
+    "16708b5038a0faa75f9a33a4b0372c9c",
   "src/tests/restricted_traces/manhattan_10.tar.gz.sha1":
-    "752781119592a190cc02b773adf38fc3",
+    "6320a951b9a6957b8736610a2db12d50",
   "src/tests/restricted_traces/marvel_contest_of_champions.tar.gz.sha1":
-    "d95d5167639b7b72ae9ae51f77b70f7e",
+    "a47b6c4b268f9db445430dfa48c4e1f3",
   "src/tests/restricted_traces/mobile_legends.tar.gz.sha1":
-    "a3fe48a3acc2165a7fb3eb6cf01b441f",
+    "bb177d8de87bbf4c0d37fd69ab77d73c",
   "src/tests/restricted_traces/nba2k20_800.tar.gz.sha1":
-    "03df0dcf41c18bc59edfc0b088ca4a87",
+    "1992ff0de548d690093417b5b8124c35",
   "src/tests/restricted_traces/pubg_mobile_lite.tar.gz.sha1":
     "07c3f467603d4d00bdae2bfed121da8d",
   "src/tests/restricted_traces/restricted_traces.json":
@@ -40,11 +40,11 @@
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
     "cb1e3a2d827912765d824e99144ad70c",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "d8e7c186631c9b35312c7a399862e332",
+    "59d33ebcb1ed609458d6b9ad851079d9",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
-    "77475b0186ee0380eeb9db47433d0457",
+    "a89c53445e5c56bedae2a8dd156f6794",
   "src/tests/restricted_traces/trex_200.tar.gz.sha1":
-    "ca2d91a527f4a4317f944afc96c35268",
+    "62bfb2e71dc7066cd5cfd1d343ad291c",
   "src/tests/restricted_traces/world_of_tanks_blitz.tar.gz.sha1":
-    "c72106f9999f5eff8916a0c699072687"
+    "bc00a7d03028f34ec388ab2821b6d35e"
 }
