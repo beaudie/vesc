@@ -1513,7 +1513,10 @@ void SpirvTransformer::visitVariable(const uint32_t *instruction)
 
     // For interface block variables, the name that's used to associate info is the block name
     // rather than the variable name.
-    const char *name = mNamesById[isInterfaceBlockVariable ? typeId : id];
+    // the empty string is generated for unnamed instface block.
+    const char *name =
+        mNamesById[(isInterfaceBlockVariable || !strcmp(mNamesById[id], "")) ? typeId : id];
+
     ASSERT(name != nullptr);
 
     // Handle builtins, which all start with "gl_".  Either the variable name could be an indication

@@ -193,6 +193,32 @@
 3589 VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.sample_qualifier.default_framebuffer = FAIL
 3589 VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.array_element.default_framebuffer = FAIL
 
+// Shader io block : failed by glslang errors
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.named_block.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.named_block.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.named_block.struct.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.named_block_explicit_location.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.named_block_explicit_location.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.named_block_explicit_location.struct.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.unnamed_block.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.unnamed_block.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.unnamed_block.struct.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.block_array.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.block_array.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.block_array.struct.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.named_block.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.named_block.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.named_block.struct.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.named_block_explicit_location.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.named_block_explicit_location.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.named_block_explicit_location.struct.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.unnamed_block.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.unnamed_block.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.unnamed_block.struct.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.block_array.basic_type.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.block_array.array.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.block_array.struct.mat3x2 = FAIL
+
 ////
 //// Android (i.e. Pixel*) Vulkan expectations
 ////

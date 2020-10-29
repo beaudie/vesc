@@ -99,7 +99,14 @@ bool RemoveInactiveInterfaceVariablesTraverser::visitDeclaration(Visit visit,
 
     if (type.isInterfaceBlock())
     {
-        removeDeclaration = !IsVariableActive(mInterfaceBlocks, type.getInterfaceBlock()->name());
+        // When a member has a explicit location, interface block should not be removed.
+        // If the member or interface would be removed, GetProgramResrouce could not return the
+        // location.
+        if (type.getQualifier() != EvqVertexOut && type.getQualifier() != EvqFragmentIn)
+        {
+            removeDeclaration =
+                !IsVariableActive(mInterfaceBlocks, type.getInterfaceBlock()->name());
+        }
     }
     else if (qualifier == EvqUniform)
     {

@@ -795,8 +795,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         ASSERT(!mVariablesCollected);
         CollectVariables(root, &mAttributes, &mOutputVariables, &mUniforms, &mInputVaryings,
                          &mOutputVaryings, &mSharedVariables, &mUniformBlocks,
-                         &mShaderStorageBlocks, &mInBlocks, mResources.HashFunction, &mSymbolTable,
-                         mShaderType, mExtensionBehavior);
+                         &mShaderStorageBlocks, &mInBlocks, &mOutBlocks, mResources.HashFunction,
+                         &mSymbolTable, mShaderType, mExtensionBehavior);
         collectInterfaceBlocks();
         mVariablesCollected = true;
         if (compileOptions & SH_USE_UNUSED_STANDARD_SHARED_BLOCKS)
@@ -1074,6 +1074,8 @@ void TCompiler::setResourceString()
         << ":OVR_multiview:" << mResources.OVR_multiview
         << ":EXT_YUV_target:" << mResources.EXT_YUV_target
         << ":EXT_geometry_shader:" << mResources.EXT_geometry_shader
+        << ":OES_shader_io_blocks:" << mResources.OES_shader_io_blocks
+        << ":EXT_shader_io_blocks:" << mResources.EXT_shader_io_blocks
         << ":EXT_gpu_shader5:" << mResources.EXT_gpu_shader5
         << ":OES_texture_3D:" << mResources.OES_texture_3D
         << ":MaxVertexOutputVectors:" << mResources.MaxVertexOutputVectors
@@ -1140,11 +1142,12 @@ void TCompiler::collectInterfaceBlocks()
 {
     ASSERT(mInterfaceBlocks.empty());
     mInterfaceBlocks.reserve(mUniformBlocks.size() + mShaderStorageBlocks.size() +
-                             mInBlocks.size());
+                             mInBlocks.size() + mOutBlocks.size());
     mInterfaceBlocks.insert(mInterfaceBlocks.end(), mUniformBlocks.begin(), mUniformBlocks.end());
     mInterfaceBlocks.insert(mInterfaceBlocks.end(), mShaderStorageBlocks.begin(),
                             mShaderStorageBlocks.end());
     mInterfaceBlocks.insert(mInterfaceBlocks.end(), mInBlocks.begin(), mInBlocks.end());
+    mInterfaceBlocks.insert(mInterfaceBlocks.end(), mOutBlocks.begin(), mOutBlocks.end());
 }
 
 bool TCompiler::emulatePrecisionIfNeeded(TIntermBlock *root,
@@ -1185,6 +1188,7 @@ void TCompiler::clearResults()
     mUniformBlocks.clear();
     mShaderStorageBlocks.clear();
     mInBlocks.clear();
+    mOutBlocks.clear();
     mVariablesCollected    = false;
     mGLPositionInitialized = false;
 

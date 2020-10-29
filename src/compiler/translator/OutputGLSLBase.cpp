@@ -1327,29 +1327,35 @@ void TOutputGLSLBase::declareInterfaceBlockLayout(const TInterfaceBlock *interfa
 
     out << "layout(";
 
-    switch (interfaceBlock->blockStorage())
+    const TQualifier &qualifier = interfaceBlock->fields().front()->type()->getQualifier();
+    // 4.4.5 Uniform and Shader Storage Block Layout Qualifiers in GLSL 4.5 spec.
+    // Layout qualifiers can be used for uniform and shader storage blocks,
+    // but not for non-block uniform declarations.
+    if (qualifier != EvqVertexOut && qualifier != EvqFragmentIn)
     {
-        case EbsUnspecified:
-        case EbsShared:
-            // Default block storage is shared.
-            out << "shared";
-            break;
+        switch (interfaceBlock->blockStorage())
+        {
+            case EbsUnspecified:
+            case EbsShared:
+                out << "shared";
+                break;
 
-        case EbsPacked:
-            out << "packed";
-            break;
+            case EbsPacked:
+                out << "packed";
+                break;
 
-        case EbsStd140:
-            out << "std140";
-            break;
+            case EbsStd140:
+                out << "std140";
+                break;
 
-        case EbsStd430:
-            out << "std430";
-            break;
+            case EbsStd430:
+                out << "std430";
+                break;
 
-        default:
-            UNREACHABLE();
-            break;
+            default:
+                UNREACHABLE();
+                break;
+        }
     }
 
     if (interfaceBlock->blockBinding() >= 0)
@@ -1359,6 +1365,32 @@ void TOutputGLSLBase::declareInterfaceBlockLayout(const TInterfaceBlock *interfa
     }
 
     out << ") ";
+}
+
+const char *getVariableInterpolation(TQualifier qualifier)
+{
+    switch (qualifier)
+    {
+        case EvqSmoothOut:
+            return "smooth out";
+        case EvqFlatOut:
+            return "flat out";
+        case EvqNoPerspectiveOut:
+            return "noperspective out";
+        case EvqCentroidOut:
+            return "centroid out";
+        case EvqSmoothIn:
+            return "smooth in";
+        case EvqFlatIn:
+            return "flat in";
+        case EvqNoPerspectiveIn:
+            return "noperspective in";
+        case EvqCentroidIn:
+            return "centroid in";
+        default:
+            break;
+    }
+    return nullptr;
 }
 
 void TOutputGLSLBase::declareInterfaceBlock(const TInterfaceBlock *interfaceBlock)
@@ -1371,10 +1403,18 @@ void TOutputGLSLBase::declareInterfaceBlock(const TInterfaceBlock *interfaceBloc
     {
         writeFieldLayoutQualifier(field);
         out << getMemoryQualifiers(*field->type());
-
         if (writeVariablePrecision(field->type()->getPrecision()))
             out << " ";
-        out << getTypeName(*field->type()) << " " << hashFieldName(field);
+
+        const char *qualifier = getVariableInterpolation(field->type()->getQualifier());
+        if (qualifier != nullptr)
+            out << qualifier << " ";
+
+        if (field->type()->getStruct())
+            out << hashName(field->type()->getStruct()) << " " << hashFieldName(field);
+        else
+            out << getTypeName(*field->type()) << " " << hashFieldName(field);
+
         if (field->type()->isArray())
             out << ArrayString(*field->type());
         out << ";\n";

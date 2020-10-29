@@ -63,6 +63,7 @@ class UniformLinker final : angle::NonCopyable
                     std::vector<VariableLocation> *uniformLocations);
 
   private:
+    bool validateGraphicsSSBOs(InfoLog &infoLog) const;
     bool validateGraphicsUniforms(InfoLog &infoLog) const;
 
     bool flattenUniformsAndCheckCapsForShader(Shader *shader,

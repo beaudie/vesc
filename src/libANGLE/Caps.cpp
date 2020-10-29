@@ -1038,6 +1038,8 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_sample_shading"] = enableableExtension(&Extensions::sampleShadingOES);
         map["GL_OES_shader_multisample_interpolation"] = enableableExtension(&Extensions::multisampleInterpolationOES);
         map["GL_OES_shader_image_atomic"] = enableableExtension(&Extensions::shaderImageAtomicOES);
+        map["GL_OES_shader_io_blocks"] = enableableExtension(&Extensions::shaderIoBlocksOES);
+        map["GL_EXT_shader_io_blocks"] = enableableExtension(&Extensions::shaderIoBlocksEXT);
         map["GL_NV_robustness_video_memory_purge"] = esOnlyExtension(&Extensions::robustnessVideoMemoryPurgeNV);
         map["GL_ANGLE_get_tex_level_parameter"] = enableableExtension(&Extensions::getTexLevelParameterANGLE);
         // GLES1 extensions

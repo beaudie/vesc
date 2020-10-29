@@ -40,11 +40,14 @@ ShaderVariable::ShaderVariable(GLenum typeIn)
       active(false),
       isRowMajorLayout(false),
       location(-1),
+      isImplicitLocation(false),
       binding(-1),
       imageUnitFormat(GL_NONE),
       offset(-1),
       readonly(false),
       writeonly(false),
+      isInstanceName(false),
+      memberVariableType(MemberVariableType::DEFAULT_VARIABLE),
       index(-1),
       interpolation(INTERPOLATION_SMOOTH),
       isInvariant(false),
@@ -72,11 +75,14 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       structName(other.structName),
       isRowMajorLayout(other.isRowMajorLayout),
       location(other.location),
+      isImplicitLocation(other.isImplicitLocation),
       binding(other.binding),
       imageUnitFormat(other.imageUnitFormat),
       offset(other.offset),
       readonly(other.readonly),
       writeonly(other.writeonly),
+      isInstanceName(other.isInstanceName),
+      memberVariableType(other.memberVariableType),
       index(other.index),
       interpolation(other.interpolation),
       isInvariant(other.isInvariant),
@@ -98,11 +104,14 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     isRowMajorLayout              = other.isRowMajorLayout;
     flattenedOffsetInParentArrays = other.flattenedOffsetInParentArrays;
     location                      = other.location;
+    isImplicitLocation            = other.isImplicitLocation;
     binding                       = other.binding;
     imageUnitFormat               = other.imageUnitFormat;
     offset                        = other.offset;
     readonly                      = other.readonly;
     writeonly                     = other.writeonly;
+    isInstanceName                = other.isInstanceName;
+    memberVariableType            = other.memberVariableType;
     index                         = other.index;
     interpolation                 = other.interpolation;
     isInvariant                   = other.isInvariant;
@@ -117,8 +126,10 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
         staticUse != other.staticUse || active != other.active ||
         fields.size() != other.fields.size() || structName != other.structName ||
         isRowMajorLayout != other.isRowMajorLayout || location != other.location ||
-        binding != other.binding || imageUnitFormat != other.imageUnitFormat ||
-        offset != other.offset || readonly != other.readonly || writeonly != other.writeonly ||
+        isImplicitLocation != other.isImplicitLocation || binding != other.binding ||
+        imageUnitFormat != other.imageUnitFormat || offset != other.offset ||
+        readonly != other.readonly || writeonly != other.writeonly ||
+        isInstanceName != other.isInstanceName || memberVariableType != other.memberVariableType ||
         index != other.index || interpolation != other.interpolation ||
         isInvariant != other.isInvariant || texelFetchStaticUse != other.texelFetchStaticUse)
     {

@@ -3846,8 +3846,22 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     }
     else if (typeQualifier.qualifier != EvqUniform && typeQualifier.qualifier != EvqBuffer)
     {
-        error(typeQualifier.line, "invalid qualifier: interface blocks must be uniform or buffer",
-              getQualifierString(typeQualifier.qualifier));
+        if (typeQualifier.qualifier == EvqFragmentIn || typeQualifier.qualifier == EvqVertexOut)
+        {
+            if (!isExtensionEnabled(TExtension::OES_shader_io_blocks) &&
+                !isExtensionEnabled(TExtension::EXT_shader_io_blocks))
+            {
+                error(typeQualifier.line,
+                      "invalid qualifier: interface blocks need shader io block extension",
+                      getQualifierString(typeQualifier.qualifier));
+            }
+        }
+        else
+        {
+            error(typeQualifier.line,
+                  "invalid qualifier: interface blocks must be uniform or buffer",
+                  getQualifierString(typeQualifier.qualifier));
+        }
     }
 
     if (typeQualifier.invariant)
@@ -3884,7 +3898,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                                           typeQualifier.layoutQualifier.earlyFragmentTests);
 
     TLayoutQualifier blockLayoutQualifier = typeQualifier.layoutQualifier;
-    checkLocationIsNotSpecified(typeQualifier.line, blockLayoutQualifier);
+    if (typeQualifier.qualifier != EvqFragmentIn && typeQualifier.qualifier != EvqVertexOut)
+    {
+        checkLocationIsNotSpecified(typeQualifier.line, blockLayoutQualifier);
+    }
     checkStd430IsForShaderStorageBlock(typeQualifier.line, blockLayoutQualifier.blockStorage,
                                        typeQualifier.qualifier);
 
@@ -3948,6 +3965,21 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                           getQualifierString(qualifier));
                 }
                 break;
+            // a member variable in io block may have different interpolation.
+            case EvqFlatIn:
+            case EvqFlatOut:
+            case EvqNoPerspectiveIn:
+            case EvqNoPerspectiveOut:
+            case EvqSmoothIn:
+            case EvqSmoothOut:
+            case EvqCentroidIn:
+            case EvqCentroidOut:
+            // it could be incomplete qualifier since interface block has either io or out.
+            case EvqSmooth:
+            case EvqFlat:
+            case EvqNoPerspective:
+            case EvqCentroid:
+                break;
             default:
                 error(field->line(), "invalid qualifier on interface block member",
                       getQualifierString(qualifier));
@@ -3961,7 +3993,6 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
         // check layout qualifiers
         TLayoutQualifier fieldLayoutQualifier = fieldType->getLayoutQualifier();
-        checkLocationIsNotSpecified(field->line(), fieldLayoutQualifier);
         checkIndexIsNotSpecified(field->line(), fieldLayoutQualifier.index);
         checkBindingIsNotSpecified(field->line(), fieldLayoutQualifier.binding);
 

@@ -102,7 +102,10 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     mResources.NV_EGL_stream_consumer_external       = extensions.eglStreamConsumerExternalNV;
     mResources.NV_shader_noperspective_interpolation = extensions.noperspectiveInterpolationNV;
     mResources.ARB_texture_rectangle                 = extensions.textureRectangle;
-    mResources.EXT_gpu_shader5                       = extensions.gpuShader5EXT;
+    mResources.OES_shader_io_blocks                  = extensions.shaderIoBlocksOES;
+    mResources.EXT_shader_io_blocks                  = extensions.shaderIoBlocksEXT;
+
+    mResources.EXT_gpu_shader5 = extensions.gpuShader5EXT;
     mResources.OES_texture_storage_multisample_2d_array =
         extensions.textureStorageMultisample2DArrayOES;
     mResources.OES_texture_3D                  = extensions.texture3DOES;

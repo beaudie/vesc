@@ -328,6 +328,10 @@ void RendererVk::ensureCapsInitialized() const
         vk::GetTextureSRGBOverrideSupport(this, mNativeExtensions);
     mNativeExtensions.textureSRGBDecode = vk::GetTextureSRGBDecodeSupport(this);
 
+    // Vulkan natively supports io interface block
+    mNativeExtensions.shaderIoBlocksOES = true;
+    mNativeExtensions.shaderIoBlocksEXT = true;
+
     mNativeExtensions.gpuShader5EXT = vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures);
 
     mNativeExtensions.textureFilteringCHROMIUM = getFeatures().supportsFilteringPrecision.enabled;

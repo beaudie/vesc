@@ -55,7 +55,15 @@ enum class BlockType
     // Required in OpenGL ES 3.1 extension GL_OES_shader_io_blocks.
     // TODO(jiawei.shao@intel.com): add BLOCK_OUT.
     // Also used in GLSL
+    BLOCK_OUT,
     BLOCK_IN
+};
+
+enum MemberVariableType
+{
+    DEFAULT_VARIABLE,
+    INTERFACE_MEMBER,
+    DUPLICATED_MEMBER
 };
 
 // Base class for all variables defined in shaders, including Varyings, Uniforms, etc
@@ -165,6 +173,7 @@ struct ShaderVariable
 
     // VariableWithLocation
     int location;
+    bool isImplicitLocation;
 
     // Uniform
     int binding;
@@ -177,6 +186,9 @@ struct ShaderVariable
     int offset;
     bool readonly;
     bool writeonly;
+    bool isInstanceName;
+
+    MemberVariableType memberVariableType;
 
     // OutputVariable
     // From EXT_blend_func_extended.

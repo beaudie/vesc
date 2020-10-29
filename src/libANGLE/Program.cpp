@@ -1765,19 +1765,58 @@ void ProgramState::updateProgramInterfaceInputs()
     {
         for (const sh::ShaderVariable &varying : shader->getInputVaryings())
         {
+            sh::ShaderVariable var = sh::ShaderVariable(varying);
+            if (varying.memberVariableType == sh::MemberVariableType::DUPLICATED_MEMBER)
+            {
+                continue;
+            }
+
             if (varying.isStruct())
             {
                 for (const sh::ShaderVariable &field : varying.fields)
                 {
                     sh::ShaderVariable fieldVarying = sh::ShaderVariable(field);
-                    fieldVarying.location           = varying.location;
-                    fieldVarying.name               = varying.name + "." + field.name;
-                    mExecutable->mProgramInputs.emplace_back(fieldVarying);
+                    if (fieldVarying.isStruct())
+                    {
+                        for (const sh::ShaderVariable &nested : fieldVarying.fields)
+                        {
+                            sh::ShaderVariable nestedVarying = sh::ShaderVariable(nested);
+                            if (nestedVarying.location < 0 && !fieldVarying.isImplicitLocation)
+                            {
+                                nestedVarying.location = fieldVarying.location;
+                            }
+                            if (nestedVarying.location < 0 && nested.isImplicitLocation)
+                            {
+                                nestedVarying.location = fieldVarying.location;
+                            }
+                            nestedVarying.name =
+                                varying.name + "." + field.name + "." + nested.name;
+                            mExecutable->mProgramInputs.emplace_back(nestedVarying);
+                        }
+                    }
+                    else
+                    {
+                        if (!field.location && field.isImplicitLocation)
+                        {
+                            fieldVarying.location = -1;
+                        }
+                        if (fieldVarying.location < 0 && !varying.isImplicitLocation)
+                        {
+                            fieldVarying.location = varying.location;
+                        }
+                        fieldVarying.name = varying.name + "." + field.name;
+                        mExecutable->mProgramInputs.emplace_back(fieldVarying);
+                    }
                 }
             }
             else
             {
-                mExecutable->mProgramInputs.emplace_back(varying);
+                if (varying.memberVariableType == sh::MemberVariableType::INTERFACE_MEMBER &&
+                    varying.isImplicitLocation)
+                {
+                    var.location = -1;
+                }
+                mExecutable->mProgramInputs.emplace_back(var);
             }
         }
     }
@@ -1804,19 +1843,57 @@ void ProgramState::updateProgramInterfaceOutputs()
     // Copy over each output varying, since the Shader could go away
     for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
     {
+        sh::ShaderVariable var = sh::ShaderVariable(varying);
+        if (varying.memberVariableType == sh::MemberVariableType::DUPLICATED_MEMBER)
+        {
+            continue;
+        }
+
         if (varying.isStruct())
         {
             for (const sh::ShaderVariable &field : varying.fields)
             {
                 sh::ShaderVariable fieldVarying = sh::ShaderVariable(field);
-                fieldVarying.location           = varying.location;
-                fieldVarying.name               = varying.name + "." + field.name;
-                mExecutable->mOutputVariables.emplace_back(fieldVarying);
+                if (fieldVarying.isStruct())
+                {
+                    for (const sh::ShaderVariable &nested : fieldVarying.fields)
+                    {
+                        sh::ShaderVariable nestedVarying = sh::ShaderVariable(nested);
+                        if (nestedVarying.location < 0 && !fieldVarying.isImplicitLocation)
+                        {
+                            nestedVarying.location = fieldVarying.location;
+                        }
+                        if (nestedVarying.location < 0 && nested.isImplicitLocation)
+                        {
+                            nestedVarying.location = fieldVarying.location;
+                        }
+                        nestedVarying.name = varying.name + "." + field.name + "." + nested.name;
+                        mExecutable->mOutputVariables.emplace_back(nestedVarying);
+                    }
+                }
+                else
+                {
+                    if (!fieldVarying.active && field.isImplicitLocation)
+                    {
+                        fieldVarying.location = -1;
+                    }
+                    if (fieldVarying.location < 0 && !varying.isImplicitLocation)
+                    {
+                        fieldVarying.location = varying.location;
+                    }
+                    fieldVarying.name = varying.name + "." + field.name;
+                    mExecutable->mOutputVariables.emplace_back(fieldVarying);
+                }
             }
         }
         else
         {
-            mExecutable->mOutputVariables.emplace_back(varying);
+            if (varying.memberVariableType == sh::MemberVariableType::INTERFACE_MEMBER &&
+                varying.isImplicitLocation)
+            {
+                var.location = -1;
+            }
+            mExecutable->mOutputVariables.emplace_back(var);
         }
     }
 }
@@ -3526,6 +3603,11 @@ void Program::getFilteredVaryings(const std::vector<sh::ShaderVariable> &varying
         {
             continue;
         }
+        // Instance name can be different but the size of array of struct should be matched.
+        if (varying.isInstanceName && !varying.isArray())
+        {
+            continue;
+        }
 
         filteredVaryingsOut->push_back(&varying);
     }
@@ -4093,11 +4175,12 @@ LinkMismatchError Program::LinkValidateVariablesBase(const sh::ShaderVariable &v
         return LinkMismatchError::FORMAT_MISMATCH;
     }
 
-    if (variable1.fields.size() != variable2.fields.size())
+    const unsigned int numMembers = static_cast<unsigned int>(variable1.fields.size());
+    if (numMembers != variable2.fields.size())
     {
         return LinkMismatchError::FIELD_NUMBER_MISMATCH;
     }
-    const unsigned int numMembers = static_cast<unsigned int>(variable1.fields.size());
+
     for (unsigned int memberIndex = 0; memberIndex < numMembers; memberIndex++)
     {
         const sh::ShaderVariable &member1 = variable1.fields[memberIndex];
@@ -4142,6 +4225,31 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::ShaderVariable &output
         // multi-vertex primitive. For the purposes of interface matching, such variables and blocks
         // are treated as though they were not declared as arrays.
         if (outputVarying.isArray())
+        {
+            return LinkMismatchError::ARRAY_SIZE_MISMATCH;
+        }
+    }
+
+    // [Shader Interface matching] Section 9.1 in the OpenGL ES Shading Language
+    // When linking shaders, the type of declared vertex outputs and fragment inputs with the same
+    // name must match, otherwise the link command will fail.
+    if (inputVarying.memberVariableType != sh::MemberVariableType::DEFAULT_VARIABLE &&
+        inputVarying.location == outputVarying.location && inputVarying.name != outputVarying.name)
+    {
+        return LinkMismatchError::FIELD_NAME_MISMATCH;
+    }
+
+    if (outputVarying.isArray())
+    {
+        if (!inputVarying.isArray())
+        {
+            return LinkMismatchError::TYPE_MISMATCH;
+        }
+        if (inputVarying.getOutermostArraySize() != outputVarying.getOutermostArraySize())
+        {
+            return LinkMismatchError::ARRAY_SIZE_MISMATCH;
+        }
+        if (inputVarying.getInnerArraySizeProduct() != outputVarying.getInnerArraySizeProduct())
         {
             return LinkMismatchError::ARRAY_SIZE_MISMATCH;
         }

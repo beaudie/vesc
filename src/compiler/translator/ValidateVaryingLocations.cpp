@@ -25,6 +25,35 @@ void error(const TIntermSymbol &symbol, const char *reason, TDiagnostics *diagno
     diagnostics->error(symbol.getLine(), reason, symbol.getName().data());
 }
 
+unsigned int GetLocationCount(const TStructure *structure)
+{
+    unsigned int totalLocation = 0;
+    for (const auto *field : structure->fields())
+    {
+        int field_size        = 0;
+        const auto *fieldType = field->type();
+
+        if (fieldType->getStruct() != nullptr)
+        {
+            field_size = GetLocationCount(fieldType->getStruct());
+        }
+        else if (fieldType->isArray())
+        {
+            field_size = fieldType->getArraySizeProduct();
+        }
+        else if (fieldType->isMatrix())
+        {
+            field_size = fieldType->getNominalSize();
+        }
+        else
+        {
+            field_size = fieldType->getSecondarySize();
+        }
+        totalLocation += field_size;
+    }
+    return totalLocation;
+}
+
 unsigned int GetLocationCount(const TIntermSymbol *varying, bool ignoreVaryingArraySize)
 {
     const auto &varyingType = varying->getType();
@@ -53,6 +82,38 @@ unsigned int GetLocationCount(const TIntermSymbol *varying, bool ignoreVaryingAr
         // (GL_EXT_geometry_shader SPEC issues(5))
         ASSERT(!varyingType.isArrayOfArrays());
         return varyingType.getSecondarySize();
+    }
+    else if (varyingType.isInterfaceBlock())
+    {
+        unsigned int totalLocation = 0;
+        for (const auto *field : varyingType.getInterfaceBlock()->fields())
+        {
+            int field_size        = 0;
+            const auto *fieldType = field->type();
+
+            if (fieldType->getStruct() != nullptr)
+            {
+                field_size = GetLocationCount(fieldType->getStruct());
+            }
+            else if (fieldType->isMatrix())
+            {
+                field_size = fieldType->getNominalSize() * fieldType->getArraySizeProduct();
+            }
+            else if (fieldType->isArray())
+            {
+                field_size = fieldType->getArraySizeProduct();
+            }
+            else
+            {
+                field_size = fieldType->getLocationCount();
+            }
+            totalLocation += field_size;
+        }
+        if (varyingType.isArray())
+        {
+            totalLocation *= varyingType.getArraySizeProduct();
+        }
+        return totalLocation;
     }
     else if (varyingType.isMatrix())
     {

@@ -685,6 +685,10 @@ bool UniformLinker::link(const Caps &caps,
         {
             return false;
         }
+        if (!validateGraphicsSSBOs(infoLog))
+        {
+            return false;
+        }
     }
 
     // Flatten the uniforms list (nested fields) into a simple list (no nesting).
@@ -711,6 +715,7 @@ bool UniformLinker::validateGraphicsUniforms(InfoLog &infoLog) const
 {
     // Check that uniforms defined in the graphics shaders are identical
     std::map<std::string, ShaderUniform> linkedUniforms;
+    std::map<std::string, sh::InterfaceBlock> vertexSSBOs;
 
     for (const ShaderType shaderType : kAllGraphicsShaderTypes)
     {
@@ -732,6 +737,56 @@ bool UniformLinker::validateGraphicsUniforms(InfoLog &infoLog) const
                                                        &linkedUniforms, infoLog))
                 {
                     return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool UniformLinker::validateGraphicsSSBOs(InfoLog &infoLog) const
+{
+    // Check that uniforms defined in the graphics shaders are identical
+    std::map<std::string, sh::InterfaceBlock> vertexSSBOs;
+
+    for (const ShaderType shaderType : kAllGraphicsShaderTypes)
+    {
+        Shader *currentShader = mState.getAttachedShader(shaderType);
+        if (currentShader)
+        {
+            if (shaderType == ShaderType::Vertex)
+            {
+                auto currentSSBOs = currentShader->getShaderStorageBlocks();
+                if (!currentSSBOs.size())
+                {
+                    return true;
+                }
+
+                for (const sh::InterfaceBlock &ssbo : currentSSBOs)
+                {
+                    vertexSSBOs[ssbo.name] = ssbo;
+                }
+            }
+            else
+            {
+                auto currentSSBOs = currentShader->getShaderStorageBlocks();
+                if (!currentSSBOs.size())
+                {
+                    return true;
+                }
+                if (currentSSBOs.size() != vertexSSBOs.size())
+                {
+                    return false;
+                }
+
+                ASSERT(vertexSSBOs.size() == 1 && currentSSBOs.size() == 1);
+                for (auto ssbo : currentSSBOs)
+                {
+                    if (vertexSSBOs.find(ssbo.name) == vertexSSBOs.end())
+                    {
+                        return false;
+                    }
                 }
             }
         }

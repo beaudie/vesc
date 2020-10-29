@@ -167,6 +167,8 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->EXT_YUV_target                              = 0;
     resources->EXT_geometry_shader                         = 0;
     resources->EXT_gpu_shader5                             = 0;
+    resources->OES_shader_io_blocks                        = 0;
+    resources->EXT_shader_io_blocks                        = 0;
     resources->EXT_shader_non_constant_global_initializers = 0;
     resources->NV_shader_noperspective_interpolation       = 0;
     resources->OES_texture_storage_multisample_2d_array    = 0;
@@ -463,6 +465,26 @@ const std::vector<ShaderVariable> *GetOutputVariables(const ShHandle handle)
 const std::vector<InterfaceBlock> *GetInterfaceBlocks(const ShHandle handle)
 {
     return GetShaderVariables<InterfaceBlock>(handle);
+}
+
+const std::vector<InterfaceBlock> *GetInBlocks(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    if (!compiler)
+    {
+        return nullptr;
+    }
+    return &compiler->getInBlocks();
+}
+
+const std::vector<InterfaceBlock> *GetOutBlocks(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    if (!compiler)
+    {
+        return nullptr;
+    }
+    return &compiler->getOutBlocks();
 }
 
 const std::vector<InterfaceBlock> *GetUniformBlocks(const ShHandle handle)

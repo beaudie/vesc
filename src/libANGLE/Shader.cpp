@@ -310,6 +310,8 @@ void Shader::compile(const Context *context)
     mState.mOutputVaryings.clear();
     mState.mUniforms.clear();
     mState.mUniformBlocks.clear();
+    mState.mInBlocks.clear();
+    mState.mOutBlocks.clear();
     mState.mShaderStorageBlocks.clear();
     mState.mActiveAttributes.clear();
     mState.mActiveOutputVariables.clear();
@@ -431,6 +433,8 @@ void Shader::resolveCompile()
 
     mState.mUniforms            = GetShaderVariables(sh::GetUniforms(compilerHandle));
     mState.mUniformBlocks       = GetShaderVariables(sh::GetUniformBlocks(compilerHandle));
+    mState.mInBlocks            = GetShaderVariables(sh::GetInBlocks(compilerHandle));
+    mState.mOutBlocks           = GetShaderVariables(sh::GetOutBlocks(compilerHandle));
     mState.mShaderStorageBlocks = GetShaderVariables(sh::GetShaderStorageBlocks(compilerHandle));
 
     switch (mState.mShaderType)

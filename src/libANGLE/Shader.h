@@ -74,6 +74,8 @@ class ShaderState final : angle::NonCopyable
     const std::vector<sh::ShaderVariable> &getOutputVaryings() const { return mOutputVaryings; }
     const std::vector<sh::ShaderVariable> &getUniforms() const { return mUniforms; }
     const std::vector<sh::InterfaceBlock> &getUniformBlocks() const { return mUniformBlocks; }
+    const std::vector<sh::InterfaceBlock> &getInBlocks() const { return mInBlocks; }
+    const std::vector<sh::InterfaceBlock> &getOutBlocks() const { return mOutBlocks; }
     const std::vector<sh::InterfaceBlock> &getShaderStorageBlocks() const
     {
         return mShaderStorageBlocks;
@@ -126,6 +128,8 @@ class ShaderState final : angle::NonCopyable
     std::vector<sh::ShaderVariable> mUniforms;
     std::vector<sh::InterfaceBlock> mUniformBlocks;
     std::vector<sh::InterfaceBlock> mShaderStorageBlocks;
+    std::vector<sh::InterfaceBlock> mInBlocks;
+    std::vector<sh::InterfaceBlock> mOutBlocks;
     std::vector<sh::ShaderVariable> mAllAttributes;
     std::vector<sh::ShaderVariable> mActiveAttributes;
     std::vector<sh::ShaderVariable> mActiveOutputVariables;

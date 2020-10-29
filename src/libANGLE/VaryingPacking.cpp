@@ -500,7 +500,6 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
                 {
                     packUserVarying(ref, &uniqueFullNames);
                 }
-                continue;
             }
         }
 

@@ -618,6 +618,44 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
     }
 }
 
+InterpolationType GetMemberInterpolationType(TQualifier qualifier)
+{
+    switch (qualifier)
+    {
+        case EvqFlat:
+        case EvqFlatIn:
+        case EvqFlatOut:
+            return INTERPOLATION_FLAT;
+
+        case EvqNoPerspective:
+        case EvqNoPerspectiveIn:
+        case EvqNoPerspectiveOut:
+            return INTERPOLATION_NOPERSPECTIVE;
+
+        case EvqSmooth:
+        case EvqSmoothIn:
+        case EvqSmoothOut:
+        case EvqVertexOut:
+        case EvqFragmentIn:
+        case EvqVaryingIn:
+        case EvqVaryingOut:
+        case EvqGeometryIn:
+        case EvqGeometryOut:
+            return INTERPOLATION_SMOOTH;
+
+        case EvqCentroid:
+        case EvqCentroidIn:
+        case EvqCentroidOut:
+            return INTERPOLATION_CENTROID;
+
+        default:
+            UNREACHABLE();
+#if !UNREACHABLE_IS_NORETURN
+            return INTERPOLATION_SMOOTH;
+#endif
+    }
+}
+
 TType GetShaderVariableBasicType(const sh::ShaderVariable &var)
 {
     switch (var.type)
