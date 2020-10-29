@@ -772,9 +772,10 @@ namespace vk
 enum class SpecializationConstantId : uint32_t
 {
     LineRasterEmulation = 0,
+    SurfaceRotation     = 1,
 
-    InvalidEnum = 1,
-    EnumCount   = 1,
+    InvalidEnum = 2,
+    EnumCount   = InvalidEnum,
 };
 
 // Interface block name containing the aggregate default uniforms
