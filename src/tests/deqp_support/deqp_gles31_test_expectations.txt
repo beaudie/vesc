@@ -193,11 +193,6 @@
 3589 VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.sample_qualifier.default_framebuffer = FAIL
 3589 VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.array_element.default_framebuffer = FAIL
 
-// Cannot ignore SampleMask when the target is a single-sampled target:
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.default_framebuffer = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.singlesample_texture = FAIL
-3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.singlesample_rbo = FAIL
-
 ////
 //// AMD Vulkan expectations
 ////
