@@ -32,11 +32,31 @@ static_assert(EGL_DONT_CARE == -1, "Unexpected value for EGL_DONT_CARE");
 
 namespace tcu
 {
-ANGLEPlatform::ANGLEPlatform(angle::LogErrorFunc logErrorFunc)
+ANGLEPlatform::ANGLEPlatform(angle::LogErrorFunc logErrorFunc, uint32_t preRotation)
 {
     angle::SetLowPriorityProcess();
 
     mPlatformMethods.logError = logErrorFunc;
+
+    // Create pre-rotation attributes.
+    switch (preRotation)
+    {
+        case 90:
+            mPreRotationFeatures.push_back("emulated_prerotation_90");
+            break;
+        case 180:
+            mPreRotationFeatures.push_back("emulated_prerotation_180");
+            break;
+        case 270:
+            mPreRotationFeatures.push_back("emulated_prerotation_270");
+            break;
+        default:
+            break;
+    }
+    if (!mPreRotationFeatures.empty())
+    {
+        mPreRotationFeatures.push_back(nullptr);
+    }
 
 #if (DE_OS == DE_OS_WIN32)
     {
@@ -174,18 +194,24 @@ std::vector<eglw::EGLAttrib> ANGLEPlatform::initAttribs(eglw::EGLAttrib type,
         attribs.push_back(reinterpret_cast<eglw::EGLAttrib>(&mPlatformMethods));
     }
 
+    if (!mPreRotationFeatures.empty())
+    {
+        attribs.push_back(EGL_FEATURE_OVERRIDES_ENABLED_ANGLE);
+        attribs.push_back(reinterpret_cast<EGLAttrib>(mPreRotationFeatures.data()));
+    }
+
     attribs.push_back(EGL_NONE);
     return attribs;
 }
 }  // namespace tcu
 
 // Create platform
-tcu::Platform *CreateANGLEPlatform(angle::LogErrorFunc logErrorFunc)
+tcu::Platform *CreateANGLEPlatform(angle::LogErrorFunc logErrorFunc, uint32_t preRotation)
 {
-    return new tcu::ANGLEPlatform(logErrorFunc);
+    return new tcu::ANGLEPlatform(logErrorFunc, preRotation);
 }
 
 tcu::Platform *createPlatform()
 {
-    return CreateANGLEPlatform(nullptr);
+    return CreateANGLEPlatform(nullptr, 0);
 }

@@ -77,6 +77,10 @@ enum Token
     kConfigPixel2,
     // GPU devices
     kConfigNVIDIAQuadroP400,
+    // PreRotation
+    kConfigPreRotate90,
+    kConfigPreRotate180,
+    kConfigPreRotate270,
     // expectation
     kExpectationPass,
     kExpectationFail,
@@ -167,6 +171,9 @@ constexpr TokenInfo kTokenData[kNumberOfTokens] = {
     {"nexus5x", GPUTestConfig::kConditionNexus5X},
     {"pixel2orxl", GPUTestConfig::kConditionPixel2OrXL},
     {"quadrop400", GPUTestConfig::kConditionNVIDIAQuadroP400},
+    {"prerotate90", GPUTestConfig::kConditionPreRotate90},
+    {"prerotate180", GPUTestConfig::kConditionPreRotate180},
+    {"prerotate270", GPUTestConfig::kConditionPreRotate270},
     {"pass", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestPass},
     {"fail", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestFail},
     {"flaky", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestFlaky},
@@ -438,6 +445,9 @@ bool GPUTestExpectationsParser::parseLine(const GPUTestConfig &config,
             case kConfigNexus5X:
             case kConfigPixel2:
             case kConfigNVIDIAQuadroP400:
+            case kConfigPreRotate90:
+            case kConfigPreRotate180:
+            case kConfigPreRotate270:
                 // MODIFIERS, check each condition and add accordingly.
                 if (stage != kLineParserConfigs && stage != kLineParserBugID)
                 {
