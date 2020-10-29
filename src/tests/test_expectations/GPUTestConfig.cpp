@@ -567,10 +567,14 @@ GPUTestConfig::GPUTestConfig()
     mConditions[kConditionNexus5X]          = IsNexus5X();
     mConditions[kConditionPixel2OrXL]       = IsPixel2() || IsPixel2XL();
     mConditions[kConditionNVIDIAQuadroP400] = IsNVIDIAQuadroP400();
+
+    mConditions[kConditionPreRotate90]  = false;
+    mConditions[kConditionPreRotate180] = false;
+    mConditions[kConditionPreRotate270] = false;
 }
 
 // If the constructor is passed an API, load those conditions as well
-GPUTestConfig::GPUTestConfig(const API &api) : GPUTestConfig()
+GPUTestConfig::GPUTestConfig(const API &api, uint32_t preRotation) : GPUTestConfig()
 {
     mConditions[kConditionD3D9]        = IsD3D9(api);
     mConditions[kConditionD3D11]       = IsD3D11(api);
@@ -579,6 +583,21 @@ GPUTestConfig::GPUTestConfig(const API &api) : GPUTestConfig()
     mConditions[kConditionVulkan]      = IsVulkan(api);
     mConditions[kConditionSwiftShader] = IsSwiftShader(api);
     mConditions[kConditionMetal]       = IsMetal(api);
+
+    switch (preRotation)
+    {
+        case 90:
+            mConditions[kConditionPreRotate90] = true;
+            break;
+        case 180:
+            mConditions[kConditionPreRotate180] = true;
+            break;
+        case 270:
+            mConditions[kConditionPreRotate270] = true;
+            break;
+        default:
+            break;
+    }
 }
 
 // Return a const reference to the list of all pre-calculated conditions.
