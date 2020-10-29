@@ -999,6 +999,10 @@ class ContextVk : public ContextImpl, public vk::Context
 
     void outputCumulativePerfCounters();
 
+    void updateSampleShadingWithRasterizationSamples(const gl::State &glState,
+                                                     const uint32_t rasterizationSamples);
+    void updateRasterizationSamples(const gl::State &glState, const uint32_t rasterizationSamples);
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
