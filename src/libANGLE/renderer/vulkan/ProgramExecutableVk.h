@@ -66,6 +66,7 @@ class ProgramInfo final : angle::NonCopyable
                               const gl::ShaderType shaderType,
                               const ShaderInfo &shaderInfo,
                               ProgramTransformOptionBits optionBits,
+                              SurfaceRotation surfaceRotation,
                               ProgramExecutableVk *executableVk);
     void release(ContextVk *contextVk);
 
@@ -119,9 +120,13 @@ class ProgramExecutableVk
     const gl::ProgramExecutable &getGlExecutable();
 
     ProgramInfo &getGraphicsDefaultProgramInfo() { return mGraphicsProgramInfos[0]; }
-    ProgramInfo &getGraphicsProgramInfo(ProgramTransformOptionBits optionBits)
+    ProgramInfo &getGraphicsProgramInfo(ProgramTransformOptionBits optionBits,
+                                        SurfaceRotation surfaceRotation)
     {
-        return mGraphicsProgramInfos[optionBits.to_ulong()];
+        return mGraphicsProgramInfos[optionBits.to_ulong() +
+                                     static_cast<int>(surfaceRotation) *
+                                         static_cast<int>(
+                                             ProgramTransformOption::PermutationCount)];
     }
     ProgramInfo &getComputeProgramInfo() { return mComputeProgramInfo; }
     vk::BufferSerial getCurrentDefaultUniformBufferSerial() const
@@ -253,7 +258,10 @@ class ProgramExecutableVk
     // since that's slow to calculate.
     ShaderMapInterfaceVariableInfoMap mVariableInfoMap;
 
-    ProgramInfo mGraphicsProgramInfos[static_cast<int>(ProgramTransformOption::PermutationCount)];
+    // We store all permutations of surface rotation and transformed sprv programs here. We may need
+    // some LRU algorithm to free least used programs to reduce the number of programs.
+    ProgramInfo mGraphicsProgramInfos[static_cast<int>(ProgramTransformOption::PermutationCount) *
+                                      static_cast<int>(SurfaceRotation::EnumCount)];
     ProgramInfo mComputeProgramInfo;
 
     ProgramTransformOptionBits mTransformOptionBits;

@@ -137,6 +137,7 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                        const gl::ShaderType shaderType,
                                        const ShaderInfo &shaderInfo,
                                        ProgramTransformOptionBits optionBits,
+                                       SurfaceRotation surfaceRotation,
                                        ProgramExecutableVk *executableVk)
 {
     const ShaderMapInterfaceVariableInfoMap &variableInfoMap =
@@ -158,11 +159,11 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
 
     mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
 
-    if (optionBits[ProgramTransformOption::EnableLineRasterEmulation])
-    {
-        mProgramHelper.enableSpecializationConstant(
-            sh::vk::SpecializationConstantId::LineRasterEmulation);
-    }
+    mProgramHelper.setSpecializationConstant(
+        sh::vk::SpecializationConstantId::LineRasterEmulation,
+        optionBits[ProgramTransformOption::EnableLineRasterEmulation] ? true : false);
+    mProgramHelper.setSpecializationConstant(sh::vk::SpecializationConstantId::SurfaceRotation,
+                                             static_cast<uint32_t>(surfaceRotation));
 
     return angle::Result::Continue;
 }
@@ -668,7 +669,8 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     const gl::State &glState = contextVk->getState();
     mTransformOptionBits[ProgramTransformOption::EnableLineRasterEmulation] =
         contextVk->isBresenhamEmulationEnabled(mode);
-    ProgramInfo &programInfo         = getGraphicsProgramInfo(mTransformOptionBits);
+    ProgramInfo &programInfo =
+        getGraphicsProgramInfo(mTransformOptionBits, desc.getSurfaceRotation());
     RendererVk *renderer             = contextVk->getRenderer();
     vk::PipelineCache *pipelineCache = nullptr;
 
@@ -681,7 +683,8 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
         if (programVk)
         {
             ANGLE_TRY(programVk->initGraphicsShaderProgram(
-                contextVk, shaderType, mTransformOptionBits, &programInfo, this));
+                contextVk, shaderType, mTransformOptionBits, desc.getSurfaceRotation(),
+                &programInfo, this));
         }
     }
 
