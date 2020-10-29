@@ -128,7 +128,7 @@ void EarlyAdjustFlipYForPreRotation(SurfaceRotation blitAngleIn,
 
 void AdjustBlitAreaForPreRotation(SurfaceRotation framebufferAngle,
                                   const gl::Rectangle &blitAreaIn,
-                                  gl::Rectangle framebufferDimensions,
+                                  const gl::Rectangle &framebufferDimensions,
                                   gl::Rectangle *blitAreaOut)
 {
     switch (framebufferAngle)
@@ -258,6 +258,40 @@ void AdjustBlitResolveParametersForPreRotation(SurfaceRotation framebufferAngle,
     }
 }
 
+void AdjustInvalidateAreaForPreRotation(SurfaceRotation framebufferAngle,
+                                        const gl::Rectangle &areaIn,
+                                        const gl::Rectangle &framebufferDimensions,
+                                        gl::Rectangle *areaOut)
+{
+    switch (framebufferAngle)
+    {
+        case SurfaceRotation::Identity:
+            *areaOut = areaIn;
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            areaOut->x      = areaIn.y;
+            areaOut->y      = areaIn.x;
+            areaOut->width  = areaIn.height;
+            areaOut->height = areaIn.width;
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            areaOut->x      = framebufferDimensions.width - areaIn.x - areaIn.width;
+            areaOut->y      = framebufferDimensions.height - areaIn.y - areaIn.height;
+            areaOut->width  = areaIn.width;
+            areaOut->height = areaIn.height;
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            areaOut->x      = framebufferDimensions.height - areaIn.y - areaIn.height;
+            areaOut->y      = framebufferDimensions.width - areaIn.x - areaIn.width;
+            areaOut->width  = areaIn.height;
+            areaOut->height = areaIn.width;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
 bool HasResolveAttachment(const gl::AttachmentArray<RenderTargetVk *> &colorRenderTargets,
                           const gl::DrawBufferMask &getEnabledDrawBuffers)
 {
@@ -359,9 +393,13 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+    gl::Rectangle rotatedInvalidateArea;
+    AdjustInvalidateAreaForPreRotation(contextVk->getRotationDrawFramebuffer(), area,
+                                       getNonRotatedCompleteRenderArea(), &rotatedInvalidateArea);
+
     // If invalidateSub() covers the whole framebuffer area, make it behave as invalidate().
     const gl::Rectangle completeRenderArea = getRotatedCompleteRenderArea(contextVk);
-    if (area.encloses(completeRenderArea))
+    if (rotatedInvalidateArea.encloses(completeRenderArea))
     {
         return invalidateImpl(contextVk, count, attachments, false);
     }
@@ -372,7 +410,8 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
     // glCopyTex[Sub]Image, shader storage image, etc).
     ANGLE_TRY(flushDeferredClears(contextVk, completeRenderArea));
 
-    if (area.encloses(contextVk->getStartedRenderPassCommands().getRenderArea()))
+    if (contextVk->hasStartedRenderPass() &&
+        rotatedInvalidateArea.encloses(contextVk->getStartedRenderPassCommands().getRenderArea()))
     {
         // Because the render pass's render area is within the invalidated area, it is fine for
         // invalidateImpl() to use a storeOp of DONT_CARE (i.e. fine to not store the contents of
