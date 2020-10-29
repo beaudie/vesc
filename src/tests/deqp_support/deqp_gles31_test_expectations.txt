@@ -193,6 +193,52 @@
 3589 VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.sample_qualifier.default_framebuffer = FAIL
 3589 VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.array_element.default_framebuffer = FAIL
 
+// Cannot support a non-const indexing for gl_SampleMask or gl_SampleMaskIn variables:
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_*.multisample_*_1 = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_*.multisample_*_2 = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_*.multisample_*_4 = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_*.multisample_*_8 = FAIL
+
+// Cannot ignore multisampling-related operations when the target is a single-sampled target:
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_*.default_framebuffer = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_*.singlesample_texture = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.discard_half_per_*.singlesample_rbo = FAIL
+
+// Cannot ignore SampleShadingEnable when the target is a single-sampled target:
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.default_framebuffer = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.singlesample_texture = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.singlesample_rbo = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit_count_per_two_samples.default_framebuffer = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit_count_per_two_samples.singlesample_texture = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit_count_per_two_samples.singlesample_rbo = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bits_unique_per_two_samples.singlesample_texture = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.*_per_two_samples.default_framebuffer = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.*_per_two_samples.singlesample_texture = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.*_per_two_samples.singlesample_rbo = FAIL
+
+// Cannot ignore SampleMask when the target is a single-sampled target:
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.default_framebuffer = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.singlesample_texture = FAIL
+3588 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask.inverse_per_*.singlesample_rbo = FAIL
+
+////
+//// AMD Vulkan expectations
+////
+
+// Cannot support the per-sample shading when gl_SampleID or gl_SamplePosition:
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit*_per_sample.multisample_*_1 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit*_per_sample.multisample_*_2 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit*_per_sample.multisample_*_4 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit*_per_sample.multisample_*_8 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit_count_per_two_samples.multisample_*_4 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bit_count_per_two_samples.multisample_*_8 = FAIL
+
+// Cannot support a seperate set of fragment shader input when per-sample shading:
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.multisample_*_1 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.multisample_*_2 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.multisample_*_4 = FAIL
+3588 VULKAN AMD : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.multisample_*_8 = FAIL
+
 ////
 //// Android (i.e. Pixel*) Vulkan expectations
 ////

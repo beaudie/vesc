@@ -70,7 +70,11 @@ struct GraphicsDriverUniforms
 
     uint32_t xfbActiveUnpaused;
     uint32_t xfbVerticesPerDraw;
-    std::array<int32_t, 3> padding;
+
+    // Used to replace gl_NumSamples. Because gl_NumSamples cannot be recognized in SPIR-V.
+    int32_t numSamples;
+
+    std::array<int32_t, 2> padding;
 
     std::array<int32_t, 4> xfbBufferOffsets;
 
@@ -3980,6 +3984,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
     float depthRangeFar  = mState.getFarPlane();
     float depthRangeDiff = depthRangeFar - depthRangeNear;
 
+    int32_t numSamples = mDrawFramebuffer->getSamples();
+
     // Copy and flush to the device.
     GraphicsDriverUniforms *driverUniforms = reinterpret_cast<GraphicsDriverUniforms *>(ptr);
     *driverUniforms                        = {
@@ -3991,6 +3997,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
         mState.getEnabledClipDistances().bits(),
         xfbActiveUnpaused,
         mXfbVertexCountPerInstance,
+        numSamples,
         {},
         {},
         {},

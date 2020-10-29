@@ -1091,9 +1091,11 @@ void TCompiler::setResourceString()
         << ":EXT_texture_cube_map_array:" << mResources.EXT_texture_cube_map_array
         << ":EXT_shadow_samplers:" << mResources.EXT_shadow_samplers
         << ":OES_shader_multisample_interpolation:" << mResources.OES_shader_multisample_interpolation
+        << ":OES_sample_variables:" << mResources.OES_sample_variables
         << ":MinProgramTextureGatherOffset:" << mResources.MinProgramTextureGatherOffset
         << ":MaxProgramTextureGatherOffset:" << mResources.MaxProgramTextureGatherOffset
         << ":MaxImageUnits:" << mResources.MaxImageUnits
+        << ":MaxSamples:" << mResources.MaxSamples
         << ":MaxVertexImageUniforms:" << mResources.MaxVertexImageUniforms
         << ":MaxFragmentImageUniforms:" << mResources.MaxFragmentImageUniforms
         << ":MaxComputeImageUniforms:" << mResources.MaxComputeImageUniforms
