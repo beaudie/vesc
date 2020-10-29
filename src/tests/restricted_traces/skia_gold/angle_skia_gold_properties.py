@@ -4,6 +4,7 @@
 """ANGLE implementation of //build/skia_gold_common/skia_gold_properties.py."""
 
 import subprocess
+import sys
 from skia_gold_common import skia_gold_properties
 
 
