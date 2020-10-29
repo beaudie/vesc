@@ -15,6 +15,7 @@
 #include <fstream>
 #include <sstream>
 
+#include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
 
@@ -238,6 +239,17 @@ bool ReplaceSubstring(std::string *str,
 std::vector<std::string> GetStringsFromEnvironmentVar(const char *varName, const char *separator)
 {
     std::string environment = GetEnvironmentVar(varName);
+    return SplitString(environment, separator, TRIM_WHITESPACE, SPLIT_WANT_NONEMPTY);
+}
+
+std::vector<std::string> GetStringsFromAndroidProperty(const char *varName,
+                                                       const char *propertyName,
+                                                       const char *separator)
+{
+    WARN() << "Property: " << propertyName;
+    WARN() << "varName: " << varName;
+    std::string environment = GetEnvironmentVarFromAndroidProperty(varName, propertyName);
+    WARN() << "value: " << environment;
     return SplitString(environment, separator, TRIM_WHITESPACE, SPLIT_WANT_NONEMPTY);
 }
 }  // namespace angle
