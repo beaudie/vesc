@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "d5726b6a94502ab787506adff19284ee",
+    "85d1082c73aedfcdf60d2551b6e00087",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "2b5d6505d6a8b6f3bbfbad2c8405a89d",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -19,6 +19,8 @@
     "0d569cbab0adf4df1027f671c65f7bff",
   "src/tests/restricted_traces/fate_grand_order.tar.gz.sha1":
     "091d008d6d38d2cc8a6d31e3be417063",
+  "src/tests/restricted_traces/fifa_mobile.tar.gz.sha1":
+    "c1deaabd756b24677aa48aff56f2d331",
   "src/tests/restricted_traces/free_fire.tar.gz.sha1":
     "a4e7aba54fb48524bb4f3022623bc7cd",
   "src/tests/restricted_traces/gen_restricted_traces.py":
@@ -38,13 +40,13 @@
   "src/tests/restricted_traces/real_commando_secret_mission.tar.gz.sha1":
     "4b484dd9c53a79100ec13b6f1c86040d",
   "src/tests/restricted_traces/restricted_traces.json":
-    "409567d34961d31f9624ba43783fe2f3",
+    "393fa6110be3a710ae554b19df1d3a18",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "47e925e155579d8293858bee531aa3e3",
+    "fa2d53b92cd68fcebca6dd6ee645c483",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "217b5f08593e80c6d3beb9e8a88055cd",
+    "afb16599d190b01e0ba0efa8055c307f",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "599c5bd34872a7ca9e70adb1d5bcd7ba",
+    "fd69ab9d0268fc59f8a8009b4128b50f",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
     "0a08ce3df88cb358ccac3ac63ba04955",
   "src/tests/restricted_traces/trex_200.tar.gz.sha1":
