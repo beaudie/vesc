@@ -34,6 +34,7 @@ reflect the reality of the situation.  The expected format for every line in the
     NEXUS5X PIXEL2ORXL
     QUADROP400
     SWIFTSHADER
+    PREROTATE90 PREROTATE180 PREROTATE270
 
 `TEST_NAME` can be a specific test name, or set of test names using `'*'` as wildcard anywhere in
 the name.  Examples:
