@@ -148,10 +148,12 @@ class ProgramVk : public ProgramImpl
     ANGLE_INLINE angle::Result initGraphicsShaderProgram(ContextVk *contextVk,
                                                          const gl::ShaderType shaderType,
                                                          ProgramTransformOptionBits optionBits,
+                                                         SurfaceRotation surfaceRotation,
                                                          ProgramInfo *programInfo,
                                                          ProgramExecutableVk *executableVk)
     {
-        return initProgram(contextVk, shaderType, optionBits, programInfo, executableVk);
+        return initProgram(contextVk, shaderType, optionBits, surfaceRotation, programInfo,
+                           executableVk);
     }
 
     ANGLE_INLINE angle::Result initComputeProgram(ContextVk *contextVk,
@@ -159,8 +161,8 @@ class ProgramVk : public ProgramImpl
                                                   ProgramExecutableVk *executableVk)
     {
         ProgramTransformOptionBits optionBits;
-        return initProgram(contextVk, gl::ShaderType::Compute, optionBits, programInfo,
-                           executableVk);
+        return initProgram(contextVk, gl::ShaderType::Compute, optionBits,
+                           SurfaceRotation::Identity, programInfo, executableVk);
     }
 
     GlslangProgramInterfaceInfo &getGlslangProgramInterfaceInfo()
@@ -193,6 +195,7 @@ class ProgramVk : public ProgramImpl
     ANGLE_INLINE angle::Result initProgram(ContextVk *contextVk,
                                            const gl::ShaderType shaderType,
                                            ProgramTransformOptionBits optionBits,
+                                           SurfaceRotation surfaceRotation,
                                            ProgramInfo *programInfo,
                                            ProgramExecutableVk *executableVk)
     {
@@ -203,7 +206,7 @@ class ProgramVk : public ProgramImpl
         if (!programInfo->valid(shaderType))
         {
             ANGLE_TRY(programInfo->initProgram(contextVk, shaderType, mOriginalShaderInfo,
-                                               optionBits, executableVk));
+                                               optionBits, surfaceRotation, executableVk));
         }
         ASSERT(programInfo->valid(shaderType));
 

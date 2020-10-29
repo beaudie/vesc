@@ -2140,7 +2140,7 @@ class ShaderProgramHelper : angle::NonCopyable
     ShaderAndSerial &getShader(gl::ShaderType shaderType) { return mShaders[shaderType].get(); }
 
     void setShader(gl::ShaderType shaderType, RefCounted<ShaderAndSerial> *shader);
-    void enableSpecializationConstant(sh::vk::SpecializationConstantId id);
+    void setSpecializationConstant(sh::vk::SpecializationConstantId id, uint32_t value);
 
     // For getting a Pipeline and from the pipeline cache.
     ANGLE_INLINE angle::Result getGraphicsPipeline(
@@ -2185,7 +2185,7 @@ class ShaderProgramHelper : angle::NonCopyable
     PipelineAndSerial mComputePipeline;
 
     // Specialization constants, currently only used by the graphics queue.
-    SpecializationConstantBitSet mSpecializationConstants;
+    SpecializationConstant mSpecializationConstants;
 };
 
 // Tracks current handle allocation counts in the back-end. Useful for debugging and profiling.

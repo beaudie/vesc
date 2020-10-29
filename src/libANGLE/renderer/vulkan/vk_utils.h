@@ -678,9 +678,11 @@ class Recycler final : angle::NonCopyable
     std::vector<T> mObjectFreeList;
 };
 
-using SpecializationConstantBitSet =
-    angle::PackedEnumBitSet<sh::vk::SpecializationConstantId, uint32_t>;
-static_assert(sizeof(SpecializationConstantBitSet) == sizeof(uint32_t), "Unexpected size");
+struct SpecializationConstant
+{
+    uint32_t lineRasterEmulation;
+    uint32_t surfaceRotation;
+};
 
 template <typename T>
 using SpecializationConstantMap = angle::PackedEnumMap<sh::vk::SpecializationConstantId, T>;
