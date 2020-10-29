@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
+#include "ProgramExecutableVk.h"
 #include "common/utilities.h"
 #include "image_util/loadimage.h"
 #include "libANGLE/Context.h"
@@ -6396,7 +6397,7 @@ ImageViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
 }
 
 // ShaderProgramHelper implementation.
-ShaderProgramHelper::ShaderProgramHelper() = default;
+ShaderProgramHelper::ShaderProgramHelper() : mSpecializationConstants{0, 0} {}
 
 ShaderProgramHelper::~ShaderProgramHelper() = default;
 
@@ -6430,11 +6431,22 @@ void ShaderProgramHelper::setShader(gl::ShaderType shaderType, RefCounted<Shader
     mShaders[shaderType].set(shader);
 }
 
-void ShaderProgramHelper::enableSpecializationConstant(sh::vk::SpecializationConstantId id)
+void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConstantId id,
+                                                    uint32_t value)
 {
     ASSERT(id < sh::vk::SpecializationConstantId::EnumCount);
-
-    mSpecializationConstants.set(id);
+    switch (id)
+    {
+        case sh::vk::SpecializationConstantId::LineRasterEmulation:
+            mSpecializationConstants.lineRasterEmulation = value;
+            break;
+        case sh::vk::SpecializationConstantId::SurfaceRotation:
+            mSpecializationConstants.surfaceRotation = value;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
 }
 
 angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
