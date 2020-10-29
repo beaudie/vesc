@@ -66,6 +66,7 @@ class ProgramInfo final : angle::NonCopyable
                               const gl::ShaderType shaderType,
                               const ShaderInfo &shaderInfo,
                               ProgramTransformOptionBits optionBits,
+                              SurfaceRotation surfaceRotation,
                               ProgramExecutableVk *executableVk);
     void release(ContextVk *contextVk);
 
@@ -131,6 +132,7 @@ class ProgramExecutableVk
 
     angle::Result getGraphicsPipeline(ContextVk *contextVk,
                                       gl::PrimitiveMode mode,
+                                      SurfaceRotation surfaceRotation,
                                       const vk::GraphicsPipelineDesc &desc,
                                       const gl::AttributesMask &activeAttribLocations,
                                       const vk::GraphicsPipelineDesc **descPtrOut,

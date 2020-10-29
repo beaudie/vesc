@@ -1421,7 +1421,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
 
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mExecutable->getGraphicsPipeline(
-            this, mCurrentDrawMode, *mGraphicsPipelineDesc,
+            this, mCurrentDrawMode, mCurrentRotationDrawFramebuffer, *mGraphicsPipelineDesc,
             context->getState().getProgramExecutable()->getNonBuiltinAttribLocationsMask(),
             &descPtr, &mCurrentGraphicsPipeline));
         mGraphicsPipelineTransition.reset();
@@ -1435,7 +1435,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
             const vk::GraphicsPipelineDesc *descPtr;
 
             ANGLE_TRY(mExecutable->getGraphicsPipeline(
-                this, mCurrentDrawMode, *mGraphicsPipelineDesc,
+                this, mCurrentDrawMode, mCurrentRotationDrawFramebuffer, *mGraphicsPipelineDesc,
                 context->getState().getProgramExecutable()->getNonBuiltinAttribLocationsMask(),
                 &descPtr, &mCurrentGraphicsPipeline));
 

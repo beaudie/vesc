@@ -1184,26 +1184,39 @@ void GetRenderPassAndUpdateCounters(ContextVk *contextVk,
 }
 
 void InitializeSpecializationInfo(
-    vk::SpecializationConstantBitSet specConsts,
+    const vk::SpecializationConstant specConsts,
     vk::SpecializationConstantMap<VkSpecializationMapEntry> *specializationEntriesOut,
-    vk::SpecializationConstantMap<VkBool32> *specializationValuesOut,
     VkSpecializationInfo *specializationInfoOut)
 {
     // Collect specialization constants.
     for (const sh::vk::SpecializationConstantId id :
          angle::AllEnums<sh::vk::SpecializationConstantId>())
     {
-        const uint32_t offset                      = static_cast<uint32_t>(id);
-        (*specializationValuesOut)[id]             = specConsts.test(id);
-        (*specializationEntriesOut)[id].constantID = offset;
+        uint32_t offset;
+        switch (id)
+        {
+            case sh::vk::SpecializationConstantId::LineRasterEmulation:
+                offset = offsetof(vk::SpecializationConstant, lineRasterEmulation);
+                break;
+            case sh::vk::SpecializationConstantId::SurfaceRotation:
+                offset = offsetof(vk::SpecializationConstant, surfaceRotation);
+                break;
+            default:
+                UNREACHABLE();
+                offset = 0;
+                break;
+        }
+        // Have the entry point to the value slot
+        (*specializationEntriesOut)[id].constantID = static_cast<uint32_t>(id);
         (*specializationEntriesOut)[id].offset     = offset;
-        (*specializationEntriesOut)[id].size       = sizeof(VkBool32);
+        (*specializationEntriesOut)[id].size       = sizeof(uint32_t);
     }
 
-    specializationInfoOut->mapEntryCount = static_cast<uint32_t>(specializationEntriesOut->size());
-    specializationInfoOut->pMapEntries   = specializationEntriesOut->data();
-    specializationInfoOut->dataSize      = specializationEntriesOut->size() * sizeof(VkBool32);
-    specializationInfoOut->pData         = specializationValuesOut->data();
+    specializationInfoOut->mapEntryCount =
+        1;  // static_cast<uint32_t>(specializationEntriesOut->size());
+    specializationInfoOut->pMapEntries = specializationEntriesOut->data();
+    specializationInfoOut->dataSize    = sizeof(specConsts);
+    specializationInfoOut->pData       = &specConsts;
 }
 
 // Utility for setting a value on a packed 4-bit integer array.
@@ -1597,7 +1610,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     const ShaderModule *vertexModule,
     const ShaderModule *fragmentModule,
     const ShaderModule *geometryModule,
-    vk::SpecializationConstantBitSet specConsts,
+    const vk::SpecializationConstant specConsts,
     Pipeline *pipelineOut) const
 {
     angle::FixedVector<VkPipelineShaderStageCreateInfo, 3> shaderStages;
@@ -1613,9 +1626,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     VkGraphicsPipelineCreateInfo createInfo        = {};
 
     vk::SpecializationConstantMap<VkSpecializationMapEntry> specializationEntries;
-    vk::SpecializationConstantMap<VkBool32> specializationValues;
-    InitializeSpecializationInfo(specConsts, &specializationEntries, &specializationValues,
-                                 &specializationInfo);
+    InitializeSpecializationInfo(specConsts, &specializationEntries, &specializationInfo);
 
     // Vertex shader is always expected to be present.
     ASSERT(vertexModule != nullptr);
@@ -3269,7 +3280,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     const vk::ShaderModule *vertexModule,
     const vk::ShaderModule *fragmentModule,
     const vk::ShaderModule *geometryModule,
-    vk::SpecializationConstantBitSet specConsts,
+    const vk::SpecializationConstant specConsts,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
