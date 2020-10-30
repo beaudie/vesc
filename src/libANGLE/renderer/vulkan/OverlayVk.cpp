@@ -106,12 +106,12 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
     fontDataBuffer.get().unmap(renderer);
 
     // Create the font image.
-    ANGLE_TRY(
-        mFontImage.init(contextVk, gl::TextureType::_2D,
-                        VkExtent3D{gl::overlay::kFontImageWidth, gl::overlay::kFontImageHeight, 1},
-                        renderer->getFormat(angle::FormatID::R8_UNORM), 1,
-                        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-                        gl::LevelIndex(0), gl::LevelIndex(0), 1, gl::overlay::kFontCount));
+    ANGLE_TRY(mFontImage.init(
+        contextVk, gl::TextureType::_2D,
+        VkExtent3D{gl::overlay::kFontImageWidth, gl::overlay::kFontImageHeight, 1},
+        renderer->getFormat(angle::FormatID::R8_UNORM), 1,
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, gl::LevelIndex(0),
+        gl::LevelIndex(0), 1, gl::overlay::kFontCount, contextVk->isRobustResourceInitEnabled()));
     ANGLE_TRY(mFontImage.initMemory(contextVk, renderer->getMemoryProperties(),
                                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     ANGLE_TRY(mFontImage.initImageView(contextVk, gl::TextureType::_2DArray,
@@ -179,7 +179,8 @@ angle::Result OverlayVk::cullWidgets(ContextVk *contextVk)
     ANGLE_TRY(mCulledWidgets.init(contextVk, gl::TextureType::_2D, culledWidgetsExtent,
                                   renderer->getFormat(angle::FormatID::R32G32_UINT), 1,
                                   VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-                                  gl::LevelIndex(0), gl::LevelIndex(0), 1, 1));
+                                  gl::LevelIndex(0), gl::LevelIndex(0), 1, 1,
+                                  contextVk->isRobustResourceInitEnabled()));
     ANGLE_TRY(mCulledWidgets.initMemory(contextVk, renderer->getMemoryProperties(),
                                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     ANGLE_TRY(mCulledWidgets.initImageView(contextVk, gl::TextureType::_2D,
