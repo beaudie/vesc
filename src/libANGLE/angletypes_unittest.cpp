@@ -263,6 +263,28 @@ TEST(Rectangle, Clip)
     ASSERT_EQ(result.y, 70);
     ASSERT_EQ(result.width, 20);
     ASSERT_EQ(result.height, 30);
+
+    // Non-overlapping rectangles
+    gl::Rectangle clip5(-100, 0, 99, 200);
+    ASSERT_FALSE(gl::ClipRectangle(source, clip5, nullptr));
+
+    gl::Rectangle clip6(0, -100, 100, 99);
+    ASSERT_FALSE(gl::ClipRectangle(source, clip6, nullptr));
+
+    gl::Rectangle clip7(101, 0, 99, 200);
+    ASSERT_FALSE(gl::ClipRectangle(source, clip7, nullptr));
+
+    gl::Rectangle clip8(0, 201, 100, 99);
+    ASSERT_FALSE(gl::ClipRectangle(source, clip8, nullptr));
+
+    // Zero-width/height rectangles
+    gl::Rectangle clip9(50, 0, 0, 200);
+    ASSERT_FALSE(gl::ClipRectangle(source, clip9, nullptr));
+    ASSERT_FALSE(gl::ClipRectangle(clip9, source, nullptr));
+
+    gl::Rectangle clip10(0, 100, 100, 0);
+    ASSERT_FALSE(gl::ClipRectangle(source, clip10, nullptr));
+    ASSERT_FALSE(gl::ClipRectangle(clip10, source, nullptr));
 }
 
 // Test combine rectangles

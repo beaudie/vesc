@@ -3799,6 +3799,17 @@ void Context::clear(GLbitfield mask)
         return;
     }
 
+    // Noop empty scissors.
+    if (mState.isScissorTestEnabled())
+    {
+        const Box &dimensions = mState.getDrawFramebuffer()->getDimensions();
+        Rectangle framebufferArea(0, 0, dimensions.width, dimensions.height);
+        if (!ClipRectangle(framebufferArea, mState.getScissor(), nullptr))
+        {
+            return;
+        }
+    }
+
     // Remove clear bits that are ineffective. An effective clear changes at least one fragment. If
     // color/depth/stencil masks make the clear ineffective we skip it altogether.
 
