@@ -1762,23 +1762,6 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         contextVk->updateColorMasks(context->getState().getBlendStateExt());
     }
 
-    // In some cases we'll need to force a flush of deferred clears. When we're syncing the read
-    // framebuffer we might not get a RenderPass. Also when there are masked out cleared color
-    // channels.
-    if (binding == GL_READ_FRAMEBUFFER && !mDeferredClears.empty())
-    {
-        // Rotate scissoredRenderArea based on the read FBO's rotation (different than
-        // FramebufferVk::getRotatedScissoredRenderArea(), which is based on the draw FBO's
-        // rotation).  Since the rectangle is scissored, it must be fully rotated, and not just
-        // have the width and height swapped.
-        bool invertViewport = contextVk->isViewportFlipEnabledForReadFBO();
-        gl::Rectangle rotatedScissoredRenderArea;
-        RotateRectangle(contextVk->getRotationReadFramebuffer(), invertViewport, renderArea.width,
-                        renderArea.height, scissoredRenderArea, &rotatedScissoredRenderArea);
-
-        ANGLE_TRY(flushDeferredClears(contextVk));
-    }
-
     // No-op redundant changes to prevent closing the RenderPass.
     if (mCurrentFramebufferDesc == priorFramebufferDesc)
     {
