@@ -602,7 +602,20 @@ void RendererVk::ensureCapsInitialized() const
         std::min<int32_t>(4096, limitsVk.maxStorageBufferRange / sizeof(uint32_t));
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        mNativeCaps.maxShaderAtomicCounters[shaderType] = maxAtomicCounters;
+        if (shaderType == gl::ShaderType::Vertex)
+        {
+            mNativeCaps.maxShaderAtomicCounters[shaderType] =
+                mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics ? maxAtomicCounters : 0;
+        }
+        else if (shaderType == gl::ShaderType::Fragment)
+        {
+            mNativeCaps.maxShaderAtomicCounters[shaderType] =
+                mPhysicalDeviceFeatures.fragmentStoresAndAtomics ? maxAtomicCounters : 0;
+        }
+        else
+        {
+            mNativeCaps.maxShaderAtomicCounters[shaderType] = maxAtomicCounters;
+        }
     }
     mNativeCaps.maxCombinedAtomicCounters = maxAtomicCounters;
 
