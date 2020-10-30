@@ -469,14 +469,7 @@ class ContextVk : public ContextImpl, public vk::Context
     // avoid calling vkAllocateDesctiporSets each texture update.
     const vk::TextureDescriptorDesc &getActiveTexturesDesc() const { return mActiveTexturesDesc; }
 
-    angle::Result updateScissor(const gl::State &glState)
-    {
-        return updateScissorImpl(glState, false);
-    }
-    angle::Result updateScissorAndEndRenderPass(const gl::State &glState)
-    {
-        return updateScissorImpl(glState, true);
-    }
+    void updateScissor(const gl::State &glState, const FramebufferVk *framebufferVk);
 
     bool emulateSeamfulCubeMapSampling() const { return mEmulateSeamfulCubeMapSampling; }
 
@@ -992,7 +985,6 @@ class ContextVk : public ContextImpl, public vk::Context
     template <typename T, const T *VkWriteDescriptorSet::*pInfo>
     void growDesciptorCapacity(std::vector<T> *descriptorVector, size_t newSize);
 
-    angle::Result updateScissorImpl(const gl::State &glState, bool shouldEndRenderPass);
     angle::Result updateRenderPassDepthStencilAccess();
     bool shouldSwitchToReadOnlyDepthFeedbackLoopMode(const gl::Context *context,
                                                      gl::Texture *texture) const;
