@@ -1816,8 +1816,11 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     }
 
     // The FBO's new attachment may have changed the renderable area
-    const gl::State &glState = context->getState();
-    ANGLE_TRY(contextVk->updateScissor(glState));
+    if (binding == GL_DRAW_FRAMEBUFFER)
+    {
+        const gl::State &glState = context->getState();
+        contextVk->updateScissor(glState);
+    }
 
     if (command != gl::Command::Blit)
     {
@@ -1833,8 +1836,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     updateRenderPassDesc();
 
     // Notify the ContextVk to update the pipeline desc.
-    FramebufferVk *currentDrawFramebuffer = vk::GetImpl(context->getState().getDrawFramebuffer());
-    if (currentDrawFramebuffer == this)
+    if (binding == GL_DRAW_FRAMEBUFFER)
     {
         contextVk->onDrawFramebufferChange(this);
     }
