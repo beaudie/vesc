@@ -259,9 +259,21 @@ enum SubjectIndexes : angle::SubjectIndex
     kDrawFramebufferSubjectIndex
 };
 
-bool IsClearBufferEnabled(const FramebufferState &mState, GLenum buffer, GLint drawbuffer)
+bool IsClearBufferEnabled(const FramebufferState &fbState, GLenum buffer, GLint drawbuffer)
 {
-    return buffer != GL_COLOR || mState.getEnabledDrawBuffers()[drawbuffer];
+    return buffer != GL_COLOR || fbState.getEnabledDrawBuffers()[drawbuffer];
+}
+
+bool IsEmptyScissor(const State &glState)
+{
+    if (!glState.isScissorTestEnabled())
+    {
+        return false;
+    }
+
+    const Extents &dimensions = glState.getDrawFramebuffer()->getExtents();
+    Rectangle framebufferArea(0, 0, dimensions.width, dimensions.height);
+    return !ClipRectangle(framebufferArea, glState.getScissor(), nullptr);
 }
 
 bool IsColorMaskedOut(const BlendStateExt &blendStateExt, const GLint drawbuffer)
@@ -3799,6 +3811,12 @@ void Context::clear(GLbitfield mask)
         return;
     }
 
+    // Noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     // Remove clear bits that are ineffective. An effective clear changes at least one fragment. If
     // color/depth/stencil masks make the clear ineffective we skip it altogether.
 
@@ -3865,6 +3883,12 @@ void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *valu
         return;
     }
 
+    // Noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     Framebuffer *framebufferObject          = mState.getDrawFramebuffer();
     const FramebufferAttachment *attachment = nullptr;
     if (buffer == GL_DEPTH)
@@ -3893,6 +3917,12 @@ void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *valu
         return;
     }
 
+    // Noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     Framebuffer *framebufferObject          = mState.getDrawFramebuffer();
     const FramebufferAttachment *attachment = nullptr;
     if (buffer == GL_COLOR &&
@@ -3913,6 +3943,12 @@ void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *valu
 void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values)
 {
     if (noopClearBuffer(buffer, drawbuffer))
+    {
+        return;
+    }
+
+    // Noop empty scissors.
+    if (IsEmptyScissor(mState))
     {
         return;
     }
@@ -3941,6 +3977,12 @@ void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values
 void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
 {
     if (noopClearBuffer(buffer, drawbuffer))
+    {
+        return;
+    }
+
+    // Noop empty scissors.
+    if (IsEmptyScissor(mState))
     {
         return;
     }
