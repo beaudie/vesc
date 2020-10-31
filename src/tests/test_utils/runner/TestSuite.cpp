@@ -176,13 +176,6 @@ TestResultType GetResultTypeFromString(const std::string &str)
     return TestResultType::Unknown;
 }
 
-js::Value ResultTypeToJSString(TestResultType type, js::Document::AllocatorType *allocator)
-{
-    js::Value jsName;
-    jsName.SetString(ResultTypeToString(type), *allocator);
-    return jsName;
-}
-
 bool WriteJsonFile(const std::string &outputFile, js::Document *doc)
 {
     FILE *fp = fopen(outputFile.c_str(), "w");
