@@ -1875,6 +1875,7 @@ class ImageViewHelper : angle::NonCopyable
     ~ImageViewHelper();
 
     void init(RendererVk *renderer);
+    void updateSerial(RendererVk *renderer);
     void release(RendererVk *renderer);
     void destroy(VkDevice device);
 
@@ -1999,7 +2000,8 @@ class ImageViewHelper : angle::NonCopyable
     ImageViewSubresourceSerial getSubresourceSerial(gl::LevelIndex levelGL,
                                                     uint32_t levelCount,
                                                     uint32_t layer,
-                                                    LayerMode layerMode) const;
+                                                    LayerMode layerMode,
+                                                    bool srgbDecode) const;
 
   private:
     ImageView &getReadImageView()
