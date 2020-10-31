@@ -5851,6 +5851,11 @@ void ImageViewHelper::init(RendererVk *renderer)
     }
 }
 
+void ImageViewHelper::updateSerial(RendererVk *renderer)
+{
+    mImageViewSerial = renderer->getResourceSerialFactory().generateImageViewSerial();
+}
+
 void ImageViewHelper::release(RendererVk *renderer)
 {
     std::vector<GarbageObject> garbage;
