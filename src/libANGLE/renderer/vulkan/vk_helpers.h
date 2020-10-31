@@ -1875,6 +1875,7 @@ class ImageViewHelper : angle::NonCopyable
     ~ImageViewHelper();
 
     void init(RendererVk *renderer);
+    void updateSerial(RendererVk *renderer);
     void release(RendererVk *renderer);
     void destroy(VkDevice device);
 

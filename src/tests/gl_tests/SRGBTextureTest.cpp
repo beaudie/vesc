@@ -461,13 +461,17 @@ TEST_P(SRGBTextureTestES3, SRGBDecodeSamplerParameter)
 
     glDisable(GL_DEPTH_TEST);
     drawQuad(mProgram, "position", 0.5f);
-
     EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
 
+    // Switch to skip decode and verify pixel value
     glSamplerParameteri(sampler.get(), GL_TEXTURE_SRGB_DECODE_EXT, GL_SKIP_DECODE_EXT);
     drawQuad(mProgram, "position", 0.5f);
-
     EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+
+    // Switch back to decode and verify pixel value
+    glSamplerParameteri(sampler.get(), GL_TEXTURE_SRGB_DECODE_EXT, GL_DECODE_EXT);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
 }
 
 // Test that sampler state overrides texture state for srgb decode

@@ -2386,9 +2386,34 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     gl_vk::GetExtentsAndLayerCount(mState.getType(), extents, &vkExtent, &layerCount);
     GLint samples = mState.getBaseLevelDesc().samples ? mState.getBaseLevelDesc().samples : 1;
 
+    // With the introduction of sRGB related GLES extensions any texture could be respecified
+    // causing it to be interpreted in a different colorspace. Create the VkImage accordingly.
+    VkImageFormatListCreateInfoKHR *additionalCreateInfo = nullptr;
+    VkFormat imageFormat                                 = format.vkImageFormat;
+    VkFormat imageListFormat = format.actualImageFormat().isSRGB ? vk::ConvertToLinear(imageFormat)
+                                                                 : vk::ConvertToSRGB(imageFormat);
+
+    VkImageFormatListCreateInfoKHR formatListInfo = {};
+    if (renderer->getFeatures().supportsImageFormatList.enabled &&
+        (imageListFormat != VK_FORMAT_UNDEFINED))
+    {
+        mRequiresMutableStorage = true;
+
+        // Add VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT to VkImage create flag
+        mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+
+        // There is just 1 additional format we might use to create a VkImageView for this VkImage
+        formatListInfo.sType           = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
+        formatListInfo.pNext           = nullptr;
+        formatListInfo.viewFormatCount = 1;
+        formatListInfo.pViewFormats    = &imageListFormat;
+        additionalCreateInfo           = &formatListInfo;
+    }
+
     ANGLE_TRY(mImage->initExternal(contextVk, mState.getType(), vkExtent, format, samples,
                                    mImageUsageFlags, mImageCreateFlags, vk::ImageLayout::Undefined,
-                                   nullptr, gl::LevelIndex(mState.getEffectiveBaseLevel()),
+                                   additionalCreateInfo,
+                                   gl::LevelIndex(mState.getEffectiveBaseLevel()),
                                    gl::LevelIndex(mState.getEffectiveMaxLevel()), levelCount,
                                    layerCount, contextVk->isRobustResourceInitEnabled()));
 
@@ -2436,6 +2461,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         if (mOwnsImage)
         {
             mImage->releaseImageFromShareContexts(renderer, contextVk);
+            mRequiresMutableStorage = false;
         }
         else
         {
@@ -2661,6 +2687,13 @@ angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
 {
     if (mRequiresMutableStorage)
     {
+        if (contextVk->getRenderer()->getFeatures().supportsImageFormatList.enabled)
+        {
+            // If VkImage was created with VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT, it is possible
+            // that we are switching to use the non-linear (or linear) VkImageViews instead due
+            // to a sampler state override. Update the serial of the ImageViewHelper.
+            getImageViews().updateSerial(contextVk->getRenderer());
+        }
         return angle::Result::Continue;
     }
 
