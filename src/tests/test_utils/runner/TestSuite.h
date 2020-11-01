@@ -66,6 +66,7 @@ struct TestResult
 {
     TestResultType type       = TestResultType::Skip;
     double elapsedTimeSeconds = 0.0;
+    uint32_t flakyFailures    = 0;
 };
 
 inline bool operator==(const TestResult &a, const TestResult &b)
@@ -153,6 +154,7 @@ class TestSuite
     int mTestTimeout;
     int mBatchTimeout;
     int mBatchId;
+    int mFlakyRetries;
     std::vector<std::string> mChildProcessArgs;
     std::map<TestIdentifier, FileLine> mTestFileLines;
     std::vector<ProcessInfo> mCurrentProcesses;
