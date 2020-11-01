@@ -21,13 +21,12 @@ using namespace angle;
 
 namespace js = rapidjson;
 
+bool gVerbose;
+
 namespace
 {
 constexpr char kTestHelperExecutable[] = "test_utils_unittest_helper";
 constexpr int kFlakyRetries            = 3;
-
-// Enable this for debugging.
-constexpr bool kDebugOutput = false;
 
 class TestSuiteTest : public testing::Test
 {
@@ -40,7 +39,9 @@ class TestSuiteTest : public testing::Test
         }
     }
 
-    bool runTestSuite(const std::vector<std::string> &extraArgs, TestResults *actualResults)
+    bool runTestSuite(const std::vector<std::string> &extraArgs,
+                      TestResults *actualResults,
+                      bool validateStderr)
     {
         std::string executablePath = GetExecutableDirectory();
         EXPECT_NE(executablePath, "");
@@ -69,7 +70,7 @@ class TestSuiteTest : public testing::Test
             args.push_back(arg.c_str());
         }
 
-        if (kDebugOutput)
+        if (gVerbose)
         {
             printf("Test arguments:\n");
             for (const char *arg : args)
@@ -83,9 +84,13 @@ class TestSuiteTest : public testing::Test
         EXPECT_TRUE(process->started());
         EXPECT_TRUE(process->finish());
         EXPECT_TRUE(process->finished());
-        EXPECT_EQ(process->getStderr(), "");
 
-        if (kDebugOutput)
+        if (validateStderr)
+        {
+            EXPECT_EQ(process->getStderr(), "");
+        }
+
+        if (gVerbose)
         {
             printf("stdout:\n%s\n", process->getStdout().c_str());
         }
@@ -103,13 +108,12 @@ TEST_F(TestSuiteTest, RunMockTests)
     std::vector<std::string> extraArgs = {"--gtest_filter=MockTestSuiteTest.DISABLED_*"};
 
     TestResults actual;
-    ASSERT_TRUE(runTestSuite(extraArgs, &actual));
+    ASSERT_TRUE(runTestSuite(extraArgs, &actual, true));
 
     std::map<TestIdentifier, TestResult> expectedResults = {
         {{"MockTestSuiteTest", "DISABLED_Pass"}, {TestResultType::Pass, 0.0}},
         {{"MockTestSuiteTest", "DISABLED_Fail"}, {TestResultType::Fail, 0.0}},
         {{"MockTestSuiteTest", "DISABLED_Timeout"}, {TestResultType::Timeout, 0.0}},
-        // {{"MockTestSuiteTest", "DISABLED_Crash"}, {TestResultType::Crash, 0.0}},
     };
 
     EXPECT_EQ(expectedResults, actual.results);
@@ -122,11 +126,32 @@ TEST_F(TestSuiteTest, RunFlakyTests)
                                           "--flaky-retries=" + std::to_string(kFlakyRetries)};
 
     TestResults actual;
-    ASSERT_TRUE(runTestSuite(extraArgs, &actual));
+    ASSERT_TRUE(runTestSuite(extraArgs, &actual, true));
 
     std::map<TestIdentifier, TestResult> expectedResults = {
         {{"MockFlakyTestSuiteTest", "DISABLED_Flaky"},
          {TestResultType::Pass, 0.0, kFlakyRetries - 1}}};
+
+    EXPECT_EQ(expectedResults, actual.results);
+}
+
+// Verifies that crashes are handled even without the crash handler.
+TEST_F(TestSuiteTest, RunCrashingTests)
+{
+    std::vector<std::string> extraArgs = {
+        "--gtest_filter=MockTestSuiteTest.DISABLED_Pass:MockTestSuiteTest.DISABLED_Fail:"
+        "MockCrashTestSuiteTest.DISABLED_*",
+        "--disable-crash-handler"};
+
+    TestResults actual;
+    ASSERT_TRUE(runTestSuite(extraArgs, &actual, false));
+
+    std::map<TestIdentifier, TestResult> expectedResults = {
+        {{"MockTestSuiteTest", "DISABLED_Pass"}, {TestResultType::Pass, 0.0}},
+        {{"MockTestSuiteTest", "DISABLED_Fail"}, {TestResultType::Fail, 0.0}},
+        {{"MockCrashTestSuiteTest", "DISABLED_Crash"}, {TestResultType::Crash, 0.0}},
+        {{"MockCrashTestSuiteTest", "DISABLED_PassAfterCrash"}, {TestResultType::Pass, 0.0}},
+    };
 
     EXPECT_EQ(expectedResults, actual.results);
 }
@@ -187,8 +212,14 @@ TEST(MockFlakyTestSuiteTest, DISABLED_Flaky)
 }
 
 // Trigger a test crash.
-// TEST(MockTestSuiteTest, DISABLED_Crash)
-// {
-//     ANGLE_CRASH();
-// }
+TEST(MockCrashTestSuiteTest, DISABLED_Crash)
+{
+    ANGLE_CRASH();
+}
+
+// This test runs after the crash test.
+TEST(MockCrashTestSuiteTest, DISABLED_PassAfterCrash)
+{
+    EXPECT_TRUE(true);
+}
 }  // namespace

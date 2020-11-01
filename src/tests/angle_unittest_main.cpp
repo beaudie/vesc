@@ -28,8 +28,18 @@ class CompilerTestEnvironment : public testing::Environment
     }
 };
 
+extern bool gVerbose;
+
 int main(int argc, char **argv)
 {
+    for (int argIndex = 1; argIndex < argc; ++argIndex)
+    {
+        if (strcmp(argv[argIndex], "-v") == 0 || strcmp(argv[argIndex], "--verbose") == 0)
+        {
+            gVerbose = true;
+        }
+    }
+
     angle::TestSuite testSuite(&argc, argv);
     testing::AddGlobalTestEnvironment(new CompilerTestEnvironment());
     return testSuite.run();
