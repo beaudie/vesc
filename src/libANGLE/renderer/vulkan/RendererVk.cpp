@@ -1792,6 +1792,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     }
     ANGLE_FEATURE_CONDITION(&mFeatures, clampPointSize,
                             isNvidia && nvidiaVersion.major < uint32_t(IsWindows() ? 430 : 421));
+    // http://anglebug.com/3970#c25.
+    // This workaround caused test failures on Quadro P400/driver 418.56/Linux.
+    // Therefore, on Linux we require a major version > 418.
+    ANGLE_FEATURE_CONDITION(&mFeatures, depthClamping,
+                            isNvidia && (!IsLinux() || nvidiaVersion.major > 418u));
 
     // Work around ineffective compute-graphics barriers on Nexus 5X.
     // TODO(syoussefi): Figure out which other vendors and driver versions are affected.
