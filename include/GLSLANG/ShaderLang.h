@@ -342,6 +342,9 @@ const ShCompileOptions SH_EARLY_FRAGMENT_TESTS_OPTIMIZATION = UINT64_C(1) << 55;
 // Allow compiler to insert Android pre-rotation code.
 const ShCompileOptions SH_ADD_PRE_ROTATION = UINT64_C(1) << 56;
 
+// Allow compiler to use specialization constant to do pre-rotation.
+const ShCompileOptions SH_SPECCONST_FOR_ROTATION = UINT64_C(1) << 57;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {
@@ -776,6 +779,21 @@ enum class SpecializationConstantId : uint32_t
 
     InvalidEnum = 2,
     EnumCount   = InvalidEnum,
+};
+
+enum class SurfaceRotation : uint32_t
+{
+    Identity,
+    Rotated90Degrees,
+    Rotated180Degrees,
+    Rotated270Degrees,
+    FlippedIdentity,
+    FlippedRotated90Degrees,
+    FlippedRotated180Degrees,
+    FlippedRotated270Degrees,
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
 };
 
 // Interface block name containing the aggregate default uniforms
