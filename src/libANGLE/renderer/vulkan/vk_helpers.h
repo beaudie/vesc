@@ -1999,7 +1999,8 @@ class ImageViewHelper : angle::NonCopyable
     ImageViewSubresourceSerial getSubresourceSerial(gl::LevelIndex levelGL,
                                                     uint32_t levelCount,
                                                     uint32_t layer,
-                                                    LayerMode layerMode) const;
+                                                    LayerMode layerMode,
+                                                    bool srgbDecode) const;
 
   private:
     ImageView &getReadImageView()
