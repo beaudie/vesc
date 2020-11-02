@@ -36,14 +36,15 @@ namespace angle
 {
 namespace
 {
-constexpr char kTestTimeoutArg[]       = "--test-timeout=";
+constexpr char kBatchId[]              = "--batch-id=";
 constexpr char kFilterFileArg[]        = "--filter-file=";
-constexpr char kResultFileArg[]        = "--results-file=";
-constexpr char kHistogramJsonFileArg[] = "--histogram-json-file=";
+constexpr char kFlakyRetries[]         = "--flaky-retries=";
 constexpr char kGTestListTests[]       = "--gtest_list_tests";
+constexpr char kHistogramJsonFileArg[] = "--histogram-json-file=";
 constexpr char kListTests[]            = "--list-tests";
 constexpr char kPrintTestStdout[]      = "--print-test-stdout";
-constexpr char kBatchId[]              = "--batch-id=";
+constexpr char kResultFileArg[]        = "--results-file=";
+constexpr char kTestTimeoutArg[]       = "--test-timeout=";
 #if defined(NDEBUG)
 constexpr int kDefaultTestTimeout = 20;
 #else
@@ -243,8 +244,25 @@ void WriteResultsFile(bool interrupted,
 
         counts[result.type]++;
 
-        jsResult.AddMember("expected", "PASS", allocator);
-        jsResult.AddMember("actual", ResultTypeToJSString(result.type, &allocator), allocator);
+        std::string expectedResult;
+        std::string actualResult;
+
+        for (uint32_t fail = 0; fail < result.flakyFailures; ++fail)
+        {
+            expectedResult += "FAIL ";
+            actualResult += "FAIL ";
+        }
+
+        expectedResult += "PASS";
+        actualResult += ResultTypeToString(result.type);
+
+        jsResult.AddMember("actual", actualResult, allocator);
+        jsResult.AddMember("expected", expectedResult, allocator);
+
+        if (result.flakyFailures > 0)
+        {
+            jsResult.AddMember("is_flaky", true, allocator);
+        }
 
         if (result.type != TestResultType::Pass)
         {
@@ -549,15 +567,39 @@ bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOu
         const std::string expectedStr = expected.GetString();
         const std::string actualStr   = actual.GetString();
 
-        if (expectedStr != "PASS")
+        if (expectedStr.find(' ') == std::string::npos && expectedStr != "PASS")
         {
             return false;
         }
 
-        TestResultType resultType = GetResultTypeFromString(actualStr);
-        if (resultType == TestResultType::Unknown)
+        TestResultType resultType = TestResultType::Unknown;
+        int flakyFailures         = 0;
+        if (actualStr.find(' '))
         {
-            return false;
+            std::istringstream strstr(actualStr);
+            std::string token;
+            while (std::getline(strstr, token, ' '))
+            {
+                resultType = GetResultTypeFromString(token);
+                if (resultType == TestResultType::Unknown)
+                {
+                    printf("Failed to parse result type.\n");
+                    return false;
+                }
+                if (resultType != TestResultType::Pass)
+                {
+                    flakyFailures++;
+                }
+            }
+        }
+        else
+        {
+            resultType = GetResultTypeFromString(actualStr);
+            if (resultType == TestResultType::Unknown)
+            {
+                printf("Failed to parse result type.\n");
+                return false;
+            }
         }
 
         double elapsedTimeSeconds = 0.0;
@@ -581,20 +623,20 @@ bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOu
         TestResult &result        = resultsOut->results[id];
         result.elapsedTimeSeconds = elapsedTimeSeconds;
         result.type               = resultType;
+        result.flakyFailures      = flakyFailures;
     }
 
     return true;
 }
 
-bool MergeTestResults(const TestResults &input, TestResults *output)
+bool MergeTestResults(TestResults *input, TestResults *output, int flakyRetries)
 {
-    for (const auto &resultsIter : input.results)
+    for (auto &resultsIter : input->results)
     {
-        const TestIdentifier &id      = resultsIter.first;
-        const TestResult &inputResult = resultsIter.second;
-        TestResult &outputResult      = output->results[id];
+        const TestIdentifier &id = resultsIter.first;
+        TestResult &inputResult  = resultsIter.second;
+        TestResult &outputResult = output->results[id];
 
-        // This should probably handle situations where a test is run more than once.
         if (inputResult.type != TestResultType::Skip)
         {
             if (outputResult.type != TestResultType::Skip)
@@ -604,8 +646,20 @@ bool MergeTestResults(const TestResults &input, TestResults *output)
                 return false;
             }
 
-            outputResult.elapsedTimeSeconds = inputResult.elapsedTimeSeconds;
-            outputResult.type               = inputResult.type;
+            // Mark the tests that haven't exhausted their retries as 'SKIP'. This makes ANGLE
+            // attempt the test again.
+            uint32_t runCount = outputResult.flakyFailures + 1;
+            if (inputResult.type != TestResultType::Pass &&
+                runCount < static_cast<uint32_t>(flakyRetries))
+            {
+                inputResult.type = TestResultType::Skip;
+                outputResult.flakyFailures++;
+            }
+            else
+            {
+                outputResult.elapsedTimeSeconds = inputResult.elapsedTimeSeconds;
+                outputResult.type               = inputResult.type;
+            }
         }
     }
 
@@ -829,7 +883,8 @@ TestSuite::TestSuite(int *argc, char **argv)
       mMaxProcesses(std::min(NumberOfProcessors(), kDefaultMaxProcesses)),
       mTestTimeout(kDefaultTestTimeout),
       mBatchTimeout(kDefaultBatchTimeout),
-      mBatchId(-1)
+      mBatchId(-1),
+      mFlakyRetries(0)
 {
     Optional<int> filterArgIndex;
     bool alsoRunDisabledTests = false;
@@ -1057,6 +1112,7 @@ bool TestSuite::parseSingleArg(const char *argument)
             ParseIntArg("--max-processes=", argument, &mMaxProcesses) ||
             ParseIntArg(kTestTimeoutArg, argument, &mTestTimeout) ||
             ParseIntArg("--batch-timeout=", argument, &mBatchTimeout) ||
+            ParseIntArg(kFlakyRetries, argument, &mFlakyRetries) ||
             // Other test functions consume the batch ID, so keep it in the list.
             ParseIntArgNoDelete(kBatchId, argument, &mBatchId) ||
             ParseStringArg("--results-directory=", argument, &mResultsDirectory) ||
@@ -1191,7 +1247,7 @@ bool TestSuite::finishProcess(ProcessInfo *processInfo)
         return false;
     }
 
-    if (!MergeTestResults(batchResults, &mTestResults))
+    if (!MergeTestResults(&batchResults, &mTestResults, mFlakyRetries))
     {
         std::cerr << "Error merging batch test results.\n";
         return false;
@@ -1255,21 +1311,20 @@ bool TestSuite::finishProcess(ProcessInfo *processInfo)
     }
 
     // On unexpected exit, re-queue any unfinished tests.
-    if (processInfo->process->getExitCode() != 0)
+    std::vector<TestIdentifier> unfinishedTests;
+    for (const auto &resultIter : batchResults.results)
     {
-        std::vector<TestIdentifier> unfinishedTests;
+        const TestIdentifier &id = resultIter.first;
+        const TestResult &result = resultIter.second;
 
-        for (const auto &resultIter : batchResults.results)
+        if (result.type == TestResultType::Skip)
         {
-            const TestIdentifier &id = resultIter.first;
-            const TestResult &result = resultIter.second;
-
-            if (result.type == TestResultType::Skip)
-            {
-                unfinishedTests.push_back(id);
-            }
+            unfinishedTests.push_back(id);
         }
+    }
 
+    if (!unfinishedTests.empty())
+    {
         mTestQueue.emplace(std::move(unfinishedTests));
     }
 
