@@ -19,6 +19,16 @@ namespace sh
 
 class TOutputVulkanGLSL;
 
+TIntermTyped *GenerateMultiplierXForDFdx(TIntermSymbol *rotationSpecConst);
+TIntermTyped *GenerateMultiplierYForDFdx(TIntermSymbol *rotationSpecConst);
+TIntermTyped *GenerateMultiplierXForDFdy(TIntermSymbol *rotationSpecConst);
+TIntermTyped *GenerateMultiplierYForDFdy(TIntermSymbol *rotationSpecConst);
+TIntermTyped *GenerateFlipY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms);
+TIntermTyped *GenerateFlipXY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms);
+TIntermTyped *GenerateNegFlipXY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms);
+TIntermTyped *GenerateFragRotation(TIntermSymbol *rotationSpecConst,
+                                   const TVariable *driverUniforms);
+
 class TranslatorVulkan : public TCompiler
 {
   public:
