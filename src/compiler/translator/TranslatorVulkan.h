@@ -24,15 +24,18 @@ class TranslatorVulkan : public TCompiler
   public:
     TranslatorVulkan(sh::GLenum type, ShShaderSpec spec);
 
+    static TIntermTyped *getDriverUniformFlipXYRef(const TVariable *driverUniforms);
+    static TIntermSwizzle *getDriverUniformNegFlipYRef(const TVariable *driverUniforms);
+
   protected:
     ANGLE_NO_DISCARD bool translate(TIntermBlock *root,
                                     ShCompileOptions compileOptions,
                                     PerformanceDiagnostics *perfDiagnostics) override;
     bool shouldFlattenPragmaStdglInvariantAll() override;
 
-    TIntermSwizzle *getDriverUniformNegFlipYRef(const TVariable *driverUniforms) const;
     TIntermBinary *getDriverUniformDepthRangeReservedFieldRef(
         const TVariable *driverUniforms) const;
+
     // Subclass can call this method to transform the AST before writing the final output.
     // See TranslatorMetal.cpp.
     ANGLE_NO_DISCARD bool translateImpl(TIntermBlock *root,
@@ -49,10 +52,9 @@ class TranslatorVulkan : public TCompiler
         return true;
     }
 
-    // Back-end specific fields to be added to driver uniform. See TranslatorMetal.cpp.
-    virtual void createAdditionalGraphicsDriverUniformFields(std::vector<TField *> *fieldsOut) {}
+    virtual const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root,
+                                                               TSymbolTable *symbolTable);
 };
-
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TRANSLATORVULKAN_H_
