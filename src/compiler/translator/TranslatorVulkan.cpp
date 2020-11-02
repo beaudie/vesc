@@ -173,6 +173,8 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
 // Specialization constant names
 constexpr ImmutableString kLineRasterEmulationSpecConstVarName =
     ImmutableString("ANGLELineRasterEmulation");
+constexpr ImmutableString kSurfaceRotationSpecConstVarName =
+    ImmutableString("ANGLESurfaceRotation");
 
 constexpr const char kViewport[]             = "viewport";
 constexpr const char kHalfRenderArea[]       = "halfRenderArea";
@@ -483,6 +485,14 @@ TIntermSymbol *GenerateLineRasterSpecConstRef(TSymbolTable *symbolTable)
     TVariable *specConstVar =
         new TVariable(symbolTable, kLineRasterEmulationSpecConstVarName,
                       StaticType::GetBasic<EbtBool>(), SymbolType::AngleInternal);
+    return new TIntermSymbol(specConstVar);
+}
+
+TIntermSymbol *GenerateSurfaceRotationSpecConstRef(TSymbolTable *symbolTable)
+{
+    TVariable *specConstVar =
+        new TVariable(symbolTable, kSurfaceRotationSpecConstVarName,
+                      StaticType::GetBasic<EbtUInt>(), SymbolType::AngleInternal);
     return new TIntermSymbol(specConstVar);
 }
 
@@ -871,6 +881,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
     }
 
     const TVariable *driverUniforms;
+    TIntermSymbol *surfaceRotationSpecConst = nullptr;
     if (getShaderType() == GL_COMPUTE_SHADER)
     {
         driverUniforms = AddComputeDriverUniformsToShader(root, &getSymbolTable());
@@ -919,6 +930,13 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             sink << "layout(constant_id="
                  << static_cast<uint32_t>(vk::SpecializationConstantId::LineRasterEmulation)
                  << ") const bool " << kLineRasterEmulationSpecConstVarName << " = false;\n\n";
+        }
+        if (compileOptions & SH_SPECCONST_FOR_ROTATION)
+        {
+            sink << "layout(constant_id="
+                 << static_cast<uint32_t>(vk::SpecializationConstantId::SurfaceRotation)
+                 << ") const uint " << kSurfaceRotationSpecConstVarName << " = 0;\n\n";
+            surfaceRotationSpecConst = GenerateSurfaceRotationSpecConstRef(&getSymbolTable());
         }
     }
 
@@ -1015,8 +1033,8 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             TIntermBinary *flipXY = CreateDriverUniformRef(driverUniforms, kFlipXY);
             TIntermBinary *fragRotation =
                 usePreRotation ? CreateDriverUniformRef(driverUniforms, kFragRotation) : nullptr;
-            if (!RewriteDfdy(this, root, getSymbolTable(), getShaderVersion(), flipXY,
-                             fragRotation))
+            if (!RewriteDfdy(this, root, getSymbolTable(), getShaderVersion(),
+                             surfaceRotationSpecConst, flipXY, fragRotation))
             {
                 return false;
             }
