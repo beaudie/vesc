@@ -20,6 +20,7 @@ namespace sh
 
 class TCompiler;
 class TIntermNode;
+class TIntermSymbol;
 class TIntermBinary;
 class TIntermTyped;
 class TSymbolTable;
@@ -29,6 +30,7 @@ ANGLE_NO_DISCARD bool RewriteDfdy(TCompiler *compiler,
                                   TIntermNode *root,
                                   const TSymbolTable &symbolTable,
                                   int shaderVersion,
+                                  TIntermSymbol *surfaceRotationSpecConst,
                                   TIntermBinary *flipXY,
                                   TIntermTyped *fragRotation);
 
