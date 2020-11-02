@@ -1482,7 +1482,7 @@ bool GraphicsPipelineDesc::operator==(const GraphicsPipelineDesc &other) const
 // TODO(jmadill): We should prefer using Packed GLenums. http://anglebug.com/2169
 
 // Initialize PSO states, it is consistent with initial value of gl::State
-void GraphicsPipelineDesc::initDefaults()
+void GraphicsPipelineDesc::initDefaults(ContextVk const *contextVk)
 {
     // Set all vertex input attributes to default, the default format is Float
     angle::FormatID defaultFormat = GetCurrentValueFormatID(gl::VertexAttribType::Float);
@@ -1495,8 +1495,12 @@ void GraphicsPipelineDesc::initDefaults()
         SetBitField(packedAttrib.offset, 0);
     }
 
-    mRasterizationAndMultisampleStateInfo.bits.subpass                    = 0;
-    mRasterizationAndMultisampleStateInfo.bits.depthClampEnable           = 0;
+    mRasterizationAndMultisampleStateInfo.bits.subpass = 0;
+    mRasterizationAndMultisampleStateInfo.bits.depthClampEnable =
+        (contextVk->getRenderer()->getPhysicalDeviceFeatures().depthClamp &&
+         contextVk->getFeatures().depthClamping.enabled)
+            ? VK_TRUE
+            : VK_FALSE;
     mRasterizationAndMultisampleStateInfo.bits.rasterizationDiscardEnable = 0;
     SetBitField(mRasterizationAndMultisampleStateInfo.bits.polygonMode, VK_POLYGON_MODE_FILL);
     SetBitField(mRasterizationAndMultisampleStateInfo.bits.cullMode, VK_CULL_MODE_BACK_BIT);
