@@ -1446,7 +1446,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     shaderParams.clearDepth = params.depthStencilClearValue.depth;
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDefaults(contextVk);
     pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
     pipelineDesc.setColorWriteMasks(0, gl::DrawBufferMask(), gl::DrawBufferMask());
     pipelineDesc.setSingleColorWriteMask(params.colorAttachmentIndexGL, params.colorMaskFlags);
@@ -1692,7 +1692,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         VK_COLOR_COMPONENT_A_BIT;
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDefaults(contextVk);
     if (blitColor)
     {
         pipelineDesc.setColorWriteMasks(
@@ -2136,7 +2136,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ASSERT(src->getSamples() == 1);
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDefaults(contextVk);
     pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
     pipelineDesc.setRenderPassDesc(renderPassDesc);
     pipelineDesc.setRasterizationSamples(dest->getSamples());
@@ -2363,7 +2363,7 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
     ANGLE_TRY(ensureUnresolveResourcesInitialized(contextVk, function, totalBindingCount));
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDefaults(contextVk);
     pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
     pipelineDesc.setRasterizationSamples(framebuffer->getSamples());
     pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
