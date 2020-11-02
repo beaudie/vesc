@@ -40,6 +40,189 @@ namespace sh
 
 namespace
 {
+// This is 2x2 matrix in column major. The first column is for dFdx and second column is for dFdy.
+using PreRotationMatrixValues        = std::array<float, 4>;
+using PreRotationMatrixValuesEnumMap = angle::PackedEnumMap<vk::SurfaceRotation,
+                                                            PreRotationMatrixValues,
+                                                            angle::EnumSize<vk::SurfaceRotation>()>;
+constexpr PreRotationMatrixValuesEnumMap kFragRotationMatrices = {
+    {{vk::SurfaceRotation::Identity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+     {vk::SurfaceRotation::Rotated90Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
+     {vk::SurfaceRotation::Rotated180Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+     {vk::SurfaceRotation::Rotated270Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
+     {vk::SurfaceRotation::FlippedIdentity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+     {vk::SurfaceRotation::FlippedRotated90Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
+     {vk::SurfaceRotation::FlippedRotated180Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+     {vk::SurfaceRotation::FlippedRotated270Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}}}};
+// Returns mat2(m0, m1, m2, m3)
+TIntermAggregate *CreateFragRotationMatrixNode(vk::SurfaceRotation rotation)
+{
+    auto mat2Type             = new TType(EbtFloat, 2, 2);
+    TIntermSequence *mat2Args = new TIntermSequence();
+    mat2Args->push_back(CreateFloatNode(kFragRotationMatrices[rotation][0]));
+    mat2Args->push_back(CreateFloatNode(kFragRotationMatrices[rotation][1]));
+    mat2Args->push_back(CreateFloatNode(kFragRotationMatrices[rotation][2]));
+    mat2Args->push_back(CreateFloatNode(kFragRotationMatrices[rotation][3]));
+    TIntermAggregate *constVarConstructor =
+        TIntermAggregate::CreateConstructor(*mat2Type, mat2Args);
+    return constVarConstructor;
+}
+
+// Generates an array of vec2 and then use rotation to retrieve the desired flipXY out.
+TIntermTyped *GenerateFragRotationMatrix(TIntermSymbol *rotationSpecConst)
+{
+    auto mat2Type        = new TType(EbtFloat, 2, 2);
+    TType *typeMat2Array = new TType(*mat2Type);
+    typeMat2Array->makeArray(static_cast<unsigned int>(vk::SurfaceRotation::EnumCount));
+
+    TIntermSequence *sequences;
+    sequences = new TIntermSequence(
+        {CreateFragRotationMatrixNode(vk::SurfaceRotation::Identity),
+         CreateFragRotationMatrixNode(vk::SurfaceRotation::Rotated90Degrees),
+         CreateFragRotationMatrixNode(vk::SurfaceRotation::Rotated180Degrees),
+         CreateFragRotationMatrixNode(vk::SurfaceRotation::Rotated270Degrees),
+         CreateFragRotationMatrixNode(vk::SurfaceRotation::FlippedIdentity),
+         CreateFragRotationMatrixNode(vk::SurfaceRotation::FlippedRotated90Degrees),
+         CreateFragRotationMatrixNode(vk::SurfaceRotation::FlippedRotated180Degrees),
+         CreateFragRotationMatrixNode(vk::SurfaceRotation::FlippedRotated270Degrees)});
+    TIntermTyped *fragRotationMatrixArray =
+        TIntermAggregate::CreateConstructor(*typeMat2Array, sequences);
+
+    TIntermTyped *fragRotationMatrix =
+        new TIntermBinary(EOpIndexDirect, fragRotationMatrixArray, rotationSpecConst->deepCopy());
+    return fragRotationMatrix;
+}
+
+using FlipXYValues = std::array<float, 2>;
+using FlipXYValuesEnumaMap =
+    angle::PackedEnumMap<vk::SurfaceRotation, FlipXYValues, angle::EnumSize<vk::SurfaceRotation>()>;
+constexpr FlipXYValuesEnumaMap kFlipXYValue = {
+    {{vk::SurfaceRotation::Identity, {{1.0f, 1.0f}}},
+     {vk::SurfaceRotation::Rotated90Degrees, {{1.0f, 1.0f}}},
+     {vk::SurfaceRotation::Rotated180Degrees, {{-1.0f, 1.0f}}},
+     {vk::SurfaceRotation::Rotated270Degrees, {{-1.0f, -1.0f}}},
+     {vk::SurfaceRotation::FlippedIdentity, {{1.0f, -1.0f}}},
+     {vk::SurfaceRotation::FlippedRotated90Degrees, {{1.0f, -1.0f}}},
+     {vk::SurfaceRotation::FlippedRotated180Degrees, {{-1.0f, -1.0f}}},
+     {vk::SurfaceRotation::FlippedRotated270Degrees, {{-1.0f, 1.0f}}}}};
+
+// Returns vec2(flip.x, flip.y) or vec2(flip.x, -flip.y) if negFlipY is true
+TIntermAggregate *CreateFlipXYNode(vk::SurfaceRotation rotation, bool negFlipY)
+{
+    auto vec2Type             = new TType(EbtFloat, 2);
+    TIntermSequence *vec2Args = new TIntermSequence();
+    vec2Args->push_back(CreateFloatNode(kFlipXYValue[rotation][0]));
+    if (negFlipY)
+    {
+        vec2Args->push_back(CreateFloatNode(-kFlipXYValue[rotation][1]));
+    }
+    else
+    {
+        vec2Args->push_back(CreateFloatNode(kFlipXYValue[rotation][1]));
+    }
+    TIntermAggregate *constVarConstructor =
+        TIntermAggregate::CreateConstructor(*vec2Type, vec2Args);
+    return constVarConstructor;
+}
+
+// Generates an array of vec2 and then use rotation to retrieve the desired flipXY out.
+TIntermTyped *CreateFlipXY(TIntermSymbol *rotationSpecConst, bool negFlipY)
+{
+    auto vec2Type          = new TType(EbtFloat, 2);
+    TType *typeFlipXYArray = new TType(*vec2Type);
+    typeFlipXYArray->makeArray(static_cast<unsigned int>(vk::SurfaceRotation::EnumCount));
+
+    TIntermSequence *sequences;
+    sequences = new TIntermSequence(
+        {CreateFlipXYNode(vk::SurfaceRotation::Identity, negFlipY),
+         CreateFlipXYNode(vk::SurfaceRotation::Rotated90Degrees, negFlipY),
+         CreateFlipXYNode(vk::SurfaceRotation::Rotated180Degrees, negFlipY),
+         CreateFlipXYNode(vk::SurfaceRotation::Rotated270Degrees, negFlipY),
+         CreateFlipXYNode(vk::SurfaceRotation::FlippedIdentity, negFlipY),
+         CreateFlipXYNode(vk::SurfaceRotation::FlippedRotated90Degrees, negFlipY),
+         CreateFlipXYNode(vk::SurfaceRotation::FlippedRotated180Degrees, negFlipY),
+         CreateFlipXYNode(vk::SurfaceRotation::FlippedRotated270Degrees, negFlipY)});
+    TIntermTyped *flipXYArray = TIntermAggregate::CreateConstructor(*typeFlipXYArray, sequences);
+
+    TIntermTyped *flipXY =
+        new TIntermBinary(EOpIndexDirect, flipXYArray, rotationSpecConst->deepCopy());
+    return flipXY;
+}
+
+// Returns [flipX*m0, flipY*m1], where [m0 m1] is the first column of kFragRotation matrix.
+constexpr FlipXYValues CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation rotation)
+{
+    return FlipXYValues({kFlipXYValue[rotation][0] * kFragRotationMatrices[rotation][0],
+                         kFlipXYValue[rotation][1] * kFragRotationMatrices[rotation][1]});
+}
+constexpr FlipXYValuesEnumaMap kRotatedFlipXYForDFdx = {
+    {{vk::SurfaceRotation::Identity,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::Identity)},
+     {vk::SurfaceRotation::Rotated90Degrees,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::Rotated90Degrees)},
+     {vk::SurfaceRotation::Rotated180Degrees,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::Rotated180Degrees)},
+     {vk::SurfaceRotation::Rotated270Degrees,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::Rotated270Degrees)},
+     {vk::SurfaceRotation::FlippedIdentity,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::FlippedIdentity)},
+     {vk::SurfaceRotation::FlippedRotated90Degrees,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::FlippedRotated90Degrees)},
+     {vk::SurfaceRotation::FlippedRotated180Degrees,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::FlippedRotated180Degrees)},
+     {vk::SurfaceRotation::FlippedRotated270Degrees,
+      CreateRotatedFlipXYValueForDFdx(vk::SurfaceRotation::FlippedRotated270Degrees)}}};
+
+// Returns [flipX*m2, flipY*m3], where [m2 m3] is the second column of kFragRotation matrix.
+constexpr FlipXYValues CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation rotation)
+{
+    return FlipXYValues({kFlipXYValue[rotation][0] * kFragRotationMatrices[rotation][2],
+                         kFlipXYValue[rotation][1] * kFragRotationMatrices[rotation][3]});
+}
+constexpr FlipXYValuesEnumaMap kRotatedFlipXYForDFdy = {
+    {{vk::SurfaceRotation::Identity,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::Identity)},
+     {vk::SurfaceRotation::Rotated90Degrees,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::Rotated90Degrees)},
+     {vk::SurfaceRotation::Rotated180Degrees,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::Rotated180Degrees)},
+     {vk::SurfaceRotation::Rotated270Degrees,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::Rotated270Degrees)},
+     {vk::SurfaceRotation::FlippedIdentity,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::FlippedIdentity)},
+     {vk::SurfaceRotation::FlippedRotated90Degrees,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::FlippedRotated90Degrees)},
+     {vk::SurfaceRotation::FlippedRotated180Degrees,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::FlippedRotated180Degrees)},
+     {vk::SurfaceRotation::FlippedRotated270Degrees,
+      CreateRotatedFlipXYValueForDFdy(vk::SurfaceRotation::FlippedRotated270Degrees)}}};
+
+// Returns an array of float and then use rotation to retrieve the desired float value out.
+TIntermTyped *CreateMultiplier(const FlipXYValuesEnumaMap &valuesEnumaMap,
+                               TIntermSymbol *rotation,
+                               int index)
+{
+    const TType *floatType = StaticType::GetBasic<EbtFloat>();
+    TType *typeFloat8      = new TType(*floatType);
+    typeFloat8->makeArray(static_cast<unsigned int>(vk::SurfaceRotation::EnumCount));
+
+    TIntermSequence *sequences;
+    sequences = new TIntermSequence(
+        {CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::Identity][index]),
+         CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::Rotated90Degrees][index]),
+         CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::Rotated180Degrees][index]),
+         CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::Rotated270Degrees][index]),
+         CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::FlippedIdentity][index]),
+         CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::FlippedRotated90Degrees][index]),
+         CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::FlippedRotated180Degrees][index]),
+         CreateFloatNode(valuesEnumaMap[vk::SurfaceRotation::FlippedRotated270Degrees][index])});
+    TIntermTyped *multiplersArray = TIntermAggregate::CreateConstructor(*typeFloat8, sequences);
+
+    TIntermTyped *multiplier =
+        new TIntermBinary(EOpIndexDirect, multiplersArray, rotation->deepCopy());
+    return multiplier;
+}
+
 // This traverses nodes, find the struct ones and add their declarations to the sink. It also
 // removes the nodes from the tree as it processes them.
 class DeclareStructTypesTraverser : public TIntermTraverser
@@ -173,6 +356,8 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
 // Specialization constant names
 constexpr ImmutableString kLineRasterEmulationSpecConstVarName =
     ImmutableString("ANGLELineRasterEmulation");
+constexpr ImmutableString kSurfaceRotationSpecConstVarName =
+    ImmutableString("ANGLESurfaceRotation");
 
 constexpr const char kViewport[]             = "viewport";
 constexpr const char kHalfRenderArea[]       = "halfRenderArea";
@@ -486,6 +671,14 @@ TIntermSymbol *GenerateLineRasterSpecConstRef(TSymbolTable *symbolTable)
     return new TIntermSymbol(specConstVar);
 }
 
+TIntermSymbol *GenerateSurfaceRotationSpecConstRef(TSymbolTable *symbolTable)
+{
+    TVariable *specConstVar =
+        new TVariable(symbolTable, kSurfaceRotationSpecConstVarName,
+                      StaticType::GetBasic<EbtUInt>(), SymbolType::AngleInternal);
+    return new TIntermSymbol(specConstVar);
+}
+
 TVariable *AddANGLEPositionVaryingDeclaration(TIntermBlock *root,
                                               TSymbolTable *symbolTable,
                                               TQualifier qualifier)
@@ -585,13 +778,14 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
                                                 TIntermBlock *root,
                                                 TIntermSequence *insertSequence,
                                                 TSymbolTable *symbolTable,
+                                                TIntermSymbol *rotationSpecConst,
                                                 const TVariable *driverUniforms)
 {
-    TIntermBinary *flipXY       = CreateDriverUniformRef(driverUniforms, kFlipXY);
-    TIntermBinary *pivot        = CreateDriverUniformRef(driverUniforms, kHalfRenderArea);
-    TIntermBinary *fragRotation = (compileOptions & SH_ADD_PRE_ROTATION)
-                                      ? CreateDriverUniformRef(driverUniforms, kFragRotation)
-                                      : nullptr;
+    TIntermTyped *flipXY       = GenerateFlipXY(rotationSpecConst, driverUniforms);
+    TIntermBinary *pivot       = CreateDriverUniformRef(driverUniforms, kHalfRenderArea);
+    TIntermTyped *fragRotation = (compileOptions & SH_ADD_PRE_ROTATION)
+                                     ? GenerateFragRotation(rotationSpecConst, driverUniforms)
+                                     : nullptr;
     return RotateAndFlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable,
                                         BuiltInVariable::gl_FragCoord(), kFlippedFragCoordName,
                                         pivot, fragRotation);
@@ -635,6 +829,7 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
                                               TInfoSinkBase &sink,
                                               TIntermBlock *root,
                                               TSymbolTable *symbolTable,
+                                              TIntermSymbol *rotationSpecConst,
                                               const TVariable *driverUniforms,
                                               bool usesFragCoord)
 {
@@ -733,7 +928,7 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     if (!usesFragCoord)
     {
         if (!InsertFragCoordCorrection(compiler, compileOptions, root, emulationSequence,
-                                       symbolTable, driverUniforms))
+                                       symbolTable, rotationSpecConst, driverUniforms))
         {
             return false;
         }
@@ -871,6 +1066,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
     }
 
     const TVariable *driverUniforms;
+    TIntermSymbol *surfaceRotationSpecConst = nullptr;
     if (getShaderType() == GL_COMPUTE_SHADER)
     {
         driverUniforms = AddComputeDriverUniformsToShader(root, &getSymbolTable());
@@ -920,6 +1116,13 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                  << static_cast<uint32_t>(vk::SpecializationConstantId::LineRasterEmulation)
                  << ") const bool " << kLineRasterEmulationSpecConstVarName << " = false;\n\n";
         }
+        if (compileOptions & SH_SPECCONST_FOR_ROTATION)
+        {
+            sink << "layout(constant_id="
+                 << static_cast<uint32_t>(vk::SpecializationConstantId::SurfaceRotation)
+                 << ") const uint " << kSurfaceRotationSpecConstVarName << " = 0;\n\n";
+            surfaceRotationSpecConst = GenerateSurfaceRotationSpecConstRef(&getSymbolTable());
+        }
     }
 
     // Declare gl_FragColor and glFragData as webgl_FragColor and webgl_FragData
@@ -953,7 +1156,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         if (compileOptions & SH_ADD_BRESENHAM_LINE_RASTER_EMULATION)
         {
             if (!AddBresenhamEmulationFS(this, compileOptions, sink, root, &getSymbolTable(),
-                                         driverUniforms, usesFragCoord))
+                                         surfaceRotationSpecConst, driverUniforms, usesFragCoord))
             {
                 return false;
             }
@@ -990,7 +1193,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
 
         if (usesPointCoord)
         {
-            TIntermBinary *flipXY       = CreateDriverUniformRef(driverUniforms, kNegFlipXY);
+            TIntermTyped *flipXY = GenerateNegFlipXY(surfaceRotationSpecConst, driverUniforms);
             TIntermConstantUnion *pivot = CreateFloatNode(0.5f);
             TIntermBinary *fragRotation =
                 usePreRotation ? CreateDriverUniformRef(driverUniforms, kFragRotation) : nullptr;
@@ -1005,21 +1208,17 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         if (usesFragCoord)
         {
             if (!InsertFragCoordCorrection(this, compileOptions, root, GetMainSequence(root),
-                                           &getSymbolTable(), driverUniforms))
+                                           &getSymbolTable(), surfaceRotationSpecConst,
+                                           driverUniforms))
             {
                 return false;
             }
         }
 
+        if (!RewriteDfdy(this, compileOptions, root, getSymbolTable(), getShaderVersion(),
+                         surfaceRotationSpecConst, driverUniforms))
         {
-            TIntermBinary *flipXY = CreateDriverUniformRef(driverUniforms, kFlipXY);
-            TIntermBinary *fragRotation =
-                usePreRotation ? CreateDriverUniformRef(driverUniforms, kFragRotation) : nullptr;
-            if (!RewriteDfdy(this, root, getSymbolTable(), getShaderVersion(), flipXY,
-                             fragRotation))
-            {
-                return false;
-            }
+            return false;
         }
 
         EmitEarlyFragmentTestsGLSL(*this, sink);
@@ -1150,6 +1349,78 @@ TIntermBinary *TranslatorVulkan::getDriverUniformDepthRangeReservedFieldRef(
     TIntermBinary *depthRange = CreateDriverUniformRef(driverUniforms, kDepthRange);
 
     return new TIntermBinary(EOpIndexDirectStruct, depthRange, CreateIndexNode(3));
+}
+
+TIntermTyped *GenerateMultiplierXForDFdx(TIntermSymbol *rotationSpecConst)
+{
+    return CreateMultiplier(kRotatedFlipXYForDFdx, rotationSpecConst, 0);
+}
+TIntermTyped *GenerateMultiplierYForDFdx(TIntermSymbol *rotationSpecConst)
+{
+    return CreateMultiplier(kRotatedFlipXYForDFdx, rotationSpecConst, 1);
+}
+TIntermTyped *GenerateMultiplierXForDFdy(TIntermSymbol *rotationSpecConst)
+{
+    return CreateMultiplier(kRotatedFlipXYForDFdy, rotationSpecConst, 0);
+}
+TIntermTyped *GenerateMultiplierYForDFdy(TIntermSymbol *rotationSpecConst)
+{
+    return CreateMultiplier(kRotatedFlipXYForDFdy, rotationSpecConst, 1);
+}
+TIntermTyped *GenerateFlipY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms)
+{
+    if (rotationSpecConst)
+    {
+        return CreateMultiplier(kFlipXYValue, rotationSpecConst, 1);
+    }
+    else
+    {
+        TIntermBinary *flipXY = CreateDriverUniformRef(driverUniforms, kFlipXY);
+        TIntermTyped *flipY =
+            new TIntermBinary(EOpIndexDirect, flipXY->deepCopy(), CreateIndexNode(1));
+        return flipY;
+    }
+}
+TIntermTyped *GenerateNegFlipY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms)
+{
+    TIntermTyped *negFlipXY     = GenerateNegFlipXY(rotationSpecConst, driverUniforms);
+    TVector<int> swizzleOffsetY = {1};
+    TIntermSwizzle *negFlipY    = new TIntermSwizzle(negFlipXY, swizzleOffsetY);
+    return negFlipY;
+}
+TIntermTyped *GenerateFlipXY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms)
+{
+    if (rotationSpecConst)
+    {
+        return CreateFlipXY(rotationSpecConst, false);
+    }
+    else
+    {
+        return CreateDriverUniformRef(driverUniforms, kFlipXY);
+    }
+}
+TIntermTyped *GenerateNegFlipXY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms)
+{
+    if (rotationSpecConst)
+    {
+        return CreateFlipXY(rotationSpecConst, true);
+    }
+    else
+    {
+        return CreateDriverUniformRef(driverUniforms, kNegFlipXY);
+    }
+}
+TIntermTyped *GenerateFragRotation(TIntermSymbol *rotationSpecConst,
+                                   const TVariable *driverUniforms)
+{
+    if (rotationSpecConst)
+    {
+        return GenerateFragRotationMatrix(rotationSpecConst);
+    }
+    else
+    {
+        return CreateDriverUniformRef(driverUniforms, kFragRotation);
+    }
 }
 
 }  // namespace sh
