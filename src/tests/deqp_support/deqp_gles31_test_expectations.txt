@@ -292,3 +292,18 @@
 // Vulkan Android failures with these formats
 5277 VULKAN ANDROID : dEQP-GLES31.functional.copy_image.non_compressed.viewclass_32_bits.rgba8_snorm_rgb10_a2* = FAIL
 5277 VULKAN ANDROID : dEQP-GLES31.functional.copy_image.non_compressed.viewclass_32_bits.rgba8_snorm_rgb9_e5* = FAIL
+
+// Skip on Pixel2 to reduce the bots test time so that it won't timeout
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32f_rgba8_etc2_eac.texture3d_to_cubemap = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32i_rgba_astc_10x6_khr.texture2d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32i_rgba_astc_10x5_khr.texture2d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32i_rgba_astc_8x6_khr.texture2d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32i_rgba_astc_8x5_khr.texture2d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32i_rgba_astc_6x6_khr.texture2d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32i_rgba_astc_6x5_khr.texture2d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32f_srgb8_alpha8_astc_12x10_khr.texture3d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32f_srgb8_alpha8_astc_10x8_khr.cubemap_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32f_srgb8_alpha8_astc_6x5_khr.texture2d_array_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32f_rgba_astc_12x10_khr.texture2d_array_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32f_rgba_astc_10x10_khr.texture3d_to_texture2d_array = SKIP
+172936025 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.copy_image.mixed.viewclass_128_bits_mixed.rgba32f_rgba_astc_8x6_khr.texture3d_to_texture2d_array = SKIP
