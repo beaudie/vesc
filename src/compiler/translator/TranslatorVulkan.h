@@ -24,15 +24,20 @@ class TranslatorVulkan : public TCompiler
   public:
     TranslatorVulkan(sh::GLenum type, ShShaderSpec spec);
 
+    static TIntermTyped *getDriverUniformFlipXYRef(const TVariable *driverUniforms);
+    static TIntermTyped *getDriverUniformNegFlipYRef(const TVariable *driverUniforms);
+    static TIntermTyped *getDriverUniformFragRotationMatrixRef(const TVariable *driverUniforms);
+    static TIntermTyped *getDriverUniformPreRotationMatrixRef(const TVariable *driverUniforms);
+
   protected:
     ANGLE_NO_DISCARD bool translate(TIntermBlock *root,
                                     ShCompileOptions compileOptions,
                                     PerformanceDiagnostics *perfDiagnostics) override;
     bool shouldFlattenPragmaStdglInvariantAll() override;
 
-    TIntermSwizzle *getDriverUniformNegFlipYRef(const TVariable *driverUniforms) const;
     TIntermBinary *getDriverUniformDepthRangeReservedFieldRef(
         const TVariable *driverUniforms) const;
+
     // Subclass can call this method to transform the AST before writing the final output.
     // See TranslatorMetal.cpp.
     ANGLE_NO_DISCARD bool translateImpl(TIntermBlock *root,
