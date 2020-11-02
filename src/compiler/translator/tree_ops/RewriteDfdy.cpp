@@ -8,9 +8,11 @@
 
 #include "compiler/translator/tree_ops/RewriteDfdy.h"
 
+#include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/TranslatorVulkan.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
@@ -24,47 +26,65 @@ class Traverser : public TIntermTraverser
 {
   public:
     ANGLE_NO_DISCARD static bool Apply(TCompiler *compiler,
+                                       ShCompileOptions compileOptions,
                                        TIntermNode *root,
                                        const TSymbolTable &symbolTable,
-                                       TIntermBinary *flipXY,
+                                       TIntermSymbol *rotationSpecConst,
+                                       TIntermTyped *flipXY,
                                        TIntermTyped *fragRotation);
 
   private:
-    Traverser(TIntermBinary *flipXY, TIntermTyped *fragRotation, TSymbolTable *symbolTable);
+    Traverser(TSymbolTable *symbolTable,
+              ShCompileOptions compileOptions,
+              TIntermSymbol *rotationSpecConst,
+              TIntermTyped *flipXY,
+              TIntermTyped *fragRotation);
     bool visitUnary(Visit visit, TIntermUnary *node) override;
 
     bool visitUnaryWithRotation(Visit visit, TIntermUnary *node);
     bool visitUnaryWithoutRotation(Visit visit, TIntermUnary *node);
 
-    TIntermBinary *mFlipXY      = nullptr;
-    TIntermTyped *mFragRotation = nullptr;
+    TIntermSymbol *mRotationSpecConst = nullptr;
+    bool mUsePreRotation              = false;
+    TIntermTyped *mFlipXY             = nullptr;
+    TIntermTyped *mFragRotation       = nullptr;
 };
 
-Traverser::Traverser(TIntermBinary *flipXY, TIntermTyped *fragRotation, TSymbolTable *symbolTable)
+Traverser::Traverser(TSymbolTable *symbolTable,
+                     ShCompileOptions compileOptions,
+                     TIntermSymbol *rotationSpecConst,
+                     TIntermTyped *flipXY,
+                     TIntermTyped *fragRotation)
     : TIntermTraverser(true, false, false, symbolTable),
+      mRotationSpecConst(rotationSpecConst),
+      mUsePreRotation(compileOptions & SH_ADD_PRE_ROTATION),
       mFlipXY(flipXY),
       mFragRotation(fragRotation)
 {}
 
 // static
 bool Traverser::Apply(TCompiler *compiler,
+                      ShCompileOptions compileOptions,
                       TIntermNode *root,
                       const TSymbolTable &symbolTable,
-                      TIntermBinary *flipXY,
+                      TIntermSymbol *rotationSpecConst,
+                      TIntermTyped *flipXY,
                       TIntermTyped *fragRotation)
 {
     TSymbolTable *pSymbolTable = const_cast<TSymbolTable *>(&symbolTable);
-    Traverser traverser(flipXY, fragRotation, pSymbolTable);
+    Traverser traverser(pSymbolTable, compileOptions, rotationSpecConst, flipXY, fragRotation);
     root->traverse(&traverser);
     return traverser.updateTree(compiler, root);
 }
 
 bool Traverser::visitUnary(Visit visit, TIntermUnary *node)
 {
-    if (mFragRotation)
+    if (mUsePreRotation)
     {
+        ASSERT(mRotationSpecConst || mFragRotation);
         return visitUnaryWithRotation(visit, node);
     }
+    ASSERT(!mFragRotation);
     return visitUnaryWithoutRotation(visit, node);
 }
 
@@ -102,36 +122,52 @@ bool Traverser::visitUnaryWithRotation(Visit visit, TIntermUnary *node)
     //
     //   correctedDfdx(operand) = dFdy(operand) * mFlipXY.y
     //   correctedDfdy(operand) = dFdx(operand) * mFlipXY.x
-    //
-    // TODO(ianelliott): Look at the performance of this approach and potentially optimize it
-    // http://anglebug.com/4678
 
-    // Get a vec2 with the correct half of ANGLEUniforms.fragRotation
-    TIntermBinary *halfRotationMat = nullptr;
-    if (node->getOp() == EOpDFdx)
+    TIntermTyped *multiplierX;
+    TIntermTyped *multiplierY;
+    if (mRotationSpecConst)
     {
-        halfRotationMat =
-            new TIntermBinary(EOpIndexDirect, mFragRotation->deepCopy(), CreateIndexNode(0));
+        if (node->getOp() == EOpDFdx)
+        {
+            multiplierX = GenerateMultiplierXForDFdx(mRotationSpecConst);
+            multiplierY = GenerateMultiplierYForDFdx(mRotationSpecConst);
+        }
+        else
+        {
+            multiplierX = GenerateMultiplierXForDFdy(mRotationSpecConst);
+            multiplierY = GenerateMultiplierYForDFdy(mRotationSpecConst);
+        }
     }
     else
     {
-        halfRotationMat =
-            new TIntermBinary(EOpIndexDirect, mFragRotation->deepCopy(), CreateIndexNode(1));
+        // Get a vec2 with the correct half of ANGLEUniforms.fragRotation
+        TIntermBinary *halfRotationMat = nullptr;
+        if (node->getOp() == EOpDFdx)
+        {
+            halfRotationMat =
+                new TIntermBinary(EOpIndexDirect, mFragRotation->deepCopy(), CreateIndexNode(0));
+        }
+        else
+        {
+            halfRotationMat =
+                new TIntermBinary(EOpIndexDirect, mFragRotation->deepCopy(), CreateIndexNode(1));
+        }
+
+        // Multiply halfRotationMat by ANGLEUniforms.flipXY and store in a temporary variable
+        TIntermBinary *rotatedFlipXY =
+            new TIntermBinary(EOpMul, mFlipXY->deepCopy(), halfRotationMat);
+        const TType *vec2Type       = StaticType::GetBasic<EbtFloat, 2>();
+        TIntermSymbol *tmpRotFlipXY = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec2Type));
+        TIntermSequence *tmpDecl    = new TIntermSequence;
+        tmpDecl->push_back(CreateTempInitDeclarationNode(&tmpRotFlipXY->variable(), rotatedFlipXY));
+        insertStatementsInParentBlock(*tmpDecl);
+
+        // Get the .x and .y swizzles to use as multipliers
+        TVector<int> swizzleOffsetX = {0};
+        TVector<int> swizzleOffsetY = {1};
+        multiplierX                 = new TIntermSwizzle(tmpRotFlipXY, swizzleOffsetX);
+        multiplierY                 = new TIntermSwizzle(tmpRotFlipXY->deepCopy(), swizzleOffsetY);
     }
-
-    // Multiply halfRotationMat by ANGLEUniforms.flipXY and store in a temporary variable
-    TIntermBinary *rotatedFlipXY = new TIntermBinary(EOpMul, mFlipXY->deepCopy(), halfRotationMat);
-    const TType *vec2Type        = StaticType::GetBasic<EbtFloat, 2>();
-    TIntermSymbol *tmpRotFlipXY  = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec2Type));
-    TIntermSequence *tmpDecl     = new TIntermSequence;
-    tmpDecl->push_back(CreateTempInitDeclarationNode(&tmpRotFlipXY->variable(), rotatedFlipXY));
-    insertStatementsInParentBlock(*tmpDecl);
-
-    // Get the .x and .y swizzles to use as multipliers
-    TVector<int> swizzleOffsetX = {0};
-    TVector<int> swizzleOffsetY = {1};
-    TIntermSwizzle *multiplierX = new TIntermSwizzle(tmpRotFlipXY, swizzleOffsetX);
-    TIntermSwizzle *multiplierY = new TIntermSwizzle(tmpRotFlipXY->deepCopy(), swizzleOffsetY);
 
     // Get the results of dFdx(operand) and dFdy(operand), and multiply them by the swizzles
     TIntermTyped *operand = node->getOperand();
@@ -177,21 +213,23 @@ bool Traverser::visitUnaryWithoutRotation(Visit visit, TIntermUnary *node)
 
     return true;
 }
-
 }  // anonymous namespace
 
 bool RewriteDfdy(TCompiler *compiler,
+                 ShCompileOptions compileOptions,
                  TIntermNode *root,
                  const TSymbolTable &symbolTable,
                  int shaderVersion,
-                 TIntermBinary *flipXY,
+                 TIntermSymbol *rotationSpecConst,
+                 TIntermTyped *flipXY,
                  TIntermTyped *fragRotation)
 {
     // dFdy is only valid in GLSL 3.0 and later.
     if (shaderVersion < 300)
         return true;
 
-    return Traverser::Apply(compiler, root, symbolTable, flipXY, fragRotation);
+    return Traverser::Apply(compiler, compileOptions, root, symbolTable, rotationSpecConst, flipXY,
+                            fragRotation);
 }
 
 }  // namespace sh
