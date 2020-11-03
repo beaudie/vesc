@@ -668,6 +668,9 @@ struct Extensions
 
     // GL_EXT_copy_image
     bool copyImageEXT = false;
+
+    // GL_EXT_YUV_target
+    bool yuvTargetEXT = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct

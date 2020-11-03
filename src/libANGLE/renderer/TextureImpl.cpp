@@ -168,4 +168,11 @@ angle::Result TextureImpl::getTexImage(const gl::Context *context,
     UNREACHABLE();
     return angle::Result::Stop;
 }
+
+GLint TextureImpl::getRequiredTextureImageUnits(const gl::Context *context)
+{
+    UNREACHABLE();
+    return 0;
+}
+
 }  // namespace rx
