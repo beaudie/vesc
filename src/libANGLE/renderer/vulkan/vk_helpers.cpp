@@ -556,7 +556,7 @@ const angle::Format &GetDepthStencilImageToBufferFormat(const angle::Format &ima
 
 VkClearValue GetRobustResourceClearValue(const Format &format)
 {
-    VkClearValue clearValue;
+    VkClearValue clearValue = {};
     if (format.intendedFormat().hasDepthOrStencilBits())
     {
         clearValue.depthStencil = kRobustInitDepthStencilValue;
@@ -4859,9 +4859,11 @@ void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled)
 {
     // Skip staging extra clears if robust resource init is enabled.
     if (!mFormat->hasEmulatedImageChannels() || isRobustResourceInitEnabled)
+    {
         return;
+    }
 
-    VkClearValue clearValue;
+    VkClearValue clearValue = {};
     if (mFormat->intendedFormat().hasDepthOrStencilBits())
     {
         clearValue.depthStencil = kRobustInitDepthStencilValue;
