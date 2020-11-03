@@ -38,6 +38,7 @@ class DmaBufImageSiblingEGL : public ExternalImageSiblingEGL
     egl::AttributeMap mAttribs;
     gl::Extents mSize;
     gl::Format mFormat;
+    bool mYUV;
 };
 
 }  // namespace rx
