@@ -234,6 +234,8 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
                                       GLenum type,
                                       void *pixels);
 
+    virtual GLint getRequiredTextureImageUnits(const gl::Context *context);
+
   protected:
     const gl::TextureState &mState;
 };
