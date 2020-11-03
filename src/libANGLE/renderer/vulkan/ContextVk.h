@@ -1117,7 +1117,7 @@ class ContextVk : public ContextImpl, public vk::Context
     // We have a queue of CommandBufferHelpers (CBHs) that is drawn from for the two active command
     //  buffers in the main thread. The two active command buffers are the inside and outside
     //  RenderPass command buffers.
-    constexpr static size_t kNumCommandBuffers = 2;
+    constexpr static size_t kNumCommandBuffers = 8;
     std::array<vk::CommandBufferHelper, kNumCommandBuffers> mCommandBuffers;
 
     // Lock access to the command buffer queue
