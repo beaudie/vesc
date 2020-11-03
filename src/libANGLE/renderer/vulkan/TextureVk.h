@@ -226,8 +226,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return mState.getSRGBOverride() != gl::SrgbOverride::Default;
     }
 
-    angle::Result ensureMutable(ContextVk *contextVk);
-
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
