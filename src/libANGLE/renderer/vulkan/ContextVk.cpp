@@ -3623,8 +3623,13 @@ void ContextVk::invalidateDriverUniforms()
     mComputeDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS_BINDING);
 }
 
-void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
+angle::Result ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
 {
+    if (framebufferVk != mDrawFramebuffer)
+    {
+        return angle::Result::Continue;
+    }
+
     // Ensure that the pipeline description is updated.
     if (mGraphicsPipelineDesc->getRasterizationSamples() !=
         static_cast<uint32_t>(framebufferVk->getSamples()))
@@ -3633,7 +3638,12 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
                                                           framebufferVk->getSamples());
     }
 
+    // Update scissor.
+    ANGLE_TRY(updateScissor(mState));
+
     onDrawFramebufferRenderPassDescChange(framebufferVk);
+
+    return angle::Result::Continue;
 }
 
 void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk)
