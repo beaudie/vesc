@@ -2516,11 +2516,14 @@ void RendererVk::setGlobalDebugAnnotator()
 
     if (enableDebugAnnotatorVk)
     {
+        // Install DebugAnnotatorVk so that GLES API commands will generate Vulkan debug markers
         gl::InitializeDebugAnnotations(&mAnnotator);
     }
     else
     {
-        gl::UninitializeDebugAnnotations();
+        // Install LoggingAnnotator so that other debug functionality will still work (e.g. Vulkan
+        // validation errors will cause dEQP tests to fail).
+        mDisplay->setGlobalDebugAnnotator();
     }
 }
 
