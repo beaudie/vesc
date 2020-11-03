@@ -25,6 +25,7 @@ namespace gl
 struct SamplerBinding
 {
     SamplerBinding(TextureType textureTypeIn,
+                   GLenum samplerTypeIn,
                    SamplerFormat formatIn,
                    size_t elementCount,
                    bool unreferenced);
@@ -33,6 +34,8 @@ struct SamplerBinding
 
     // Necessary for retrieving active textures from the GL state.
     TextureType textureType;
+
+    GLenum samplerType;
 
     SamplerFormat format;
 
@@ -183,6 +186,8 @@ class ProgramExecutable final : public angle::Subject
         return mActiveImageShaderBits;
     }
 
+    const ActiveTextureMask &getActiveYUVSamplers() const { return mActiveSamplerYUV; }
+
     const ActiveTextureArray<TextureType> &getActiveSamplerTypes() const
     {
         return mActiveSamplerTypes;
@@ -302,6 +307,8 @@ class ProgramExecutable final : public angle::Subject
     }
     int getLinkedShaderVersion(ShaderType shaderType) { return mLinkedShaderVersions[shaderType]; }
 
+    bool isYUVOutput() const;
+
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
     // class declarations and accessing the necessary members with getters/setters.
@@ -330,6 +337,7 @@ class ProgramExecutable final : public angle::Subject
     ActiveTextureMask mActiveSamplersMask;
     ActiveTextureArray<uint32_t> mActiveSamplerRefCounts;
     ActiveTextureArray<TextureType> mActiveSamplerTypes;
+    ActiveTextureMask mActiveSamplerYUV;
     ActiveTextureArray<SamplerFormat> mActiveSamplerFormats;
     ActiveTextureArray<ShaderBitSet> mActiveSamplerShaderBits;
 
@@ -343,6 +351,7 @@ class ProgramExecutable final : public angle::Subject
     // to uniforms.
     std::vector<sh::ShaderVariable> mOutputVariables;
     std::vector<VariableLocation> mOutputLocations;
+    bool mYUVOutput;
     // Vertex attributes, Fragment input varyings, etc.
     std::vector<sh::ShaderVariable> mProgramInputs;
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;

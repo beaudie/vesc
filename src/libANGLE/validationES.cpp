@@ -2926,6 +2926,32 @@ const char *ValidateDrawStates(const Context *context)
         return kDrawFramebufferIncomplete;
     }
 
+    bool framebufferIsYUV = framebuffer->hasYUVAttachment();
+    if (framebufferIsYUV)
+    {
+        const BlendState &blendState = state.getBlendState();
+        if (!blendState.colorMaskRed || !blendState.colorMaskGreen || !blendState.colorMaskBlue)
+        {
+            // When rendering into a YUV framebuffer, the color mask must have r g and b set to
+            // true.
+            return kInvalidColorMaskForYUV;
+        }
+
+        if (blendState.blend)
+        {
+            // When rendering into a YUV framebuffer, blending must be disabled.
+            return kInvalidBlendStateForYUV;
+        }
+    }
+    else
+    {
+        if (framebuffer->hasExternalTextureAttachment())
+        {
+            // It is an error to render into an external texture that is not YUV.
+            return kExternalTextureAttachmentNotYUV;
+        }
+    }
+
     if (context->getStateCache().hasAnyEnabledClientAttrib())
     {
         if (extensions.webglCompatibility || !state.areClientArraysEnabled())
@@ -2951,6 +2977,8 @@ const char *ValidateDrawStates(const Context *context)
         Program *program                 = state.getLinkedProgram(context);
         ProgramPipeline *programPipeline = state.getProgramPipeline();
 
+        bool programIsYUVOutput = false;
+
         if (program)
         {
             if (!program->validateSamplers(nullptr, context->getCaps()))
@@ -2963,6 +2991,8 @@ const char *ValidateDrawStates(const Context *context)
             {
                 return errorMsg;
             }
+
+            programIsYUVOutput = program->isYUVOutput();
         }
         else if (programPipeline)
         {
@@ -2994,16 +3024,24 @@ const char *ValidateDrawStates(const Context *context)
             {
                 return err::kProgramPipelineLinkFailed;
             }
+
+            programIsYUVOutput = executable.isYUVOutput();
+        }
+
+        if (programIsYUVOutput != framebufferIsYUV)
+        {
+            // Both the program and framebuffer must match in YUV output state.
+            return kYUVOutputMissmatch;
+        }
+
+        if (!state.validateSamplerFormats())
+        {
+            return kSamplerFormatMismatch;
         }
 
         // Do some additional WebGL-specific validation
         if (extensions.webglCompatibility)
         {
-            if (!state.validateSamplerFormats())
-            {
-                return kSamplerFormatMismatch;
-            }
-
             const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
             if (state.isTransformFeedbackActive() &&
                 transformFeedbackObject->buffersBoundForOtherUse())
