@@ -12,7 +12,7 @@
   "scripts/gl_angle_ext.xml":
     "0b4f3476d76a5ccc40af342d6c08739d",
   "scripts/registry_xml.py":
-    "81856de1b9e68a4ed009f4e41b51ee72",
+    "f7993c8e5cd23c73853e489404afc228",
   "scripts/wgl.xml":
     "c36001431919e1c435f1215a85f7e1db",
   "src/common/entry_points_enum_autogen.cpp":
@@ -68,7 +68,7 @@
   "src/libANGLE/Context_gles_3_2_autogen.h":
     "48567dca16fd881dfe6d61fee0e3106f",
   "src/libANGLE/Context_gles_ext_autogen.h":
-    "f6bfac56b4a8d39f8bad72d0675a1b55",
+    "a04f4a4c2d930288507720d2c60e28e1",
   "src/libANGLE/capture_gles_1_0_autogen.cpp":
     "1ee3e4aceb1afa9585aa458c600665a9",
   "src/libANGLE/capture_gles_1_0_autogen.h":
@@ -92,7 +92,7 @@
   "src/libANGLE/capture_gles_ext_autogen.cpp":
     "d89e06299028ee04bd1257bda55d18fe",
   "src/libANGLE/capture_gles_ext_autogen.h":
-    "8e0bd59e0709c472b8c4cbb76707adea",
+    "661bcc360c91465182ca6b3e370e89ca",
   "src/libANGLE/frame_capture_replay_autogen.cpp":
     "09901bfdd8b16c9e888380179b53aa7a",
   "src/libANGLE/frame_capture_utils_autogen.cpp":
@@ -110,7 +110,7 @@
   "src/libANGLE/validationES3_autogen.h":
     "86ba503835328438158d9a464943f3bd",
   "src/libANGLE/validationESEXT_autogen.h":
-    "dd1db6f40dd66dd5ad8ee82d560c0394",
+    "fe8c70d7ca42bcb0c32310b7948df5f7",
   "src/libANGLE/validationGL11_autogen.h":
     "aadd145c1404de9c34d6b7c00404f10f",
   "src/libANGLE/validationGL12_autogen.h":
@@ -250,15 +250,15 @@
   "src/libGLESv2/entry_points_gles_3_2_autogen.h":
     "5798aa0a73af1d4ba5dfe99b6217a247",
   "src/libGLESv2/entry_points_gles_ext_autogen.cpp":
-    "aba37c32a371cd40daf2366d7edd4671",
+    "019166f0205392b485dae2c484809eba",
   "src/libGLESv2/entry_points_gles_ext_autogen.h":
-    "776240b5afbf762c7b1efb71733d8ecd",
+    "a5fae91e5fc2c024a2303ce5b36d3650",
   "src/libGLESv2/libGLESv2_autogen.cpp":
-    "c833652f4dba60a332c430894147d944",
+    "960ce335ab6ed3cfb8fa6e112556609d",
   "src/libGLESv2/libGLESv2_autogen.def":
-    "7118158ac9816b978622c630b7ec7980",
+    "11496879000b3638a0f8361bacf39b38",
   "src/libGLESv2/libGLESv2_no_capture_autogen.def":
-    "02832f0b93c8ab5925432372d83b8147",
+    "bc62bf0555203be9a6cb93886e6d546d",
   "src/libGLESv2/libGLESv2_with_capture_autogen.def":
-    "35130e3d34a78c6a4aa7703d8355ee6c"
+    "167f02622512da3f4ed7f7255d52b57e"
 }
