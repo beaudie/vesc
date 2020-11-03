@@ -6256,7 +6256,8 @@ ImageViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
     uint32_t levelCount,
     uint32_t layer,
     LayerMode layerMode,
-    SrgbDecodeMode srgbDecodeMode) const
+    SrgbDecodeMode srgbDecodeMode,
+    SrgbOverrideMode srgbOverrideMode) const
 {
     ASSERT(mImageViewSerial.valid());
 
@@ -6267,6 +6268,7 @@ ImageViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
     SetBitField(serial.subresource.layer, layer);
     SetBitField(serial.subresource.singleLayer, layerMode == LayerMode::Single ? 1 : 0);
     SetBitField(serial.subresource.srgbDecodeMode, srgbDecodeMode);
+    SetBitField(serial.subresource.srgbOverrideMode, srgbOverrideMode);
     return serial;
 }
 
