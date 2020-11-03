@@ -2034,10 +2034,6 @@ TEST_P(ImageTest, SourceYUVAHBTargetExternalRGBSample)
     std::cout << "Test skipped: !ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT." << std::endl;
     return;
 #else
-    // Multiple issues sampling AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420 in the Vulkan backend:
-    // http://issuetracker.google.com/172649538
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     EGLWindow *window = getEGLWindow();
 
     ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());

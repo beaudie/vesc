@@ -3737,6 +3737,12 @@ angle::Result ImageHelper::initLayerImageViewImpl(
         yuvConversionInfo.pNext      = nullptr;
         yuvConversionInfo.conversion = mYuvConversionSampler.get().getHandle();
         AddToPNextChain(&viewInfo, &yuvConversionInfo);
+
+        // Using yuv, externalFormat is non-zero so format must be VK_FORMAT_UNDEFINED.
+        if (mExternalFormat)
+        {
+            viewInfo.format = VK_FORMAT_UNDEFINED;
+        }
     }
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
     return angle::Result::Continue;
