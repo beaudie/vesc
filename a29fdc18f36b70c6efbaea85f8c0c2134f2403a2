@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9372f3_0a0eefd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-11-03T22:39:35Z",
+      "side": 1,
+      "message": "Fixed the mac deqp failures.",
+      "revId": "a29fdc18f36b70c6efbaea85f8c0c2134f2403a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
