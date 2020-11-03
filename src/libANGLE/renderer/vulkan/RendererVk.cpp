@@ -2388,30 +2388,6 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
     return angle::Result::Continue;
 }
 
-// Return a shared fence to be used for the next submit
-// Fence may be shared with a Sync object.
-// reset indicates that nextSubmitFence should be reset before returning. This ensures that the next
-// request for a submit fence gets a fresh fence.
-// TODO: https://issuetracker.google.com/issues/170312581 - move to CommandProcessor as part of
-// fence ownership follow-up task.
-angle::Result RendererVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut, bool reset)
-{
-    std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
-    if (!mNextSubmitFence.isReferenced())
-    {
-        ANGLE_TRY(newSharedFence(&mCommandProcessor, &mNextSubmitFence));
-    }
-
-    ASSERT(!sharedFenceOut->isReferenced());
-    sharedFenceOut->copy(getDevice(), mNextSubmitFence);
-
-    if (reset)
-    {
-        resetSharedFence(&mNextSubmitFence);
-    }
-    return angle::Result::Continue;
-}
-
 template <VkFormatFeatureFlags VkFormatProperties::*features>
 VkFormatFeatureFlags RendererVk::getFormatFeatureBits(VkFormat format,
                                                       const VkFormatFeatureFlags featureBits) const
