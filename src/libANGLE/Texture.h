@@ -122,8 +122,8 @@ class TextureState final : private angle::NonCopyable
 
     bool isCubeComplete() const;
 
-    ANGLE_INLINE bool compatibleWithSamplerFormat(SamplerFormat format,
-                                                  const SamplerState &samplerState) const
+    ANGLE_INLINE bool compatibleWithSamplerFormatForWebGL(SamplerFormat format,
+                                                          const SamplerState &samplerState) const
     {
         if (!mCachedSamplerFormatValid ||
             mCachedSamplerCompareMode != samplerState.getCompareMode())
@@ -145,6 +145,7 @@ class TextureState final : private angle::NonCopyable
     GLenum getUsage() const { return mUsage; }
     GLenum getDepthStencilTextureMode() const { return mDepthStencilTextureMode; }
     bool isStencilMode() const { return mDepthStencilTextureMode == GL_STENCIL_INDEX; }
+    bool isYUV() const;
 
     bool hasBeenBoundAsImage() const { return mHasBeenBoundAsImage; }
 
@@ -325,6 +326,8 @@ class Texture final : public RefCountObject<TextureID>,
 
     void setBorderColor(const Context *context, const ColorGeneric &color);
     const ColorGeneric &getBorderColor() const;
+
+    GLint getRequiredTextureImageUnits(const Context *context) const;
 
     const TextureState &getTextureState() const;
 
