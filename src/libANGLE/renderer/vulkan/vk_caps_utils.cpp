@@ -322,11 +322,15 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.depthTextureCubeMapOES =
         mNativeExtensions.depthTextureOES && mNativeExtensions.packedDepthStencilOES;
 
-    // Vulkan natively supports format reinterpretation, but we still require support for all
-    // formats we may reinterpret to
-    mNativeExtensions.textureSRGBOverride =
-        vk::GetTextureSRGBOverrideSupport(this, mNativeExtensions);
-    mNativeExtensions.textureSRGBDecode = vk::GetTextureSRGBDecodeSupport(this);
+    // Support sRGB extensions iff underlying ICD supports VK_KHR_image_format_list extension
+    if (getFeatures().supportsImageFormatList.enabled)
+    {
+        // Vulkan natively supports format reinterpretation, but we still require support for all
+        // formats we may reinterpret to
+        mNativeExtensions.textureSRGBOverride =
+            vk::GetTextureSRGBOverrideSupport(this, mNativeExtensions);
+        mNativeExtensions.textureSRGBDecode = vk::GetTextureSRGBDecodeSupport(this);
+    }
 
     mNativeExtensions.gpuShader5EXT = vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures);
 

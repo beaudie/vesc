@@ -2116,14 +2116,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         mRequiresMutableStorage = true;
     }
 
-    // If we're handling dirty srgb decode/override state, we may have to reallocate the image with
-    // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT. Vulkan requires this bit to be set in order to use
-    // imageviews with a format that does not match the texture's internal format.
-    if (isSRGBOverrideEnabled())
-    {
-        mRequiresMutableStorage = true;
-    }
-
     if (mRequiresMutableStorage)
     {
         mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
@@ -2687,21 +2679,5 @@ angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
     onStateChange(angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
-}
-
-angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
-{
-    if (mRequiresMutableStorage)
-    {
-        return angle::Result::Continue;
-    }
-
-    mRequiresMutableStorage = true;
-    mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
-
-    ANGLE_TRY(respecifyImageStorage(contextVk));
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
-
-    return refreshImageViews(contextVk);
 }
 }  // namespace rx
