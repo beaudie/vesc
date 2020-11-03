@@ -925,10 +925,12 @@ VariableLocation::VariableLocation(unsigned int arrayIndex, unsigned int index)
 
 // SamplerBindings implementation.
 SamplerBinding::SamplerBinding(TextureType textureTypeIn,
+                               GLenum samplerTypeIn,
                                SamplerFormat formatIn,
                                size_t elementCount,
                                bool unreferenced)
     : textureType(textureTypeIn),
+      samplerType(samplerTypeIn),
       format(formatIn),
       boundTextureUnits(elementCount, 0),
       unreferenced(unreferenced)
@@ -3759,9 +3761,11 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
     {
         const auto &samplerUniform = mState.mExecutable->getUniforms()[samplerIndex];
         TextureType textureType    = SamplerTypeToTextureType(samplerUniform.type);
+        GLenum samplerType         = samplerUniform.typeInfo->type;
         unsigned int elementCount  = samplerUniform.getBasicTypeElementCount();
         SamplerFormat format       = samplerUniform.typeInfo->samplerFormat;
-        mState.mExecutable->mSamplerBindings.emplace_back(textureType, format, elementCount, false);
+        mState.mExecutable->mSamplerBindings.emplace_back(textureType, samplerType, format,
+                                                          elementCount, false);
     }
 
     // Whatever is left constitutes the default uniforms.
@@ -5275,6 +5279,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     for (const auto &samplerBinding : mState.getSamplerBindings())
     {
         stream.writeEnum(samplerBinding.textureType);
+        stream.writeInt(samplerBinding.samplerType);
         stream.writeEnum(samplerBinding.format);
         stream.writeInt(samplerBinding.boundTextureUnits.size());
         stream.writeBool(samplerBinding.unreferenced);
@@ -5522,11 +5527,12 @@ angle::Result Program::deserialize(const Context *context,
     for (size_t samplerIndex = 0; samplerIndex < samplerCount; ++samplerIndex)
     {
         TextureType textureType = stream.readEnum<TextureType>();
+        GLenum samplerType      = stream.readInt<GLenum>();
         SamplerFormat format    = stream.readEnum<SamplerFormat>();
         size_t bindingCount     = stream.readInt<size_t>();
         bool unreferenced       = stream.readBool();
-        mState.mExecutable->mSamplerBindings.emplace_back(textureType, format, bindingCount,
-                                                          unreferenced);
+        mState.mExecutable->mSamplerBindings.emplace_back(textureType, samplerType, format,
+                                                          bindingCount, unreferenced);
     }
 
     unsigned int imageRangeLow             = stream.readInt<unsigned int>();

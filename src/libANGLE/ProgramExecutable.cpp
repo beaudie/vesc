@@ -55,6 +55,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mActiveSamplersMask(other.mActiveSamplersMask),
       mActiveSamplerRefCounts(other.mActiveSamplerRefCounts),
       mActiveSamplerTypes(other.mActiveSamplerTypes),
+      mActiveSamplerYUV(other.mActiveSamplerYUV),
       mActiveSamplerFormats(other.mActiveSamplerFormats),
       mActiveSamplerShaderBits(other.mActiveSamplerShaderBits),
       mActiveImagesMask(other.mActiveImagesMask),
@@ -104,6 +105,7 @@ void ProgramExecutable::reset()
     mActiveSamplersMask.reset();
     mActiveSamplerRefCounts = {};
     mActiveSamplerTypes.fill(TextureType::InvalidEnum);
+    mActiveSamplerYUV.reset();
     mActiveSamplerFormats.fill(SamplerFormat::InvalidEnum);
 
     mActiveImagesMask.reset();
@@ -294,8 +296,9 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
         {
             if (++mActiveSamplerRefCounts[textureUnit] == 1)
             {
-                mActiveSamplerTypes[textureUnit]      = samplerBinding.textureType;
-                mActiveSamplerFormats[textureUnit]    = samplerBinding.format;
+                mActiveSamplerTypes[textureUnit]   = samplerBinding.textureType;
+                mActiveSamplerYUV[textureUnit]     = IsSamplerYUVType(samplerBinding.samplerType);
+                mActiveSamplerFormats[textureUnit] = samplerBinding.format;
                 mActiveSamplerShaderBits[textureUnit] = samplerUniform.activeShaders();
             }
             else
@@ -303,6 +306,11 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
                 if (mActiveSamplerTypes[textureUnit] != samplerBinding.textureType)
                 {
                     mActiveSamplerTypes[textureUnit] = TextureType::InvalidEnum;
+                }
+                if (mActiveSamplerYUV.test(textureUnit) !=
+                    IsSamplerYUVType(samplerBinding.samplerType))
+                {
+                    mActiveSamplerYUV[textureUnit] = false;
                 }
                 if (mActiveSamplerFormats[textureUnit] != samplerBinding.format)
                 {
@@ -349,6 +357,7 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
 {
     bool foundBinding         = false;
     TextureType foundType     = TextureType::InvalidEnum;
+    bool foundYUV             = false;
     SamplerFormat foundFormat = SamplerFormat::InvalidEnum;
 
     for (const SamplerBinding &binding : samplerBindings)
@@ -366,6 +375,7 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
                 {
                     foundBinding = true;
                     foundType    = binding.textureType;
+                    foundYUV     = IsSamplerYUVType(binding.samplerType);
                     foundFormat  = binding.format;
                 }
                 else
@@ -373,6 +383,10 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
                     if (foundType != binding.textureType)
                     {
                         foundType = TextureType::InvalidEnum;
+                    }
+                    if (foundYUV != IsSamplerYUVType(binding.samplerType))
+                    {
+                        foundYUV = false;
                     }
                     if (foundFormat != binding.format)
                     {
@@ -384,6 +398,7 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
     }
 
     mActiveSamplerTypes[textureUnitIndex]   = foundType;
+    mActiveSamplerYUV[textureUnitIndex]     = foundYUV;
     mActiveSamplerFormats[textureUnitIndex] = foundFormat;
 }
 

@@ -38,6 +38,7 @@ HardwareBufferImageSiblingVkAndroid::HardwareBufferImageSiblingVkAndroid(EGLClie
       mFormat(GL_NONE),
       mRenderable(false),
       mTextureable(false),
+      mYUV(false),
       mSamples(0),
       mImage(nullptr)
 {}
@@ -251,6 +252,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         ANGLE_TRY(mImage->initExternalMemory(
             displayVk, renderer->getMemoryProperties(), externalMemoryRequirements,
             &yuvConversionInfo, &dedicatedAllocInfo, VK_QUEUE_FAMILY_FOREIGN_EXT, flags));
+
+        mYUV = true;
     }
     else
     {
@@ -295,6 +298,11 @@ bool HardwareBufferImageSiblingVkAndroid::isRenderable(const gl::Context *contex
 bool HardwareBufferImageSiblingVkAndroid::isTexturable(const gl::Context *context) const
 {
     return mTextureable;
+}
+
+bool HardwareBufferImageSiblingVkAndroid::isYUV() const
+{
+    return mYUV;
 }
 
 gl::Extents HardwareBufferImageSiblingVkAndroid::getSize() const
