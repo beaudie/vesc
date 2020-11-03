@@ -1564,6 +1564,8 @@ void GenerateCaps(const FunctionsGL *functions,
     {
         caps->maxClipDistances = 0;
     }
+
+    extensions->yuvTargetEXT = functions->hasGLESExtension("GL_EXT_yuv_target");
 }
 
 void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *features)
