@@ -1874,6 +1874,14 @@ enum class SrgbDecodeMode
     SrgbDecode
 };
 
+// Texture override mode indicating if an attachment needs to be decoded in linear colorspace or
+// sRGB
+enum class SrgbOverrideMode
+{
+    Linear,
+    Srgb
+};
+
 class ImageViewHelper : angle::NonCopyable
 {
   public:
@@ -2007,7 +2015,8 @@ class ImageViewHelper : angle::NonCopyable
                                                     uint32_t levelCount,
                                                     uint32_t layer,
                                                     LayerMode layerMode,
-                                                    SrgbDecodeMode srgbDecodeMode) const;
+                                                    SrgbDecodeMode srgbDecodeMode,
+                                                    SrgbOverrideMode srgbOverrideMode) const;
 
   private:
     ImageView &getReadImageView()
