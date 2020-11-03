@@ -902,18 +902,51 @@ gl::Rectangle ClipRectToScissor(const gl::State &glState, const gl::Rectangle &r
     return clippedRect;
 }
 
+void logFeatureStatus(angle::FeatureSetBase *features,
+                      const std::vector<std::string> &featureNames,
+                      bool enabled)
+{
+    for (const std::string &name : featureNames)
+    {
+        if (features->getFeatures().find(name) != features->getFeatures().end())
+        {
+            INFO() << "Feature: " << name << (enabled ? " enabled" : " disabled");
+        }
+        else
+        {
+            WARN() << "Feature: " << name << " is not a valid feature name.";
+        }
+    }
+}
+
 void ApplyFeatureOverrides(angle::FeatureSetBase *features, const egl::DisplayState &state)
 {
     features->overrideFeatures(state.featureOverridesEnabled, true);
     features->overrideFeatures(state.featureOverridesDisabled, false);
 
     // Override with environment as well.
+    constexpr char kAngleFeatureOverridesEnabledEnvName[]  = "ANGLE_FEATURE_OVERRIDES_ENABLED";
+    constexpr char kAngleFeatureOverridesDisabledEnvName[] = "ANGLE_FEATURE_OVERRIDES_DISABLED";
     std::vector<std::string> overridesEnabled =
-        angle::GetStringsFromEnvironmentVar("ANGLE_FEATURE_OVERRIDES_ENABLED", ":");
+        angle::GetStringsFromEnvironmentVar(kAngleFeatureOverridesEnabledEnvName, ":");
     std::vector<std::string> overridesDisabled =
-        angle::GetStringsFromEnvironmentVar("ANGLE_FEATURE_OVERRIDES_DISABLED", ":");
+        angle::GetStringsFromEnvironmentVar(kAngleFeatureOverridesDisabledEnvName, ":");
     features->overrideFeatures(overridesEnabled, true);
     features->overrideFeatures(overridesDisabled, false);
+
+    constexpr char kAngleFeatureOverridesEnabledPropertyName[] =
+        "debug.angle.feature_overrides_enabled";
+    constexpr char kAngleFeatureOverridesDisabledPropertyName[] =
+        "debug.angle.feature_overrides_disabled";
+    overridesEnabled = angle::GetStringsFromAndroidProperty(
+        kAngleFeatureOverridesEnabledEnvName, kAngleFeatureOverridesEnabledPropertyName, ":");
+    overridesDisabled = angle::GetStringsFromAndroidProperty(
+        kAngleFeatureOverridesDisabledEnvName, kAngleFeatureOverridesDisabledPropertyName, ":");
+    features->overrideFeatures(overridesEnabled, true);
+    logFeatureStatus(features, overridesEnabled, true);
+
+    features->overrideFeatures(overridesDisabled, false);
+    logFeatureStatus(features, overridesDisabled, false);
 }
 
 void GetSamplePosition(GLsizei sampleCount, size_t index, GLfloat *xy)
