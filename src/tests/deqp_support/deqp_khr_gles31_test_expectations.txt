@@ -118,3 +118,6 @@
 
 // New failures with latest dEQP roll (2020-04-28)
 4593 SWIFTSHADER : KHR-GLES31.core.nearest_edge.offset_left = FAIL
+
+// New failures introduced when Vulkan validation errors weren't being caught.
+5304 VULKAN : KHR-GLES31.core.sample_shading.render.rgba8* = FAIL

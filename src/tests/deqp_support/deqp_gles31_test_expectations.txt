@@ -273,3 +273,7 @@
 4822 VULKAN ANDROID : dEQP-GLES31.functional.draw_buffers_indexed.random.max_required_draw_buffers.10 = SKIP
 4822 VULKAN ANDROID : dEQP-GLES31.functional.draw_buffers_indexed.random.max_required_draw_buffers.11 = SKIP
 4822 VULKAN ANDROID : dEQP-GLES31.functional.draw_buffers_indexed.random.max_required_draw_buffers.17 = SKIP
+
+// New failures introduced when Vulkan validation errors weren't being caught.
+5304 VULKAN : dEQP-GLES31.functional.texture.multisample.samples_*use_texture_*int_2d* = FAIL
+5304 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_*_texture_*int_2d* = FAIL
