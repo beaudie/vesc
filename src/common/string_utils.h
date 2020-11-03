@@ -94,7 +94,9 @@ bool ReplaceSubstring(std::string *str,
                       const std::string &replacement);
 
 // Split up a string parsed from an environment variable.
-std::vector<std::string> GetStringsFromEnvironmentVar(const char *varName, const char *separator);
+std::vector<std::string> GetStringsFromAndroidProperty(const char *varName,
+                                                       const char *propertyName,
+                                                       const char *separator);
 
 }  // namespace angle
 
