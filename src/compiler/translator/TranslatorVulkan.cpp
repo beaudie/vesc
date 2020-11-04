@@ -50,6 +50,7 @@ using PreRotationMatrixValuesEnumMap = angle::PackedEnumMap<vk::SurfaceRotation,
                                                             PreRotationMatrixValues,
                                                             angle::EnumSize<vk::SurfaceRotation>()>;
 
+// Used to pre-rotate gl_Position for swapchain images on Android.
 constexpr PreRotationMatrixValuesEnumMap kPreRotationMatrices = {
     {{vk::SurfaceRotation::Identity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
      {vk::SurfaceRotation::Rotated90Degrees, {{0.0f, -1.0f, 1.0f, 0.0f}}},
@@ -60,6 +61,7 @@ constexpr PreRotationMatrixValuesEnumMap kPreRotationMatrices = {
      {vk::SurfaceRotation::FlippedRotated180Degrees, {{-1.0f, 0.0f, 0.0f, 1.0f}}},
      {vk::SurfaceRotation::FlippedRotated270Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}}}};
 
+// Used to pre-rotate gl_FragCoord for swapchain images on Android.
 constexpr PreRotationMatrixValuesEnumMap kFragRotationMatrices = {
     {{vk::SurfaceRotation::Identity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
      {vk::SurfaceRotation::Rotated90Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
@@ -120,6 +122,12 @@ TIntermTyped *GenerateFragRotationMatrix(TIntermSymbol *rotationSpecConst)
 using FlipXYValues = std::array<float, 2>;
 using FlipXYValuesEnumaMap =
     angle::PackedEnumMap<vk::SurfaceRotation, FlipXYValues, angle::EnumSize<vk::SurfaceRotation>()>;
+// Y-axis flipping only comes into play with the default framebuffer (i.e. a swapchain image).
+// For 0-degree rotation, an FBO or pbuffer could be the draw framebuffer, and so we must check
+// whether flipY should be positive or negative.  All other rotations, will be to the default
+// framebuffer, and so the value of isViewportFlipEnabledForDrawFBO() is assumed true; the
+// appropriate flipY value is chosen such that gl_FragCoord is positioned at the lower-left
+// corner of the window.
 constexpr FlipXYValuesEnumaMap kFlipXYValue = {
     {{vk::SurfaceRotation::Identity, {{1.0f, 1.0f}}},
      {vk::SurfaceRotation::Rotated90Degrees, {{1.0f, 1.0f}}},
@@ -385,22 +393,16 @@ constexpr ImmutableString kSurfaceRotationSpecConstVarName =
 
 constexpr const char kViewport[]             = "viewport";
 constexpr const char kHalfRenderArea[]       = "halfRenderArea";
-constexpr const char kFlipXY[]               = "flipXY";
-constexpr const char kNegFlipXY[]            = "negFlipXY";
 constexpr const char kClipDistancesEnabled[] = "clipDistancesEnabled";
 constexpr const char kXfbActiveUnpaused[]    = "xfbActiveUnpaused";
 constexpr const char kXfbVerticesPerDraw[]   = "xfbVerticesPerDraw";
 constexpr const char kXfbBufferOffsets[]     = "xfbBufferOffsets";
 constexpr const char kAcbBufferOffsets[]     = "acbBufferOffsets";
 constexpr const char kDepthRange[]           = "depthRange";
-constexpr const char kPreRotation[]          = "preRotation";
-constexpr const char kFragRotation[]         = "fragRotation";
 
-constexpr size_t kNumGraphicsDriverUniforms                                                = 12;
-constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames = {
-    {kViewport, kHalfRenderArea, kFlipXY, kNegFlipXY, kClipDistancesEnabled, kXfbActiveUnpaused,
-     kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange, kPreRotation,
-     kFragRotation}};
+// These are only used when SH_USE_ROTATION_SPECCONST is not enabled.
+constexpr const char kFlipXY[]    = "flipXY";
+constexpr const char kNegFlipXY[] = "negFlipXY";
 
 constexpr size_t kNumComputeDriverUniforms                                               = 1;
 constexpr std::array<const char *, kNumComputeDriverUniforms> kComputeDriverUniformNames = {
@@ -564,14 +566,8 @@ ANGLE_NO_DISCARD bool AppendPreRotation(TCompiler *compiler,
                                         const TVariable *driverUniforms)
 {
     TIntermTyped *preRotationRef;
-    if (rotationSpecConst)
-    {
-        preRotationRef = GeneratePreRotationMatrix(rotationSpecConst);
-    }
-    else
-    {
-        preRotationRef = CreateDriverUniformRef(driverUniforms, kPreRotation);
-    }
+    ASSERT(rotationSpecConst);
+    preRotationRef               = GeneratePreRotationMatrix(rotationSpecConst);
     TIntermSymbol *glPos         = new TIntermSymbol(BuiltInVariable::gl_Position());
     TVector<int> swizzleOffsetXY = {0, 1};
     TIntermSwizzle *glPosXY      = new TIntermSwizzle(glPos, swizzleOffsetXY);
@@ -606,6 +602,7 @@ ANGLE_NO_DISCARD bool AppendVertexShaderTransformFeedbackOutputToMain(TCompiler 
 // There are Graphics and Compute variations as they require different uniforms.
 const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root,
                                                    TSymbolTable *symbolTable,
+                                                   ShCompileOptions compileOptions,
                                                    const std::vector<TField *> &additionalFields)
 {
     // Init the depth range type.
@@ -637,29 +634,55 @@ const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root,
     // This field list mirrors the structure of GraphicsDriverUniforms in ContextVk.cpp.
     TFieldList *driverFieldList = new TFieldList;
 
-    const std::array<TType *, kNumGraphicsDriverUniforms> kDriverUniformTypes = {{
-        new TType(EbtFloat, 4),
-        new TType(EbtFloat, 2),
-        new TType(EbtFloat, 2),
-        new TType(EbtFloat, 2),
-        new TType(EbtUInt),  // uint clipDistancesEnabled;  // 32 bits for 32 clip distances max
-        new TType(EbtUInt),
-        new TType(EbtUInt),
-        // NOTE: There's a vec3 gap here that can be used in the future
-        new TType(EbtInt, 4),
-        new TType(EbtUInt, 4),
-        emulatedDepthRangeType,
-        new TType(EbtFloat, 2, 2),
-        new TType(EbtFloat, 2, 2),
-    }};
-
-    for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniforms; ++uniformIndex)
+    if (compileOptions & SH_USE_ROTATION_SPECCONST)
     {
-        TField *driverUniformField =
-            new TField(kDriverUniformTypes[uniformIndex],
-                       ImmutableString(kGraphicsDriverUniformNames[uniformIndex]), TSourceLoc(),
-                       SymbolType::AngleInternal);
-        driverFieldList->push_back(driverUniformField);
+        constexpr size_t kNumGraphicsDriverUniforms = 8;
+        constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames =
+            {{kViewport, kHalfRenderArea, kClipDistancesEnabled, kXfbActiveUnpaused,
+              kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange}};
+
+        const std::array<TType *, kNumGraphicsDriverUniforms> kDriverUniformTypes = {
+            {new TType(EbtFloat, 4), new TType(EbtFloat, 2),
+             new TType(
+                 EbtUInt),  // uint clipDistancesEnabled;  // 32 bits for 32 clip distances max
+             new TType(EbtUInt), new TType(EbtUInt),
+             // NOTE: There's a vec3 gap here that can be used in the future
+             new TType(EbtInt, 4), new TType(EbtUInt, 4), emulatedDepthRangeType}};
+
+        for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniforms; ++uniformIndex)
+        {
+            TField *driverUniformField =
+                new TField(kDriverUniformTypes[uniformIndex],
+                           ImmutableString(kGraphicsDriverUniformNames[uniformIndex]), TSourceLoc(),
+                           SymbolType::AngleInternal);
+            driverFieldList->push_back(driverUniformField);
+        }
+    }
+    else
+    {
+        constexpr size_t kNumGraphicsDriverUniforms = 10;
+        constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames =
+            {{kViewport, kHalfRenderArea, kFlipXY, kNegFlipXY, kClipDistancesEnabled,
+              kXfbActiveUnpaused, kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets,
+              kDepthRange}};
+
+        const std::array<TType *, kNumGraphicsDriverUniforms> kDriverUniformTypes = {
+            {new TType(EbtFloat, 4), new TType(EbtFloat, 2), new TType(EbtFloat, 2),
+             new TType(EbtFloat, 2),
+             new TType(
+                 EbtUInt),  // uint clipDistancesEnabled;  // 32 bits for 32 clip distances max
+             new TType(EbtUInt), new TType(EbtUInt),
+             // NOTE: There's a vec3 gap here that can be used in the future
+             new TType(EbtInt, 4), new TType(EbtUInt, 4), emulatedDepthRangeType}};
+
+        for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniforms; ++uniformIndex)
+        {
+            TField *driverUniformField =
+                new TField(kDriverUniformTypes[uniformIndex],
+                           ImmutableString(kGraphicsDriverUniformNames[uniformIndex]), TSourceLoc(),
+                           SymbolType::AngleInternal);
+            driverFieldList->push_back(driverUniformField);
+        }
     }
 
     // Back-end specific fields
@@ -1108,8 +1131,8 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
     {
         std::vector<TField *> additionalFields;
         createAdditionalGraphicsDriverUniformFields(&additionalFields);
-        driverUniforms =
-            AddGraphicsDriverUniformsToShader(root, &getSymbolTable(), additionalFields);
+        driverUniforms = AddGraphicsDriverUniformsToShader(root, &getSymbolTable(), compileOptions,
+                                                           additionalFields);
     }
 
     if (atomicCounterCount > 0)
@@ -1198,6 +1221,9 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         bool hasGLFragColor = false;
         bool hasGLFragData  = false;
         bool usePreRotation = compileOptions & SH_ADD_PRE_ROTATION;
+        // If usePreRotation is enabled, SH_USE_ROTATION_SPECCONST must also enabled. We rely on
+        // SH_USE_ROTATION_SPECCONST to handle pre-rotation.
+        ASSERT(!usePreRotation || surfaceRotationSpecConst);
 
         for (const ShaderVariable &outputVar : mOutputVariables)
         {
@@ -1448,14 +1474,8 @@ TIntermTyped *GenerateNegFlipXY(TIntermSymbol *rotationSpecConst, const TVariabl
 TIntermTyped *GenerateFragRotation(TIntermSymbol *rotationSpecConst,
                                    const TVariable *driverUniforms)
 {
-    if (rotationSpecConst)
-    {
-        return GenerateFragRotationMatrix(rotationSpecConst);
-    }
-    else
-    {
-        return CreateDriverUniformRef(driverUniforms, kFragRotation);
-    }
+    ASSERT(rotationSpecConst);
+    return GenerateFragRotationMatrix(rotationSpecConst);
 }
 
 }  // namespace sh

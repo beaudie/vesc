@@ -72,7 +72,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
     // context state does not allow it
     compileOptions |= SH_EARLY_FRAGMENT_TESTS_OPTIMIZATION;
 
-    // Let compiler use specialized constant for pre-rotation.
+    // Let compiler use specialized constant for pre-rotation and flipY. This bit can not be removed
+    // since uniform's support for flipXY has been removed.
     compileOptions |= SH_USE_ROTATION_SPECCONST;
 
     if (contextVk->getFeatures().enablePreRotateSurfaces.enabled ||
