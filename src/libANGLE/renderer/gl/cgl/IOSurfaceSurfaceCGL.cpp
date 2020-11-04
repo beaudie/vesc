@@ -26,6 +26,7 @@
 #    include "libANGLE/renderer/gl/StateManagerGL.h"
 #    include "libANGLE/renderer/gl/TextureGL.h"
 #    include "libANGLE/renderer/gl/cgl/DisplayCGL.h"
+#    include "libANGLE/renderer/gl/cgl/FunctionsCGL.h"
 
 namespace rx
 {

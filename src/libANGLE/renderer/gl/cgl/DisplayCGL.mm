@@ -22,6 +22,7 @@
 #    include "libANGLE/Error.h"
 #    include "libANGLE/renderer/gl/cgl/ContextCGL.h"
 #    include "libANGLE/renderer/gl/cgl/DeviceCGL.h"
+#    include "libANGLE/renderer/gl/cgl/FunctionsCGL.h"
 #    include "libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.h"
 #    include "libANGLE/renderer/gl/cgl/PbufferSurfaceCGL.h"
 #    include "libANGLE/renderer/gl/cgl/RendererCGL.h"
