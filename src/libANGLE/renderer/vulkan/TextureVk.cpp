@@ -1475,7 +1475,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     region.imageOffset.x               = sourceArea.x;
     region.imageOffset.y               = sourceArea.y;
     region.imageOffset.z               = sourceArea.z;
-    region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.imageSubresource.aspectMask = mImage->getAspectFlags();
     region.imageSubresource.layerCount = layerCount;
     region.imageSubresource.mipLevel   = mImage->toVkLevel(level).get();
 
@@ -1492,7 +1492,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 
     ANGLE_TRY(contextVk->onBufferTransferRead(srcBuffer));
     ANGLE_TRY(contextVk->onImageTransferWrite(level, 1, layerIndex, layerCount,
-                                              VK_IMAGE_ASPECT_COLOR_BIT, mImage));
+                                              mImage->getAspectFlags(), mImage));
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
