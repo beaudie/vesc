@@ -81,7 +81,6 @@ bool Traverser::visitUnary(Visit visit, TIntermUnary *node)
 {
     if (mUsePreRotation)
     {
-        ASSERT(mRotationSpecConst || mFragRotation);
         return visitUnaryWithRotation(visit, node);
     }
     ASSERT(!mFragRotation);
@@ -125,48 +124,16 @@ bool Traverser::visitUnaryWithRotation(Visit visit, TIntermUnary *node)
 
     TIntermTyped *multiplierX;
     TIntermTyped *multiplierY;
-    if (mRotationSpecConst)
+    ASSERT(mRotationSpecConst);
+    if (node->getOp() == EOpDFdx)
     {
-        if (node->getOp() == EOpDFdx)
-        {
-            multiplierX = GenerateMultiplierXForDFdx(mRotationSpecConst);
-            multiplierY = GenerateMultiplierYForDFdx(mRotationSpecConst);
-        }
-        else
-        {
-            multiplierX = GenerateMultiplierXForDFdy(mRotationSpecConst);
-            multiplierY = GenerateMultiplierYForDFdy(mRotationSpecConst);
-        }
+        multiplierX = GenerateMultiplierXForDFdx(mRotationSpecConst);
+        multiplierY = GenerateMultiplierYForDFdx(mRotationSpecConst);
     }
     else
     {
-        // Get a vec2 with the correct half of ANGLEUniforms.fragRotation
-        TIntermBinary *halfRotationMat = nullptr;
-        if (node->getOp() == EOpDFdx)
-        {
-            halfRotationMat =
-                new TIntermBinary(EOpIndexDirect, mFragRotation->deepCopy(), CreateIndexNode(0));
-        }
-        else
-        {
-            halfRotationMat =
-                new TIntermBinary(EOpIndexDirect, mFragRotation->deepCopy(), CreateIndexNode(1));
-        }
-
-        // Multiply halfRotationMat by ANGLEUniforms.flipXY and store in a temporary variable
-        TIntermBinary *rotatedFlipXY =
-            new TIntermBinary(EOpMul, mFlipXY->deepCopy(), halfRotationMat);
-        const TType *vec2Type       = StaticType::GetBasic<EbtFloat, 2>();
-        TIntermSymbol *tmpRotFlipXY = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec2Type));
-        TIntermSequence *tmpDecl    = new TIntermSequence;
-        tmpDecl->push_back(CreateTempInitDeclarationNode(&tmpRotFlipXY->variable(), rotatedFlipXY));
-        insertStatementsInParentBlock(*tmpDecl);
-
-        // Get the .x and .y swizzles to use as multipliers
-        TVector<int> swizzleOffsetX = {0};
-        TVector<int> swizzleOffsetY = {1};
-        multiplierX                 = new TIntermSwizzle(tmpRotFlipXY, swizzleOffsetX);
-        multiplierY                 = new TIntermSwizzle(tmpRotFlipXY->deepCopy(), swizzleOffsetY);
+        multiplierX = GenerateMultiplierXForDFdy(mRotationSpecConst);
+        multiplierY = GenerateMultiplierYForDFdy(mRotationSpecConst);
     }
 
     // Get the results of dFdx(operand) and dFdy(operand), and multiply them by the swizzles
