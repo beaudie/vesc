@@ -341,4 +341,13 @@ ANGLE_NO_DISCARD bool TranslatorMetal::insertRasterizerDiscardLogic(TIntermBlock
     return RunAtTheEndOfShader(this, root, ifCall, symbolTable);
 }
 
+TIntermSwizzle *TranslatorMetal::getDriverUniformNegFlipYRef(const TVariable *driverUniforms) const
+{
+    // Create a swizzle to "negFlipXY.y"
+    TIntermBinary *negFlipXY    = CreateDriverUniformRef(driverUniforms, kNegFlipXY);
+    TVector<int> swizzleOffsetY = {1};
+    TIntermSwizzle *negFlipY    = new TIntermSwizzle(negFlipXY, swizzleOffsetY);
+    return negFlipY;
+}
+
 }  // namespace sh
