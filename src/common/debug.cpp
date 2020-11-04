@@ -214,6 +214,9 @@ void Trace(LogSeverity severity, const char *message)
     }
 
     if (severity == LOG_FATAL || severity == LOG_ERR || severity == LOG_WARN ||
+#if defined(ANGLE_ENABLE_ANDROID_API_LOGCAT)
+        severity == LOG_EVENT ||
+#endif
         severity == LOG_INFO)
     {
 #if defined(ANGLE_PLATFORM_ANDROID)
@@ -221,6 +224,7 @@ void Trace(LogSeverity severity, const char *message)
         switch (severity)
         {
             case LOG_INFO:
+            case LOG_EVENT:
                 android_priority = ANDROID_LOG_INFO;
                 break;
             case LOG_WARN:

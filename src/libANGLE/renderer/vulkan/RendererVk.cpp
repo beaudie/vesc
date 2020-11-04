@@ -2513,6 +2513,10 @@ void RendererVk::setGlobalDebugAnnotator()
             enableDebugAnnotatorVk = true;
         }
     }
+#if defined(ANGLE_ENABLE_ANDROID_API_LOGCAT)
+    // This will log all API commands to Android's logcat as well as create Vulkan debug markers.
+    enableDebugAnnotatorVk = true;
+#endif
 
     if (enableDebugAnnotatorVk)
     {
