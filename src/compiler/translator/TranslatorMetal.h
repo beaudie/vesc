@@ -33,11 +33,18 @@ class TranslatorMetal : public TranslatorVulkan
     ANGLE_NO_DISCARD bool transformDepthBeforeCorrection(TIntermBlock *root,
                                                          const TVariable *driverUniforms) override;
 
-    void createAdditionalGraphicsDriverUniformFields(std::vector<TField *> *fieldsOut) override;
-
+    const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root,
+                                                       TSymbolTable *symbolTable) override;
     ANGLE_NO_DISCARD bool insertSampleMaskWritingLogic(TIntermBlock *root,
                                                        const TVariable *driverUniforms);
     ANGLE_NO_DISCARD bool insertRasterizerDiscardLogic(TIntermBlock *root);
+    // We don't support specialized constant yet
+    TIntermSymbol *createRotationFlipSpecConst(TInfoSinkBase &sink) override { return nullptr; }
+    TIntermTyped *GenerateFlipXY(TIntermSymbol *rotationSpecConst,
+                                 const TVariable *driverUniforms) override;
+    TIntermTyped *GenerateNegFlipXY(TIntermSymbol *rotationSpecConst,
+                                    const TVariable *driverUniforms) override;
+    TIntermSwizzle *getDriverUniformNegFlipYRef(const TVariable *driverUniforms) const;
 };
 
 }  // namespace sh
