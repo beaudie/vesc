@@ -35,6 +35,11 @@
 #include "platform/FrontendFeatures.h"
 #include "platform/PlatformMethods.h"
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace gl
 {
 
@@ -731,6 +736,23 @@ void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
     block->arrayElement = stream->readInt<unsigned int>();
 
     LoadShaderVariableBuffer(stream, block);
+}
+
+void PrintShaderSource(const gl::Shader *shader)
+{
+    std::string str       = shader->getSourceString();
+    std::string delimiter = "\n";
+
+    std::string::size_type pos  = 0;
+    std::string::size_type prev = 0;
+    while ((pos = str.find(delimiter, prev)) != std::string::npos)
+    {
+        INFO("  %s", str.substr(prev, pos - prev).c_str());
+        prev = pos + 1;
+    }
+
+    // To get the last substring (or only, if delimiter is not found)
+    INFO("  %s", str.substr(prev).c_str());
 }
 }  // anonymous namespace
 
@@ -3497,6 +3519,40 @@ bool Program::linkVaryings(InfoLog &infoLog) const
                     currentShader->getType(), previousShader->getShaderVersion(),
                     currentShader->getShaderVersion(), isSeparable(), infoLog))
             {
+                INFO("%s(): LINK ERROR!!!", __FUNCTION__);
+
+                // Output the error
+                size_t len        = infoLog.getLength();
+                GLsizei logLength = ((GLsizei)len) - 1;
+                std::vector<char> logContents(logLength, 0);
+                infoLog.getLog(logLength, nullptr, logContents.data());
+                INFO("%s():\t Contents of infoLog:\t%s", __FUNCTION__, logContents.data());
+
+                // Output the shader sources twice, to ensure they get to logcat
+                INFO("%s():\t Vertex shader source ...", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
+                PrintShaderSource(getAttachedShader(ShaderType::Vertex));
+                INFO("%s():", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
+
+                INFO("%s():\t Fragment shader source ...", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
+                PrintShaderSource(getAttachedShader(ShaderType::Fragment));
+                INFO("%s():", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
+
+                // Output the shader sources again, to ensure they get to logcat
+                INFO("%s():\t Vertex shader source ...", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
+                PrintShaderSource(getAttachedShader(ShaderType::Vertex));
+                INFO("%s():", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
+
+                INFO("%s():\t Fragment shader source ...", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
+                PrintShaderSource(getAttachedShader(ShaderType::Fragment));
+                INFO("%s():", __FUNCTION__);
+                INFO("%s():", __FUNCTION__);
                 return false;
             }
         }

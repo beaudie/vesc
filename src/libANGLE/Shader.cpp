@@ -190,6 +190,20 @@ void Shader::setSource(GLsizei count, const char *const *string, const GLint *le
         }
     }
 
+    INFO() << "glShaderSource(): string =";
+    std::string str       = stream.str();
+    std::string delimiter = "\n";
+
+    std::string::size_type pos  = 0;
+    std::string::size_type prev = 0;
+    while ((pos = str.find(delimiter, prev)) != std::string::npos)
+    {
+        INFO() << str.substr(prev, pos - prev);
+        prev = pos + 1;
+    }
+
+    // To get the last substring (or only, if delimiter is not found)
+    INFO() << str.substr(prev);
     mState.mSource = stream.str();
 }
 

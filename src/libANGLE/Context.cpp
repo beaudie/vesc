@@ -733,14 +733,30 @@ BufferID Context::createBuffer()
 
 GLuint Context::createProgram()
 {
+#ifdef OLD_CODE
     return mState.mShaderProgramManager->createProgram(mImplementation.get()).value;
+#else   // OLD_CODE
+    GLuint returnValue = mState.mShaderProgramManager->createProgram(mImplementation.get()).value;
+    INFO() << "CreateProgram(): return Program = " << returnValue;
+    return returnValue;
+#endif  // OLD_CODE
 }
 
 GLuint Context::createShader(ShaderType type)
 {
+#ifdef OLD_CODE
     return mState.mShaderProgramManager
         ->createShader(mImplementation.get(), mState.mLimitations, type)
         .value;
+#else   // OLD_CODE
+    GLuint returnValue =
+        mState.mShaderProgramManager->createShader(mImplementation.get(), mState.mLimitations, type)
+            .value;
+    INFO() << "CreateShader(): return Shader = " << returnValue;
+    return mState.mShaderProgramManager
+        ->createShader(mImplementation.get(), mState.mLimitations, type)
+        .value;
+#endif  // OLD_CODE
 }
 
 TextureID Context::createTexture()
