@@ -41,8 +41,21 @@ const char kRasterizerDiscardEnabledConstName[] = "ANGLERasterizerDisabled";
 namespace
 {
 
-constexpr ImmutableString kCoverageMaskField       = ImmutableString("coverageMask");
-constexpr ImmutableString kSampleMaskWriteFuncName = ImmutableString("ANGLEWriteSampleMask");
+constexpr ImmutableString kSampleMaskWriteFuncName  = ImmutableString("ANGLEWriteSampleMask");
+constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDepthRangeParams");
+
+/* Driver uniforms */
+constexpr const char kViewport[]             = "viewport";
+constexpr const char kHalfRenderArea[]       = "halfRenderArea";
+constexpr const char kFlipXY[]               = "flipXY";
+constexpr const char kNegFlipXY[]            = "negFlipXY";
+constexpr const char kClipDistancesEnabled[] = "clipDistancesEnabled";
+constexpr const char kXfbActiveUnpaused[]    = "xfbActiveUnpaused";
+constexpr const char kXfbVerticesPerDraw[]   = "xfbVerticesPerDraw";
+constexpr const char kXfbBufferOffsets[]     = "xfbBufferOffsets";
+constexpr const char kAcbBufferOffsets[]     = "acbBufferOffsets";
+constexpr const char kDepthRange[]           = "depthRange";
+constexpr const char kCoverageMask[]         = "coverageMask";
 
 TIntermBinary *CreateDriverUniformRef(const TVariable *driverUniforms, const char *fieldName)
 {
@@ -227,14 +240,64 @@ bool TranslatorMetal::transformDepthBeforeCorrection(TIntermBlock *root,
     return RunAtTheEndOfShader(this, root, assignment, &getSymbolTable());
 }
 
-void TranslatorMetal::createAdditionalGraphicsDriverUniformFields(std::vector<TField *> *fieldsOut)
+const TVariable *TranslatorMetal::AddGraphicsDriverUniformsToShader(TIntermBlock *root,
+                                                                    TSymbolTable *symbolTable)
 {
-    // Add coverage mask to driver uniform. Metal doesn't have built-in GL_SAMPLE_COVERAGE_VALUE
-    // equivalent functionality, needs to emulate it using fragment shader's [[sample_mask]] output
-    // value.
-    TField *coverageMaskField =
-        new TField(new TType(EbtUInt), kCoverageMaskField, TSourceLoc(), SymbolType::AngleInternal);
-    fieldsOut->push_back(coverageMaskField);
+    // Init the depth range type.
+    TFieldList *depthRangeParamsFields = new TFieldList();
+    depthRangeParamsFields->push_back(new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1, 1),
+                                                 ImmutableString("near"), TSourceLoc(),
+                                                 SymbolType::AngleInternal));
+    depthRangeParamsFields->push_back(new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1, 1),
+                                                 ImmutableString("far"), TSourceLoc(),
+                                                 SymbolType::AngleInternal));
+    depthRangeParamsFields->push_back(new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1, 1),
+                                                 ImmutableString("diff"), TSourceLoc(),
+                                                 SymbolType::AngleInternal));
+    // This additional field might be used by subclass such as TranslatorMetal.
+    depthRangeParamsFields->push_back(new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1, 1),
+                                                 ImmutableString("reserved"), TSourceLoc(),
+                                                 SymbolType::AngleInternal));
+    TStructure *emulatedDepthRangeParams = new TStructure(
+        symbolTable, kEmulatedDepthRangeParams, depthRangeParamsFields, SymbolType::AngleInternal);
+    TType *emulatedDepthRangeType = new TType(emulatedDepthRangeParams, false);
+
+    // Declare a global depth range variable.
+    TVariable *depthRangeVar =
+        new TVariable(symbolTable->nextUniqueId(), kEmptyImmutableString, SymbolType::Empty,
+                      TExtension::UNDEFINED, emulatedDepthRangeType);
+
+    DeclareGlobalVariable(root, depthRangeVar);
+
+    // This field list mirrors the structure of GraphicsDriverUniforms in ContextVk.cpp.
+    TFieldList *driverFieldList = new TFieldList;
+
+    constexpr size_t kNumGraphicsDriverUniforms                                                = 11;
+    constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames = {
+        {kViewport, kHalfRenderArea, kFlipXY, kNegFlipXY, kClipDistancesEnabled, kXfbActiveUnpaused,
+         kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange, kCoverageMask}};
+
+    const std::array<TType *, kNumGraphicsDriverUniforms> kDriverUniformTypes = {
+        {new TType(EbtFloat, 4), new TType(EbtFloat, 2), new TType(EbtFloat, 2),
+         new TType(EbtFloat, 2),
+         new TType(EbtUInt),  // uint clipDistancesEnabled;  // 32 bits for 32 clip distances max
+         new TType(EbtUInt), new TType(EbtUInt),
+         // NOTE: There's a vec3 gap here that can be used in the future
+         new TType(EbtInt, 4), new TType(EbtUInt, 4), emulatedDepthRangeType, new TType(EbtUInt)}};
+
+    for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniforms; ++uniformIndex)
+    {
+        TField *driverUniformField =
+            new TField(kDriverUniformTypes[uniformIndex],
+                       ImmutableString(kGraphicsDriverUniformNames[uniformIndex]), TSourceLoc(),
+                       SymbolType::AngleInternal);
+        driverFieldList->push_back(driverUniformField);
+    }
+
+    // Define a driver uniform block "ANGLEUniformBlock" with instance name "ANGLEUniforms".
+    return DeclareInterfaceBlock(
+        root, symbolTable, driverFieldList, EvqUniform, TMemoryQualifier::Create(), 0,
+        ImmutableString(vk::kDriverUniformsBlockName), ImmutableString(vk::kDriverUniformsVarName));
 }
 
 // Add sample_mask writing to main, guarded by the specialization constant
@@ -273,7 +336,7 @@ ANGLE_NO_DISCARD bool TranslatorMetal::insertSampleMaskWritingLogic(TIntermBlock
     sampleMaskWriteFunc->addParameter(maskArg);
 
     // coverageMask
-    TIntermBinary *coverageMask = CreateDriverUniformRef(driverUniforms, kCoverageMaskField.data());
+    TIntermBinary *coverageMask = CreateDriverUniformRef(driverUniforms, kCoverageMask);
 
     // Insert this code to the end of main()
     // if (ANGLECoverageMaskEnabled)
@@ -339,6 +402,29 @@ ANGLE_NO_DISCARD bool TranslatorMetal::insertRasterizerDiscardLogic(TIntermBlock
     TIntermIfElse *ifCall         = new TIntermIfElse(discardEnabled, discardBlock, nullptr);
 
     return RunAtTheEndOfShader(this, root, ifCall, symbolTable);
+}
+
+TIntermTyped *TranslatorMetal::GenerateFlipXY(TIntermSymbol *rotationSpecConst,
+                                              const TVariable *driverUniforms)
+{
+    ASSERT(!rotationSpecConst);
+    return CreateDriverUniformRef(driverUniforms, kFlipXY);
+}
+
+TIntermTyped *TranslatorMetal::GenerateNegFlipXY(TIntermSymbol *rotationSpecConst,
+                                                 const TVariable *driverUniforms)
+{
+    ASSERT(!rotationSpecConst);
+    return CreateDriverUniformRef(driverUniforms, kNegFlipXY);
+}
+
+TIntermSwizzle *TranslatorMetal::getDriverUniformNegFlipYRef(const TVariable *driverUniforms) const
+{
+    // Create a swizzle to "negFlipXY.y"
+    TIntermBinary *negFlipXY    = CreateDriverUniformRef(driverUniforms, kNegFlipXY);
+    TVector<int> swizzleOffsetY = {1};
+    TIntermSwizzle *negFlipY    = new TIntermSwizzle(negFlipXY, swizzleOffsetY);
+    return negFlipY;
 }
 
 }  // namespace sh
