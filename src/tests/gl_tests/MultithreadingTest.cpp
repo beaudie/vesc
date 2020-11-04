@@ -10,6 +10,7 @@
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
 
+#include <unistd.h>
 #include <atomic>
 #include <mutex>
 #include <thread>
@@ -19,11 +20,14 @@ namespace angle
 
 class MultithreadingTest : public ANGLETest
 {
+  public:
+    static constexpr uint32_t kSize = 128;
+
   protected:
     MultithreadingTest()
     {
-        setWindowWidth(128);
-        setWindowHeight(128);
+        setWindowWidth(kSize);
+        setWindowHeight(kSize);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
@@ -87,6 +91,52 @@ class MultithreadingTest : public ANGLETest
             thread.join();
         }
     }
+};
+
+class MultithreadingTestES3 : public MultithreadingTest
+{
+  public:
+    void textureThreadFunction();
+
+  protected:
+    MultithreadingTestES3()
+        : mTexture2D(0), mExitThread(false), mMainThreadSyncObj(NULL), mSecondThreadSyncObj(NULL)
+    {
+        setWindowWidth(kSize);
+        setWindowHeight(kSize);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    GLuint create2DTexture()
+    {
+        GLuint texture2D;
+        glGenTextures(1, &texture2D);
+        glBindTexture(GL_TEXTURE_2D, texture2D);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
+        EXPECT_GL_NO_ERROR();
+        return texture2D;
+    }
+
+    void testSetUp() override { mTexture2D = create2DTexture(); }
+
+    void testTearDown() override
+    {
+        if (mTexture2D)
+        {
+            glDeleteTextures(1, &mTexture2D);
+        }
+    }
+
+    std::mutex mutex;
+    GLuint mTexture2D;
+    std::atomic<bool> mExitThread;
+    std::atomic<bool> mDrawGreen;  // Toggle drawing green or red
+    std::atomic<GLsync> mMainThreadSyncObj;
+    std::atomic<GLsync> mSecondThreadSyncObj;
 };
 
 // Test that it's possible to make one context current on different threads
@@ -360,12 +410,167 @@ TEST_P(MultithreadingTest, MultiCreateContext)
     EXPECT_EGL_SUCCESS();
 }
 
+void MultithreadingTestES3::textureThreadFunction()
+{
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay dpy     = window->getDisplay();
+    EGLConfig config   = window->getConfig();
+    EGLSurface surface = EGL_NO_SURFACE;
+    EGLContext ctx     = EGL_NO_CONTEXT;
+
+    // Initialize the pbuffer and context
+    EGLint pbufferAttributes[] = {
+        EGL_WIDTH, kSize, EGL_HEIGHT, kSize, EGL_NONE, EGL_NONE,
+    };
+    surface = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
+    EXPECT_EGL_SUCCESS();
+    EXPECT_NE(EGL_NO_SURFACE, surface);
+
+    ctx = window->createContext(window->getContext());
+    EXPECT_NE(EGL_NO_CONTEXT, ctx);
+
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
+    EXPECT_EGL_SUCCESS();
+
+    static std::array<GLColor, kSize * kSize> greenColor;
+    greenColor.fill(GLColor::green);
+    static std::array<GLColor, kSize * kSize> redColor;
+    greenColor.fill(GLColor::red);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 redColor.data());
+    ASSERT_GL_NO_ERROR();
+
+    mSecondThreadSyncObj = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    ASSERT_GL_NO_ERROR();
+    std::cout << "TIMTIM >> created mSecondThreadSyncObj: " << mSecondThreadSyncObj << std::endl;
+
+    // Draw something
+    while (!mExitThread)
+    {
+        //        std::lock_guard<decltype(mutex)> lock(mutex);
+        usleep(1000);
+
+        if (mMainThreadSyncObj != NULL)
+        {
+            std::cout << "TIMTIM >> waiting on mMainThreadSyncObj: " << mMainThreadSyncObj
+                      << std::endl;
+            glWaitSync(mMainThreadSyncObj, 0, GL_TIMEOUT_IGNORED);
+            ASSERT_GL_NO_ERROR();
+            glFlush();
+            mMainThreadSyncObj = NULL;
+        }
+        else
+        {
+            continue;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, mTexture2D);
+        ASSERT_GL_NO_ERROR();
+
+        if (mDrawGreen)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                         greenColor.data());
+            ASSERT_GL_NO_ERROR();
+        }
+        else
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                         redColor.data());
+            ASSERT_GL_NO_ERROR();
+        }
+
+        mSecondThreadSyncObj = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+        ASSERT_GL_NO_ERROR();
+        std::cout << "TIMTIM >> created mSecondThreadSyncObj: " << mSecondThreadSyncObj
+                  << std::endl;
+
+        mDrawGreen = mDrawGreen ^ true;
+    }
+
+    // Clean up
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    EXPECT_EGL_SUCCESS();
+
+    eglDestroySurface(dpy, surface);
+    eglDestroyContext(dpy, ctx);
+}
+
+// Test fence sync with multiple threads
+TEST_P(MultithreadingTestES3, MultithreadFenceDraw)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
+    EGLWindow *window            = getEGLWindow();
+    EGLDisplay dpy               = window->getDisplay();
+    EGLContext ctx               = window->getContext();
+    EGLSurface surface           = window->getSurface();
+    constexpr int kNumIterations = 5;
+    constexpr int kNumDraws      = 5;
+
+    std::thread textureThread(&MultithreadingTestES3::textureThreadFunction, this);
+
+    ANGLE_GL_PROGRAM(texProgram, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+
+    for (int iterations = 0; iterations < kNumIterations; ++iterations)
+    {
+        for (int draws = 0; draws < kNumDraws;)
+        {
+            //            std::lock_guard<decltype(mutex)> lock(mutex);
+            usleep(1000);
+
+            if (mSecondThreadSyncObj != NULL)
+            {
+                std::cout << "TIMTIM >> waiting on mSecondThreadSyncObj: " << mSecondThreadSyncObj
+                          << std::endl;
+                glWaitSync(mSecondThreadSyncObj, 0, GL_TIMEOUT_IGNORED);
+                glFlush();
+                mSecondThreadSyncObj = NULL;
+            }
+            else
+            {
+                continue;
+            }
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glBindTexture(GL_TEXTURE_2D, mTexture2D);
+            glUseProgram(texProgram);
+            drawQuad(texProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
+
+            mMainThreadSyncObj = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+            ASSERT_GL_NO_ERROR();
+            std::cout << "TIMTIM >> created mMainThreadSyncObj: " << mMainThreadSyncObj
+                      << std::endl;
+
+            ++draws;
+        }
+
+        ASSERT_GL_NO_ERROR();
+        swapBuffers();
+    }
+
+    mExitThread = true;
+    textureThread.join();
+
+    // Re-make current the test window's context for teardown.
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
+    EXPECT_EGL_SUCCESS();
+}
+
 // TODO(geofflang): Test sharing a program between multiple shared contexts on multiple threads
 
 ANGLE_INSTANTIATE_TEST(MultithreadingTest,
                        WithNoVirtualContexts(ES2_OPENGL()),
                        WithNoVirtualContexts(ES3_OPENGL()),
                        WithNoVirtualContexts(ES2_OPENGLES()),
-                       WithNoVirtualContexts(ES3_OPENGLES()));
+                       WithNoVirtualContexts(ES3_OPENGLES()),
+                       WithNoVirtualContexts(ES3_VULKAN()),
+                       WithNoVirtualContexts(ES3_VULKAN_SWIFTSHADER()));
+
+ANGLE_INSTANTIATE_TEST(MultithreadingTestES3,
+                       WithNoVirtualContexts(ES3_OPENGL()),
+                       WithNoVirtualContexts(ES3_OPENGLES()),
+                       WithNoVirtualContexts(ES3_VULKAN()),
+                       WithNoVirtualContexts(ES3_VULKAN_SWIFTSHADER()));
 
 }  // namespace angle
