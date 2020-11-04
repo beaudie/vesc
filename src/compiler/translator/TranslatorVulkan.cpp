@@ -221,7 +221,8 @@ ANGLE_NO_DISCARD bool RotateAndFlipBuiltinVariable(TCompiler *compiler,
                                                    const TVariable *builtin,
                                                    const ImmutableString &flippedVariableName,
                                                    TIntermTyped *pivot,
-                                                   TIntermTyped *fragRotation)
+                                                   TIntermTyped *fragRotation,
+                                                   TIntermSymbol *surfaceRotationSpecConst)
 {
     // Create a symbol reference to 'builtin'.
     TIntermSymbol *builtinRef = new TIntermSymbol(builtin);
@@ -246,7 +247,13 @@ ANGLE_NO_DISCARD bool RotateAndFlipBuiltinVariable(TCompiler *compiler,
 
     // Create the expression "(builtin.xy * fragRotation)"
     TIntermTyped *rotatedXY;
-    if (fragRotation)
+    if (surfaceRotationSpecConst)
+    {
+        rotatedXY = new TIntermBinary(EOpMatrixTimesVector,
+                                      GenerateFragRotationMatrix(surfaceRotationSpecConst),
+                                      builtinXY->deepCopy());
+    }
+    else if (fragRotation)
     {
         rotatedXY = new TIntermBinary(EOpMatrixTimesVector, fragRotation->deepCopy(),
                                       builtinXY->deepCopy());
@@ -259,8 +266,17 @@ ANGLE_NO_DISCARD bool RotateAndFlipBuiltinVariable(TCompiler *compiler,
 
     // Create the expression "(builtin.xy - pivot) * flipXY + pivot
     TIntermBinary *removePivot = new TIntermBinary(EOpSub, rotatedXY, pivot);
-    TIntermBinary *inverseXY   = new TIntermBinary(EOpMul, removePivot, flipXY);
-    TIntermBinary *plusPivot   = new TIntermBinary(EOpAdd, inverseXY, pivot->deepCopy());
+    TIntermBinary *inverseXY;
+    if (surfaceRotationSpecConst)
+    {
+        inverseXY =
+            new TIntermBinary(EOpMul, removePivot, GenerateFlipXY(surfaceRotationSpecConst));
+    }
+    else
+    {
+        inverseXY = new TIntermBinary(EOpMul, removePivot, flipXY);
+    }
+    TIntermBinary *plusPivot = new TIntermBinary(EOpAdd, inverseXY, pivot->deepCopy());
 
     // Create the corrected variable and copy the value of the original builtin.
     TIntermSequence *sequence = new TIntermSequence();
@@ -595,7 +611,8 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
                                                 TIntermBlock *root,
                                                 TIntermSequence *insertSequence,
                                                 TSymbolTable *symbolTable,
-                                                const TVariable *driverUniforms)
+                                                const TVariable *driverUniforms,
+                                                TIntermSymbol *surfaceRotationSpecConst)
 {
     TIntermBinary *flipXY       = CreateDriverUniformRef(driverUniforms, kFlipXY);
     TIntermBinary *pivot        = CreateDriverUniformRef(driverUniforms, kHalfRenderArea);
@@ -604,7 +621,7 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
                                       : nullptr;
     return RotateAndFlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable,
                                         BuiltInVariable::gl_FragCoord(), kFlippedFragCoordName,
-                                        pivot, fragRotation);
+                                        pivot, fragRotation, surfaceRotationSpecConst);
 }
 
 // This block adds OpenGL line segment rasterization emulation behind a specialization constant
@@ -646,7 +663,8 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
                                               TIntermBlock *root,
                                               TSymbolTable *symbolTable,
                                               const TVariable *driverUniforms,
-                                              bool usesFragCoord)
+                                              bool usesFragCoord,
+                                              TIntermSymbol *surfaceRotationSpecConst)
 {
     TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable, EvqVaryingIn);
     const TType *vec2Type    = StaticType::GetBasic<EbtFloat, 2>();
@@ -743,7 +761,7 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     if (!usesFragCoord)
     {
         if (!InsertFragCoordCorrection(compiler, compileOptions, root, emulationSequence,
-                                       symbolTable, driverUniforms))
+                                       symbolTable, driverUniforms, surfaceRotationSpecConst))
         {
             return false;
         }
@@ -971,7 +989,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         if (compileOptions & SH_ADD_BRESENHAM_LINE_RASTER_EMULATION)
         {
             if (!AddBresenhamEmulationFS(this, compileOptions, sink, root, &getSymbolTable(),
-                                         driverUniforms, usesFragCoord))
+                                         driverUniforms, usesFragCoord, surfaceRotationSpecConst))
             {
                 return false;
             }
@@ -1014,7 +1032,8 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                 usePreRotation ? CreateDriverUniformRef(driverUniforms, kFragRotation) : nullptr;
             if (!RotateAndFlipBuiltinVariable(this, root, GetMainSequence(root), flipXY,
                                               &getSymbolTable(), BuiltInVariable::gl_PointCoord(),
-                                              kFlippedPointCoordName, pivot, fragRotation))
+                                              kFlippedPointCoordName, pivot, fragRotation,
+                                              surfaceRotationSpecConst))
             {
                 return false;
             }
@@ -1023,7 +1042,8 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         if (usesFragCoord)
         {
             if (!InsertFragCoordCorrection(this, compileOptions, root, GetMainSequence(root),
-                                           &getSymbolTable(), driverUniforms))
+                                           &getSymbolTable(), driverUniforms,
+                                           surfaceRotationSpecConst))
             {
                 return false;
             }

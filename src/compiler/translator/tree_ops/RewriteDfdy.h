@@ -25,6 +25,11 @@ class TIntermBinary;
 class TIntermTyped;
 class TSymbolTable;
 
+// Returns node for flipXY[rotation]
+ANGLE_NO_DISCARD TIntermTyped *GenerateFlipXY(TIntermSymbol *rotation);
+// Returns node for fragRotationMatrices[rotation]
+ANGLE_NO_DISCARD TIntermTyped *GenerateFragRotationMatrix(TIntermSymbol *rotation);
+
 // If fragRotation = nullptr, no rotation will be applied.
 ANGLE_NO_DISCARD bool RewriteDfdy(TCompiler *compiler,
                                   TIntermNode *root,
