@@ -1800,7 +1800,7 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
 {
     // Recreate the image to reflect new base or max levels.
     // First, flush any pending updates so we have good data in the existing vkImage
-    if (mImage->valid() && mImage->hasStagedUpdates())
+    if (mImage->valid() && mImage->hasStagedUpdatesInBaseMaxRange())
     {
         ANGLE_TRY(flushImageStagedUpdates(contextVk));
     }
@@ -1832,11 +1832,11 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
             {
                 // Note: if this level is incompatibly redefined, there will necessarily be a staged
                 // update, and the contents of the image are to be thrown away.
-                ASSERT(mImage->isUpdateStaged(levelGL, layer));
+                ASSERT(mImage->hasStagedUpdatesForSubresource(levelGL, layer));
                 continue;
             }
 
-            ASSERT(!mImage->isUpdateStaged(levelGL, layer));
+            ASSERT(!mImage->hasStagedUpdatesForSubresource(levelGL, layer));
 
             // Pull data from the current image and stage it as an update for the new image
 
@@ -1946,7 +1946,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdates())
+    if (mImage->valid() && !mImage->hasStagedUpdatesInBaseMaxRange())
     {
         return angle::Result::Continue;
     }

@@ -668,6 +668,9 @@ using TexLevelArray = std::array<T, IMPLEMENTATION_MAX_TEXTURE_LEVELS>;
 
 using TexLevelMask = angle::BitSet<IMPLEMENTATION_MAX_TEXTURE_LEVELS>;
 
+template <typename T>
+using TexLevelFastVector = angle::FastVector<T, IMPLEMENTATION_MAX_TEXTURE_LEVELS>;
+
 enum class ComponentType
 {
     Float       = 0,
