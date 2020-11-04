@@ -23,11 +23,6 @@ TIntermTyped *GenerateMultiplierXForDFdx(TIntermSymbol *rotationSpecConst);
 TIntermTyped *GenerateMultiplierYForDFdx(TIntermSymbol *rotationSpecConst);
 TIntermTyped *GenerateMultiplierXForDFdy(TIntermSymbol *rotationSpecConst);
 TIntermTyped *GenerateMultiplierYForDFdy(TIntermSymbol *rotationSpecConst);
-TIntermTyped *GenerateFlipY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms);
-TIntermTyped *GenerateFlipXY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms);
-TIntermTyped *GenerateNegFlipXY(TIntermSymbol *rotationSpecConst, const TVariable *driverUniforms);
-TIntermTyped *GenerateFragRotation(TIntermSymbol *rotationSpecConst,
-                                   const TVariable *driverUniforms);
 
 class TranslatorVulkan : public TCompiler
 {
@@ -38,9 +33,9 @@ class TranslatorVulkan : public TCompiler
     ANGLE_NO_DISCARD bool translate(TIntermBlock *root,
                                     ShCompileOptions compileOptions,
                                     PerformanceDiagnostics *perfDiagnostics) override;
+
     bool shouldFlattenPragmaStdglInvariantAll() override;
 
-    TIntermSwizzle *getDriverUniformNegFlipYRef(const TVariable *driverUniforms) const;
     TIntermBinary *getDriverUniformDepthRangeReservedFieldRef(
         const TVariable *driverUniforms) const;
     // Subclass can call this method to transform the AST before writing the final output.
@@ -59,10 +54,35 @@ class TranslatorVulkan : public TCompiler
         return true;
     }
 
-    // Back-end specific fields to be added to driver uniform. See TranslatorMetal.cpp.
-    virtual void createAdditionalGraphicsDriverUniformFields(std::vector<TField *> *fieldsOut) {}
-};
+    virtual TIntermSymbol *createRotationFlipSpecConst(TInfoSinkBase &sink);
 
+    virtual const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root,
+                                                               TSymbolTable *symbolTable);
+
+    virtual TIntermTyped *GenerateFlipXY(TIntermSymbol *rotationSpecConst,
+                                         const TVariable *driverUniforms);
+    virtual TIntermTyped *GenerateNegFlipXY(TIntermSymbol *rotationSpecConst,
+                                            const TVariable *driverUniforms);
+
+  private:
+    ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
+                                                    ShCompileOptions compileOptions,
+                                                    TIntermBlock *root,
+                                                    TIntermSequence *insertSequence,
+                                                    TSymbolTable *symbolTable,
+                                                    TIntermSymbol *rotationSpecConst,
+                                                    const TVariable *driverUniforms);
+
+    ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
+                                                  ShCompileOptions compileOptions,
+                                                  TInfoSinkBase &sink,
+                                                  TIntermBlock *root,
+                                                  TSymbolTable *symbolTable,
+                                                  TIntermSymbol *rotationSpecConst,
+                                                  const TVariable *driverUniforms,
+                                                  bool usesFragCoord);
+    TIntermTyped *GenerateFragRotation(TIntermSymbol *rotationSpecConst);
+};
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TRANSLATORVULKAN_H_

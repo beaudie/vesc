@@ -34,7 +34,8 @@ ANGLE_NO_DISCARD bool RewriteDfdy(TCompiler *compiler,
                                   const TSymbolTable &symbolTable,
                                   int shaderVersion,
                                   TIntermSymbol *rotationSpecConst,
-                                  const TVariable *driverUniforms);
+                                  TIntermTyped *flipXY,
+                                  TIntermTyped *fragRotation);
 
 }  // namespace sh
 
