@@ -428,7 +428,12 @@ void TracePerfTest::drawBenchmark()
     // Add a time sample from GL and the host.
     sampleTime();
 
-    for (uint32_t frame = mStartFrame; frame <= mEndFrame; ++frame)
+    // Exit early if we're at the specified step limit.
+    uint32_t endFrame =
+        std::min<uint32_t>(mEndFrame, mStepsToRun - mNumStepsPerformed + mStartFrame - 1);
+    mStepsPerRunLoopStep = endFrame - mStartFrame + 1;
+
+    for (uint32_t frame = mStartFrame; frame <= endFrame; ++frame)
     {
         char frameName[32];
         sprintf(frameName, "Frame %u", frame);
