@@ -89,6 +89,15 @@ bool DebugAnnotationsActive()
 #endif
 }
 
+bool ShouldBeginScopedEvent()
+{
+#if defined(ANGLE_ENABLE_ANNOTATOR_RUN_TIME_CHECKS)
+    return DebugAnnotationsActive();
+#else
+    return true;
+#endif  // defined(ANGLE_ENABLE_ANNOTATOR_RUN_TIME_CHECKS)
+}
+
 bool DebugAnnotationsInitialized()
 {
     return g_debugAnnotator != nullptr;
