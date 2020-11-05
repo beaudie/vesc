@@ -360,6 +360,8 @@ double ANGLEPerfTest::printResults()
         printf("Ran %0.2lf iterations per second\n", fps);
     }
 
+    mReporter->AddResult(".steps", static_cast<size_t>(mNumStepsPerformed));
+
     // Output histogram JSON set format if enabled.
     double secondsPerStep      = elapsedTimeSeconds[0] / static_cast<double>(mNumStepsPerformed);
     double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);

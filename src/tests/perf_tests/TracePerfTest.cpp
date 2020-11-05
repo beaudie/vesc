@@ -428,7 +428,18 @@ void TracePerfTest::drawBenchmark()
     // Add a time sample from GL and the host.
     sampleTime();
 
-    for (uint32_t frame = mStartFrame; frame <= mEndFrame; ++frame)
+    uint32_t endFrame = mEndFrame;
+
+    // Exit early if we're at the specified step limit.
+    // Ensure we're not going to run another step after the early exit to avoid state reset
+    // complications.
+    if (gTestTrials == 1 && gWarmupLoops == 0)
+    {
+        endFrame = std::min<uint32_t>(endFrame, mStepsToRun - mNumStepsPerformed + mStartFrame - 1);
+        mStepsPerRunLoopStep = endFrame - mStartFrame + 1;
+    }
+
+    for (uint32_t frame = mStartFrame; frame <= endFrame; ++frame)
     {
         char frameName[32];
         sprintf(frameName, "Frame %u", frame);
@@ -492,14 +503,17 @@ void TracePerfTest::drawBenchmark()
 
         endInternalTraceEvent(frameName);
 
+        if (frame == mEndFrame)
+        {
+            ResetReplay(params.testID);
+        }
+
         // Check for abnormal exit.
         if (!mRunning)
         {
             return;
         }
     }
-
-    ResetReplay(params.testID);
 
     // Process any running queries once per iteration.
     for (size_t queryIndex = 0; queryIndex < mRunningQueries.size();)
