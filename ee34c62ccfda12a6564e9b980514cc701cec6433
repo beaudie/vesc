@@ -68,6 +68,23 @@
       "message": "folks, so do you want this to land or is this just a test issue?",
       "revId": "ee34c62ccfda12a6564e9b980514cc701cec6433",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8717cd5d_2921cd67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-11-05T15:06:59Z",
+      "side": 1,
+      "message": "We want you to land it. We also want to be able to land our own changes to refs/meta/config. for now please land this, and ideally we can find someone to pursue http://crbug.com/1141131\n",
+      "revId": "ee34c62ccfda12a6564e9b980514cc701cec6433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
