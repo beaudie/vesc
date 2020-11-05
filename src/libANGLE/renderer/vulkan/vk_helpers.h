@@ -2012,7 +2012,8 @@ class ImageViewHelper : angle::NonCopyable
                                                     uint32_t levelCount,
                                                     uint32_t layer,
                                                     LayerMode layerMode,
-                                                    SrgbDecodeMode srgbDecodeMode) const;
+                                                    SrgbDecodeMode srgbDecodeMode,
+                                                    gl::SrgbOverride srgbOverrideMode) const;
 
   private:
     ImageView &getReadImageView()
