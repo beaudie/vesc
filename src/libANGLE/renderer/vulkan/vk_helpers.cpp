@@ -11,6 +11,7 @@
 #include "common/utilities.h"
 #include "image_util/loadimage.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/renderer/load_functions_table.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
@@ -4457,7 +4458,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                       const GLuint inputDepthPitch,
                                                       const GLuint inputSkipBytes)
 {
-    const angle::Format &storageFormat = vkFormat.actualImageFormat();
+    const angle::Format &inputFormat = vkFormat.intendedFormat();
 
     size_t outputRowPitch;
     size_t outputDepthPitch;
@@ -4466,10 +4467,11 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     uint32_t bufferImageHeight;
     size_t allocationSize;
 
-    LoadImageFunctionInfo loadFunctionInfo = vkFormat.textureLoadFunctions(type);
-    LoadImageFunction stencilLoadFunction  = nullptr;
+    LoadImageFunctionInfo loadFunctionInfo =
+        GetLoadFunctionsMap(vkFormat.internalFormat, vkFormat.intendedFormatID)(type);
+    LoadImageFunction stencilLoadFunction = nullptr;
 
-    if (storageFormat.isBlock)
+    if (inputFormat.isBlock)
     {
         const gl::InternalFormat &storageFormatInfo = vkFormat.getInternalFormatInfo(type);
         GLuint rowPitch;
@@ -4496,13 +4498,13 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     }
     else
     {
-        ASSERT(storageFormat.pixelBytes != 0);
+        ASSERT(inputFormat.pixelBytes != 0);
 
-        if (storageFormat.id == angle::FormatID::D24_UNORM_S8_UINT)
+        if (inputFormat.id == angle::FormatID::D24_UNORM_S8_UINT)
         {
             stencilLoadFunction = angle::LoadX24S8ToS8;
         }
-        if (storageFormat.id == angle::FormatID::D32_FLOAT_S8X24_UINT)
+        if (inputFormat.id == angle::FormatID::D32_FLOAT_S8X24_UINT)
         {
             // If depth is D32FLOAT_S8, we must pack D32F tightly (no stencil) for CopyBufferToImage
             outputRowPitch = sizeof(float) * glExtents.width;
@@ -4530,7 +4532,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         }
         else
         {
-            outputRowPitch = storageFormat.pixelBytes * glExtents.width;
+            outputRowPitch = inputFormat.pixelBytes * glExtents.width;
         }
         outputDepthPitch = outputRowPitch * glExtents.height;
 
@@ -4542,8 +4544,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         // Note: because the LoadImageFunctionInfo functions are limited to copying a single
         // component, we have to special case packed depth/stencil use and send the stencil as a
         // separate chunk.
-        if (storageFormat.depthBits > 0 && storageFormat.stencilBits > 0 &&
-            formatInfo.depthBits > 0 && formatInfo.stencilBits > 0)
+        if (inputFormat.depthBits > 0 && inputFormat.stencilBits > 0)
         {
             // Note: Stencil is always one byte
             stencilAllocationSize = glExtents.width * glExtents.height * glExtents.depth;
@@ -4570,7 +4571,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                   outputDepthPitch);
 
     VkBufferImageCopy copy         = {};
-    VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.actualImageFormat());
+    VkImageAspectFlags aspectFlags = GetFormatAspectFlags(inputFormat);
 
     copy.bufferOffset      = stagingOffset;
     copy.bufferRowLength   = bufferRowLength;
@@ -4627,20 +4628,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
     }
 
-    if (HasBothDepthAndStencilAspects(aspectFlags))
-    {
-        // We still have both depth and stencil aspect bits set. That means we have a destination
-        // buffer that is packed depth stencil and that the application is only loading one aspect.
-        // Figure out which aspect the user is touching and remove the unused aspect bit.
-        if (formatInfo.stencilBits > 0)
-        {
-            aspectFlags &= ~VK_IMAGE_ASPECT_DEPTH_BIT;
-        }
-        else
-        {
-            aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
-        }
-    }
+    ASSERT(!HasBothDepthAndStencilAspects(aspectFlags));
 
     if (aspectFlags)
     {
