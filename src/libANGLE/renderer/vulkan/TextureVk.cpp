@@ -418,7 +418,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                 contextVk, getNativeImageIndex(index),
                 gl::Extents(area.width, area.height, area.depth),
                 gl::Offset(area.x, area.y, area.z), formatInfo, unpack, stagingBuffer, type, source,
-                vkFormat, inputRowPitch, inputDepthPitch, inputSkipBytes));
+                vkFormat, inputRowPitch, inputDepthPitch, inputSkipBytes, true));
 
             ANGLE_TRY(unpackBufferVk->unmapImpl(contextVk));
         }

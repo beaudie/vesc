@@ -1450,7 +1450,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                              const Format &vkFormat,
                                              const GLuint inputRowPitch,
                                              const GLuint inputDepthPitch,
-                                             const GLuint inputSkipBytes);
+                                             const GLuint inputSkipBytes,
+                                             const bool isFromPBO);
 
     angle::Result stageSubresourceUpdate(ContextVk *contextVk,
                                          const gl::ImageIndex &index,
