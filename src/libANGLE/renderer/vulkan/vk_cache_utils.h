@@ -990,14 +990,15 @@ struct ImageSubresourceRange
 {
     uint16_t level : 10;          // GL max is 1000 (fits in 10 bits).
     uint16_t levelCount : 6;      // Max 63 levels (2 ** 6 - 1). If we need more, take from layer.
-    uint16_t layer : 14;          // Implementation max is 2048 (11 bits).
+    uint16_t layer : 13;          // Implementation max is 2048 (11 bits).
     uint16_t singleLayer : 1;     // true/false only. Not possible to use sub-slices of levels.
     uint16_t srgbDecodeMode : 1;  // Values from vk::SrgbDecodeMode.
+    uint16_t srgbOverrideEnabled : 1;  // true/false only.
 };
 
 static_assert(sizeof(ImageSubresourceRange) == sizeof(uint32_t), "Size mismatch");
 
-constexpr ImageSubresourceRange kInvalidImageSubresourceRange = {0, 0, 0, 0, 0};
+constexpr ImageSubresourceRange kInvalidImageSubresourceRange = {0, 0, 0, 0, 0, 0};
 
 struct ImageViewSubresourceSerial
 {

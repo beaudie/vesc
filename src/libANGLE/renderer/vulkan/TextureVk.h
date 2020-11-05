@@ -429,6 +429,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     bool mOwnsImage;
     bool mRequiresMutableStorage;
+    bool mImageFormatListSupported;
 
     gl::TextureType mImageNativeType;
 

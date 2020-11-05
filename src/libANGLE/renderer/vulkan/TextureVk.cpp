@@ -209,6 +209,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
     : TextureImpl(state),
       mOwnsImage(false),
       mRequiresMutableStorage(false),
+      mImageFormatListSupported(false),
       mImageNativeType(gl::TextureType::InvalidEnum),
       mImageLayerOffset(0),
       mImageLevelOffset(0),
@@ -1234,7 +1235,8 @@ void TextureVk::releaseAndDeleteImage(ContextVk *contextVk)
         releaseImage(contextVk);
         releaseStagingBuffer(contextVk);
         mImageObserverBinding.bind(nullptr);
-        mRequiresMutableStorage = false;
+        mRequiresMutableStorage   = false;
+        mImageFormatListSupported = false;
         SafeDelete(mImage);
     }
     mRedefinedLevels.reset();
@@ -2207,9 +2209,13 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_RED) ||
         localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_GREEN) ||
         localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_BLUE) ||
-        localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_ALPHA) ||
-        localBits.test(gl::Texture::DIRTY_BIT_SRGB_OVERRIDE) ||
-        localBits.test(gl::Texture::DIRTY_BIT_SRGB_DECODE))
+        localBits.test(gl::Texture::DIRTY_BIT_SWIZZLE_ALPHA))
+    {
+        ANGLE_TRY(refreshImageViews(contextVk));
+    }
+
+    if (!mImageFormatListSupported && (localBits.test(gl::Texture::DIRTY_BIT_SRGB_OVERRIDE) ||
+                                       localBits.test(gl::Texture::DIRTY_BIT_SRGB_DECODE)))
     {
         ANGLE_TRY(refreshImageViews(contextVk));
     }
@@ -2397,7 +2403,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     if (renderer->getFeatures().supportsImageFormatList.enabled &&
         (imageListFormat != VK_FORMAT_UNDEFINED))
     {
-        mRequiresMutableStorage = true;
+        mRequiresMutableStorage   = true;
+        mImageFormatListSupported = true;
 
         // Add VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT to VkImage create flag
         mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
@@ -2662,12 +2669,15 @@ vk::ImageViewSubresourceSerial TextureVk::getImageViewSubresourceSerial(
     gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
     // getMipmapMaxLevel will clamp to the max level if it is smaller than the number of mips.
     uint32_t levelCount               = gl::LevelIndex(mState.getMipmapMaxLevel()) - baseLevel + 1;
-    vk::SrgbDecodeMode srgbDecodeMode = (samplerState.getSRGBDecode() == GL_DECODE_EXT)
+    vk::SrgbDecodeMode srgbDecodeMode = (mImage->getFormat().actualImageFormat().isSRGB &&
+                                         (samplerState.getSRGBDecode() == GL_DECODE_EXT))
                                             ? vk::SrgbDecodeMode::SrgbDecode
                                             : vk::SrgbDecodeMode::SkipDecode;
+    bool srgbOverrideEnabled = (!mImage->getFormat().actualImageFormat().isSRGB &&
+                                (mState.getSRGBOverride() == gl::SrgbOverride::SRGB));
 
     return getImageViews().getSubresourceSerial(baseLevel, levelCount, 0, vk::LayerMode::All,
-                                                srgbDecodeMode);
+                                                srgbDecodeMode, srgbOverrideEnabled);
 }
 
 angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
