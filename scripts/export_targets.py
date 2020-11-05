@@ -181,6 +181,7 @@ assert INCLUDE_REGEX.match(b'\n#include "foo"')
 # included, but not part of the source list.
 IGNORED_INCLUDES = {
     b'absl/container/flat_hash_map.h',
+    b'android_ndk_types.h',
     b'compiler/translator/TranslatorESSL.h',
     b'compiler/translator/TranslatorGLSL.h',
     b'compiler/translator/TranslatorHLSL.h',
