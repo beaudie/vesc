@@ -31,6 +31,12 @@ std::string GetExecutableName()
 std::string GetEnvironmentVarOrAndroidProperty(const char *variableName, const char *propertyName)
 {
 #if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 21
+    if (getenv(variableName) != nullptr)
+    {
+        std::string value(getenv(variableName));
+        return value;
+    }
+
     std::string sanitizedPropertyName = propertyName;
     sanitizedPropertyName.erase(
         std::remove(sanitizedPropertyName.begin(), sanitizedPropertyName.end(), '\''),
