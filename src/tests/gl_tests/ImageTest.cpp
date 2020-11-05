@@ -3078,6 +3078,35 @@ TEST_P(ImageTest, UpdatedExternalTexture)
     glDeleteTextures(1, &targetTexture);
 }
 
+// Check that the texture successfully updates when an image is deleted
+TEST_P(ImageTest, DeletedImageWithSameSizeAndFormat)
+{
+    EGLWindow *window = getEGLWindow();
+
+    GLubyte originalData[4] = {255, 0, 255, 255};
+    GLubyte updateData[4]   = {0, 255, 0, 255};
+
+    // Create the Image
+    GLuint source;
+    EGLImageKHR image;
+    createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, kDefaultAttribs, originalData,
+                                  &source, &image);
+
+    // Create texture & bind to Image
+    GLuint texture;
+    createEGLImageTargetTexture2D(image, &texture);
+
+    // Delete Image
+    eglDestroyImageKHR(window->getDisplay(), image);
+
+    // Redefine Texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, updateData);
+
+    // Clean up
+    glDeleteTextures(1, &source);
+    glDeleteTextures(1, &texture);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ImageTest);
