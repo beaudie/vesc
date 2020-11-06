@@ -180,6 +180,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                         const gl::Extents &size,
                                         bool fixedSampleLocations) override;
 
+    angle::Result setBuffer(const gl::Context *context, GLenum internalFormat) override;
+
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;
 

@@ -2743,4 +2743,10 @@ angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
 
     return refreshImageViews(contextVk);
 }
+
+angle::Result TextureVk::setBuffer(const gl::Context *context, GLenum internalFormat)
+{
+    UNIMPLEMENTED();
+    return angle::Result::Continue;
+}
 }  // namespace rx
