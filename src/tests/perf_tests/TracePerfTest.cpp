@@ -489,6 +489,11 @@ void TracePerfTest::drawBenchmark()
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
                 glClear(GL_COLOR_BUFFER_BIT);
             }
+            else
+            {
+                // We have a whole application frame's worth of work, lets get it going on the GPU.
+                glFlush();
+            }
 
             if (scissorTest)
             {
