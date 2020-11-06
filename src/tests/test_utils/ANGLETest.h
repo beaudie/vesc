@@ -22,6 +22,7 @@
 #include "platform/PlatformMethods.h"
 #include "util/EGLWindow.h"
 #include "util/shader_utils.h"
+#include "util/test_utils.h"
 #include "util/util_gl.h"
 
 namespace angle
@@ -212,6 +213,12 @@ constexpr std::array<GLenum, 6> kCubeFaces = {
      GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}};
 
 void LoadEntryPointsWithUtilLoader(angle::GLESDriverType driver);
+
+int GetTestStartDelaySeconds();
+void SetTestStartDelay(const char *testStartDelay);
+
+int GetSwapBuffers();
+void SetSwapBuffers(bool swapBuffers);
 
 }  // namespace angle
 
@@ -598,10 +605,21 @@ class ANGLETestWithParam : public ANGLETestBase, public ::testing::TestWithParam
     {
         ANGLETestBase::ANGLETestSetUp();
         testSetUp();
+        // Delay test startup to allow a debugger to attach.
+        if (angle::GetTestStartDelaySeconds())
+        {
+            angle::Sleep(angle::GetTestStartDelaySeconds() * 1000);
+        }
     }
 
     void TearDown() final
     {
+        // Perform a swapBuffers() to delineate a frame while tracing.
+        if (angle::GetSwapBuffers())
+        {
+            swapBuffers();
+        }
+
         testTearDown();
         ANGLETestBase::ANGLETestTearDown();
     }

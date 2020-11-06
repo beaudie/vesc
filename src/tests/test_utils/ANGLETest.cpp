@@ -42,6 +42,9 @@ const GLColor GLColor::white            = GLColor(255u, 255u, 255u, 255u);
 const GLColor GLColor::yellow           = GLColor(255u, 255u, 0, 255u);
 const GLColor GLColor::magenta          = GLColor(255u, 0u, 255u, 255u);
 
+int gTestStartDelaySeconds = 0;
+bool gSwapBuffers          = false;
+
 namespace
 {
 float ColorNorm(GLubyte channelValue)
@@ -299,6 +302,26 @@ void LoadEntryPointsWithUtilLoader(angle::GLESDriverType driverType)
     LoadGLES(getProcAddress);
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
 }
+
+int GetTestStartDelaySeconds()
+{
+    return gTestStartDelaySeconds;
+}
+
+void SetTestStartDelay(const char *testStartDelay)
+{
+    gTestStartDelaySeconds = std::stoi(testStartDelay);
+}
+
+int GetSwapBuffers()
+{
+    return gTestStartDelaySeconds;
+}
+
+void SetSwapBuffers(bool swapBuffers)
+{
+    gSwapBuffers = swapBuffers;
+}
 }  // namespace angle
 
 using namespace angle;
@@ -316,6 +339,8 @@ constexpr char kUseConfig[]                      = "--use-config=";
 constexpr char kReuseDisplays[]                  = "--reuse-displays";
 constexpr char kEnableANGLEPerTestCaptureLabel[] = "--angle-per-test-capture-label";
 constexpr char kBatchId[]                        = "--batch-id=";
+constexpr char kDelayTestStart[]                 = "--delay-test-start=";
+constexpr char kSwapBuffers[]                    = "--swap-buffers";
 
 void SetupEnvironmentVarsForCaptureReplay()
 {
@@ -1395,6 +1420,14 @@ void ANGLEProcessTestArgs(int *argc, char *argv[])
                          strlen(kEnableANGLEPerTestCaptureLabel)) == 0)
         {
             gEnableANGLEPerTestCaptureLabel = true;
+        }
+        else if (strncmp(argv[argIndex], kDelayTestStart, strlen(kDelayTestStart)) == 0)
+        {
+            SetTestStartDelay(argv[argIndex] + strlen(kDelayTestStart));
+        }
+        else if (strncmp(argv[argIndex], kSwapBuffers, strlen(kSwapBuffers)) == 0)
+        {
+            SetSwapBuffers(true);
         }
     }
 }
